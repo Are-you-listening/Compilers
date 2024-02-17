@@ -7,7 +7,7 @@ expr : literal
      | expr ('+'|'-') expr
      | expr ('>>' | '<<') expr
      | expr ('<' | '>'| '>=' | '<=') expr
-     | expr ('==' |  '!=') expr
+     | expr ('==' | '!=') expr
      | expr '&' expr
      | expr '^' expr
      | expr '|' expr
