@@ -1,4 +1,4 @@
-# Generated from C:/Users/lucas/OneDrive/Documents/Compilers/Compilers/grammar/expression.g4 by ANTLR 4.13.1
+# Generated from C:/Users/Gebruiker/Desktop/University/Compilers/grammar/expression.g4 by ANTLR 4.13.1
 from antlr4 import *
 if "." in __name__:
     from .expressionParser import expressionParser
@@ -23,15 +23,6 @@ class expressionListener(ParseTreeListener):
 
     # Exit a parse tree produced by expressionParser#expr.
     def exitExpr(self, ctx:expressionParser.ExprContext):
-        pass
-
-
-    # Enter a parse tree produced by expressionParser#boolexpr.
-    def enterBoolexpr(self, ctx:expressionParser.BoolexprContext):
-        pass
-
-    # Exit a parse tree produced by expressionParser#boolexpr.
-    def exitBoolexpr(self, ctx:expressionParser.BoolexprContext):
         pass
 
 

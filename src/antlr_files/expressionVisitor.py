@@ -1,4 +1,4 @@
-# Generated from C:/Users/lucas/OneDrive/Documents/Compilers/Compilers/grammar/expression.g4 by ANTLR 4.13.1
+# Generated from C:/Users/Gebruiker/Desktop/University/Compilers/grammar/expression.g4 by ANTLR 4.13.1
 from antlr4 import *
 if "." in __name__:
     from .expressionParser import expressionParser
@@ -16,11 +16,6 @@ class expressionVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by expressionParser#expr.
     def visitExpr(self, ctx:expressionParser.ExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by expressionParser#boolexpr.
-    def visitBoolexpr(self, ctx:expressionParser.BoolexprContext):
         return self.visitChildren(ctx)
 
 
