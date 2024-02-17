@@ -30,11 +30,12 @@ class ASTVisitor:
 class dotVisitor(ASTVisitor):
     def __init__(self):
         self.outfile = open("ASTvisual.dot", "w")
-        self.outfile.write("graph AST {\n")
+        self.outfile.write("digraph AST {\n")
 
     def visitNode(self, node: ASTNode):
-        self.outfile.write(f'  "{id(node)}" [label="{node.text}];\n"')
+        self.outfile.write(f'  "{id(node)}" [label="{node.text}"];\n')
         for child in node.children:
+            self.outfile.write(f'  "{id(child)}" [label="{child.text}"];\n')
             self.outfile.write(f'  "{id(node)}" -> "{id(child)}";\n')
             child.accept(self)
     def visitNodeTerminal(self, node: ASTNodeTerminal):

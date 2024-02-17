@@ -24,6 +24,8 @@ def main(argv):
     cfv = constantFoldingVisitor(lexer)
     cfv.visit(ast)
 
+    d = dotVisitor()
+    d.visitNode(ast.root)
 
     print("end")
 
