@@ -74,9 +74,6 @@ class expressionParser ( Parser ):
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
 
-
-
-
     class Start_Context(ParserRuleContext):
         __slots__ = 'parser'
 

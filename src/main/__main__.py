@@ -13,9 +13,7 @@ def main(argv):
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
     tree = parser.start_()
-
     print(Trees.toStringTree(tree, None, parser))
-
     vinterp = ASTCreator()
     vinterp.visit(tree)
 
