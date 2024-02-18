@@ -1,7 +1,6 @@
 from abc import abstractmethod
-
 from src.parser.AST import ASTNode, AST, ASTNodeTerminal
-import subprocess
+
 
 class ASTVisitor:
 
@@ -26,7 +25,3 @@ class ASTVisitor:
     @abstractmethod
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass
-
-
-
-

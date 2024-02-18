@@ -2,13 +2,14 @@
 class ASTVisitor:
     pass
 
+
 class ASTNode:
     def __init__(self, text, parent):
         self.children = []
         self.text = text
         self.parent = parent
 
-    def add_children(self, child):
+    def addChildren(self, child):
         self.children.append(child)
 
     def getChild(self, index):
@@ -28,7 +29,6 @@ class ASTNode:
 
         return count
 
-
     def findChild(self, child):
         return self.children.index(child)
 
@@ -38,12 +38,13 @@ class ASTNode:
 
 
 class ASTNodeTerminal(ASTNode):
-    def __init__(self, text, parent, type):
+    def __init__(self, text, parent, terminal_type):
         super(ASTNodeTerminal, self).__init__(text, parent)
-        self.type = type
+        self.type = terminal_type
 
     def accept(self, v: ASTVisitor):
         v.visitNodeTerminal(self)
+
 
 class AST:
     def __init__(self, root):
@@ -51,5 +52,3 @@ class AST:
 
     def traverse(self):
         pass
-
-from src.parser.ASTVisitor import *

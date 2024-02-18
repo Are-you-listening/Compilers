@@ -27,7 +27,7 @@ def main(argv):
     cfv.visit(ast)
 
     d = DotVisitor()
-    d.visitNode(ast.root)
+    d.visit(ast)
 
     print("end")
 

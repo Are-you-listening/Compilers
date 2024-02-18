@@ -10,8 +10,18 @@ class ConstantFoldingVisitor(ASTVisitor):
         self.postorder(root)
 
     def visitNode(self, node: ASTNode):
-        #check for (BASE) operations
+        """
+        check if we can do constant folding
+        :param node: current node we are checking
+        """
+
         if node.getChildAmount() == node.getTerminalAmount() == 3:
+            """Checked for BINARY operations"""
+
+            """
+            In this case we want to constant fold we our 3 Terminal children 
+            Our format will be something like this: (5+6) (with the middle child being the operator)
+            """
             type_name = self.lexer.ruleNames[node.getChild(1).type-1]
             type_name = node.getChild(1).text
             foldable = ['*', '/', '%', '>>', '<<', '&', '|', '~', '^', '+', '-']
@@ -27,11 +37,14 @@ class ConstantFoldingVisitor(ASTVisitor):
 
             # Make into 1 node
             index = parent.findChild(node)
-            node = ASTNodeTerminal(eval(f"{node.getChild(0).text}{node.getChild(1).text}{node.getChild(2).text}"), parent, datatype_name)
+            node = ASTNodeTerminal(eval(f"{node.getChild(0).text}{node.getChild(1).text}{node.getChild(2).text}"),
+                                   parent, datatype_name)
+
             parent.setChild(index, node)
 
-        #check for UNARY operations
         elif node.getChildAmount() == node.getTerminalAmount() == 2:
+            """Check for UNARY operations"""
+
             type_name = self.lexer.ruleNames[node.getChild(0).type - 1]
             type_name = node.getChild(0).text
             foldable = ['+', '-']
@@ -52,16 +65,16 @@ class ConstantFoldingVisitor(ASTVisitor):
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         parent = node.parent
-        if (parent == None):
+        if parent is None:
             return
 
         grand_parent = parent.parent
-        if (grand_parent == None):
+        if grand_parent is None:
             return
 
         if parent.getChildAmount() == 1:
             index = grand_parent.findChild(parent)
             grand_parent.setChild(index, node)
-            #Overwrite index of parent with node
+            # Overwrite index of parent with node
 
             self.visitNodeTerminal(node)
