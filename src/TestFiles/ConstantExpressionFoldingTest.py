@@ -3,7 +3,7 @@ import subprocess
 
 class TestConstantExpression(unittest.TestCase):
     def testEvaluateResults(self):
-        test_expr = "5+6"
+        test_expr = "5+6/5"
 
         c_format = f"""
         #include <stdio.h>
@@ -13,5 +13,5 @@ class TestConstantExpression(unittest.TestCase):
         """
         out = subprocess.run(f"echo '{c_format}' | gcc -x c -o temp - && ./temp && rm temp",
                              shell=True, capture_output=True)
-
+        print(out.stdout)
         self.assertTrue(True)

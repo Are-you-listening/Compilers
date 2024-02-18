@@ -1,5 +1,5 @@
 grammar expression;
-start_ : expr EOF;
+start_ : expr ';' EOF;
 expr : literal
      | '(' expr ')'
      | ('+'|'-' | '~' | '!') expr

@@ -7,7 +7,9 @@ from src.antlr_files.expressionParser import expressionParser
 from src.antlr_files.expressionVisitor import expressionVisitor
 from src.parser.ASTCreator import ASTCreator
 from src.parser.AST import *
-from src.parser.ASTVisitor import *
+from src.parser.ConstantFoldingVisitor import *
+from src.parser.DotVisitor import *
+
 
 def main(argv):
     input_stream = FileStream("../../example_source_files/file1")
@@ -21,10 +23,10 @@ def main(argv):
 
     print(Trees.toStringTree(tree, None, parser))
 
-    cfv = constantFoldingVisitor(lexer)
+    cfv = ConstantFoldingVisitor(lexer)
     cfv.visit(ast)
 
-    d = dotVisitor()
+    d = DotVisitor()
     d.visitNode(ast.root)
 
     print("end")
