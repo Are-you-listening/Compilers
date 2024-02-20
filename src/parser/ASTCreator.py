@@ -49,7 +49,6 @@ class ASTCreator(expressionVisitor):
         self.__makeNode(ctx, "Literal")
 
     def visitTerminal(self, ctx):
-        print("ter", ctx.getText())
         node = ASTNodeTerminal(ctx.getText(), self.parent, ctx.getSymbol().type)
         self.parent.addChildren(node)
 
