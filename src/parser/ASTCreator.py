@@ -2,6 +2,8 @@ from src.antlr_files.expressionVisitor import *
 from src.antlr_files.expressionParser import *
 from src.parser.AST import *
 
+black_list = ['(', ')', ';']
+
 
 class ASTCreator(expressionVisitor):
     """
@@ -49,6 +51,9 @@ class ASTCreator(expressionVisitor):
         self.__makeNode(ctx, "Literal")
 
     def visitTerminal(self, ctx):
+        if ctx.getText() in black_list:
+            return
+
         node = ASTNodeTerminal(ctx.getText(), self.parent, ctx.getSymbol().type)
         self.parent.addChildren(node)
 

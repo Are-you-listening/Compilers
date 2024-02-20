@@ -10,7 +10,6 @@ from src.parser.AST import *
 from src.parser.ConstantFoldingVisitor import *
 from src.parser.DotVisitor import *
 
-
 def main(argv):
     input_stream = FileStream("../../example_source_files/file1")
     lexer = expressionLexer(input_stream)
@@ -21,13 +20,13 @@ def main(argv):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    print(Trees.toStringTree(tree, None, parser))
+    d = DotVisitor()
+    d.visit(ast)
 
     cfv = ConstantFoldingVisitor(lexer)
     cfv.visit(ast)
 
-    d = DotVisitor()
-    d.visit(ast)
+
 
     print("end")
 

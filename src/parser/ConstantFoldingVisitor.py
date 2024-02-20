@@ -1,4 +1,5 @@
 from src.parser.ASTVisitor import *
+from src.parser.CFunctionExecuter import *
 
 
 class ConstantFoldingVisitor(ASTVisitor):
@@ -22,9 +23,25 @@ class ConstantFoldingVisitor(ASTVisitor):
             In this case we want to constant fold we our 3 Terminal children 
             Our format will be something like this: (5+6) (with the middle child being the operator)
             """
-            type_name = self.lexer.ruleNames[node.getChild(1).type-1]
             type_name = node.getChild(1).text
-            foldable = ['*', '/', '%', '>>', '<<', '&', '|', '~', '^', '+', '-']
+            foldable = {'*': BinaryOperations.Multiply,
+                        '/': BinaryOperations.Divide,
+                        '%': BinaryOperations.Modulus,
+                        '>>': BitOperations.BitwiseRightshift,
+                        '<<': BitOperations.BitwiseLeftshift,
+                        '&': BitOperations.BitAnd,
+                        '|': BitOperations.BitOr,
+                        '^': BitOperations.BitExclusive,
+                        '+': BinaryOperations.Add,
+                        '-': BinaryOperations.Subtract,
+                        '<': RelationalOperations.LessThan,
+                        '>': RelationalOperations.GreaterThan,
+                        '<=': RelationalOperations.LessThanOrEqualTo,
+                        '>=': RelationalOperations.GreaterThanOrEqualTo,
+                        '==': RelationalOperations.EqualTo,
+                        '!=': RelationalOperations.NotEqualTo,
+                        '||': LogicalOperations.LogicalOr,
+                        '&&': LogicalOperations.LogicalAnd}
 
             if type_name not in foldable:
                 return
@@ -37,17 +54,22 @@ class ConstantFoldingVisitor(ASTVisitor):
 
             # Make into 1 node
             index = parent.findChild(node)
-            node = ASTNodeTerminal(eval(f"{node.getChild(0).text}{node.getChild(1).text}{node.getChild(2).text}"),
-                                   parent, datatype_name)
+
+            node = ASTNodeTerminal(
+                str(IntByte.checkRange(foldable[node.getChild(1).text](int(node.getChild(0).text), int(node.getChild(2).text)))),
+                parent, datatype_name)
 
             parent.setChild(index, node)
+            self.visitNodeTerminal(node)
 
         elif node.getChildAmount() == node.getTerminalAmount() == 2:
             """Check for UNARY operations"""
 
-            type_name = self.lexer.ruleNames[node.getChild(0).type - 1]
             type_name = node.getChild(0).text
-            foldable = ['+', '-']
+            foldable = {'+': UnaryOperations.Plus,
+                        '-': UnaryOperations.Min,
+                        '~': BitOperations.BitNot,
+                        '!': LogicalOperations.LogicalNot}
 
             if type_name not in foldable:
                 return
@@ -59,9 +81,11 @@ class ConstantFoldingVisitor(ASTVisitor):
             datatype_name = node.getChild(1).type
             # Make into 1 node
             index = parent.findChild(node)
-            node = ASTNodeTerminal(eval(f"{node.getChild(0).text}{node.getChild(1).text}"),
+
+            node = ASTNodeTerminal(str(IntByte.checkRange(foldable[node.getChild(0).text](int(node.getChild(1).text)))),
                                    parent, datatype_name)
             parent.setChild(index, node)
+            self.visitNodeTerminal(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         parent = node.parent

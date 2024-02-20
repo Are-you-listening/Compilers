@@ -1,5 +1,5 @@
 grammar expression;
-start_ : expr ';' EOF;
+start_ : (expr (';')+)*  EOF;
 expr : literal
      | '(' expr ')'
      | ('+'|'-' | '~' | '!') expr
@@ -16,5 +16,5 @@ expr : literal
 
 literal : INT ;
 
-INT : [0-9]+ ;
+INT : ([1-9][0-9]*) | [0-9] ;
 WS : [ \t\n\r]+ -> skip ;
