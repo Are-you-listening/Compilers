@@ -11,6 +11,9 @@ class IntByte:
 
 
 class UnaryOperations:
+    """
+    Unary functions equivalent to the functionality of C
+    """
     @staticmethod
     def Plus(a):
         return a
@@ -21,7 +24,9 @@ class UnaryOperations:
 
 
 class BinaryOperations:
-
+    """
+    Binary functions equivalent to the functionality of C
+    """
     @staticmethod
     def Add(a, b):
         return a + b
@@ -44,6 +49,9 @@ class BinaryOperations:
 
 
 class LogicalOperations:
+    """
+    Logical functions equivalent to the functionality of C
+    """
 
     @staticmethod
     def LogicalAnd(a: int, b: int):
@@ -68,6 +76,10 @@ class LogicalOperations:
 
 
 class BitOperations:
+    """
+    Bit functions equivalent to the functionality of C
+    """
+
     @staticmethod
     def BitAnd(a: int, b: int):
         return a & b
@@ -101,6 +113,10 @@ class BitOperations:
 
 
 class RelationalOperations:
+    """
+    Relation functions equivalent to the functionality of C
+    """
+
     @staticmethod
     def LessThan(a, b):
         return int(a < b)

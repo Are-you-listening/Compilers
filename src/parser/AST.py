@@ -4,6 +4,9 @@ class ASTVisitor:
 
 
 class ASTNode:
+    """
+    A node inside the AST
+    """
     def __init__(self, text, parent):
         self.children = []
         self.text = text
@@ -38,6 +41,9 @@ class ASTNode:
 
 
 class ASTNodeTerminal(ASTNode):
+    """
+    A node inside the AST that contains a terminal
+    """
     def __init__(self, text, parent, terminal_type):
         super(ASTNodeTerminal, self).__init__(text, parent)
         self.type = terminal_type
@@ -47,6 +53,7 @@ class ASTNodeTerminal(ASTNode):
 
 
 class AST:
+    """Base AST class"""
     def __init__(self, root):
         self.root = root
 

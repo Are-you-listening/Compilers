@@ -16,6 +16,10 @@ class ConstantFoldingVisitor(ASTVisitor):
         :param node: current node we are checking
         """
 
+        parent = node.parent
+        if parent is None:
+            return
+
         if node.getChildAmount() == node.getTerminalAmount() == 3:
             """Checked for BINARY operations"""
 
@@ -46,21 +50,8 @@ class ConstantFoldingVisitor(ASTVisitor):
             if type_name not in foldable:
                 return
 
-            parent = node.parent
-            if parent is None:
-                return
-
             datatype_name = node.getChild(0).type
-
-            # Make into 1 node
-            index = parent.findChild(node)
-
-            node = ASTNodeTerminal(
-                str(IntByte.checkRange(foldable[node.getChild(1).text](int(node.getChild(0).text), int(node.getChild(2).text)))),
-                parent, datatype_name)
-
-            parent.setChild(index, node)
-            self.visitNodeTerminal(node)
+            result = str(IntByte.checkRange(foldable[node.getChild(1).text](int(node.getChild(0).text), int(node.getChild(2).text))))
 
         elif node.getChildAmount() == node.getTerminalAmount() == 2:
             """Check for UNARY operations"""
@@ -74,18 +65,21 @@ class ConstantFoldingVisitor(ASTVisitor):
             if type_name not in foldable:
                 return
 
-            parent = node.parent
-            if parent is None:
-                return
-
             datatype_name = node.getChild(1).type
-            # Make into 1 node
-            index = parent.findChild(node)
+            result = str(IntByte.checkRange(foldable[node.getChild(0).text](int(node.getChild(1).text))))
 
-            node = ASTNodeTerminal(str(IntByte.checkRange(foldable[node.getChild(0).text](int(node.getChild(1).text)))),
-                                   parent, datatype_name)
-            parent.setChild(index, node)
-            self.visitNodeTerminal(node)
+        else:
+            return
+
+        """store the calculated value as an new node"""
+        index = parent.findChild(node)
+
+        node = ASTNodeTerminal(result,
+                               parent, datatype_name)
+        parent.setChild(index, node)
+
+        """do the visiting again"""
+        self.visitNodeTerminal(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         parent = node.parent

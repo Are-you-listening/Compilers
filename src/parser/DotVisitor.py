@@ -3,6 +3,9 @@ import subprocess
 
 
 class DotVisitor(ASTVisitor):
+    """
+    Visitor to visualize the AST tree using dot
+    """
     def __init__(self):
         self.outfile = open("ASTvisual.dot", "w")
         self.outfile.write("digraph AST {\n")

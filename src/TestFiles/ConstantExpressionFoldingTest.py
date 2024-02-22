@@ -1,69 +1,78 @@
 import unittest
-import subprocess
 from src.parser.ASTOutput import *
-import sys
 from antlr4 import *
-from antlr4.tree.Trees import Trees
 
 from src.antlr_files.expressionLexer import expressionLexer
 from src.antlr_files.expressionParser import expressionParser
-from src.antlr_files.expressionVisitor import expressionVisitor
 from src.parser.ASTCreator import ASTCreator
-from src.parser.AST import *
 from src.parser.ConstantFoldingVisitor import *
 from src.parser.DotVisitor import *
 
 
 class TestConstantExpression(unittest.TestCase):
     def testEvaluateResults(self):
+        """
+        This testcase will test expression folding
+        :return:
+        """
 
+        """
+        Files that are checked
+        """
         filenames = ["proj1_man_pass_constantFolding.c", "proj1_man_pass_intLiteral.c",
                      "proj1_man_pass_operators.c", "proj1_man_pass_whitespace.c"]
 
-        for f in filenames:
-            path = f"../../testfiles/basic_tests_123/{f}"
-            with open(path, "rt") as open_file:
+        for file in filenames:
+            self.compareData(file)
 
-                test_expr = open_file.read()
+    def compareData(self, file):
+        """
+        check each expression in the testfile
+        """
 
+        path = f"../../testfiles/basic_tests_123/{file}"
+        with open(path, "rt") as open_file:
 
-            c_prints = []
-            for expr in test_expr.split(';'):
-                expr = expr.replace("\n", "")
-                if len(expr) == 0:
-                    continue
-                c_print = f"""printf("%d", {expr});\nprintf(";");\n"""
-                c_prints.append(c_print)
+            test_expr = open_file.read()
 
-            c_format = f"""
-                    #include <stdio.h>
-                    int main(void){'{'}
-                        {"".join(c_prints)}
-                        
-                    {'}'}
-                    """
+        c_prints = []
+        for expr in test_expr.split(';'):
+            expr = expr.replace("\n", "")
+            if len(expr) == 0:
+                continue
+            c_print = f"""printf("%d", {expr});\nprintf(";");\n"""
+            c_prints.append(c_print)
 
-            out = subprocess.run(f"echo '{c_format}' | gcc -x c -o temp - && ./temp && rm temp",
-                                 shell=True, capture_output=True)
+        c_format = f"""
+                            #include <stdio.h>
+                            int main(void){'{'}
+                                {"".join(c_prints)}
 
+                            {'}'}
+                            """
 
-            # run ast
-            input_stream = FileStream(path)
-            lexer = expressionLexer(input_stream)
-            stream = CommonTokenStream(lexer)
-            parser = expressionParser(stream)
-            tree = parser.start_()
-            toAST = ASTCreator()
-            toAST.visit(tree)
-            ast = toAST.getAST()
+        out = subprocess.run(f"echo '{c_format}' | gcc -x c -o temp - && ./temp && rm temp",
+                             shell=True, capture_output=True)
 
-            cfv = ConstantFoldingVisitor(lexer)
-            cfv.visit(ast)
+        """
+        compile the file using our own ast
+        """
+        input_stream = FileStream(path)
+        lexer = expressionLexer(input_stream)
+        stream = CommonTokenStream(lexer)
+        parser = expressionParser(stream)
+        tree = parser.start_()
+        toAST = ASTCreator()
+        toAST.visit(tree)
+        ast = toAST.getAST()
 
-            out2 = ASTOutput()
-            out2.visit(ast)
+        cfv = ConstantFoldingVisitor(lexer)
+        cfv.visit(ast)
 
-            print(out.stdout)
-            print(out2.getOutput()[:-6])
+        out2 = ASTOutput()
+        out2.visit(ast)
 
-            self.assertEqual(out.stdout, bytes(out2.getOutput()[:-6], encoding='utf-8'))
+        """
+        compare outputs
+        """
+        self.assertEqual(out.stdout, bytes(out2.getOutput()[:-6], encoding='utf-8'))

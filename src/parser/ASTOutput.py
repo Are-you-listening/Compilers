@@ -2,6 +2,9 @@ from src.parser.ASTVisitor import *
 
 
 class ASTOutput(ASTVisitor):
+    """
+    Makes a print format output of the yield of the AST
+    """
     def __init__(self):
         self.output = ""
 

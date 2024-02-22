@@ -3,6 +3,9 @@ from src.parser.AST import ASTNode, AST, ASTNodeTerminal
 
 
 class ASTVisitor:
+    """
+    Abstract visitor for the AST
+    """
 
     def visit(self, ast: AST):
         root = ast.root
