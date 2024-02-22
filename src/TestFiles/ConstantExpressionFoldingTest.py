@@ -20,7 +20,7 @@ class TestConstantExpression(unittest.TestCase):
         Files that are checked
         """
         filenames = ["proj1_man_pass_constantFolding.c", "proj1_man_pass_intLiteral.c",
-                     "proj1_man_pass_operators.c", "proj1_man_pass_whitespace.c"]
+                     "proj1_man_pass_operators.c", "proj1_man_pass_whitespace.c", "../ownTests/proj1_own1.c"]
 
         for file in filenames:
             self.compareData(file)
