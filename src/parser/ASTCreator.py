@@ -41,8 +41,26 @@ class ASTCreator(expressionVisitor):
         self.AST = AST(self.parent)
 
     def visitStart_(self, ctx: expressionParser.Start_Context):
-        self.parent = ASTNode("Start", None)
+        self.parent = ASTNode("Start", None, None)
         self.visitChildren(ctx)
+
+    def visitFunction(self, ctx:expressionParser.FunctionContext):
+        self.__makeNode(ctx, "Function")
+
+    def visitLines(self, ctx:expressionParser.LinesContext):
+        self.__makeNode(ctx, "Lines")
+
+    def visitLine(self, ctx:expressionParser.LineContext):
+        self.__makeNode(ctx, "Line")
+
+    def visitType(self, ctx:expressionParser.TypeContext):
+        self.__makeNode(ctx, "Type")
+
+    def visitDeclaration(self, ctx:expressionParser.DeclarationContext):
+        self.__makeNode(ctx, "Declaration")
+
+    def visitAssignment(self, ctx:expressionParser.AssignmentContext):
+        self.__makeNode(ctx, "Assignment")
 
     def visitExpr(self, ctx: expressionParser.ExprContext):
         self.__makeNode(ctx, "Expr")
@@ -67,7 +85,7 @@ class ASTCreator(expressionVisitor):
         """
         makes new Object and makes sure this will be a child of it's parent
         """
-        node = ASTNode(terminal_type, self.parent)
+        node = ASTNode(terminal_type, self.parent, None)
         self.parent.addChildren(node)
         old_parent = self.parent
         self.parent = node
