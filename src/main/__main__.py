@@ -20,9 +20,8 @@ def main(argv):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-
-    #cfv = ConstantFoldingVisitor(lexer)
-    #cfv.visit(ast)
+    cfv = ConstantFoldingVisitor(lexer)
+    cfv.visit(ast)
 
     d = DotVisitor()
     d.visit(ast)

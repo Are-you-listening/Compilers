@@ -90,7 +90,7 @@ class ConstantFoldingVisitor(ASTVisitor):
         if grand_parent is None:
             return
 
-        if parent.getChildAmount() == 1:
+        if parent.getChildAmount() == 1 and (parent.text in ("Literal", "Expr")) and node.type == self.lexer.IDENTIFIER:
             index = grand_parent.findChild(parent)
             grand_parent.setChild(index, node)
             # Overwrite index of parent with node
