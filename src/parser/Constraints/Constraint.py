@@ -3,6 +3,9 @@ from src.parser.AST import *
 
 
 class Constraint:
+    """
+    Abstact class to add constraints that will be checked by the constraint checker
+    """
     def __init__(self):
         self.accepted = False
 

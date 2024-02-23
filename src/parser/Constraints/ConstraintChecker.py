@@ -4,7 +4,7 @@ from src.parser.Constraints.MainFoundConstraint import *
 
 class ConstraintChecker(ASTVisitor):
     """
-    Visitor to visualize the AST tree using dot
+    Visitor to check all nodes to verify certain constraints
     """
     def __init__(self, lexer):
         self.constraints = [MainFoundConstraint(lexer)]
