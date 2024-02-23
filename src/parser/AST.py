@@ -7,10 +7,11 @@ class ASTNode:
     """
     A node inside the AST
     """
-    def __init__(self, text, parent):
+    def __init__(self, text, parent, symbol_table):
         self.children = []
         self.text = text
         self.parent = parent
+        self.symbol_table = symbol_table
 
     def addChildren(self, child):
         self.children.append(child)
@@ -44,8 +45,8 @@ class ASTNodeTerminal(ASTNode):
     """
     A node inside the AST that contains a terminal
     """
-    def __init__(self, text, parent, terminal_type):
-        super(ASTNodeTerminal, self).__init__(text, parent)
+    def __init__(self, text, parent, symbol_table, terminal_type):
+        super(ASTNodeTerminal, self).__init__(text, parent, symbol_table)
         self.type = terminal_type
 
     def accept(self, v: ASTVisitor):

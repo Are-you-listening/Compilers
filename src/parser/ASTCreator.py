@@ -17,6 +17,7 @@ class ASTCreator(expressionVisitor):
         """
         self.parent = None
         self.AST = None
+        self.symbol_entries = []
 
     def visit(self, tree):
         """
@@ -29,6 +30,7 @@ class ASTCreator(expressionVisitor):
         """
         self.parent = None
         self.AST = None
+        self.symbol_entries = []
 
         """
         call the visit of the base class
@@ -72,7 +74,7 @@ class ASTCreator(expressionVisitor):
         if ctx.getText() in black_list:
             return
 
-        node = ASTNodeTerminal(ctx.getText(), self.parent, ctx.getSymbol().type)
+        node = ASTNodeTerminal(ctx.getText(), self.parent, None, ctx.getSymbol().type)
         self.parent.addChildren(node)
 
     def __makeNode(self, ctx, terminal_type: str):
