@@ -2,10 +2,10 @@ grammar expression;
 start_ : lines function lines EOF;
 function : type IDENTIFIER '()' '{' lines '}';
 lines : (line)*  ;
-line: (declaration | expr)(';')+;
-literal : (INT | FLOAT | CHAR | IDENTIFIER) ;
-type: ('const')? ('int' | 'char' | 'float');
+line: (declaration | expr| assignment)(';')+;
+type: ('const')? ('int' | 'char' | 'float') ('*')*;
 declaration: type IDENTIFIER ('=' expr)?;
+assignment: IDENTIFIER ('=' expr);
 expr : literal
      | '(' expr ')'
      | ('+'|'-' | '~' | '!') expr
@@ -19,6 +19,8 @@ expr : literal
      | expr '|' expr
      | expr '&&' expr
      | expr '||' expr;
+literal : (INT | FLOAT | CHAR | IDENTIFIER) ;
+
 
 IDENTIFIER: ([a-z]|[A-Z]|'_')([a-z]|[A-Z]|'_'|[0-9])*;
 INT : ([1-9][0-9]*) | [0-9] ;
