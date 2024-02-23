@@ -9,6 +9,7 @@ from src.parser.ASTCreator import ASTCreator
 from src.parser.AST import *
 from src.parser.ConstantFoldingVisitor import *
 from src.parser.DotVisitor import *
+from src.parser.Constraints.ConstraintChecker import *
 
 def main(argv):
     input_stream = FileStream("../../example_source_files/file1")
@@ -22,6 +23,9 @@ def main(argv):
 
     cfv = ConstantFoldingVisitor(lexer)
     cfv.visit(ast)
+
+    constraint_checker = ConstraintChecker(lexer)
+    constraint_checker.visit(ast)
 
     d = DotVisitor()
     d.visit(ast)

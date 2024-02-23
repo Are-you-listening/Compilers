@@ -1,5 +1,5 @@
 grammar expression;
-start_ : lines function lines EOF;
+start_ : (function | line)* EOF;
 function : type IDENTIFIER '(' ')' '{' lines '}';
 lines : (line)*  ;
 line: (declaration | expr| assignment)(';')+;

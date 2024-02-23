@@ -69,3 +69,5 @@ class AST:
 
     def traverse(self):
         pass
+
+from src.parser.ASTVisitor import *

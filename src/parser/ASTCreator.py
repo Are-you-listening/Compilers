@@ -16,10 +16,16 @@ class ASTCreator(expressionVisitor):
         self.parent: will store the parent ASTNode of the Node we create in the visit function
         self.AST: will create an AST tree containing a ptr to the parent
         """
+
+        self.lexer = lexer
         self.parent = None
         self.AST = None
         self.stack = [[]]
-        self.lexer = lexer
+
+    def __setup(self):
+        self.parent = None
+        self.AST = None
+        self.stack = [[]]
 
     def visit(self, tree):
         """
@@ -30,9 +36,7 @@ class ASTCreator(expressionVisitor):
         """
         Clear the previously assigned parent and AST to prevent issues when used multiple times
         """
-        self.parent = None
-        self.AST = None
-        self.stack = [[]]
+        self.__setup()
 
         """
         call the visit of the base class
@@ -45,7 +49,7 @@ class ASTCreator(expressionVisitor):
         self.AST = AST(self.parent)
 
     def visitStart_(self, ctx: expressionParser.Start_Context):
-        self.parent = ASTNode("Start", None, self.getSymbolTable())
+        self.parent = ASTNode("Start", None, self.__getSymbolTable())
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx:expressionParser.FunctionContext):
@@ -86,26 +90,9 @@ class ASTCreator(expressionVisitor):
         if ctx.getText() in black_list:
             return
 
-        #ctx has type IDENTIFIER
+        self.__updateSymbolTable(ctx)
 
-
-        #self.parent.getChild #traverse through children and get type if exist + get const
-        child = self.parent.findType("Type")
-        isConst = False
-        type = ""
-
-        if(self.lexer.IDENTIFIER == ctx.getSymbol().type):
-            if (self.parent.text=="Declaration" or self.parent.text=="Function"):
-                for grandchild in child.children:
-                    if grandchild.text == "const":
-                        isConst = True
-                    else:
-                        type += grandchild.text
-
-                symbol_entry = SymbolEntry(self.parent.text, type, ctx.getText(), isConst)
-                self.stack[-1].append(symbol_entry)
-
-        node = ASTNodeTerminal(ctx.getText(), self.parent, self.getSymbolTable(), ctx.getSymbol().type)
+        node = ASTNodeTerminal(ctx.getText(), self.parent, self.__getSymbolTable(), ctx.getSymbol().type)
         self.parent.addChildren(node)
 
     def __makeNode(self, ctx, terminal_type: str):
@@ -118,7 +105,7 @@ class ASTCreator(expressionVisitor):
         """
         makes new Object and makes sure this will be a child of it's parent
         """
-        node = ASTNode(terminal_type, self.parent, self.getSymbolTable())
+        node = ASTNode(terminal_type, self.parent, self.__getSymbolTable())
         self.parent.addChildren(node)
         old_parent = self.parent
         self.parent = node
@@ -137,7 +124,7 @@ class ASTCreator(expressionVisitor):
         """
         return self.AST
 
-    def getSymbolTable(self):
+    def __getSymbolTable(self):
         symbol_table = SymbolTable([])
 
         for list in self.stack:
@@ -146,4 +133,22 @@ class ASTCreator(expressionVisitor):
 
         return symbol_table
 
+    def __updateSymbolTable(self, ctx):
+        """
+        self.parent.getChild #traverse through children and get type if exist + get const
+        """
 
+        child = self.parent.findType("Type")
+        is_const = False
+        datatype = ""
+
+        if self.lexer.IDENTIFIER == ctx.getSymbol().type:
+            if self.parent.text == "Declaration" or self.parent.text == "Function":
+                for grandchild in child.children:
+                    if grandchild.text == "const":
+                        is_const = True
+                    else:
+                        datatype += grandchild.text
+
+                symbol_entry = SymbolEntry(self.parent.text, datatype, ctx.getText(), is_const)
+                self.stack[-1].append(symbol_entry)
