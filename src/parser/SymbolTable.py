@@ -1,6 +1,7 @@
 class SymbolEntry:
-    def __init__(self, fitype: str, name: str, const: bool):
+    def __init__(self, fitype: str, type: str, name: str, const: bool):
         self.fitype = fitype
+        self.type = type
         self.name = name
         self.const = const
 

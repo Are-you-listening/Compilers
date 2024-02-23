@@ -10,7 +10,7 @@ class ASTCreator(expressionVisitor):
     """
     This class converts the Parse tree created from antlr4 file into our explicit defined AST
     """
-    def __init__(self):
+    def __init__(self,lexer):
         """
         Default initialization of the data members
         self.parent: will store the parent ASTNode of the Node we create in the visit function
@@ -19,6 +19,7 @@ class ASTCreator(expressionVisitor):
         self.parent = None
         self.AST = None
         self.stack = [[]]
+        self.lexer = lexer
 
     def visit(self, tree):
         """
@@ -80,9 +81,24 @@ class ASTCreator(expressionVisitor):
         if ctx.getText() in black_list:
             return
 
+        #ctx has type IDENTIFIER
+
+
         #self.parent.getChild #traverse through children and get type if exist + get const
-        symbol_entry = SymbolEntry(self.latest, "N", False)
-        self.stack[-1].append(symbol_entry)
+        child = self.parent.findType("Type")
+        isConst = False
+        type = ""
+
+        if(self.lexer.IDENTIFIER == ctx.getSymbol().type):
+            if (self.parent.text=="Declaration" or self.parent.text=="Function"):
+                for grandchild in child.children:
+                    if grandchild.text == "const":
+                        isConst = True
+                    else:
+                        type += grandchild.text
+
+                symbol_entry = SymbolEntry(self.parent.text, type, ctx.getText(), isConst)
+                self.stack[-1].append(symbol_entry)
 
         node = ASTNodeTerminal(ctx.getText(), self.parent, self.getSymbolTable(), ctx.getSymbol().type)
         self.parent.addChildren(node)
@@ -122,5 +138,7 @@ class ASTCreator(expressionVisitor):
         for list in self.stack:
             for element in list:
                 symbol_table.add(element)
+
+        return symbol_table
 
 

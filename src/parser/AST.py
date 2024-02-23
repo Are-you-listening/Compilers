@@ -36,6 +36,12 @@ class ASTNode:
     def findChild(self, child):
         return self.children.index(child)
 
+    def findType(self, type: str):
+        for child in self.children:
+            if child.text == type:
+                return child
+        return None
+
     def setChild(self, index, child):
         self.children[index] = child
         child.parent = self

@@ -16,7 +16,7 @@ def main(argv):
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
     tree = parser.start_()
-    toAST = ASTCreator()
+    toAST = ASTCreator(lexer)
     toAST.visit(tree)
     ast = toAST.getAST()
 
