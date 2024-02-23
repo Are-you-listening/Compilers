@@ -46,6 +46,9 @@ class ASTNode:
         self.children[index] = child
         child.parent = self
 
+    def getSymbolTable(self):
+        return self.symbol_table
+
 
 class ASTNodeTerminal(ASTNode):
     """

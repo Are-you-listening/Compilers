@@ -3,7 +3,7 @@ from src.antlr_files.expressionParser import *
 from src.parser.AST import *
 from src.parser.SymbolTable import *
 
-black_list = ['(', ')', ';']
+black_list = ['(', ')', ';', '{', '}']
 
 
 class ASTCreator(expressionVisitor):
@@ -73,6 +73,11 @@ class ASTCreator(expressionVisitor):
         self.__makeNode(ctx, "Literal")
 
     def visitTerminal(self, ctx):
+        """
+        check for open and closed {} to determine the scope data
+        :param ctx:
+        :return:
+        """
         if ctx.getText() == '{':
             self.stack.append([])
         elif ctx.getText() == '}':
