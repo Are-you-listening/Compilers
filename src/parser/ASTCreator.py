@@ -80,7 +80,7 @@ class ASTCreator(expressionVisitor):
         if ctx.getText() in black_list:
             return
 
-        #self.parent.getChild
+        #self.parent.getChild #traverse through children and get type if exist + get const
         symbol_entry = SymbolEntry(self.latest, "N", False)
         self.stack[-1].append(symbol_entry)
 
