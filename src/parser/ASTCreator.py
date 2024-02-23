@@ -1,6 +1,7 @@
 from src.antlr_files.expressionVisitor import *
 from src.antlr_files.expressionParser import *
 from src.parser.AST import *
+from src.parser.SymbolTable import *
 
 black_list = ['(', ')', ';']
 
@@ -17,7 +18,7 @@ class ASTCreator(expressionVisitor):
         """
         self.parent = None
         self.AST = None
-        self.symbol_entries = []
+        self.stack = [[]]
 
     def visit(self, tree):
         """
@@ -30,7 +31,7 @@ class ASTCreator(expressionVisitor):
         """
         self.parent = None
         self.AST = None
-        self.symbol_entries = []
+        self.stack = [[]]
 
         """
         call the visit of the base class
@@ -43,7 +44,7 @@ class ASTCreator(expressionVisitor):
         self.AST = AST(self.parent)
 
     def visitStart_(self, ctx: expressionParser.Start_Context):
-        self.parent = ASTNode("Start", None, None)
+        self.parent = ASTNode("Start", None, self.getSymbolTable())
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx:expressionParser.FunctionContext):
@@ -71,10 +72,19 @@ class ASTCreator(expressionVisitor):
         self.__makeNode(ctx, "Literal")
 
     def visitTerminal(self, ctx):
+        if ctx.getText() == '{':
+            self.stack.append([])
+        elif ctx.getText() == '}':
+            self.stack.pop()
+
         if ctx.getText() in black_list:
             return
 
-        node = ASTNodeTerminal(ctx.getText(), self.parent, None, ctx.getSymbol().type)
+        #self.parent.getChild
+        symbol_entry = SymbolEntry(self.latest, "N", False)
+        self.stack[-1].append(symbol_entry)
+
+        node = ASTNodeTerminal(ctx.getText(), self.parent, self.getSymbolTable(), ctx.getSymbol().type)
         self.parent.addChildren(node)
 
     def __makeNode(self, ctx, terminal_type: str):
@@ -87,7 +97,7 @@ class ASTCreator(expressionVisitor):
         """
         makes new Object and makes sure this will be a child of it's parent
         """
-        node = ASTNode(terminal_type, self.parent, None)
+        node = ASTNode(terminal_type, self.parent, self.getSymbolTable())
         self.parent.addChildren(node)
         old_parent = self.parent
         self.parent = node
@@ -105,3 +115,12 @@ class ASTCreator(expressionVisitor):
         :return: self.AST
         """
         return self.AST
+
+    def getSymbolTable(self):
+        symbol_table = SymbolTable([])
+
+        for list in self.stack:
+            for element in list:
+                symbol_table.add(element)
+
+

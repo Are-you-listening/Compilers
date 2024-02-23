@@ -1,5 +1,9 @@
+int a = 5;
+
 int main() {
     int x = 4;
     int y = 5;
 
 }
+
+int b = 5+a;
