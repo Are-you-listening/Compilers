@@ -5,7 +5,7 @@ from src.parser.CTypes.CFunctionExecuter import CFunctionExecuter
 class _RangeCheck:
     @staticmethod
     def checkRange(value):
-        """assume 4 bytes/ int"""
+        """assume 1 bytes/ char"""
         b = value.to_bytes(8, byteorder="big", signed=True)
         b = b[-1:]
         return int.from_bytes(b, 'big', signed=True)

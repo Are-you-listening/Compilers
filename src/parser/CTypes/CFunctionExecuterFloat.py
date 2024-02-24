@@ -1,14 +1,15 @@
 import math
 from src.parser.CTypes.CFunctionExecuter import CFunctionExecuter
-
+import struct
 
 class _RangeCheck:
     @staticmethod
     def checkRange(value):
-        """assume 4 bytes/ int"""
-        b = value.to_bytes(32, byteorder="big", signed=True)
+        """assume 4 bytes/ float"""
+        b = struct.pack("f", value)
         b = b[-4:]
-        return int.from_bytes(b, 'big', signed=True)
+
+        return struct.unpack("f", b)[0]
 
 
 class _UnaryOperations:
@@ -23,7 +24,6 @@ class _UnaryOperations:
     def Min(a):
         return a * -1
 
-
 class _BinaryOperations:
     """
     Binary functions equivalent to the functionality of C
@@ -37,8 +37,8 @@ class _BinaryOperations:
         return a - b
 
     @staticmethod
-    def Divide(a: int, b: int):
-        return math.floor(a / b)
+    def Divide(a, b):
+        return a / b
 
     @staticmethod
     def Multiply(a, b):
@@ -55,21 +55,21 @@ class _LogicalOperations:
     """
 
     @staticmethod
-    def LogicalAnd(a: int, b: int):
+    def LogicalAnd(a, b):
         if a and b:
             return 1
         else:
             return 0
 
     @staticmethod
-    def LogicalOr(a: int, b: int):
+    def LogicalOr(a, b):
         if a or b:
             return 1
         else:
             return 0
 
     @staticmethod
-    def LogicalNot(a: int):
+    def LogicalNot(a):
         if a == 0:
             return 1
         else:
@@ -82,19 +82,19 @@ class _BitOperations:
     """
 
     @staticmethod
-    def BitAnd(a: int, b: int):
+    def BitAnd(a, b):
         return a & b
 
     @staticmethod
-    def BitOr(a: int, b: int):
+    def BitOr(a, b):
         return a | b
 
     @staticmethod
-    def BitNot(a: int):
+    def BitNot(a):
         return ~a
 
     @staticmethod
-    def BitExclusive(a: int, b: int):
+    def BitExclusive(a, b):
         return a ^ b
 
     @staticmethod
@@ -105,9 +105,6 @@ class _BitOperations:
 
     @staticmethod
     def BitwiseRightshift(a, b):
-
-        a = a.to_bytes(32, byteorder="big", signed=True)
-        a = int.from_bytes(a, 'big', signed=True)
         b = b.to_bytes(32, byteorder="big", signed=True)
         b = int.from_bytes(b, "big", signed=False)
         return a >> b
@@ -147,12 +144,21 @@ class _Conversions:
     @staticmethod
     def ToChar(value):
         """assume 4 bytes/ int"""
+        value = int(value)
         b = value.to_bytes(8, byteorder="big", signed=True)
         b = b[-1:]
         return int.from_bytes(b, 'big', signed=True)
 
+    @staticmethod
+    def ToInt(value):
+        """assume 4 bytes/ int"""
+        value = int(value)
+        b = value.to_bytes(32, byteorder="big", signed=True)
+        b = b[-4:]
+        return int.from_bytes(b, 'big', signed=True)
 
-class CFunctionExecuterInt(CFunctionExecuter):
+
+class CFunctionExecuterFloat(CFunctionExecuter):
     def __init__(self):
         super(CFunctionExecuter, self).__init__()
 
@@ -162,13 +168,14 @@ class CFunctionExecuterInt(CFunctionExecuter):
         self.LogicalOperations = _LogicalOperations
         self.BitOperations = _BitOperations
         self.RelationalOperations = _RelationalOperations
-        self.conversion_dict = {"CHAR": _Conversions.ToChar}
+        self.conversion_dict = {"CHAR": _Conversions.ToChar,
+                                "INT": _Conversions.ToInt}
 
     def fromString(self, string):
-        return int(string)
+        return float(string)
 
     def convertTo(self, data, to_type):
-        if to_type == "INT":
+        if to_type == "FLOAT":
             return data
 
         return self.conversion_dict[to_type](data)

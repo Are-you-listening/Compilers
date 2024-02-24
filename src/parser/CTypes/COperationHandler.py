@@ -1,6 +1,6 @@
 from src.parser.CTypes.CFunctionExecuterInt import *
 from src.parser.CTypes.CFunctionExecuterChar import *
-
+from src.parser.CTypes.CFunctionExecuterFloat import *
 
 class RichnessChecker:
     def __init__(self, lexer, rich_order: list):
@@ -23,7 +23,7 @@ class RichnessChecker:
 class COperationHandler:
     def __init__(self, lexer):
         self.richness_checker = RichnessChecker(lexer, ["CHAR", "INT", "FLOAT"])
-        self.c_type_executors = {"INT": CFunctionExecuterInt, "CHAR": CFunctionExecuterChar}
+        self.c_type_executors = {"INT": CFunctionExecuterInt, "CHAR": CFunctionExecuterChar, "FLOAT": CFunctionExecuterFloat}
 
     def doOperationBinary(self, val1: tuple, val2: tuple, operation: str):
 
