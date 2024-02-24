@@ -6,8 +6,8 @@ class _RangeCheck:
     @staticmethod
     def checkRange(value):
         """assume 4 bytes/ int"""
-        b = value.to_bytes(32, byteorder="big", signed=True)
-        b = b[-4:]
+        b = value.to_bytes(8, byteorder="big", signed=True)
+        b = b[-1:]
         return int.from_bytes(b, 'big', signed=True)
 
 
@@ -142,15 +142,8 @@ class _RelationalOperations:
     def NotEqualTo(a, b):
         return int(a != b)
 
-class _Conversions:
-    @staticmethod
-    def ToChar(value):
-        """assume 4 bytes/ int"""
-        b = value.to_bytes(8, byteorder="big", signed=True)
-        b = b[-1:]
-        return int.from_bytes(b, 'big', signed=True)
 
-class CFunctionExecuterInt(CFunctionExecuter):
+class CFunctionExecuterChar(CFunctionExecuter):
     def __init__(self):
         super(CFunctionExecuter, self).__init__()
 
@@ -160,16 +153,14 @@ class CFunctionExecuterInt(CFunctionExecuter):
         self.LogicalOperations = _LogicalOperations
         self.BitOperations = _BitOperations
         self.RelationalOperations = _RelationalOperations
-        self.conversion_dict = {"CHAR": _Conversions.ToChar}
+        self.conversion_dict = {"Float": ""}
 
-    def fromString(self, string):
-        return int(string)
+    def fromString(self, string: str):
+        return ord(string[1])
 
     def convertTo(self, data, to_type):
-        if to_type == "INT":
+        if to_type == "CHAR":
             return data
 
-        return self.conversion_dict[to_type](data)
-
     def getString(self, data):
-        return str(data)
+        return f"'{chr(data)}'"

@@ -1,5 +1,5 @@
 import math
-
+from abc import abstractmethod
 
 class _RangeCheck:
     @staticmethod
@@ -142,3 +142,15 @@ class CFunctionExecuter:
         self.LogicalOperations = _LogicalOperations
         self.BitOperations = _BitOperations
         self.RelationalOperations = _RelationalOperations
+        self.conversion_dict = {}
+
+    @abstractmethod
+    def fromString(self, string):
+        pass
+
+    def getString(self, data):
+        return str(data)
+
+    @abstractmethod
+    def convertTo(self, data, to_type):
+        pass

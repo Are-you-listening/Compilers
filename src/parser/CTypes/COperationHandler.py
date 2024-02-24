@@ -1,4 +1,5 @@
 from src.parser.CTypes.CFunctionExecuterInt import *
+from src.parser.CTypes.CFunctionExecuterChar import *
 
 
 class RichnessChecker:
@@ -7,20 +8,41 @@ class RichnessChecker:
         self.rich_order = rich_order
 
     def get_poorest(self, val1: tuple, val2: tuple):
-        type1 = self.lexer.ruleNames[val1[1]-1]
-        type2 = self.lexer.ruleNames[val2[1]-1]
+        type1 = self.getType(val1)
+        type2 = self.getType(val2)
 
         index1 = self.rich_order.index(type1)
         index2 = self.rich_order.index(type2)
         return self.rich_order[min(index1, index2)]
 
+    def getType(self, val: tuple):
+        type = self.lexer.ruleNames[val[1] - 1]
+        return type
+
 
 class COperationHandler:
     def __init__(self, lexer):
         self.richness_checker = RichnessChecker(lexer, ["CHAR", "INT", "FLOAT"])
+        self.c_type_executors = {"INT": CFunctionExecuterInt, "CHAR": CFunctionExecuterChar}
 
     def doOperationBinary(self, val1: tuple, val2: tuple, operation: str):
-        c_type = CFunctionExecuterInt()
+
+        poorest_type = self.richness_checker.get_poorest(val1, val2)
+
+        """
+        make sure we do the right type of operation (int op, char op, ...) and the values need to be converted
+        to the poorest type
+        """
+        c_type1 = self.c_type_executors[self.richness_checker.getType(val1)]()
+        c_type2 = self.c_type_executors[self.richness_checker.getType(val2)]()
+
+        data1 = c_type1.fromString(val1[0])
+        data2 = c_type2.fromString(val2[0])
+
+        data1 = c_type1.convertTo(data1, poorest_type)
+        data2 = c_type2.convertTo(data2, poorest_type)
+
+        c_type = self.c_type_executors[poorest_type]()
 
         foldable = {'*': c_type.BinaryOperations.Multiply,
                     '/': c_type.BinaryOperations.Divide,
@@ -42,18 +64,16 @@ class COperationHandler:
                     '&&': c_type.LogicalOperations.LogicalAnd}
 
         if operation not in foldable:
-            return
-
-        poorest_type = self.richness_checker.get_poorest(val1, val2)
-        #print(poorest_type)
-
-        result = str(c_type.RangeCheck.checkRange(
-            foldable[operation](int(val1[0]), int(val2[0]))))
+            return None
+        sub_result = c_type.RangeCheck.checkRange(
+            foldable[operation](data1, data2))
+        result = c_type.getString(sub_result)
 
         return result
 
     def doOperationUnary(self, val1: tuple, operation: str):
-        c_type = CFunctionExecuterInt()
+        c_type = self.c_type_executors[self.richness_checker.getType(val1)]()
+        data1 = c_type.fromString(val1[0])
 
         foldable = {'+': c_type.UnaryOperations.Plus,
                     '-': c_type.UnaryOperations.Min,
@@ -63,5 +83,7 @@ class COperationHandler:
         if operation not in foldable:
             return
 
-        result = str(c_type.RangeCheck.checkRange(foldable[operation](int(val1[0]))))
+        sub_result = c_type.RangeCheck.checkRange(foldable[operation](data1))
+        result = c_type.getString(sub_result)
+
         return result

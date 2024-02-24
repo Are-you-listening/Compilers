@@ -38,7 +38,7 @@ class ConstantFoldingVisitor(ASTVisitor):
             """Check for UNARY operations"""
 
             datatype_name = node.getChild(1).type
-            result = self.operation_handler.doOperationUnary((node.getChild(1).text, node.getChild(0).type),
+            result = self.operation_handler.doOperationUnary((node.getChild(1).text, node.getChild(1).type),
                                                              node.getChild(0).text)
 
         else:
