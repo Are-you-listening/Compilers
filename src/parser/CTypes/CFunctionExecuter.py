@@ -1,13 +1,13 @@
 import math
 from abc import abstractmethod
 
-class _RangeCheck:
+class BaseRangeCheck:
     @staticmethod
     def checkRange(value):
         return value
 
 
-class _UnaryOperations:
+class BaseUnaryOperations:
     """
     Unary functions equivalent to the functionality of C
     """
@@ -20,7 +20,7 @@ class _UnaryOperations:
         return a * -1
 
 
-class _BinaryOperations:
+class BaseBinaryOperations:
     """
     Binary functions equivalent to the functionality of C
     """
@@ -45,7 +45,7 @@ class _BinaryOperations:
         return a % b
 
 
-class _LogicalOperations:
+class BaseLogicalOperations:
     """
     Logical functions equivalent to the functionality of C
     """
@@ -72,7 +72,7 @@ class _LogicalOperations:
             return 0
 
 
-class _BitOperations:
+class BaseBitOperations:
     """
     Bit functions equivalent to the functionality of C
     """
@@ -104,7 +104,7 @@ class _BitOperations:
         return a >> b
 
 
-class _RelationalOperations:
+class BaseRelationalOperations:
     """
     Relation functions equivalent to the functionality of C
     """
@@ -136,12 +136,12 @@ class _RelationalOperations:
 
 class CFunctionExecuter:
     def __init__(self):
-        self.RangeCheck = _RangeCheck
-        self.UnaryOperations = _UnaryOperations
-        self.BinaryOperations = _BinaryOperations
-        self.LogicalOperations = _LogicalOperations
-        self.BitOperations = _BitOperations
-        self.RelationalOperations = _RelationalOperations
+        self.RangeCheck = BaseRangeCheck
+        self.UnaryOperations = BaseUnaryOperations
+        self.BinaryOperations = BaseBinaryOperations
+        self.LogicalOperations = BaseLogicalOperations
+        self.BitOperations = BaseBitOperations
+        self.RelationalOperations = BaseRelationalOperations
         self.conversion_dict = {}
 
     @abstractmethod

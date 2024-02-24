@@ -28,17 +28,15 @@ class ConstantFoldingVisitor(ASTVisitor):
             In this case we want to constant fold we our 3 Terminal children 
             Our format will be something like this: (5+6) (with the middle child being the operator)
             """
-            datatype_name = node.getChild(0).type
 
-            result = self.operation_handler.doOperationBinary((node.getChild(0).text, node.getChild(0).type),
+            result, datatype_name = self.operation_handler.doOperationBinary((node.getChild(0).text, node.getChild(0).type),
                                                               (node.getChild(2).text, node.getChild(2).type),
                                                               node.getChild(1).text)
 
         elif node.getChildAmount() == node.getTerminalAmount() == 2:
             """Check for UNARY operations"""
 
-            datatype_name = node.getChild(1).type
-            result = self.operation_handler.doOperationUnary((node.getChild(1).text, node.getChild(1).type),
+            result, datatype_name = self.operation_handler.doOperationUnary((node.getChild(1).text, node.getChild(1).type),
                                                              node.getChild(0).text)
 
         else:

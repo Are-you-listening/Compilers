@@ -19,6 +19,9 @@ class RichnessChecker:
         type = self.lexer.ruleNames[val[1] - 1]
         return type
 
+    def getTypeNumber(self, type_name):
+        return self.lexer.ruleNames.index(type_name)+1
+
 
 class COperationHandler:
     def __init__(self, lexer):
@@ -69,7 +72,7 @@ class COperationHandler:
             foldable[operation](data1, data2))
         result = c_type.getString(sub_result)
 
-        return result
+        return result, self.richness_checker.getTypeNumber(poorest_type)
 
     def doOperationUnary(self, val1: tuple, operation: str):
         c_type = self.c_type_executors[self.richness_checker.getType(val1)]()
@@ -86,4 +89,4 @@ class COperationHandler:
         sub_result = c_type.RangeCheck.checkRange(foldable[operation](data1))
         result = c_type.getString(sub_result)
 
-        return result
+        return result, val1[1]

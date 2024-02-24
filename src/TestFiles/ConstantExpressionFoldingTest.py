@@ -20,12 +20,27 @@ class TestConstantExpression(unittest.TestCase):
         Files that are checked
         """
         filenames = ["proj1_man_pass_constantFolding.c", "proj1_man_pass_intLiteral.c",
-                     "proj1_man_pass_operators.c", "proj1_man_pass_whitespace.c", "../ownTests/proj1_own1.c"]
+                     "proj1_man_pass_operators.c", "proj1_man_pass_whitespace.c", "../ownTests/proj1_own1.c",
+                     "../ownTests/proj1_own2.c"]
 
         for file in filenames:
-            self.compareData(file)
+            self.compareData(file, "d")
 
-    def compareData(self, file):
+    def testEvaluateResults2(self):
+        """
+        This testcase will test expression folding
+        :return:
+        """
+
+        """
+        Files that are checked
+        """
+        filenames = ["../ownTests/proj2_own3.c"]
+
+        for file in filenames:
+            self.compareData(file, "c")
+
+    def compareData(self, file, p_type):
         """
         check each expression in the testfile
         """
@@ -40,7 +55,7 @@ class TestConstantExpression(unittest.TestCase):
             expr = expr.replace("\n", "")
             if len(expr) == 0:
                 continue
-            c_print = f"""printf("%d", {expr});\nprintf(";");\n"""
+            c_print = f"""printf("%{p_type}", {expr});\nprintf(";");\n"""
             c_prints.append(c_print)
 
         c_format = f"""
@@ -50,8 +65,8 @@ class TestConstantExpression(unittest.TestCase):
 
                             {'}'}
                             """
-
-        out = subprocess.run(f"echo '{c_format}' | gcc -x c -o temp - && ./temp && rm temp",
+        c_format = c_format.replace("'", "'\\''")
+        out = subprocess.run(f"""echo '{c_format}' | gcc -ansi -pedantic -x c -o temp - && ./temp && rm temp""",
                              shell=True, capture_output=True)
 
         """
@@ -71,7 +86,6 @@ class TestConstantExpression(unittest.TestCase):
 
         out2 = ASTOutput()
         out2.visit(ast)
-
         """
         compare outputs
         """

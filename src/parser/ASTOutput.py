@@ -16,7 +16,10 @@ class ASTOutput(ASTVisitor):
         pass
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        self.output += node.text + ";"
+        out = node.text
+        if out[0] == "'" and out[-1] == "'":
+            out = out[1:-1]
+        self.output += out + ";"
 
     def getOutput(self):
         return self.output

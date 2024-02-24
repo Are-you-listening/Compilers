@@ -16,7 +16,11 @@ class DotVisitor(ASTVisitor):
             self.outfile.write(f'  "{id(node)}" -> "{id(child)}";\n')
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        self.outfile.write(f'  "{id(node)}" [label="{node.text}"];\n')
+        label = node.text
+        if node.text == "'\x00'":
+            label = '\\000'
+
+        self.outfile.write(f'  "{id(node)}" [label="{label}"];\n')
 
     def __del__(self):
         self.outfile.write("}\n")
