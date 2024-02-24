@@ -1,6 +1,7 @@
 import math
 from src.parser.CTypes.CFunctionExecuter import CFunctionExecuter
 
+
 class _RangeCheck:
     @staticmethod
     def checkRange(value):

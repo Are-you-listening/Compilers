@@ -1,10 +1,11 @@
 from src.parser.ASTVisitor import *
-from src.parser.CTypes.CFunctionExecuterInt import *
+from src.parser.CTypes.COperationHandler import COperationHandler
 
 
 class ConstantFoldingVisitor(ASTVisitor):
     def __init__(self, lexer):
         self.lexer = lexer
+        self.operation_handler = COperationHandler(lexer)
 
     def visit(self, ast: AST):
         root = ast.root
@@ -27,52 +28,18 @@ class ConstantFoldingVisitor(ASTVisitor):
             In this case we want to constant fold we our 3 Terminal children 
             Our format will be something like this: (5+6) (with the middle child being the operator)
             """
-            type_name = node.getChild(1).text
-
-            c_type = CFunctionExecuterInt()
-
-            foldable = {'*': c_type.BinaryOperations.Multiply,
-                        '/': c_type.BinaryOperations.Divide,
-                        '%': c_type.BinaryOperations.Modulus,
-                        '>>': c_type.BitOperations.BitwiseRightshift,
-                        '<<': c_type.BitOperations.BitwiseLeftshift,
-                        '&': c_type.BitOperations.BitAnd,
-                        '|': c_type.BitOperations.BitOr,
-                        '^': c_type.BitOperations.BitExclusive,
-                        '+': c_type.BinaryOperations.Add,
-                        '-': c_type.BinaryOperations.Subtract,
-                        '<': c_type.RelationalOperations.LessThan,
-                        '>': c_type.RelationalOperations.GreaterThan,
-                        '<=': c_type.RelationalOperations.LessThanOrEqualTo,
-                        '>=': c_type.RelationalOperations.GreaterThanOrEqualTo,
-                        '==': c_type.RelationalOperations.EqualTo,
-                        '!=': c_type.RelationalOperations.NotEqualTo,
-                        '||': c_type.LogicalOperations.LogicalOr,
-                        '&&': c_type.LogicalOperations.LogicalAnd}
-
-            if type_name not in foldable:
-                return
-
             datatype_name = node.getChild(0).type
-            result = str(c_type.RangeCheck.checkRange(foldable[node.getChild(1).text](int(node.getChild(0).text), int(node.getChild(2).text))))
+
+            result = self.operation_handler.doOperationBinary((node.getChild(0).text, node.getChild(0).type),
+                                                              (node.getChild(2).text, node.getChild(2).type),
+                                                              node.getChild(1).text)
 
         elif node.getChildAmount() == node.getTerminalAmount() == 2:
             """Check for UNARY operations"""
 
-            type_name = node.getChild(0).text
-
-            c_type = CFunctionExecuterInt()
-
-            foldable = {'+': c_type.UnaryOperations.Plus,
-                        '-': c_type.UnaryOperations.Min,
-                        '~': c_type.BitOperations.BitNot,
-                        '!': c_type.LogicalOperations.LogicalNot}
-
-            if type_name not in foldable:
-                return
-
             datatype_name = node.getChild(1).type
-            result = str(c_type.RangeCheck.checkRange(foldable[node.getChild(0).text](int(node.getChild(1).text))))
+            result = self.operation_handler.doOperationUnary((node.getChild(1).text, node.getChild(0).type),
+                                                             node.getChild(0).text)
 
         else:
             return
