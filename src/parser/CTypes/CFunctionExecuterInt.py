@@ -1,7 +1,7 @@
 import math
+from src.parser.CTypes.CFunctionExecuter import CFunctionExecuter
 
-
-class IntByte:
+class _RangeCheck:
     @staticmethod
     def checkRange(value):
         """assume 4 bytes/ int"""
@@ -10,7 +10,7 @@ class IntByte:
         return int.from_bytes(b, 'big', signed=True)
 
 
-class UnaryOperations:
+class _UnaryOperations:
     """
     Unary functions equivalent to the functionality of C
     """
@@ -23,7 +23,7 @@ class UnaryOperations:
         return a * -1
 
 
-class BinaryOperations:
+class _BinaryOperations:
     """
     Binary functions equivalent to the functionality of C
     """
@@ -48,7 +48,7 @@ class BinaryOperations:
         return a % b
 
 
-class LogicalOperations:
+class _LogicalOperations:
     """
     Logical functions equivalent to the functionality of C
     """
@@ -75,7 +75,7 @@ class LogicalOperations:
             return 0
 
 
-class BitOperations:
+class _BitOperations:
     """
     Bit functions equivalent to the functionality of C
     """
@@ -112,7 +112,7 @@ class BitOperations:
         return a >> b
 
 
-class RelationalOperations:
+class _RelationalOperations:
     """
     Relation functions equivalent to the functionality of C
     """
@@ -140,3 +140,15 @@ class RelationalOperations:
     @staticmethod
     def NotEqualTo(a, b):
         return int(a != b)
+
+
+class CFunctionExecuterInt(CFunctionExecuter):
+    def __init__(self):
+        super(CFunctionExecuter, self).__init__()
+
+        self.RangeCheck = _RangeCheck
+        self.UnaryOperations = _UnaryOperations
+        self.BinaryOperations = _BinaryOperations
+        self.LogicalOperations = _LogicalOperations
+        self.BitOperations = _BitOperations
+        self.RelationalOperations = _RelationalOperations

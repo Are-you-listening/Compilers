@@ -54,9 +54,10 @@ class ASTNodeTerminal(ASTNode):
     """
     A node inside the AST that contains a terminal
     """
-    def __init__(self, text, parent, symbol_table, terminal_type):
+    def __init__(self, text, parent, symbol_table, terminal_type, operation_type=None):
         super(ASTNodeTerminal, self).__init__(text, parent, symbol_table)
         self.type = terminal_type
+        self.operation_type = operation_type
 
     def accept(self, v: ASTVisitor):
         v.visitNodeTerminal(self)
