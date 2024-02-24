@@ -5,8 +5,10 @@ class ASTOutput(ASTVisitor):
     """
     Makes a print format output of the yield of the AST
     """
-    def __init__(self):
+    def __init__(self, lexer, round_amount=-1):
         self.output = ""
+        self.lexer = lexer
+        self.round_amount = round_amount
 
     def visit(self, ast: AST):
         self.output = ""
@@ -19,6 +21,10 @@ class ASTOutput(ASTVisitor):
         out = node.text
         if out[0] == "'" and out[-1] == "'":
             out = out[1:-1]
+
+        if node.type == self.lexer.FLOAT and self.round_amount > 0:
+            out = format(float(out), f".{self.round_amount}f")
+
         self.output += out + ";"
 
     def getOutput(self):

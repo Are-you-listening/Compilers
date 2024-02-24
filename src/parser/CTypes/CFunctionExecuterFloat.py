@@ -1,7 +1,7 @@
 import math
 from src.parser.CTypes.CFunctionExecuter import *
 import struct
-
+from src.parser.ErrorExporter import *
 
 class _RangeCheck(BaseRangeCheck):
     @staticmethod
@@ -23,6 +23,11 @@ class _BinaryOperations(BaseBinaryOperations):
     Binary functions equivalent to the functionality of C
     """
 
+    @staticmethod
+    def Modulus(a, b):
+        ErrorExporter.invalidOperatorFloat("%")
+        return -1
+
 
 class _LogicalOperations(BaseLogicalOperations):
     """
@@ -36,18 +41,40 @@ class _BitOperations(BaseBitOperations):
     """
 
     @staticmethod
+    def BitAnd(a, b):
+        ErrorExporter.invalidOperatorFloat("&")
+        return -1
+
+    @staticmethod
+    def BitOr(a, b):
+        ErrorExporter.invalidOperatorFloat("|")
+        return -1
+
+    @staticmethod
+    def BitNot(a):
+        ErrorExporter.invalidOperatorFloat("~")
+        return -1
+
+    @staticmethod
+    def BitExclusive(a, b):
+        ErrorExporter.invalidOperatorFloat("^")
+        return -1
+
+    @staticmethod
+    def BitwiseLeftshift(a, b):
+        ErrorExporter.invalidOperatorFloat("<<")
+        return -1
+
+    @staticmethod
     def BitwiseRightshift(a, b):
-        b = b.to_bytes(32, byteorder="big", signed=True)
-        b = int.from_bytes(b, "big", signed=False)
-        return a >> b
+        ErrorExporter.invalidOperatorFloat(">>")
+        return -1
 
 
 class _RelationalOperations(BaseRelationalOperations):
     """
     Relation functions equivalent to the functionality of C
     """
-
-
 
 class _Conversions:
     @staticmethod

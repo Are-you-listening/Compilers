@@ -131,6 +131,7 @@ class BaseRelationalOperations:
 
     @staticmethod
     def NotEqualTo(a, b):
+
         return int(a != b)
 
 
