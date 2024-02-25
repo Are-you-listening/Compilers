@@ -1,6 +1,7 @@
 from src.parser.ASTVisitor import *
 from src.parser.IdentifierReplacerVisitor import IdentifierReplacerVisitor
 from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
+from src.parser.ErrorExporter import *
 
 
 class ValueAdderVisitor(ASTVisitor):
@@ -42,9 +43,12 @@ class ValueAdderVisitor(ASTVisitor):
                     constantfolder.postorder(val)
 
                     # after the constant folder is done, we have to revisit this node
-                    # if infinite loop, it is probably here...
-                    self.visitNode(node)
-
+                    if val.text == "Expr":
+                        ErrorExporter.invalidRvalue(ident.text)
+                    else:
+                        for entry in ident.getSymbolTable().symbols:
+                            if entry.name == ident.text:
+                                entry.value = val.text
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass

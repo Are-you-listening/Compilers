@@ -12,3 +12,11 @@ class ErrorExporter:
     def invalidOperatorPtr(operator: str):
         print(f"invalid ptr operation {operator}")
 
+    @staticmethod
+    def invalidRvalue(identifier: str):
+        print(f"invalid assignment to {identifier}")
+
+    @staticmethod
+    def uninitializedVariable(identifier: str):
+        print(f"use of uninitialized variable {identifier}")
+

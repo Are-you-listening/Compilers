@@ -1,4 +1,5 @@
 from src.parser.ASTVisitor import *
+from src.parser.ErrorExporter import *
 
 class IdentifierReplacerVisitor(ASTVisitor):
     def __init__(self, lexer):
@@ -12,7 +13,10 @@ class IdentifierReplacerVisitor(ASTVisitor):
 
         for entry in node.getSymbolTable().symbols:
             if entry.name == toReplace:
-                node.text = entry.value
+                if entry.value is not None:
+                    node.text = entry.value
+                else:
+                    ErrorExporter.uninitializedVariable(toReplace)
 
                 # don't know how this would interact with const types
                 if entry.type == "int":
