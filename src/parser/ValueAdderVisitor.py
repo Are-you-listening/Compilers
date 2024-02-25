@@ -1,8 +1,14 @@
 from src.parser.ASTVisitor import *
+from src.parser.IdentifierReplacerVisitor import IdentifierReplacerVisitor
+from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
+
 
 class ValueAdderVisitor(ASTVisitor):
-    def __init__(self):
-        pass
+    """
+    AST visitor that adds identifier values to the symbol table
+    """
+    def __init__(self, lexer):
+        self.lexer = lexer
 
     def visitNode(self, node: ASTNode):
         if node.text == "Declaration":
@@ -20,6 +26,17 @@ class ValueAdderVisitor(ASTVisitor):
                     for entry in ST.symbols:
                         if entry.name == ident.text:
                             entry.value = val.text
+                else:
+                    # replace all the identifiers in the RHS with their symbol table value
+                    replacer = IdentifierReplacerVisitor(self.lexer)
+                    replacer.preorder(val)
+
+                    constantfolder = ConstantFoldingVisitor(self.lexer)
+                    constantfolder.postorder(val)
+
+                    # after the constant folder is done, we have to revisit this node
+                    # if infinite loop, it is probably here...
+                    self.visitNode(node)
 
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):

@@ -28,11 +28,11 @@ def main(argv):
     constraint_checker = ConstraintChecker(lexer)
     constraint_checker.visit(ast)
 
+    v = ValueAdderVisitor(lexer)
+    v.visit(ast)
+
     d = DotVisitor()
     d.visit(ast)
-
-    v = ValueAdderVisitor()
-    v.visit(ast)
 
     print("end")
 
