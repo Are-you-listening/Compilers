@@ -11,11 +11,18 @@ class ValueAdderVisitor(ASTVisitor):
         self.lexer = lexer
 
     def visitNode(self, node: ASTNode):
-        if node.text == "Declaration":
+        if node.text == "Declaration" or node.text == "Assignment":
             equal_node = node.findType('=')
             if equal_node is not None:
-                ident = node.getChild(1)
-                val = node.getChild(3)
+
+                counter = 0
+                for child in node.children:
+                    if child.text == "=":
+                        break
+                    counter += 1
+
+                ident = node.getChild(counter - 1)
+                val = node.getChild(counter + 1)
 
                 """" because of constant folding, val will be a terminal node with the value of the identifier
                  if val is and 'Expr' node this means that an identifier is used in the RHS
