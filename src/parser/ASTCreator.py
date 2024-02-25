@@ -10,7 +10,8 @@ class ASTCreator(expressionVisitor):
     """
     This class converts the Parse tree created from antlr4 file into our explicit defined AST
     """
-    def __init__(self,lexer):
+
+    def __init__(self, lexer):
         """
         Default initialization of the data members
         self.parent: will store the parent ASTNode of the Node we create in the visit function
@@ -52,22 +53,22 @@ class ASTCreator(expressionVisitor):
         self.parent = ASTNode("Start", None, self.__getSymbolTable())
         self.visitChildren(ctx)
 
-    def visitFunction(self, ctx:expressionParser.FunctionContext):
+    def visitFunction(self, ctx: expressionParser.FunctionContext):
         self.__makeNode(ctx, "Function")
 
-    def visitLines(self, ctx:expressionParser.LinesContext):
+    def visitLines(self, ctx: expressionParser.LinesContext):
         self.__makeNode(ctx, "Lines")
 
-    def visitLine(self, ctx:expressionParser.LineContext):
+    def visitLine(self, ctx: expressionParser.LineContext):
         self.__makeNode(ctx, "Line")
 
-    def visitType(self, ctx:expressionParser.TypeContext):
+    def visitType(self, ctx: expressionParser.TypeContext):
         self.__makeNode(ctx, "Type")
 
-    def visitDeclaration(self, ctx:expressionParser.DeclarationContext):
+    def visitDeclaration(self, ctx: expressionParser.DeclarationContext):
         self.__makeNode(ctx, "Declaration")
 
-    def visitAssignment(self, ctx:expressionParser.AssignmentContext):
+    def visitAssignment(self, ctx: expressionParser.AssignmentContext):
         self.__makeNode(ctx, "Assignment")
 
     def visitExpr(self, ctx: expressionParser.ExprContext):
@@ -149,6 +150,24 @@ class ASTCreator(expressionVisitor):
                         is_const = True
                     else:
                         datatype += grandchild.text
-
-                symbol_entry = SymbolEntry(self.parent.text, datatype, ctx.getText(), is_const)
+                # the value in the symbol table is initially empty
+                symbol_entry = SymbolEntry(self.parent.text, datatype, ctx.getText(), is_const, None)
                 self.stack[-1].append(symbol_entry)
+
+    def __addSymbolTableValue(self, declaration_node: ASTNode):
+        """
+        self is of type 'Declaration' so check if there is a '=' among the children, if so add the RHS to the symbol table as value
+        :return:
+        """
+        # because it is a declaration there will always at least be 2 children: the type and identifier name
+        # the equal symbol and the value is optional
+        # if the equal symbol is missing, we don't have a value to add so skip
+        equal_node = declaration_node.findType("=")
+        if equal_node is not None:
+            ident = declaration_node.getChild(1)
+            val = declaration_node.getChild(3)
+
+            for entry in self.stack[-1]:
+                if entry.name == ident.text:
+                    entry.value = val.text
+                    print(entry.value)
