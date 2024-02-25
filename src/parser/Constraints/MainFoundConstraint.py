@@ -14,7 +14,7 @@ class MainFoundConstraint(Constraint):
         pass
 
     def checkTerminalNode(self, node: ASTNodeTerminal):
-        if node.type == self.lexer.IDENTIFIER and node.text == "main":
+        if node.type == self.lexer.IDENTIFIER and node.text == "main" and node.parent.text == "Function":
             self.accepted = True
 
     def throwException(self):
