@@ -77,6 +77,9 @@ class ASTCreator(expressionVisitor):
     def visitLiteral(self, ctx):
         self.__makeNode(ctx, "Literal")
 
+    def visitExpression(self, ctx):
+        self.__makeNode(ctx, "Expression")
+
     def visitTerminal(self, ctx):
         """
         check for open and closed {} to determine the scope data

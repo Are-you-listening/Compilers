@@ -69,13 +69,15 @@ class ASTNode:
         :return:
         """
         self.parent.replaceChild(self, node)
-        node.parent = self.parent
+        self.parent = node
         node.addChildren(self)
 
     def removeChild(self, child):
         self.children.remove(child)
 
     def replaceChild(self, old_child, new_child):
+        new_child.parent = self
+        old_child.parent = None
         index = self.children.index(old_child)
         self.children[index] = new_child
 

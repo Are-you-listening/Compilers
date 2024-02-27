@@ -47,9 +47,9 @@ class ASTDereferencer(ASTVisitor):
         node.addNodeParent(new_node)
 
         """Check if the dereference can replace parent 'literal'/ 'Expr'"""
+
         parent = new_node.parent
         while parent.text in ("Expr", "Literal") and parent.getChildAmount() == 1:
             grand_parent = parent.parent
             grand_parent.replaceChild(parent, new_node)
             parent = grand_parent
-

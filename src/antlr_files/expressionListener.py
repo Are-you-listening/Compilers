@@ -71,6 +71,15 @@ class expressionListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by expressionParser#conversion.
+    def enterConversion(self, ctx:expressionParser.ConversionContext):
+        pass
+
+    # Exit a parse tree produced by expressionParser#conversion.
+    def exitConversion(self, ctx:expressionParser.ConversionContext):
+        pass
+
+
     # Enter a parse tree produced by expressionParser#expr.
     def enterExpr(self, ctx:expressionParser.ExprContext):
         pass

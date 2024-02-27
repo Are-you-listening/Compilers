@@ -6,6 +6,7 @@ line: (declaration | expr| assignment)(';')+;
 type: ('const')? ('int' | 'char' | 'float') ('*')*;
 declaration: type IDENTIFIER ('=' expr)?;
 assignment: IDENTIFIER ('=' expr);
+conversion: '(' type ')' literal;
 expr : literal
      | '(' type ')' expr //explicit conversion
      | '(' expr ')'
@@ -22,7 +23,7 @@ expr : literal
      | expr '|' expr
      | expr '&&' expr
      | expr '||' expr;
-literal : (INT | FLOAT | CHAR | IDENTIFIER) ;
+literal : (INT | FLOAT | CHAR | IDENTIFIER | conversion) ;
 
 
 IDENTIFIER: ([a-z]|[A-Z]|'_')([a-z]|[A-Z]|'_'|[0-9])*;

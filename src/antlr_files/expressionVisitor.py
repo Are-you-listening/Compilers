@@ -44,6 +44,11 @@ class expressionVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by expressionParser#conversion.
+    def visitConversion(self, ctx:expressionParser.ConversionContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by expressionParser#expr.
     def visitExpr(self, ctx:expressionParser.ExprContext):
         return self.visitChildren(ctx)
