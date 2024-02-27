@@ -31,7 +31,7 @@ class ValueAdderVisitor(ASTVisitor):
 
                 if val.text != "Expr":
                     ST = ident.getSymbolTable()
-                    for entry in ST.symbols:
+                    for entry in ST.symbols.values():
                         if entry.name == ident.text:
                             entry.value = val.text
                 else:

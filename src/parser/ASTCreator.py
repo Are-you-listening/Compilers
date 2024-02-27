@@ -21,16 +21,16 @@ class ASTCreator(expressionVisitor):
         self.lexer = lexer
         self.parent = None
         self.AST = None
-        self.stack = [[]]
+        self.table = None
 
     def __setup(self):
         self.parent = None
         self.AST = None
-        self.stack = [[]]
+        self.table = SymbolTable(None)
 
     def visit(self, tree):
         """
-        Default visit function that visits an given tree doing a pre-order traversal
+        Default visit function that visits a given tree doing a pre-order traversal
         :param tree: tree we want to traverse threw
         """
 
@@ -50,11 +50,14 @@ class ASTCreator(expressionVisitor):
         self.AST = AST(self.parent)
 
     def visitStart_(self, ctx: expressionParser.Start_Context):
-        self.parent = ASTNode("Start", None, self.__getSymbolTable())
+        self.parent = ASTNode("Start", None, self.table)
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx: expressionParser.FunctionContext):
         self.__makeNode(ctx, "Function")
+        tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
+        self.table.nextTable(tempTable)
+        self.table = tempTable
 
     def visitLines(self, ctx: expressionParser.LinesContext):
         self.__makeNode(ctx, "Lines")
@@ -77,26 +80,20 @@ class ASTCreator(expressionVisitor):
     def visitLiteral(self, ctx):
         self.__makeNode(ctx, "Literal")
 
-    def visitConversion(self, ctx:expressionParser.ConversionContext):
+    def visitConversion(self, ctx: expressionParser.ConversionContext):
         self.__makeNode(ctx, "Conversion")
 
     def visitTerminal(self, ctx):
         """
-        check for open and closed {} to determine the scope data
         :param ctx:
         :return:
         """
-        if ctx.getText() == '{':
-            self.stack.append([])
-        elif ctx.getText() == '}':
-            self.stack.pop()
 
         if ctx.getText() in black_list:
             return
 
-        self.__updateSymbolTable(ctx)
-
-        node = ASTNodeTerminal(ctx.getText(), self.parent, self.__getSymbolTable(), ctx.getSymbol().type)
+        node = ASTNodeTerminal(ctx.getText(), self.parent, self.table, ctx.getSymbol().type)
+        self.__updateSymbolTable(ctx, node)
         self.parent.addChildren(node)
 
     def __makeNode(self, ctx, terminal_type: str):
@@ -109,7 +106,7 @@ class ASTCreator(expressionVisitor):
         """
         makes new Object and makes sure this will be a child of it's parent
         """
-        node = ASTNode(terminal_type, self.parent, self.__getSymbolTable())
+        node = ASTNode(terminal_type, self.parent, self.table)  # Also attaches the current table/scope
         self.parent.addChildren(node)
         old_parent = self.parent
         self.parent = node
@@ -128,16 +125,7 @@ class ASTCreator(expressionVisitor):
         """
         return self.AST
 
-    def __getSymbolTable(self):
-        symbol_table = SymbolTable([])
-
-        for list in self.stack:
-            for element in list:
-                symbol_table.add(element)
-
-        return symbol_table
-
-    def __updateSymbolTable(self, ctx):
+    def __updateSymbolTable(self, ctx, node):
         """
         self.parent.getChild #traverse through children and get type if exist + get const
         """
@@ -154,23 +142,5 @@ class ASTCreator(expressionVisitor):
                     else:
                         datatype += grandchild.text
                 # the value in the symbol table is initially empty
-                symbol_entry = SymbolEntry(self.parent.text, datatype, ctx.getText(), is_const, None)
-                self.stack[-1].append(symbol_entry)
-
-    def __addSymbolTableValue(self, declaration_node: ASTNode):
-        """
-        self is of type 'Declaration' so check if there is a '=' among the children, if so add the RHS to the symbol table as value
-        :return:
-        """
-        # because it is a declaration there will always at least be 2 children: the type and identifier name
-        # the equal symbol and the value is optional
-        # if the equal symbol is missing, we don't have a value to add so skip
-        equal_node = declaration_node.findType("=")
-        if equal_node is not None:
-            ident = declaration_node.getChild(1)
-            val = declaration_node.getChild(3)
-
-            for entry in self.stack[-1]:
-                if entry.name == ident.text:
-                    entry.value = val.text
-                    print(entry.value)
+                symbol_entry = SymbolEntry(self.parent.text, datatype, ctx.getText(), is_const, None, node, None)
+                self.table.add(symbol_entry)

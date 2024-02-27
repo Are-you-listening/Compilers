@@ -14,7 +14,7 @@ from src.parser.ValueAdderVisitor import *
 from src.parser.ASTDereferencer import *
 
 def main(argv):
-    input_stream = FileStream("../../example_source_files/file3")
+    input_stream = FileStream("../../example_source_files/file2")
     lexer = expressionLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
@@ -39,6 +39,8 @@ def main(argv):
     v.visit(ast)
 
     print("end")
+
+    ast.root.symbol_table.traverse(ast.root.symbol_table.print())
 
 
 if __name__ == '__main__':
