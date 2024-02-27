@@ -1,6 +1,6 @@
 grammar expression;
-start_ : lines function lines EOF;
-function : type IDENTIFIER '()' '{' lines '}';
+start_ : (function | line)* EOF;
+function : type IDENTIFIER '(' ')' '{' lines '}';
 lines : (line)*  ;
 line: (declaration | expr| assignment)(';')+;
 type: ('const')? ('int' | 'char' | 'float') ('*')*;

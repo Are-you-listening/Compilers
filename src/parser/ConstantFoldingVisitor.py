@@ -1,10 +1,11 @@
 from src.parser.ASTVisitor import *
-from src.parser.CFunctionExecuter import *
+from src.parser.CTypes.COperationHandler import COperationHandler
 
 
 class ConstantFoldingVisitor(ASTVisitor):
     def __init__(self, lexer):
         self.lexer = lexer
+        self.operation_handler = COperationHandler(lexer)
 
     def visit(self, ast: AST):
         root = ast.root
@@ -27,46 +28,16 @@ class ConstantFoldingVisitor(ASTVisitor):
             In this case we want to constant fold we our 3 Terminal children 
             Our format will be something like this: (5+6) (with the middle child being the operator)
             """
-            type_name = node.getChild(1).text
-            foldable = {'*': BinaryOperations.Multiply,
-                        '/': BinaryOperations.Divide,
-                        '%': BinaryOperations.Modulus,
-                        '>>': BitOperations.BitwiseRightshift,
-                        '<<': BitOperations.BitwiseLeftshift,
-                        '&': BitOperations.BitAnd,
-                        '|': BitOperations.BitOr,
-                        '^': BitOperations.BitExclusive,
-                        '+': BinaryOperations.Add,
-                        '-': BinaryOperations.Subtract,
-                        '<': RelationalOperations.LessThan,
-                        '>': RelationalOperations.GreaterThan,
-                        '<=': RelationalOperations.LessThanOrEqualTo,
-                        '>=': RelationalOperations.GreaterThanOrEqualTo,
-                        '==': RelationalOperations.EqualTo,
-                        '!=': RelationalOperations.NotEqualTo,
-                        '||': LogicalOperations.LogicalOr,
-                        '&&': LogicalOperations.LogicalAnd}
 
-            if type_name not in foldable:
-                return
-
-            datatype_name = node.getChild(0).type
-            result = str(IntByte.checkRange(foldable[node.getChild(1).text](int(node.getChild(0).text), int(node.getChild(2).text))))
+            result, datatype_name = self.operation_handler.doOperationBinary((node.getChild(0).text, node.getChild(0).type),
+                                                              (node.getChild(2).text, node.getChild(2).type),
+                                                              node.getChild(1).text)
 
         elif node.getChildAmount() == node.getTerminalAmount() == 2:
             """Check for UNARY operations"""
 
-            type_name = node.getChild(0).text
-            foldable = {'+': UnaryOperations.Plus,
-                        '-': UnaryOperations.Min,
-                        '~': BitOperations.BitNot,
-                        '!': LogicalOperations.LogicalNot}
-
-            if type_name not in foldable:
-                return
-
-            datatype_name = node.getChild(1).type
-            result = str(IntByte.checkRange(foldable[node.getChild(0).text](int(node.getChild(1).text))))
+            result, datatype_name = self.operation_handler.doOperationUnary((node.getChild(1).text, node.getChild(1).type),
+                                                             node.getChild(0).text)
 
         else:
             return
@@ -75,7 +46,7 @@ class ConstantFoldingVisitor(ASTVisitor):
         index = parent.findChild(node)
 
         node = ASTNodeTerminal(result,
-                               parent, datatype_name)
+                               parent, parent.getSymbolTable(), datatype_name)
         parent.setChild(index, node)
 
         """do the visiting again"""
@@ -90,7 +61,7 @@ class ConstantFoldingVisitor(ASTVisitor):
         if grand_parent is None:
             return
 
-        if parent.getChildAmount() == 1:
+        if parent.getChildAmount() == 1 and (parent.text in ("Literal", "Expr")) and node.type != self.lexer.IDENTIFIER:
             index = grand_parent.findChild(parent)
             grand_parent.setChild(index, node)
             # Overwrite index of parent with node

@@ -1,9 +1,10 @@
 class SymbolEntry:
-    def __init__(self, fitype: str, type: str, name: str, const: bool):
+    def __init__(self, fitype: str, datatype: str, name: str, const: bool, value):
         self.fitype = fitype
-        self.type = type
+        self.type = datatype
         self.name = name
         self.const = const
+        self.value = value
 
 
 class SymbolTable:

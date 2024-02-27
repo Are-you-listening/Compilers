@@ -9,9 +9,11 @@ from src.parser.ASTCreator import ASTCreator
 from src.parser.AST import *
 from src.parser.ConstantFoldingVisitor import *
 from src.parser.DotVisitor import *
+from src.parser.Constraints.ConstraintChecker import *
+from src.parser.ValueAdderVisitor import *
 
 def main(argv):
-    input_stream = FileStream("../../example_source_files/file1")
+    input_stream = FileStream("../../example_source_files/file2")
     lexer = expressionLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
@@ -20,13 +22,17 @@ def main(argv):
     toAST.visit(tree)
     ast = toAST.getAST()
 
+    cfv = ConstantFoldingVisitor(lexer)
+    cfv.visit(ast)
 
-    #cfv = ConstantFoldingVisitor(lexer)
-    #cfv.visit(ast)
+    constraint_checker = ConstraintChecker(lexer)
+    constraint_checker.visit(ast)
+
+    v = ValueAdderVisitor(lexer)
+    v.visit(ast)
 
     d = DotVisitor()
     d.visit(ast)
-
 
     print("end")
 

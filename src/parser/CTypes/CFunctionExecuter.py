@@ -1,16 +1,13 @@
 import math
+from abc import abstractmethod
 
-
-class IntByte:
+class BaseRangeCheck:
     @staticmethod
     def checkRange(value):
-        """assume 4 bytes/ int"""
-        b = value.to_bytes(32, byteorder="big", signed=True)
-        b = b[-4:]
-        return int.from_bytes(b, 'big', signed=True)
+        return value
 
 
-class UnaryOperations:
+class BaseUnaryOperations:
     """
     Unary functions equivalent to the functionality of C
     """
@@ -23,7 +20,7 @@ class UnaryOperations:
         return a * -1
 
 
-class BinaryOperations:
+class BaseBinaryOperations:
     """
     Binary functions equivalent to the functionality of C
     """
@@ -36,8 +33,8 @@ class BinaryOperations:
         return a - b
 
     @staticmethod
-    def Divide(a: int, b: int):
-        return math.floor(a / b)
+    def Divide(a, b):
+        return a / b
 
     @staticmethod
     def Multiply(a, b):
@@ -48,52 +45,52 @@ class BinaryOperations:
         return a % b
 
 
-class LogicalOperations:
+class BaseLogicalOperations:
     """
     Logical functions equivalent to the functionality of C
     """
 
     @staticmethod
-    def LogicalAnd(a: int, b: int):
+    def LogicalAnd(a, b):
         if a and b:
             return 1
         else:
             return 0
 
     @staticmethod
-    def LogicalOr(a: int, b: int):
+    def LogicalOr(a, b):
         if a or b:
             return 1
         else:
             return 0
 
     @staticmethod
-    def LogicalNot(a: int):
+    def LogicalNot(a):
         if a == 0:
             return 1
         else:
             return 0
 
 
-class BitOperations:
+class BaseBitOperations:
     """
     Bit functions equivalent to the functionality of C
     """
 
     @staticmethod
-    def BitAnd(a: int, b: int):
+    def BitAnd(a, b):
         return a & b
 
     @staticmethod
-    def BitOr(a: int, b: int):
+    def BitOr(a, b):
         return a | b
 
     @staticmethod
-    def BitNot(a: int):
+    def BitNot(a):
         return ~a
 
     @staticmethod
-    def BitExclusive(a: int, b: int):
+    def BitExclusive(a, b):
         return a ^ b
 
     @staticmethod
@@ -104,15 +101,10 @@ class BitOperations:
 
     @staticmethod
     def BitwiseRightshift(a, b):
-
-        a = a.to_bytes(32, byteorder="big", signed=True)
-        a = int.from_bytes(a, 'big', signed=True)
-        b = b.to_bytes(32, byteorder="big", signed=True)
-        b = int.from_bytes(b, "big", signed=False)
         return a >> b
 
 
-class RelationalOperations:
+class BaseRelationalOperations:
     """
     Relation functions equivalent to the functionality of C
     """
@@ -139,4 +131,27 @@ class RelationalOperations:
 
     @staticmethod
     def NotEqualTo(a, b):
+
         return int(a != b)
+
+
+class CFunctionExecuter:
+    def __init__(self):
+        self.RangeCheck = BaseRangeCheck
+        self.UnaryOperations = BaseUnaryOperations
+        self.BinaryOperations = BaseBinaryOperations
+        self.LogicalOperations = BaseLogicalOperations
+        self.BitOperations = BaseBitOperations
+        self.RelationalOperations = BaseRelationalOperations
+        self.conversion_dict = {}
+
+    @abstractmethod
+    def fromString(self, string):
+        pass
+
+    def getString(self, data):
+        return str(data)
+
+    @abstractmethod
+    def convertTo(self, data, to_type):
+        pass

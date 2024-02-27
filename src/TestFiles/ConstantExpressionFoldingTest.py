@@ -20,12 +20,41 @@ class TestConstantExpression(unittest.TestCase):
         Files that are checked
         """
         filenames = ["proj1_man_pass_constantFolding.c", "proj1_man_pass_intLiteral.c",
-                     "proj1_man_pass_operators.c", "proj1_man_pass_whitespace.c", "../ownTests/proj1_own1.c"]
+                     "proj1_man_pass_operators.c", "proj1_man_pass_whitespace.c", "../ownTests/proj1_own1.c",
+                     "../ownTests/proj1_own2.c"]
 
         for file in filenames:
-            self.compareData(file)
+            self.compareData(file, "d")
 
-    def compareData(self, file):
+    def testEvaluateResults2(self):
+        """
+        This testcase will test expression folding
+        :return:
+        """
+
+        """
+        Files that are checked
+        """
+        filenames = ["../ownTests/proj2_own3.c"]
+
+        for file in filenames:
+            self.compareData(file, "c")
+
+    def testEvaluateResults3(self):
+        """
+        This testcase will test expression folding
+        :return:
+        """
+
+        """
+        Files that are checked
+        """
+        filenames = ["../ownTests/proj2_own4.c", "../ownTests/proj2_own5.c"]
+
+        for file in filenames:
+            self.compareData(file, ".5f", 5, "(float)")
+
+    def compareData(self, file, p_type, round_amount=-1, addition=""):
         """
         check each expression in the testfile
         """
@@ -40,18 +69,19 @@ class TestConstantExpression(unittest.TestCase):
             expr = expr.replace("\n", "")
             if len(expr) == 0:
                 continue
-            c_print = f"""printf("%d", {expr});\nprintf(";");\n"""
+            c_print = f"""printf("%{p_type}", {addition}{expr});\nprintf(";");\n"""
             c_prints.append(c_print)
 
         c_format = f"""
                             #include <stdio.h>
+                            #include <math.h>
                             int main(void){'{'}
                                 {"".join(c_prints)}
 
                             {'}'}
                             """
-
-        out = subprocess.run(f"echo '{c_format}' | gcc -x c -o temp - && ./temp && rm temp",
+        c_format = c_format.replace("'", "'\\''")
+        out = subprocess.run(f"""echo '{c_format}' | gcc -ansi -pedantic -x c -o temp - && ./temp && rm temp""",
                              shell=True, capture_output=True)
 
         """
@@ -62,16 +92,15 @@ class TestConstantExpression(unittest.TestCase):
         stream = CommonTokenStream(lexer)
         parser = expressionParser(stream)
         tree = parser.start_()
-        toAST = ASTCreator()
+        toAST = ASTCreator(lexer)
         toAST.visit(tree)
         ast = toAST.getAST()
 
         cfv = ConstantFoldingVisitor(lexer)
         cfv.visit(ast)
 
-        out2 = ASTOutput()
+        out2 = ASTOutput(lexer, round_amount)
         out2.visit(ast)
-
         """
         compare outputs
         """
