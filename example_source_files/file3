@@ -1,0 +1,2 @@
+int a = (int) 5.6;
+char b = (char) a;

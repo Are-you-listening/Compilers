@@ -14,7 +14,7 @@ from src.parser.ValueAdderVisitor import *
 from src.parser.ASTDereferencer import *
 
 def main(argv):
-    input_stream = FileStream("../../example_source_files/file1")
+    input_stream = FileStream("../../example_source_files/file3")
     lexer = expressionLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)

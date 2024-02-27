@@ -77,8 +77,8 @@ class ASTCreator(expressionVisitor):
     def visitLiteral(self, ctx):
         self.__makeNode(ctx, "Literal")
 
-    def visitExpression(self, ctx):
-        self.__makeNode(ctx, "Expression")
+    def visitConversion(self, ctx:expressionParser.ConversionContext):
+        self.__makeNode(ctx, "Conversion")
 
     def visitTerminal(self, ctx):
         """
