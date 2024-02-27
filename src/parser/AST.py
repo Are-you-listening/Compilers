@@ -49,6 +49,20 @@ class ASTNode:
     def getSymbolTable(self):
         return self.symbol_table
 
+    def getSiblingNeighbour(self, direction):
+        """
+        Get access of a simpling
+        direction gives the relative direction index:
+        direction -1: left sibling, direction 1: right sibling
+        :param direction:
+        :return:
+        """
+        index = self.parent.findChild(self)
+        index += direction
+        if 0 > index >= self.getChildAmount():
+            return None
+        return self.parent.getChild(index)
+
 
 class ASTNodeTerminal(ASTNode):
     """
