@@ -21,6 +21,12 @@ class ConstantFoldingVisitor(ASTVisitor):
         if parent is None:
             return
 
+        """
+        Only do constant folding on expressions
+        """
+        if node.text != "Expr":
+            return
+
         if node.getChildAmount() == node.getTerminalAmount() == 3:
             """Checked for BINARY operations"""
 

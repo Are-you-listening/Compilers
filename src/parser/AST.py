@@ -63,6 +63,22 @@ class ASTNode:
             return None
         return self.parent.getChild(index)
 
+    def addNodeParent(self, node):
+        """
+        adds a new node as parent of itself
+        :return:
+        """
+        self.parent.replaceChild(self, node)
+        node.parent = self.parent
+        node.addChildren(self)
+
+    def removeChild(self, child):
+        self.children.remove(child)
+
+    def replaceChild(self, old_child, new_child):
+        index = self.children.index(old_child)
+        self.children[index] = new_child
+
 
 class ASTNodeTerminal(ASTNode):
     """
