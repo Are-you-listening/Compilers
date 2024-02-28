@@ -43,7 +43,7 @@ class ASTDereferencer(ASTVisitor):
             parent = node.parent
             parent.removeChild(sibling_before)
 
-        new_node = ASTNode("Dereference", None, None)
+        new_node = ASTNode("Dereference", None, node.symbol_table)
         node.addNodeParent(new_node)
 
         """Check if the dereference can replace parent 'literal'/ 'Expr'"""
