@@ -21,6 +21,14 @@ class ErrorExporter:
         print(f"use of uninitialized variable {identifier}")
 
     @staticmethod
-    def constComplaint(identifier: str):
-        print(f"manipulation of const variable {identifier}")
+    def undeclaredVariable(identifier: str):
+        print(f"use of undeclared variable {identifier}")
+
+    @staticmethod
+    def constComplaint(identifier: str, type: str):
+        print(f"Assignment to variable {identifier} which is of type {type}")
+
+    @staticmethod
+    def redefinition(linenr: str, pos: str, variable: str, type: str):
+        print(f"[ Error ] line {linenr}, position {pos}: redefinition or redeclaration of {type} {variable}")
 
