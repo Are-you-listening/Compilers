@@ -23,6 +23,8 @@ class SymbolTable:
         self.next = []
 
     def add(self, entry: SymbolEntry):
+        if self.symbols.get(entry.name) is not None:
+            return
         self.symbols[entry.name] = entry
 
     def remove(self, symbol: SymbolEntry):
