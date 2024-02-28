@@ -13,10 +13,10 @@ from src.parser.Constraints.ConstraintChecker import *
 from src.parser.ValueAdderVisitor import *
 from src.parser.ASTDereferencer import *
 from src.parser.ASTConversion import *
-
+from src.parser.ASTCleaner import *
 
 def main(argv):
-    input_stream = FileStream("../../example_source_files/file7")
+    input_stream = FileStream("../../example_source_files/file2")
     lexer = expressionLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
@@ -31,19 +31,23 @@ def main(argv):
     constraint_checker = ConstraintChecker(lexer)
     constraint_checker.visit(ast)
 
-    cfv = ConstantFoldingVisitor(lexer)
-    cfv.visit(ast)
+    astcleaner = ASTCleaner(lexer)
+    astcleaner.visit(ast)
+
+    #cfv = ConstantFoldingVisitor(lexer)
+    #cfv.visit(ast)
 
     v = ValueAdderVisitor(lexer)
     v.visit(ast)
 
     print("end")
 
-    ast_conv = ASTConversion(lexer)
-    ast_conv.visit(ast)
+    #ast_conv = ASTConversion(lexer)
+    #ast_conv.visit(ast)
 
     d = DotVisitor()
     d.visit(ast)
+
 
 if __name__ == '__main__':
     main(sys.argv)
