@@ -1,3 +1,5 @@
+from src.parser.ErrorExporter import *
+
 class SymbolEntry:
     def __init__(self, fitype: str, datatype: str, name: str, const: bool, value, firstUsed , firstDeferred):
         self.fitype = fitype
@@ -19,13 +21,13 @@ class SymbolTable:
         self.next = []
 
     def add(self, entry: SymbolEntry):
-            self.symbols[entry.name] = entry
+        self.symbols[entry.name] = entry
 
     def remove(self, symbol: SymbolEntry):
         self.symbols.pop(symbol.name)
 
     def getEntry(self, name):
-        return self.symbols[name]
+        return self.symbols.get(name)
 
     def print(self):
         print(self.symbols)
