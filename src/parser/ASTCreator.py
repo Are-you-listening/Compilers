@@ -93,6 +93,7 @@ class ASTCreator(expressionVisitor):
             return
 
         node = ASTNodeTerminal(ctx.getText(), self.parent, self.table, ctx.getSymbol().type)
+        node.linenr = ctx.getSymbol().line
         self.__updateSymbolTable(ctx, node)
         self.parent.addChildren(node)
 
