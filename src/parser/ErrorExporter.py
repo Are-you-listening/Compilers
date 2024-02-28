@@ -25,10 +25,10 @@ class ErrorExporter:
         print(f"[ Error ] use of undeclared variable {identifier}")
 
     @staticmethod
-    def constComplaint(identifier: str, type: str):
-        print(f"[ Error ] Assignment to variable {identifier} which is of type {type}")
+    def constComplaint(linenr: str, identifier: str, type: str):
+        print(f"[ Error ] line {linenr}: Manipulation of variable {identifier} which is of type {type}")
 
     @staticmethod
-    def redefinition(linenr: str, pos: str, variable: str, type: str):
-        print(f"[ Error ] line {linenr}, position {pos}: redefinition or redeclaration of {type} {variable}")
+    def redefinition(linenr: str, type: str, variable: str):
+        print(f"[ Error ] line {linenr}: redefinition or redeclaration of {type} {variable}")
 
