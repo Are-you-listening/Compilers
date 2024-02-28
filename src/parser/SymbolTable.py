@@ -24,6 +24,7 @@ class SymbolTable:
 
     def add(self, entry: SymbolEntry):
         if self.symbols.get(entry.name) is not None:
+            ErrorExporter.redefinition(None,entry.type,entry.name) # This allows earlier detection of errors but unsure how we would retrieve the lineNr
             return
         self.symbols[entry.name] = entry
 
