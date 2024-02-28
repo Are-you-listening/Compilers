@@ -29,18 +29,17 @@ def main(argv):
     d = DotVisitor()
     d.visit(ast)
 
-    cfv = ConstantFoldingVisitor(lexer)
-    cfv.visit(ast)
-
     constraint_checker = ConstraintChecker(lexer)
     constraint_checker.visit(ast)
+
+    cfv = ConstantFoldingVisitor(lexer)
+    cfv.visit(ast)
 
     v = ValueAdderVisitor(lexer)
     v.visit(ast)
 
     print("end")
 
-    #ast.root.symbol_table.traverse(ast.root.symbol_table.print(),True)
 
 
 if __name__ == '__main__':
