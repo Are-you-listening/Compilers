@@ -23,12 +23,6 @@ class SymbolTable:
         self.next = []
 
     def add(self, entry: SymbolEntry):
-        existing = self.symbols.get(entry.name)
-        entry.print()
-        if existing is not None: # Redefinition of variable
-            ErrorExporter.redefinition(None,None,existing.type,existing.name)
-            return
-
         self.symbols[entry.name] = entry
 
     def remove(self, symbol: SymbolEntry):
@@ -37,13 +31,12 @@ class SymbolTable:
     def getEntry(self, name):
         return self.symbols.get(name)
 
-    def print(self,printEntry=False):
-        if printEntry:
-            for entry in self.symbols.values():
-                entry.print()
+    def print(self):
+        for entry in self.symbols.values():
+            entry.print()
         print(self.symbols)
 
-    def traverse(self, function, printEntry: bool, up: bool):
+    def traverse(self, function, up: bool, print=False):
         """
 
         :param function: function to execute
@@ -52,14 +45,17 @@ class SymbolTable:
         :return:
         """
         if up:
-            self.print(printEntry)
-            self.prev.traverse(function,printEntry,up)
+            if(print):
+                self.print()
+            self.prev.traverse(function,up,print)
         else:
-            self.print(printEntry)
+            if (print):
+                self.print()
 
             for child in self.next:
-                self.print(printEntry)
-                child.traverse(function, printEntry)
+                if (print):
+                    self.print()
+                child.traverse(function, up, print)
 
     def nextTable(self, next):
         """Add a new table as child"""
@@ -73,8 +69,8 @@ class SymbolTable:
         """
         if self.entryExists(entryname):
             return True
-        if self.prev!=None:
-            self.prev.traverse(self.entryExists(entryname), False, True) # Else: traverse upwards
+        if self.prev is not None:
+            self.prev.traverse(self.entryExists(entryname), True)  # Else: traverse upwards
         else:
             return False
 
