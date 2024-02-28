@@ -40,7 +40,7 @@ def main(argv):
 
     print("end")
 
-    ast.root.symbol_table.traverse(ast.root.symbol_table.print())
+    #ast.root.symbol_table.traverse(ast.root.symbol_table.print(),True)
 
 
 if __name__ == '__main__':
