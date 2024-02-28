@@ -12,7 +12,7 @@ class ASTConversion(ASTVisitor):
         self.rc = RichnessChecker(lexer, types)
 
     def visitNode(self, node: ASTNode):
-        if node.text == "Declaration":
+        if node.text == "Declaration" and node.getChildAmount() == 4:
 
             child = node.getChild(3)
             poorest = self.getPoorestType(child)
@@ -27,6 +27,21 @@ class ASTConversion(ASTVisitor):
                 for t_child in to_type_tree.children:
                     type_node.addChildren(ASTNodeTerminal(t_child.text, type_node, type_node.getSymbolTable(), t_child.type,
                                                           t_child.operation_type))
+                child.addNodeParent(new_node)
+
+        if node.text == "Assignment" and node.getChildAmount() == 3:
+            type_child = node.getChild(0)
+            child = node.getChild(2)
+            data_type = type_child.getSymbolTable().getEntry(type_child.text).type.upper()
+            if self.getPoorestType(child) != data_type:
+                new_node = ASTNode("Conversion", node, child.getSymbolTable())
+                type_node = ASTNode("Type", new_node, new_node.getSymbolTable())
+                new_node.addChildren(type_node)
+
+                type_node.addChildren(
+                    ASTNodeTerminal(data_type, type_node, type_node.getSymbolTable(), data_type,
+                                    None))
+
                 child.addNodeParent(new_node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
@@ -53,9 +68,6 @@ class ASTConversion(ASTVisitor):
                 node.addNodeParent(new_node)
 
 
-
-
-
     def getPoorestType(self, node: ASTNode):
         """
         Function to get the poorest type of the subtree
@@ -75,6 +87,10 @@ class ASTConversion(ASTVisitor):
             if t_type not in types:
                 return None
             return node.type
+
+        if node.text == "Conversion":
+            type_value = node.getChild(0)
+            return self.getPoorestType(type_value)
 
         poorest_child = None
         for child_index in range(node.getChildAmount()):

@@ -14,8 +14,9 @@ from src.parser.ValueAdderVisitor import *
 from src.parser.ASTDereferencer import *
 from src.parser.ASTConversion import *
 
+
 def main(argv):
-    input_stream = FileStream("../../example_source_files/file6")
+    input_stream = FileStream("../../example_source_files/file7")
     lexer = expressionLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
@@ -37,12 +38,12 @@ def main(argv):
     v.visit(ast)
 
     print("end")
+
     ast_conv = ASTConversion(lexer)
     ast_conv.visit(ast)
 
     d = DotVisitor()
     d.visit(ast)
-
 
 if __name__ == '__main__':
     main(sys.argv)
