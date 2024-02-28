@@ -59,7 +59,7 @@ class ASTNode:
         """
         index = self.parent.findChild(self)
         index += direction
-        if 0 > index >= self.getChildAmount():
+        if 0 > index >= self.parent.getChildAmount():
             return None
         return self.parent.getChild(index)
 
