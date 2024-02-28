@@ -13,7 +13,9 @@ class ASTConversion(ASTVisitor):
 
     def visitNode(self, node: ASTNode):
         if node.text == "Declaration" and node.getChildAmount() == 4:
-
+            """
+            situation when declaration
+            """
             child = node.getChild(3)
             poorest = self.getPoorestType(child)
             child_type = self.rc.getType(poorest)
@@ -30,6 +32,9 @@ class ASTConversion(ASTVisitor):
                 child.addNodeParent(new_node)
 
         if node.text == "Assignment" and node.getChildAmount() == 3:
+            """
+            situation Assignment
+            """
             type_child = node.getChild(0)
             child = node.getChild(2)
             data_type = type_child.getSymbolTable().getEntry(type_child.text).type.upper()
