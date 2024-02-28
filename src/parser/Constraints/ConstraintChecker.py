@@ -1,5 +1,6 @@
 
 from src.parser.Constraints.MainFoundConstraint import *
+from src.parser.Constraints.ConstConstraint import *
 
 
 class ConstraintChecker(ASTVisitor):
@@ -7,7 +8,7 @@ class ConstraintChecker(ASTVisitor):
     Visitor to check all nodes to verify certain constraints
     """
     def __init__(self, lexer):
-        self.constraints = [MainFoundConstraint(lexer)]
+        self.constraints = [MainFoundConstraint(lexer),ConstConstraint()]
 
     def visitNode(self, node: ASTNode):
         for c in self.constraints:
