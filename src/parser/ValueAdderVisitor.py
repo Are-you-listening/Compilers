@@ -43,10 +43,9 @@ class ValueAdderVisitor(ASTVisitor):
                     constantfolder.postorder(val)
 
                     # after the constant folder is done, we have to revisit this node
-                    if val.text == "Expr":
-                        ErrorExporter.invalidRvalue(ident.text)
-                    else:
-                        for entry in ident.getSymbolTable().symbols:
+                    if val.text != "Expr":
+                        ST = ident.getSymbolTable()
+                        for entry in ST.symbols.values():
                             if entry.name == ident.text:
                                 entry.value = val.text
 
