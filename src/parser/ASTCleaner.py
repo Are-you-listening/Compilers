@@ -3,9 +3,8 @@ from src.parser.CTypes.COperationHandler import COperationHandler
 
 
 class ASTCleaner(ASTVisitor):
-    def __init__(self, lexer):
-        self.lexer = lexer
-        self.operation_handler = COperationHandler(lexer)
+    def __init__(self):
+        self.operation_handler = COperationHandler()
 
     def visit(self, ast: AST):
         root = ast.root

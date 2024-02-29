@@ -3,8 +3,8 @@ from src.parser.ErrorExporter import *
 
 
 class IdentifierReplacerVisitor(ASTVisitor):
-    def __init__(self, lexer):
-        self.lexer = lexer
+    def __init__(self):
+       pass
 
     def visitNode(self, node: ASTNode):
         pass

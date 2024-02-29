@@ -92,7 +92,7 @@ class ASTCreator(expressionVisitor):
         if ctx.getText() in black_list:
             return
 
-        node = ASTNodeTerminal(ctx.getText(), self.parent, self.table, self.translateLexerID(ctx.getSymbol().type,ctx.getText()))
+        node = ASTNodeTerminal(ctx.getText(), self.parent, self.table, self.translateLexerID(ctx.getSymbol().type))
         node.linenr = ctx.getSymbol().line
         self.__updateSymbolTable(ctx, node)
         self.parent.addChildren(node)
@@ -141,12 +141,14 @@ class ASTCreator(expressionVisitor):
                     if grandchild.text == "const":
                         is_const = True
                     else:
-                        datatype += self.translateLexerID(None,grandchild.text)
+                        datatype += grandchild.text.upper()
                 # the value in the symbol table is initially empty
                 symbol_entry = SymbolEntry(self.parent.text, datatype, ctx.getText(), is_const, None, node, None)
                 self.table.add(symbol_entry)
 
-    def translateLexerID(self, id,text=None):
+    def translateLexerID(self, id):
+        return self.lexer.ruleNames[id-1]
+        """
         if id == self.lexer.CHAR:
             return "CHAR"
         elif id == self.lexer.FLOAT:
@@ -165,3 +167,4 @@ class ASTCreator(expressionVisitor):
                     return "FLOAT"
             print("DEVELOPER WARNING in translateLexerID(), unknown id or text, cannot retrieve typename: returning original id: ", id)
             return id
+        """

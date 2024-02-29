@@ -9,8 +9,8 @@ class ConstraintChecker(ASTVisitor):
     """
     Visitor to check all nodes to verify certain constraints
     """
-    def __init__(self, lexer):
-        self.constraints = [MainFoundConstraint(), UndeclaredConstrained(), RedefinitionConstraint(), ConstConstraint(), IncompatibleTypeOperationConstrained(lexer)]
+    def __init__(self):
+        self.constraints = [MainFoundConstraint(), UndeclaredConstrained(), RedefinitionConstraint(), ConstConstraint(), IncompatibleTypeOperationConstrained()]
 
     def visitNode(self, node: ASTNode):
         for c in self.constraints:

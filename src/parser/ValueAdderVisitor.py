@@ -8,8 +8,8 @@ class ValueAdderVisitor(ASTVisitor):
     """
     AST visitor that adds identifier values to the symbol table
     """
-    def __init__(self, lexer):
-        self.lexer = lexer
+    def __init__(self):
+        pass
 
     def visitNode(self, node: ASTNode):
         if node.text == "Declaration" or node.text == "Assignment":
@@ -36,10 +36,10 @@ class ValueAdderVisitor(ASTVisitor):
                             entry.value = val.text
                 else:
                     # replace all the identifiers in the RHS with their symbol table value
-                    replacer = IdentifierReplacerVisitor(self.lexer)
+                    replacer = IdentifierReplacerVisitor()
                     replacer.preorder(val)
 
-                    constantfolder = ConstantFoldingVisitor(self.lexer)
+                    constantfolder = ConstantFoldingVisitor()
                     constantfolder.postorder(val)
 
                     # after the constant folder is done, we have to revisit this node

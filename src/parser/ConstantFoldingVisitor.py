@@ -3,9 +3,8 @@ from src.parser.CTypes.COperationHandler import COperationHandler
 
 
 class ConstantFoldingVisitor(ASTVisitor):
-    def __init__(self, lexer):
-        self.lexer = lexer
-        self.operation_handler = COperationHandler(lexer)
+    def __init__(self):
+        self.operation_handler = COperationHandler()
 
     def visit(self, ast: AST):
         root = ast.root
@@ -35,9 +34,9 @@ class ConstantFoldingVisitor(ASTVisitor):
             Our format will be something like this: (5+6) (with the middle child being the operator)
             """
 
-            if node.getChild(0).type == self.lexer.IDENTIFIER:
+            if node.getChild(0).type == "IDENTIFIER":
                 return
-            if node.getChild(2).type == self.lexer.IDENTIFIER:
+            if node.getChild(2).type == "IDENTIFIER":
                 return
 
             result, datatype_name = self.operation_handler.doOperationBinary((node.getChild(0).text, node.getChild(0).type),
@@ -47,7 +46,7 @@ class ConstantFoldingVisitor(ASTVisitor):
         elif node.getChildAmount() == node.getTerminalAmount() == 2:
             """Check for UNARY operations"""
 
-            if node.node.getChild(1).type == self.lexer.IDENTIFIER:
+            if node.getChild(1).type == "IDENTIFIER":
                 return
 
             result, datatype_name = self.operation_handler.doOperationUnary((node.getChild(1).text, node.getChild(1).type),
@@ -65,3 +64,19 @@ class ConstantFoldingVisitor(ASTVisitor):
 
         """do the visiting again"""
         self.visitNodeTerminal(node)
+
+    def visitNodeTerminal(self, node: ASTNodeTerminal):
+        parent = node.parent
+        if parent is None:
+            return
+
+        grand_parent = parent.parent
+        if grand_parent is None:
+            return
+
+        if parent.getChildAmount() == 1 and (parent.text in ("Literal", "Expr")):
+            index = grand_parent.findChild(parent)
+            grand_parent.setChild(index, node)
+            # Overwrite index of parent with node
+
+            self.visitNodeTerminal(node)

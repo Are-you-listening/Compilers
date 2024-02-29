@@ -96,10 +96,10 @@ class TestConstantExpression(unittest.TestCase):
         toAST.visit(tree)
         ast = toAST.getAST()
 
-        cfv = ConstantFoldingVisitor(lexer)
+        cfv = ConstantFoldingVisitor()
         cfv.visit(ast)
 
-        out2 = ASTOutput(lexer, round_amount)
+        out2 = ASTOutput(round_amount)
         out2.visit(ast)
         """
         compare outputs

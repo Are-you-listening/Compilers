@@ -5,8 +5,8 @@ class ASTDereferencer(ASTVisitor):
     """
     Make sure identifiers are dereferenced if needed
     """
-    def __init__(self, lexer):
-        self.lexer = lexer
+    def __init__(self):
+        pass
 
     def visitNode(self, node: ASTNode):
         pass
@@ -22,7 +22,7 @@ class ASTDereferencer(ASTVisitor):
         :param node:
         :return:
         """
-        if node.type != self.lexer.IDENTIFIER:
+        if node.type != "IDENTIFIER":
             return
 
         sibling_before = node.getSiblingNeighbour(-1)

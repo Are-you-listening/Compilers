@@ -7,9 +7,8 @@ class ASTConversion(ASTVisitor):
     """
     Makes implicit conversions explicit
     """
-    def __init__(self, lexer):
-        self.lexer = lexer
-        self.rc = RichnessChecker(lexer, types)
+    def __init__(self):
+        self.rc = RichnessChecker(types)
 
     def visitNode(self, node: ASTNode):
         if node.text == "Declaration" and node.getChildAmount() == 4:
@@ -18,7 +17,7 @@ class ASTConversion(ASTVisitor):
             """
             child = node.getChild(3)
             poorest = self.getPoorestType(child)
-            child_type = self.rc.getType(poorest)
+            child_type = poorest
 
             to_type_tree = node.getChild(0)
             if to_type_tree.getChild(0).text.upper() != child_type:
@@ -54,7 +53,7 @@ class ASTConversion(ASTVisitor):
 
         if parent.text == "Expr":
             poorest = self.getPoorestType(parent)
-            node_type = self.rc.getType(node.type)
+            node_type = node.type
             if node_type == "IDENTIFIER":
                 type_entry = node.getSymbolTable().getEntry(node.text)
                 node_type = type_entry.type.upper()
@@ -64,12 +63,12 @@ class ASTConversion(ASTVisitor):
             If not it will implicitly be converted to the poorest type
             """
 
-            if self.rc.getType(poorest) != node_type and node_type in types:
+            if poorest != node_type and node_type in types:
 
                 new_node = ASTNode("Conversion", parent, node.getSymbolTable())
                 type_node = ASTNode("Type", new_node, new_node.getSymbolTable())
                 new_node.addChildren(type_node)
-                type_node.addChildren(ASTNodeTerminal(node_type, type_node, type_node.getSymbolTable(), self.rc.getTypeNumber(node_type)))
+                type_node.addChildren(ASTNodeTerminal(node_type, type_node, type_node.getSymbolTable(), node_type))
                 node.addNodeParent(new_node)
 
 
@@ -80,14 +79,13 @@ class ASTConversion(ASTVisitor):
         :return: poorest type
         """
         if isinstance(node, ASTNodeTerminal):
-            t_type = self.rc.getType(node.type)
+            t_type = node.type
 
             if t_type == "IDENTIFIER":
                 """
                 return type corresponding to the value of the Identifier
                 """
                 type_entry = node.getSymbolTable().getEntry(node.text)
-                #return self.rc.getTypeNumber(type_entry.type.upper())
                 return type_entry.type
 
             if t_type not in types:
@@ -108,6 +106,6 @@ class ASTConversion(ASTVisitor):
             if poorest_child is None:
                 poorest_child = child_type
             else:
-                poorest_child = self.rc.getTypeNumber(self.rc.get_poorest(poorest_child, child_type))
+                poorest_child = self.rc.get_poorest(poorest_child, child_type)
 
         return poorest_child

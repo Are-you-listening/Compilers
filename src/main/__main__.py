@@ -16,7 +16,7 @@ from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
 
 def main(argv):
-    input_stream = FileStream("../../example_source_files/file2")
+    input_stream = FileStream("../../example_source_files/file9")
     lexer = expressionLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
@@ -25,28 +25,30 @@ def main(argv):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    ast_deref = ASTDereferencer(lexer)
+    ast_deref = ASTDereferencer()
     ast_deref.visit(ast)
 
-    constraint_checker = ConstraintChecker(lexer)
+    d = DotVisitor()
+    d.visit(ast)
+
+    constraint_checker = ConstraintChecker()
     constraint_checker.visit(ast)
 
-    astcleaner = ASTCleaner(lexer)
+    astcleaner = ASTCleaner()
     astcleaner.visit(ast)
 
-    #cfv = ConstantFoldingVisitor(lexer)
-    #cfv.visit(ast)
+    cfv = ConstantFoldingVisitor()
+    cfv.visit(ast)
 
-    v = ValueAdderVisitor(lexer)
+    v = ValueAdderVisitor()
     v.visit(ast)
 
     print("end")
 
-    #ast_conv = ASTConversion(lexer)
-    #ast_conv.visit(ast)
+    ast_conv = ASTConversion()
+    ast_conv.visit(ast)
 
-    d = DotVisitor()
-    d.visit(ast)
+
 
 
 if __name__ == '__main__':

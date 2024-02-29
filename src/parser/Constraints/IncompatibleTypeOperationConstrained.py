@@ -8,13 +8,13 @@ class IncompatibleTypeOperationConstrained(Constraint):
     Checks if the operations are of a compatible type
     """
 
-    def __init__(self, lexer):
+    def __init__(self):
         super().__init__()
         self.incompatible = {
             "FLOAT": ["%", "|", "&", "~", "CHAR"],
             "CHAR": ["FLOAT"],
         }
-        self.t = ASTConversion(lexer)
+        self.t = ASTConversion()
 
     def getLeftType(self, parent):
         return str(self.t.getPoorestType(parent.children[0]))
