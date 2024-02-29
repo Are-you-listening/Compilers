@@ -1,0 +1,5 @@
+int main(){
+    float y;
+    char x;
+    x+y;
+}
