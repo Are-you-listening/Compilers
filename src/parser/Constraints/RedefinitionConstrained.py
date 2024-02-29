@@ -15,4 +15,4 @@ class RedefinitionConstraint(Constraint):
                 if node.symbol_table.getEntry(node.text).firstUsed != node:
                     if node.parent.text=="Declaration":
                         self.accepted = True
-                        ErrorExporter.redefinition(node.linenr,node.symbol_table.getEntry(node.text).type, node.text)
+                        ErrorExporter.redefinition(node.linenr,node.symbol_table.getEntry(node.text).getType(), node.text)

@@ -1,7 +1,8 @@
 from src.antlr_files.expressionVisitor import *
 from src.antlr_files.expressionParser import *
 from src.parser.AST import *
-from src.parser.SymbolTable import *
+from src.parser.Tables.SymbolTable import *
+from src.parser.Tables.SymbolTypePtr import *
 
 black_list = ['(', ')', ';', '{', '}']
 
@@ -132,39 +133,27 @@ class ASTCreator(expressionVisitor):
         """
 
         child = self.parent.findType("Type")
-        is_const = False
-        datatype = ""
 
         if self.lexer.IDENTIFIER == ctx.getSymbol().type:
             if self.parent.text == "Declaration" or self.parent.text == "Function":
+
+                is_const = False
+                latest_datatype = ""
+
                 for grandchild in child.children:
                     if grandchild.text == "const":
                         is_const = True
+                    elif grandchild.text == "*":
+                        latest_datatype = SymbolTypePtr(latest_datatype)
                     else:
-                        datatype += grandchild.text.upper()
-                # the value in the symbol table is initially empty
-                symbol_entry = SymbolEntry(self.parent.text, datatype, ctx.getText(), is_const, None, node, None)
+                        latest_datatype = SymbolType(grandchild.text.upper())
+
+                """
+                the value in the symbol table is initially empty
+                """
+
+                symbol_entry = SymbolEntry(self.parent.text, latest_datatype, ctx.getText(), is_const, None, node, None)
                 self.table.add(symbol_entry)
 
     def translateLexerID(self, id):
         return self.lexer.ruleNames[id-1]
-        """
-        if id == self.lexer.CHAR:
-            return "CHAR"
-        elif id == self.lexer.FLOAT:
-            return "FLOAT"
-        elif id == self.lexer.IDENTIFIER:
-            return "IDENTIFIER"
-        elif id == self.lexer.INT:
-            return "INT"
-        else:
-            if text!=None:
-                if text=="int":
-                    return "INT"
-                if text == "char":
-                    return "CHAR"
-                elif text == "float":
-                    return "FLOAT"
-            print("DEVELOPER WARNING in translateLexerID(), unknown id or text, cannot retrieve typename: returning original id: ", id)
-            return id
-        """

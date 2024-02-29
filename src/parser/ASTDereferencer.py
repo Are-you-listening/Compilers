@@ -24,12 +24,17 @@ class ASTDereferencer(ASTVisitor):
         """
         if node.type != "IDENTIFIER":
             return
+        if node.parent.text in ("Declaration", "Assignment", "Function"):
+            return
 
         sibling_before = node.getSiblingNeighbour(-1)
 
         if sibling_before is None:
+            self.addDereference(node)
             return
+
         if not isinstance(sibling_before, ASTNodeTerminal):
+            self.addDereference(node)
             return
 
         """removes the de reference sign"""
@@ -42,9 +47,9 @@ class ASTDereferencer(ASTVisitor):
         if sibling_before.text == "*":
             parent = node.parent
             parent.removeChild(sibling_before)
+            self.addDereference(node)
 
-        new_node = ASTNode("Dereference", None, node.symbol_table)
-        node.addNodeParent(new_node)
+        new_node = self.addDereference(node)
 
         """Check if the dereference can replace parent 'literal'/ 'Expr'"""
 
@@ -53,3 +58,10 @@ class ASTDereferencer(ASTVisitor):
             grand_parent = parent.parent
             grand_parent.replaceChild(parent, new_node)
             parent = grand_parent
+
+    @staticmethod
+    def addDereference(node):
+        new_node = ASTNode("Dereference", None, node.symbol_table)
+        node.addNodeParent(new_node)
+
+        return new_node

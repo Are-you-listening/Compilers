@@ -1,10 +1,11 @@
 from src.parser.ErrorExporter import *
-from src.parser.ErrorExporter import *
+from src.parser.Tables.SymbolType import *
+
 
 class SymbolEntry:
-    def __init__(self, fitype: str, datatype: str, name: str, const: bool, value, firstUsed, firstDeferred):
+    def __init__(self, fitype: str, datatype: SymbolType, name: str, const: bool, value, firstUsed, firstDeferred):
         self.fitype = fitype
-        self.type = datatype
+        self.__type = datatype
         self.name = name
         self.const = const
         self.value = value
@@ -12,8 +13,11 @@ class SymbolEntry:
         self.firstDeferred = firstDeferred  # The node this Enry is first deferred
 
     def print(self):
-        print(self.fitype, self.type, self.name, "| const = ", self.const, " | value = ", self.value, self.firstUsed,
+        print(self.fitype, self.__type, self.name, "| const = ", self.const, " | value = ", self.value, self.firstUsed,
               self.firstDeferred)
+
+    def getType(self):
+        return self.__type.getType()
 
 
 class SymbolTable:
@@ -24,7 +28,7 @@ class SymbolTable:
 
     def add(self, entry: SymbolEntry):
         if self.symbols.get(entry.name) is not None:
-            ErrorExporter.redefinition(None,entry.type,entry.name) # This allows earlier detection of errors but unsure how we would retrieve the lineNr
+            ErrorExporter.redefinition(None,entry.getType(),entry.name) # This allows earlier detection of errors but unsure how we would retrieve the lineNr
             return
         self.symbols[entry.name] = entry
 

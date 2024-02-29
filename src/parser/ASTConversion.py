@@ -36,7 +36,7 @@ class ASTConversion(ASTVisitor):
             """
             type_child = node.getChild(0)
             child = node.getChild(2)
-            data_type = type_child.getSymbolTable().getEntry(type_child.text).type.upper()
+            data_type = type_child.getSymbolTable().getEntry(type_child.text).getType()
             if self.getPoorestType(child) != data_type:
                 new_node = ASTNode("Conversion", node, child.getSymbolTable())
                 type_node = ASTNode("Type", new_node, new_node.getSymbolTable())
@@ -86,7 +86,7 @@ class ASTConversion(ASTVisitor):
                 return type corresponding to the value of the Identifier
                 """
                 type_entry = node.getSymbolTable().getEntry(node.text)
-                return type_entry.type
+                return type_entry.getType()
 
             if t_type not in types:
                 return None
