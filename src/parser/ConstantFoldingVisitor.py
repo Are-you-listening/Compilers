@@ -35,9 +35,9 @@ class ConstantFoldingVisitor(ASTVisitor):
             Our format will be something like this: (5+6) (with the middle child being the operator)
             """
 
-            if node.getChild(0).type == self.lexer.IDENTIFIER:
+            if node.getChild(0).type == "IDENTIFIER":
                 return
-            if node.getChild(2).type == self.lexer.IDENTIFIER:
+            if node.getChild(2).type == "IDENTIFIER":
                 return
 
             result, datatype_name = self.operation_handler.doOperationBinary((node.getChild(0).text, node.getChild(0).type),
@@ -47,7 +47,7 @@ class ConstantFoldingVisitor(ASTVisitor):
         elif node.getChildAmount() == node.getTerminalAmount() == 2:
             """Check for UNARY operations"""
 
-            if node.node.getChild(1).type == self.lexer.IDENTIFIER:
+            if node.node.getChild(1).type == "IDENTIFIER":
                 return
 
             result, datatype_name = self.operation_handler.doOperationUnary((node.getChild(1).text, node.getChild(1).type),
