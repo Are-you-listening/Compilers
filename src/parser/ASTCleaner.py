@@ -11,6 +11,13 @@ class ASTCleaner(ASTVisitor):
         self.postorder(root)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
+        self.cleanUseless(node)
+        self.cleanEqualSign(node)
+
+    def cleanUseless(self, node: ASTNodeTerminal):
+        """
+        Cleanup the tree by removing nodes(Expr and Literal) that have single child
+        """
         parent = node.parent
         if parent is None:
             return
@@ -25,3 +32,12 @@ class ASTCleaner(ASTVisitor):
             # Overwrite index of parent with node
 
             self.visitNodeTerminal(node)
+
+    @staticmethod
+    def cleanEqualSign(node: ASTNodeTerminal):
+        """
+        when having a declaration of an assignment the sign '=' is not needed anymore.
+        """
+
+        if node.text == "=":
+            node.parent.removeChild(node)

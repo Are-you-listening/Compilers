@@ -16,7 +16,7 @@ from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
 
 def main(argv):
-    input_stream = FileStream("../../example_source_files/file10")
+    input_stream = FileStream("../../example_source_files/file11")
     lexer = expressionLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
@@ -36,7 +36,6 @@ def main(argv):
 
     constraint_checker = ConstraintChecker()
     constraint_checker.visit(ast)
-
 
     cfv = ConstantFoldingVisitor()
     cfv.visit(ast)
