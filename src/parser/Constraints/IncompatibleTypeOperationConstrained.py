@@ -12,10 +12,8 @@ class IncompatibleTypeOperationConstrained(Constraint):
         super().__init__()
         self.lexer = lexer
         self.incompatible = {
-            "FLOAT": ["%", "|", "&", "~", "CHAR", str(self.lexer.CHAR)],
-            "CHAR": ["FLOAT", str(self.lexer.FLOAT)],
-            str(self.lexer.FLOAT): ["char"],
-            str(self.lexer.CHAR): ["float", "%", "|", "&", "~", "char"]
+            "FLOAT": ["%", "|", "&", "~", "CHAR"],
+            "CHAR": ["FLOAT"],
         }
         self.t = ASTConversion(self.lexer)
 
@@ -41,18 +39,16 @@ class IncompatibleTypeOperationConstrained(Constraint):
         if node.type == self.lexer.IDENTIFIER:
             type = node.symbol_table.getEntry(node.text).type
         type = str(type)
-        print(type)
-        print(ltype)
-        print(rtype)
-        print("t")
+        #print(type)
+        #print(ltype)
+        #print(rtype)
+        #print("t")
 
 
         #if rtype in self.incompatible[ltype]:
             #print(self.incompatible[ltype])
         #print(self.incompatible[ltype])
 
-        #if (ltype in self.incompatible.keys() and rtype in self.incompatible[ltype]) or (rtype in self.incompatible.keys() and ltype in self.incompatible[rtype]):
-        #    ErrorExporter.invalidOperation(node.linenr, parent.children[1].text, ltype, rtype)
-
-# 36 float
-# 35 char
+        if (ltype in self.incompatible.keys() and rtype in self.incompatible[ltype]) or (rtype in self.incompatible.keys() and ltype in self.incompatible[rtype]):
+            ErrorExporter.invalidOperation(node.linenr, parent.children[1].text, ltype, rtype)
+            self.accepted = True

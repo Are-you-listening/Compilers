@@ -29,4 +29,5 @@ class ConstConstraint(Constraint):
                         self.throwExceptionA()
 
     def throwExceptionA(self):
+        self.accepted = True
         ErrorExporter.constComplaint(self.node.getChild(0).linenr, self.node.getChild(0).text, "const")

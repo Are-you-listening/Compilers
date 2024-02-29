@@ -13,4 +13,5 @@ class UndeclaredConstrained(Constraint):
     def checkTerminalNode(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
             if not node.symbol_table.exists(node.text):
+                self.accepted = True
                 ErrorExporter.undeclaredVariable(node.text)
