@@ -23,6 +23,7 @@ class RichnessChecker:
         return type
 
     def getTypeNumber(self, type_name):
+        return type_name
         return self.lexer.ruleNames.index(type_name)+1
 
 
