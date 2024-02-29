@@ -6,11 +6,11 @@ class UndeclaredConstrained(Constraint):
     """
     Checks for redefinition or redeclaration of variables
     """
-    def __init__(self, lexer):
+    def __init__(self):
         super().__init__()
-        self.lexer = lexer
+
 
     def checkTerminalNode(self, node: ASTNodeTerminal):
-        if node.type == self.lexer.IDENTIFIER:
+        if node.type == "IDENTIFIER":
             if not node.symbol_table.exists(node.text):
                 ErrorExporter.undeclaredVariable(node.text)

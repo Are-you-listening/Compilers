@@ -18,14 +18,14 @@ class IdentifierReplacerVisitor(ASTVisitor):
                     # the variable is const, so we can replace it with it's value
                     if entry.value is not None:
                         node.text = entry.value
-                        if entry.type == "int":
-                            node.type = self.lexer.INT
+                        if entry.type == "INT":
+                            node.type = "INT"
 
-                        elif entry.type == "char":
-                            node.type = self.lexer.CHAR
+                        elif entry.type == "CHAR":
+                            node.type = "CHAR"
 
-                        elif entry.type == "float":
-                            node.type = self.lexer.FLOAT
+                        elif entry.type == "FLOAT":
+                            node.type = "FLOAT"
 
                         # find the declaration node 1 level higher and replace it with a terminal node
                         parentsiblings = node.parent.parent.children

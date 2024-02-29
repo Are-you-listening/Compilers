@@ -78,7 +78,7 @@ class CFunctionExecuterChar(CFunctionExecuter):
         self.LogicalOperations = _LogicalOperations
         self.BitOperations = _BitOperations
         self.RelationalOperations = _RelationalOperations
-        self.conversion_dict = {"Float": ""}
+        self.conversion_dict = {"FLOAT": ""}
 
     def fromString(self, string: str):
         return ord(string[1])

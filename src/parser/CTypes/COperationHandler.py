@@ -18,6 +18,7 @@ class RichnessChecker:
         return self.rich_order[min(index1, index2)]
 
     def getType(self, val: int):
+        return val
         type = self.lexer.ruleNames[val - 1]
         return type
 
