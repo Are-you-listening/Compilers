@@ -9,6 +9,10 @@ class ErrorExporter:
         print(f"[ Error ] invalid float operation {operator}")
 
     @staticmethod
+    def invalidOperation(linenr: str, operator: str, type: str, type2: str):
+        print(f"[ Error ] line {linenr}: invalid operation {operator} between type {type} and type {type2}")
+
+    @staticmethod
     def invalidOperatorPtr(operator: str):
         print(f"[ Error ] invalid ptr operation {operator}")
 
