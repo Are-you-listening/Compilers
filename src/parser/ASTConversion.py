@@ -87,7 +87,8 @@ class ASTConversion(ASTVisitor):
                 return type corresponding to the value of the Identifier
                 """
                 type_entry = node.getSymbolTable().getEntry(node.text)
-                return self.rc.getTypeNumber(type_entry.type.upper())
+                #return self.rc.getTypeNumber(type_entry.type.upper())
+                return type_entry.type
 
             if t_type not in types:
                 return None

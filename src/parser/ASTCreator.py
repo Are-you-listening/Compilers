@@ -141,7 +141,7 @@ class ASTCreator(expressionVisitor):
                     if grandchild.text == "const":
                         is_const = True
                     else:
-                        datatype += grandchild.text
+                        datatype += self.translateLexerID(None,grandchild.text)
                 # the value in the symbol table is initially empty
                 symbol_entry = SymbolEntry(self.parent.text, datatype, ctx.getText(), is_const, None, node, None)
                 self.table.add(symbol_entry)
