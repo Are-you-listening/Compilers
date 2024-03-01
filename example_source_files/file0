@@ -1,5 +1,5 @@
-int main(){
-    float y;
-    char x;
-    x+y;
+int main() {
+    int x ;
+    int b;
+    &x = b;
 }
