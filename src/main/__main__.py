@@ -21,13 +21,18 @@ def cleanGreen(input_file, dot_file):
     lexer = expressionLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
-    parser.removeErrorListeners()  # Add our own error Listener
-    parser.addErrorListener(EListener())
+
+    #parser.removeErrorListeners()  # Add our own error Listener
+    #parser.addErrorListener(EListener())
     tree = parser.start_()
 
     toAST = ASTCreator(lexer)  # Create Actual AST
     toAST.visit(tree)
     ast = toAST.getAST()
+
+    d = DotVisitor()
+    d.visit(ast)
+    return ast
 
     astcleaner = ASTCleaner()  # Do a standard cleaning
     astcleaner.visit(ast)
@@ -81,9 +86,9 @@ def main(argv):
         param = argv[arg_index]
         arg = argv[arg_index + 1]
         if param == "--input":
-            dot_file = arg
+            input_file = arg
         if param == "--render_ast":
-            output_file = arg
+            dot_file = arg
         elif param == "--render_symb":
             symbol_file = arg
         elif param == "--render_symb":

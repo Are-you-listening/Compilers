@@ -1,5 +1,6 @@
 from src.parser.ErrorExporter import *
 from src.parser.Tables.SymbolType import *
+from src.parser.Tables.SymbolTypePtr import *
 
 
 class SymbolEntry:
@@ -18,6 +19,17 @@ class SymbolEntry:
 
     def getType(self):
         return self.__type.getType()
+
+    def getTypeObject(self):
+        return self.__type
+
+    def getValue(self):
+        return self.value
+
+    def Dereference(self):
+        if isinstance(self.__type, SymbolTypePtr):
+            return self.__type.deReference()
+        return None
 
 
 class SymbolTable:

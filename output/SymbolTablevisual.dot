@@ -1,6 +1,3 @@
 digraph AST {
-  "0" [label="main
-x
-y
-"];
+  "0" [label=""];
 }

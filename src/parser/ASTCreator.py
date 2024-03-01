@@ -84,6 +84,10 @@ class ASTCreator(expressionVisitor):
     def visitConversion(self, ctx: expressionParser.ConversionContext):
         self.__makeNode(ctx, "Conversion")
 
+    def visitComment(self, ctx:expressionParser.CommentContext):
+        self.__makeNode(ctx, "Comment")
+
+
     def visitTerminal(self, ctx):
         """
         :param ctx:

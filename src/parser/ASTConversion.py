@@ -1,7 +1,7 @@
 from src.parser.ASTVisitor import *
 import subprocess
 from src.parser.CTypes.COperationHandler import *
-
+from src.parser.Tables.SymbolTypePtr import *
 
 class ASTConversion(ASTVisitor):
     """
@@ -56,7 +56,7 @@ class ASTConversion(ASTVisitor):
             node_type = node.type
             if node_type == "IDENTIFIER":
                 type_entry = node.getSymbolTable().getEntry(node.text)
-                node_type = type_entry.type.upper()
+                node_type = type_entry.getType().upper()
 
             """
             We check for nodes that have a type, if so we check if this type is the poorest type
@@ -96,7 +96,10 @@ class ASTConversion(ASTVisitor):
             return self.getPoorestType(type_value)
 
         if node.text == "Dereference":
-            pass
+            deref = self.getDereference(node)
+            if not isinstance(deref, str):
+                return "PTR"
+            return deref
 
         poorest_child = None
         for child_index in range(node.getChildAmount()):
@@ -111,3 +114,36 @@ class ASTConversion(ASTVisitor):
                 poorest_child = self.rc.get_poorest(poorest_child, child_type)
 
         return poorest_child
+
+    def getDereference(self, node: ASTNode):
+        """
+        get to which the subtree references
+        for example 'int a' references to int
+        int* a =0;, *(a+1) references to int too
+        :param node:
+        :return:
+        """
+
+        if node.text == "Dereference":
+            child = node.getChild(0)
+
+            type_obj = self.getDereference(child)
+            if isinstance(type_obj, SymbolTypePtr):
+                return type_obj.deReference()
+            elif isinstance(type_obj, SymbolType):
+                return type_obj.getType()
+
+            return None
+
+        if isinstance(node, ASTNodeTerminal) and node.type == "IDENTIFIER":
+            return node.getSymbolTable().getEntry(node.text).getTypeObject()
+
+        deref_type = None
+        for child in node.children:
+            type_obj = self.getDereference(child)
+
+            if deref_type is not None and not deref_type.getType() == type_obj.getType():
+                print("oeioeioei")
+
+            deref_type = type_obj
+

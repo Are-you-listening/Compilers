@@ -4,6 +4,7 @@ from src.parser.CTypes.CFunctionExecuterFloat import *
 
 types = ["CHAR", "INT", "FLOAT"]
 
+
 class RichnessChecker:
     def __init__(self, rich_order: list):
         self.rich_order = rich_order
@@ -22,7 +23,10 @@ class COperationHandler:
 
     def doOperationBinary(self, val1: tuple, val2: tuple, operation: str):
 
-        poorest_type = self.richness_checker.get_poorest(val1[1], val2[1])
+        if val1[1] == val2[1] == "PTR":
+            poorest_type = "PTR"
+        else:
+            poorest_type = self.richness_checker.get_poorest(val1[1], val2[1])
 
         """
         make sure we do the right type of operation (int op, char op, ...) and the values need to be converted
