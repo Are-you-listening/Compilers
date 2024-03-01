@@ -71,7 +71,6 @@ class ASTConversion(ASTVisitor):
                 type_node.addChildren(ASTNodeTerminal(node_type, type_node, type_node.getSymbolTable(), node_type))
                 node.addNodeParent(new_node)
 
-
     def getPoorestType(self, node: ASTNode):
         """
         Function to get the poorest type of the subtree
@@ -95,6 +94,9 @@ class ASTConversion(ASTVisitor):
         if node.text == "Conversion":
             type_value = node.getChild(0)
             return self.getPoorestType(type_value)
+
+        if node.text == "Dereference":
+            pass
 
         poorest_child = None
         for child_index in range(node.getChildAmount()):

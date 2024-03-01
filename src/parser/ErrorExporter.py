@@ -2,6 +2,7 @@ from antlr4.tree.Tree import ParseTreeListener
 from antlr4.error.ErrorListener import ErrorListener
 import sys
 
+
 class EListener(ErrorListener):
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
         #        print("[ Syntax Error ] line " + str(line) + ":" + str(column) + " " + msg, file=sys.stderr)

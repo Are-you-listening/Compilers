@@ -28,6 +28,6 @@ literal : (INT | FLOAT | CHAR | IDENTIFIER | conversion) ;
 
 IDENTIFIER: ([a-z]|[A-Z]|'_')([a-z]|[A-Z]|'_'|[0-9])*;
 INT : ([1-9][0-9]*) | [0-9] ;
-FLOAT: ([0-9]+)('.'[0-9]*)?;
+FLOAT: ([0-9]*'.')?([0-9]+) | ([0-9]+)('.'[0-9]*)?;
 CHAR: '\''.'\'';
 WS : [ \t\n\r]+ -> skip ;
