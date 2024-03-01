@@ -17,7 +17,7 @@ from src.parser.ASTCleaner import *
 
 
 def main(argv):
-    input_file = ""
+    input_file = "file1"
     for arg_index in range(1, len(argv), 2):
         param = argv[arg_index]
         arg = argv[arg_index+1]
@@ -58,8 +58,6 @@ def main(argv):
 
     d = DotVisitor()
     d.visit(ast)
-
-
 
 
 if __name__ == '__main__':
