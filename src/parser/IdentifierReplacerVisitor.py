@@ -16,11 +16,16 @@ class IdentifierReplacerVisitor(ASTVisitor):
         if node.type != "IDENTIFIER":
             return
 
+        # get the symbolTable entry of the identifier we are going to replace
         entry = node.getSymbolTable().symbols[toReplace]
+
         if entry.const or entry.firstUsed is None:
-            # the variable is const, so we can replace it with it's value
-            # or the value has not been used before so we can still replace it
+            # the variable is const, so we can replace it with its value
+            # or the value has not been used before, so we can still replace it
+
+            # from now on the identifier has been used
             entry.firstUsed = node
+
             if entry.value is not None:
                 node.text = entry.value
                 if entry.getType() == "INT":
@@ -32,7 +37,7 @@ class IdentifierReplacerVisitor(ASTVisitor):
                 elif entry.getType() == "FLOAT":
                     node.type = "FLOAT"
 
-                # replaces the derefence - identifer with the value of the identifier
+                # replaces the dereference -> identifer with the value of the identifier
                 parentsiblings = node.parent.parent.children
                 for i in range(len(parentsiblings)):
                     if parentsiblings[i] == node.parent:

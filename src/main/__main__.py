@@ -10,7 +10,7 @@ from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
 
 
-def cleanGreen(input_file, dot_file):
+def cleanGreen(input_file, dot_file, crashtest):
     """
     Standard function to generate parseTree & Export it to Dot
     :param input_file:
@@ -40,8 +40,9 @@ def cleanGreen(input_file, dot_file):
     ast_deref = ASTDereferencer()  # Correct the use of references & pointers
     ast_deref.visit(ast)
 
-    d = DotVisitor(dot_file)  # Export AST in Dot
-    d.visit(ast)
+    if not crashtest:
+        d = DotVisitor(dot_file)  # Export AST in Dot
+        d.visit(ast)
 
     return ast
 
@@ -69,7 +70,7 @@ def MIPS():
     pass
 
 
-def main(argv):
+def main(argv,crashTest=False):
     """
     Main function to start program
     :param argv:
@@ -96,8 +97,9 @@ def main(argv):
         elif param == "--target_mips":
             mips_file = arg
 
-    ast = cleanGreen(input_file, dot_file)  # Start AST cleanup & Dot Conversion
-    TableDotVisitor(symbol_file, ast.root.symbol_table)  # Export Symbol Table
+    ast = cleanGreen(input_file, dot_file, crashTest)  # Start AST cleanup & Dot Conversion
+    if not crashTest:
+        TableDotVisitor(symbol_file, ast.root.symbol_table)  # Export Symbol Table
     Processing(ast)  # Check for Errors , Apply Folding Techniques , ...
 
     print("end")
