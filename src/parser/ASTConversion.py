@@ -143,7 +143,7 @@ class ASTConversion(ASTVisitor):
             type_obj = self.getDereference(child)
 
             if deref_type is not None and not deref_type.getType() == type_obj.getType():
-                print("oeioeioei")
+                ErrorExporter.wrongRefCombination(deref_type.getType(), type_obj.getType())
 
             deref_type = type_obj
 

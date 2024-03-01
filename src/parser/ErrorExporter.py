@@ -49,3 +49,7 @@ class ErrorExporter:
     def redefinition(linenr: str, type: str, variable: str):
         print(f"[ Error ] line {linenr}: redefinition or redeclaration of {type} {variable}",file=sys.stderr)
 
+    @staticmethod
+    def wrongRefCombination(type1: str, type2: str):
+        print(f"[ Error ] line {linenr}: reference types do not match: {type1} and {type2}", file=sys.stderr)
+
