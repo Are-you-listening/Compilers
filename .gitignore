@@ -163,4 +163,12 @@ cython_debug/
 src/main/ASTvisual.png
 src/main/ASTvisual.dot
 /src/antlr_files/
+src/antlr_files/expressionLexer.py
+src/antlr_files/expressionListener.py
+src/antlr_files/expressionParser.py
+src/antlr_files/expressionVisitor.py
 /output/
+output/SymbolTablevisual.dot
+output/SymbolTablevisual.png
+output/ASTvisual.dot
+output/ASTvisual.png
