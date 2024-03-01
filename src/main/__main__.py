@@ -15,8 +15,16 @@ from src.parser.ASTDereferencer import *
 from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
 
+
 def main(argv):
-    input_stream = FileStream("../../example_source_files/file0")
+    input_file = ""
+    for arg_index in range(1, len(argv), 2):
+        param = argv[arg_index]
+        arg = argv[arg_index+1]
+        if param == "--input":
+            input_file = arg
+
+    input_stream = FileStream(f"../../example_source_files/{input_file}")
     lexer = expressionLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
