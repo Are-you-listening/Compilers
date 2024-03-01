@@ -3,6 +3,7 @@ import subprocess
 from src.parser.CTypes.COperationHandler import *
 from src.parser.Tables.SymbolTypePtr import *
 
+
 class ASTConversion(ASTVisitor):
     """
     Makes implicit conversions explicit

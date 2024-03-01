@@ -30,10 +30,6 @@ def cleanGreen(input_file, dot_file, crashtest):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    d = DotVisitor()
-    d.visit(ast)
-    return ast
-
     astcleaner = ASTCleaner()  # Do a standard cleaning
     astcleaner.visit(ast)
 
