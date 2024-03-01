@@ -12,14 +12,14 @@ class TestCrashTest(unittest.TestCase):
         """
         Files that are checked
         """
-        path = "../../testfiles/basic_tests_123"
+        path = "testfiles/basic_tests_123"
         for root, dirs, filenames in os.walk(path):
             for file in filenames:
 
                 if "proj3" in file:
                     continue
 
-                self.runAST("../testfiles/basic_tests_123/"+file)
+                self.runAST("testfiles/basic_tests_123/"+file)
 
     def runAST(self, file_name):
         print(file_name)
