@@ -162,3 +162,4 @@ cython_debug/
 #Ignore generated visuals
 src/main/ASTvisual.png
 src/main/ASTvisual.dot
+src/antlr_files/*
