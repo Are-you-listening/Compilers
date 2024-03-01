@@ -23,5 +23,5 @@ class TestCrashTest(unittest.TestCase):
 
     def runAST(self, file_name):
         print(file_name)
-        main([0, "--input", file_name])
+        main([0, "--input", file_name],True)
 
