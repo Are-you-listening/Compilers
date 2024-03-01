@@ -3,18 +3,18 @@ from src.parser.Tables.SymbolType import *
 
 
 class SymbolEntry:
-    def __init__(self, fitype: str, datatype: SymbolType, name: str, const: bool, value, firstUsed, firstDeferred):
+    def __init__(self, fitype: str, datatype: SymbolType, name: str, const: bool, value, firstDeclared, firstUsed):
         self.fitype = fitype
         self.__type = datatype
         self.name = name
         self.const = const
         self.value = value
-        self.firstUsed = firstUsed  # The node this Entry is first used
-        self.firstDeferred = firstDeferred  # The node this Enry is first deferred
+        self.firstDeclared = firstDeclared  # The node this Entry is first declared
+        self.firstUsed = firstUsed  # The node this Enry is first used
 
     def print(self):
-        print(self.fitype, self.__type, self.name, "| const = ", self.const, " | value = ", self.value, self.firstUsed,
-              self.firstDeferred)
+        print(self.fitype, self.__type, self.name, "| const = ", self.const, " | value = ", self.value, self.firstDeclared,
+              self.firstUsed)
 
     def getType(self):
         return self.__type.getType()
