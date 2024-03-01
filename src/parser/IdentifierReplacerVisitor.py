@@ -18,13 +18,13 @@ class IdentifierReplacerVisitor(ASTVisitor):
                     # the variable is const, so we can replace it with it's value
                     if entry.value is not None:
                         node.text = entry.value
-                        if entry.type == "INT":
+                        if entry.getType() == "INT":
                             node.type = "INT"
 
-                        elif entry.type == "CHAR":
+                        elif entry.getType() == "CHAR":
                             node.type = "CHAR"
 
-                        elif entry.type == "FLOAT":
+                        elif entry.getType() == "FLOAT":
                             node.type = "FLOAT"
 
                         # find the declaration node 1 level higher and replace it with a terminal node
