@@ -5,8 +5,13 @@ comment : '/*'(.)*?'*/' | SINGLECOMMENT;
 
 function : type IDENTIFIER '(' ')' '{' lines '}';
 lines : (line)*  ;
-line: (declaration | expr| assignment| typedef)(';')+;
+line: (declaration | expr| assignment| typedef | printf )(';')+;
 typedef: 'typedef' type IDENTIFIER;
+printf: 'printf' '(' '%s' ',' (IDENTIFIER | literal) ')'
+        | 'printf' '(' '%d' ',' (IDENTIFIER | literal) ')'
+        | 'printf' '(' '%x' ',' (IDENTIFIER | literal) ')'
+        | 'printf' '(' '%f' ',' (IDENTIFIER | literal) ')'
+        | 'printf' '(' '%c' ',' (IDENTIFIER | literal) ')' ;
 
 type: ('const')? ('int' | 'char' | 'float') ('*')*;
 declaration: type IDENTIFIER ('=' expr)?;
