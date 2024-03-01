@@ -15,20 +15,15 @@ class ValueAdderVisitor(ASTVisitor):
         if node.text == "Declaration":
             # there are 3 children: type, ident and value
             ident = node.getChild(1)
-            val = node.getChild(2)
         elif node.text == "Assignment":
             # there are 2 children: identifier and value
             ident = node.getChild(0)
-            val = node.getChild(1)
         else:
             # should also check for increment operations
             # basically check for every operation that changes an identifier value
             return
 
-        """" because of constant folding, val will be a terminal node with the value of the identifier
-         if val is and 'Expr' node this means that an identifier is used in the RHS
-         So we replace the identifier with it's Symbol Table value and redo constant folding"""
-
+        val = node.getChild(-1)
         if val.text != "Expr":
             ST = ident.getSymbolTable()
             for entry in ST.symbols.values():
@@ -42,14 +37,17 @@ class ValueAdderVisitor(ASTVisitor):
             constantfolder = ConstantFoldingVisitor()
             constantfolder.postorder(val)
 
+            val = node.getChild(-1)
+
             # after the constant folder is done, we have to revisit this node
             if val.text != "Expr":
                 ST = ident.getSymbolTable()
-                for entry in ST.symbols.values():
-                    if entry.name == ident.text:
-                        entry.value = val.text
+                entry = ST.symbols[ident.text]
+                entry.value = val.text
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        pass
-
-
+        if node.type == "IDENTIFIER":
+            # if it is a variable and it is not the node where it is first declared -> update firstUsed if necessary
+            entry = node.getSymbolTable().symbols[node.text]
+            if node != entry.firstDeclared:
+                entry.firstUsed = node
