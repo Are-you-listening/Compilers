@@ -17,7 +17,7 @@ from src.parser.ASTCleaner import *
 
 
 def main(argv):
-    input_file = "file1"
+    input_file = "file13"
     for arg_index in range(1, len(argv), 2):
         param = argv[arg_index]
         arg = argv[arg_index+1]
@@ -42,6 +42,9 @@ def main(argv):
     ast_deref = ASTDereferencer()
     ast_deref.visit(ast)
 
+    d = DotVisitor()
+    d.visit(ast)
+
     constraint_checker = ConstraintChecker()
     constraint_checker.visit(ast)
 
@@ -56,8 +59,7 @@ def main(argv):
     ast_conv = ASTConversion()
     ast_conv.visit(ast)
 
-    d = DotVisitor()
-    d.visit(ast)
+
 
 
 if __name__ == '__main__':
