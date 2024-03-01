@@ -12,7 +12,7 @@ class RedefinitionConstraint(Constraint):
     def checkTerminalNode(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
             if node.symbol_table.exists(node.text):
-                if node.symbol_table.getEntry(node.text).firstUsed != node:
+                if node.symbol_table.getEntry(node.text).firstDeclared != node:
                     if node.parent.text=="Declaration":
                         self.accepted = True
                         ErrorExporter.redefinition(node.linenr,node.symbol_table.getEntry(node.text).getType(), node.text)

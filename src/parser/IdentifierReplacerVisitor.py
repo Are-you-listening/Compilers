@@ -4,7 +4,8 @@ from src.parser.ErrorExporter import *
 
 class IdentifierReplacerVisitor(ASTVisitor):
     def __init__(self):
-       pass
+        self.previousNode = None
+        pass
 
     def visitNode(self, node: ASTNode):
         pass
@@ -14,8 +15,10 @@ class IdentifierReplacerVisitor(ASTVisitor):
 
         for entry in node.getSymbolTable().symbols.values():
             if entry.name == toReplace:
-                if entry.const:
+                if entry.const or entry.firstUsed is None:
                     # the variable is const, so we can replace it with it's value
+                    # or the value has not been used before so we can still replace it
+                    entry.firstUsed = node
                     if entry.value is not None:
                         node.text = entry.value
                         if entry.getType() == "INT":
