@@ -4,18 +4,23 @@ from src.parser.Tables.SymbolTypePtr import *
 
 
 class SymbolEntry:
-    def __init__(self, fitype: str, datatype: SymbolType, name: str, const: bool, value, firstDeclared, firstUsed):
+    def __init__(self, fitype: str, datatype: SymbolType, name: str, const: bool, value, first_declared, first_used):
         self.fitype = fitype
         self.__type = datatype
         self.name = name
         self.const = const
         self.value = value
-        self.firstDeclared = firstDeclared  # The node this Entry is first declared
-        self.firstUsed = firstUsed  # The node this Enry is first used
+        self.firstDeclared = first_declared  # The node this Entry is first declared
+        self.firstUsed = first_used  # The node this Enry is first used
 
-    def print(self):
-        print(self.fitype, self.__type, self.name, "| const = ", self.const, " | value = ", self.value, self.firstDeclared,
-              self.firstUsed)
+    def __repr__(self):
+        return f"""fi type: {self.fitype} 
+                   type: {self.__type} 
+                   name: {self.name}
+                   const: {self.const}
+                   value: {self.value}
+                   first declared: {self.firstDeclared}
+                   first used: {self.firstUsed})"""
 
     def getType(self):
         return self.__type.getType()
@@ -26,21 +31,25 @@ class SymbolEntry:
     def getValue(self):
         return self.value
 
-    def Dereference(self):
-        if isinstance(self.__type, SymbolTypePtr):
-            return self.__type.deReference()
-        return None
-
 
 class SymbolTable:
     def __init__(self, prev):
+        """
+        Init a symbol table
+        :param prev: a ptr to the prev symbol table we need to point to
+        """
         self.symbols = {}
         self.prev = prev
         self.next = []
 
     def add(self, entry: SymbolEntry):
+        """
+        add an symbol entry to the symbol table
+        :param entry: the entry we want to add
+        :return:
+        """
         if self.symbols.get(entry.name) is not None:
-            ErrorExporter.redefinition(None,entry.getType(),entry.name) # This allows earlier detection of errors but unsure how we would retrieve the lineNr
+            ErrorExporter.redefinition(entry.firstDeclared, entry.getType(), entry.name) # This allows earlier detection of errors but unsure how we would retrieve the lineNr
             return
         self.symbols[entry.name] = entry
 
@@ -48,59 +57,62 @@ class SymbolTable:
         self.symbols.pop(symbol.name)
 
     def getEntry(self, name):
+        """
+        Get entry
+        :param name: name of the entry
+        :return:
+        """
         return self.symbols.get(name)
 
-    def print(self):
+    def __repr__(self):
+        rep_string = ""
         for entry in self.symbols.values():
-            entry.print()
-        print(self.symbols)
+            rep_string += f"{repr(entry)}\n"
+        rep_string += f"self.symbols"
 
-    def traverse(self, function, up: bool, print=False):
+    def traverse(self, function, up: bool, do_print=False):
         """
 
+        :param do_print: bool indication whether to print or not
         :param function: function to execute
-        :param printEntry: toggle the print of entries
         :param up: go up or down the list
         :return:
         """
+
+        if do_print:
+            print(self)
+
         if up:
-            if print:
-                self.print()
             if self.prev is None:
                 return
-            self.prev.traverse(function,up,print)
+            self.prev.traverse(function, up, do_print)
         else:
-            if print:
-                self.print()
-
             for child in self.next:
-                if print:
-                    self.print()
-                child.traverse(function, up, print)
+                child.traverse(function, up, do_print)
 
-    def nextTable(self, next):
+    def nextTable(self, next_table: "SymbolTable"):
         """Add a new table as child"""
-        self.next.append(next)
+        self.next.append(next_table)
 
-    def exists(self,entryname):
+    def exists(self, entry_name: str):
         """
         Check if a given symbolEntry already exists in the scope
-        :param entryname:
+        :param entry_name: the name of an entry of the symbol table
         :return:
         """
-        if self.entryExists(entryname):
+        if self.entryExists(entry_name):
             return True
         if self.prev is not None:
-            self.prev.traverse(self.entryExists(entryname), True)  # Else: traverse upwards
+            self.prev.traverse(self.entryExists(entry_name), True)  # Else: traverse upwards
         else:
             return False
 
-    def entryExists(self,entryname):
+    def entryExists(self, entry_name: str):
         """
         Check if a given symbolEntry already exists in the current table
-        :param entryname:
+        :param entry_name:the name of an entry of the symbol table
         :return:
         """
-        if self.symbols.get(entryname) is None:
+        if self.symbols.get(entry_name) is None:
             return False
         return True
