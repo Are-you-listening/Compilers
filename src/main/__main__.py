@@ -8,7 +8,7 @@ from src.parser.ValueAdderVisitor import *
 from src.parser.ASTDereferencer import *
 from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
-
+from src.parser.TableDotVisitor import *
 
 def cleanGreen(input_file, dot_file, crashtest):
     """
@@ -39,6 +39,10 @@ def cleanGreen(input_file, dot_file, crashtest):
     if not crashtest:
         d = DotVisitor(dot_file)  # Export AST in Dot
         d.visit(ast)
+
+        d2 = TableDotVisitor("ASTSymb.dot", False)
+        d2.visit(ast)
+
 
     return ast
 

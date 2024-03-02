@@ -12,7 +12,7 @@ class SymbolEntry:
         self.firstDeclared = first_declared  # The node this Entry is first declared
         self.firstUsed = first_used  # The node this Enry is first used
 
-    def __repr__(self):
+    def __str__(self):
         return f"""fi type: {self.fitype} 
                    type: {self.__type} 
                    name: {self.name}
@@ -71,7 +71,7 @@ class SymbolTable:
     def __str__(self):
         rep_string = ""
         for entry in self.symbols.values():
-            rep_string += f"{repr(entry)}\n"
+            rep_string += f"{str(entry)}\n"
         rep_string += f"self.symbols"
 
     def traverse(self, function, up: bool, do_print=False):

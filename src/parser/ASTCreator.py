@@ -22,7 +22,7 @@ class ASTCreator(expressionVisitor):
         self.lexer = lexer
         self.parent = None
         self.AST = None
-        self.table = None
+        self.table = SymbolTable(None)
 
     def __setup(self):
         self.parent = None
@@ -100,6 +100,11 @@ class ASTCreator(expressionVisitor):
         node = ASTNodeTerminal(ctx.getText(), self.parent, self.table, self.translateLexerID(ctx.getSymbol().type))
         node.linenr = ctx.getSymbol().line
         self.__updateSymbolTable(ctx, node)
+
+        tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
+        self.table.nextTable(tempTable)
+        self.table = tempTable
+
         self.parent.addChildren(node)
 
     def __makeNode(self, ctx, terminal_type: str):

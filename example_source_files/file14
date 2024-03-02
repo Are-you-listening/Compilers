@@ -1,5 +1,7 @@
 //hello
 int main(){
+int x = 0;
+int a = 0;
 //hi
 /**
 *

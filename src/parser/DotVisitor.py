@@ -28,31 +28,3 @@ class DotVisitor(ASTVisitor):
         self.outfile.close()
         dot_command = "dot -Tpng " + self.filename+".dot" + " -o "+self.filename+".png"
         subprocess.run(dot_command, shell=True)
-
-class TableDotVisitor():
-    def __init__(self,file,table):
-        self.filename = file
-        self.outfile = open(file+".dot", "w")
-        self.outfile.write("digraph AST {\n")
-        self.id = 0
-        table.traverse(self.Dot(table), False)
-
-    def Dot(self,table):
-        label = ""
-
-        for entry in table.symbols:
-            label += entry+'\n'
-
-        #label = node.text
-        #if node.text == "'\x00'":
-        #    label = '\\000'
-
-        self.outfile.write(f'  "{self.id}" [label="{label}"];\n')
-        self.id += 1
-
-    def __del__(self):
-        self.outfile.write("}\n")
-        self.outfile.close()
-        dot_command = "dot -Tpng " + self.filename+".dot" + " -o "+self.filename+".png"
-        subprocess.run(dot_command, shell=True)
-
