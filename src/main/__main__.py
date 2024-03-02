@@ -22,8 +22,8 @@ def cleanGreen(input_file, dot_file, crashtest):
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
 
-    #parser.removeErrorListeners()  # Add our own error Listener
-    #parser.addErrorListener(EListener())
+    parser.removeErrorListeners()  # Add our own error Listener
+    parser.addErrorListener(EListener())
     tree = parser.start_()
 
     toAST = ASTCreator(lexer)  # Create Actual AST
@@ -95,7 +95,7 @@ def main(argv,crashTest=False):
 
     ast = cleanGreen(input_file, dot_file, crashTest)  # Start AST cleanup & Dot Conversion
     if not crashTest:
-        d2 = TableDotVisitor(symbol_file, False)# Export Symbol Table
+        d2 = TableDotVisitor(symbol_file, False)  # Export Symbol Table
         d2.visit(ast)
     Processing(ast)  # Check for Errors , Apply Folding Techniques , ...
 
