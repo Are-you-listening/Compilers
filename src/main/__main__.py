@@ -40,10 +40,6 @@ def cleanGreen(input_file, dot_file, crashtest):
         d = DotVisitor(dot_file)  # Export AST in Dot
         d.visit(ast)
 
-        d2 = TableDotVisitor("ASTSymb.dot", False)
-        d2.visit(ast)
-
-
     return ast
 
 
@@ -99,7 +95,8 @@ def main(argv,crashTest=False):
 
     ast = cleanGreen(input_file, dot_file, crashTest)  # Start AST cleanup & Dot Conversion
     if not crashTest:
-        TableDotVisitor(symbol_file, ast.root.symbol_table)  # Export Symbol Table
+        d2 = TableDotVisitor(symbol_file, False)# Export Symbol Table
+        d2.visit(ast)
     Processing(ast)  # Check for Errors , Apply Folding Techniques , ...
 
     print("end")
