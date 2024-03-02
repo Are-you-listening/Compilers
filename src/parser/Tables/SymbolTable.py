@@ -1,5 +1,4 @@
 from src.parser.ErrorExporter import *
-from src.parser.Tables.SymbolType import *
 from src.parser.Tables.SymbolTypePtr import *
 
 
@@ -62,7 +61,6 @@ class SymbolTable:
         :param name: name of the entry
         :return:
         """
-        return self.symbols.get(name)
         if name in self.symbols.keys():
             return self.symbols.get(name)
         else:
