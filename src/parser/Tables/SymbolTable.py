@@ -48,7 +48,12 @@ class SymbolTable:
         self.symbols.pop(symbol.name)
 
     def getEntry(self, name):
-        return self.symbols.get(name)
+        if name in self.symbols.keys():
+            return self.symbols.get(name)
+        else:
+            if self.prev is not None:
+                self.prev.getEntry(name)
+            return
 
     def print(self):
         for entry in self.symbols.values():
