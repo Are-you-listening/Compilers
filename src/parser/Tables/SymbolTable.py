@@ -64,15 +64,17 @@ class SymbolTable:
         :return:
         """
         if up:
-            if(print):
+            if print:
                 self.print()
+            if self.prev is None:
+                return
             self.prev.traverse(function,up,print)
         else:
-            if (print):
+            if print:
                 self.print()
 
             for child in self.next:
-                if (print):
+                if print:
                     self.print()
                 child.traverse(function, up, print)
 

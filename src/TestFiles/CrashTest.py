@@ -19,9 +19,12 @@ class TestCrashTest(unittest.TestCase):
                 if "proj3" in file:
                     continue
 
+                if file.endswith("png") or file.endswith("dot"):
+                    continue
+
                 self.runAST("testfiles/basic_tests_123/"+file)
 
     def runAST(self, file_name):
         print(file_name)
-        main([0, "--input", file_name],True)
+        main([0, "--input", file_name], True)
 

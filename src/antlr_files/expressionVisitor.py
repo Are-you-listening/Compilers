@@ -14,6 +14,11 @@ class expressionVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by expressionParser#code.
+    def visitCode(self, ctx:expressionParser.CodeContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by expressionParser#comment.
     def visitComment(self, ctx:expressionParser.CommentContext):
         return self.visitChildren(ctx)
@@ -24,11 +29,6 @@ class expressionVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by expressionParser#lines.
-    def visitLines(self, ctx:expressionParser.LinesContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by expressionParser#line.
     def visitLine(self, ctx:expressionParser.LineContext):
         return self.visitChildren(ctx)
@@ -36,6 +36,11 @@ class expressionVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by expressionParser#typedef.
     def visitTypedef(self, ctx:expressionParser.TypedefContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by expressionParser#printf.
+    def visitPrintf(self, ctx:expressionParser.PrintfContext):
         return self.visitChildren(ctx)
 
 

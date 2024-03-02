@@ -60,8 +60,9 @@ class ASTCreator(expressionVisitor):
         self.table.nextTable(tempTable)
         self.table = tempTable
 
-    def visitLines(self, ctx: expressionParser.LinesContext):
-        self.__makeNode(ctx, "Lines")
+    def visitCode(self, ctx: expressionParser.CodeContext):
+        self.__makeNode(ctx, "Code")
+
 
     def visitLine(self, ctx: expressionParser.LineContext):
         self.__makeNode(ctx, "Line")

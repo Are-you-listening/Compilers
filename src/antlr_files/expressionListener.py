@@ -17,6 +17,15 @@ class expressionListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by expressionParser#code.
+    def enterCode(self, ctx:expressionParser.CodeContext):
+        pass
+
+    # Exit a parse tree produced by expressionParser#code.
+    def exitCode(self, ctx:expressionParser.CodeContext):
+        pass
+
+
     # Enter a parse tree produced by expressionParser#comment.
     def enterComment(self, ctx:expressionParser.CommentContext):
         pass
@@ -35,15 +44,6 @@ class expressionListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by expressionParser#lines.
-    def enterLines(self, ctx:expressionParser.LinesContext):
-        pass
-
-    # Exit a parse tree produced by expressionParser#lines.
-    def exitLines(self, ctx:expressionParser.LinesContext):
-        pass
-
-
     # Enter a parse tree produced by expressionParser#line.
     def enterLine(self, ctx:expressionParser.LineContext):
         pass
@@ -59,6 +59,15 @@ class expressionListener(ParseTreeListener):
 
     # Exit a parse tree produced by expressionParser#typedef.
     def exitTypedef(self, ctx:expressionParser.TypedefContext):
+        pass
+
+
+    # Enter a parse tree produced by expressionParser#printf.
+    def enterPrintf(self, ctx:expressionParser.PrintfContext):
+        pass
+
+    # Exit a parse tree produced by expressionParser#printf.
+    def exitPrintf(self, ctx:expressionParser.PrintfContext):
         pass
 
 

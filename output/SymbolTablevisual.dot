@@ -1,3 +1,4 @@
 digraph AST {
-  "0" [label=""];
+  "0" [label="main
+"];
 }

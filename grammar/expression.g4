@@ -1,10 +1,9 @@
 grammar expression;
-start_ : (function | line | comment)* EOF;
+start_ : code EOF;
+code: (function | line  | comment)*;
 
 comment : '/*'(.)*?'*/' | SINGLECOMMENT;
-
-function : type IDENTIFIER '(' ')' '{' lines '}';
-lines : (line)*  ;
+function : type IDENTIFIER '(' ')' '{' code '}';
 line: (declaration | expr| assignment| typedef | printf )(';')+;
 typedef: 'typedef' type IDENTIFIER;
 printf: 'printf' '(' '%s' ',' (IDENTIFIER | literal) ')'
