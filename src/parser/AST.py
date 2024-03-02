@@ -81,6 +81,9 @@ class ASTNode:
         index = self.children.index(old_child)
         self.children[index] = new_child
 
+    def clearChildren(self):
+        self.children = []
+
 
 class ASTNodeTerminal(ASTNode):
     """

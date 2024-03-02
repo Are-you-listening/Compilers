@@ -10,6 +10,9 @@ class ASTCleaner(ASTVisitor):
         root = ast.root
         self.postorder(root)
 
+    def visitNode(self, node: ASTNodeTerminal):
+        self.cleanComments(node)
+
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.cleanUseless(node)
         self.cleanEqualSign(node)
@@ -41,3 +44,23 @@ class ASTCleaner(ASTVisitor):
 
         if node.text == "=":
             node.parent.removeChild(node)
+
+    @staticmethod
+    def cleanComments(node: ASTNode):
+        """
+        make sure we put every part of a comment inside the same node
+        :param node: AST node that we will check if it is a comment and if so, merge
+        :return: Nothing
+        """
+
+        if node.text != "Comment":
+            return
+
+        resulting_comment = ""
+        for child in node.children:
+            resulting_comment += child.text
+
+        node.clearChildren()
+        comment_node = ASTNodeTerminal(resulting_comment, node, node.getSymbolTable(), "COMMENT")
+        node.addChildren(comment_node)
+

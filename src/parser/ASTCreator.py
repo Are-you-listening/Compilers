@@ -60,8 +60,9 @@ class ASTCreator(expressionVisitor):
         self.table.nextTable(tempTable)
         self.table = tempTable
 
-    def visitLines(self, ctx: expressionParser.LinesContext):
-        self.__makeNode(ctx, "Lines")
+    def visitCode(self, ctx: expressionParser.CodeContext):
+        self.__makeNode(ctx, "Code")
+
 
     def visitLine(self, ctx: expressionParser.LineContext):
         self.__makeNode(ctx, "Line")
@@ -96,7 +97,6 @@ class ASTCreator(expressionVisitor):
 
         if ctx.getText() in black_list:
             return
-
         node = ASTNodeTerminal(ctx.getText(), self.parent, self.table, self.translateLexerID(ctx.getSymbol().type))
         node.linenr = ctx.getSymbol().line
         self.__updateSymbolTable(ctx, node)
@@ -155,7 +155,6 @@ class ASTCreator(expressionVisitor):
                 """
                 the value in the symbol table is initially empty
                 """
-
                 symbol_entry = SymbolEntry(self.parent.text, latest_datatype, ctx.getText(), is_const, None, node, None)
                 self.table.add(symbol_entry)
 
