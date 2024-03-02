@@ -64,7 +64,7 @@ class SymbolTable:
         """
         return self.symbols.get(name)
 
-    def __repr__(self):
+    def __str__(self):
         rep_string = ""
         for entry in self.symbols.values():
             rep_string += f"{repr(entry)}\n"
