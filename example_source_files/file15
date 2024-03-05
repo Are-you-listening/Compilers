@@ -4,7 +4,7 @@ int main(){
     char b = 0;
     float c = 0;
 
-    int q;
+    float q;
 
     const int d = 0;
     const char e = 0;

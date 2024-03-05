@@ -1,0 +1,8 @@
+
+int main(){
+    int a = 1;
+    int b = a+1;
+    int c = (a+5)*(b+6);
+
+}
+

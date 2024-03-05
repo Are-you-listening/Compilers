@@ -43,6 +43,6 @@ class ValueAdderVisitor(ASTVisitor):
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
             # if it is a variable, and it is not the node where it is first declared -> update firstUsed if necessary
-            entry = node.getSymbolTable().symbols[node.text]
+            entry = node.getSymbolTable().getEntry(node.text)
             if node != entry.firstDeclared:
                 entry.firstUsed = node
