@@ -23,6 +23,15 @@ class ConstantFoldingVisitor(ASTVisitor):
         """
         Only do constant folding on expressions
         """
+        if node.getChildAmount() == 1 and (node.text in ("Literal", "Expr")):
+            if parent is None:
+                return
+
+            index = parent.findChild(node)
+            parent.setChild(index, node.getChild(0))
+            # Overwrite index of parent with node
+
+
         if node.text != "Expr":
             return
 
@@ -66,17 +75,4 @@ class ConstantFoldingVisitor(ASTVisitor):
         self.visitNodeTerminal(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        parent = node.parent
-        if parent is None:
-            return
-
-        grand_parent = parent.parent
-        if grand_parent is None:
-            return
-
-        if parent.getChildAmount() == 1 and (parent.text in ("Literal", "Expr")):
-            index = grand_parent.findChild(parent)
-            grand_parent.setChild(index, node)
-            # Overwrite index of parent with node
-
-            self.visitNodeTerminal(node)
+        pass
