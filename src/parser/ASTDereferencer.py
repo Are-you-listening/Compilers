@@ -24,7 +24,7 @@ class ASTDereferencer(ASTVisitor):
         """
         if node.type != "IDENTIFIER":
             return
-        if node.parent.text in ("Declaration", "Function") and node.parent.findChild(node) == 1:
+        if node.parent.text in ("Declaration", "Function") and node.parent.findChild(node) == 0:
             return
 
         if node.parent.text == "Assignment" and node.parent.findChild(node) == 0:

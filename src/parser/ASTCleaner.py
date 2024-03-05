@@ -12,15 +12,19 @@ class ASTCleaner(ASTVisitor):
 
     def visitNode(self, node: ASTNodeTerminal):
         self.cleanComments(node)
+        self.cleanLine(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.cleanUseless(node)
         self.cleanEqualSign(node)
+        self.cleanEOF(node)
 
     def cleanUseless(self, node: ASTNodeTerminal):
+
         """
         Cleanup the tree by removing nodes(Expr and Literal) that have single child
         """
+
         parent = node.parent
         if parent is None:
             return
@@ -64,3 +68,28 @@ class ASTCleaner(ASTVisitor):
         comment_node = ASTNodeTerminal(resulting_comment, node, node.getSymbolTable(), "COMMENT")
         node.addChildren(comment_node)
 
+    @staticmethod
+    def cleanEOF(node: ASTNode):
+        """
+        <EOF> is useless
+        """
+        if node.text != "<EOF>":
+            return
+
+        node.parent.removeChild(node)
+
+    @staticmethod
+    def cleanLine(node: ASTNode):
+        """
+        The node 'Line' is useless
+        """
+
+        if node.text != "Line":
+            return
+
+        line_index = node.parent.findChild(node)
+
+        node.parent.removeChild(node)
+
+        for child in node.children:
+            node.parent.insertChild(line_index, child)

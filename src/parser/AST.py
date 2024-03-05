@@ -84,6 +84,10 @@ class ASTNode:
     def clearChildren(self):
         self.children = []
 
+    def insertChild(self, index: int, new_child):
+        self.children.insert(index, new_child)
+        new_child.parent = self
+
 
 class ASTNodeTerminal(ASTNode):
     """

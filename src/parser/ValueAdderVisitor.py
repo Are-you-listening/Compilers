@@ -11,10 +11,7 @@ class ValueAdderVisitor(ASTVisitor):
         pass
 
     def visitNode(self, node: ASTNode):
-        if node.text == "Declaration":
-            # there are 3 children: type, ident and value
-            ident = node.getChild(1)
-        elif node.text == "Assignment":
+        if node.text in ("Declaration", "Assignment"):
             # there are 2 children: identifier and value
             ident = node.getChild(0)
         else:

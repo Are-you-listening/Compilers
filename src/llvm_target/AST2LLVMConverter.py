@@ -54,7 +54,7 @@ class AST2LLVMConverter(ASTVisitor):
         """
         ask the var type, and search its value in the symbol table
         """
-        var_child: ASTNode = node.getChild(1)
+        var_child: ASTNode = node.getChild(0)
         data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
         """
         all children of type_child are terminals
@@ -68,7 +68,7 @@ class AST2LLVMConverter(ASTVisitor):
         return text
 
     def handleFunction(self, node):
-        var_child: ASTNode = node.getChild(1)
+        var_child: ASTNode = node.getChild(0)
         data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
 
         text = Declaration.function(var_child.text, data_type, ptrs)

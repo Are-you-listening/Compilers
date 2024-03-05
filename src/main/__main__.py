@@ -8,6 +8,7 @@ from src.parser.ValueAdderVisitor import *
 from src.parser.ASTDereferencer import *
 from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
+from src.parser.ASTCleanerAfter import *
 from src.parser.TableDotVisitor import *
 from src.llvm_target.AST2LLVMConverter import *
 from src.llvm_target.LLVMDotVisitor import *
@@ -36,6 +37,9 @@ def cleanGreen(input_file, dot_file, crashtest):
 
     astcleaner = ASTCleaner()  # Do a standard cleaning
     astcleaner.visit(ast)
+
+    astcleanerafter = ASTCleanerAfter()  # Do a standard cleaning
+    astcleanerafter.visit(ast)
 
     ast_deref = ASTDereferencer()  # Correct the use of references & pointers
     ast_deref.visit(ast)
