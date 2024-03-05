@@ -30,6 +30,18 @@ class SymbolEntry:
     def getValue(self):
         return self.value
 
+    def getPtrTuple(self):
+        """
+        returns a tuple: (type, amount of * depending on how many ptrs their are in the chain)
+        """
+        ptr_string = ""
+        d_t = self.__type
+        while isinstance(d_t, SymbolTypePtr):
+            ptr_string += "*"
+            d_t = d_t.deReference()
+
+        return d_t.getType(), ptr_string
+
 
 class SymbolTable:
     def __init__(self, prev):
