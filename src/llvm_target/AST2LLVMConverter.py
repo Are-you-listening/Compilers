@@ -13,11 +13,13 @@ class AST2LLVMConverter(ASTVisitor):
         self.map_table = MapTable(None)
         self.parent: LLVMNode = LLVMNode("", None, self.map_table)
         self.root = self.parent
+        self.last_function = self.root
 
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
         self.parent: LLVMNode = LLVMNode("", None, self.map_table)
         self.root = self.parent
+        self.last_function = self.root
 
         super().visit(ast)
 
@@ -36,7 +38,12 @@ class AST2LLVMConverter(ASTVisitor):
         self.map_table = MapTable(self.map_table)
 
         if node.text == "Declaration":
-            text = self.handleDeclaration(node)
+            self.handleDeclaration(node)
+
+            if node.getChildAmount() == 2:
+                text = self.handleAssignment(node)
+            else:
+                text = ""
 
         if node.text == "Function":
             text = self.handleFunction(node)
@@ -45,13 +52,15 @@ class AST2LLVMConverter(ASTVisitor):
         self.parent.addChild(llvm_node)
         self.parent = llvm_node
 
+        if node.text == "Function":
+            self.last_function = llvm_node
+
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.map_table = MapTable(self.map_table)
 
         llvm_node = LLVMNode("temp", self.parent, self.map_table)
         self.parent.addChild(llvm_node)
         self.parent = llvm_node
-
 
     def handleDeclaration(self, node):
             """
@@ -65,12 +74,16 @@ class AST2LLVMConverter(ASTVisitor):
             text, register = Declaration.declare(data_type, ptrs)
 
             """
+            add the allocation to the start of the function
+            """
+            self.geCurrentFunction().addText(text)
+
+            """
             add value to map to map var to address register
             """
             self.map_table.addEntry(MapEntry(var_child.text, register))
-            return text
 
-    def handleFunction(self, node):
+    def handleFunction(self, node: ASTNode):
         var_child: ASTNode = node.getChild(0)
         data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
 
@@ -83,3 +96,9 @@ class AST2LLVMConverter(ASTVisitor):
 
     def getRoot(self):
         return self.root
+
+    def geCurrentFunction(self) -> LLVMNode:
+        return self.last_function
+
+    def handleAssignment(self, node: ASTNode):
+        return "assignment"

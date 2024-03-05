@@ -1,21 +1,25 @@
 
 int main(){
-int a = 5;
-char b = 5+a;
-float c = 0;
+    int a = 3+5;
+    char b = 0;
+    float c = 0;
 
-const int d = 0;
-const char e = 0;
-const float f = 0;
+    int q;
 
-int* g = 0;
-char* h = 0;
-float* i = 0;
+    const int d = 0;
+    const char e = 0;
+    const float f = 0;
 
-int** j = 0;
-char** k = 0;
-float** l = 0;
+
+    int* g = 0;
+    char* h = 0;
+    float* i = 0;
+
+    int** j = 0;
+    char** k = 0;
+    float** l = 0;
 
 
 
 }
+

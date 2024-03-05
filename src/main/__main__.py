@@ -117,7 +117,7 @@ def main(argv,crashTest=False):
     llvm = to_llvm.getRoot()
     llvm_dot = LLVMDotVisitor(llvm_dot_file)
     llvm_dot.visit(llvm)
-    llvm_table = LLVMTableDotVisitor(llvm_map_file, True)
+    llvm_table = LLVMTableDotVisitor(llvm_map_file, False)
     llvm_table.visit(llvm)
 
 
