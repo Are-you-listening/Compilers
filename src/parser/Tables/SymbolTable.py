@@ -77,7 +77,7 @@ class SymbolTable:
             return self.symbols.get(name)
         else:
             if self.prev is not None:
-                self.prev.getEntry(name)
+                return self.prev.getEntry(name)
             return
 
     def __str__(self):

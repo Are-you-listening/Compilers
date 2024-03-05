@@ -22,4 +22,9 @@ class Declaration:
     def declare(data_type: str, ptrs: str):
         register_nr = LLVMSingleton.getInstance().useRegister()
         out_str = f"%{register_nr} = alloca {CTypesToLLVM.convertType(data_type)}{ptrs}, align {CTypesToLLVM.getBytesUse(data_type, ptrs)}"
+        return out_str, register_nr
+
+    @staticmethod
+    def function(func_name: str, return_type: str, ptrs: str):
+        out_str = f"define dso_local {CTypesToLLVM.convertType(return_type)}{ptrs} @{func_name}() #0 {'{'}"
         return out_str

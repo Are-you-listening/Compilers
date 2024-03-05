@@ -2,10 +2,11 @@ class LLVMNode:
     """
     A node inside the AST
     """
-    def __init__(self, text, parent):
+    def __init__(self, text, parent, map_table):
         self.children = []
         self.text = text
         self.parent = parent
+        self.map_table = map_table
 
     def addChild(self, node: "LLVMNode"):
         self.children.append(node)
@@ -19,3 +20,9 @@ class LLVMNode:
 
     def accept(self, v):
         v.visitNode(self)
+
+    def getMapTable(self):
+        return self.map_table
+
+    def addText(self, text: str):
+        self.text += '\n'+text

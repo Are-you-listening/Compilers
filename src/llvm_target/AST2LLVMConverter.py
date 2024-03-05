@@ -1,19 +1,22 @@
 from src.parser.ASTVisitor import *
 from src.llvm_target.LLVMTree import *
-from src.llvm_target.output_string_generator import *
+from src.llvm_target.OutputStringGenerator import *
+from src.llvm_target.MapTable.MapTable import *
 
 
-class ASTLLVMConverter(ASTVisitor):
+class AST2LLVMConverter(ASTVisitor):
     """
     Visitor to visualize the AST tree using dot
     """
 
     def __init__(self):
-        self.parent: LLVMNode = LLVMNode("root node header text", None)
+        self.map_table = MapTable(None)
+        self.parent: LLVMNode = LLVMNode("", None, self.map_table)
         self.root = self.parent
 
     def visit(self, ast: AST):
-        self.parent: LLVMNode = LLVMNode("root node header text", None)
+        self.map_table = MapTable(None)
+        self.parent: LLVMNode = LLVMNode("", None, self.map_table)
         self.root = self.parent
 
         super().visit(ast)
@@ -27,14 +30,20 @@ class ASTLLVMConverter(ASTVisitor):
             self.preorder(child)
         if isinstance(root, ASTNodeTerminal):
             return
+
         self.parent = self.parent.getParent()
 
     def visitNode(self, node: ASTNode):
-        text = "empty placeholder"
+        text = ""
+        self.map_table = MapTable(self.map_table)
+
         if node.text == "Declaration":
             text = self.handleDeclaration(node)
 
-        llvm_node = LLVMNode(text, self.parent)
+        if node.text == "Function":
+            text = self.handleFunction(node)
+
+        llvm_node = LLVMNode(text, self.parent, self.map_table)
         self.parent.addChild(llvm_node)
         self.parent = llvm_node
 
@@ -50,8 +59,24 @@ class ASTLLVMConverter(ASTVisitor):
         """
         all children of type_child are terminals
         """
+        text, register = Declaration.declare(data_type, ptrs)
 
-        return Declaration.declare(data_type, ptrs)
+        """
+        add value to map to map var to address register
+        """
+        self.map_table.addEntry(MapEntry(var_child.text, register))
+        return text
+
+    def handleFunction(self, node):
+        var_child: ASTNode = node.getChild(1)
+        data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
+
+        text = Declaration.function(var_child.text, data_type, ptrs)
+
+        """
+        add value to map to map var to address register
+        """
+        return text
 
     def getRoot(self):
         return self.root

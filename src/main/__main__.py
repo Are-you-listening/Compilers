@@ -9,8 +9,11 @@ from src.parser.ASTDereferencer import *
 from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
 from src.parser.TableDotVisitor import *
-from src.llvm_target.ASTLLVMConverter import *
+from src.llvm_target.AST2LLVMConverter import *
 from src.llvm_target.LLVMDotVisitor import *
+from src.llvm_target.LLVMTableDotVisitor import *
+
+
 def cleanGreen(input_file, dot_file, crashtest):
     """
     Standard function to generate parseTree & Export it to Dot
@@ -77,7 +80,8 @@ def main(argv,crashTest=False):
     input_file = "example_source_files/file0"  # Define some standard variables & settings
     dot_file = "output/ASTvisual"
     symbol_file = "output/SymbolTablevisual"
-    llvm_dot_file = "output/ASTvisualLLVM"
+    llvm_dot_file = "output/LLVM"
+    llvm_map_file = "output/LLVMMap"
     llvm_file = None
     mips_file = None
 
@@ -102,11 +106,14 @@ def main(argv,crashTest=False):
     Processing(ast)  # Check for Errors , Apply Folding Techniques , ...
 
     print("LLVM")
-    to_llvm = ASTLLVMConverter()
+    to_llvm = AST2LLVMConverter()
     to_llvm.visit(ast)
     llvm = to_llvm.getRoot()
     llvm_dot = LLVMDotVisitor(llvm_dot_file)
     llvm_dot.visit(llvm)
+    llvm_table = LLVMTableDotVisitor(llvm_map_file, True)
+    llvm_table.visit(llvm)
+
 
 if __name__ == '__main__':
     main(sys.argv)
