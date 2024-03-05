@@ -28,8 +28,6 @@ class AST2LLVMConverter(ASTVisitor):
         root.accept(self)
         for child in root.children:
             self.preorder(child)
-        if isinstance(root, ASTNodeTerminal):
-            return
 
         self.parent = self.parent.getParent()
 
@@ -48,24 +46,29 @@ class AST2LLVMConverter(ASTVisitor):
         self.parent = llvm_node
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        pass
+        self.map_table = MapTable(self.map_table)
+
+        llvm_node = LLVMNode("temp", self.parent, self.map_table)
+        self.parent.addChild(llvm_node)
+        self.parent = llvm_node
+
 
     def handleDeclaration(self, node):
-        """
-        ask the var type, and search its value in the symbol table
-        """
-        var_child: ASTNode = node.getChild(0)
-        data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
-        """
-        all children of type_child are terminals
-        """
-        text, register = Declaration.declare(data_type, ptrs)
+            """
+            ask the var type, and search its value in the symbol table
+            """
+            var_child: ASTNode = node.getChild(0)
+            data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
+            """
+            all children of type_child are terminals
+            """
+            text, register = Declaration.declare(data_type, ptrs)
 
-        """
-        add value to map to map var to address register
-        """
-        self.map_table.addEntry(MapEntry(var_child.text, register))
-        return text
+            """
+            add value to map to map var to address register
+            """
+            self.map_table.addEntry(MapEntry(var_child.text, register))
+            return text
 
     def handleFunction(self, node):
         var_child: ASTNode = node.getChild(0)

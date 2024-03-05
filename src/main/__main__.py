@@ -44,10 +44,6 @@ def cleanGreen(input_file, dot_file, crashtest):
     ast_deref = ASTDereferencer()  # Correct the use of references & pointers
     ast_deref.visit(ast)
 
-    if not crashtest:
-        d = DotVisitor(dot_file)  # Export AST in Dot
-        d.visit(ast)
-
     return ast
 
 
@@ -104,10 +100,16 @@ def main(argv,crashTest=False):
             mips_file = arg
 
     ast = cleanGreen(input_file, dot_file, crashTest)  # Start AST cleanup & Dot Conversion
+
+    Processing(ast)  # Check for Errors , Apply Folding Techniques , ...
+
     if not crashTest:
+        d = DotVisitor(dot_file)  # Export AST in Dot
+        d.visit(ast)
+
         d2 = TableDotVisitor(symbol_file, False)  # Export Symbol Table
         d2.visit(ast)
-    Processing(ast)  # Check for Errors , Apply Folding Techniques , ...
+
 
     print("LLVM")
     to_llvm = AST2LLVMConverter()

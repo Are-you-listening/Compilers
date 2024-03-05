@@ -116,12 +116,7 @@ class SymbolTable:
         :param entry_name: the name of an entry of the symbol table
         :return:
         """
-        if self.entryExists(entry_name):
-            return True
-        if self.prev is not None:
-            self.prev.traverse(self.entryExists(entry_name), True)  # Else: traverse upwards
-        else:
-            return False
+        return self.getEntry(entry_name) is not None
 
     def entryExists(self, entry_name: str):
         """

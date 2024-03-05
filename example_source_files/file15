@@ -1,7 +1,7 @@
 
 int main(){
-int a = 0;
-char b = 0;
+int a = 5;
+char b = 5+a;
 float c = 0;
 
 const int d = 0;
