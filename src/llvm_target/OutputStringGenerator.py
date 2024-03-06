@@ -28,3 +28,12 @@ class Declaration:
     def function(func_name: str, return_type: str, ptrs: str):
         out_str = f"define dso_local {CTypesToLLVM.convertType(return_type)}{ptrs} @{func_name}() #0 {'{'}"
         return out_str
+
+
+class Load:
+    @staticmethod
+    def identifier(load_register: str, data_type: str, ptrs: str):
+        register_nr = LLVMSingleton.getInstance().useRegister()
+        llvm_type = CTypesToLLVM.convertType(data_type)
+        out_str = f"%{register_nr} = load {llvm_type}{ptrs}, {llvm_type}{ptrs}* %{load_register}, align {CTypesToLLVM.getBytesUse(data_type, ptrs)}"
+        return out_str

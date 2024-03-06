@@ -72,12 +72,20 @@ class AST2LLVMConverter(ASTVisitor):
         self.current.store(text, self.map_table)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        self.map_table = MapTable(self.map_table)
 
-        self.current.store("temp", self.map_table)
         if node.type == "IDENTIFIER":
-            pass
 
+            s_e = node.getSymbolTable().getEntry(node.text)
+            data_type, ptrs = s_e.getPtrTuple()
+            entry = self.map_table.getEntry(node.text)
+
+            """
+            identifiers of declarations and functions are not yet defined
+            """
+            if entry is None:
+                return
+            text = Load.identifier(entry.mem_register, data_type, ptrs)
+            self.current.store(text, self.map_table)
 
     def handleDeclaration(self, node):
             """
