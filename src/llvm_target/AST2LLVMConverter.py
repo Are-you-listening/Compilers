@@ -66,6 +66,23 @@ class AST2LLVMConverter(ASTVisitor):
             self.map_table = MapTable(self.map_table)
             text = self.handleFunction(node)
 
+        if node.text == "Dereference":
+            addr_reg = self.current.getChild(0).register
+            var_name = self.map_table.getEntry(addr_reg, True).entry
+            s_e = node.getSymbolTable().getEntry(var_name)
+            data_type, ptrs = s_e.getPtrTuple()
+
+            entry = self.map_table.getEntry(var_name)
+
+            """
+            identifiers of declarations and functions are not yet defined
+            """
+            if entry is None:
+                return
+
+            text = Load.identifier(entry.mem_register, data_type, ptrs)
+
+
         """
         change value of the node
         """
@@ -74,9 +91,6 @@ class AST2LLVMConverter(ASTVisitor):
     def visitNodeTerminal(self, node: ASTNodeTerminal):
 
         if node.type == "IDENTIFIER":
-
-            s_e = node.getSymbolTable().getEntry(node.text)
-            data_type, ptrs = s_e.getPtrTuple()
             entry = self.map_table.getEntry(node.text)
 
             """
@@ -84,8 +98,8 @@ class AST2LLVMConverter(ASTVisitor):
             """
             if entry is None:
                 return
-            text = Load.identifier(entry.mem_register, data_type, ptrs)
-            self.current.store(text, self.map_table)
+
+            self.current.register = entry.mem_register
 
     def handleDeclaration(self, node):
             """

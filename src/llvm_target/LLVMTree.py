@@ -31,3 +31,6 @@ class LLVMNode:
     def store(self, text, map_table):
         self.text = text + self.text
         self.map_table = map_table
+
+    def getChild(self, index) -> "LLVMNode":
+        return self.children[index]
