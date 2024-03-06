@@ -50,7 +50,6 @@ class AST2LLVMConverter(ASTVisitor):
 
     def visitNode(self, node: ASTNode):
         text = ""
-        self.map_table = MapTable(self.map_table)
 
         if node.text == "Declaration":
             self.handleDeclaration(node)
@@ -64,6 +63,7 @@ class AST2LLVMConverter(ASTVisitor):
             text = self.handleAssignment(node)
 
         if node.text == "Function":
+            self.map_table = MapTable(self.map_table)
             text = self.handleFunction(node)
 
         """
@@ -71,14 +71,13 @@ class AST2LLVMConverter(ASTVisitor):
         """
         self.current.store(text, self.map_table)
 
-        """
-        some after processing
-        """
-
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.map_table = MapTable(self.map_table)
 
         self.current.store("temp", self.map_table)
+        if node.type == "IDENTIFIER":
+            pass
+
 
     def handleDeclaration(self, node):
             """

@@ -7,6 +7,7 @@ class LLVMNode:
         self.text = text
         self.parent = parent
         self.map_table = map_table
+        self.register = None
 
     def addChild(self, node: "LLVMNode"):
         self.children.append(node)
