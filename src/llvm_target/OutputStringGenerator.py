@@ -29,10 +29,21 @@ class Declaration:
         out_str = f"define dso_local {CTypesToLLVM.convertType(return_type)}{ptrs} @{func_name}() #0 {'{'}"
         return out_str
 
+    @staticmethod
+    def assignment(store_register: int, value_register: int, data_type: str, ptrs: str):
+        llvm_type = CTypesToLLVM.convertType(data_type)+ptrs
+        out_str = f"store {llvm_type} %{value_register}, {llvm_type}* %{store_register}, align {CTypesToLLVM.getBytesUse(data_type, ptrs)}"
+        return out_str
+
+    @staticmethod
+    def assignmentLiteral(store_register: int, value: str, data_type: str, ptrs: str):
+        llvm_type = CTypesToLLVM.convertType(data_type) + ptrs
+        out_str = f"store {llvm_type} {value}, {llvm_type}* %{store_register}, align {CTypesToLLVM.getBytesUse(data_type, ptrs)}"
+        return out_str
 
 class Load:
     @staticmethod
-    def identifier(load_register: str, data_type: str, ptrs: str):
+    def identifier(load_register: int, data_type: str, ptrs: str):
         register_nr = LLVMSingleton.getInstance().useRegister()
         llvm_type = CTypesToLLVM.convertType(data_type)
         out_str = f"%{register_nr} = load {llvm_type}{ptrs}, {llvm_type}{ptrs}* %{load_register}, align {CTypesToLLVM.getBytesUse(data_type, ptrs)}"

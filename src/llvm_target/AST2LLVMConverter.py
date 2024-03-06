@@ -115,8 +115,8 @@ class AST2LLVMConverter(ASTVisitor):
         see assignment to declaration as assignment
         """
         if node.getChildAmount() == 2:
-            text = self.handleAssignment(node)
-            self.current.store(text, self.map_table)
+            self.handleAssignment(node)
+
 
     def handleFunction(self, node: ASTNode):
         var_child: ASTNode = node.getChild(0)
@@ -136,7 +136,20 @@ class AST2LLVMConverter(ASTVisitor):
         return self.last_function
 
     def handleAssignment(self, node: ASTNode):
-        return "assignment"
+        left_child = node.getChild(0)
+        store_reg = self.map_table.getEntry(left_child.text).mem_register
+        right_child = self.current.getChild(1)
+
+        dt, ptr = left_child.getSymbolTable().getEntry(left_child.text).getPtrTuple()
+        if right_child.register is None:
+            """
+            store literal
+            """
+            text = Declaration.assignmentLiteral(store_reg, node.getChild(1).text, dt, ptr)
+        else:
+            text = Declaration.assignment(store_reg, right_child.register, dt, ptr)
+
+        self.current.store(text, self.map_table)
 
     def handleDereference(self, node: ASTNode):
         """
