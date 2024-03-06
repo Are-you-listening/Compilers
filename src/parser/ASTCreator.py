@@ -55,14 +55,14 @@ class ASTCreator(expressionVisitor):
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx: expressionParser.FunctionContext):
-        self.__makeNode(ctx, "Function")
         tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
         self.table.nextTable(tempTable)
         self.table = tempTable
 
+        self.__makeNode(ctx, "Function")
+
     def visitCode(self, ctx: expressionParser.CodeContext):
         self.__makeNode(ctx, "Code")
-
 
     def visitLine(self, ctx: expressionParser.LineContext):
         self.__makeNode(ctx, "Line")
@@ -100,10 +100,6 @@ class ASTCreator(expressionVisitor):
         node = ASTNodeTerminal(ctx.getText(), self.parent, self.table, self.translateLexerID(ctx.getSymbol().type))
         node.linenr = ctx.getSymbol().line
         self.__updateSymbolTable(ctx, node)
-
-        tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
-        self.table.nextTable(tempTable)
-        self.table = tempTable
 
         self.parent.addChildren(node)
 

@@ -108,8 +108,7 @@ def main(argv,crashTest=False):
         d.visit(ast)
 
         d2 = TableDotVisitor(symbol_file, False)  # Export Symbol Table
-        d2.visit(ast)
-
+        d2.visit(ast.root.getSymbolTable())
 
     print("LLVM")
     to_llvm = AST2LLVMConverter()

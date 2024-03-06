@@ -127,3 +127,6 @@ class SymbolTable:
         if self.symbols.get(entry_name) is None:
             return False
         return True
+
+    def accept(self, v):
+        v.visitSym(self)
