@@ -26,3 +26,7 @@ class LLVMNode:
 
     def addText(self, text: str):
         self.text += '\n'+text
+
+    def store(self, text, map_table):
+        self.text = text + self.text
+        self.map_table = map_table

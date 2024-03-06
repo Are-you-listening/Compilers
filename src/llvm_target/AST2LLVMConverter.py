@@ -11,27 +11,42 @@ class AST2LLVMConverter(ASTVisitor):
 
     def __init__(self):
         self.map_table = MapTable(None)
-        self.parent: LLVMNode = LLVMNode("", None, self.map_table)
-        self.root = self.parent
+        self.current: LLVMNode = LLVMNode("", None, self.map_table)
+        self.root = self.current
         self.last_function = self.root
 
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
-        self.parent: LLVMNode = LLVMNode("", None, self.map_table)
-        self.root = self.parent
+        self.current: LLVMNode = LLVMNode("", None, self.map_table)
+        self.root = self.current
         self.last_function = self.root
 
-        super().visit(ast)
+        root = ast.root
+        self.postorder(root)
 
-    def preorder(self, root: ASTNode):
+    def postorder(self, root: ASTNode):
         """
-        override default preorder
+        override default postorder
         """
-        root.accept(self)
+
+        """
+        create dummy nodes
+        """
+        dummy_node = LLVMNode("", self.current, self.map_table)
+        self.current.addChild(dummy_node)
+        self.current = dummy_node
+
+        """
+        store function on last function position
+        """
+        if root.text == "Function":
+            self.last_function = self.current
+
         for child in root.children:
-            self.preorder(child)
+            self.postorder(child)
+        root.accept(self)
 
-        self.parent = self.parent.getParent()
+        self.current = self.current.getParent()
 
     def visitNode(self, node: ASTNode):
         text = ""
@@ -45,22 +60,25 @@ class AST2LLVMConverter(ASTVisitor):
             else:
                 text = ""
 
+        if node.text == "Assignment":
+            text = self.handleAssignment(node)
+
         if node.text == "Function":
             text = self.handleFunction(node)
 
-        llvm_node = LLVMNode(text, self.parent, self.map_table)
-        self.parent.addChild(llvm_node)
-        self.parent = llvm_node
+        """
+        change value of the node
+        """
+        self.current.store(text, self.map_table)
 
-        if node.text == "Function":
-            self.last_function = llvm_node
+        """
+        some after processing
+        """
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.map_table = MapTable(self.map_table)
 
-        llvm_node = LLVMNode("temp", self.parent, self.map_table)
-        self.parent.addChild(llvm_node)
-        self.parent = llvm_node
+        self.current.store("temp", self.map_table)
 
     def handleDeclaration(self, node):
             """
