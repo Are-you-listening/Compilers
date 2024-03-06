@@ -67,20 +67,7 @@ class AST2LLVMConverter(ASTVisitor):
             text = self.handleFunction(node)
 
         if node.text == "Dereference":
-            addr_reg = self.current.getChild(0).register
-            var_name = self.map_table.getEntry(addr_reg, True).entry
-            s_e = node.getSymbolTable().getEntry(var_name)
-            data_type, ptrs = s_e.getPtrTuple()
-
-            entry = self.map_table.getEntry(var_name)
-
-            """
-            identifiers of declarations and functions are not yet defined
-            """
-            if entry is None:
-                return
-
-            text = Load.identifier(entry.mem_register, data_type, ptrs)
+            text = self.handleDereference(node)
 
 
         """
@@ -141,3 +128,20 @@ class AST2LLVMConverter(ASTVisitor):
 
     def handleAssignment(self, node: ASTNode):
         return "assignment"
+
+    def handleDereference(self, node: ASTNode):
+        addr_reg = self.current.getChild(0).register
+        var_name = self.map_table.getEntry(addr_reg, True).entry
+        s_e = node.getSymbolTable().getEntry(var_name)
+        data_type, ptrs = s_e.getPtrTuple()
+
+        entry = self.map_table.getEntry(var_name)
+
+        """
+        identifiers of declarations and functions are not yet defined
+        """
+        if entry is None:
+            return
+
+        text = Load.identifier(entry.mem_register, data_type, ptrs)
+        return text
