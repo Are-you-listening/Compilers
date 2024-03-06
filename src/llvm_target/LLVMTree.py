@@ -8,6 +8,8 @@ class LLVMNode:
         self.parent = parent
         self.map_table = map_table
         self.register = None
+        self.type_tup = None
+        self.dummy = True
 
     def addChild(self, node: "LLVMNode"):
         self.children.append(node)
@@ -31,6 +33,7 @@ class LLVMNode:
     def store(self, text, map_table):
         self.text = text + self.text
         self.map_table = map_table
+        self.dummy = False
 
     def getChild(self, index) -> "LLVMNode":
         return self.children[index]

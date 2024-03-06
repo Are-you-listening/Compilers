@@ -5,49 +5,51 @@ from src.parser.CTypes.COperationHandler import COperationHandler
 class ASTCleaner(ASTVisitor):
     def __init__(self):
         self.operation_handler = COperationHandler()
+        self.to_remove = [] # list of child parent of nodes we need to remove, can't be done directly because loops
 
     def visit(self, ast: AST):
         root = ast.root
+        self.to_remove = []
         self.postorder(root)
 
-    def visitNode(self, node: ASTNodeTerminal):
+        for c, p in self.to_remove:
+            p.removeChild(c)
+
+    def visitNode(self, node: ASTNode):
+        self.cleanUseless(node)
         self.cleanComments(node)
         self.cleanLine(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        self.cleanUseless(node)
         self.cleanEqualSign(node)
         self.cleanEOF(node)
 
-    def cleanUseless(self, node: ASTNodeTerminal):
+    def cleanUseless(self, node: ASTNode):
 
         """
         Cleanup the tree by removing nodes(Expr and Literal) that have single child
         """
 
+        if node is None:
+            return
+
         parent = node.parent
         if parent is None:
             return
 
-        grand_parent = parent.parent
-        if grand_parent is None:
-            return
-
-        if parent.getChildAmount() == 1 and (parent.text in ("Literal", "Expr")):
-            index = grand_parent.findChild(parent)
-            grand_parent.setChild(index, node)
+        if node.getChildAmount() == 1 and (node.text in ("Literal", "Expr")):
+            index = parent.findChild(node)
+            parent.setChild(index, node.getChild(0))
             # Overwrite index of parent with node
 
-            self.visitNodeTerminal(node)
-
-    @staticmethod
-    def cleanEqualSign(node: ASTNodeTerminal):
+    def cleanEqualSign(self, node: ASTNodeTerminal):
         """
         when having a declaration of an assignment the sign '=' is not needed anymore.
         """
 
         if node.text == "=":
-            node.parent.removeChild(node)
+            self.to_remove.append((node, node.parent))
+
 
     @staticmethod
     def cleanComments(node: ASTNode):

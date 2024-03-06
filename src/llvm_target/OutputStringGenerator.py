@@ -36,4 +36,4 @@ class Load:
         register_nr = LLVMSingleton.getInstance().useRegister()
         llvm_type = CTypesToLLVM.convertType(data_type)
         out_str = f"%{register_nr} = load {llvm_type}{ptrs}, {llvm_type}{ptrs}* %{load_register}, align {CTypesToLLVM.getBytesUse(data_type, ptrs)}"
-        return out_str
+        return out_str, register_nr

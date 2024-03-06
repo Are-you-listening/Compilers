@@ -9,7 +9,18 @@ class ASTDereferencer(ASTVisitor):
         pass
 
     def visitNode(self, node: ASTNode):
-        pass
+        if node.text != "Expr":
+            return
+
+        if node.getChildAmount() != 2:
+            return
+
+        left_child = node.getChild(0)
+        right_child = node.getChild(1)
+        if left_child.text == "*":
+            ref = self.addDereference(right_child)
+            node.parent.replaceChild(node, ref)
+            node.removeChild(left_child)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         """
@@ -24,6 +35,7 @@ class ASTDereferencer(ASTVisitor):
         """
         if node.type != "IDENTIFIER":
             return
+
         if node.parent.text in ("Declaration", "Function") and node.parent.findChild(node) == 0:
             return
 

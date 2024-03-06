@@ -19,7 +19,7 @@ conversion: '(' type ')' literal;
 expr : literal
      | '(' type ')' expr //explicit conversion
      | '(' expr ')'
-     | ('++' | '--' | '&' | '*') IDENTIFIER
+     | ('++' | '--' | '&' | '*') expr
      | IDENTIFIER ('++' | '--')
      | ('+'|'-' | '~' | '!' ) expr
      | expr ('*' | '/' | '%') expr

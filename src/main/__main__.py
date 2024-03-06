@@ -44,6 +44,9 @@ def cleanGreen(input_file, dot_file, crashtest):
     ast_deref = ASTDereferencer()  # Correct the use of references & pointers
     ast_deref.visit(ast)
 
+    d = DotVisitor("output/debug1")  # Export AST in Dot
+    d.visit(ast)
+
     return ast
 
 

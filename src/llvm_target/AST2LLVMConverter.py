@@ -49,34 +49,33 @@ class AST2LLVMConverter(ASTVisitor):
         self.current = self.current.getParent()
 
     def visitNode(self, node: ASTNode):
-        text = ""
+
+        """
+        Visit function to construct LLVM
+        :param node:
+        :return:
+        """
+
+        """
+        only change dummy nodes
+        """
+        if not self.current.dummy:
+            return
 
         if node.text == "Declaration":
             self.handleDeclaration(node)
 
-            if node.getChildAmount() == 2:
-                text = self.handleAssignment(node)
-            else:
-                text = ""
-
         if node.text == "Assignment":
-            text = self.handleAssignment(node)
+            self.handleAssignment(node)
 
         if node.text == "Function":
             self.map_table = MapTable(self.map_table)
-            text = self.handleFunction(node)
+            self.handleFunction(node)
 
         if node.text == "Dereference":
-            text = self.handleDereference(node)
-
-
-        """
-        change value of the node
-        """
-        self.current.store(text, self.map_table)
+            self.handleDereference(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-
         if node.type == "IDENTIFIER":
             entry = self.map_table.getEntry(node.text)
 
@@ -86,28 +85,38 @@ class AST2LLVMConverter(ASTVisitor):
             if entry is None:
                 return
 
+            data_type, ptrs = node.getSymbolTable().getEntry(node.text).getPtrTuple()
+
             self.current.register = entry.mem_register
+            self.current.type_tup = (data_type, ptrs)
 
     def handleDeclaration(self, node):
-            """
-            ask the var type, and search its value in the symbol table
-            """
-            var_child: ASTNode = node.getChild(0)
-            data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
-            """
-            all children of type_child are terminals
-            """
-            text, register = Declaration.declare(data_type, ptrs)
+        """
+        ask the var type, and search its value in the symbol table
+        """
+        var_child: ASTNode = node.getChild(0)
+        data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
+        """
+        all children of type_child are terminals
+        """
+        text, register = Declaration.declare(data_type, ptrs)
 
-            """
-            add the allocation to the start of the function
-            """
-            self.geCurrentFunction().addText(text)
+        """
+        add the allocation to the start of the function
+        """
+        self.geCurrentFunction().addText(text)
 
-            """
-            add value to map to map var to address register
-            """
-            self.map_table.addEntry(MapEntry(var_child.text, register))
+        """
+        add value to map to map var to address register
+        """
+        self.map_table.addEntry(MapEntry(var_child.text, register))
+
+        """
+        see assignment to declaration as assignment
+        """
+        if node.getChildAmount() == 2:
+            text = self.handleAssignment(node)
+            self.current.store(text, self.map_table)
 
     def handleFunction(self, node: ASTNode):
         var_child: ASTNode = node.getChild(0)
@@ -118,7 +127,7 @@ class AST2LLVMConverter(ASTVisitor):
         """
         add value to map to map var to address register
         """
-        return text
+        self.current.store(text, self.map_table)
 
     def getRoot(self):
         return self.root
@@ -130,18 +139,30 @@ class AST2LLVMConverter(ASTVisitor):
         return "assignment"
 
     def handleDereference(self, node: ASTNode):
+        """
+        Handle a dereference
+        :param datatype_tup:
+        :param node:
+        :return:
+        """
         addr_reg = self.current.getChild(0).register
-        var_name = self.map_table.getEntry(addr_reg, True).entry
-        s_e = node.getSymbolTable().getEntry(var_name)
-        data_type, ptrs = s_e.getPtrTuple()
 
-        entry = self.map_table.getEntry(var_name)
+        data_type, ptrs = self.current.getChild(0).type_tup
 
         """
-        identifiers of declarations and functions are not yet defined
+        get the var register
         """
-        if entry is None:
-            return
 
-        text = Load.identifier(entry.mem_register, data_type, ptrs)
-        return text
+        text, new_reg = Load.identifier(addr_reg, data_type, ptrs)
+        self.current.store(text, self.map_table)
+        self.current.register = new_reg
+        self.current.type_tup = (data_type, ptrs[:-1])
+
+        if node.parent.text == "Dereference":
+            """
+            call recursively but remove 1 ptr
+            """
+            temp_current = self.current
+            self.current = self.current.getParent()
+            self.handleDereference(node.parent)
+            self.current = temp_current
