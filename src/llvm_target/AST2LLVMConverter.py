@@ -75,6 +75,11 @@ class AST2LLVMConverter(ASTVisitor):
         if node.text == "Dereference":
             self.handleDereference(node)
 
+        if node.text == "Comment":
+            self.handleComment(node)
+
+
+
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
             entry = self.map_table.getEntry(node.text)
@@ -179,3 +184,8 @@ class AST2LLVMConverter(ASTVisitor):
             self.current = self.current.getParent()
             self.handleDereference(node.parent)
             self.current = temp_current
+
+    def handleComment(self, node: ASTNode):
+        self.current.store("//" + node.children[0].text, self.map_table)
+
+
