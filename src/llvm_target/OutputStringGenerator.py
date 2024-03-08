@@ -75,3 +75,8 @@ class Calculation:
         llvm_op = op_translate.get((op, llvm_type), "")
         out_str = f"%{register_nr} = {llvm_op} {llvm_type+ptrs} %{val_1_reg}, %{val_2_reg}"
         return out_str, register_nr
+
+class Printf:
+    @staticmethod
+    def printfFormat(formatSpecifier):
+        return f"@.str = private unnamed_addr constant [4 x i8] c\"{formatSpecifier}\\00\""
