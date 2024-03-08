@@ -23,6 +23,7 @@ class ASTCreator(expressionVisitor):
         self.parent = None
         self.AST = None
         self.table = SymbolTable(None)
+        self.typedefs = {}
 
     def __setup(self):
         self.parent = None
@@ -49,6 +50,7 @@ class ASTCreator(expressionVisitor):
         make a new AST
         """
         self.AST = AST(self.parent)
+        self.AST.typedeftable=self.typedefs
 
     def visitStart_(self, ctx: expressionParser.Start_Context):
         self.parent = ASTNode("Start", None, self.table)
@@ -63,6 +65,14 @@ class ASTCreator(expressionVisitor):
 
     def visitCode(self, ctx: expressionParser.CodeContext):
         self.__makeNode(ctx, "Code")
+
+    def visitTypedef(self, ctx:expressionParser.TypedefContext):
+        typedef = ctx.stop.text
+        translation=ctx.children[1].children[0].symbol.text
+        self.typedefs[typedef]=translation
+
+    def visitPrintf(self, ctx:expressionParser.PrintfContext):
+        self.__makeNode(ctx, "printf")
 
     def visitLine(self, ctx: expressionParser.LineContext):
         self.__makeNode(ctx, "Line")
@@ -94,9 +104,16 @@ class ASTCreator(expressionVisitor):
         :param ctx:
         :return:
         """
-
         if ctx.getText() in black_list:
             return
+
+        p=""
+
+        if self.translateLexerID(ctx.getSymbol().type)=="IDENTIFIER":
+            #print(self.translateLexerID(ctx.getSymbol().type))
+            p = ctx.getText()
+
+
         node = ASTNodeTerminal(ctx.getText(), self.parent, self.table, self.translateLexerID(ctx.getSymbol().type))
         node.linenr = ctx.getSymbol().line
         self.__updateSymbolTable(ctx, node)
