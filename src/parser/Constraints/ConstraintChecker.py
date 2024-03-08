@@ -25,5 +25,9 @@ class ConstraintChecker(ASTVisitor):
     def visit(self, ast: AST):
         super(ConstraintChecker, self).visit(ast)
         for c in self.constraints:
-            if not c.isAccepted():
-                c.throwException()
+            if c.isRejected() is None:
+                if not c.isAccepted():
+                    c.throwException()
+            else:
+                if c.isRejected():
+                    c.throwException()

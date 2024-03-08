@@ -8,6 +8,9 @@ class Constraint:
     """
     def __init__(self):
         self.accepted = False
+        # if self.rejected is None, this means that it is not needed for this constraint
+        self.rejected = None
+        self.errornode = None
 
     @abstractmethod
     def checkNode(self, node: ASTNode):
@@ -19,6 +22,9 @@ class Constraint:
 
     def isAccepted(self):
         return self.accepted
+
+    def isRejected(self):
+        return self.rejected
 
     @abstractmethod
     def throwException(self):
