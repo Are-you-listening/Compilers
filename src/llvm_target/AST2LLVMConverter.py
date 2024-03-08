@@ -74,9 +74,9 @@ class AST2LLVMConverter(ASTVisitor):
 
         if node.text == "Dereference":
             self.handleDereference(node)
+        if node.text == "Comment":
+            self.handleComment(node)
 
-        if node.text == "Expr":
-            self.handleArithmetic(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
@@ -174,20 +174,13 @@ class AST2LLVMConverter(ASTVisitor):
         self.current.register = new_reg
         self.current.type_tup = (data_type, ptrs[:-1])
 
-    def handleArithmetic(self, node: ASTNode):
-        if node.getChildAmount() == 2:
-            pass
-        if node.getChildAmount() == 3:
-            operator = node.getChild(1).text
-
-            left = self.current.getChild(0)
-            right = self.current.getChild(2)
-
-            if left.type_tup != right.type_tup:
-                raise Exception("conversion did not occur properly")
-
-            text, new_reg = Calculation.operation(left.register, right.register, operator, left.type_tup[0], left.type_tup[1])
-
-            self.current.store(text, self.map_table)
-            self.current.register = new_reg
-            self.current.type_tup = left.type_tup
+        if node.parent.text == "Dereference":
+            """
+            call recursively but remove 1 ptr
+            """
+            temp_current = self.current
+            self.current = self.current.getParent()
+            self.handleDereference(node.parent)
+            self.current = temp_current
+    def handleComment(self, node: ASTNode):
+        self.current.store(node.children[0].text, self.map_table)
