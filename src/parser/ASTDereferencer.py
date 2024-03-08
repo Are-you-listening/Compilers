@@ -22,7 +22,7 @@ class ASTDereferencer(ASTVisitor):
 
 
         if left_child.text == "*":
-            if right_child.text != "Expr" and node.symbol_table.getEntry(right_child.text) == None:
+            if right_child.text != "Expr" and node.symbol_table.getEntry(right_child.text) == None: # This operation is only applicapble on a single identifier, not on a literal
                 ErrorExporter.invalidOperatorPtr("on type: "+right_child.type, right_child.linenr)
 
             ref = self.addDereference(right_child)
@@ -61,6 +61,8 @@ class ASTDereferencer(ASTVisitor):
 
         """removes the de reference sign"""
         if sibling_before.text == "&"  and node.getSiblingNeighbour(-2) is None:
+
+
             parent = node.parent
             parent.removeChild(sibling_before)
             return
