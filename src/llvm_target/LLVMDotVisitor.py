@@ -13,7 +13,9 @@ class LLVMDotVisitor(LLVMVisitor):
         self.outfile.write("digraph AST {\n")
 
     def visitNode(self, node: LLVMNode):
-        self.outfile.write(f'  "{id(node)}" [label="{node.text}"];\n')
+        label = f' {node.text}'
+        label = label.replace("\"", "")
+        self.outfile.write(f'  "{id(node)}" [label="{label}"];\n')
         for child in node.children:
             self.outfile.write(f'  "{id(node)}" -> "{id(child)}";\n')
 

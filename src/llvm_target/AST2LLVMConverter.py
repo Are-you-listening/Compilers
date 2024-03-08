@@ -74,8 +74,12 @@ class AST2LLVMConverter(ASTVisitor):
 
         if node.text == "Dereference":
             self.handleDereference(node)
+
         if node.text == "Comment":
             self.handleComment(node)
+
+        if node.text == "printf":
+            self.handlePrintf(node)
 
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
@@ -184,3 +188,8 @@ class AST2LLVMConverter(ASTVisitor):
             self.current = temp_current
     def handleComment(self, node: ASTNode):
         self.current.store(node.children[0].text, self.map_table)
+
+    def handlePrintf(self, node: ASTNode):
+        formatSpecifier = node.children[0].text
+        text = Printf.printfFormat(formatSpecifier)
+        self.current.store(text, self.map_table)
