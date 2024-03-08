@@ -14,6 +14,7 @@ class AmpersandConstraint(Constraint):
         if node.text == "&":
             rsibl = node.getSiblingNeighbour(1)
             if rsibl.text == "Expr" or node.symbol_table.getEntry(
-                    rsibl.text) == None:  # This operation is only applicapble on a single identifier, not on a literal
+                    rsibl.text) is None:  # This operation is only applicable on a single identifier, not on a
+                # literal/expr
                 ErrorExporter.invalidOperatorPtr("", node.linenr)
                 self.rejected = True
