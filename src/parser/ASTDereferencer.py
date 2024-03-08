@@ -1,4 +1,5 @@
 from src.parser.ASTVisitor import *
+from src.parser.ErrorExporter import *
 
 
 class ASTDereferencer(ASTVisitor):
@@ -17,7 +18,13 @@ class ASTDereferencer(ASTVisitor):
 
         left_child = node.getChild(0)
         right_child = node.getChild(1)
+
+
+
         if left_child.text == "*":
+            if right_child.text != "Expr" and node.symbol_table.getEntry(right_child.text) == None:
+                ErrorExporter.invalidOperatorPtr("on type: "+right_child.type, right_child.linenr)
+
             ref = self.addDereference(right_child)
             node.parent.replaceChild(node, ref)
             node.removeChild(left_child)
