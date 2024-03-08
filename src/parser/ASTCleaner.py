@@ -65,7 +65,10 @@ class ASTCleaner(ASTVisitor):
         resulting_comment = ""
         for child in node.children:
             resulting_comment += child.text
-
+        if resulting_comment[:2] == "//" :
+            resulting_comment = resulting_comment [2:]
+        else:
+            resulting_comment = resulting_comment [2:len(resulting_comment) - 2]
         node.clearChildren()
         comment_node = ASTNodeTerminal(resulting_comment, node, node.getSymbolTable(), "COMMENT")
         node.addChildren(comment_node)

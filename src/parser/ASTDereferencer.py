@@ -53,13 +53,13 @@ class ASTDereferencer(ASTVisitor):
             return
 
         """removes the de reference sign"""
-        if sibling_before.text == "&":
+        if sibling_before.text == "&"  and node.getSiblingNeighbour(-2) is None:
             parent = node.parent
             parent.removeChild(sibling_before)
             return
 
         """removes the de reference sign"""
-        if sibling_before.text == "*":
+        if sibling_before.text == "*" and node.getSiblingNeighbour(-2) is None:
             parent = node.parent
             parent.removeChild(sibling_before)
             self.addDereference(node)
