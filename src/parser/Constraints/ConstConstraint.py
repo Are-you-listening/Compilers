@@ -9,25 +9,25 @@ class ConstConstraint(Constraint):
     def __init__(self):
         super().__init__()
         self.node = None
+        self.rejected = False
 
     def checkNode(self, node: ASTNode):
         self.node = node
         if node.text == "Assignment":
             if node.symbol_table.getEntry(node.getChild(0).text).const:
-                self.throwExceptionA()
+                self.rejected = True
         elif node.text == "Dereference":
             UnaryOps = ["++","--"]
 
             if node.getSiblingNeighbour(1) is not None:
                 if node.getSiblingNeighbour(1).text in UnaryOps:
                     if node.symbol_table.getEntry(node.getChild(0).text).const:
-                        self.throwExceptionA()
+                        self.rejected = True
 
             elif node.getSiblingNeighbour(-1) is not None:
                 if node.getSiblingNeighbour(-1).text in UnaryOps:
                     if node.symbol_table.getEntry(node.getChild(0).text).const:
-                        self.throwExceptionA()
+                        self.rejected = True
 
-    def throwExceptionA(self):
-        self.accepted = True
+    def throwException(self):
         ErrorExporter.constComplaint(self.node.getChild(0).linenr, self.node.getChild(0).text, "const")
