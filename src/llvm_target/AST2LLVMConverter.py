@@ -75,6 +75,9 @@ class AST2LLVMConverter(ASTVisitor):
         if node.text == "Dereference":
             self.handleDereference(node)
 
+        if node.text == "Expr":
+            self.handleArithmetic(node)
+
         if node.text == "Comment":
             self.handleComment(node)
 
@@ -184,8 +187,3 @@ class AST2LLVMConverter(ASTVisitor):
             self.current = self.current.getParent()
             self.handleDereference(node.parent)
             self.current = temp_current
-
-    def handleComment(self, node: ASTNode):
-        self.current.store("//" + node.children[0].text, self.map_table)
-
-
