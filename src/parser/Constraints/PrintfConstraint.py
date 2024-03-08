@@ -21,7 +21,7 @@ class PrintfConstraint(Constraint):
     def getPrintType(self, text):
         if text == "%s":
             return "STRING"
-        elif text == "%d" or text == "$x":
+        elif text == "%d" or text == "%x":
             return "INT"
         elif text == "%f":
             return "FLOAT"
