@@ -4,7 +4,7 @@ from src.parser.ErrorExporter import *
 
 class AmpersandConstraint(Constraint):
     """
-    Verifies the integrity of the const variables
+    Verifies the integrity of the & operator
     """
 
     def __init__(self):
