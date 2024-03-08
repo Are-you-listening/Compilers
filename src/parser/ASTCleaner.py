@@ -6,9 +6,11 @@ class ASTCleaner(ASTVisitor):
     def __init__(self):
         self.operation_handler = COperationHandler()
         self.to_remove = [] # list of child parent of nodes we need to remove, can't be done directly because loops
+        self.ast = None
 
     def visit(self, ast: AST):
         root = ast.root
+        self.ast = ast
         self.to_remove = []
         self.postorder(root)
 

@@ -50,7 +50,6 @@ class ASTCreator(expressionVisitor):
         make a new AST
         """
         self.AST = AST(self.parent)
-        self.AST.typedeftable=self.typedefs
 
     def visitStart_(self, ctx: expressionParser.Start_Context):
         self.parent = ASTNode("Start", None, self.table)
@@ -66,12 +65,12 @@ class ASTCreator(expressionVisitor):
     def visitCode(self, ctx: expressionParser.CodeContext):
         self.__makeNode(ctx, "Code")
 
-    def visitTypedef(self, ctx:expressionParser.TypedefContext):
+    def visitTypedef(self, ctx: expressionParser.TypedefContext):
         typedef = ctx.stop.text
-        translation=ctx.children[1].children[0].symbol.text
-        self.typedefs[typedef]=translation
+        translation = ctx.children[1].children[0].symbol.text
+        self.typedefs[typedef] = translation
 
-    def visitPrintf(self, ctx:expressionParser.PrintfContext):
+    def visitPrintf(self, ctx: expressionParser.PrintfContext):
         self.__makeNode(ctx, "printf")
 
     def visitLine(self, ctx: expressionParser.LineContext):
@@ -95,9 +94,8 @@ class ASTCreator(expressionVisitor):
     def visitConversion(self, ctx: expressionParser.ConversionContext):
         self.__makeNode(ctx, "Conversion")
 
-    def visitComment(self, ctx:expressionParser.CommentContext):
+    def visitComment(self, ctx: expressionParser.CommentContext):
         self.__makeNode(ctx, "Comment")
-
 
     def visitTerminal(self, ctx):
         """
@@ -107,14 +105,14 @@ class ASTCreator(expressionVisitor):
         if ctx.getText() in black_list:
             return
 
-        p=""
+        text = ctx.getText()
 
-        if self.translateLexerID(ctx.getSymbol().type)=="IDENTIFIER":
-            #print(self.translateLexerID(ctx.getSymbol().type))
-            p = ctx.getText()
+        if self.translateLexerID(ctx.getSymbol().type) == "IDENTIFIER":
+            text = ctx.getText()
+            if text in self.typedefs.keys():
+                text = self.typedefs[text]
 
-
-        node = ASTNodeTerminal(ctx.getText(), self.parent, self.table, self.translateLexerID(ctx.getSymbol().type))
+        node = ASTNodeTerminal(text, self.parent, self.table, self.translateLexerID(ctx.getSymbol().type))
         node.linenr = ctx.getSymbol().line
         self.__updateSymbolTable(ctx, node)
 
@@ -177,4 +175,4 @@ class ASTCreator(expressionVisitor):
                 self.table.add(symbol_entry)
 
     def translateLexerID(self, id):
-        return self.lexer.ruleNames[id-1]
+        return self.lexer.ruleNames[id - 1]
