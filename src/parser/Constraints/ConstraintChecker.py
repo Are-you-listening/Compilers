@@ -3,6 +3,7 @@ from src.parser.Constraints.ConstConstraint import *
 from src.parser.Constraints.RedefinitionConstrained import *
 from src.parser.Constraints.UndeclaredConstrained import *
 from src.parser.Constraints.IncompatibleTypeOperationConstrained import *
+from src.parser.Constraints.AmpersandConstraint import *
 
 
 class ConstraintChecker(ASTVisitor):
@@ -10,7 +11,7 @@ class ConstraintChecker(ASTVisitor):
     Visitor to check all nodes to verify certain constraints
     """
     def __init__(self):
-        self.constraints = [MainFoundConstraint(), UndeclaredConstrained(), RedefinitionConstraint(), ConstConstraint(), IncompatibleTypeOperationConstrained()]
+        self.constraints = [MainFoundConstraint(), UndeclaredConstrained(), RedefinitionConstraint(), ConstConstraint(),AmpersandConstraint(), IncompatibleTypeOperationConstrained()]
 
     def visitNode(self, node: ASTNode):
         for c in self.constraints:
