@@ -74,6 +74,7 @@ class AST2LLVMConverter(ASTVisitor):
 
         if node.text == "Dereference":
             self.handleDereference(node)
+
         if node.text == "Comment":
             self.handleComment(node)
 
