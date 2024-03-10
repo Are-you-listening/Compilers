@@ -158,7 +158,6 @@ class ASTCreator(expressionVisitor):
             if self.parent.text == "Declaration" or self.parent.text == "Function":
 
                 is_const = False
-                latest_datatype = ""
 
                 for grandchild in child.children:
                     if grandchild.text == "const":
