@@ -23,6 +23,7 @@ class ASTCreator(expressionVisitor):
         self.parent = None
         self.AST = None
         self.table = SymbolTable(None)
+        self.typedefs = {}
 
     def __setup(self):
         self.parent = None
@@ -64,6 +65,14 @@ class ASTCreator(expressionVisitor):
     def visitCode(self, ctx: expressionParser.CodeContext):
         self.__makeNode(ctx, "Code")
 
+    def visitTypedef(self, ctx: expressionParser.TypedefContext):
+        typedef = ctx.stop.text
+        translation = ctx.children[1].children[0].symbol.text
+        self.typedefs[typedef] = translation
+
+    def visitPrintf(self, ctx: expressionParser.PrintfContext):
+        self.__makeNode(ctx, "printf")
+
     def visitLine(self, ctx: expressionParser.LineContext):
         self.__makeNode(ctx, "Line")
 
@@ -85,19 +94,25 @@ class ASTCreator(expressionVisitor):
     def visitConversion(self, ctx: expressionParser.ConversionContext):
         self.__makeNode(ctx, "Conversion")
 
-    def visitComment(self, ctx:expressionParser.CommentContext):
+    def visitComment(self, ctx: expressionParser.CommentContext):
         self.__makeNode(ctx, "Comment")
-
 
     def visitTerminal(self, ctx):
         """
         :param ctx:
         :return:
         """
-
         if ctx.getText() in black_list:
             return
-        node = ASTNodeTerminal(ctx.getText(), self.parent, self.table, self.translateLexerID(ctx.getSymbol().type))
+
+        text = ctx.getText()
+
+        if self.translateLexerID(ctx.getSymbol().type) == "IDENTIFIER":
+            text = ctx.getText()
+            if text in self.typedefs.keys():
+                text = self.typedefs[text]
+
+        node = ASTNodeTerminal(text, self.parent, self.table, self.translateLexerID(ctx.getSymbol().type))
         node.linenr = ctx.getSymbol().line
         self.__updateSymbolTable(ctx, node)
 
@@ -160,4 +175,4 @@ class ASTCreator(expressionVisitor):
                 self.table.add(symbol_entry)
 
     def translateLexerID(self, id):
-        return self.lexer.ruleNames[id-1]
+        return self.lexer.ruleNames[id - 1]

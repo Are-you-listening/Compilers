@@ -25,7 +25,7 @@ class ASTCleanerAfter(ASTVisitor):
         the declaration type of a function/declaration is no longer needed
         """
 
-        if node.text not in ("Declaration", "Function") :
+        if node.text not in ("Declaration", "Function"):
             return
 
         node.removeChild(node.getChild(0))

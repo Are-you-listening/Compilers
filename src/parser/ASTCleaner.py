@@ -6,9 +6,11 @@ class ASTCleaner(ASTVisitor):
     def __init__(self):
         self.operation_handler = COperationHandler()
         self.to_remove = [] # list of child parent of nodes we need to remove, can't be done directly because loops
+        self.ast = None
 
     def visit(self, ast: AST):
         root = ast.root
+        self.ast = ast
         self.to_remove = []
         self.postorder(root)
 
@@ -19,6 +21,7 @@ class ASTCleaner(ASTVisitor):
         self.cleanUseless(node)
         self.cleanComments(node)
         self.cleanLine(node)
+        self.cleanPrintf(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.cleanEqualSign(node)
@@ -98,3 +101,20 @@ class ASTCleaner(ASTVisitor):
 
         for child in node.children:
             node.parent.insertChild(line_index, child)
+
+    def cleanPrintf(self,node: ASTNode):
+        """
+        make the printf child nodes cleaner
+        """
+
+        if node.text != "printf":
+            return
+
+        for child in node.children:
+            if child.text == "printf":
+                node.removeChild(child)
+            if child.text == ",":
+                node.removeChild(child)
+        id = node.children[0].text
+        node.children[0].text = id[1:len(node.children[0].text) - 1]
+

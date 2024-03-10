@@ -88,7 +88,6 @@ class SymbolTable:
 
     def traverse(self, function, up: bool, do_print=False):
         """
-
         :param do_print: bool indication whether to print or not
         :param function: function to execute
         :param up: go up or down the list

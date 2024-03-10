@@ -1,4 +1,5 @@
 from src.parser.ASTVisitor import *
+from src.parser.ErrorExporter import *
 
 
 class ASTDereferencer(ASTVisitor):
@@ -17,7 +18,13 @@ class ASTDereferencer(ASTVisitor):
 
         left_child = node.getChild(0)
         right_child = node.getChild(1)
+
+
+
         if left_child.text == "*":
+            if right_child.text == "Expr" or node.symbol_table.getEntry(right_child.text) == None: # This operation is only applicapble on a single identifier, not on a literal or expr/rvalue
+                ErrorExporter.invalidOperatorPtr("on rvalue", left_child.linenr)
+
             ref = self.addDereference(right_child)
             node.parent.replaceChild(node, ref)
             node.removeChild(left_child)
@@ -54,6 +61,8 @@ class ASTDereferencer(ASTVisitor):
 
         """removes the de reference sign"""
         if sibling_before.text == "&"  and node.getSiblingNeighbour(-2) is None:
+
+
             parent = node.parent
             parent.removeChild(sibling_before)
             return
