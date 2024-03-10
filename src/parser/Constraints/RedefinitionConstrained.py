@@ -6,6 +6,7 @@ class RedefinitionConstraint(Constraint):
     """
     Checks for redefinition or redeclaration of variables
     """
+
     def __init__(self):
         super().__init__()
         self.rejected = False
@@ -14,9 +15,10 @@ class RedefinitionConstraint(Constraint):
         if node.type == "IDENTIFIER":
             if node.symbol_table.exists(node.text):
                 if node.symbol_table.getEntry(node.text).firstDeclared != node:
-                    if node.parent.text=="Declaration":
-                        self.rejected = True
-                        self.errornode = node
+                    if node.parent.text == "Declaration":
+                        if node.parent.findChild(node) != 1:  # If it is no rvalue
+                            self.rejected = True
+                            self.errornode = node
 
     def throwException(self):
         if self.errornode is None:
