@@ -60,7 +60,7 @@ class SymbolTable:
         :return:
         """
         if self.symbols.get(entry.name) is not None:
-            ErrorExporter.redefinition(entry.firstDeclared, entry.getType(), entry.name) # This allows earlier detection of errors but unsure how we would retrieve the lineNr
+            ErrorExporter.redefinition(entry.firstDeclared.linenr, entry.getType(), entry.name) # This allows earlier detection of errors but unsure how we would retrieve the lineNr
             return
         self.symbols[entry.name] = entry
 
