@@ -1,6 +1,6 @@
 from src.parser.AST import *
 
-class CodeReverser:
+class CodeGetter:
     def __init__(self):
         self.codelines = []
 
