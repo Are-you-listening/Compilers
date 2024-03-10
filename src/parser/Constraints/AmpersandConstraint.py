@@ -9,6 +9,7 @@ class AmpersandConstraint(Constraint):
 
     def __init__(self):
         super().__init__()
+        self.rejected = False
 
     def checkTerminalNode(self, node: ASTNodeTerminal):
         if node.text == "&":
