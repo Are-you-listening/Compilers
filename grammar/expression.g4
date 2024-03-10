@@ -14,7 +14,7 @@ printf: 'printf' '(' '"%s"' ',' (IDENTIFIER | literal) ')'
 
 type: ('const')? ('int' | 'char' | 'float' | IDENTIFIER) ('*')*;
 declaration: type IDENTIFIER ('=' expr)?;
-assignment: ('*')* IDENTIFIER ('=' expr);
+assignment: ('*')?? IDENTIFIER ('=' expr);
 conversion: '(' type ')' literal;
 expr : literal
      | '(' type ')' expr //explicit conversion
