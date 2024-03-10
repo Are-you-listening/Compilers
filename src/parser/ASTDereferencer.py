@@ -65,6 +65,10 @@ class ASTDereferencer(ASTVisitor):
 
             parent = node.parent
             parent.removeChild(sibling_before)
+            while parent.text in ("Expr", "Literal") and parent.getChildAmount() == 1:  # Cleanup unnecessary parents
+                grand_parent = parent.parent
+                grand_parent.replaceChild(parent, node)
+                parent = grand_parent
             return
 
         """removes the de reference sign"""
