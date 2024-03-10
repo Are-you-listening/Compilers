@@ -1,15 +1,23 @@
-from src.parser.AST import *
+from src.parser.ASTVisitor import *
 
-class CodeGetter:
+class CodeGetter(ASTVisitor):
+    """
+    precondition: this class is the first visitor on the AST, ie before any cleaner visitors change the tree
+    """
     def __init__(self):
-        self.codelines = []
+        self.codelines = {}
 
-    def loadFile(self, filename):
-        with open(filename, 'r') as codefile:
-            self.codelines = codefile.readlines()
-        codefile.close()
+    def visitNode(self, node: ASTNode):
+        pass
+
+    def visitNodeTerminal(self, node: ASTNodeTerminal):
+        if node.linenr in self.codelines:
+            self.codelines[node.linenr] += " " + node.text
+        else:
+            self.codelines[node.linenr] = node.text
+        pass
 
     def getLine(self, node: ASTNodeTerminal):
-        lineNR = node.linenr - 1
-        if 0 <= lineNR < len(self.codelines):
+        lineNR = node.linenr
+        if node.linenr in self.codelines:
             return self.codelines[lineNR]
