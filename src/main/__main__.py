@@ -41,6 +41,9 @@ def cleanGreen(input_file, dot_file, crashtest):
     astcleanerafter = ASTCleanerAfter()  # Do a standard cleaning
     astcleanerafter.visit(ast)
 
+    d = DotVisitor("output/debug0")  # Export AST in Dot
+    d.visit(ast)
+
     ast_deref = ASTDereferencer()  # Correct the use of references & pointers
     ast_deref.visit(ast)
 
@@ -53,6 +56,7 @@ def cleanGreen(input_file, dot_file, crashtest):
 def Processing(ast):
     constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
     constraint_checker.visit(ast)
+
 
     cfv = ConstantFoldingVisitor()
     cfv.visit(ast)
