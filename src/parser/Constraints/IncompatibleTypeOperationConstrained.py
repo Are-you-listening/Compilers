@@ -53,11 +53,9 @@ class IncompatibleTypeOperationConstrained(Constraint):
 
         ltype = self.getLeftType(parent)
         mtype, rtype = self.getRightType(parent)
-
-        print(ltype, str(mtype), rtype, node.text)
-
         types = [ltype, mtype, rtype]
-        if "!" in types and "PTR" in types:
+
+        if "!" in types and "PTR" in types: # 2 Known exceptions expressions which are still applicable
             return
         elif "-" in types and "PTR" == ltype and ("INT" in types or "CHAR" in types):
             return
