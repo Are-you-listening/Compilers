@@ -23,7 +23,7 @@ class ErrorExporter:
 
     @staticmethod
     def invalidOperation(linenr: str, operator: str, type: str, type2: str):
-        print(f"[ Error ] line {linenr}: invalid operation {operator} between type {type} and type {type2}",file=sys.stderr)
+        print(f"[ Error ] line {linenr}: invalid operation {operator} on type(s): {type}  {type2}",file=sys.stderr)
 
     @staticmethod
     def invalidOperatorPtr(operator: str, linenr):

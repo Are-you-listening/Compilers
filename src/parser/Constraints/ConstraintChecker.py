@@ -31,6 +31,8 @@ class ConstraintChecker(ASTVisitor):
             if c.isRejected() is None:
                 if not c.isAccepted():
                     c.throwException()
+                    sys.exit()
             else:
                 if c.isRejected():
                     c.throwException()
+                    sys.exit()

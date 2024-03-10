@@ -13,17 +13,37 @@ class IncompatibleTypeOperationConstrained(Constraint):
         self.incompatible = {
             "FLOAT": ["%", "|", "&", "~", "CHAR"],
             "CHAR": ["FLOAT"],
+            "PTR": ["+", "/", "*", "^", ">>", "<<", "%", "|", "INT", "FLOAT", "CHAR"],  # - (binary)
+            "PTRU": ["~", "-", "+"]  # ! is allowed  , disallowed Unary operands
         }
         self.t = ASTConversion()
         self.rejected = False
+        self.type = None
 
     def getLeftType(self, parent):
-        return str(self.t.getPoorestType(parent.children[0]))
+        try:
+            return str(self.t.getPoorestType(parent.children[0]))
+        except:
+            return None
 
     def getRightType(self, parent):
-        if len(parent.children) >= 2:
-            return str(self.t.getPoorestType(parent.children[1]))
-        return None
+        try:
+            if len(parent.children) == 2:
+                type = str(self.t.getPoorestType(parent.children[1]))
+                if type == "None":
+                    return None, parent.children[1].text
+                elif type == "PTR" and len(parent.children) == 2:
+                    return None, "PTRU"
+                return type
+            elif len(parent.children) == 3:
+                type = str(self.t.getPoorestType(parent.children[2]))
+                mtype = str(self.t.getPoorestType(parent.children[1]))
+                if mtype == "None":
+                    mtype = parent.children[1].text
+                return mtype, type
+            return None,None
+        except:
+            return None, None
 
     def checkTerminalNode(self, node: ASTNodeTerminal):
         parent = node.parent
@@ -32,12 +52,45 @@ class IncompatibleTypeOperationConstrained(Constraint):
             return
 
         ltype = self.getLeftType(parent)
-        rtype = self.getRightType(parent)
+        mtype, rtype = self.getRightType(parent)
 
-        if (ltype in self.incompatible.keys() and rtype in self.incompatible[ltype]) or (rtype in self.incompatible.keys() and ltype in self.incompatible[rtype]):
+        print(ltype, str(mtype), rtype, node.text)
+
+        types = [ltype, mtype, rtype]
+        if "!" in types and "PTR" in types:
+            return
+        elif "-" in types and "PTR" == ltype and ("INT" in types or "CHAR" in types):
+            return
+
+        if ltype in self.incompatible.keys() and rtype in self.incompatible[ltype]:
             self.rejected = True
+            self.type = ltype
+            self.errornode = node
+        elif rtype in self.incompatible.keys() and ltype in self.incompatible[rtype]:
+            self.rejected = True
+            self.type = rtype
+            self.errornode = node
+        elif ltype in self.incompatible.keys() and mtype in self.incompatible[ltype]:
+            self.rejected = True
+            self.type = ltype
+            self.errornode = node
+        elif mtype in self.incompatible.keys() and ltype in self.incompatible[mtype]:
+            self.rejected = True
+            self.type = mtype
+            self.errornode = node
+        elif mtype in self.incompatible.keys() and rtype in self.incompatible[mtype]:
+            self.rejected = True
+            self.type = ltype
+            self.errornode = node
+        elif rtype in self.incompatible.keys() and mtype in self.incompatible[rtype]:
+            self.rejected = True
+            self.type = rtype
             self.errornode = node
 
     def throwException(self):
         node = self.errornode
-        ErrorExporter.invalidOperation(node.linenr, node.parent.children[1].text, self.getLeftType(node.parent), self.getRightType(node.parent))
+        operation = node.parent.children[1].text
+        if self.type == "PTRU":
+            self.type = "PTR"
+            operation = node.parent.children[0].text
+        ErrorExporter.invalidOperation(node.linenr, operation, self.type, "")
