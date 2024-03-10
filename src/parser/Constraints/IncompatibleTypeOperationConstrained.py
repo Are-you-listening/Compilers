@@ -52,7 +52,9 @@ class IncompatibleTypeOperationConstrained(Constraint):
             return
 
         ltype = self.getLeftType(parent)
-        mtype, rtype = self.getRightType(parent)
+        temp = self.getRightType(parent)
+        mtype = temp[0]
+        rtype = temp[1]
         types = [ltype, mtype, rtype]
 
         if "!" in types and "PTR" in types: # 2 Known exceptions expressions which are still applicable
