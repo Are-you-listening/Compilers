@@ -15,7 +15,7 @@ from src.llvm_target.LLVMDotVisitor import *
 from src.llvm_target.LLVMTableDotVisitor import *
 
 
-def cleanGreen(input_file, dot_file, crashtest):
+def cleanGreen(input_file, dot_file, crashtest,symbol_file):
     """
     Standard function to generate parseTree & Export it to Dot
     :param input_file:
@@ -49,6 +49,9 @@ def cleanGreen(input_file, dot_file, crashtest):
 
     d = DotVisitor("output/debug1")  # Export AST in Dot
     d.visit(ast)
+
+    s = TableDotVisitor(symbol_file)
+    s.visit(ast.root.getSymbolTable())
 
     return ast
 
@@ -106,7 +109,7 @@ def main(argv,crashTest=False):
         elif param == "--target_mips":
             mips_file = arg
 
-    ast = cleanGreen(input_file, dot_file, crashTest)  # Start AST cleanup & Dot Conversion
+    ast = cleanGreen(input_file, dot_file, crashTest,symbol_file)  # Start AST cleanup & Dot Conversion
 
     Processing(ast)  # Check for Errors , Apply Folding Techniques , ...
 
