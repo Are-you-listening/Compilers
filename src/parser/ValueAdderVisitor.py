@@ -18,7 +18,9 @@ class ValueAdderVisitor(ASTVisitor):
             return
 
         val = node.getChild(-1)
-        if val.text not in ("Expr", "Dereference"):
+        # If the left side has a dereference this means that it is a pointer
+        # so we only do replacements on the left side and don't change anything in the symbol table
+        if (val.text not in ("Expr", "Dereference")) and (ident.text != "Dereference"):
             entry = ident.getSymbolTable().symbols[ident.text]
             entry.value = val.text
         else:
@@ -35,7 +37,7 @@ class ValueAdderVisitor(ASTVisitor):
 
             # check if the constant folder was able to do something
             # if the value node contains "expr" then there is still something on the RHS that we couldn't replace
-            if val.text not in ("Expr", "Dereference"):
+            if (val.text not in ("Expr", "Dereference")) and (ident.text != "Dereference"):
                 ST = ident.getSymbolTable()
                 entry = ST.symbols[ident.text]
                 entry.value = val.text
