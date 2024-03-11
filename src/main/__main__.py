@@ -6,7 +6,7 @@ from src.parser.DotVisitor import *
 from src.parser.Constraints.ConstraintChecker import *
 from src.parser.ValueAdderVisitor import *
 from src.parser.ASTDereferencer import *
-from src.parser.ASTConversion2 import *
+from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
 from src.parser.ASTCleanerAfter import *
 from src.parser.TableDotVisitor import *
