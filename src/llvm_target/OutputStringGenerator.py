@@ -104,4 +104,9 @@ class Calculation:
 class Printf:
     @staticmethod
     def printfFormat(formatSpecifier):
-        return f"@.str = private unnamed_addr constant [4 x i8] c\"{formatSpecifier}\\00\""
+        return f"@.str = private unnamed_addr constant [{len(formatSpecifier) + 1} x i8] c\"{formatSpecifier}\\00\", allign 1"
+
+    @staticmethod
+    def printfIR():
+        register_nr = LLVMSingleton.getInstance().useRegister()
+        return f"%{register_nr} = call i32 (i8*, ...) @printf"

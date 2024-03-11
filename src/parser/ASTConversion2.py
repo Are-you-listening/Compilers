@@ -8,7 +8,6 @@ class ASTConversion2(ASTVisitor):
     """
     Makes implicit conversions explicit
     """
-
     def __init__(self):
         self.rc = RichnessChecker(types)
 
@@ -26,7 +25,6 @@ class ASTConversion2(ASTVisitor):
         self.postorder(root)
 
     def visitNode(self, node: ASTNode):
-        # print(node.text)
         if node.text == "Dereference":
             child = node.getChild(0)
             data_type, ptrs = self.type_mapping[child]

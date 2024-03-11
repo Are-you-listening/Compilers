@@ -40,3 +40,6 @@ class LLVMNode:
 
     def getChild(self, index) -> "LLVMNode":
         return self.children[index]
+
+    def getChildren(self):
+        return self.children
