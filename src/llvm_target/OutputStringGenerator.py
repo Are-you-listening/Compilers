@@ -100,3 +100,8 @@ class Calculation:
             out_str = op_translate.get(op, "")
 
         return out_str, register_nr
+
+class Printf:
+    @staticmethod
+    def printfFormat(formatSpecifier):
+        return f"@.str = private unnamed_addr constant [4 x i8] c\"{formatSpecifier}\\00\""

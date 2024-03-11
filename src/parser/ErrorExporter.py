@@ -23,11 +23,11 @@ class ErrorExporter:
 
     @staticmethod
     def invalidOperation(linenr: str, operator: str, type: str, type2: str):
-        print(f"[ Error ] line {linenr}: invalid operation {operator} between type {type} and type {type2}",file=sys.stderr)
+        print(f"[ Error ] line {linenr}: invalid operation {operator} on type(s): {type}  {type2}",file=sys.stderr)
 
     @staticmethod
-    def invalidOperatorPtr(operator: str):
-        print(f"[ Error ] invalid ptr operation {operator}",file=sys.stderr)
+    def invalidOperatorPtr(operator: str, linenr):
+        print(f"[ Error ] line {linenr}: invalid ptr operation {operator}",file=sys.stderr)
 
     @staticmethod
     def invalidRvalue(identifier: str):

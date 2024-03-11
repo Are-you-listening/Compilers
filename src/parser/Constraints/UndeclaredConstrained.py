@@ -6,6 +6,7 @@ class UndeclaredConstrained(Constraint):
     """
     Checks for undeclared variables
     """
+
     def __init__(self):
         super().__init__()
         self.rejected = False
@@ -16,7 +17,21 @@ class UndeclaredConstrained(Constraint):
                 self.rejected = True
                 self.errornode = node
 
+    def checkNode(self, node: ASTNode):
+        if node.text == "Assignment":
+            self.checkViableAssignment(node)
+
     def throwException(self):
         if self.errornode is None:
             return
         ErrorExporter.undeclaredVariable(self.errornode.text)
+
+    def checkViableAssignment(self, node):
+        for child in node.children:
+            if child.text == "Dereference":
+                self.checkViableAssignment(child)
+            elif type(child) == ASTNodeTerminal:
+                if child.type == "IDENTIFIER":
+                    self.checkTerminalNode(child)
+            else:
+                self.checkViableAssignment(child)

@@ -19,6 +19,9 @@ class ASTNode:
     def getChild(self, index) -> "ASTNode":
         return self.children[index]
 
+    def getChildren(self):
+        return self.children
+
     def accept(self, v: ASTVisitor):
         v.visitNode(self)
 

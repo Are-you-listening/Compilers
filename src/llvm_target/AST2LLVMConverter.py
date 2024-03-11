@@ -3,6 +3,7 @@ from src.llvm_target.LLVMTree import *
 from src.llvm_target.OutputStringGenerator import *
 from src.llvm_target.MapTable.MapTable import *
 from src.llvm_target.ControlFlow.ControlFlowGraph import *
+from src.parser.CodeGetter import *
 
 
 class AST2LLVMConverter(ASTVisitor):
@@ -10,12 +11,13 @@ class AST2LLVMConverter(ASTVisitor):
     Visitor to visualize the AST tree using dot
     """
 
-    def __init__(self):
+    def __init__(self, codegetter : CodeGetter):
         self.map_table = MapTable(None)
         self.current: LLVMNode = LLVMNode("", None, self.map_table)
         self.root = self.current
         self.last_function = self.root
         self.control_flow_graph = ControlFlowGraph()
+        self.codegetter = codegetter
 
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
@@ -75,9 +77,11 @@ class AST2LLVMConverter(ASTVisitor):
 
         if node.text == "Declaration":
             self.handleDeclaration(node)
+            self.addOriginalCodeAsComment(node)
 
         if node.text == "Assignment":
             self.handleAssignment(node)
+            self.addOriginalCodeAsComment(node)
 
         if node.text == "Function":
             self.map_table = MapTable(self.map_table)
@@ -86,11 +90,15 @@ class AST2LLVMConverter(ASTVisitor):
         if node.text == "Dereference":
             self.handleDereference(node)
 
+
         if node.text == "Expr":
             self.handleOperations(node)
 
         if node.text == "Comment":
             self.handleComment(node)
+
+        if node.text == "printf":
+            self.handlePrintf(node)
 
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
@@ -134,6 +142,7 @@ class AST2LLVMConverter(ASTVisitor):
         """
         if node.getChildAmount() == 2:
             self.handleAssignment(node)
+
 
     def handleFunction(self, node: ASTNode):
         var_child: ASTNode = node.getChild(0)
@@ -254,3 +263,19 @@ class AST2LLVMConverter(ASTVisitor):
             self.control_flow_graph.addLogicalOr(right_child)
 
 
+
+
+    def handlePrintf(self, node: ASTNode):
+        formatSpecifier = node.children[0].text
+        text = Printf.printfFormat(formatSpecifier)
+        self.current.store(text, self.map_table)
+
+    def addOriginalCodeAsComment(self, node: ASTNode):
+        """
+        create a new LLVM node that contains the original C code and add it to the LLVM tree
+        :param node: the node in the AST that we are currently handling
+        :return:
+        """
+        code = self.codegetter.getLine(node.getChild(0))
+        # a ';' is used in LLVM to start a comment
+        self.current.addTextToLine(f"\t;{code}")

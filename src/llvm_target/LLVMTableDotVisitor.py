@@ -14,7 +14,9 @@ class LLVMTableDotVisitor(LLVMVisitor):
         self.absolute = absolute
 
     def visitNode(self, node: LLVMNode):
-        self.outfile.write(f'  "{id(node)}" [label="{node.getMapTable().getOutStr(self.absolute)}"];\n')
+        label = f' {node.getMapTable().getOutStr(self.absolute)}'
+        label = label.replace("\"", "")
+        self.outfile.write(f'  "{id(node)}" [label="{label}"];\n')
         for child in node.children:
             self.outfile.write(f'  "{id(node)}" -> "{id(child)}";\n')
 

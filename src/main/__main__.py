@@ -14,8 +14,10 @@ from src.llvm_target.AST2LLVMConverter import *
 from src.llvm_target.LLVMDotVisitor import *
 from src.llvm_target.LLVMTableDotVisitor import *
 from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
+from src.parser.CodeGetter import *
 
-def cleanGreen(input_file, dot_file, crashtest):
+
+def cleanGreen(input_file, dot_file, crashtest,symbol_file, codegetter):
     """
     Standard function to generate parseTree & Export it to Dot
     :param input_file:
@@ -35,11 +37,16 @@ def cleanGreen(input_file, dot_file, crashtest):
     toAST.visit(tree)
     ast = toAST.getAST()
 
+    codegetter.visit(ast)
+
     astcleaner = ASTCleaner()  # Do a standard cleaning
     astcleaner.visit(ast)
 
     astcleanerafter = ASTCleanerAfter()  # Do a standard cleaning
     astcleanerafter.visit(ast)
+
+    d = DotVisitor("output/debug0")  # Export AST in Dot
+    d.visit(ast)
 
     ast_deref = ASTDereferencer()  # Correct the use of references & pointers
     ast_deref.visit(ast)
@@ -47,12 +54,16 @@ def cleanGreen(input_file, dot_file, crashtest):
     d = DotVisitor("output/debug1")  # Export AST in Dot
     d.visit(ast)
 
+    s = TableDotVisitor(symbol_file)
+    s.visit(ast.root.getSymbolTable())
+
     return ast
 
 
 def Processing(ast):
     constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
-    constraint_checker.visit(ast)
+    # constraint_checker.visit(ast)
+
 
     cfv = ConstantFoldingVisitor()
     cfv.visit(ast)
@@ -102,7 +113,9 @@ def main(argv,crashTest=False):
         elif param == "--target_mips":
             mips_file = arg
 
-    ast = cleanGreen(input_file, dot_file, crashTest)  # Start AST cleanup & Dot Conversion
+    codegetter = CodeGetter()
+
+    ast = cleanGreen(input_file, dot_file, crashTest, symbol_file, codegetter)  # Start AST cleanup & Dot Conversion
 
     Processing(ast)  # Check for Errors , Apply Folding Techniques , ...
 
@@ -114,7 +127,8 @@ def main(argv,crashTest=False):
         d2.visit(ast.root.getSymbolTable())
 
     print("LLVM")
-    to_llvm = AST2LLVMConverter()
+    # the codegetter is used to add the original code as comments
+    to_llvm = AST2LLVMConverter(codegetter)
     to_llvm.visit(ast)
     llvm = to_llvm.getRoot()
     llvm_dot = LLVMDotVisitor(llvm_dot_file)
