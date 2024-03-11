@@ -45,14 +45,8 @@ def cleanGreen(input_file, dot_file, crashtest,symbol_file, codegetter):
     astcleanerafter = ASTCleanerAfter()  # Do a standard cleaning
     astcleanerafter.visit(ast)
 
-    d = DotVisitor("output/debug0")  # Export AST in Dot
-    d.visit(ast)
-
-    ast_deref = ASTDereferencer()  # Correct the use of references & pointers
+    ast_deref = ASTDereferencer()  # Correct the use of references & pointers into our format
     ast_deref.visit(ast)
-
-    d = DotVisitor("output/debug1")  # Export AST in Dot
-    d.visit(ast)
 
     s = TableDotVisitor(symbol_file)
     s.visit(ast.root.getSymbolTable())
@@ -62,8 +56,7 @@ def cleanGreen(input_file, dot_file, crashtest,symbol_file, codegetter):
 
 def Processing(ast):
     constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
-    # constraint_checker.visit(ast)
-
+    constraint_checker.visit(ast)
 
     cfv = ConstantFoldingVisitor()
     cfv.visit(ast)
@@ -72,7 +65,11 @@ def Processing(ast):
     v.visit(ast)
 
     ast_conv = ASTConversion2()
-    ast_conv.visit(ast)
+    ast_conv.postorder(ast.root)
+
+    d = DotVisitor("output/debug1")  # Export AST in Dot
+    d.visit(ast)
+
     return ast
 
 
