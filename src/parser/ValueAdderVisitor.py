@@ -18,7 +18,7 @@ class ValueAdderVisitor(ASTVisitor):
             return
 
         val = node.getChild(-1)
-        if val.text != "Expr":
+        if val.text not in ("Expr", "Dereference"):
             entry = ident.getSymbolTable().symbols[ident.text]
             entry.value = val.text
         else:
@@ -35,7 +35,7 @@ class ValueAdderVisitor(ASTVisitor):
 
             # check if the constant folder was able to do something
             # if the value node contains "expr" then there is still something on the RHS that we couldn't replace
-            if val.text != "Expr":
+            if val.text not in ("Expr", "Dereference"):
                 ST = ident.getSymbolTable()
                 entry = ST.symbols[ident.text]
                 entry.value = val.text
