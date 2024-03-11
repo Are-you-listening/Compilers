@@ -12,16 +12,40 @@ class LLVMVisitor:
         self.preorder(llvm_node)
 
     def preorder(self, root: LLVMNode):
-        root.accept(self)
+        """root.accept(self)
         for child in root.children:
-            self.preorder(child)
+            self.preorder(child)"""
+
+        stack = [root]
+        while len(stack) > 0:
+            # pop() takes the last element of the list
+            # just keep in mind that the end of the list is the top of the stack
+            currentnode = stack.pop()
+            currentnode.accept(self)
+            # reverse the order of the children because the later the node in the list the sooner it will be visited
+            for child in reversed(currentnode.getChildren()):
+                stack.append(child)
 
     def postorder(self, root: LLVMNode):
-        for child in root.children:
+        """for child in root.children:
             self.postorder(child)
-        root.accept(self)
+        root.accept(self)"""
+
+        stack = [root]
+        visited = set()
+        while (len(stack) > 0):
+            currentnode = stack[-1]  # get top of stack without popping it
+            childnotvisited = False
+            for child in reversed(currentnode.getChildren()):
+                if child not in visited:
+                    stack.append(child)
+                    childnotvisited = True
+            if not childnotvisited:
+                # print(currentnode.text)  # debug print
+                currentnode.accept(self)
+                visited.add(currentnode)
+                stack.pop()
 
     @abstractmethod
     def visitNode(self, root: LLVMNode):
         pass
-
