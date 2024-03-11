@@ -2,6 +2,7 @@ from src.parser.ASTVisitor import *
 from src.llvm_target.LLVMTree import *
 from src.llvm_target.OutputStringGenerator import *
 from src.llvm_target.MapTable.MapTable import *
+from src.parser.CodeGetter import *
 
 
 class AST2LLVMConverter(ASTVisitor):
@@ -9,11 +10,12 @@ class AST2LLVMConverter(ASTVisitor):
     Visitor to visualize the AST tree using dot
     """
 
-    def __init__(self):
+    def __init__(self, codegetter : CodeGetter):
         self.map_table = MapTable(None)
         self.current: LLVMNode = LLVMNode("", None, self.map_table)
         self.root = self.current
         self.last_function = self.root
+        self.codegetter = codegetter
 
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
@@ -64,9 +66,11 @@ class AST2LLVMConverter(ASTVisitor):
 
         if node.text == "Declaration":
             self.handleDeclaration(node)
+            self.addOriginalCodeAsComment(node)
 
         if node.text == "Assignment":
             self.handleAssignment(node)
+            self.addOriginalCodeAsComment(node)
 
         if node.text == "Function":
             self.map_table = MapTable(self.map_table)
@@ -186,6 +190,7 @@ class AST2LLVMConverter(ASTVisitor):
             self.current = self.current.getParent()
             self.handleDereference(node.parent)
             self.current = temp_current
+
     def handleComment(self, node: ASTNode):
         self.current.store(node.children[0].text, self.map_table)
 
@@ -193,3 +198,13 @@ class AST2LLVMConverter(ASTVisitor):
         formatSpecifier = node.children[0].text
         text = Printf.printfFormat(formatSpecifier)
         self.current.store(text, self.map_table)
+
+    def addOriginalCodeAsComment(self, node: ASTNode):
+        """
+        create a new LLVM node that contains the original C code and add it to the LLVM tree
+        :param node: the node in the AST that we are currently handling
+        :return:
+        """
+        code = self.codegetter.getLine(node.getChild(0))
+        # a ';' is used in LLVM to start a comment
+        self.current.addTextToLine(f"\t;{code}")

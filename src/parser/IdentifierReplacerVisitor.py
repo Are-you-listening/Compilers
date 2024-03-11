@@ -5,49 +5,55 @@ from src.parser.ErrorExporter import *
 class IdentifierReplacerVisitor(ASTVisitor):
     def __init__(self):
         self.previousNode = None
-        pass
 
     def visitNode(self, node: ASTNode):
         pass
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        toReplace = node.text
+        # if the node is not under a dereference we can never replace it with a value
+        # We keep replacing derefs with values until we encounter something that we can't replace
+        while node.parent.text == "Dereference":
+            toReplace = node.text
 
-        if node.type != "IDENTIFIER":
-            return
+            if node.type != "IDENTIFIER":
+                return
 
-        # get the symbolTable entry of the identifier we are going to replace
-        entry = node.getSymbolTable().getEntry(toReplace)
+            # get the symbolTable entry of the identifier we are going to replace
+            entry = node.getSymbolTable().getEntry(toReplace)
 
-        if entry.const or entry.firstUsed is None:
-            # the variable is const, so we can replace it with its value
-            # or the value has not been used before, so we can still replace it
+            if entry.const or entry.firstUsed is None:
+                # the variable is const, so we can replace it with its value
+                # or the value has not been used before, so we can still replace it
 
-            # from now on the identifier has been used
-            entry.firstUsed = node
+                # from now on the identifier has been used,
+                # but we only change it if it is actually hasn't been used before
+                # we could have also gotten  here just because it is const
+                if entry.firstUsed is None:
+                    entry.firstUsed = node
 
-            if entry.value is not None:
-                node.text = entry.value
-                if entry.getType() == "INT":
-                    node.type = "INT"
+                if entry.value is not None:
+                    node.text = entry.value
+                    if entry.getType() == "INT":
+                        node.type = "INT"
 
-                elif entry.getType() == "CHAR":
-                    node.type = "CHAR"
+                    elif entry.getType() == "CHAR":
+                        node.type = "CHAR"
 
-                elif entry.getType() == "FLOAT":
-                    node.type = "FLOAT"
+                    elif entry.getType() == "FLOAT":
+                        node.type = "FLOAT"
 
-                # replaces the dereference -> identifer with the value of the identifier
-                parentsiblings = node.parent.parent.children
-                for i in range(len(parentsiblings)):
-                    if parentsiblings[i] == node.parent:
-                        node.parent = parentsiblings[i].parent
-                        parentsiblings[i] = node
-                        break
+                    # replaces a dereference -> identifer pair with the value of that identifier
+                    parentsiblings = node.parent.parent.children
+                    for i in range(len(parentsiblings)):
+                        if parentsiblings[i] == node.parent:
+                            node.parent = parentsiblings[i].parent
+                            parentsiblings[i] = node
+                            break
 
+                else:
+                    ErrorExporter.uninitializedVariable(toReplace)
+                    break
             else:
-                ErrorExporter.uninitializedVariable(toReplace)
-        else:
-            # print("variable is not const -> not replacing")
-            pass
+                # print("variable is not const -> not replacing")
+                break
         return
