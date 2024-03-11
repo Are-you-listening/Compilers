@@ -28,7 +28,7 @@ class UndeclaredConstrained(Constraint):
 
     def checkViableAssignment(self, node):
         for child in node.children:
-            if child.text == "Dereference":
+            if child.text == "Dereference":  # Go deeper
                 self.checkViableAssignment(child)
             elif type(child) == ASTNodeTerminal:
                 if child.type == "IDENTIFIER":
