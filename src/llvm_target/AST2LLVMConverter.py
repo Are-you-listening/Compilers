@@ -90,7 +90,6 @@ class AST2LLVMConverter(ASTVisitor):
         if node.text == "Dereference":
             self.handleDereference(node)
 
-
         if node.text == "Expr":
             self.handleOperations(node)
 
@@ -261,9 +260,6 @@ class AST2LLVMConverter(ASTVisitor):
 
         if operator == "||":
             self.control_flow_graph.addLogicalOr(right_child)
-
-
-
 
     def handlePrintf(self, node: ASTNode):
         formatSpecifier = node.children[0].text

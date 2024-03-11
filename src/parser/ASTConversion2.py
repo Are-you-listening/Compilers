@@ -63,8 +63,7 @@ class ASTConversion2(ASTVisitor):
             else:
                 if current_poorest_ptrs != ptrs:
                     pass
-                    #raise Exception("Ptrs amount does not match")
-                print("a", data_type, "b", current_poorest)
+
                 current_poorest = self.rc.get_poorest(data_type, current_poorest)
 
         """
