@@ -2,7 +2,6 @@ from src.parser.Constraints.MainFoundConstraint import *
 from src.parser.Constraints.ConstConstraint import *
 from src.parser.Constraints.RedefinitionConstrained import *
 from src.parser.Constraints.UndeclaredConstrained import *
-from src.parser.Constraints.IncompatibleOperationConstrained import *
 from src.parser.Constraints.AmpersandConstraint import *
 from src.parser.Constraints.PrintfConstraint import *
 
