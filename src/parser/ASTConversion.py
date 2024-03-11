@@ -11,12 +11,16 @@ class ASTConversion(ASTVisitor):
     def __init__(self):
         self.rc = RichnessChecker(types)
 
+    def visit(self, ast: AST):
+        root = ast.root
+        self.preorder(root)
+
     def visitNode(self, node: ASTNode):
-        if node.text == "Declaration" and node.getChildAmount() == 4:
+        if node.text == "Declaration" and node.getChildAmount() == 2:
             """
             situation when declaration
             """
-            child = node.getChild(3)
+            child = node.getChild(1)
             poorest = self.getPoorestType(child)
             child_type = poorest
 
@@ -31,12 +35,12 @@ class ASTConversion(ASTVisitor):
                                                           t_child.operation_type))
                 child.addNodeParent(new_node)
 
-        if node.text == "Assignment" and node.getChildAmount() == 3:
+        if node.text == "Assignment" and node.getChildAmount() == 2:
             """
             situation Assignment
             """
             type_child = node.getChild(0)
-            child = node.getChild(2)
+            child = node.getChild(1)
             data_type = type_child.getSymbolTable().getEntry(type_child.text).getType()
             if self.getPoorestType(child) != data_type:
                 new_node = ASTNode("Conversion", node, child.getSymbolTable())

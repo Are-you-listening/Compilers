@@ -2,6 +2,7 @@ from src.parser.ASTVisitor import *
 from src.llvm_target.LLVMTree import *
 from src.llvm_target.OutputStringGenerator import *
 from src.llvm_target.MapTable.MapTable import *
+from src.llvm_target.ControlFlow.ControlFlowGraph import *
 
 
 class AST2LLVMConverter(ASTVisitor):
@@ -14,12 +15,14 @@ class AST2LLVMConverter(ASTVisitor):
         self.current: LLVMNode = LLVMNode("", None, self.map_table)
         self.root = self.current
         self.last_function = self.root
+        self.control_flow_graph = ControlFlowGraph()
 
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
         self.current: LLVMNode = LLVMNode("", None, self.map_table)
         self.root = self.current
         self.last_function = self.root
+        self.control_flow_graph = ControlFlowGraph()
 
         root = ast.root
         self.postorder(root)
@@ -62,6 +65,14 @@ class AST2LLVMConverter(ASTVisitor):
         if not self.current.dummy:
             return
 
+        """
+        end an eval of the control flow
+        """
+        if node.text not in ("Expr", "Literal", "Dereference"):
+            if self.control_flow_graph.isEval():
+                pass
+                self.control_flow_graph.endEval()
+
         if node.text == "Declaration":
             self.handleDeclaration(node)
 
@@ -74,6 +85,10 @@ class AST2LLVMConverter(ASTVisitor):
 
         if node.text == "Dereference":
             self.handleDereference(node)
+
+        if node.text == "Expr":
+            self.handleOperations(node)
+
         if node.text == "Comment":
             self.handleComment(node)
 
@@ -119,7 +134,6 @@ class AST2LLVMConverter(ASTVisitor):
         """
         if node.getChildAmount() == 2:
             self.handleAssignment(node)
-
 
     def handleFunction(self, node: ASTNode):
         var_child: ASTNode = node.getChild(0)
@@ -174,13 +188,69 @@ class AST2LLVMConverter(ASTVisitor):
         self.current.register = new_reg
         self.current.type_tup = (data_type, ptrs[:-1])
 
-        if node.parent.text == "Dereference":
+    def handleOperations(self, node: ASTNode):
+        """
+        Handle Arithmetic operations
+        :param node:
+        :return:
+        """
+        text = ""
+        new_reg = -1
+        left = None
+
+        if node.getChildAmount() == 2:
+            operator = node.getChild(0).text
+
+            left = self.current.getChild(1)
+            text, new_reg = Calculation.unary(left.register, operator, left.type_tup[0], left.type_tup[1])
+        if node.getChildAmount() == 3:
+
+            operator = node.getChild(1).text
+
             """
-            call recursively but remove 1 ptr
+            do special ControlFlow changes for logical operations
             """
-            temp_current = self.current
-            self.current = self.current.getParent()
-            self.handleDereference(node.parent)
-            self.current = temp_current
+            if operator in ("&&", "||"):
+                self.handleLogicalOperations(node, operator)
+
+            left = self.current.getChild(0)
+            right = self.current.getChild(2)
+
+            if left.type_tup != right.type_tup:
+                raise Exception("conversion did not occur properly")
+
+            text, new_reg = Calculation.operation(left.register, right.register, operator, left.type_tup[0], left.type_tup[1])
+
+        self.current.store(text, self.map_table)
+        self.current.register = new_reg
+        self.current.type_tup = left.type_tup
+
     def handleComment(self, node: ASTNode):
         self.current.store(node.children[0].text, self.map_table)
+
+    def handleLogicalOperations(self, node, operator):
+        """
+        Logical operations cause a change in the control Flow
+        So we will make changes to the control flow graph
+
+        :param node:
+        :param operator:
+        :return:
+        """
+
+        left_child = self.current.getChild(0)
+        right_child = self.current.getChild(2)
+
+        """
+        when not Control Flow is yet occurring we need to start one.
+        """
+        if not self.control_flow_graph.isEval():
+            self.control_flow_graph.startEval(left_child)
+
+        if operator == "&&":
+            self.control_flow_graph.addLogicalAnd(right_child)
+
+        if operator == "||":
+            self.control_flow_graph.addLogicalOr(right_child)
+
+

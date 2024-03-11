@@ -9,7 +9,7 @@ class RichnessChecker:
     def __init__(self, rich_order: list):
         self.rich_order = rich_order
 
-    def get_poorest(self, val1: int, val2: int):
+    def get_poorest(self, val1: str, val2: str):
 
         index1 = self.rich_order.index(val1)
         index2 = self.rich_order.index(val2)
