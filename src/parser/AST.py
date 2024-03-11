@@ -12,6 +12,7 @@ class ASTNode:
         self.text = text
         self.parent = parent
         self.symbol_table = symbol_table
+        self.linenr = None
 
     def addChildren(self, child):
         self.children.append(child)
@@ -100,7 +101,6 @@ class ASTNodeTerminal(ASTNode):
         super(ASTNodeTerminal, self).__init__(text, parent, symbol_table)
         self.type = terminal_type
         self.operation_type = operation_type
-        self.linenr = None
 
     def accept(self, v: ASTVisitor):
         v.visitNodeTerminal(self)
