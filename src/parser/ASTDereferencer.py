@@ -22,8 +22,8 @@ class ASTDereferencer(ASTVisitor):
 
 
         if left_child.text == "*":
-            if right_child.text == "Expr" or node.symbol_table.getEntry(right_child.text) == None: # This operation is only applicapble on a single identifier, not on a literal or expr/rvalue
-                ErrorExporter.invalidOperatorPtr("on rvalue", left_child.linenr)
+            # if right_child.text == "Expr" or node.symbol_table.getEntry(right_child.text) == None: # This operation is only applicapble on a single identifier, not on a literal or expr/rvalue
+            #     ErrorExporter.invalidOperatorPtr("on rvalue", left_child.linenr)
 
             ref = self.addDereference(right_child)
             node.parent.replaceChild(node, ref)
@@ -65,7 +65,7 @@ class ASTDereferencer(ASTVisitor):
 
             parent = node.parent
             parent.removeChild(sibling_before)
-            while parent.text in ("Expr", "Literal") and parent.getChildAmount() == 1:  # Cleanup unnecessary parents
+            while parent.text in ("Expr", "Literal") and parent.getChildAmount() == 1:
                 grand_parent = parent.parent
                 grand_parent.replaceChild(parent, node)
                 parent = grand_parent
