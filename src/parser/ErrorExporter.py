@@ -53,3 +53,6 @@ class ErrorExporter:
     def wrongRefCombination(type1: str, type2: str):
         print(f"[ Error ] reference types do not match: {type1} and {type2}", file=sys.stderr)
 
+    @staticmethod
+    def conversionWarning(linenr: str, type1: str, type2: str):
+        print(f"[ Warning ] line {linenr}: Types do not match properly, a conversion was made on types: {type1} and {type2}")
