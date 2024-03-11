@@ -5,16 +5,16 @@ from src.parser.Tables.SymbolTypePtr import *
 class SymbolEntry:
     def __init__(self, fitype: str, datatype: SymbolType, name: str, const: bool, value, first_declared, first_used):
         self.fitype = fitype
-        self.__type = datatype
+        self.typeObject = datatype
         self.name = name
         self.const = const
         self.value = value
         self.firstDeclared = first_declared  # The node this Entry is first declared
-        self.firstUsed = first_used  # The node this Enry is first used
+        self.firstUsed = first_used  # The node this Entry is first used
 
     def __str__(self):
         return f"""fi type: {self.fitype} 
-                   type: {self.__type} 
+                   type: {self.typeObject} 
                    name: {self.name}
                    const: {self.const}
                    value: {self.value}
@@ -22,10 +22,10 @@ class SymbolEntry:
                    first used: {self.firstUsed})"""
 
     def getType(self):
-        return self.__type.getType()
+        return self.typeObject.getType()
 
     def getTypeObject(self):
-        return self.__type
+        return self.typeObject
 
     def getValue(self):
         return self.value
@@ -35,7 +35,7 @@ class SymbolEntry:
         returns a tuple: (type, amount of * depending on how many ptrs their are in the chain)
         """
         ptr_string = ""
-        d_t = self.__type
+        d_t = self.typeObject
         while isinstance(d_t, SymbolTypePtr):
             ptr_string += "*"
             d_t = d_t.deReference()
