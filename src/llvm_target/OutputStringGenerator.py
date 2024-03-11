@@ -54,26 +54,51 @@ class Load:
 class Calculation:
     @staticmethod
     def operation(val_1_reg: int, val_2_reg: int, op: str, data_type: str, ptrs: str):
-        op_translate = {("+", "i32"): "add nsw",
-                        ("-", "i32"): "sub nsw",
-                        ("*", "i32"): "mul nsw",
-                        ("/", "i32"): "sdiv",
-                        ("%", "i32"): "srem",
-                        ("+", "i8"): "add nsw",
-                        ("-", "i8"): "sub nsw",
-                        ("*", "i8"): "mul nsw",
-                        ("/", "i8"): "sdiv",
-                        ("%", "i8"): "srem",
-                        ("+", "float"): "fadd",
-                        ("-", "float"): "fsub",
-                        ("*", "float"): "fmul",
-                        ("/", "float"): "fdiv"
+        op_translate_float = {
+            "+": "fadd",
+            "-": "fsub",
+            "*": "fmul",
+            "/": "fdiv"
+        }
+
+        op_translate = {"+": "add nsw",
+                        "-": "sub nsw",
+                        "*": "mul nsw",
+                        "/": "sdiv",
+                        "%": "srem",
+                        "<": "icmp slt",
+                        ">": "icmp sgt",
+                        "==": "icmp eq"
                         }
 
         register_nr = LLVMSingleton.getInstance().useRegister()
         llvm_type = CTypesToLLVM.convertType(data_type)
-        llvm_op = op_translate.get((op, llvm_type), "")
+
+        if llvm_type == "float":
+            llvm_op = op_translate_float.get(op, "")
+        else:
+            llvm_op = op_translate.get(op, "")
+
         out_str = f"%{register_nr} = {llvm_op} {llvm_type+ptrs} %{val_1_reg}, %{val_2_reg}"
+        return out_str, register_nr
+
+    @staticmethod
+    def unary(val_1_reg: int, op: str, data_type: str, ptrs: str):
+        register_nr = LLVMSingleton.getInstance().useRegister()
+        llvm_type = CTypesToLLVM.convertType(data_type)
+
+        op_translate_float = {
+        }
+
+        op_translate = {"+": "",
+                        "-": f"%{register_nr} = sub nsw {llvm_type+ptrs} 0, %{val_1_reg}"
+                        }
+
+        if llvm_type == "float":
+            out_str = op_translate_float.get(op, "")
+        else:
+            out_str = op_translate.get(op, "")
+
         return out_str, register_nr
 
 class Printf:

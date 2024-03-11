@@ -16,7 +16,7 @@ class ASTNode:
     def addChildren(self, child):
         self.children.append(child)
 
-    def getChild(self, index):
+    def getChild(self, index) -> "ASTNode":
         return self.children[index]
 
     def getChildren(self):

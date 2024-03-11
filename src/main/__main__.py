@@ -6,14 +6,16 @@ from src.parser.DotVisitor import *
 from src.parser.Constraints.ConstraintChecker import *
 from src.parser.ValueAdderVisitor import *
 from src.parser.ASTDereferencer import *
-from src.parser.ASTConversion import *
+from src.parser.ASTConversion2 import *
 from src.parser.ASTCleaner import *
 from src.parser.ASTCleanerAfter import *
 from src.parser.TableDotVisitor import *
 from src.llvm_target.AST2LLVMConverter import *
 from src.llvm_target.LLVMDotVisitor import *
 from src.llvm_target.LLVMTableDotVisitor import *
+from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
 from src.parser.CodeGetter import *
+
 
 def cleanGreen(input_file, dot_file, crashtest,symbol_file, codegetter):
     """
@@ -69,7 +71,7 @@ def Processing(ast):
     v = ValueAdderVisitor()
     v.visit(ast)
 
-    ast_conv = ASTConversion()
+    ast_conv = ASTConversion2()
     ast_conv.visit(ast)
     return ast
 
@@ -89,7 +91,7 @@ def main(argv,crashTest=False):
     :return:
     """
 
-    input_file = "example_source_files/file16"  # Define some standard variables & settings
+    input_file = "example_source_files/file0"  # Define some standard variables & settings
     dot_file = "output/ASTvisual"
     symbol_file = "output/SymbolTablevisual"
     llvm_dot_file = "output/LLVM"
@@ -133,6 +135,10 @@ def main(argv,crashTest=False):
     llvm_dot.visit(llvm)
     llvm_table = LLVMTableDotVisitor(llvm_map_file, False)
     llvm_table.visit(llvm)
+
+    control_dot = ControlFlowDotVisitor("output/ControlFlow")
+    control_dot.visit(to_llvm.control_flow_graph.root)
+
 
 
 if __name__ == '__main__':
