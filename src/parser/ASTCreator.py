@@ -129,6 +129,7 @@ class ASTCreator(expressionVisitor):
         makes new Object and makes sure this will be a child of it's parent
         """
         node = ASTNode(terminal_type, self.parent, self.table)  # Also attaches the current table/scope
+        node.linenr = ctx.start.line
         self.parent.addChildren(node)
         old_parent = self.parent
         self.parent = node
@@ -158,6 +159,7 @@ class ASTCreator(expressionVisitor):
             if self.parent.text == "Declaration" or self.parent.text == "Function":
 
                 is_const = False
+                latest_datatype = ""
 
                 for grandchild in child.children:
                     if grandchild.text == "const":
