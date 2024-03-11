@@ -264,6 +264,7 @@ class AST2LLVMConverter(ASTVisitor):
     def handlePrintf(self, node: ASTNode):
         formatSpecifier = node.children[0].text
         text = Printf.printfFormat(formatSpecifier)
+        text += Printf.printfIR()
         self.current.store(text, self.map_table)
 
     def addOriginalCodeAsComment(self, node: ASTNode):
