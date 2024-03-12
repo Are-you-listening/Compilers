@@ -1,4 +1,5 @@
 from src.llvm_target.LLVMSingleton import LLVMSingleton
+from llvmlite import ir
 
 
 class CTypesToLLVM:
@@ -16,71 +17,103 @@ class CTypesToLLVM:
         convert_map = {"INT": 4, "CHAR": 1, "FLOAT": 4}
         return convert_map.get(data_type, "TYPE ISSUE")
 
+    @staticmethod
+    def getIRType(data_type: str, ptrs: str):
+        convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType()}
+        llvm_type = convert_map.get(data_type)
+        for i in range(len(ptrs)):
+            llvm_type = ir.PointerType(llvm_type)
+
+        return llvm_type
+
 
 class Declaration:
     @staticmethod
     def declare(data_type: str, ptrs: str):
-        register_nr = LLVMSingleton.getInstance().useRegister()
-        out_str = f"%{register_nr} = alloca {CTypesToLLVM.convertType(data_type)}{ptrs}, align {CTypesToLLVM.getBytesUse(data_type, ptrs)}"
-        return out_str, register_nr
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+        llvm_val = block.alloca(CTypesToLLVM.getIRType(data_type, ptrs))
+        llvm_val.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
+
+        return llvm_val
 
     @staticmethod
     def function(func_name: str, return_type: str, ptrs: str):
-        out_str = f"define dso_local {CTypesToLLVM.convertType(return_type)}{ptrs} @{func_name}() #0 {'{'}"
-        return out_str
+
+        """
+        change the current latest function
+        """
+        function_type = ir.FunctionType(CTypesToLLVM.getIRType(return_type, ptrs), ())
+        new_function = ir.Function(LLVMSingleton.getInstance().getModule(), function_type, name=func_name)
+        LLVMSingleton.getInstance().setLastFunction(new_function)
+
+        return new_function
 
     @staticmethod
-    def assignment(store_register: int, value_register: int, data_type: str, ptrs: str):
-        llvm_type = CTypesToLLVM.convertType(data_type)+ptrs
-        out_str = f"store {llvm_type} %{value_register}, {llvm_type}* %{store_register}, align {CTypesToLLVM.getBytesUse(data_type, ptrs)}"
-        return out_str
+    def assignment(store_register: int, value: int, data_type: str, ptrs: str):
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+        llvm_val = block.store(value, store_register)
+
+        llvm_val.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
+        return llvm_val
 
     @staticmethod
-    def assignmentLiteral(store_register: int, value: str, data_type: str, ptrs: str):
-        llvm_type = CTypesToLLVM.convertType(data_type) + ptrs
-        out_str = f"store {llvm_type} {value}, {llvm_type}* %{store_register}, align {CTypesToLLVM.getBytesUse(data_type, ptrs)}"
-        return out_str
+    def llvmLiteral(value: str, data_type: str, ptrs: str):
+        return ir.Constant(CTypesToLLVM.getIRType(data_type, ptrs), value)
+
+    @staticmethod
+    def addComment(text: str):
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+        block.comment(text)
 
 
 class Load:
     @staticmethod
-    def identifier(load_register: int, data_type: str, ptrs: str):
-        register_nr = LLVMSingleton.getInstance().useRegister()
-        llvm_type = CTypesToLLVM.convertType(data_type)
-        out_str = f"%{register_nr} = load {llvm_type}{ptrs}, {llvm_type}{ptrs}* %{load_register}, align {CTypesToLLVM.getBytesUse(data_type, ptrs)}"
-        return out_str, register_nr
-
+    def identifier(load_llvm):
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+        llvm_var = block.load(load_llvm)
+        return llvm_var
 
 class Calculation:
     @staticmethod
-    def operation(val_1_reg: int, val_2_reg: int, op: str, data_type: str, ptrs: str):
+    def operation(left, right, operator):
+        block = LLVMSingleton.getInstance().getCurrentBlock()
         op_translate_float = {
-            "+": "fadd",
-            "-": "fsub",
-            "*": "fmul",
-            "/": "fdiv"
+            "+": block.fadd,
+            "-": block.fsub,
+            "*": block.fmul,
+            "/": block.fdiv
         }
 
-        op_translate = {"+": "add nsw",
-                        "-": "sub nsw",
-                        "*": "mul nsw",
-                        "/": "sdiv",
-                        "%": "srem",
-                        "<": "icmp slt",
-                        ">": "icmp sgt",
-                        "==": "icmp eq"
+        op_translate = {"+": block.add,
+                        "-": block.sub,
+                        "*": block.mul,
+                        "/": block.sdiv,
+                        "%": block.srem
                         }
 
-        register_nr = LLVMSingleton.getInstance().useRegister()
-        llvm_type = CTypesToLLVM.convertType(data_type)
+        op_translate_icmp = {"<": block.icmp_signed,
+                             ">": block.icmp_signed,
+                             "==": block.icmp_signed
+                             }
 
-        if llvm_type == "float":
-            llvm_op = op_translate_float.get(op, "")
+        if left.type == "float":
+            llvm_op = op_translate_float.get(operator, "")
         else:
-            llvm_op = op_translate.get(op, "")
+            llvm_op = op_translate.get(operator, None)
+            if llvm_op is not None:
+                llvm_var = llvm_op(left, right)
+                return llvm_var
+            llvm_op = op_translate_icmp.get(operator, None)
+            llvm_var = llvm_op(operator, left, right)
 
-        out_str = f"%{register_nr} = {llvm_op} {llvm_type+ptrs} %{val_1_reg}, %{val_2_reg}"
-        return out_str, register_nr
+            """
+            convert 1 bit to 32 bit
+            """
+            llvm_var = block.zext(llvm_var, left.type)
+            return llvm_var
+
+
+
 
     @staticmethod
     def unary(val_1_reg: int, op: str, data_type: str, ptrs: str):
@@ -100,6 +133,16 @@ class Calculation:
             out_str = op_translate.get(op, "")
 
         return out_str, register_nr
+
+
+class Printf:
+    @staticmethod
+    def printf(format_specifier: str, text: str):
+        module = LLVMSingleton.getInstance().getModule()
+
+        printf = ir.Function(module, ir.FunctionType(ir.IntType(32), [ir.IntType(8).as_pointer()], var_arg=True), name="printf")
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+
 
 class Printf:
     @staticmethod

@@ -1,3 +1,4 @@
+from llvmlite import ir
 
 
 class LLVMSingleton:
@@ -7,7 +8,9 @@ class LLVMSingleton:
         if self.__instance is not None:
             raise Exception("This class is a singleton!")
 
-        self.__register_counter = 1
+        self.__module = ir.Module(name=__file__)
+        self.__last_function = None
+        self.__current_block = None
 
     @staticmethod
     def getInstance():
@@ -15,8 +18,15 @@ class LLVMSingleton:
             LLVMSingleton.__instance = LLVMSingleton()
         return LLVMSingleton.__instance
 
-    def useRegister(self):
-        out = self.__register_counter
-        self.__register_counter += 1
-        return out
+    def getModule(self):
+        return self.__module
+
+    def getCurrentBlock(self) -> ir.IRBuilder:
+        return self.__current_block
+
+    def setLastFunction(self, new_function):
+        self.__last_function = new_function
+        new_block = self.__last_function.append_basic_block()
+        self.__current_block = ir.IRBuilder(new_block)
+
 

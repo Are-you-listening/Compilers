@@ -10,9 +10,7 @@ from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
 from src.parser.ASTCleanerAfter import *
 from src.parser.TableDotVisitor import *
-from src.llvm_target.AST2LLVMConverter import *
-from src.llvm_target.LLVMDotVisitor import *
-from src.llvm_target.LLVMTableDotVisitor import *
+from src.llvm_target.AST2LLVM import *
 from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
 from src.parser.CodeGetter import *
 
@@ -128,8 +126,9 @@ def main(argv,crashTest=False):
 
     print("LLVM")
     # the codegetter is used to add the original code as comments
-    to_llvm = AST2LLVMConverter(codegetter)
+    to_llvm = AST2LLVM(codegetter)
     to_llvm.visit(ast)
+    """
     llvm = to_llvm.getRoot()
     llvm_dot = LLVMDotVisitor(llvm_dot_file)
     llvm_dot.visit(llvm)
@@ -138,6 +137,7 @@ def main(argv,crashTest=False):
 
     control_dot = ControlFlowDotVisitor("output/ControlFlow")
     control_dot.visit(to_llvm.control_flow_graph.root)
+    """
 
 
 
