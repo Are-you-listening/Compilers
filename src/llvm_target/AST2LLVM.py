@@ -49,6 +49,7 @@ class AST2LLVM(ASTVisitor):
 
         if node.text == "Declaration":
             self.handleDeclaration(node)
+            self.addOriginalCodeAsComment(node)
 
         if node.text == "Function":
             self.map_table = self.map_table.prev
@@ -58,6 +59,7 @@ class AST2LLVM(ASTVisitor):
 
         if node.text == "Assignment":
             self.handleAssignment(node)
+            self.addOriginalCodeAsComment(node)
 
         if node.text == "Comment":
             self.handleComment(node)
@@ -193,3 +195,11 @@ class AST2LLVM(ASTVisitor):
 
     def handleConversions(self, node: ASTNode):
         print("still need to do")
+
+    def addOriginalCodeAsComment(self, node: ASTNode):
+        """
+        create a new LLVM node that contains the original C code and add it to the LLVM tree
+        :param node: the node in the AST that we are currently handling
+        :return:
+        """
+        Declaration.addComment(node.getChild(0).text)
