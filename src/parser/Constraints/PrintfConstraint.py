@@ -11,7 +11,7 @@ class PrintfConstraint(Constraint):
         super().__init__()
         self.rejected = False
 
-    def checkNode(self, node: ASTNodeTerminal):
+    def checkTerminalNode(self, node: ASTNodeTerminal):
         if node.text == "printf":
             printtype = self.getPrintType(node.children[0].text)
             variabletype = node.children[1].type
