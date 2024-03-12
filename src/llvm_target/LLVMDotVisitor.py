@@ -7,8 +7,8 @@ class LLVMDotVisitor(LLVMVisitor):
     """
     Visitor to visualize the AST tree using dot
     """
-    def __init__(self, outfile="LLVM.dot"):
-        self.filename = outfile.split('.')[0]
+    def __init__(self, outfile="LLVM"):
+        self.filename = outfile
         self.outfile = open(self.filename+".dot", "w")
         self.outfile.write("digraph AST {\n")
 

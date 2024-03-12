@@ -7,8 +7,8 @@ class TableDotVisitor:
     """
     Visitor to visualize the AST tree using dot
     """
-    def __init__(self, outfile="ASTvisual.dot", absolute: bool = False):
-        self.filename = outfile.split('.')[0]
+    def __init__(self, outfile="ASTvisual", absolute: bool = False):
+        self.filename = outfile
         self.outfile = open(self.filename+".dot", "w")
         self.outfile.write("digraph AST {\n")
         self.absolute = absolute

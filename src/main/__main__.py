@@ -51,6 +51,9 @@ def cleanGreen(input_file, dot_file, crashtest,symbol_file, codegetter):
     s = TableDotVisitor(symbol_file)
     s.visit(ast.root.getSymbolTable())
 
+    d = DotVisitor(dot_file)  # Export AST in Dot
+    d.visit(ast)
+
     return ast
 
 
@@ -105,7 +108,7 @@ def main(argv,crashTest=False):
             dot_file = arg
         elif param == "--render_symb":
             symbol_file = arg
-        elif param == "--render_symb":
+        elif param == "--target_llvm":
             llvm_file = arg
         elif param == "--target_mips":
             mips_file = arg
