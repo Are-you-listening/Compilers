@@ -71,7 +71,9 @@ class Load:
     def identifier(load_llvm):
         block = LLVMSingleton.getInstance().getCurrentBlock()
         llvm_var = block.load(load_llvm)
+        llvm_var.align = load_llvm.align
         return llvm_var
+
 
 class Calculation:
     @staticmethod
@@ -98,6 +100,8 @@ class Calculation:
 
         if left.type == "float":
             llvm_op = op_translate_float.get(operator, "")
+            llvm_var = llvm_op(operator, left, right)
+            return llvm_var
         else:
             llvm_op = op_translate.get(operator, None)
             if llvm_op is not None:
@@ -139,9 +143,10 @@ class Printf:
     @staticmethod
     def printf(format_specifier: str, text: str):
         module = LLVMSingleton.getInstance().getModule()
+        block = LLVMSingleton.getInstance().getCurrentBlock()
 
         printf = ir.Function(module, ir.FunctionType(ir.IntType(32), [ir.IntType(8).as_pointer()], var_arg=True), name="printf")
-        block = LLVMSingleton.getInstance().getCurrentBlock()
+
 
 
 class Printf:
