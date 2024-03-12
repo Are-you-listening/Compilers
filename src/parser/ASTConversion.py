@@ -2,12 +2,15 @@ from src.parser.ASTVisitor import *
 import subprocess
 from src.parser.CTypes.COperationHandler import *
 from src.parser.Tables.SymbolTypePtr import *
+from src.parser.Tables.SymbolType import *
+from src.parser.Tables.SymbolTable import *
 
 
 class ASTConversion2(ASTVisitor):
     """
     Makes implicit conversions explicit
     """
+
     def __init__(self):
         self.rc = RichnessChecker(types)
 
@@ -73,24 +76,35 @@ class ASTConversion2(ASTVisitor):
                     current_poorest = self.rc.get_poorest(data_type, current_poorest)
                 else:
                     # Handle errors
-                    if (len(current_poorest_ptrs)>=2 and data_type == "FLOAT" and len(ptrs)==0):
+                    if (len(current_poorest_ptrs) >= 2 and data_type == "FLOAT" and len(ptrs) == 0):
                         print(ptrs)
                         ErrorExporter.invalidOperation(node.linenr, "", "PTR", "FLOAT")
-                    """
-                    This type of warnings is at the moment not fully implementable without a proper distinction between int b; int* ptr = &b; and int* ptr = b;
-                    """
-                    # else:  # PTR and INT/CHAR can convert in between each other, however a warning will be shown
-                    #     type1 = current_poorest + current_poorest_ptrs
-                    #     type2 = data_type + self.type_mapping[child][1]
-                    #     if type1[len(type1) - 1] == '*':
-                    #         type1 = type1[:-1]
-                    #     if type2[len(type2) - 1] == '*':
-                    #         type2 = type2[:-1]
-                    #
-                    #     if type1 != type2 and (len(current_poorest_ptrs)-len(self.type_mapping[child][1])>1): # If the types are different and the length differs more then 1, we can for sure say its a correct warning. (int b; int* b_ptr = &b; has a difference of 1 but is allowed)
-                    #         ErrorExporter.conversionWarning(node.linenr, type1, type2)
+                        """
+                        This type of warnings is at the moment not fully implementable without a proper distinction between int b; int* ptr = &b; and int* ptr = b;
+                        """
+                    else:  # PTR and INT/CHAR can convert in between each other, however a warning will be shown
 
-        checkCompatibility.append(current_poorest)  # Check for illegal operations
+                        type1 = current_poorest + current_poorest_ptrs
+                        type2 = data_type + self.type_mapping[child][1]
+                        # if type1[len(type1) - 1] == '*':
+                        #     type1 = type1[:-1]
+                        # if type2[len(type2) - 1] == '*':
+                        #     type2 = type2[:-1]
+
+                        if type1 != type2 and (len(current_poorest_ptrs) - len(self.type_mapping[child][
+                                                                                   1]) > 1):  # If the types are different and the length differs more then 1, we can for sure say its a correct warning. (int b; int* b_ptr = &b; has a difference of 1 but is allowed)
+                            ErrorExporter.conversionWarning(node.linenr, type1, type2)
+
+            """
+            Collect Data for the incompatible operation test
+            """
+            appendix = current_poorest # Preset the type
+            while child.text == "Dereference":  # When a dereference node is found, we cannot get the type from that node
+                child = child.children[0]
+            entry = child.getSymbolTable().getEntry(child.text)
+            if entry is not None: # If there exists an entry we want the type from the SymbolTable (which is most likely a PTR)
+                appendix = entry.getType()
+            checkCompatibility.append(appendix)  # Add it to the verifier list
 
         """
         Verify if the operators are allowed | Semantic Analyse
@@ -152,7 +166,6 @@ class ASTConversion2(ASTVisitor):
         self.type_mapping[node] = (current_poorest, current_poorest_ptrs)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-
         if node.type == "IDENTIFIER":
             type_entry = node.getSymbolTable().getEntry(node.text)
             data_type, ptrs = type_entry.getPtrTuple()
