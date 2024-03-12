@@ -75,5 +75,3 @@ class ErrorExporter:
     @staticmethod
     def conversionWarning(linenr: str, type1: str, type2: str):
         print(f"[ Warning ] line {linenr}: Types do not match properly, a conversion was made on types: {type1} and {type2}")
-        sys.exit()
-

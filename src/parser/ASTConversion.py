@@ -76,6 +76,9 @@ class ASTConversion2(ASTVisitor):
                     if (len(current_poorest_ptrs)>=2 and data_type == "FLOAT" and len(ptrs)==0):
                         print(ptrs)
                         ErrorExporter.invalidOperation(node.linenr, "", "PTR", "FLOAT")
+                    """
+                    This type of warnings is at the moment not fully implementable without a proper distinction between int b; int* ptr = &b; and int* ptr = b;
+                    """
                     # else:  # PTR and INT/CHAR can convert in between each other, however a warning will be shown
                     #     type1 = current_poorest + current_poorest_ptrs
                     #     type2 = data_type + self.type_mapping[child][1]
@@ -84,7 +87,7 @@ class ASTConversion2(ASTVisitor):
                     #     if type2[len(type2) - 1] == '*':
                     #         type2 = type2[:-1]
                     #
-                    #     if type1 != type2:
+                    #     if type1 != type2 and (len(current_poorest_ptrs)-len(self.type_mapping[child][1])>1): # If the types are different and the length differs more then 1, we can for sure say its a correct warning. (int b; int* b_ptr = &b; has a difference of 1 but is allowed)
                     #         ErrorExporter.conversionWarning(node.linenr, type1, type2)
 
         checkCompatibility.append(current_poorest)  # Check for illegal operations
