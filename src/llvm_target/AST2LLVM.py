@@ -25,7 +25,6 @@ class AST2LLVM(ASTVisitor):
         root = ast.root
         self.postorder(root)
 
-
     def postorder(self, root: ASTNode):
         """
         override default postorder
@@ -55,12 +54,17 @@ class AST2LLVM(ASTVisitor):
                 currentnode.accept(self)
                 visited.add(currentnode)
                 stack.pop()
+
     def visitNode(self, node: ASTNode):
         """
         Visit function to construct LLVM
         :param node:
         :return:
         """
+        if node.text in ("Declaration", "Assignment", "Function"):
+
+            if self.control_flow_graph.isEval():
+                self.control_flow_graph.endEval()
 
         if node.text == "Declaration":
             self.handleDeclaration(node)
@@ -102,6 +106,25 @@ class AST2LLVM(ASTVisitor):
 
         if node.type in ("INT", "FLOAT", "CHAR"):
             llvm_var = Declaration.llvmLiteral(node.text, node.type, "")
+            self.llvm_map[node] = llvm_var
+
+        if node.text == "&&":
+
+            llvm_var = self.handleLogicalOperations(node.getSiblingNeighbour(-1))
+            self.control_flow_graph.addLogicalAnd()
+            self.llvm_map[node] = llvm_var
+
+        if node.text == "||":
+
+            llvm_var = self.handleLogicalOperations(node.getSiblingNeighbour(-1))
+            self.control_flow_graph.addLogicalOr()
+            self.llvm_map[node] = llvm_var
+
+        if node.getSiblingNeighbour(-1) is None:
+            return
+
+        if node.getSiblingNeighbour(-1).text in ("||", "&&"):
+            llvm_var = self.handleLogicalOperations(node)
             self.llvm_map[node] = llvm_var
 
     def handleFunction(self, node: ASTNode):
@@ -223,7 +246,6 @@ class AST2LLVM(ASTVisitor):
             # If the node is not a dereference node, return the node itself
             return node
 
-
     def handleOperations(self, node: ASTNode):
         """
         Handle Arithmetic operations
@@ -240,7 +262,7 @@ class AST2LLVM(ASTVisitor):
             do special ControlFlow changes for logical operations
             """
             if operator in ("&&", "||"):
-                self.handleLogicalOperations(node, operator)
+                self.llvm_map[node] = self.llvm_map[node.getChild(2)]
                 return
 
             left = self.llvm_map.get(node.getChild(0))
@@ -262,23 +284,20 @@ class AST2LLVM(ASTVisitor):
         code = self.codegetter.getLine(node.getChild(0))
         Declaration.addComment(code)
 
-    def handleLogicalOperations(self, node, operator):
+    def handleLogicalOperations(self, node):
         if not self.control_flow_graph.isEval():
-            """
-            When eval not started -> start eval met left child
-            """
-            self.control_flow_graph.startEval(self.llvm_map[node.getChild(0)])
+            self.control_flow_graph.startEval()
+        """
+        add syntax to make bool on right spot
+        """
+        llvm_zero = Declaration.llvmLiteral("0", "INT", "")
 
-        if operator == "&&":
-            print("hehe1")
-            self.control_flow_graph.addLogicalAnd(self.llvm_map[node.getChild(2)])
+        var = self.llvm_map[node]
+        if isinstance(var, ir.values.Constant):
+            self.control_flow_graph.const_value_map[LLVMSingleton.getInstance().getCurrentBlock()] = var
+            return var
 
-        if operator == "||":
-            print("hehe2")
-            self.control_flow_graph.addLogicalOr(self.llvm_map[node.getChild(2)])
+        llvm_var = Calculation.operation(var, llvm_zero, "!=")
 
-        left = self.llvm_map.get(node.getChild(0))
-        right = self.llvm_map.get(node.getChild(2))
-        llvm_var = Calculation.operation(left, right, "+")
+        return llvm_var
 
-        self.llvm_map[node] = llvm_var

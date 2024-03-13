@@ -7,8 +7,9 @@ int main(){
     int b = 2;
     b = 2;
 
-    int c = 1;
-    c = a && b || c;
+    int c = 8;
+    c = 5;
+    c = a && (a == b) || c;
 
 
 }

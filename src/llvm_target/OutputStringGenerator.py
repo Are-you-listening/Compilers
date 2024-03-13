@@ -70,6 +70,7 @@ class Load:
     def identifier(load_llvm):
         block = LLVMSingleton.getInstance().getCurrentBlock()
         llvm_var = block.load(load_llvm)
+
         llvm_var.align = load_llvm.align
         return llvm_var
 
@@ -94,7 +95,8 @@ class Calculation:
 
         op_translate_icmp = {"<": block.icmp_signed,
                              ">": block.icmp_signed,
-                             "==": block.icmp_signed
+                             "==": block.icmp_signed,
+                             "!=": block.icmp_signed
                              }
 
         if left.type == "float":
