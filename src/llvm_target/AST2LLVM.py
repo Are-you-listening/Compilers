@@ -243,4 +243,5 @@ class AST2LLVM(ASTVisitor):
         :param node: the node in the AST that we are currently handling
         :return:
         """
-        Declaration.addComment(node.getChild(0).text)
+        code = self.codegetter.getLine(node.getChild(0))
+        Declaration.addComment(code)
