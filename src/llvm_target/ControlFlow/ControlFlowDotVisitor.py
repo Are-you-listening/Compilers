@@ -28,11 +28,10 @@ class ControlFlowDotVisitor:
             self.preorder(edge.to_vertex)
 
     def visitVertex(self, vertex: Vertex):
-        if vertex.llvm_end_node is None:
+        if vertex.llvm is None:
             label = "not yet labeled"
         else:
-            label = vertex.llvm_end_node.register
-
+            label = str(vertex.llvm)
         self.outfile.write(f'  "{id(vertex)}" [label="{label}"];\n')
         for edge in vertex.edges:
             self.outfile.write(f'  "{id(vertex)}" -> "{id(edge.to_vertex)}" [label="{edge.on}"];\n')

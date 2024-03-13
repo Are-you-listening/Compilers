@@ -15,13 +15,16 @@ class AST2LLVM(ASTVisitor):
         self.map_table = MapTable(None)
         self.codegetter = codegetter
         self.llvm_map = {}
+        self.control_flow_graph = ControlFlowGraph()
 
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
+        self.llvm_map = {}
+        self.control_flow_graph = ControlFlowGraph()
 
         root = ast.root
         self.postorder(root)
-        self.llvm_map = {}
+
 
     def postorder(self, root: ASTNode):
         """
@@ -31,14 +34,27 @@ class AST2LLVM(ASTVisitor):
         """
         store function on last function position
         """
-        if root.text == "Function":
-            self.map_table = MapTable(self.map_table)
-            self.handleFunction(root)
 
-        for child in root.children:
-            self.postorder(child)
-        root.accept(self)
+        stack = [root]
+        visited = set()
+        while (len(stack) > 0):
+            currentnode = stack[-1]  # get top of stack without popping it
 
+            if currentnode.text == "Function" and currentnode not in visited:
+                visited.add(currentnode)
+                self.map_table = MapTable(self.map_table)
+                self.handleFunction(currentnode)
+
+            childnotvisited = False
+            for child in reversed(currentnode.getChildren()):
+                if child not in visited:
+                    stack.append(child)
+                    childnotvisited = True
+            if not childnotvisited:
+                # print(currentnode.text)  # debug print
+                currentnode.accept(self)
+                visited.add(currentnode)
+                stack.pop()
     def visitNode(self, node: ASTNode):
         """
         Visit function to construct LLVM
@@ -130,7 +146,7 @@ class AST2LLVM(ASTVisitor):
         with open('output/output.ll', 'w') as f:
             f.write(str(LLVMSingleton.getInstance().getModule()))
 
-    def handleAssignment(self, node):
+    def handleAssignment(self, node: ASTNode):
         left_child = node.getChild(0)
         store_reg = self.map_table.getEntry(left_child.text).llvm
         right_child = node.getChild(1)
@@ -224,7 +240,7 @@ class AST2LLVM(ASTVisitor):
             do special ControlFlow changes for logical operations
             """
             if operator in ("&&", "||"):
-                #self.handleLogicalOperations(node, operator)
+                self.handleLogicalOperations(node, operator)
                 return
 
             left = self.llvm_map.get(node.getChild(0))
@@ -245,3 +261,24 @@ class AST2LLVM(ASTVisitor):
         """
         code = self.codegetter.getLine(node.getChild(0))
         Declaration.addComment(code)
+
+    def handleLogicalOperations(self, node, operator):
+        if not self.control_flow_graph.isEval():
+            """
+            When eval not started -> start eval met left child
+            """
+            self.control_flow_graph.startEval(self.llvm_map[node.getChild(0)])
+
+        if operator == "&&":
+            print("hehe1")
+            self.control_flow_graph.addLogicalAnd(self.llvm_map[node.getChild(2)])
+
+        if operator == "||":
+            print("hehe2")
+            self.control_flow_graph.addLogicalOr(self.llvm_map[node.getChild(2)])
+
+        left = self.llvm_map.get(node.getChild(0))
+        right = self.llvm_map.get(node.getChild(2))
+        llvm_var = Calculation.operation(left, right, "+")
+
+        self.llvm_map[node] = llvm_var

@@ -38,7 +38,6 @@ class Declaration:
 
     @staticmethod
     def function(func_name: str, return_type: str, ptrs: str):
-
         """
         change the current latest function
         """
@@ -137,8 +136,6 @@ class Calculation:
             out_str = op_translate.get(op, "")
 
         return out_str, register_nr
-
-
 
 
 class Printf:

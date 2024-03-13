@@ -1,12 +1,14 @@
 import typing
 
+from src.llvm_target.LLVMSingleton import LLVMSingleton
+
 
 class Vertex:
-    def __init__(self, llvm_end_node=None):
+    def __init__(self, llvm_block):
         """
         :param llvm_end_node:
         """
-        self.llvm_end_node = llvm_end_node
+        self.llvm = llvm_block
 
         """
         list of directed edges
@@ -14,9 +16,6 @@ class Vertex:
         """
         self.edges = []
         self.reverse_edges = []
-
-    def setEndNode(self, llvm_end_node):
-        self.llvm_end_node = llvm_end_node
 
     def addEdge(self, edge: "Edge"):
         self.edges.append(edge)
@@ -42,7 +41,7 @@ class Edge:
 
 class ControlFlowGraph:
     def __init__(self):
-        self.current: Vertex = Vertex()
+        self.current: Vertex = Vertex(LLVMSingleton.getInstance().getCurrentBlock())
         self.root: Vertex = self.current
 
         """
@@ -60,25 +59,28 @@ class ControlFlowGraph:
         """
         return (self.accepting is not None) and (self.reject is not None)
 
-    def startEval(self, llvm_node):
+    def startEval(self, llvm_var):
         """
         start an eval situation providing the node that causes a splitup
         We will create a condition branch checking for true/false
-        :param llvm_node:
+        :param llvm_var:
         :return:
         """
-        self.current.setEndNode(llvm_node)
 
-        on_true_vertex = Vertex()
-        on_false_vertex = Vertex()
+        builder_true = LLVMSingleton.getInstance().addBlock()
+        builder_false = LLVMSingleton.getInstance().addBlock()
+
+        on_true_vertex = Vertex(builder_true)
+        on_false_vertex = Vertex(builder_false)
+
         self.accepting = on_true_vertex
         self.reject = on_false_vertex
 
         """
         add edges for start construction
         """
-        self.current.addEdge(Edge(self.current, on_true_vertex, (llvm_node.register, True)))
-        self.current.addEdge(Edge(self.current, on_false_vertex, (llvm_node.register, False)))
+        self.current.addEdge(Edge(self.current, on_true_vertex, (llvm_var, True)))
+        self.current.addEdge(Edge(self.current, on_false_vertex, (llvm_var, False)))
 
     def endEval(self):
         for edge in self.reject.reverse_edges:
@@ -94,20 +96,22 @@ class ControlFlowGraph:
         self.accepting = None
         self.reject = None
 
-    def addLogicalAnd(self, llvm_right_child):
-        new_accepting = Vertex()
-        self.accepting.addEdge(Edge(self.accepting, new_accepting, (llvm_right_child.register, True)))
-        self.accepting.addEdge(Edge(self.accepting, self.reject, (llvm_right_child.register, False)))
+    def addLogicalAnd(self, llvm_var_right):
+        builder = LLVMSingleton.getInstance().addBlock()
+        new_accepting = Vertex(builder)
 
-        self.accepting.setEndNode(llvm_right_child)
+        self.accepting.addEdge(Edge(self.accepting, new_accepting, (llvm_var_right, True)))
+        self.accepting.addEdge(Edge(self.accepting, self.reject, (llvm_var_right, False)))
+
         self.accepting = new_accepting
 
-    def addLogicalOr(self, llvm_right_child):
-        new_reject = Vertex()
-        self.reject.addEdge(Edge(self.reject, new_reject, (llvm_right_child.register, False)))
-        self.reject.addEdge(Edge(self.reject, self.accepting, (llvm_right_child.register, True)))
+    def addLogicalOr(self, llvm_var_right):
+        builder = LLVMSingleton.getInstance().addBlock()
+        new_reject = Vertex(builder)
 
-        self.reject .setEndNode(llvm_right_child)
+        self.reject.addEdge(Edge(self.reject, new_reject, (llvm_var_right, False)))
+        self.reject.addEdge(Edge(self.reject, self.accepting, (llvm_var_right, True)))
+
         self.reject = new_reject
 
 

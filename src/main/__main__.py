@@ -128,17 +128,9 @@ def main(argv,crashTest=False):
     # the codegetter is used to add the original code as comments
     to_llvm = AST2LLVM(codegetter)
     to_llvm.visit(ast)
-    """
-    llvm = to_llvm.getRoot()
-    llvm_dot = LLVMDotVisitor(llvm_dot_file)
-    llvm_dot.visit(llvm)
-    llvm_table = LLVMTableDotVisitor(llvm_map_file, False)
-    llvm_table.visit(llvm)
 
     control_dot = ControlFlowDotVisitor("output/ControlFlow")
     control_dot.visit(to_llvm.control_flow_graph.root)
-    """
-
 
 
 if __name__ == '__main__':
