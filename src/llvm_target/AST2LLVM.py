@@ -40,7 +40,6 @@ class AST2LLVM(ASTVisitor):
         root.accept(self)
 
     def visitNode(self, node: ASTNode):
-
         """
         Visit function to construct LLVM
         :param node:
@@ -164,8 +163,50 @@ class AST2LLVM(ASTVisitor):
 
     def handlePrintf(self, node: ASTNode):
         formatSpecifier = node.children[0].text
-        text = Printf.printfFormat(formatSpecifier)
-        text += Printf.printfIR()
+        args = []
+
+        # Loop through each child after the format specifier
+        for child in node.children[1:]:
+            # Get the actual variable or literal node from the dereference chain
+            var_node = self.getVariableNode(child)
+            if var_node is None:
+                print("Error: Unable to find variable node for argument.")
+                continue
+
+            if isinstance(var_node, ASTNodeTerminal) and var_node.type == "IDENTIFIER":
+                # Get the LLVM IR representation of the variable from the symbol table
+                llvm_var = self.map_table.getEntry(var_node.text).llvm
+                if llvm_var is not None:
+                    args.append(llvm_var)
+                else:
+                    # Handle case when LLVM IR representation is not found
+                    print(f"Error: LLVM IR representation not found for identifier {var_node.text}")
+            elif isinstance(var_node, ASTNodeTerminal) and var_node.type in ("INT", "FLOAT", "CHAR"):
+                # If the variable node is a literal, use its LLVM IR directly
+                llvm_literal = self.llvm_map.get(var_node)
+                if llvm_literal is not None:
+                    args.append(llvm_literal)
+                else:
+                    # Handle case when LLVM IR representation is not found
+                    print(f"Error: LLVM IR representation not found for literal {var_node.text}")
+            else:
+                # Handle unsupported or unexpected argument types
+                print(f"Error: Unsupported or unexpected argument type encountered: {var_node}")
+
+        # Call Printf.printf() function with the format specifier and arguments
+        Printf.printf(formatSpecifier, *args)
+
+    def getVariableNode(self, node):
+        """
+        Recursive function to get the actual variable or literal node from a chain of dereference nodes.
+        """
+        if node.text == "Dereference":
+            # If the node is a dereference node, recursively get the variable node from its child
+            return self.getVariableNode(node.children[0])
+        else:
+            # If the node is not a dereference node, return the node itself
+            return node
+
 
     def handleOperations(self, node: ASTNode):
         """

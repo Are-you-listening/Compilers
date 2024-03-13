@@ -29,4 +29,8 @@ class LLVMSingleton:
         new_block = self.__last_function.append_basic_block()
         self.__current_block = ir.IRBuilder(new_block)
 
+    def getLastFunction(self):
+            return self.__last_function
+
+
 

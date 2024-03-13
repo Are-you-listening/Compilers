@@ -135,21 +135,54 @@ class Calculation:
         return out_str, register_nr
 
 
+
+
 class Printf:
     @staticmethod
-    def printf(format_specifier: str, text: str):
+    def printf(format_specifier: str, *args):
         module = LLVMSingleton.getInstance().getModule()
+        voidptr_ty = ir.IntType(8).as_pointer()
+        printf_ty = ir.FunctionType(ir.IntType(32), [voidptr_ty], var_arg=True)
+        printf = ir.Function(module, printf_ty, name="printf")
 
-        printf = ir.Function(module, ir.FunctionType(ir.IntType(32), [ir.IntType(8).as_pointer()], var_arg=True), name="printf")
-        block = LLVMSingleton.getInstance().getCurrentBlock()
+        # Create a new basic block in the current function
+        current_function = LLVMSingleton.getInstance().getLastFunction()
+        block = current_function.append_basic_block("printf_block")
+
+        # Create a new IRBuilder for the basic block
+        builder = ir.IRBuilder(block)
+
+        # Load the format specifier string
+        format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(format_specifier) + 1),
+                                        bytearray(format_specifier.encode("utf8")))
+        format_str_global = builder.module.globals.get(".str")
+        if not format_str_global:
+            format_str_global = ir.GlobalVariable(builder.module, format_str_const.type, ".str")
+            format_str_global.linkage = "internal"
+            format_str_global.global_constant = True
+            format_str_global.initializer = format_str_const
+        format_str_ptr = builder.bitcast(format_str_global, ir.IntType(8).as_pointer())
+
+        # Create an alloca instruction for each argument
+        args_alloca = [builder.alloca(arg.type) for arg in args]
+
+        # Store the arguments in their respective alloca instructions
+        for arg_alloca, arg_value in zip(args_alloca, args):
+            builder.store(arg_value, arg_alloca)
+
+        # Load the arguments from their respective alloca instructions
+        args_values = [format_str_ptr] + [builder.load(arg_alloca) for arg_alloca in args_alloca]
+
+        # Call the printf function
+        printf_call = builder.call(printf, args_values)
+
+        # Return the result of the printf call
+        return printf_call
 
 
-class Printf:
-    @staticmethod
-    def printfFormat(formatSpecifier):
-        return f"@.str = private unnamed_addr constant [{len(formatSpecifier) + 1} x i8] c\"{formatSpecifier}\\00\", allign 1"
 
-    @staticmethod
-    def printfIR():
-        register_nr = LLVMSingleton.getInstance().useRegister()
-        return f"%{register_nr} = call i32 (i8*, ...) @printf"
+
+
+
+
+
