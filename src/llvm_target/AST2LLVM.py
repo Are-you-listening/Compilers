@@ -254,6 +254,15 @@ class AST2LLVM(ASTVisitor):
         """
 
         if node.getChildAmount() == 2:
+            operator = node.getChild(0).text
+            child = node.getChild(1)
+            if child.text in ("++", "--"):
+                operator = child.text
+                child = node.getChild(0)
+
+            child = self.llvm_map[child]
+            llvm_var = Calculation.unary(child, operator)
+
             pass
         if node.getChildAmount() == 3:
             operator = node.getChild(1).text

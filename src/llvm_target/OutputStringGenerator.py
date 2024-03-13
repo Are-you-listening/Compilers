@@ -4,12 +4,6 @@ from llvmlite import ir
 
 class CTypesToLLVM:
     @staticmethod
-    def convertType(data_type: str):
-        convert_map = {"INT": "i32", "CHAR": "i8", "FLOAT": "float"}
-
-        return convert_map.get(data_type, "TYPE ISSUE")
-
-    @staticmethod
     def getBytesUse(data_type: str, ptrs: str):
         if len(ptrs) >= 1:
             return 8
@@ -49,6 +43,7 @@ class Declaration:
 
     @staticmethod
     def assignment(store_register: int, value: int, data_type: str, ptrs: str):
+
         block = LLVMSingleton.getInstance().getCurrentBlock()
         llvm_val = block.store(value, store_register)
 
@@ -57,6 +52,11 @@ class Declaration:
 
     @staticmethod
     def llvmLiteral(value: str, data_type: str, ptrs: str):
+        if CTypesToLLVM.getIRType(data_type, ptrs) == ir.FloatType():
+            value = float(value)
+        if CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(32):
+            value = int(value)
+
         return ir.Constant(CTypesToLLVM.getIRType(data_type, ptrs), value)
 
     @staticmethod
@@ -121,23 +121,26 @@ class Calculation:
 
 
     @staticmethod
-    def unary(val_1_reg: int, op: str, data_type: str, ptrs: str):
-        register_nr = LLVMSingleton.getInstance().useRegister()
-        llvm_type = CTypesToLLVM.convertType(data_type)
+    def unary(llvm_val, op: str):
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+        llvm_type = llvm_val.type
 
-        op_translate_float = {
-        }
+        op_translate_float = {"-": block.fneg(llvm_val),
+                              "+": llvm_val
+                              }
 
-        op_translate = {"+": "",
-                        "-": f"%{register_nr} = sub nsw {llvm_type+ptrs} 0, %{val_1_reg}"
+        op_translate = {"-": block.sub(ir.Constant(llvm_type, 0), llvm_val),
+                        "+": llvm_val,
+                        "~": block.xor(llvm_val, ir.Constant(llvm_type, -1)),
+                        "!": block.xor(block.icmp_signed("!=", llvm_val, ir.Constant(llvm_type, 0)), 1)
                         }
 
         if llvm_type == "float":
-            out_str = op_translate_float.get(op, "")
+            llvm_result = op_translate_float.get(op, None)
         else:
-            out_str = op_translate.get(op, "")
+            llvm_result = op_translate.get(op, None)
 
-        return out_str, register_nr
+        return llvm_result
 
 
 class Printf:
