@@ -62,7 +62,6 @@ class AST2LLVM(ASTVisitor):
         :return:
         """
         if node.text in ("Declaration", "Assignment", "Function"):
-
             if self.control_flow_graph.isEval():
                 self.control_flow_graph.endEval()
 
@@ -109,13 +108,11 @@ class AST2LLVM(ASTVisitor):
             self.llvm_map[node] = llvm_var
 
         if node.text == "&&":
-
             llvm_var = self.handleLogicalOperations(node.getSiblingNeighbour(-1))
             self.control_flow_graph.addLogicalAnd()
             self.llvm_map[node] = llvm_var
 
         if node.text == "||":
-
             llvm_var = self.handleLogicalOperations(node.getSiblingNeighbour(-1))
             self.control_flow_graph.addLogicalOr()
             self.llvm_map[node] = llvm_var
