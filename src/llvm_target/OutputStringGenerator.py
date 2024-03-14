@@ -1,3 +1,5 @@
+import llvmlite.ir.types
+
 from src.llvm_target.LLVMSingleton import LLVMSingleton
 from llvmlite import ir
 
@@ -142,6 +144,16 @@ class Calculation:
             llvm_op = op_translate_float.get(operator, "")
             llvm_var = llvm_op(left, right)
             return llvm_var
+        elif left.type.is_pointer and operator in ["+", "-"]:
+            if not isinstance(right, ir.Constant):
+                right = block.sext(right, ir.IntType(64))
+
+            if operator == "-":  # Add a subtract
+                Calculation.operation(right, right, operator)
+
+            new_value = block.gep(left, [right], True)
+            return new_value
+
         else:
             llvm_op = op_translate.get(operator, None)
             if llvm_op is not None:
@@ -197,7 +209,7 @@ class Printf:
 
         # Load the format specifier string
         format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(format_specifier) + 1),
-                                        bytearray(format_specifier.encode("utf8")))
+                                       bytearray(format_specifier.encode("utf8")))
         format_str_global = builder.module.globals.get(".str")
         if not format_str_global:
             format_str_global = ir.GlobalVariable(builder.module, format_str_const.type, ".str")
