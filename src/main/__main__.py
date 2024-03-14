@@ -56,6 +56,7 @@ def cleanGreen(input_file, dot_file, crashtest,symbol_file, codegetter):
 
 
 def Processing(ast):
+
     constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
     constraint_checker.visit(ast)
 
@@ -64,6 +65,9 @@ def Processing(ast):
 
     v = ValueAdderVisitor()
     v.visit(ast)
+
+    d = DotVisitor("output/debug2")  # Export AST in Dot
+    d.visit(ast)
 
     ast_conv = ASTConversion2()
     ast_conv.postorder(ast.root)
