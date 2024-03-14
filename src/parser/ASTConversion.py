@@ -207,6 +207,7 @@ class ASTConversion2(ASTVisitor):
         :param items:
         :return:
         """
+        blocklist = [["PTR","+","PTR"],["PTR","*","PTR"],["PTR","*","INT"],["PTR","*","CHAR"],["CHAR","*","PTR"],["INT","*","PTR"]]
         for item in items:  # Make all combinations of items
             for item2 in items:
                 if item != item2:  # Except the combination when it has itsself twice
@@ -214,4 +215,6 @@ class ASTConversion2(ASTVisitor):
                         return False
                     elif item2 in self.incompatible.keys() and item in self.incompatible[item2]:
                         return False
+        if items in blocklist:
+            return False
         return True
