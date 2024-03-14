@@ -2,6 +2,38 @@ from src.llvm_target.LLVMSingleton import LLVMSingleton
 from llvmlite import ir
 
 
+class UnaryWrapper:
+    @staticmethod
+    def Plus(llvm_var):
+        return llvm_var
+
+    @staticmethod
+    def Min(llvm_var):
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+        llvm_type = llvm_var.type
+        return block.sub(ir.Constant(llvm_type, 0), llvm_var)
+
+    @staticmethod
+    def fNeg(llvm_var):
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+        return block.fneg(llvm_var)
+
+    @staticmethod
+    def BitNot(llvm_var):
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+        llvm_type = llvm_var.type
+        return block.xor(llvm_var, ir.Constant(llvm_type, -1))
+
+    @staticmethod
+    def LogicalNot(llvm_var):
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+        llvm_type = llvm_var.type
+        sub_bool = block.icmp_signed("!=", llvm_var, ir.Constant(llvm_type, 0))
+        llvm_var = block.xor(sub_bool, ir.Constant(ir.IntType(1), 1))
+        llvm_var = block.zext(llvm_var, llvm_type)
+        return llvm_var
+
+
 class CTypesToLLVM:
     @staticmethod
     def getBytesUse(data_type: str, ptrs: str):
@@ -90,18 +122,25 @@ class Calculation:
                         "-": block.sub,
                         "*": block.mul,
                         "/": block.sdiv,
-                        "%": block.srem
+                        "%": block.srem,
+                        "<<": block.shl,
+                        ">>": block.ashr,
+                        "&": block.and_,
+                        "|": block.or_,
+                        "^": block.xor
                         }
 
         op_translate_icmp = {"<": block.icmp_signed,
                              ">": block.icmp_signed,
                              "==": block.icmp_signed,
-                             "!=": block.icmp_signed
+                             "!=": block.icmp_signed,
+                             "<=": block.icmp_signed,
+                             ">=": block.icmp_signed
                              }
 
-        if left.type == "float":
+        if left.type == ir.FloatType():
             llvm_op = op_translate_float.get(operator, "")
-            llvm_var = llvm_op(operator, left, right)
+            llvm_var = llvm_op(left, right)
             return llvm_var
         else:
             llvm_op = op_translate.get(operator, None)
@@ -118,29 +157,27 @@ class Calculation:
             return llvm_var
 
 
-
-
     @staticmethod
     def unary(llvm_val, op: str):
-        block = LLVMSingleton.getInstance().getCurrentBlock()
-        llvm_type = llvm_val.type
 
-        op_translate_float = {"-": block.fneg(llvm_val),
-                              "+": llvm_val
+        op_translate_float = {"-": UnaryWrapper.fNeg,
+                              "+": UnaryWrapper.Plus,
+                              "++": lambda llvm_var: Calculation.operation(llvm_var, ir.Constant(llvm_var.type, 1), "+")
                               }
 
-        op_translate = {"-": block.sub(ir.Constant(llvm_type, 0), llvm_val),
-                        "+": llvm_val,
-                        "~": block.xor(llvm_val, ir.Constant(llvm_type, -1)),
-                        "!": block.xor(block.icmp_signed("!=", llvm_val, ir.Constant(llvm_type, 0)), 1)
+        op_translate = {"-": UnaryWrapper.Min,
+                        "+": UnaryWrapper.Plus,
+                        "~": UnaryWrapper.BitNot,
+                        "!": UnaryWrapper.LogicalNot,
+                        "++": lambda llvm_var: Calculation.operation(llvm_var, ir.Constant(llvm_var.type, 1), "+")
                         }
 
-        if llvm_type == "float":
-            llvm_result = op_translate_float.get(op, None)
+        if llvm_val.type == ir.FloatType():
+            llvm_op = op_translate_float.get(op, None)
         else:
-            llvm_result = op_translate.get(op, None)
+            llvm_op = op_translate.get(op, None)
 
-        return llvm_result
+        return llvm_op(llvm_val)
 
 
 class Printf:

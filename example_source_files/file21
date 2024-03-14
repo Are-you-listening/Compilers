@@ -1,0 +1,4 @@
+int main() {
+int b = (char) 5;
+float a = b;
+}
