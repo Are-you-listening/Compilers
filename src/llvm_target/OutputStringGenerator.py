@@ -154,13 +154,13 @@ class Calculation:
             llvm_var = llvm_op(left, right)
             return llvm_var
         elif left.type.is_pointer and operator in ["+", "-"]:
-            if not isinstance(right, ir.Constant):
+            if not isinstance(right, ir.Constant):  # If it is no constant, LLVM requires a sign extend to match the size
                 right = block.sext(right, ir.IntType(64))
 
             if operator == "-":  # Add a subtract
                 Calculation.operation(right, right, operator)
 
-            new_value = block.gep(left, [right], True)
+            new_value = block.gep(left, [right], True) # Create the gep instruction
             return new_value
 
         else:
@@ -209,14 +209,10 @@ class Printf:
         printf_ty = ir.FunctionType(ir.IntType(32), [voidptr_ty], var_arg=True)
         printf = ir.Function(module, printf_ty, name="printf")
 
-        # Create a new basic block in the current function
         current_function = LLVMSingleton.getInstance().getLastFunction()
         block = current_function.append_basic_block("printf_block")
 
-        # Create a new IRBuilder for the basic block
         builder = ir.IRBuilder(block)
-
-        # Load the format specifier string
         format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(format_specifier) + 1),
                                        bytearray(format_specifier.encode("utf8")))
         format_str_global = builder.module.globals.get(".str")
@@ -227,21 +223,47 @@ class Printf:
             format_str_global.initializer = format_str_const
         format_str_ptr = builder.bitcast(format_str_global, ir.IntType(8).as_pointer())
 
-        # Create an alloca instruction for each argument
+        """
+        Create an alloca instruction for each argument
+        """
         args_alloca = [builder.alloca(arg.type) for arg in args]
 
-        # Store the arguments in their respective alloca instructions
+        """
+        Store the arguments in their respective alloca instructions
+        """
         for arg_alloca, arg_value in zip(args_alloca, args):
             builder.store(arg_value, arg_alloca)
 
-        # Load the arguments from their respective alloca instructions
+        """ 
+        Load the arguments from their respective alloca instructions 
+        """
         args_values = [format_str_ptr] + [builder.load(arg_alloca) for arg_alloca in args_alloca]
 
-        # Call the printf function
         printf_call = builder.call(printf, args_values)
 
-        # Return the result of the printf call
         return printf_call
+
+
+
+
+class Conversion:
+    @staticmethod
+    def performConversion(llvm_var, to_type):
+        block = LLVMSingleton.getInstance().getCurrentBlock()  # Get the current block
+        if isinstance(llvm_var.type, ir.IntType) and (to_type == "float" or to_type == "FLOAT"):
+            return block.fpext(llvm_var, ir.FloatType())
+        elif isinstance(llvm_var.type, ir.FloatType) and (to_type == "int" or to_type == "INT"):
+            return block.fptosi(llvm_var, ir.IntType(32))
+        elif isinstance(llvm_var.type, ir.IntType) and (to_type == "char" or to_type == "CHAR"):
+            return block.trunc(llvm_var, ir.IntType(8))
+        elif isinstance(llvm_var.type, ir.FloatType) and (to_type == "char" or to_type == "CHAR"):
+            return block.trunc(llvm_var, ir.IntType(8))
+        elif isinstance(llvm_var.type, ir.IntType) and (to_type == "int" or to_type == "INT"):
+            return block.zext(llvm_var, ir.IntType(32))
+        else:
+            return llvm_var
+
+
 
 
 

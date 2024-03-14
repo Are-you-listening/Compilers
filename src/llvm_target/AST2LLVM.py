@@ -198,38 +198,35 @@ class AST2LLVM(ASTVisitor):
         Declaration.addComment(comment_text)
 
     def handlePrintf(self, node: ASTNode):
+        """
+        Handle printf function
+        :param node:
+        :return:
+        """
         formatSpecifier = node.children[0].text
         args = []
 
-        # Loop through each child after the format specifier
         for child in node.children[1:]:
-            # Get the actual variable or literal node from the dereference chain
             var_node = self.getVariableNode(child)
             if var_node is None:
                 print("Error: Unable to find variable node for argument.")
                 continue
 
             if isinstance(var_node, ASTNodeTerminal) and var_node.type == "IDENTIFIER":
-                # Get the LLVM IR representation of the variable from the symbol table
                 llvm_var = self.map_table.getEntry(var_node.text).llvm
                 if llvm_var is not None:
                     args.append(llvm_var)
                 else:
-                    # Handle case when LLVM IR representation is not found
                     print(f"Error: LLVM IR representation not found for identifier {var_node.text}")
             elif isinstance(var_node, ASTNodeTerminal) and var_node.type in ("INT", "FLOAT", "CHAR"):
-                # If the variable node is a literal, use its LLVM IR directly
                 llvm_literal = self.llvm_map.get(var_node)
                 if llvm_literal is not None:
                     args.append(llvm_literal)
                 else:
-                    # Handle case when LLVM IR representation is not found
                     print(f"Error: LLVM IR representation not found for literal {var_node.text}")
             else:
-                # Handle unsupported or unexpected argument types
                 print(f"Error: Unsupported or unexpected argument type encountered: {var_node}")
 
-        # Call Printf.printf() function with the format specifier and arguments
         Printf.printf(formatSpecifier, *args)
 
     def getVariableNode(self, node):
@@ -237,10 +234,8 @@ class AST2LLVM(ASTVisitor):
         Recursive function to get the actual variable or literal node from a chain of dereference nodes.
         """
         if node.text == "Dereference":
-            # If the node is a dereference node, recursively get the variable node from its child
             return self.getVariableNode(node.children[0])
         else:
-            # If the node is not a dereference node, return the node itself
             return node
 
     def handleOperations(self, node: ASTNode):
@@ -289,7 +284,34 @@ class AST2LLVM(ASTVisitor):
         self.llvm_map[node] = llvm_var
 
     def handleConversions(self, node: ASTNode):
-        print("still need to do")
+        """
+                Handle explicit and implicit conversions
+                :param node:
+                :return:
+                """
+        to_type_node = node.getChild(0)
+        to_type = self.getConversionType(to_type_node)
+
+        expr_node = node.getChild(1)
+        llvm_var = self.llvm_map[expr_node]
+
+        converted_var = Conversion.performConversion(llvm_var, to_type)
+
+
+        self.llvm_map[node] = converted_var
+
+    def getConversionType(self, type_node: ASTNode):
+        """"
+        Extract the type of the AST node
+        """
+        type_text = type_node.children[0].text
+        if type_node.getChildAmount() > 1:
+            type_text = type_node.children[1].text
+
+
+        return type_text
+
+
 
     def addOriginalCodeAsComment(self, node: ASTNode):
         """
