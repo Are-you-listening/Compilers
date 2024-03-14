@@ -20,9 +20,9 @@ class ValueAdderVisitor(ASTVisitor):
         val = node.getChild(-1)
         # If the left side has a dereference this means that it is a pointer
         # so we only do replacements on the left side and don't change anything in the symbol table
-        if (val.text not in ("Expr", "Dereference")) and (ident.text != "Dereference"):
+        if (val.text not in ("Expr", "Dereference", "Conversion")) and (ident.text != "Dereference"):
             entry = ident.getSymbolTable().symbols[ident.text]
-            entry.value = val.text
+            entry.value = val
         else:
             # replace all the identifiers in the RHS with their symbol table value
             replacer = IdentifierReplacerVisitor()
@@ -40,7 +40,7 @@ class ValueAdderVisitor(ASTVisitor):
             if (val.text not in ("Expr", "Dereference")) and (ident.text != "Dereference"):
                 ST = ident.getSymbolTable()
                 entry = ST.symbols[ident.text]
-                entry.value = val.text
+                entry.value = val
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":

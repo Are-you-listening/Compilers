@@ -1,5 +1,8 @@
+import copy
+
 from src.parser.ASTVisitor import *
 from src.parser.ErrorExporter import *
+from copy import deepcopy
 
 
 class IdentifierReplacerVisitor(ASTVisitor):
@@ -32,15 +35,21 @@ class IdentifierReplacerVisitor(ASTVisitor):
                     entry.firstUsed = node
 
                 if entry.value is not None:
-                    node.text = entry.value
-                    if entry.getType() == "INT":
-                        node.type = "INT"
+                    if entry.value.text == "Conversion":
+                        temp = copy.deepcopy(entry.value)
+                        temp.parent = node.parent
+                        temp.symbol_table = node.symbol_table
+                        node = temp
+                    else:
+                        node.text = entry.value.text
+                        if entry.getType() == "INT":
+                            node.type = "INT"
 
-                    elif entry.getType() == "CHAR":
-                        node.type = "CHAR"
+                        elif entry.getType() == "CHAR":
+                            node.type = "CHAR"
 
-                    elif entry.getType() == "FLOAT":
-                        node.type = "FLOAT"
+                        elif entry.getType() == "FLOAT":
+                            node.type = "FLOAT"
 
                     # replaces a dereference -> identifer pair with the value of that identifier
                     parentsiblings = node.parent.parent.children
