@@ -151,18 +151,21 @@ class ControlFlowGraph:
             else:
                 true_edge = current_vertex.edges[1]
                 false_edge = current_vertex.edges[0]
-            print("bef", true_edge.to_vertex == false_edge.to_vertex)
             if true_edge.to_vertex == false_edge.to_vertex:
                 """
                 In this case both true and false go to this branch
                 """
-                print("www")
+
+                """
+                make branch statement a boolean
+                """
                 current_vertex.llvm.branch(true_edge.to_vertex.llvm.block)
             else:
                 """
                 when different endpoints for true and false
                 """
-                last_instruction = current_vertex.llvm.block.instructions[-1]
+                last_instruction = self.__makeBool(current_vertex.llvm)
+
                 current_vertex.llvm.cbranch(last_instruction, true_edge.to_vertex.llvm.block,
                                             false_edge.to_vertex.llvm.block)
 
@@ -181,7 +184,6 @@ class ControlFlowGraph:
         """
         current_vertex = final_vertex
 
-        print(current_vertex.reverse_edges)
         edge_true_list = set()
         edge_false_list = set()
         for edge in current_vertex.reverse_edges:
@@ -214,9 +216,20 @@ class ControlFlowGraph:
 
                     phi.add_incoming(ir.Constant(bool_type, bool_val), vertex.llvm.block)
                 else:
-                    phi.add_incoming(vertex.llvm.block.instructions[-2], vertex.llvm.block)
+                    last_instruction = vertex.llvm.block.instructions[-2]
+                    """
+                    make bool if not a bool type
+                    """
+                    phi.add_incoming(last_instruction, vertex.llvm.block)
 
             elif in_true:
                 phi.add_incoming(ir.Constant(bool_type, 1), vertex.llvm.block)
             elif in_false:
                 phi.add_incoming(ir.Constant(bool_type, 0), vertex.llvm.block)
+
+    def __makeBool(self, builder):
+        instruction = builder.block.instructions[-1]
+        if instruction.type != ir.IntType(1):
+            instruction = builder.icmp_signed("!=", instruction, ir.Constant(instruction.type, 0))
+
+        return instruction

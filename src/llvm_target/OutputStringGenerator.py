@@ -85,6 +85,15 @@ class Declaration:
         return llvm_val
 
     @staticmethod
+    def assignmentAlign(store_register: int, value: int, align: int):
+
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+        llvm_val = block.store(value, store_register)
+
+        llvm_val.align = align
+        return llvm_val
+
+    @staticmethod
     def llvmLiteral(value: str, data_type: str, ptrs: str):
         if CTypesToLLVM.getIRType(data_type, ptrs) == ir.FloatType():
             value = float(value)
