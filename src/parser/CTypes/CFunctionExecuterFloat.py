@@ -80,10 +80,10 @@ class _Conversions:
     @staticmethod
     def ToChar(value):
         """assume 4 bytes/ int"""
-        value = int(value)
+        value = int(math.floor(float(value)))
         b = value.to_bytes(8, byteorder="big", signed=True)
         b = b[-1:]
-        return int.from_bytes(b, 'big', signed=True)
+        return str(int.from_bytes(b, 'big', signed=True))
 
     @staticmethod
     def ToInt(value):
