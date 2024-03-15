@@ -18,7 +18,7 @@ class ErrorExporter:
     def mainNotFound():
         print(f"[ Error ] main function not found")
         #print("[ Error ] main function not found", file=sys.stderr)
-        exit()
+        #exit()
 
     @staticmethod
     def invalidOperatorFloat(operator: str, linenr: str):
