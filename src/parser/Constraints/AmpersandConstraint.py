@@ -14,8 +14,6 @@ class AmpersandConstraint(Constraint):
     def checkTerminalNode(self, node: ASTNodeTerminal):
         if node.text == "&":
             rsibl = node.getSiblingNeighbour(1)
-            if rsibl.text == "Expr" or node.symbol_table.getEntry(
-                    rsibl.text) is None:  # This operation is only applicable on a single identifier, not on a
-                # literal/expr
+            if rsibl.text == "Expr":  # This operation is only applicable on a single identifier, not on a literal/expr
                 ErrorExporter.invalidOperatorPtr("", node.linenr)
                 self.rejected = True
