@@ -63,14 +63,16 @@ def Processing(ast):
     cfv = ConstantFoldingVisitor()
     cfv.visit(ast)
 
+    ast_conv = ASTConversion2()
+    ast_conv.postorder(ast.root)
+
     v = ValueAdderVisitor()
     v.visit(ast)
 
     d = DotVisitor("output/debug2")  # Export AST in Dot
     d.visit(ast)
 
-    ast_conv = ASTConversion2()
-    ast_conv.postorder(ast.root)
+
 
     d = DotVisitor("output/debug1")  # Export AST in Dot
     d.visit(ast)
