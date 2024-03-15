@@ -169,6 +169,7 @@ class AST2LLVM(ASTVisitor):
 
     def handleAssignment(self, node: ASTNode):
         left_child = node.getChild(0)
+        print(left_child.text)
         store_reg = self.map_table.getEntry(left_child.text).llvm
         right_child = node.getChild(1)
         to_store_reg = self.llvm_map.get(right_child, None)
