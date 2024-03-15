@@ -61,7 +61,7 @@ def serializedATN():
         1,0,0,0,126,128,5,18,0,0,127,126,1,0,0,0,128,131,1,0,0,0,129,127,
         1,0,0,0,129,130,1,0,0,0,130,132,1,0,0,0,131,129,1,0,0,0,132,133,
         5,43,0,0,133,134,5,19,0,0,134,135,3,22,11,0,135,19,1,0,0,0,136,137,
-        5,1,0,0,137,138,3,14,7,0,138,139,5,2,0,0,139,140,3,24,12,0,140,21,
+        5,1,0,0,137,138,3,14,7,0,138,139,5,2,0,0,139,140,3,22,11,0,140,21,
         1,0,0,0,141,142,6,11,-1,0,142,159,3,24,12,0,143,144,5,1,0,0,144,
         145,3,14,7,0,145,146,5,2,0,0,146,147,3,22,11,15,147,159,1,0,0,0,
         148,149,5,1,0,0,149,150,3,22,11,0,150,151,5,2,0,0,151,159,1,0,0,
@@ -1028,8 +1028,8 @@ class expressionParser ( Parser ):
             return self.getTypedRuleContext(expressionParser.TypeContext,0)
 
 
-        def literal(self):
-            return self.getTypedRuleContext(expressionParser.LiteralContext,0)
+        def expr(self):
+            return self.getTypedRuleContext(expressionParser.ExprContext,0)
 
 
         def getRuleIndex(self):
@@ -1065,7 +1065,7 @@ class expressionParser ( Parser ):
             self.state = 138
             self.match(expressionParser.T__1)
             self.state = 139
-            self.literal()
+            self.expr(0)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
