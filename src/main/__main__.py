@@ -128,6 +128,7 @@ def main(argv,crashTest=False):
         d2.visit(ast.root.getSymbolTable())
 
     print("LLVM")
+    llvm_file="testfiles/basic_tests_123/proj2_man_pass_pointerReassignmentLLVM.ll"
 
     # the codegetter is used to add the original code as comments
     to_llvm = AST2LLVM(codegetter,llvm_file)

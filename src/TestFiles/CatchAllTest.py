@@ -16,8 +16,8 @@ class CatchAllTest(unittest.TestCase):
         path = "testfiles/"
         for root, dirs, filenames in os.walk(path):
             for file in filenames:
-                if file.endswith("c"):
-                    #print(root + "/" + file)
+                if file.endswith(".c"):
+                    print(root + "/" + file)
                     self.runAST(root + "/" + file)
 
 
