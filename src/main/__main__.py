@@ -60,14 +60,14 @@ def Processing(ast):
     constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
     constraint_checker.visit(ast)
 
-    #cfv = ConstantFoldingVisitor()
-    #cfv.visit(ast)
+    cfv = ConstantFoldingVisitor()
+    cfv.visit(ast)
 
     ast_conv = ASTConversion2()
     ast_conv.postorder(ast.root)
 
-    #v = ValueAdderVisitor()
-    #v.visit(ast)
+    v = ValueAdderVisitor()
+    v.visit(ast)
 
     d = DotVisitor("output/debug2")  # Export AST in Dot
     d.visit(ast)
