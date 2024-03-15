@@ -12,6 +12,11 @@ class LLVMSingleton:
         self.__last_function = None
         self.__current_block = None
 
+    def clear(self):
+        self.__module = ir.Module(name=__file__)
+        self.__last_function = None
+        self.__current_block = None
+
     @staticmethod
     def getInstance():
         if LLVMSingleton.__instance is None:

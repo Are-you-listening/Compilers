@@ -144,6 +144,8 @@ def main(argv,crashTest=False):
     control_dot = ControlFlowDotVisitor("output/ControlFlow")
     control_dot.visit(to_llvm.control_flow_graph.root)
 
+    LLVMSingleton.getInstance().clear()
+
 
 if __name__ == '__main__':
     main(sys.argv)
