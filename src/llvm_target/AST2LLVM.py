@@ -217,23 +217,19 @@ class AST2LLVM(ASTVisitor):
         for child in node.children[1:]:
             var_node = self.getVariableNode(child)
             if var_node is None:
-                print("Error: Unable to find variable node for argument.")
                 continue
 
             if isinstance(var_node, ASTNodeTerminal) and var_node.type == "IDENTIFIER":
                 llvm_var = self.map_table.getEntry(var_node.text).llvm
                 if llvm_var is not None:
                     args.append(llvm_var)
-                else:
-                    print(f"Error: LLVM IR representation not found for identifier {var_node.text}")
+
             elif isinstance(var_node, ASTNodeTerminal) and var_node.type in ("INT", "FLOAT", "CHAR"):
                 llvm_literal = self.llvm_map.get(var_node)
                 if llvm_literal is not None:
                     args.append(llvm_literal)
-                else:
-                    print(f"Error: LLVM IR representation not found for literal {var_node.text}")
-            else:
-                print(f"Error: Unsupported or unexpected argument type encountered: {var_node}")
+
+
 
         Printf.printf(formatSpecifier, *args)
 
