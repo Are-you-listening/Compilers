@@ -168,14 +168,21 @@ class AST2LLVM(ASTVisitor):
             f.write(str(LLVMSingleton.getInstance().getModule()))
 
     def handleAssignment(self, node: ASTNode):
+        """
+        handle assignment
+        :param node:
+        :return:
+        """
         left_child = node.getChild(0)
-        print(left_child.text)
-        store_reg = self.map_table.getEntry(left_child.text).llvm
+        store_reg = self.llvm_map.get(left_child, None)
+
+        if store_reg is None:
+            store_reg = self.map_table.getEntry(left_child.text).llvm
+
         right_child = node.getChild(1)
         to_store_reg = self.llvm_map.get(right_child, None)
+        llvm_var = Declaration.assignment(store_reg, to_store_reg, store_reg.align)
 
-        dt, ptr = left_child.getSymbolTable().getEntry(left_child.text).getPtrTuple()
-        llvm_var = Declaration.assignment(store_reg, to_store_reg, dt, ptr)
         self.llvm_map[node] = llvm_var
 
     def handleDereference(self, node: ASTNode):
@@ -263,7 +270,7 @@ class AST2LLVM(ASTVisitor):
             if operator in ("++", "--"):
                 super_child = child.getChild(0)
                 u = self.llvm_map[super_child]
-                Declaration.assignmentAlign(u, llvm_var, u.align)
+                Declaration.assignment(u, llvm_var, u.align)
 
             if post_incr:
                 llvm_var = child
