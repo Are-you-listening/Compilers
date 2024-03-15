@@ -5,7 +5,8 @@ import sys
 class EListener(ErrorListener):
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
         #        print("[ Syntax Error ] line " + str(line) + ":" + str(column) + " " + msg, file=sys.stderr)
-        print(f"[ Syntax Error ] line {line}:{column} invalid symbol: '{offendingSymbol.text}'")
+        print(f"[ Syntax Error ] line {line}:{column} invalid symbol: '{offendingSymbol.text}'", file=sys.stderr)
+        exit()
         #print(f"[ Syntax Error ] line {line}:{column} invalid symbol: '{offendingSymbol.text}'", file=sys.stderr)
 
 
