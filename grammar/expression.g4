@@ -1,15 +1,16 @@
 grammar expression;
-start_ : code EOF;
+start_ : (include)? code EOF;
 code: (function | line  | comment)*;
+include: '#include <stdio.h>';
 comment : MULTILINE | SINGLECOMMENT;
 function : type IDENTIFIER '(' ')' '{' code '}';
 line: (declaration | expr| assignment| typedef | printf )(';')+;
 typedef: 'typedef' type IDENTIFIER;
-printf: 'printf' '(' '"%s"' ',' (IDENTIFIER | literal) ')'
-        | 'printf' '(' '"%d"' ',' (IDENTIFIER | literal) ')'
-        | 'printf' '(' '"%x"' ',' (IDENTIFIER | literal) ')'
-        | 'printf' '(' '"%f"' ',' (IDENTIFIER | literal) ')'
-        | 'printf' '(' '"%c"' ',' (IDENTIFIER | literal) ')' ;
+printf: 'printf' '(' '"%s'('; ')?'"' ',' (expr) ')'
+        | 'printf' '(' '"%d'('; ')? '"' ',' (expr) ')'
+        | 'printf' '(' '"%x'('; ')?'"' ',' (expr) ')'
+        | 'printf' '(' '"%f'('; ')?'"' ',' (expr) ')'
+        | 'printf' '(' '"%c'('; ')?'"' ',' (expr) ')' ;
 type: ('const')? ('int' | 'char' | 'float' | IDENTIFIER) ('*')*;
 declaration: type IDENTIFIER ('=' expr)?;
 assignment: ('*')* IDENTIFIER ('=' expr);
