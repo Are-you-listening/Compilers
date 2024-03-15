@@ -4,6 +4,7 @@ import os
 import sys
 import logging
 import subprocess
+from src.llvm_target.LLVMSingleton import *
 
 
 class CatchAllTest(unittest.TestCase):
@@ -23,8 +24,11 @@ class CatchAllTest(unittest.TestCase):
 
 
     def runAST(self, file_name):
-        # Specify filenames we don't want to run
-        if file_name in ["testfiles/basic_tests_123/proj2_man_pass_advancedPointerOperations.c"]:
+
+        LLVMSingleton.getInstance().clear()
+
+        # Specify filenames we don't want to run for now
+        if file_name in [""]:
             return
 
         # Specify filenames with syntaxt errors
