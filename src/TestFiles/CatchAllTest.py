@@ -49,15 +49,14 @@ class CatchAllTest(unittest.TestCase):
             main([0, "--input", file_name, "--render_ast", file_name[:-2]+"ASTVisual", "--render_symb", file_name[
                                                                                                         :-2] + "SymbolTable",
                                                                          "--target_llvm", file_name[:-2] + "LLVM.ll"], True)
+
+            if len(out.stderr) >= 1:
+                valid = False
+
         except:
 
             if len(out.stderr) == 0:
                 valid = False
-            else:
-
-                print(str(out.stderr))
-                print("vs")
-                print("-------------")
 
         if not valid:
             exit(1)
