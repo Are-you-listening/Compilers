@@ -20,8 +20,9 @@ class DotVisitor(ASTVisitor):
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         label = node.text
-        if label[0] == '\"' and label[1] == '%':
-            label = "%" + label[2]
+        label= label.replace('\"', "")
+
+
 
         if node.text == "'\x00'":
             label = '\\000'

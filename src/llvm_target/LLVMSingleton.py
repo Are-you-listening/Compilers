@@ -10,12 +10,12 @@ class LLVMSingleton:
 
         self.__module = ir.Module(name=__file__)
         self.__last_function = None
-        self.__current_block = None
+        self.__current_block = self.__module
 
     def clear(self):
         self.__module = ir.Module(name=__file__)
         self.__last_function = None
-        self.__current_block = None
+        self.__current_block = self.__module
 
     @staticmethod
     def getInstance():
