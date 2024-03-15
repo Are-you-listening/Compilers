@@ -196,10 +196,13 @@ class Calculation:
 class Printf:
     @staticmethod
     def printf(format_specifier: str, *args):
-        module = LLVMSingleton.getInstance().getModule()
-        voidptr_ty = ir.IntType(8).as_pointer()
-        printf_ty = ir.FunctionType(ir.IntType(32), [voidptr_ty], var_arg=True)
-        printf = ir.Function(module, printf_ty, name="printf")
+        if LLVMSingleton.getInstance().getPrintF() == None:
+            module = LLVMSingleton.getInstance().getModule()
+            voidptr_ty = ir.IntType(8).as_pointer()
+            printf_ty = ir.FunctionType(ir.IntType(32), [voidptr_ty], var_arg=True)
+            printf = ir.Function(module, printf_ty, name="printf")
+            LLVMSingleton.getInstance().setPrintF(printf)
+
 
         current_function = LLVMSingleton.getInstance().getLastFunction()
         block = current_function.append_basic_block("printf_block")
@@ -231,7 +234,7 @@ class Printf:
         """
         args_values = [format_str_ptr] + [builder.load(arg_alloca) for arg_alloca in args_alloca]
 
-        printf_call = builder.call(printf, args_values)
+        printf_call = builder.call(LLVMSingleton.getInstance().getPrintF(), args_values)
 
         return printf_call
 

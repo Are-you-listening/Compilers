@@ -10,13 +10,12 @@ class LLVMSingleton:
 
         self.__module = ir.Module(name=__file__)
         self.__last_function = None
-
+        self.__Printf = None
         self.__current_block = ir.IRBuilder(ir.Block(self.__module))
 
     def clear(self):
-        self.__module = ir.Module(name=__file__)
-        self.__last_function = None
-        self.__current_block = ir.IRBuilder(ir.Block(self.__module))
+        self.__instance = None
+        self.__init__()
 
     @staticmethod
     def getInstance():
@@ -39,7 +38,11 @@ class LLVMSingleton:
         new_block = self.__last_function.append_basic_block()
         self.__current_block = ir.IRBuilder(new_block)
 
+    def setPrintF(self, printffunction):
+        self.__Printf = printffunction
 
+    def getPrintF(self):
+        return self.__Printf
 
     def getLastFunction(self):
             return self.__last_function
