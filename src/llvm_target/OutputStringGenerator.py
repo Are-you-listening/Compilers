@@ -35,6 +35,21 @@ class UnaryWrapper:
         llvm_var = block.zext(llvm_var, llvm_type)
         return llvm_var
 
+    @staticmethod
+    def Incr(llvm_var):
+        if llvm_var.type.is_pointer:
+            llvm_var = Calculation.operation(llvm_var, ir.Constant(ir.IntType(64), 1), "+")
+        else:
+            llvm_var = Calculation.operation(llvm_var, ir.Constant(llvm_var.type, 1), "+")
+        return llvm_var
+
+    @staticmethod
+    def Decr(llvm_var):
+        if llvm_var.type.is_pointer:
+            llvm_var = Calculation.operation(llvm_var, ir.Constant(ir.IntType(64), 1), "-")
+        else:
+            llvm_var = Calculation.operation(llvm_var, ir.Constant(llvm_var.type, 1), "-")
+        return llvm_var
 
 class CTypesToLLVM:
     @staticmethod
@@ -152,7 +167,9 @@ class Calculation:
             if operator == "-":  # Add a subtract
                 Calculation.operation(right, right, operator)
 
-            new_value = block.gep(left, [right], True) # Create the gep instruction
+            print(operator)
+
+            new_value = block.gep(left, [right], True)  # Create the gep instruction
             return new_value
 
         else:
@@ -175,18 +192,21 @@ class Calculation:
 
         op_translate_float = {"-": UnaryWrapper.fNeg,
                               "+": UnaryWrapper.Plus,
-                              "++": lambda llvm_var: Calculation.operation(llvm_var, ir.Constant(llvm_var.type, 1), "+")
+                              "++": UnaryWrapper.Incr,
+                              "--": UnaryWrapper.Decr
                               }
 
         op_translate = {"-": UnaryWrapper.Min,
                         "+": UnaryWrapper.Plus,
                         "~": UnaryWrapper.BitNot,
                         "!": UnaryWrapper.LogicalNot,
-                        "++": lambda llvm_var: Calculation.operation(llvm_var, ir.Constant(llvm_var.type, 1), "+")
+                        "++": UnaryWrapper.Incr,
+                        "--": UnaryWrapper.Decr
                         }
 
         if llvm_val.type == ir.FloatType():
             llvm_op = op_translate_float.get(op, None)
+        #elif llvm_val.type
         else:
             llvm_op = op_translate.get(op, None)
 
