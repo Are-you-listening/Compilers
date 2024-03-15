@@ -76,16 +76,7 @@ class Declaration:
         return new_function
 
     @staticmethod
-    def assignment(store_register: int, value: int, data_type: str, ptrs: str):
-
-        block = LLVMSingleton.getInstance().getCurrentBlock()
-        llvm_val = block.store(value, store_register)
-
-        llvm_val.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
-        return llvm_val
-
-    @staticmethod
-    def assignmentAlign(store_register: int, value: int, align: int):
+    def assignment(store_register: int, value: int, align: int):
 
         block = LLVMSingleton.getInstance().getCurrentBlock()
         llvm_val = block.store(value, store_register)
@@ -243,9 +234,6 @@ class Printf:
         printf_call = builder.call(printf, args_values)
 
         return printf_call
-
-
-
 
 class Conversion:
     @staticmethod
