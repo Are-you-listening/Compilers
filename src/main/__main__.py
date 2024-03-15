@@ -60,22 +60,19 @@ def Processing(ast):
     constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
     constraint_checker.visit(ast)
 
-    cfv = ConstantFoldingVisitor()
-    cfv.visit(ast)
+    #cfv = ConstantFoldingVisitor()
+    #cfv.visit(ast)
 
     ast_conv = ASTConversion2()
     ast_conv.postorder(ast.root)
 
-    v = ValueAdderVisitor()
-    v.visit(ast)
+    #v = ValueAdderVisitor()
+    #v.visit(ast)
 
     d = DotVisitor("output/debug2")  # Export AST in Dot
     d.visit(ast)
 
 
-
-    d = DotVisitor("output/debug1")  # Export AST in Dot
-    d.visit(ast)
 
     return ast
 
@@ -131,8 +128,9 @@ def main(argv,crashTest=False):
         d2.visit(ast.root.getSymbolTable())
 
     print("LLVM")
+
     # the codegetter is used to add the original code as comments
-    to_llvm = AST2LLVM(codegetter)
+    to_llvm = AST2LLVM(codegetter,llvm_file)
     to_llvm.visit(ast)
 
     control_dot = ControlFlowDotVisitor("output/ControlFlow")

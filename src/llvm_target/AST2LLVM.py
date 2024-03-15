@@ -11,10 +11,11 @@ class AST2LLVM(ASTVisitor):
     Visitor to visualize the AST tree using dot
     """
 
-    def __init__(self, codegetter : CodeGetter):
+    def __init__(self, codegetter : CodeGetter, fileName):
         self.map_table = MapTable(None)
         self.codegetter = codegetter
         self.llvm_map = {}
+        self.fileName = fileName
         self.control_flow_graph = ControlFlowGraph()
 
     def visit(self, ast: AST):
@@ -163,7 +164,7 @@ class AST2LLVM(ASTVisitor):
     def __del__(self):
         print(LLVMSingleton.getInstance().getModule())
 
-        with open('output/output.ll', 'w') as f:
+        with open(self.fileName, 'w') as f:
             f.write(str(LLVMSingleton.getInstance().getModule()))
 
     def handleAssignment(self, node: ASTNode):
