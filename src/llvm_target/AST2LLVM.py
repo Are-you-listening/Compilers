@@ -162,7 +162,7 @@ class AST2LLVM(ASTVisitor):
             self.handleAssignment(node)
 
     def __del__(self):
-        print(LLVMSingleton.getInstance().getModule())
+        #print(LLVMSingleton.getInstance().getModule())
         with open(self.fileName, 'w') as f:
             f.write(str(LLVMSingleton.getInstance().getModule()))
 
