@@ -60,7 +60,7 @@ class IdentifierReplacerVisitor(ASTVisitor):
                             break
 
                 else:
-                    ErrorExporter.uninitializedVariable(toReplace)
+                    ErrorExporter.uninitializedVariable(toReplace,node.linenr)
                     break
             else:
                 # print("variable is not const -> not replacing")
