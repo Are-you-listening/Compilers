@@ -6,11 +6,7 @@ comment : MULTILINE | SINGLECOMMENT;
 function : type IDENTIFIER '(' ')' '{' code '}';
 line: (declaration | expr| assignment| typedef | printf )(';')+;
 typedef: 'typedef' type IDENTIFIER;
-printf: 'printf' '(' '"%s'('; ')?'"' ',' (expr) ')'
-        | 'printf' '(' '"%d'('; ')? '"' ',' (expr) ')'
-        | 'printf' '(' '"%x'('; ')?'"' ',' (expr) ')'
-        | 'printf' '(' '"%f'('; ')?'"' ',' (expr) ')'
-        | 'printf' '(' '"%c'('; ')?'"' ',' (expr) ')' ;
+printf: 'printf' '(' '"' ('%s' | '%d' | '%x' | '%f' | '%c') (';')? '"' ',' (expr) ')';
 type: ('const')? ('int' | 'char' | 'float' | IDENTIFIER) ('*')*;
 declaration: type IDENTIFIER ('=' expr)?;
 assignment: ('*')* IDENTIFIER ('=' expr);
