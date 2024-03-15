@@ -1,6 +1,7 @@
 from src.parser.ASTVisitor import *
 from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
 from src.parser.IdentifierReplacerVisitor import IdentifierReplacerVisitor
+from src.parser.CTypes.COperationHandler import *
 
 
 class ValueAdderVisitor(ASTVisitor):
@@ -22,6 +23,15 @@ class ValueAdderVisitor(ASTVisitor):
         # so we only do replacements on the left side and don't change anything in the symbol table
         if (val.text not in ("Expr", "Dereference", "Conversion")) and (ident.text != "Dereference"):
             entry = ident.getSymbolTable().symbols[ident.text]
+            convertdict = {
+                "INT" : CFunctionExecuterInt(),
+                "FLOAT" : CFunctionExecuterFloat(),
+                "CHAR" : CFunctionExecuterChar()
+            }
+            converter = convertdict[val.type]
+            ST = node.getSymbolTable().getEntry(ident.text)
+            newval = converter.convertTo(val.text, ST.typeObject.data_type)
+            val.text = newval
             entry.value = val
         else:
             # replace all the identifiers in the RHS with their symbol table value
