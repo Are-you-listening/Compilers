@@ -153,6 +153,7 @@ class Calculation:
             llvm_op = op_translate_float.get(operator, "")
             llvm_var = llvm_op(left, right)
             return llvm_var
+
         elif left.type.is_pointer and operator in ["+", "-"]:
             if not isinstance(right, ir.Constant):  # If it is no constant, LLVM requires a sign extend to match the size
                 right = block.sext(right, ir.IntType(64))
