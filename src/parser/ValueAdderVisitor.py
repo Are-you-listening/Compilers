@@ -33,7 +33,6 @@ class ValueAdderVisitor(ASTVisitor):
             if val.type not in convertdict.keys():
                 return
 
-            print(val.type, val.text)
             converter = convertdict[val.type]
             ST = node.getSymbolTable().getEntry(ident.text)
             newval = converter.convertTo(val.text, ST.typeObject.data_type)
