@@ -30,7 +30,7 @@ class ValueAdderVisitor(ASTVisitor):
                 "CHAR" : CFunctionExecuterChar()
             }
 
-            if val.type in convertdict.keys():
+            if val.type in convertdict.keys() and entry.typeObject in convertdict:
                 converter = convertdict[val.type]
                 ST = node.getSymbolTable().getEntry(ident.text)
                 newval = converter.convertTo(val.text, ST.typeObject.data_type)
