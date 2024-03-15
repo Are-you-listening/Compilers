@@ -88,10 +88,10 @@ class _Conversions:
     @staticmethod
     def ToInt(value):
         """assume 4 bytes/ int"""
-        value = int(value)
+        value = int(math.floor(float(value)))
         b = value.to_bytes(32, byteorder="big", signed=True)
         b = b[-4:]
-        return int.from_bytes(b, 'big', signed=True)
+        return str(int.from_bytes(b, 'big', signed=True))
 
 
 class CFunctionExecuterFloat(CFunctionExecuter):
