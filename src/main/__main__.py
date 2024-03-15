@@ -138,14 +138,12 @@ def main(argv,crashTest=False):
         d2.visit(ast.root.getSymbolTable())
 
     # the codegetter is used to add the original code as comments
-    to_llvm = AST2LLVM(codegetter,llvm_file)
+    to_llvm = AST2LLVM(codegetter, llvm_file)
     to_llvm.visit(ast)
 
     control_dot = ControlFlowDotVisitor("output/ControlFlow")
     control_dot.visit(to_llvm.control_flow_graph.root)
 
-    LLVMSingleton.getInstance().clear()
-
-
 if __name__ == '__main__':
     main(sys.argv)
+    LLVMSingleton.getInstance().clear()
