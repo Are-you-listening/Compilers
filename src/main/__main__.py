@@ -107,7 +107,7 @@ def main(argv,crashTest=False):
     symbol_file = "output/SymbolTablevisual"
     llvm_dot_file = "output/LLVM"
     llvm_map_file = "output/LLVMMap"
-    llvm_file = None
+    llvm_file = "output/output.llvm"
     mips_file = None
 
     for arg_index in range(1, len(argv), 2):  # Retrieve correct arguments
