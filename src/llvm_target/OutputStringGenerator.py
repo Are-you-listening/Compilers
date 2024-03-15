@@ -96,6 +96,7 @@ class Declaration:
     @staticmethod
     def addComment(text: str):
         block = LLVMSingleton.getInstance().getCurrentBlock()
+        print("main fixed", text)
         block.comment(text)
 
 

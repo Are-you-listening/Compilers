@@ -35,6 +35,9 @@ def cleanGreen(input_file, dot_file, crashtest,symbol_file, codegetter):
     toAST.visit(tree)
     ast = toAST.getAST()
 
+    d = DotVisitor("output/debug5")  # Export AST in Dot
+    d.visit(ast)
+
     codegetter.visit(ast)
 
     astcleaner = ASTCleaner()  # Do a standard cleaning
@@ -59,9 +62,6 @@ def Processing(ast):
 
     constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
     constraint_checker.visit(ast)
-
-    d = DotVisitor("output/debug0")  # Export AST in Dot
-    d.visit(ast)
 
     cfv = ConstantFoldingVisitor()
     cfv.visit(ast)

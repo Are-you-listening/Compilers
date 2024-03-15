@@ -17,7 +17,7 @@ class CodeGetter(ASTVisitor):
             self.codelines[node.linenr] = node.text
         pass
 
-    def getLine(self, node: ASTNodeTerminal):
+    def getLine(self, node: ASTNode):
         lineNR = node.linenr
         if node.linenr in self.codelines:
             return self.codelines[lineNR]
