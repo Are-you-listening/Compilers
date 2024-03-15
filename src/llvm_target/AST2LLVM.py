@@ -169,12 +169,22 @@ class AST2LLVM(ASTVisitor):
 
     def handleAssignment(self, node: ASTNode):
         left_child = node.getChild(0)
-        store_reg = self.map_table.getEntry(left_child.text).llvm
-        right_child = node.getChild(1)
-        to_store_reg = self.llvm_map.get(right_child, None)
 
-        dt, ptr = left_child.getSymbolTable().getEntry(left_child.text).getPtrTuple()
-        llvm_var = Declaration.assignment(store_reg, to_store_reg, dt, ptr)
+        store_reg = self.llvm_map.get(left_child, None)
+        if store_reg is None:
+            store_reg = self.map_table.getEntry(left_child.text).llvm
+
+            right_child = node.getChild(1)
+            to_store_reg = self.llvm_map.get(right_child, None)
+
+            dt, ptr = left_child.getSymbolTable().getEntry(left_child.text).getPtrTuple()
+            llvm_var = Declaration.assignment(store_reg, to_store_reg, dt, ptr)
+
+        else:
+            right_child = node.getChild(1)
+            to_store_reg = self.llvm_map.get(right_child, None)
+            llvm_var = Declaration.assignmentAlign(store_reg, to_store_reg, store_reg.align)
+
         self.llvm_map[node] = llvm_var
 
     def handleDereference(self, node: ASTNode):

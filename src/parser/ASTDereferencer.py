@@ -9,7 +9,17 @@ class ASTDereferencer(ASTVisitor):
     def __init__(self):
         pass
 
+    def visit(self, ast: AST):
+        root = ast.root
+        self.postorder(root)
+
     def visitNode(self, node: ASTNode):
+        if node.text in ("Declaration", "Function", "Assignment"):
+            left_child = node.getChild(0)
+            if left_child.text == "Dereference":
+                super_child = left_child.getChild(0)
+                node.replaceChild(left_child, super_child)
+
         if node.text != "Expr":
             return
 
@@ -18,8 +28,6 @@ class ASTDereferencer(ASTVisitor):
 
         left_child = node.getChild(0)
         right_child = node.getChild(1)
-
-
 
         if left_child.text == "*":
             # if right_child.text == "Expr" or node.symbol_table.getEntry(right_child.text) == None: # This operation is only applicapble on a single identifier, not on a literal or expr/rvalue
@@ -43,12 +51,6 @@ class ASTDereferencer(ASTVisitor):
         if node.type != "IDENTIFIER":
             return
 
-        if node.parent.text in ("Declaration", "Function") and node.parent.findChild(node) == 0:
-            return
-
-        if node.parent.text == "Assignment" and node.parent.findChild(node) == 0:
-            return
-
         sibling_before = node.getSiblingNeighbour(-1)
 
         if sibling_before is None:
@@ -60,7 +62,7 @@ class ASTDereferencer(ASTVisitor):
             return
 
         """removes the de reference sign"""
-        if sibling_before.text == "&"  and node.getSiblingNeighbour(-2) is None:
+        if sibling_before.text == "&" and node.getSiblingNeighbour(-2) is None:
 
 
             parent = node.parent
