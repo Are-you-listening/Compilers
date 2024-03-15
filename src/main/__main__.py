@@ -35,7 +35,7 @@ def cleanGreen(input_file, dot_file, crashtest,symbol_file, codegetter):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    d = DotVisitor("output/debug5")  # Export AST in Dot
+    d = DotVisitor("output/debugA0")  # Export AST in Dot
     d.visit(ast)
 
     codegetter.visit(ast)
@@ -62,6 +62,9 @@ def Processing(ast):
 
     constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
     constraint_checker.visit(ast)
+
+    d = DotVisitor("output/debug0")  # Export AST in Dot
+    d.visit(ast)
 
     cfv = ConstantFoldingVisitor()
     cfv.visit(ast)
@@ -133,9 +136,6 @@ def main(argv,crashTest=False):
 
         d2 = TableDotVisitor(symbol_file, False)  # Export Symbol Table
         d2.visit(ast.root.getSymbolTable())
-
-    print("LLVM")
-    llvm_file="testfiles/basic_tests_123/proj2_man_pass_pointerReassignmentLLVM.ll"
 
     # the codegetter is used to add the original code as comments
     to_llvm = AST2LLVM(codegetter,llvm_file)
