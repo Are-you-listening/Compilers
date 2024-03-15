@@ -77,7 +77,6 @@ class ASTConversion2(ASTVisitor):
                 else:
                     # Handle errors
                     if (len(current_poorest_ptrs) >= 2 and data_type == "FLOAT" and len(ptrs) == 0):
-                        print(ptrs)
                         ErrorExporter.invalidOperation(node.linenr, "", "PTR", "FLOAT")
                         """
                         This type of warnings is at the moment not fully implementable without a proper distinction between int b; int* ptr = &b; and int* ptr = b;
