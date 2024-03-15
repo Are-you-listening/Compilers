@@ -30,13 +30,12 @@ class ValueAdderVisitor(ASTVisitor):
                 "CHAR" : CFunctionExecuterChar()
             }
 
-            if val.type not in convertdict.keys():
-                return
+            if val.type in convertdict.keys():
+                converter = convertdict[val.type]
+                ST = node.getSymbolTable().getEntry(ident.text)
+                newval = converter.convertTo(val.text, ST.typeObject.data_type)
+                val.text = newval
 
-            converter = convertdict[val.type]
-            ST = node.getSymbolTable().getEntry(ident.text)
-            newval = converter.convertTo(val.text, ST.typeObject.data_type)
-            val.text = newval
             entry.value = val
         else:
             # replace all the identifiers in the RHS with their symbol table value
