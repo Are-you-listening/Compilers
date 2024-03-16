@@ -167,8 +167,6 @@ class Calculation:
             if operator == "-":  # Add a subtract
                 Calculation.operation(right, right, operator)
 
-            print(operator)
-
             new_value = block.gep(left, [right], True)  # Create the gep instruction
             return new_value
 

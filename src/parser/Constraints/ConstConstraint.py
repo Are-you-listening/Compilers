@@ -15,9 +15,11 @@ class ConstConstraint(Constraint):
     def checkNode(self, node: ASTNode):
         self.node = node
         if node.text == "Assignment":
-            if node.symbol_table.getEntry(node.getChild(0).text) != None and node.symbol_table.getEntry(
-                    node.getChild(0).text).const:
-                self.rejected = True
+            entry = node.symbol_table.getEntry(
+                node.getChild(0).text)
+            if node.symbol_table.getEntry(node.getChild(0).text) != None and entry.const:
+                if entry.getType() != "PTR":
+                    self.rejected = True
         elif node.text == "Dereference":
             UnaryOps = ["++", "--"]
 
