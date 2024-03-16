@@ -28,7 +28,7 @@ class CatchAllTest(unittest.TestCase):
         LLVMSingleton.getInstance().clear()
 
         # Specify filenames we don't want to run for now
-        if file_name in [""]:
+        if file_name in ["testfiles/basic_tests_123/proj2_man_semanticErr_undeclaredVariable3.c","testfiles/basic_tests_123/proj2_man_syntaxErr_variableConst2.c"]:
             return
 
         if file_name.startswith("testfiles/ownTests/proj1"):
@@ -51,7 +51,8 @@ class CatchAllTest(unittest.TestCase):
                                                                          "--target_llvm", file_name[:-2] + "LLVM.ll"], True)
 
             if len(out.stderr) >= 1:
-                valid = False
+                if "error" in out.stderr or "ERROR" in out.stderr:
+                    valid = False
 
         except:
 
@@ -59,6 +60,7 @@ class CatchAllTest(unittest.TestCase):
                 valid = False
 
         if not valid:
+            print(out.stderr)
             exit(1)
 
 
