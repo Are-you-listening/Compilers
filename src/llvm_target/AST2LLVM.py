@@ -1,4 +1,3 @@
-from src.parser.ASTVisitor import *
 from src.llvm_target.OutputStringGenerator import *
 from src.llvm_target.MapTable.MapTable import *
 from src.llvm_target.ControlFlow.ControlFlowGraph import *
@@ -11,7 +10,7 @@ class AST2LLVM(ASTVisitor):
     Visitor to visualize the AST tree using dot
     """
 
-    def __init__(self, codegetter : CodeGetter, fileName):
+    def __init__(self, codegetter: CodeGetter, fileName):
         self.map_table = MapTable(None)
         self.codegetter = codegetter
         self.llvm_map = {}
@@ -162,7 +161,7 @@ class AST2LLVM(ASTVisitor):
             self.handleAssignment(node)
 
     def __del__(self):
-        #print(LLVMSingleton.getInstance().getModule())
+        # print(LLVMSingleton.getInstance().getModule())
         with open(self.fileName, 'w') as f:
             f.write(str(LLVMSingleton.getInstance().getModule()))
 
@@ -228,8 +227,6 @@ class AST2LLVM(ASTVisitor):
                 llvm_literal = self.llvm_map.get(var_node)
                 if llvm_literal is not None:
                     args.append(llvm_literal)
-
-
 
         Printf.printf(formatSpecifier, *args)
 
@@ -301,7 +298,6 @@ class AST2LLVM(ASTVisitor):
 
         converted_var = Conversion.performConversion(llvm_var, to_type)
 
-
         self.llvm_map[node] = converted_var
 
     def getConversionType(self, type_node: ASTNode):
@@ -312,10 +308,7 @@ class AST2LLVM(ASTVisitor):
         if type_node.getChildAmount() > 1:
             type_text = type_node.children[1].text
 
-
         return type_text
-
-
 
     def addOriginalCodeAsComment(self, node: ASTNode):
         """
@@ -342,4 +335,3 @@ class AST2LLVM(ASTVisitor):
         llvm_var = Calculation.operation(var, llvm_zero, "!=")
 
         return llvm_var
-

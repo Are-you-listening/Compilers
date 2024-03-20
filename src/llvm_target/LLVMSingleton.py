@@ -38,20 +38,17 @@ class LLVMSingleton:
         new_block = self.__last_function.append_basic_block()
         self.__current_block = ir.IRBuilder(new_block)
 
-    def setPrintF(self, printffunction):
-        self.__Printf = printffunction
+    def setPrintF(self, printfFunction):
+        self.__Printf = printfFunction
 
     def getPrintF(self):
         return self.__Printf
 
     def getLastFunction(self):
-            return self.__last_function
+        return self.__last_function
 
     def setCurrentBlock(self, block: ir.IRBuilder):
         self.__current_block = block
 
     def removeBlock(self, builder):
         self.__last_function.blocks.remove(builder.block)
-
-
-

@@ -1,5 +1,3 @@
-import llvmlite.ir.types
-
 from src.llvm_target.LLVMSingleton import LLVMSingleton
 from llvmlite import ir
 
@@ -50,6 +48,7 @@ class UnaryWrapper:
         else:
             llvm_var = Calculation.operation(llvm_var, ir.Constant(llvm_var.type, 1), "-")
         return llvm_var
+
 
 class CTypesToLLVM:
     @staticmethod
@@ -161,10 +160,11 @@ class Calculation:
             return llvm_var
 
         elif left.type.is_pointer and operator in ["+", "-"]:
-            if not isinstance(right, ir.Constant):  # If it is no constant, LLVM requires a sign extend to match the size
+            if not isinstance(right,
+                              ir.Constant):  # If it is not a constant, LLVM requires a sign extend to match the size
                 right = block.sext(right, ir.IntType(64))
 
-            if operator == "-":  # Add a subtract
+            if operator == "-":  # Add subtract
                 Calculation.operation(right, right, operator)
 
             new_value = block.gep(left, [right], True)  # Create the gep instruction
@@ -181,9 +181,8 @@ class Calculation:
             """
             convert 1 bit to 32 bit
             """
-            llvm_var = block.zext(llvm_var, left.type)
+            llvm_var = block.zext(llvm_var, ir.IntType(32))
             return llvm_var
-
 
     @staticmethod
     def unary(llvm_val, op: str):
@@ -204,7 +203,7 @@ class Calculation:
 
         if llvm_val.type == ir.FloatType():
             llvm_op = op_translate_float.get(op, None)
-        #elif llvm_val.type
+        # elif llvm_val.type
         else:
             llvm_op = op_translate.get(op, None)
 
@@ -214,13 +213,12 @@ class Calculation:
 class Printf:
     @staticmethod
     def printf(format_specifier: str, *args):
-        if LLVMSingleton.getInstance().getPrintF() == None:
+        if LLVMSingleton.getInstance().getPrintF() is None:
             module = LLVMSingleton.getInstance().getModule()
             voidptr_ty = ir.IntType(8).as_pointer()
             printf_ty = ir.FunctionType(ir.IntType(32), [voidptr_ty], var_arg=True)
             printf = ir.Function(module, printf_ty, name="printf")
             LLVMSingleton.getInstance().setPrintF(printf)
-
 
         current_function = LLVMSingleton.getInstance().getLastFunction()
         block = current_function.append_basic_block("printf_block")
@@ -256,6 +254,7 @@ class Printf:
 
         return printf_call
 
+
 class Conversion:
     @staticmethod
     def performConversion(llvm_var, to_type):
@@ -272,13 +271,3 @@ class Conversion:
             return block.zext(llvm_var, ir.IntType(32))
         else:
             return llvm_var
-
-
-
-
-
-
-
-
-
-

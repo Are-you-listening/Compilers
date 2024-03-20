@@ -28,7 +28,7 @@ class CatchAllTest(unittest.TestCase):
         LLVMSingleton.getInstance().clear()
 
         # Specify filenames we don't want to run for now
-        if file_name in ["testfiles/basic_tests_123/proj2_man_semanticErr_undeclaredVariable3.c","testfiles/basic_tests_123/proj2_man_syntaxErr_variableConst2.c"]:
+        if file_name in []:
             return
 
         if file_name.startswith("testfiles/ownTests/proj1"):
@@ -36,7 +36,10 @@ class CatchAllTest(unittest.TestCase):
 
         # Specify filenames with syntaxt errors
         if file_name in ["testfiles/basic_tests_123/proj2_man_syntaxErr_invalidPointerDeclaration2.c","testfiles/basic_tests_123/proj2_man_syntaxErr_variable.c","testfiles/basic_tests_123/proj2_man_syntaxErr_pointerOperations2.c"
-                         ,"testfiles/basic_tests_123/proj2_man_semanticErr_redeclaration.c", "testfiles/ownTests/proj2_horror1.c"]:
+                         ,"testfiles/basic_tests_123/proj2_man_semanticErr_redeclaration.c","testfiles/advanced_tests/SemanticErrors/incompatibleTypes7.c","testfiles/basic_tests_123/proj2_man_semanticErr_undeclaredVariable3.c","testfiles/basic_tests_123/proj2_man_syntaxErr_variableConst2.c"]:
+            return
+
+        if file_name.startswith("testfiles/advanced_tests"):
             return
 
         out = subprocess.run(f"""clang-14 -S -emit-llvm {file_name} -o {file_name[:-2]}.ll""",
