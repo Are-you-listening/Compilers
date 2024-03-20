@@ -1,6 +1,7 @@
 import os
 import filecmp
 import unittest
+import subprocess
 from src.main.__main__ import main
 from src.llvm_target.LLVMSingleton import *
 
@@ -52,4 +53,7 @@ class CompareAll(unittest.TestCase):
 
         # Create LLVM file
         main([0, "--input", file_name, "--render_ast", file_name[:-2] + "ASTVisual", "--render_symb", file_name[:-2] + "SymbolTable",
-              "--target_llvm", file_name[:-2] + "LLVM.ll"])
+              "--target_llvm", file_name[:-2] + "LLVM.ll", "--fold", False], False)
+
+        subprocess.run(f"""clang-14 -S -emit-llvm {file_name} -o {file_name[:-2]}.ll""",
+                             shell=True, capture_output=True)

@@ -15,7 +15,7 @@ from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
 from src.parser.CodeGetter import *
 
 
-def cleanGreen(input_file, dot_file, symbol_file, codegetter):
+def cleanGreen(input_file, symbol_file, codegetter):
     """
     Standard function to generate parseTree & Export it to Dot
     :param input_file:
@@ -51,18 +51,16 @@ def cleanGreen(input_file, dot_file, symbol_file, codegetter):
     s = TableDotVisitor(symbol_file)
     s.visit(ast.root.getSymbolTable())
 
-    d = DotVisitor(dot_file)  # Export AST in Dot
-    d.visit(ast)
-
     return ast
 
 
-def Processing(ast):
+def Processing(ast, dot_file, fold):
     constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
     constraint_checker.visit(ast)
 
-    cfv = ConstantFoldingVisitor()
-    cfv.visit(ast)
+    if fold:
+        cfv = ConstantFoldingVisitor()
+        cfv.visit(ast)
 
     v = ValueAdderVisitor()
     v.visit(ast)
@@ -70,21 +68,28 @@ def Processing(ast):
     ast_conv = ASTConversion2()
     ast_conv.postorder(ast.root)
 
+    d = DotVisitor(dot_file)  # Export AST in Dot
+    d.visit(ast)
+
     return ast
 
 
-def main(argv):
+def main(argv, clang=False):
     """
     Main function to start program
     :param argv: Argument list as defined in the project description
+    :param fold:
+    :param clang:
     :return:
     """
 
     input_file = "example_source_files/file0"  # Define some standard variables & settings
     dot_file = "output/ASTvisual"
     symbol_file = "output/SymbolTablevisual"
-    llvm_file = "output/output.llvm"
+    llvm_file = "output/output.ll"
     mips_file = None
+    clang_file = "output/outputClang.ll"
+    fold = True
 
     for arg_index in range(1, len(argv), 2):  # Retrieve correct arguments
         param = argv[arg_index]
@@ -99,10 +104,17 @@ def main(argv):
             llvm_file = arg
         elif param == "--target_mips":
             mips_file = arg
+        elif param == "--fold":
+            if arg != 'True':
+                fold = False
+
+    if clang:  # Generate a reference clang file
+        subprocess.run(f"""clang-14 -S -emit-llvm {input_file} -o {clang_file}""",
+                       shell=True, capture_output=True)
 
     codegetter = CodeGetter()  # Link each line of code to a line number
-    ast = cleanGreen(input_file, dot_file, symbol_file, codegetter)  # Start AST cleanup & Dot Conversion
-    Processing(ast)  # Check for Errors , Apply Folding Techniques , ...
+    ast = cleanGreen(input_file, symbol_file, codegetter)  # Start AST cleanup & Dot Conversion
+    Processing(ast, dot_file, fold)  # Check for Errors , Apply Folding Techniques , ...
 
     to_llvm = AST2LLVM(codegetter, llvm_file)  # The codegetter is used to add the original code as comments
     to_llvm.visit(ast)
