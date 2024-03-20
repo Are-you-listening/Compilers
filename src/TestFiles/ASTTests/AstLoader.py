@@ -97,6 +97,7 @@ class AstLoader:
         AstLoader.__make_dict(ast_node, ast_node_list, ast_tree, symbol_tables, ast_to_id_map)
         symbol_tables_json = AstLoader.__make_json_symbol_table(symbol_tables, ast_to_id_map)
         json_file = json.dumps({"ast": ast_tree, "symbol_tables": symbol_tables_json, "ast_table": ast_node_list})
+
         return json_file
 
     @staticmethod
@@ -142,7 +143,7 @@ class AstLoader:
                 symbol_entry_dict["type"] = symbol_entry.getPtrTuple()
                 symbol_entry_dict["name"] = symbol_entry.name
                 symbol_entry_dict["const"] = symbol_entry.const
-                symbol_entry_dict["value"] = symbol_entry.value
+                symbol_entry_dict["value"] = ast_to_id_map.get(symbol_entry.value, None)
 
                 symbol_entry_dict["firstDeclared"] = ast_to_id_map.get(symbol_entry.firstDeclared)
                 symbol_entry_dict["firstUsed"] = ast_to_id_map.get(symbol_entry.firstUsed)
@@ -152,7 +153,10 @@ class AstLoader:
             if symbol_table.prev is None:
                 prev = None
             else:
-                prev = symbol_tables.index(symbol_table.prev)
+                if symbol_table.prev in symbol_tables:
+                    prev = symbol_tables.index(symbol_table.prev)
+                else:
+                    prev = None
 
             symbol_results.append({"prev": prev, "entries": symbol_entries})
 
