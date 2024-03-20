@@ -13,6 +13,7 @@ class compareAll(unittest.TestCase):
                 if file.endswith(".c"):
                     filename = root + "/" + file
                     print(filename)
+
                     self.runAST(root + "/" + file)
                     assert self.compareLLVM(filename[:-2] + "LLVMtoCompare.ll", filename)
 
