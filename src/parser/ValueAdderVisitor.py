@@ -18,6 +18,9 @@ class ValueAdderVisitor(ASTVisitor):
         else:
             return
 
+        if ident.text == "Dereference":
+            return
+
         val = node.getChild(-1)
         entry = ident.getSymbolTable().symbols[ident.text]
         entry.value = val
