@@ -1,7 +1,7 @@
 digraph AST {
-  "140278671319792" [label=""];
-  "140278671319792" -> "140278671316768";
-  "140278671316768" [label="main: INT
+  "134516044390192" [label=""];
+  "134516044390192" -> "134516044386352";
+  "134516044386352" [label="main: INT
 c: const CHAR
 chr_ptr: const CHAR*
 non_const_ptr: CHAR*"];
