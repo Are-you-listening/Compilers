@@ -35,6 +35,8 @@ class IdentifierReplacerVisitor(ASTVisitor):
                     entry.firstUsed = node
 
                 if entry.value is not None:
+                    if entry.value.text in ("Expr", "Dereference"):
+                        return
                     if entry.value.text == "Conversion":
                         temp = copy.deepcopy(entry.value)
                         temp.parent = node.parent
@@ -51,7 +53,7 @@ class IdentifierReplacerVisitor(ASTVisitor):
                         elif entry.getType() == "FLOAT":
                             node.type = "FLOAT"
 
-                    # replaces a dereference -> identifer pair with the value of that identifier
+                    # replaces a dereference -> identifier pair with the value of that identifier
                     parentsiblings = node.parent.parent.children
                     for i in range(len(parentsiblings)):
                         if parentsiblings[i] == node.parent:
