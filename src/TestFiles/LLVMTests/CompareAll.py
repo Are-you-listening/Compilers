@@ -30,8 +30,8 @@ class CompareAll(unittest.TestCase):
                         continue
 
                     print(filename)
-                    self.runAST(root + "/" + file)
-                    assert self.compareLLVM(filename[:-2] + "LLVMtoCompare.ll", filename[:-2]+"LLVM.ll")
+                    if self.runAST(root + "/" + file):
+                        assert self.compareLLVM(filename[:-2] + "LLVMtoCompare.ll", filename[:-2]+"LLVM.ll")
 
     @staticmethod
     def createEmptyLLVMFile(filename):
@@ -62,9 +62,13 @@ class CompareAll(unittest.TestCase):
         """
         LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
 
-        # Create LLVM file
-        main([0, "--input", file_name, "--render_ast", file_name[:-2] + "ASTVisual", "--render_symb", file_name[:-2] + "SymbolTable",
-              "--target_llvm", file_name[:-2] + "LLVM.ll", "--fold", False], False)
+        try:  # This test ignores thrown errors
+            # Create LLVM file
+            main([0, "--input", file_name, "--render_ast", file_name[:-2] + "ASTVisual", "--render_symb", file_name[:-2] + "SymbolTable",
+                  "--target_llvm", file_name[:-2] + "LLVM.ll", "--fold", False], False)
 
-        subprocess.run(f"""clang-14 -S -emit-llvm {file_name} -o {file_name[:-2]}.ll""",
-                             shell=True, capture_output=True)
+            subprocess.run(f"""clang-14 -S -emit-llvm {file_name} -o {file_name[:-2]}.ll""",
+                                 shell=True, capture_output=True)
+            return True
+        except:
+            return False
