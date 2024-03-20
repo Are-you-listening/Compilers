@@ -306,7 +306,7 @@ class AST2LLVM(ASTVisitor):
         """
         type_text = type_node.children[0].text
         if type_node.getChildAmount() > 1:
-            type_text = type_node.children[1].text
+            type_text += type_node.children[1].text
 
         return type_text
 

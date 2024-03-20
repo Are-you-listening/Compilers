@@ -259,15 +259,25 @@ class Conversion:
     @staticmethod
     def performConversion(llvm_var, to_type):
         block = LLVMSingleton.getInstance().getCurrentBlock()  # Get the current block
-        if isinstance(llvm_var.type, ir.IntType) and (to_type == "float" or to_type == "FLOAT"):
+        if isinstance(llvm_var.type, ir.IntType) and  to_type == "FLOAT":
             return block.fpext(llvm_var, ir.FloatType())
-        elif isinstance(llvm_var.type, ir.FloatType) and (to_type == "int" or to_type == "INT"):
+        elif isinstance(llvm_var.type, ir.FloatType) and to_type == "INT":
             return block.fptosi(llvm_var, ir.IntType(32))
-        elif isinstance(llvm_var.type, ir.IntType) and (to_type == "char" or to_type == "CHAR"):
+        elif isinstance(llvm_var.type, ir.IntType) and to_type == "CHAR":
             return block.trunc(llvm_var, ir.IntType(8))
-        elif isinstance(llvm_var.type, ir.FloatType) and (to_type == "char" or to_type == "CHAR"):
+        elif isinstance(llvm_var.type, ir.FloatType) and to_type == "CHAR":
             return block.trunc(llvm_var, ir.IntType(8))
-        elif isinstance(llvm_var.type, ir.IntType) and (to_type == "int" or to_type == "INT"):
+        elif isinstance(llvm_var.type, ir.IntType) and to_type == "INT":
             return block.zext(llvm_var, ir.IntType(32))
+        elif to_type[0:5] == "FLOAT" and to_type[5] == '*':
+            return block.inttoptr(llvm_var, ir.PointerType(ir.FloatType()))
+        elif to_type[0:3] == "INT" and to_type[3] == '*':
+            return block.inttoptr(llvm_var, ir.PointerType(ir.IntType(32)))
+        elif to_type[0:3] == "CHAR" and to_type[3] == '*':
+            return block.inttoptr(llvm_var, ir.PointerType(ir.IntType(8)))
+        elif to_type == "INT" and isinstance(llvm_var, ir.PointerType):
+            return block.ptrtoint(llvm_var, ir.IntType(32))
+        elif to_type == "CHAR" and isinstance(llvm_var, ir.PointerType):
+            return block.ptrtoint(llvm_var, ir.IntType(8))
         else:
             return llvm_var
