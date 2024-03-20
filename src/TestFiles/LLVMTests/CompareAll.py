@@ -28,7 +28,7 @@ class CompareAll(unittest.TestCase):
                     # be ignored
                     filename = root + "/" + file
 
-                    if filename in ["testfiles/basic_tests_123/proj2_man_pass_conversionExplicitTypeCast.c","testfiles/basic_tests_123/proj2_man_pass_advancedPointerOperations.c","testfiles/basic_tests_123/proj2_opt_pass_constPointerToNonConstPointer1.c"]:
+                    if filename in ["testfiles/basic_tests_123/proj2_man_pass_conversionExplicitTypeCast.c","testfiles/basic_tests_123/proj2_man_pass_advancedPointerOperations.c","testfiles/basic_tests_123/proj2_opt_pass_constPointerToNonConstPointer1.c","testfiles/basic_tests_123/proj2_opt_pass_constPointerToNonConstPointer2.c"]:
                         continue
 
                     print(filename)

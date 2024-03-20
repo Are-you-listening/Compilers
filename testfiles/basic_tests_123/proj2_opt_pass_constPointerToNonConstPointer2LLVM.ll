@@ -1,4 +1,4 @@
-; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/src/llvm_target/LLVMSingleton.py"
+; ModuleID = "testfiles/basic_tests_123/proj2_opt_pass_constPointerToNonConstPointer2.c"
 target triple = "unknown-unknown-unknown"
 target datalayout = ""
 
