@@ -1,5 +1,6 @@
 from src.parser.ErrorExporter import *
 from src.parser.Tables.SymbolTypePtr import *
+from typing import Dict
 
 
 class SymbolEntry:
@@ -49,8 +50,8 @@ class SymbolTable:
         Init a symbol table
         :param prev: a ptr to the prev symbol table we need to point to
         """
-        self.symbols = {}
-        self.prev = prev
+        self.symbols: Dict[str, SymbolEntry] = {}
+        self.prev: "SymbolTable" = prev
         self.next = []
 
     def add(self, entry: SymbolEntry):

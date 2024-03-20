@@ -1,0 +1,18 @@
+{
+  "ast": {
+            "text": "function",
+            "children": [{"text":  "child"}],
+            "line_nr": 1,
+            "symbol-table_nr": 0
+          },
+  "symbol_tables": [
+    {"fitype":  "fitype",
+    "typeObject":  "datatype",
+    "name":  "name",
+    "const":  "const",
+    "value":  "value",
+    "firstDeclared":  "firstDeclared",
+    "firstUsed":  "firstUsed"}
+  ]
+}
+
