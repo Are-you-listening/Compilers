@@ -1,0 +1,13 @@
+digraph AST {
+  "134272668540624" [label=""];
+  "134272668540624" -> "134272668539472";
+  "134272668539472" [label="main: INT
+integer: INT
+int_ptr: INT*
+ptr_ptr: INT**
+another_pointer: INT**
+z: INT
+pointer: INT*
+x: INT
+x_ptr: INT**"];
+}

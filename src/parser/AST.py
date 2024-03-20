@@ -1,5 +1,4 @@
-
-class ASTVisitor:
+class ASTVisitor:  # Prevent circular inclusion
     pass
 
 
@@ -7,6 +6,7 @@ class ASTNode:
     """
     A node inside the AST
     """
+
     def __init__(self, text, parent, symbol_table):
         self.children = []
         self.text = text
@@ -97,6 +97,7 @@ class ASTNodeTerminal(ASTNode):
     """
     A node inside the AST that contains a terminal
     """
+
     def __init__(self, text, parent, symbol_table, terminal_type, operation_type=None):
         super(ASTNodeTerminal, self).__init__(text, parent, symbol_table)
         self.type = terminal_type
@@ -108,10 +109,12 @@ class ASTNodeTerminal(ASTNode):
 
 class AST:
     """Base AST class"""
+
     def __init__(self, root):
         self.root = root
 
     def traverse(self):
         pass
+
 
 from src.parser.ASTVisitor import *

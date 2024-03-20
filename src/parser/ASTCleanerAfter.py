@@ -4,7 +4,7 @@ from src.parser.CTypes.COperationHandler import COperationHandler
 
 class ASTCleanerAfter(ASTVisitor):
     """
-    cleaner after symbol table is created
+    Cleaner after symbol table is created
     """
     def __init__(self):
         self.operation_handler = COperationHandler()
@@ -22,10 +22,8 @@ class ASTCleanerAfter(ASTVisitor):
     @staticmethod
     def cleanDeclaration(node: ASTNode):
         """
-        the declaration type of a function/declaration is no longer needed
+        The declaration type of function/declaration is no longer needed
         """
-
         if node.text not in ("Declaration", "Function"):
             return
-
         node.removeChild(node.getChild(0))

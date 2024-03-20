@@ -1,8 +1,5 @@
 from src.parser.ASTVisitor import *
-import subprocess
 from src.parser.CTypes.COperationHandler import *
-from src.parser.Tables.SymbolTypePtr import *
-from src.parser.Tables.SymbolType import *
 from src.parser.Tables.SymbolTable import *
 
 
@@ -15,13 +12,9 @@ class ASTConversion2(ASTVisitor):
         self.rc = RichnessChecker(types)
 
         """
-        map node on its resulting type
+        Map each node on its resulting type
         """
         self.type_mapping = {}
-        self.incompatible = {
-            "FLOAT": ["%", "|", "&", "~", "CHAR"],  # FLOAT & CHAR are always incompatible
-            "PTR": ["/", "^", ">>", "<<", "%", "|", "~"]
-        }
 
     def visit(self, ast: AST):
         root = ast.root
@@ -31,10 +24,7 @@ class ASTConversion2(ASTVisitor):
         if node.text == "Dereference":
             child = node.getChild(0)
             data_type, ptrs = self.type_mapping[child]
-            """
-            remove 1 ptr
-            """
-            ptrs = ptrs[:-1]
+            ptrs = ptrs[:-1]  # Remove 1 ptr
             self.type_mapping[node] = (data_type, ptrs)
             return
 
@@ -48,12 +38,11 @@ class ASTConversion2(ASTVisitor):
             return
 
         """
-        take the poorest type, if types are inconsistent add implicit conversion
+        Take the poorest type, if types are inconsistent: add implicit conversion
         """
         current_poorest = None
         current_poorest_ptrs = ""
-
-        checkCompatibility = []
+        checkCompatibility = []  # Helper variable
 
         for child in node.children:
             type_tup = self.type_mapping.get(child, None)
@@ -71,28 +60,31 @@ class ASTConversion2(ASTVisitor):
                     current_poorest = self.rc.get_poorest(data_type, current_poorest)
                 else:
                     # Handle errors
-                    if (len(current_poorest_ptrs) >= 2 and data_type == "FLOAT" and len(ptrs) == 0):
+                    if len(current_poorest_ptrs) >= 2 and data_type == "FLOAT" and len(ptrs) == 0:
                         ErrorExporter.invalidOperation(node.linenr, "", "PTR", "FLOAT")
-                        """
-                        This type of warnings is at the moment not fully implementable without a proper distinction between int b; int* ptr = &b; and int* ptr = b;
-                        """
+                        """This type of warnings is at the moment not fully implementable without a proper 
+                        distinction between int b; int* ptr = &b; and int* ptr = b;"""
                     else:  # PTR and INT/CHAR can convert in between each other, however a warning will be shown
 
                         type1 = current_poorest + current_poorest_ptrs
                         type2 = data_type + self.type_mapping[child][1]
 
                         if type1 != type2 and (len(current_poorest_ptrs) - len(self.type_mapping[child][
-                                                                                   1]) > 1):  # If the types are different and the length differs more then 1, we can for sure say its a correct warning. (int b; int* b_ptr = &b; has a difference of 1 but is allowed)
+                                                                                   1]) > 1):  # If the types are
+                            # different and the length differs more than 1, we can for sure say it's a correct
+                            # warning. (int b; int* b_ptr = &b; has a difference of 1 but is allowed)
                             ErrorExporter.conversionWarning(node.linenr, type1, type2)
 
             """
             Collect Data for the incompatible operation test
             """
             appendix = current_poorest  # Preset the type
-            while child.text == "Dereference":  # When a dereference node is found, we cannot get the type from that node
+            while child.text == "Dereference":  # When a dereference node is found, we cannot get the type from that
+                # node
                 child = child.children[0]
             entry = child.getSymbolTable().getEntry(child.text)
-            if entry is not None:  # If there exists an entry we want the type from the SymbolTable (which is most likely a PTR)
+            if entry is not None:  # If there exists an entry we want the type from the SymbolTable (which is most
+                # likely a PTR)
                 appendix = entry.getType()
             checkCompatibility.append(appendix)  # Add it to the verifier list
 
@@ -110,9 +102,8 @@ class ASTConversion2(ASTVisitor):
                 ErrorExporter.invalidOperation(node.linenr, checkCompatibility[1], checkCompatibility[1],
                                                "")
 
-        """
-        for declaration and assignment the type is the type of the value that is declared/assigned (and not the necesarily the poorest type)
-        """
+        """for declaration and assignment the type is the type of the value that is declared/assigned (and not the 
+        necessarily the poorest type)"""
         if node.text in ("Declaration", "Assignment", "Function"):
             assign_node = node.getChild(0)
 
@@ -126,7 +117,7 @@ class ASTConversion2(ASTVisitor):
             current_poorest_ptrs = ptrs
 
         """
-        add implict conversions as explicit
+        add implicit conversions as explicit
         """
         for child in node.children:
             type_tup = self.type_mapping.get(child, None)
@@ -170,7 +161,8 @@ class ASTConversion2(ASTVisitor):
         elif node.type in types:
             self.type_mapping[node] = (node.type, '*')
 
-    def calculateType(self, node: ASTNode):
+    @staticmethod
+    def calculateType(node: ASTNode):
         """
         provided node is a type node
         :param node:
@@ -191,7 +183,8 @@ class ASTConversion2(ASTVisitor):
 
         return data_type, ptrs
 
-    def compatible(self, items):
+    @staticmethod
+    def compatible(items):
         """
         Check the blacklist for absolute incompatible operations or types
         :param items:
@@ -199,12 +192,17 @@ class ASTConversion2(ASTVisitor):
         """
         blocklist = [["PTR", "+", "PTR"], ["PTR", "*", "PTR"], ["PTR", "*", "INT"], ["PTR", "*", "CHAR"],
                      ["CHAR", "*", "PTR"], ["INT", "*", "PTR"]]
+        incompatible = {  # Keep a list of absolutely incompatible types & operations
+            "FLOAT": ["%", "|", "&", "~", "CHAR"],  # FLOAT & CHAR are always incompatible
+            "PTR": ["/", "^", ">>", "<<", "%", "|", "~"]
+        }
+
         for item in items:  # Make all combinations of items
             for item2 in items:
-                if item != item2:  # Except the combination when it has itsself twice
-                    if item in self.incompatible.keys() and item2 in self.incompatible[item]:  # An incompatible match
+                if item != item2:  # Except the combination when it has itself twice
+                    if item in incompatible.keys() and item2 in incompatible[item]:  # An incompatible match
                         return False
-                    elif item2 in self.incompatible.keys() and item in self.incompatible[item2]:
+                    elif item2 in incompatible.keys() and item in incompatible[item2]:
                         return False
         if items in blocklist:
             return False
