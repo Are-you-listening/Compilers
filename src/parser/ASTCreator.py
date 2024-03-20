@@ -67,7 +67,7 @@ class ASTCreator(expressionVisitor):
 
     def visitTypedef(self, ctx: expressionParser.TypedefContext):
         typedef = ctx.stop.text
-        translation = ctx.children[1].children[0].symbol.text
+        translation = ctx.children[1].children[0].symbol.text.upper()
         self.typedefs[typedef] = translation
 
     def visitPrintf(self, ctx: expressionParser.PrintfContext):
