@@ -15,11 +15,13 @@ from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
 from src.parser.CodeGetter import *
 
 
-def cleanGreen(input_file, dot_file, crashtest,symbol_file, codegetter):
+def cleanGreen(input_file, dot_file, symbol_file, codegetter):
     """
     Standard function to generate parseTree & Export it to Dot
     :param input_file:
     :param dot_file:
+    :param symbol_file:
+    :param codegetter:
     :return:
     """
     input_stream = FileStream(input_file)  # Declare some variables
@@ -34,9 +36,6 @@ def cleanGreen(input_file, dot_file, crashtest,symbol_file, codegetter):
     toAST = ASTCreator(lexer)  # Create Actual AST
     toAST.visit(tree)
     ast = toAST.getAST()
-
-    d = DotVisitor("output/debugA0")  # Export AST in Dot
-    d.visit(ast)
 
     codegetter.visit(ast)
 
@@ -59,54 +58,31 @@ def cleanGreen(input_file, dot_file, crashtest,symbol_file, codegetter):
 
 
 def Processing(ast):
-
     constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
     constraint_checker.visit(ast)
-
-    d = DotVisitor("output/debug0")  # Export AST in Dot
-    d.visit(ast)
 
     cfv = ConstantFoldingVisitor()
     cfv.visit(ast)
 
-    d = DotVisitor("output/debug2")  # Export AST in Dot
-    d.visit(ast)
-
     v = ValueAdderVisitor()
     v.visit(ast)
-
-    d = DotVisitor("output/debug1")  # Export AST in Dot
-    d.visit(ast)
 
     ast_conv = ASTConversion2()
     ast_conv.postorder(ast.root)
 
-    d = DotVisitor("output/debug3")  # Export AST in Dot
-    d.visit(ast)
-
     return ast
 
 
-def LLVM():
-    pass
-
-
-def MIPS():
-    pass
-
-
-def main(argv,crashTest=False):
+def main(argv):
     """
     Main function to start program
-    :param argv:
+    :param argv: Argument list as defined in the project description
     :return:
     """
 
     input_file = "example_source_files/file0"  # Define some standard variables & settings
     dot_file = "output/ASTvisual"
     symbol_file = "output/SymbolTablevisual"
-    llvm_dot_file = "output/LLVM"
-    llvm_map_file = "output/LLVMMap"
     llvm_file = "output/output.llvm"
     mips_file = None
 
@@ -124,25 +100,16 @@ def main(argv,crashTest=False):
         elif param == "--target_mips":
             mips_file = arg
 
-    codegetter = CodeGetter()
-
-    ast = cleanGreen(input_file, dot_file, crashTest, symbol_file, codegetter)  # Start AST cleanup & Dot Conversion
-
+    codegetter = CodeGetter()  # Link each line of code to a line number
+    ast = cleanGreen(input_file, dot_file, symbol_file, codegetter)  # Start AST cleanup & Dot Conversion
     Processing(ast)  # Check for Errors , Apply Folding Techniques , ...
 
-    if not crashTest:
-        d = DotVisitor(dot_file)  # Export AST in Dot
-        d.visit(ast)
-
-        d2 = TableDotVisitor(symbol_file, False)  # Export Symbol Table
-        d2.visit(ast.root.getSymbolTable())
-
-    # the codegetter is used to add the original code as comments
-    to_llvm = AST2LLVM(codegetter, llvm_file)
+    to_llvm = AST2LLVM(codegetter, llvm_file)  # The codegetter is used to add the original code as comments
     to_llvm.visit(ast)
 
-    control_dot = ControlFlowDotVisitor("output/ControlFlow")
+    control_dot = ControlFlowDotVisitor("output/ControlFlow")  # Create a CFG
     control_dot.visit(to_llvm.control_flow_graph.root)
+
 
 if __name__ == '__main__':
     main(sys.argv)
