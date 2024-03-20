@@ -20,6 +20,10 @@ class UndeclaredConstrained(Constraint):
     def checkNode(self, node: ASTNode):
         if node.text == "Assignment":
             self.checkViableAssignment(node)
+        elif node.text == "Declaration":
+            if not self.viableDeclaration(node.children[0].text, [node.children[1]]):
+                self.errorNode = node
+                self.rejected = True
 
     def throwException(self):
         if self.errorNode is None:
@@ -35,3 +39,17 @@ class UndeclaredConstrained(Constraint):
                     self.checkTerminalNode(child)
             else:
                 self.checkViableAssignment(child)
+
+    def viableDeclaration(self, identifier: str, children: list):
+        """
+        Checks if a given identifier is not used in its children, e.g. int z = z is not viable!
+        :param identifier:
+        :param children:
+        :return:
+        """
+        for child in children:
+            if child.text == identifier:
+                return False
+            if not self.viableDeclaration(identifier, child.children):
+                return False
+        return True
