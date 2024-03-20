@@ -63,15 +63,10 @@ class ASTConversion2(ASTVisitor):
 
             data_type, ptrs = type_tup
 
-            """
-            ignore ptrs for now
-            """
-
             if current_poorest is None:
                 current_poorest = data_type
                 current_poorest_ptrs = ptrs
             else:
-
                 if current_poorest_ptrs == ptrs:  # If the amount of "*" is the same; nothing to worry about
                     current_poorest = self.rc.get_poorest(data_type, current_poorest)
                 else:
@@ -85,10 +80,6 @@ class ASTConversion2(ASTVisitor):
 
                         type1 = current_poorest + current_poorest_ptrs
                         type2 = data_type + self.type_mapping[child][1]
-                        # if type1[len(type1) - 1] == '*':
-                        #     type1 = type1[:-1]
-                        # if type2[len(type2) - 1] == '*':
-                        #     type2 = type2[:-1]
 
                         if type1 != type2 and (len(current_poorest_ptrs) - len(self.type_mapping[child][
                                                                                    1]) > 1):  # If the types are different and the length differs more then 1, we can for sure say its a correct warning. (int b; int* b_ptr = &b; has a difference of 1 but is allowed)
@@ -97,11 +88,11 @@ class ASTConversion2(ASTVisitor):
             """
             Collect Data for the incompatible operation test
             """
-            appendix = current_poorest # Preset the type
+            appendix = current_poorest  # Preset the type
             while child.text == "Dereference":  # When a dereference node is found, we cannot get the type from that node
                 child = child.children[0]
             entry = child.getSymbolTable().getEntry(child.text)
-            if entry is not None: # If there exists an entry we want the type from the SymbolTable (which is most likely a PTR)
+            if entry is not None:  # If there exists an entry we want the type from the SymbolTable (which is most likely a PTR)
                 appendix = entry.getType()
             checkCompatibility.append(appendix)  # Add it to the verifier list
 
@@ -206,7 +197,8 @@ class ASTConversion2(ASTVisitor):
         :param items:
         :return:
         """
-        blocklist = [["PTR","+","PTR"],["PTR","*","PTR"],["PTR","*","INT"],["PTR","*","CHAR"],["CHAR","*","PTR"],["INT","*","PTR"]]
+        blocklist = [["PTR", "+", "PTR"], ["PTR", "*", "PTR"], ["PTR", "*", "INT"], ["PTR", "*", "CHAR"],
+                     ["CHAR", "*", "PTR"], ["INT", "*", "PTR"]]
         for item in items:  # Make all combinations of items
             for item2 in items:
                 if item != item2:  # Except the combination when it has itsself twice
