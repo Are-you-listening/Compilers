@@ -51,4 +51,4 @@ class CompareAll(unittest.TestCase):
 
         # Create LLVM file
         main([0, "--input", file_name, "--render_ast", file_name[:-2] + "ASTVisual", "--render_symb", file_name[:-2] + "SymbolTable",
-              "--target_llvm", file_name[:-2] + "LLVM.ll"], True)
+              "--target_llvm", file_name[:-2] + "LLVM.ll"])
