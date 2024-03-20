@@ -17,7 +17,7 @@ class ConstConstraint(Constraint):
         if node.text == "Assignment":
             entry = node.symbol_table.getEntry(
                 node.getChild(0).text)
-            if node.symbol_table.getEntry(node.getChild(0).text) != None and entry.const:
+            if node.symbol_table.getEntry(node.getChild(0).text) is not None and entry.const:
                 if entry.getType() != "PTR":
                     self.rejected = True
         elif node.text == "Dereference":
@@ -38,8 +38,8 @@ class ConstConstraint(Constraint):
 
         if entry is not None:
             if entry.getType() == "PTR":
-                if node.parent.text == "Dereference" and node.parent.parent.text == "Dereference" and node.symbol_table.getEntry(
-                        node.text).const:
+                if (node.parent.text == "Dereference" and node.parent.parent.text == "Dereference"
+                        and node.symbol_table.getEntry(node.text).const):
                     self.node = node.parent
                     self.rejected = True
 

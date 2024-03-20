@@ -1,11 +1,11 @@
 from src.parser.ASTVisitor import *
-from src.parser.ErrorExporter import *
 
 
 class ASTDereferencer(ASTVisitor):
     """
     Make sure identifiers are dereferenced if needed
     """
+
     def __init__(self):
         pass
 
@@ -30,9 +30,6 @@ class ASTDereferencer(ASTVisitor):
         right_child = node.getChild(1)
 
         if left_child.text == "*":
-            # if right_child.text == "Expr" or node.symbol_table.getEntry(right_child.text) == None: # This operation is only applicapble on a single identifier, not on a literal or expr/rvalue
-            #     ErrorExporter.invalidOperatorPtr("on rvalue", left_child.linenr)
-
             ref = self.addDereference(right_child)
             node.parent.replaceChild(node, ref)
             node.removeChild(left_child)
@@ -43,7 +40,7 @@ class ASTDereferencer(ASTVisitor):
         If we found an identifier we do the following
         If it has a & before we will not dereference it
         If it has * or nothing it will be dereferenced
-        the Unary operations are not usefull anymore and so will be removed
+        the Unary operations are not useful anymore and so will be removed
 
         :param node:
         :return:
@@ -61,10 +58,7 @@ class ASTDereferencer(ASTVisitor):
             self.addDereference(node)
             return
 
-        """removes the de reference sign"""
-        if sibling_before.text == "&" and node.getSiblingNeighbour(-2) is None:
-
-
+        if sibling_before.text == "&" and node.getSiblingNeighbour(-2) is None:  # Removes the de reference sign
             parent = node.parent
             parent.removeChild(sibling_before)
             while parent.text in ("Expr", "Literal") and parent.getChildAmount() == 1:
@@ -73,8 +67,7 @@ class ASTDereferencer(ASTVisitor):
                 parent = grand_parent
             return
 
-        """removes the de reference sign"""
-        if sibling_before.text == "*" and node.getSiblingNeighbour(-2) is None:
+        if sibling_before.text == "*" and node.getSiblingNeighbour(-2) is None:  # Removes the dereference sign
             parent = node.parent
             parent.removeChild(sibling_before)
             self.addDereference(node)
@@ -94,5 +87,4 @@ class ASTDereferencer(ASTVisitor):
         new_node = ASTNode("Dereference", None, node.symbol_table)
         new_node.linenr = node.linenr
         node.addNodeParent(new_node)
-
         return new_node

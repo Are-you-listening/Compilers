@@ -5,7 +5,7 @@ from src.parser.CTypes.CFunctionExecuter import *
 class _RangeCheck(BaseRangeCheck):
     @staticmethod
     def checkRange(value):
-        """assume 1 bytes/ char"""
+        """assume 1 byte/char"""
         b = value.to_bytes(8, byteorder="big", signed=True)
         b = b[-1:]
         return int.from_bytes(b, 'big', signed=False)
@@ -44,7 +44,6 @@ class _LogicalOperations(BaseLogicalOperations):
     """
 
 
-
 class _BitOperations(BaseBitOperations):
     """
     Bit functions equivalent to the functionality of C
@@ -52,7 +51,6 @@ class _BitOperations(BaseBitOperations):
 
     @staticmethod
     def BitwiseRightshift(a, b):
-
         a = a.to_bytes(8, byteorder="big", signed=True)
         a = a[-1:]
         a = int.from_bytes(a, 'big', signed=True)
@@ -65,7 +63,6 @@ class _RelationalOperations(BaseRelationalOperations):
     """
     Relation functions equivalent to the functionality of C
     """
-
 
 
 class CFunctionExecuterChar(CFunctionExecuter):

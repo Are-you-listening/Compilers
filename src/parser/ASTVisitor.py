@@ -20,10 +20,10 @@ class ASTVisitor:
         while len(stack) > 0:
             # pop() takes the last element of the list
             # just keep in mind that the end of the list is the top of the stack
-            currentnode = stack.pop()
-            currentnode.accept(self)
+            currentNode = stack.pop()
+            currentNode.accept(self)
             # reverse the order of the children because the later the node in the list the sooner it will be visited
-            for child in reversed(currentnode.getChildren()):
+            for child in reversed(currentNode.getChildren()):
                 stack.append(child)
 
     def postorder(self, root: ASTNode):
@@ -33,21 +33,17 @@ class ASTVisitor:
 
         stack = [root]
         visited = set()
-        while (len(stack) > 0):
-            currentnode = stack[-1]  # get top of stack without popping it
-            childnotvisited = False
-            for child in reversed(currentnode.getChildren()):
+        while len(stack) > 0:
+            currentNode = stack[-1]  # get top of stack without popping it
+            childNotVisited = False
+            for child in reversed(currentNode.getChildren()):
                 if child not in visited:
                     stack.append(child)
-                    childnotvisited = True
-            if not childnotvisited:
-                # print(currentnode.text)  # debug print
-                currentnode.accept(self)
-                visited.add(currentnode)
+                    childNotVisited = True
+            if not childNotVisited:
+                currentNode.accept(self)
+                visited.add(currentNode)
                 stack.pop()
-
-
-
 
     @abstractmethod
     def visitNode(self, node: ASTNode):

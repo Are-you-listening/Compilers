@@ -1,4 +1,4 @@
-; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/src/llvm_target/LLVMSingleton.py"
+; ModuleID = "testfiles/basic_tests_123/proj2_man_semanticErr_constPointerRessignment.c"
 target triple = "unknown-unknown-unknown"
 target datalayout = ""
 
@@ -15,6 +15,7 @@ define i32 @"main"()
   store i32* %".6", i32** %".9", align 8
   ; const INT * x_ptr = & b
   %".12" = load i32*, i32** %".9", align 8
-  store i32 4, i32* %".12", align 8
+  %".13" = load i32, i32* %".3", align 4
+  store i32 %".13", i32* %".12", align 8
   ; * x_ptr = x
 }

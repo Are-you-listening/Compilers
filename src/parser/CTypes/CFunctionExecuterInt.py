@@ -34,7 +34,7 @@ class _BinaryOperations(BaseBinaryOperations):
     @staticmethod
     def Modulus(a, b):
 
-        r = a -_BinaryOperations.Divide(a, b)*b
+        r = a - _BinaryOperations.Divide(a, b) * b
         return r
 
 
@@ -51,7 +51,6 @@ class _BitOperations(BaseBitOperations):
 
     @staticmethod
     def BitwiseRightshift(a, b):
-
         a = a.to_bytes(32, byteorder="big", signed=True)
         a = int.from_bytes(a, 'big', signed=True)
         b = b.to_bytes(32, byteorder="big", signed=True)

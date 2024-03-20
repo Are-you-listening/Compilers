@@ -23,6 +23,10 @@ class LLVMSingleton:
             LLVMSingleton.__instance = LLVMSingleton()
         return LLVMSingleton.__instance
 
+    @staticmethod
+    def setName(name):
+        LLVMSingleton.getInstance().__module.name=name
+
     def getModule(self):
         return self.__module
 

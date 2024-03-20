@@ -13,14 +13,15 @@ class PrintfConstraint(Constraint):
 
     def checkTerminalNode(self, node: ASTNodeTerminal):
         if node.text == "printf":
-            printtype = self.getPrintType(node.children[0].text)
-            variabletype = node.children[1].type
+            printType = self.getPrintType(node.children[0].text)
+            variableType = node.children[1].type
 
-            if printtype != variabletype:
-                ErrorExporter.invalidOperation(node.children[0].linenr, "printf", printtype, variabletype)
+            if printType != variableType:
+                ErrorExporter.invalidOperation(node.children[0].linenr, "printf", printType, variableType)
                 sys.exit()
 
-    def getPrintType(self, text):
+    @staticmethod
+    def getPrintType(text):
         if text == "%s":
             return "STRING"
         elif text == "%d" or text == "%x":

@@ -1,6 +1,12 @@
 digraph AST {
-  "134272668010192" [label=""];
-  "134272668010192" -> "134272668013072";
-  "134272668013072" [label="main: INT
-ptr2: FLOAT*"];
+  "134516044620624" [label=""];
+  "134516044620624" -> "134516044618944";
+  "134516044618944" [label="main: INT
+x: INT
+y: INT
+ptr: INT*
+is_x: INT
+is_y: INT
+ptr2: FLOAT*
+num_skip_elements: INT"];
 }

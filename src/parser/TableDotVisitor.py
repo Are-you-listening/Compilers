@@ -1,4 +1,3 @@
-from src.parser.ASTVisitor import *
 from src.parser.Tables.SymbolTable import *
 import subprocess
 
@@ -24,10 +23,12 @@ class TableDotVisitor:
         dot_command = "dot -Tpng " + self.filename+".dot" + " -o "+self.filename+".png"
         subprocess.run(dot_command, shell=True)
 
-    def getOutStr(self, node, debug=False):
+    @staticmethod
+    def getOutStr(node, debug=False):
         """
         method to make a string representing the symbol table
         :param node:
+        :param debug:
         :return:
         """
         out = []

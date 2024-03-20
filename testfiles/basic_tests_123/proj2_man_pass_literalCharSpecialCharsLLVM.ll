@@ -1,4 +1,4 @@
-; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/src/llvm_target/LLVMSingleton.py"
+; ModuleID = "testfiles/basic_tests_123/proj2_man_pass_literalCharSpecialChars.c"
 target triple = "unknown-unknown-unknown"
 target datalayout = ""
 

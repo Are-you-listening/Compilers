@@ -67,7 +67,7 @@ class ASTCreator(expressionVisitor):
 
     def visitTypedef(self, ctx: expressionParser.TypedefContext):
         typedef = ctx.stop.text
-        translation = ctx.children[1].children[0].symbol.text
+        translation = ctx.children[1].children[0].symbol.text.upper()
         self.typedefs[typedef] = translation
 
     def visitPrintf(self, ctx: expressionParser.PrintfContext):
@@ -107,7 +107,7 @@ class ASTCreator(expressionVisitor):
 
         text = ctx.getText()
 
-        if text in ["int","float","char"]:
+        if text in ["int", "float", "char"]:
             text = text.upper()
 
         if self.translateLexerID(ctx.getSymbol().type) == "IDENTIFIER":

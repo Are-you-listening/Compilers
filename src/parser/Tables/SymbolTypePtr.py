@@ -8,5 +8,3 @@ class SymbolTypePtr(SymbolType):
 
     def deReference(self):
         return self.pts_to
-
-
