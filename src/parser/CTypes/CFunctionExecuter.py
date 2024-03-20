@@ -1,5 +1,5 @@
-import math
 from abc import abstractmethod
+
 
 class BaseRangeCheck:
     @staticmethod
@@ -11,6 +11,7 @@ class BaseUnaryOperations:
     """
     Unary functions equivalent to the functionality of C
     """
+
     @staticmethod
     def Plus(a):
         return a
@@ -24,6 +25,7 @@ class BaseBinaryOperations:
     """
     Binary functions equivalent to the functionality of C
     """
+
     @staticmethod
     def Add(a, b):
         return a + b
@@ -131,7 +133,6 @@ class BaseRelationalOperations:
 
     @staticmethod
     def NotEqualTo(a, b):
-
         return int(a != b)
 
 

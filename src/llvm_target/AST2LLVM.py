@@ -36,23 +36,23 @@ class AST2LLVM(ASTVisitor):
 
         stack = [root]
         visited = set()
-        while (len(stack) > 0):
-            currentnode = stack[-1]  # get top of stack without popping it
+        while len(stack) > 0:
+            currentNode = stack[-1]  # get top of stack without popping it
 
-            if currentnode.text == "Function" and currentnode not in visited:
-                visited.add(currentnode)
+            if currentNode.text == "Function" and currentNode not in visited:
+                visited.add(currentNode)
                 self.map_table = MapTable(self.map_table)
-                self.handleFunction(currentnode)
+                self.handleFunction(currentNode)
 
-            childnotvisited = False
-            for child in reversed(currentnode.getChildren()):
+            childNotVisited = False
+            for child in reversed(currentNode.getChildren()):
                 if child not in visited:
                     stack.append(child)
-                    childnotvisited = True
-            if not childnotvisited:
-                # print(currentnode.text)  # debug print
-                currentnode.accept(self)
-                visited.add(currentnode)
+                    childNotVisited = True
+            if not childNotVisited:
+                # print(currentNode.text)  # debug print
+                currentNode.accept(self)
+                visited.add(currentNode)
                 stack.pop()
 
     def visitNode(self, node: ASTNode):
@@ -124,7 +124,8 @@ class AST2LLVM(ASTVisitor):
             llvm_var = self.handleLogicalOperations(node)
             self.llvm_map[node] = llvm_var
 
-    def handleFunction(self, node: ASTNode):
+    @staticmethod
+    def handleFunction(node: ASTNode):
         var_child: ASTNode = node.getChild(0)
         data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
 
@@ -186,7 +187,6 @@ class AST2LLVM(ASTVisitor):
     def handleDereference(self, node: ASTNode):
         """
         Handle a dereference
-        :param datatype_tup:
         :param node:
         :return:
         """
@@ -200,7 +200,8 @@ class AST2LLVM(ASTVisitor):
         llvm_var = Load.identifier(llvm_data)
         self.llvm_map[node] = llvm_var
 
-    def handleComment(self, node: ASTNode):
+    @staticmethod
+    def handleComment(node: ASTNode):
         comment_text = node.children[0].text
         Declaration.addComment(comment_text)
 
@@ -300,7 +301,8 @@ class AST2LLVM(ASTVisitor):
 
         self.llvm_map[node] = converted_var
 
-    def getConversionType(self, type_node: ASTNode):
+    @staticmethod
+    def getConversionType(type_node: ASTNode):
         """"
         Extract the type of the AST node
         """

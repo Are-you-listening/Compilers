@@ -1,16 +1,15 @@
-from abc import abstractmethod
 from src.parser.AST import *
 
 
 class Constraint:
     """
-    Abstact class to add constraints that will be checked by the constraint checker
+    Abstract class to add constraints that will be checked by the constraint checker
     """
     def __init__(self):
         self.accepted = False
         # if self.rejected is None, this means that it is not needed for this constraint
         self.rejected = None
-        self.errornode = None
+        self.errorNode = None
 
     @abstractmethod
     def checkNode(self, node: ASTNode):

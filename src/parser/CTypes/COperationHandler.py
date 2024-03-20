@@ -87,4 +87,3 @@ class COperationHandler:
         result = c_type.getString(sub_result)
 
         return result, val1[1]
-

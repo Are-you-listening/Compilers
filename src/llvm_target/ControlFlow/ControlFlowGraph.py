@@ -1,5 +1,3 @@
-import typing
-
 from src.llvm_target.LLVMSingleton import LLVMSingleton
 from llvmlite import ir
 
@@ -7,7 +5,7 @@ from llvmlite import ir
 class Vertex:
     def __init__(self, llvm_block):
         """
-        :param llvm_end_node:
+        :param llvm_block:
         """
         self.llvm = llvm_block
 
@@ -36,7 +34,7 @@ class Edge:
         constructor for a directed edge of the Control Flow graph
         :param from_vertex:
         :param to_vertex:
-        :param on: We go to the 'to_vertex' only when we match the 'on' (registernr, on_true/false)
+        :param on: We go to the 'to_vertex' only when we match the 'on' (register number, on_true/false)
         (if bool is none always branch to here)
         """
         self.from_vertex = from_vertex
@@ -227,7 +225,8 @@ class ControlFlowGraph:
             elif in_false:
                 phi.add_incoming(ir.Constant(bool_type, 0), vertex.llvm.block)
 
-    def __makeBool(self, builder):
+    @staticmethod
+    def __makeBool(builder):
         instruction = builder.block.instructions[-1]
         if instruction.type != ir.IntType(1):
             instruction = builder.icmp_signed("!=", instruction, ir.Constant(instruction.type, 0))

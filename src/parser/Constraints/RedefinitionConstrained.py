@@ -18,11 +18,11 @@ class RedefinitionConstraint(Constraint):
                     if node.parent.text == "Declaration":
                         if node.parent.findChild(node) != 1:  # If it is no rvalue (index 1)
                             self.rejected = True
-                            self.errornode = node
+                            self.errorNode = node
 
     def throwException(self):
-        if self.errornode is None:
+        if self.errorNode is None:
             # this should never happen but who knows
             return
-        node = self.errornode
+        node = self.errorNode
         ErrorExporter.redefinition(node.linenr, node.symbol_table.getEntry(node.text).getType(), node.text)

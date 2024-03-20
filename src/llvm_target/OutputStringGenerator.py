@@ -259,7 +259,7 @@ class Conversion:
     @staticmethod
     def performConversion(llvm_var, to_type):
         block = LLVMSingleton.getInstance().getCurrentBlock()  # Get the current block
-        if isinstance(llvm_var.type, ir.IntType) and  to_type == "FLOAT":
+        if isinstance(llvm_var.type, ir.IntType) and to_type == "FLOAT":
             return block.fpext(llvm_var, ir.FloatType())
         elif isinstance(llvm_var.type, ir.FloatType) and to_type == "INT":
             return block.fptosi(llvm_var, ir.IntType(32))

@@ -4,7 +4,7 @@ from src.parser.ErrorExporter import *
 
 class MainFoundConstraint(Constraint):
     """
-    constraint to check if an main function is inside the code
+    constraint to check if a main function is inside the code
     """
     def __init__(self):
         super().__init__()
@@ -18,4 +18,3 @@ class MainFoundConstraint(Constraint):
 
     def throwException(self):
         ErrorExporter.mainNotFound()
-

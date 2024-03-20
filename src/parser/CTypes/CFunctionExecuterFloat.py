@@ -3,6 +3,7 @@ from src.parser.CTypes.CFunctionExecuter import *
 import struct
 from src.parser.ErrorExporter import *
 
+
 class _RangeCheck(BaseRangeCheck):
     @staticmethod
     def checkRange(value):
@@ -17,6 +18,7 @@ class _UnaryOperations(BaseUnaryOperations):
     """
     Unary functions equivalent to the functionality of C
     """
+
 
 class _BinaryOperations(BaseBinaryOperations):
     """
@@ -75,6 +77,7 @@ class _RelationalOperations(BaseRelationalOperations):
     """
     Relation functions equivalent to the functionality of C
     """
+
 
 class _Conversions:
     @staticmethod

@@ -33,7 +33,7 @@ class SymbolEntry:
 
     def getPtrTuple(self):
         """
-        returns a tuple: (type, amount of * depending on how many ptrs their are in the chain)
+        returns a tuple: (type, amount of * depending on how many ptrs there are in the chain)
         """
         ptr_string = ""
         d_t = self.typeObject
@@ -56,12 +56,14 @@ class SymbolTable:
 
     def add(self, entry: SymbolEntry):
         """
-        add an symbol entry to the symbol table
+        Add a symbol entry to the symbol table
         :param entry: the entry we want to add
         :return:
         """
         if self.symbols.get(entry.name) is not None:
-            ErrorExporter.redefinition(entry.firstDeclared.linenr, entry.getType(), entry.name) # This allows earlier detection of errors but unsure how we would retrieve the lineNr
+            ErrorExporter.redefinition(entry.firstDeclared.linenr, entry.getType(),
+                                       entry.name)  # This allows earlier detection of errors but unsure how we would
+            # retrieve the lineNr
             return
         self.symbols[entry.name] = entry
 
