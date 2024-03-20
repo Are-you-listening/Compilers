@@ -1,8 +1,6 @@
 import copy
-
 from src.parser.ASTVisitor import *
 from src.parser.ErrorExporter import *
-from copy import deepcopy
 
 
 class IdentifierReplacerVisitor(ASTVisitor):
@@ -54,15 +52,15 @@ class IdentifierReplacerVisitor(ASTVisitor):
                             node.type = "FLOAT"
 
                     # replaces a dereference -> identifier pair with the value of that identifier
-                    parentsiblings = node.parent.parent.children
-                    for i in range(len(parentsiblings)):
-                        if parentsiblings[i] == node.parent:
-                            node.parent = parentsiblings[i].parent
-                            parentsiblings[i] = node
+                    parentSiblings = node.parent.parent.children
+                    for i in range(len(parentSiblings)):
+                        if parentSiblings[i] == node.parent:
+                            node.parent = parentSiblings[i].parent
+                            parentSiblings[i] = node
                             break
 
                 else:
-                    ErrorExporter.uninitializedVariable(toReplace,node.linenr)
+                    ErrorExporter.uninitializedVariable(toReplace, node.linenr)
                     break
             else:
                 # print("variable is not const -> not replacing")

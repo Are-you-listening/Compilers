@@ -73,7 +73,7 @@ class ASTConversion2(ASTVisitor):
                                                                                    1]) > 1):  # If the types are
                             # different and the length differs more than 1, we can for sure say it's a correct
                             # warning. (int b; int* b_ptr = &b; has a difference of 1 but is allowed)
-                            ErrorExporter.conversionWarning(node.linenr, type1, type2)
+                            ErrorExporter.conversionWarning(node.linenr)
 
             """
             Collect Data for the incompatible operation test

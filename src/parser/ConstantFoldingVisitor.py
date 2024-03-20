@@ -31,7 +31,6 @@ class ConstantFoldingVisitor(ASTVisitor):
             parent.setChild(index, node.getChild(0))
             # Overwrite index of parent with node
 
-
         if node.text != "Expr":
             return
 
@@ -48,9 +47,10 @@ class ConstantFoldingVisitor(ASTVisitor):
             if node.getChild(2).type == "IDENTIFIER":
                 return
 
-            result, datatype_name = self.operation_handler.doOperationBinary((node.getChild(0).text, node.getChild(0).type),
-                                                              (node.getChild(2).text, node.getChild(2).type),
-                                                              node.getChild(1).text)
+            result, datatype_name = self.operation_handler.doOperationBinary(
+                (node.getChild(0).text, node.getChild(0).type),
+                (node.getChild(2).text, node.getChild(2).type),
+                node.getChild(1).text)
 
         elif node.getChildAmount() == node.getTerminalAmount() == 2:
             """Check for UNARY operations"""
@@ -58,8 +58,9 @@ class ConstantFoldingVisitor(ASTVisitor):
             if node.getChild(1).type == "IDENTIFIER" or node.getChild(1).text == '++' or node.getChild(1).text == '--':
                 return
 
-            result, datatype_name = self.operation_handler.doOperationUnary((node.getChild(1).text, node.getChild(1).type),
-                                                             node.getChild(0).text)
+            result, datatype_name = self.operation_handler.doOperationUnary(
+                (node.getChild(1).text, node.getChild(1).type),
+                node.getChild(0).text)
 
         else:
             return

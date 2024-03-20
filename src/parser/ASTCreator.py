@@ -107,7 +107,7 @@ class ASTCreator(expressionVisitor):
 
         text = ctx.getText()
 
-        if text in ["int","float","char"]:
+        if text in ["int", "float", "char"]:
             text = text.upper()
 
         if self.translateLexerID(ctx.getSymbol().type) == "IDENTIFIER":

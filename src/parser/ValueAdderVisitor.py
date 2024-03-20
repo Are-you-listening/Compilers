@@ -21,21 +21,17 @@ class ValueAdderVisitor(ASTVisitor):
         val = node.getChild(-1)
         entry = ident.getSymbolTable().symbols[ident.text]
         entry.value = val
-        # If the left side has a dereference this means that it is a pointer
+        # If the left side has a dereference this means that it is a pointer,
         # so we only do replacements on the left side and don't change anything in the symbol table
         if (val.text not in ("Expr", "Dereference", "Conversion")) and (ident.text != "Dereference"):
 
-            convertdict = {
-                "INT" : CFunctionExecuterInt(),
-                "FLOAT" : CFunctionExecuterFloat(),
-                "CHAR" : CFunctionExecuterChar()
-            }
+            convertDict = dict(INT=CFunctionExecuterInt(), FLOAT=CFunctionExecuterFloat(), CHAR=CFunctionExecuterChar())
 
-            if val.type in convertdict.keys() and entry.typeObject in convertdict:
-                converter = convertdict[val.type]
+            if val.type in convertDict.keys() and entry.typeObject in convertDict:
+                converter = convertDict[val.type]
                 ST = node.getSymbolTable().getEntry(ident.text)
-                newval = converter.convertTo(val.text, ST.typeObject.data_type)
-                val.text = newval
+                newVal = converter.convertTo(val.text, ST.typeObject.data_type)
+                val.text = newVal
 
             entry.value = val
 
@@ -44,10 +40,10 @@ class ValueAdderVisitor(ASTVisitor):
             replacer = IdentifierReplacerVisitor()
             replacer.preorder(val)
 
-            # it is possible that some identifiers have been replaced with their values
+            # it is possible that some identifiers have been replaced with their values,
             # so we retry the constant folding and see if we are able to get a single value out of it
-            constantfolder = ConstantFoldingVisitor()
-            constantfolder.postorder(val)
+            constantFolder = ConstantFoldingVisitor()
+            constantFolder.postorder(val)
 
             val = node.getChild(-1)
             entry.value = val

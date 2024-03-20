@@ -1,6 +1,5 @@
-from src.parser.ASTVisitor import *
-from src.parser.Tables.SymbolTable import *
 import subprocess
+from src.parser.ASTVisitor import *
 
 
 class DotVisitor(ASTVisitor):
@@ -20,9 +19,7 @@ class DotVisitor(ASTVisitor):
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         label = node.text
-        label= label.replace('\"', "")
-
-
+        label = label.replace('\"', "")
 
         if node.text == "'\x00'":
             label = '\\000'
