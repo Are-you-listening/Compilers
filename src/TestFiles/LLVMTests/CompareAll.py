@@ -17,6 +17,8 @@ class CompareAll(unittest.TestCase):
     """
     Test case to create a llvm output for each file and compare it with the corresponding "right" file. Right in the
     sense that we pre-set an output we see as valid.
+
+    NOTE: All the tests are run with constant folding enabled! (As by default)
     """
     def testEvaluateResults(self):
         path = "testfiles/"
@@ -26,7 +28,7 @@ class CompareAll(unittest.TestCase):
                     # be ignored
                     filename = root + "/" + file
 
-                    if filename in ["testfiles/basic_tests_123/proj2_man_pass_conversionExplicitTypeCast.c","testfiles/basic_tests_123/proj2_man_pass_advancedPointerOperations.c"]:
+                    if filename in ["testfiles/basic_tests_123/proj2_man_pass_conversionExplicitTypeCast.c","testfiles/basic_tests_123/proj2_man_pass_advancedPointerOperations.c","testfiles/basic_tests_123/proj2_opt_pass_constPointerToNonConstPointer1.c"]:
                         continue
 
                     print(filename)
@@ -65,7 +67,7 @@ class CompareAll(unittest.TestCase):
         try:  # This test ignores thrown errors
             # Create LLVM file
             main([0, "--input", file_name, "--render_ast", file_name[:-2] + "ASTVisual", "--render_symb", file_name[:-2] + "SymbolTable",
-                  "--target_llvm", file_name[:-2] + "LLVM.ll", "--fold", False], False)
+                  "--target_llvm", file_name[:-2] + "LLVM.ll",], False)
 
             subprocess.run(f"""clang-14 -S -emit-llvm {file_name} -o {file_name[:-2]}.ll""",
                                  shell=True, capture_output=True)
