@@ -116,6 +116,7 @@ def main(argv, clang=False):
     ast = cleanGreen(input_file, symbol_file, codegetter)  # Start AST cleanup & Dot Conversion
     Processing(ast, dot_file, fold)  # Check for Errors , Apply Folding Techniques , ...
 
+    LLVMSingleton.setName(input_file)
     to_llvm = AST2LLVM(codegetter, llvm_file)  # The codegetter is used to add the original code as comments
     to_llvm.visit(ast)
 
@@ -126,3 +127,4 @@ def main(argv, clang=False):
 if __name__ == '__main__':
     main(sys.argv)
     LLVMSingleton.getInstance().clear()
+
