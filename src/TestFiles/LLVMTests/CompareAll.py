@@ -14,11 +14,12 @@ class CompareAll(unittest.TestCase):
         path = "testfiles/"
         for root, dirs, filenames in os.walk(path):
             for file in filenames:
-                if file.endswith(".c"):
+                if file.endswith(".c") and "syntaxErr" not in file and "semanticErr" not in file:  # Error files will
+                    # be ignored
                     filename = root + "/" + file
                     print(filename)
                     self.runAST(root + "/" + file)
-                    assert self.compareLLVM(filename[:-2] + "LLVMtoCompare.ll", filename)
+                    assert self.compareLLVM(filename[:-2] + "LLVMtoCompare.ll", filename[:-2]+"LLVM.ll")
 
     @staticmethod
     def createEmptyLLVMFile(filename):
@@ -38,7 +39,7 @@ class CompareAll(unittest.TestCase):
         :param right:
         :return: True if they are the same
         """
-        return filecmp.cmp(newly, right)
+        return filecmp.cmp(newly, right,False)
 
     @staticmethod
     def runAST(file_name: str):
