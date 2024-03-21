@@ -15,6 +15,11 @@ class RichnessChecker:
         index2 = self.rich_order.index(val2)
         return self.rich_order[min(index1, index2)]
 
+    def get_richest(self, val1: str, val2: str):
+        index1 = self.rich_order.index(val1)
+        index2 = self.rich_order.index(val2)
+        return self.rich_order[max(index1, index2)]
+
 
 class COperationHandler:
     def __init__(self):
@@ -26,7 +31,7 @@ class COperationHandler:
         if val1[1] == val2[1] == "PTR":
             poorest_type = "PTR"
         else:
-            poorest_type = self.richness_checker.get_poorest(val1[1], val2[1])
+            poorest_type = self.richness_checker.get_richest(val1[1], val2[1])
 
         """
         make sure we do the right type of operation (int op, char op, ...) and the values need to be converted

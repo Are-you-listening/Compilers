@@ -35,6 +35,8 @@ class AstLoader:
 
             symbol_table_real = SymbolTable(prev)
 
+            output_symbol_tables.append(symbol_table_real)
+
             for entry in symbol_table["entries"]:
                 type_tup = entry["type"]
                 base_type, ptrs = type_tup
@@ -43,10 +45,8 @@ class AstLoader:
                 for i in range(len(ptrs)):
                     symbol_type = SymbolTypePtr(symbol_type)
 
-                symbol_table_entry = SymbolEntry(entry["fitype"], symbol_type, entry["name"], entry["const"], entry["value"], map_id_to_node.get(entry["firstDeclared"]), map_id_to_node.get(entry["firstUsed"]))
+                symbol_table_entry = SymbolEntry(entry["fitype"], symbol_type, entry["name"], entry["const"], map_id_to_node.get(entry["value"], None), map_id_to_node.get(entry["firstDeclared"]), map_id_to_node.get(entry["firstUsed"]))
                 symbol_table_real.add(symbol_table_entry)
-
-            output_symbol_tables.append(symbol_table_real)
 
         return output_symbol_tables
 
@@ -72,7 +72,7 @@ class AstLoader:
         ast_node.linenr = ast_node_entry["linenr"]
 
         for child in ast_tree["children"]:
-            child_entry = AstLoader.__loadAst(child, ast_node_list, ast_node_entry, map_id_to_node)
+            child_entry = AstLoader.__loadAst(child, ast_node_list, ast_node, map_id_to_node)
             ast_node.addChildren(child_entry)
 
         return ast_node
@@ -109,6 +109,10 @@ class AstLoader:
         ast_dict["linenr"] = ast_node.linenr
 
         symbol_table = ast_node.getSymbolTable()
+
+        if symbol_table.prev not in symbol_tables and symbol_table.prev is not None:
+            symbol_tables.append(symbol_table.prev)
+
         if symbol_table in symbol_tables:
             index = symbol_tables.index(symbol_table)
         else:
@@ -143,6 +147,7 @@ class AstLoader:
                 symbol_entry_dict["type"] = symbol_entry.getPtrTuple()
                 symbol_entry_dict["name"] = symbol_entry.name
                 symbol_entry_dict["const"] = symbol_entry.const
+
                 symbol_entry_dict["value"] = ast_to_id_map.get(symbol_entry.value, None)
 
                 symbol_entry_dict["firstDeclared"] = ast_to_id_map.get(symbol_entry.firstDeclared)
@@ -159,5 +164,4 @@ class AstLoader:
                     prev = None
 
             symbol_results.append({"prev": prev, "entries": symbol_entries})
-
         return symbol_results

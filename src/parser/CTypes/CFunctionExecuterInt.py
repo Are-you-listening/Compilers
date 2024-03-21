@@ -1,6 +1,6 @@
 import math
 from src.parser.CTypes.CFunctionExecuter import *
-
+import struct
 
 class _RangeCheck(BaseRangeCheck):
     @staticmethod
@@ -72,6 +72,15 @@ class _Conversions:
         b = b[-1:]
         return int.from_bytes(b, 'big', signed=True)
 
+    @staticmethod
+    def ToFloat(value):
+        """assume 4 bytes/ float"""
+        value = float(value)
+        b = struct.pack("f", value)
+        b = b[-4:]
+
+        return struct.unpack("f", b)[0]
+
 
 class CFunctionExecuterInt(CFunctionExecuter):
     def __init__(self):
@@ -83,7 +92,7 @@ class CFunctionExecuterInt(CFunctionExecuter):
         self.LogicalOperations = _LogicalOperations
         self.BitOperations = _BitOperations
         self.RelationalOperations = _RelationalOperations
-        self.conversion_dict = {"CHAR": _Conversions.ToChar}
+        self.conversion_dict = {"CHAR": _Conversions.ToChar, "FLOAT": _Conversions.ToFloat}
 
     def fromString(self, string):
         return int(string)

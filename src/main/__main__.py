@@ -65,8 +65,8 @@ def Processing(ast, dot_file, fold):
     v = ValueAdderVisitor()
     v.visit(ast)
 
-    ast_conv = ASTConversion2()
-    ast_conv.postorder(ast.root)
+    ast_conv = ASTConversion()
+    ast_conv.visit(ast)
 
     d = DotVisitor(dot_file)  # Export AST in Dot
     d.visit(ast)

@@ -56,9 +56,6 @@ cfv.visit(ast)
 v = ValueAdderVisitor()
 v.visit(ast)
 
-ast_conv = ASTConversion2()
-#ast_conv.postorder(ast.root)
-
 """
 add needed stuff above
 """
@@ -66,7 +63,27 @@ add needed stuff above
 json = AstLoader.store(ast)
 with open("file_read_json.json", "wt") as f:
     f.write(json)
+
+
+d = DotVisitor("read_file_before")  # Export AST in Dot
+d.visit(ast)
+
+
+"""
+add check stuff
+"""
+
+ast_conv = ASTConversion()
+ast_conv.visit(ast)
+
+"""
+add check stuff above
+"""
+
+json = AstLoader.store(ast)
+with open("file_read_json_result.json", "wt") as f:
+    f.write(json)
 ast_tree = AstLoader.load(json)
 
-d = DotVisitor("read_file_after_load")  # Export AST in Dot
+d = DotVisitor("read_file_after")  # Export AST in Dot
 d.visit(ast_tree)
