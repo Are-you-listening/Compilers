@@ -16,9 +16,6 @@ class LLVMSingleton:
         self.__Printf = None
         self.__current_block = ir.IRBuilder(ir.Block(self.__module))
 
-
-
-
     def clear(self):
         self.__instance = None
         self.__init__()

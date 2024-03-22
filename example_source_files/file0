@@ -1,6 +1,6 @@
-int main() {
-    char z;
-    char* b_ptr;
-    char* z_ptr;
-    b_ptr&&z_ptr;
+#include <stdio.h>
+
+int main(){
+    printf("%s", 'h');
+    return 0;
 }

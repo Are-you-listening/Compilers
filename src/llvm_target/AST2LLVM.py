@@ -25,8 +25,6 @@ class AST2LLVM(ASTVisitor):
         root = ast.root
         self.postorder(root)
 
-        LLVMSingleton.getInstance().getCurrentBlock().ret(ir.Constant(ir.IntType(32), 0))
-
     def postorder(self, root: ASTNode):
         """
         override default postorder
@@ -92,6 +90,9 @@ class AST2LLVM(ASTVisitor):
 
         if node.text == "Conversion":
             self.handleConversions(node)
+
+        if node.text == "Return":
+            self.handleReturn(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
@@ -206,6 +207,10 @@ class AST2LLVM(ASTVisitor):
     def handleComment(node: ASTNode):
         comment_text = node.children[0].text
         Declaration.addComment(comment_text)
+
+    @staticmethod
+    def handleReturn(node: ASTNode):
+        LLVMSingleton.getInstance().getCurrentBlock().ret_void()
 
     def handlePrintf(self, node: ASTNode):
         """

@@ -3,7 +3,7 @@ start_ : (include)? code EOF;
 code: (function | line  | comment)*;
 include: '#include <stdio.h>';
 comment : MULTILINE | SINGLECOMMENT;
-function : type IDENTIFIER '(' ')' '{' code '}';
+function : type IDENTIFIER '(' ')' '{' code (return)? '}';
 line: (declaration | expr| assignment| typedef | printf )(';')+;
 typedef: 'typedef' type IDENTIFIER;
 printf: 'printf' '(' '"' ('%s' | '%d' | '%x' | '%f' | '%c') (';')? '"' ',' (expr) ')';
@@ -28,6 +28,7 @@ expr : literal
      | expr '&&' expr
      | expr '||' expr;
 literal : (INT | FLOAT | CHAR | IDENTIFIER | conversion) ;
+return: 'return 0'(';')?;
 
 MULTILINE: '/*' (.)*?  '*/' ;
 SINGLECOMMENT: '//' (~[\n])*;

@@ -102,8 +102,10 @@ class Declaration:
     def llvmLiteral(value: str, data_type: str, ptrs: str):
         if CTypesToLLVM.getIRType(data_type, ptrs) == ir.FloatType():
             value = float(value)
-        if CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(32):
+        elif CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(32):
             value = int(value)
+        elif CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(8):
+            value = ord(value[1:-1])  # Values are strings
 
         return ir.Constant(CTypesToLLVM.getIRType(data_type, ptrs), value)
 
@@ -221,9 +223,10 @@ class Printf:
             LLVMSingleton.getInstance().setPrintF(printf)
 
         current_function = LLVMSingleton.getInstance().getLastFunction()
-        block = current_function.append_basic_block("printf_block")
+        #block = current_function.append_basic_block("printf_block")
 
-        builder = ir.IRBuilder(block)
+        #builder = ir.IRBuilder(block)
+        builder = LLVMSingleton.getInstance().getCurrentBlock()
         format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(format_specifier) + 1),
                                        bytearray(format_specifier.encode("utf8")))
         format_str_global = builder.module.globals.get(".str")
