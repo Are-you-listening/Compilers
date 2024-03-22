@@ -1,6 +1,8 @@
 from src.parser.CTypes.CFunctionExecuterInt import *
 from src.parser.CTypes.CFunctionExecuterChar import *
 from src.parser.CTypes.CFunctionExecuterFloat import *
+from src.parser.ErrorExporter import *
+
 
 types = ["CHAR", "INT", "FLOAT"]
 
@@ -26,7 +28,7 @@ class COperationHandler:
         self.richness_checker = RichnessChecker(types)
         self.c_type_executors = {"INT": CFunctionExecuterInt, "CHAR": CFunctionExecuterChar, "FLOAT": CFunctionExecuterFloat}
 
-    def doOperationBinary(self, val1: tuple, val2: tuple, operation: str):
+    def doOperationBinary(self, val1: tuple, val2: tuple, operation: str, lineNr: int):
 
         if val1[1] == val2[1] == "PTR":
             poorest_type = "PTR"
@@ -69,8 +71,11 @@ class COperationHandler:
 
         if operation not in foldable:
             return None
-        sub_result = c_type.RangeCheck.checkRange(
+        try:
+            sub_result = c_type.RangeCheck.checkRange(
             foldable[operation](data1, data2))
+        except:
+            ErrorExporter.devideByZero(lineNr, data1)
         result = c_type.getString(sub_result)
 
         return result, poorest_type
