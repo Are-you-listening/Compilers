@@ -25,6 +25,8 @@ class AST2LLVM(ASTVisitor):
         root = ast.root
         self.postorder(root)
 
+        LLVMSingleton.getInstance().getCurrentBlock().ret(ir.Constant(ir.IntType(32), 0))
+
     def postorder(self, root: ASTNode):
         """
         override default postorder
