@@ -22,6 +22,11 @@ class ValueAdderVisitor(ASTVisitor):
             return
 
         val = node.getChild(-1)
+
+        if val == ident and node.text == "Declaration":
+            # this means that it is a dereference without a value
+            return
+
         entry = ident.getSymbolTable().symbols[ident.text]
         entry.value = val
         # If the left side has a dereference this means that it is a pointer,
