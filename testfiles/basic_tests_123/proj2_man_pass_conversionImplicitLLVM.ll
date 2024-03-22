@@ -8,7 +8,7 @@ define i32 @"main"()
   %".3" = alloca i32, align 4
   store i32 5, i32* %".3", align 4
   ; INT x = 5
-  %".6" = fpext i32 5 to float
+  %".6" = sitofp i32 5 to float
   %".7" = alloca float, align 4
   store float %".6", float* %".7", align 4
   ; FLOAT f = x
@@ -16,7 +16,7 @@ define i32 @"main"()
   store i32 -32682, i32* %".10", align 4
   ; INT z = - 32682
   %".13" = load i32, i32* %".3", align 4
-  %".14" = fpext i32 %".13" to float
+  %".14" = sitofp i32 %".13" to float
   %".15" = fadd float 0xc13074ea00000000, %".14"
   store float %".15", float* %".7", align 4
   ; f = 33.0 * z + x

@@ -15,13 +15,13 @@ define i32 @"main"()
   %".10" = alloca i32, align 4
   store i32 %".9", i32* %".10", align 4
   ; INT z = INT f
-  %".13" = fpext i32 5 to float
+  %".13" = sitofp i32 5 to float
   %".14" = alloca float, align 4
   store float %".13", float* %".14", align 4
   ; FLOAT z2 = FLOAT x
   %".17" = load float, float* %".6", align 4
-  %".18" = fpext i32 5 to float
-  %".19" = fpext i32 2 to float
+  %".18" = sitofp i32 5 to float
+  %".19" = sitofp i32 2 to float
   %".20" = fmul float %".18", %".19"
   %".21" = fadd float %".17", %".20"
   %".22" = fptosi float %".21" to i32
@@ -33,14 +33,14 @@ define i32 @"main"()
   store float %".26", float* %".27", align 4
   ; FLOAT f2 = FLOAT f
   %".30" = load float, float* %".6", align 4
-  %".31" = fpext i32 5 to float
-  %".32" = fpext i32 2 to float
+  %".31" = sitofp i32 5 to float
+  %".32" = sitofp i32 2 to float
   %".33" = fmul float %".31", %".32"
   %".34" = fadd float %".30", %".33"
   %".35" = fptosi float %".34" to i32
-  %".36" = fpext i32 %".35" to float
+  %".36" = sitofp i32 %".35" to float
   %".37" = load float, float* %".14", align 4
-  %".38" = fpext i32 195696 to float
+  %".38" = sitofp i32 195696 to float
   %".39" = fdiv float %".37", %".38"
   %".40" = fadd float %".36", %".39"
   store float %".40", float* %".27", align 4
