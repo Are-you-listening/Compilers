@@ -6,4 +6,7 @@ int* some_pointer = &x;
 int** another_pointer = &some_pointer;
 int*** triple_pointer = &another_pointer;
 int y = ***triple_pointer;
+
+    return 0;
+
 }

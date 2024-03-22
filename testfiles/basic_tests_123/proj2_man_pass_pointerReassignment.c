@@ -16,4 +16,7 @@ char* char_ptr = &c;
 
 *char_ptr = '\t';
 char_ptr = &nl;
+
+    return 0;
+
 }

@@ -25,4 +25,7 @@ float f = 45;
 char c = 'b';
 
 int x = 5;
+
+    return 0;
+
 }
