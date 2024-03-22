@@ -26,4 +26,5 @@ define i32 @"main"()
   %".21" = alloca i32, align 4
   store i32 %".20", i32* %".21", align 4
   ; INT y = * * * triple_pointer
+  ret i32 0
 }

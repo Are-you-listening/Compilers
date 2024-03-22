@@ -1,5 +1,5 @@
 ; ModuleID = "testfiles/basic_tests_123/proj2_man_pass_advancedPointerOperations.c"
-target triple = "unknown-unknown-unknown"
+target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
 define i32 @"main"()
@@ -45,14 +45,14 @@ define i32 @"main"()
   store float* %".38", float** %".39", align 8
   ; FLOAT * ptr2 = 0
   %".42" = load float*, float** %".39", align 8
-  %".43" = inttoptr float* %".42" to i32*
-  %".44" = load i32*, i32** %".9", align 8
-  %".45" = icmp sge i32* %".43", %".44"
+  %".43" = load i32*, i32** %".9", align 8
+  %".44" = inttoptr i32* %".43" to float*
+  %".45" = icmp sge float* %".42", %".44"
   %".46" = zext i1 %".45" to i32
   %".47" = load float*, float** %".39", align 8
-  %".48" = inttoptr float* %".47" to i32*
-  %".49" = load i32*, i32** %".9", align 8
-  %".50" = icmp sle i32* %".48", %".49"
+  %".48" = load i32*, i32** %".9", align 8
+  %".49" = inttoptr i32* %".48" to float*
+  %".50" = icmp sle float* %".47", %".49"
   %".51" = zext i1 %".50" to i32
   %".52" = load i32*, i32** %".9", align 8
   %".53" = icmp sgt i32* %".52", %".3"
@@ -67,4 +67,5 @@ define i32 @"main"()
   %".62" = getelementptr inbounds i32, i32* %".61", i32 16
   store i32* %".62", i32** %".9", align 8
   ; ptr = ptr + 4 * num_skip_elements
+  ret i32 0
 }

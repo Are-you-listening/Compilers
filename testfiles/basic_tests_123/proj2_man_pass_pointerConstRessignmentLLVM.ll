@@ -16,4 +16,5 @@ define i32 @"main"()
   ; const INT * x_ptr = & x
   store i32* %".6", i32** %".9", align 8
   ; x_ptr = & b
+  ret i32 0
 }

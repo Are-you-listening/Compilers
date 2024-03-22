@@ -1,6 +1,5 @@
 from abc import abstractmethod
 
-
 class BaseRangeCheck:
     @staticmethod
     def checkRange(value):

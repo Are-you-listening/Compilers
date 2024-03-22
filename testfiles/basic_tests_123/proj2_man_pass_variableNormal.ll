@@ -7,35 +7,37 @@ target triple = "x86_64-pc-linux-gnu"
 define dso_local i32 @main() #0 {
   %1 = alloca i32, align 4
   %2 = alloca i32, align 4
-  %3 = alloca float, align 4
+  %3 = alloca i32, align 4
   %4 = alloca float, align 4
-  %5 = alloca i8, align 1
-  store i32 5, i32* %1, align 4
-  %6 = load i32, i32* %1, align 4
-  %7 = add nsw i32 %6, 3
-  store i32 %7, i32* %2, align 4
-  %8 = load i32, i32* %2, align 4
-  %9 = load i32, i32* %2, align 4
-  %10 = mul nsw i32 %8, %9
-  %11 = load i32, i32* %2, align 4
-  %12 = mul nsw i32 %10, %11
-  %13 = load i32, i32* %1, align 4
-  %14 = load i32, i32* %1, align 4
-  %15 = add nsw i32 %13, %14
-  %16 = mul nsw i32 %12, %15
-  store i32 %16, i32* %1, align 4
-  store float 0x3FEF8FDE20000000, float* %3, align 4
-  %17 = load float, float* %3, align 4
-  %18 = fpext float %17 to double
-  %19 = call double @llvm.fmuladd.f64(double %18, double 3.300000e+01, double 2.000000e+00)
-  %20 = fptrunc double %19 to float
-  store float %20, float* %4, align 4
-  %21 = load float, float* %4, align 4
-  %22 = load float, float* %3, align 4
-  %23 = fadd float %21, %22
-  store float %23, float* %4, align 4
-  store i8 97, i8* %5, align 1
-  store i8 98, i8* %5, align 1
+  %5 = alloca float, align 4
+  %6 = alloca i8, align 1
+  store i32 0, i32* %1, align 4
+  store i32 5, i32* %2, align 4
+  %7 = load i32, i32* %2, align 4
+  %8 = add nsw i32 %7, 3
+  store i32 %8, i32* %3, align 4
+  %9 = load i32, i32* %3, align 4
+  %10 = load i32, i32* %3, align 4
+  %11 = mul nsw i32 %9, %10
+  %12 = load i32, i32* %3, align 4
+  %13 = mul nsw i32 %11, %12
+  %14 = load i32, i32* %2, align 4
+  %15 = load i32, i32* %2, align 4
+  %16 = add nsw i32 %14, %15
+  %17 = mul nsw i32 %13, %16
+  store i32 %17, i32* %2, align 4
+  store float 0x3FEF8FDE20000000, float* %4, align 4
+  %18 = load float, float* %4, align 4
+  %19 = fpext float %18 to double
+  %20 = call double @llvm.fmuladd.f64(double %19, double 3.300000e+01, double 2.000000e+00)
+  %21 = fptrunc double %20 to float
+  store float %21, float* %5, align 4
+  %22 = load float, float* %5, align 4
+  %23 = load float, float* %4, align 4
+  %24 = fadd float %22, %23
+  store float %24, float* %5, align 4
+  store i8 97, i8* %6, align 1
+  store i8 98, i8* %6, align 1
   ret i32 0
 }
 

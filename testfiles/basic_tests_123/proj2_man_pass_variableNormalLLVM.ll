@@ -37,4 +37,5 @@ define i32 @"main"()
   ; CHAR c = 'a'
   store i8 98, i8* %".30", align 1
   ; c = 'b'
+  ret i32 0
 }

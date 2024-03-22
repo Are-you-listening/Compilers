@@ -9,5 +9,6 @@ const int* z = &x;
 
 const float a = 856.25668;
 const float* a_ptr = &a;
+    return 0;
 
 }

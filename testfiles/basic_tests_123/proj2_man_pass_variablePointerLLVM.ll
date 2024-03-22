@@ -34,4 +34,5 @@ define i32 @"main"()
   %".29" = alloca i32**, align 8
   store i32** %".6", i32*** %".29", align 8
   ; INT * * x_ptr = & int_ptr
+  ret i32 0
 }

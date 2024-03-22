@@ -11,4 +11,5 @@ define i32 @"main"()
   %".6" = alloca i8, align 1
   store i8 46, i8* %".6", align 1
   ; CHAR dot = '.'
+  ret i32 0
 }

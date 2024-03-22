@@ -18,5 +18,6 @@ int* pointer = &z;
 int x = *pointer;
 int** x_ptr = &int_ptr;
 
+    return 0;
 
 }

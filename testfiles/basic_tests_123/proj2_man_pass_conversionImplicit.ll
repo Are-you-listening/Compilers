@@ -6,27 +6,29 @@ target triple = "x86_64-pc-linux-gnu"
 ; Function Attrs: noinline nounwind optnone uwtable
 define dso_local i32 @main() #0 {
   %1 = alloca i32, align 4
-  %2 = alloca float, align 4
-  %3 = alloca i32, align 4
+  %2 = alloca i32, align 4
+  %3 = alloca float, align 4
   %4 = alloca i32, align 4
-  store i32 5, i32* %1, align 4
-  %5 = load i32, i32* %1, align 4
-  %6 = sitofp i32 %5 to float
-  store float %6, float* %2, align 4
-  store i32 -32682, i32* %3, align 4
-  %7 = load i32, i32* %3, align 4
-  %8 = sitofp i32 %7 to double
-  %9 = load i32, i32* %1, align 4
-  %10 = sitofp i32 %9 to double
-  %11 = call double @llvm.fmuladd.f64(double 3.300000e+01, double %8, double %10)
-  %12 = fptrunc double %11 to float
-  store float %12, float* %2, align 4
-  %13 = load float, float* %2, align 4
-  %14 = fpext float %13 to double
-  %15 = fmul double %14, 0x3FE6666666666666
-  %16 = fptosi double %15 to i32
-  store i32 %16, i32* %3, align 4
-  store i32 219, i32* %4, align 4
+  %5 = alloca i32, align 4
+  store i32 0, i32* %1, align 4
+  store i32 5, i32* %2, align 4
+  %6 = load i32, i32* %2, align 4
+  %7 = sitofp i32 %6 to float
+  store float %7, float* %3, align 4
+  store i32 -32682, i32* %4, align 4
+  %8 = load i32, i32* %4, align 4
+  %9 = sitofp i32 %8 to double
+  %10 = load i32, i32* %2, align 4
+  %11 = sitofp i32 %10 to double
+  %12 = call double @llvm.fmuladd.f64(double 3.300000e+01, double %9, double %11)
+  %13 = fptrunc double %12 to float
+  store float %13, float* %3, align 4
+  %14 = load float, float* %3, align 4
+  %15 = fpext float %14 to double
+  %16 = fmul double %15, 0x3FE6666666666666
+  %17 = fptosi double %16 to i32
+  store i32 %17, i32* %4, align 4
+  store i32 219, i32* %5, align 4
   ret i32 0
 }
 

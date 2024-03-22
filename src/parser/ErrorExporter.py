@@ -77,6 +77,11 @@ class ErrorExporter:
         print(f"[ Warning ] line {line_nr}: incompatible pointer types initializing '{''.join(type1)}' with an expression of type '{''.join(type2)}' ")
 
     @staticmethod
+    def devideByZero(line_nr: int, numerator):
+        print(f"[ Error ] line {line_nr}: can't devide {numerator} by zero")
+        exit()
+
+    @staticmethod
     def narrowingTypesWarning(line_nr: int, to_type: tuple, from_type: tuple):
         """
         print a warning for an incompatible conversion of ptr types int** to float** for example

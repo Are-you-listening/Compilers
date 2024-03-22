@@ -5,15 +5,17 @@ target triple = "x86_64-pc-linux-gnu"
 
 ; Function Attrs: noinline nounwind optnone uwtable
 define dso_local i32 @main() #0 {
-  %1 = alloca float, align 4
+  %1 = alloca i32, align 4
   %2 = alloca float, align 4
   %3 = alloca float, align 4
   %4 = alloca float, align 4
-  store float 0x3FDEA7AC80000000, float* %1, align 4
-  store float 0x4154F0CAC0000000, float* %2, align 4
-  store float 1.654000e+03, float* %3, align 4
-  store float 0.000000e+00, float* %4, align 4
-  store float 0xC081A9B940000000, float* %4, align 4
+  %5 = alloca float, align 4
+  store i32 0, i32* %1, align 4
+  store float 0x3FDEA7AC80000000, float* %2, align 4
+  store float 0x4154F0CAC0000000, float* %3, align 4
+  store float 1.654000e+03, float* %4, align 4
+  store float 0.000000e+00, float* %5, align 4
+  store float 0xC081A9B940000000, float* %5, align 4
   ret i32 0
 }
 
