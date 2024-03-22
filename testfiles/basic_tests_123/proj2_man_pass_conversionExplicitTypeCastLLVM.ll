@@ -45,4 +45,5 @@ define i32 @"main"()
   %".40" = fadd float %".36", %".39"
   store float %".40", float* %".27", align 4
   ; f2 = FLOAT a + z2 / 3 * 65232
+  ret i32 0
 }

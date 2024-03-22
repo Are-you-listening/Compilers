@@ -19,4 +19,5 @@ define i32 @"main"()
   %".14" = alloca i8, align 1
   store i8 %".13", i8* %".14", align 1
   ; CHAR another_char = * chr_ptr
+  ret i32 0
 }

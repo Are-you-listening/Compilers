@@ -19,4 +19,5 @@ define i32 @"main"()
   ; FLOAT z = 0000.00000
   store float 0xc081a9b940000000, float* %".12", align 4
   ; z = - 565.21547
+  ret i32 0
 }

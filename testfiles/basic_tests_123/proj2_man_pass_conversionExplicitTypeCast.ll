@@ -6,32 +6,34 @@ target triple = "x86_64-pc-linux-gnu"
 ; Function Attrs: noinline nounwind optnone uwtable
 define dso_local i32 @main() #0 {
   %1 = alloca i32, align 4
-  %2 = alloca float, align 4
-  %3 = alloca i32, align 4
-  %4 = alloca float, align 4
-  %5 = alloca i32, align 4
-  %6 = alloca float, align 4
-  store i32 5, i32* %1, align 4
-  store float 0x40E098B2C0000000, float* %2, align 4
-  %7 = load float, float* %2, align 4
-  %8 = fptosi float %7 to i32
-  store i32 %8, i32* %3, align 4
-  %9 = load i32, i32* %1, align 4
-  %10 = sitofp i32 %9 to float
-  store float %10, float* %4, align 4
-  %11 = load float, float* %2, align 4
-  %12 = load float, float* %4, align 4
-  %13 = call float @llvm.fmuladd.f32(float %12, float 2.000000e+00, float %11)
-  %14 = fptosi float %13 to i32
-  store i32 %14, i32* %5, align 4
-  %15 = load float, float* %2, align 4
-  store float %15, float* %6, align 4
-  %16 = load i32, i32* %5, align 4
-  %17 = sitofp i32 %16 to float
-  %18 = load float, float* %4, align 4
-  %19 = fdiv float %18, 1.956960e+05
-  %20 = fadd float %17, %19
-  store float %20, float* %6, align 4
+  %2 = alloca i32, align 4
+  %3 = alloca float, align 4
+  %4 = alloca i32, align 4
+  %5 = alloca float, align 4
+  %6 = alloca i32, align 4
+  %7 = alloca float, align 4
+  store i32 0, i32* %1, align 4
+  store i32 5, i32* %2, align 4
+  store float 0x40E098B2C0000000, float* %3, align 4
+  %8 = load float, float* %3, align 4
+  %9 = fptosi float %8 to i32
+  store i32 %9, i32* %4, align 4
+  %10 = load i32, i32* %2, align 4
+  %11 = sitofp i32 %10 to float
+  store float %11, float* %5, align 4
+  %12 = load float, float* %3, align 4
+  %13 = load float, float* %5, align 4
+  %14 = call float @llvm.fmuladd.f32(float %13, float 2.000000e+00, float %12)
+  %15 = fptosi float %14 to i32
+  store i32 %15, i32* %6, align 4
+  %16 = load float, float* %3, align 4
+  store float %16, float* %7, align 4
+  %17 = load i32, i32* %6, align 4
+  %18 = sitofp i32 %17 to float
+  %19 = load float, float* %5, align 4
+  %20 = fdiv float %19, 1.956960e+05
+  %21 = fadd float %18, %20
+  store float %21, float* %7, align 4
   ret i32 0
 }
 

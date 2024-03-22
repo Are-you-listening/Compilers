@@ -23,4 +23,5 @@ define i32 @"main"()
   %".18" = alloca float*, align 8
   store float* %".15", float** %".18", align 8
   ; const FLOAT * a_ptr = & a
+  ret i32 0
 }

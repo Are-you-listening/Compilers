@@ -7,56 +7,58 @@ target triple = "x86_64-pc-linux-gnu"
 define dso_local i32 @main() #0 {
   %1 = alloca i32, align 4
   %2 = alloca i32, align 4
-  %3 = alloca i32*, align 8
-  %4 = alloca i32, align 4
+  %3 = alloca i32, align 4
+  %4 = alloca i32*, align 8
   %5 = alloca i32, align 4
-  %6 = alloca float*, align 8
-  %7 = alloca i32, align 4
-  store i32 4, i32* %1, align 4
-  store i32 5, i32* %2, align 4
-  store i32* %1, i32** %3, align 8
-  %8 = load i32*, i32** %3, align 8
-  %9 = getelementptr inbounds i32, i32* %8, i32 1
-  store i32* %9, i32** %3, align 8
-  %10 = load i32*, i32** %3, align 8
-  %11 = getelementptr inbounds i32, i32* %10, i32 -1
-  store i32* %11, i32** %3, align 8
-  %12 = load i32*, i32** %3, align 8
-  %13 = icmp eq i32* %12, %1
-  %14 = zext i1 %13 to i32
-  store i32 %14, i32* %4, align 4
-  %15 = load i32*, i32** %3, align 8
-  %16 = icmp eq i32* %15, %2
-  %17 = zext i1 %16 to i32
-  store i32 %17, i32* %5, align 4
-  %18 = load i32*, i32** %3, align 8
-  %19 = icmp ne i32* %1, %18
-  %20 = zext i1 %19 to i32
-  store i32 %20, i32* %5, align 4
-  store float* null, float** %6, align 8
-  %21 = load float*, float** %6, align 8
-  %22 = load i32*, i32** %3, align 8
-  %23 = bitcast i32* %22 to float*
-  %24 = icmp uge float* %21, %23
-  %25 = zext i1 %24 to i32
-  %26 = load float*, float** %6, align 8
-  %27 = load i32*, i32** %3, align 8
-  %28 = bitcast i32* %27 to float*
-  %29 = icmp ule float* %26, %28
-  %30 = zext i1 %29 to i32
-  %31 = load i32*, i32** %3, align 8
-  %32 = icmp ugt i32* %31, %1
-  %33 = zext i1 %32 to i32
-  %34 = load i32*, i32** %3, align 8
-  %35 = icmp ult i32* %34, inttoptr (i64 32 to i32*)
-  %36 = zext i1 %35 to i32
-  store i32 4, i32* %7, align 4
-  %37 = load i32*, i32** %3, align 8
-  %38 = load i32, i32* %7, align 4
-  %39 = mul nsw i32 4, %38
-  %40 = sext i32 %39 to i64
-  %41 = getelementptr inbounds i32, i32* %37, i64 %40
-  store i32* %41, i32** %3, align 8
+  %6 = alloca i32, align 4
+  %7 = alloca float*, align 8
+  %8 = alloca i32, align 4
+  store i32 0, i32* %1, align 4
+  store i32 4, i32* %2, align 4
+  store i32 5, i32* %3, align 4
+  store i32* %2, i32** %4, align 8
+  %9 = load i32*, i32** %4, align 8
+  %10 = getelementptr inbounds i32, i32* %9, i32 1
+  store i32* %10, i32** %4, align 8
+  %11 = load i32*, i32** %4, align 8
+  %12 = getelementptr inbounds i32, i32* %11, i32 -1
+  store i32* %12, i32** %4, align 8
+  %13 = load i32*, i32** %4, align 8
+  %14 = icmp eq i32* %13, %2
+  %15 = zext i1 %14 to i32
+  store i32 %15, i32* %5, align 4
+  %16 = load i32*, i32** %4, align 8
+  %17 = icmp eq i32* %16, %3
+  %18 = zext i1 %17 to i32
+  store i32 %18, i32* %6, align 4
+  %19 = load i32*, i32** %4, align 8
+  %20 = icmp ne i32* %2, %19
+  %21 = zext i1 %20 to i32
+  store i32 %21, i32* %6, align 4
+  store float* null, float** %7, align 8
+  %22 = load float*, float** %7, align 8
+  %23 = load i32*, i32** %4, align 8
+  %24 = bitcast i32* %23 to float*
+  %25 = icmp uge float* %22, %24
+  %26 = zext i1 %25 to i32
+  %27 = load float*, float** %7, align 8
+  %28 = load i32*, i32** %4, align 8
+  %29 = bitcast i32* %28 to float*
+  %30 = icmp ule float* %27, %29
+  %31 = zext i1 %30 to i32
+  %32 = load i32*, i32** %4, align 8
+  %33 = icmp ugt i32* %32, %2
+  %34 = zext i1 %33 to i32
+  %35 = load i32*, i32** %4, align 8
+  %36 = icmp ult i32* %35, inttoptr (i64 32 to i32*)
+  %37 = zext i1 %36 to i32
+  store i32 4, i32* %8, align 4
+  %38 = load i32*, i32** %4, align 8
+  %39 = load i32, i32* %8, align 4
+  %40 = mul nsw i32 4, %39
+  %41 = sext i32 %40 to i64
+  %42 = getelementptr inbounds i32, i32* %38, i64 %41
+  store i32* %42, i32** %4, align 8
   ret i32 0
 }
 

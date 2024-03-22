@@ -17,4 +17,5 @@ define i32 @"main"()
   %".12" = alloca float, align 4
   store float 0x3fc52535a0000000, float* %".12", align 4
   ; const FLOAT z = f * f * f
+  ret i32 0
 }

@@ -29,4 +29,5 @@ define i32 @"main"()
   %".24" = alloca i32, align 4
   store i32 %".23", i32* %".24", align 4
   ; INT k = 'a' + 'z'
+  ret i32 0
 }

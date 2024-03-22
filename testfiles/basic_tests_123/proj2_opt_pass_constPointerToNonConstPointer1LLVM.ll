@@ -17,4 +17,5 @@ define i32 @"main"()
   %".12" = load i8*, i8** %".9", align 8
   store i8 99, i8* %".12", align 8
   ; * non_const_ptr = 'c'
+  ret i32 0
 }

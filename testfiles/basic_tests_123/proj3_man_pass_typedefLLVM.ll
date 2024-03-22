@@ -20,4 +20,5 @@ define i32 @"main"()
   %".15" = alloca i32, align 4
   store i32 %".14", i32* %".15", align 4
   ; INT b = y * z * 57809
+  ret i32 0
 }

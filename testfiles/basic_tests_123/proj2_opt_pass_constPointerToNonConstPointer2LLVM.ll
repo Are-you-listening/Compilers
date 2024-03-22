@@ -17,4 +17,5 @@ define i32 @"main"()
   %".12" = load float*, float** %".9", align 8
   store float 0x4009318fc0000000, float* %".12", align 8
   ; * non_const_f_ptr = 3.1492
+  ret i32 0
 }
