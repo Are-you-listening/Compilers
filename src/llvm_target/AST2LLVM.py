@@ -210,7 +210,7 @@ class AST2LLVM(ASTVisitor):
 
     @staticmethod
     def handleReturn(node: ASTNode):
-        LLVMSingleton.getInstance().getCurrentBlock().ret_void()
+        LLVMSingleton.getInstance().getCurrentBlock().ret(ir.Constant(ir.IntType(32),0))
 
     def handlePrintf(self, node: ASTNode):
         """

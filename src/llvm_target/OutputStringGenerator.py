@@ -222,10 +222,6 @@ class Printf:
             printf = ir.Function(module, printf_ty, name="printf")
             LLVMSingleton.getInstance().setPrintF(printf)
 
-        current_function = LLVMSingleton.getInstance().getLastFunction()
-        #block = current_function.append_basic_block("printf_block")
-
-        #builder = ir.IRBuilder(block)
         builder = LLVMSingleton.getInstance().getCurrentBlock()
         format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(format_specifier) + 1),
                                        bytearray(format_specifier.encode("utf8")))
