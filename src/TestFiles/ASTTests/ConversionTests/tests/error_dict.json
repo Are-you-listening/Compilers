@@ -1,1 +1,9 @@
-{"3":  ["[ Warning ] line 7: incompatible pointer types initializing 'FLOAT**' with an expression of type 'INT**' ", "[ Warning ] line 9: incompatible pointer types initializing 'CHAR**' with an expression of type 'INT**' ", "[ Warning ] line 13: incompatible pointer types initializing 'INT***' with an expression of type 'INT**' "]}
+{"1": ["[ Warning ] line 4: Narrowing type from 'FLOAT' to 'INT' ", "[ Warning ] line 6: Narrowing type from 'FLOAT' to 'CHAR' ", "[ Warning ] line 7: Narrowing type from 'INT' to 'CHAR' "],
+  "2": ["[ Warning ] line 3: Narrowing type from 'INT' to 'CHAR' ", "[ Warning ] line 4: Narrowing type from 'FLOAT' to 'CHAR' ", "[ Warning ] line 8: Narrowing type from 'FLOAT' to 'INT' "],
+  "3": ["[ Warning ] line 7: incompatible pointer types initializing 'FLOAT**' with an expression of type 'INT**' ", "[ Warning ] line 9: incompatible pointer types initializing 'CHAR**' with an expression of type 'INT**' ", "[ Warning ] line 13: incompatible pointer types initializing 'INT***' with an expression of type 'INT**' "],
+  "4": ["[ Warning ] line 2: Narrowing type from 'INT' to 'CHAR' ", "[ Warning ] line 5: incompatible pointer types initializing 'CHAR*' with an expression of type 'FLOAT*' "],
+  "5":  ["[ Warning ] line 3: Narrowing type from 'INT' to 'CHAR' "],
+  "6":  ["[ Warning ] line 3: Narrowing type from 'INT' to 'CHAR' ", "[ Warning ] line 4: incompatible pointer types initializing 'CHAR*' with an expression of type 'INT*' ", "[ Warning ] line 5: incompatible pointer types initializing 'FLOAT**' with an expression of type 'CHAR**' "],
+  "7": ["[ Error ] line 4: invalid operation + on type(s): PTR  FLOAT"],
+  "8": ["[ Warning ] line 4: Narrowing type from 'FLOAT' to 'INT' "]
+}

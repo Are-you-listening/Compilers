@@ -75,3 +75,25 @@ class ErrorExporter:
         :return:
         """
         print(f"[ Warning ] line {line_nr}: incompatible pointer types initializing '{''.join(type1)}' with an expression of type '{''.join(type2)}' ")
+
+    @staticmethod
+    def narrowingTypesWarning(line_nr: int, to_type: tuple, from_type: tuple):
+        """
+        print a warning for an incompatible conversion of ptr types int** to float** for example
+        :param line_nr:
+        :param to_type:
+        :param from_type:
+        :return:
+        """
+        print(f"[ Warning ] line {line_nr}: Narrowing type from '{''.join(from_type)}' to '{''.join(to_type)}' ")
+
+    @staticmethod
+    def IncompatiblePtrComparison(line_nr: int, type1: tuple, type2: tuple):
+        """
+        print a warning for an incompatible conversion of ptr types int** to float** for example
+        :param line_nr:
+        :param type1:
+        :param type2:
+        :return:
+        """
+        print(f"comparison of distinct pointer types ('{''.join(type1)}' and '{''.join(type2)}') ")

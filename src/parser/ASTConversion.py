@@ -90,13 +90,37 @@ class ASTConversion(ASTVisitor):
                 """
                 if min(len(to_type[1]), len(check_type[1])) != 0:
                     operator = child.getSiblingNeighbour(-1).text
-                    ErrorExporter.invalidOperation(node.linenr, operator, self.to_string_type(to_type),
-                                                   self.to_string_type(check_type))
+
+                    """
+                    pointers cannot do operation together unless condition operations
+                    """
+
+                    if operator not in ("==", "<=", ">=", "<", ">", "!="):
+                        """
+                        when the op is invalid for ptrs
+                        """
+                        ErrorExporter.invalidOperation(node.linenr, operator, self.to_string_type(to_type),
+                                                       self.to_string_type(check_type))
+
+                """
+                verify it is not ptr+float
+                """
+                if max(len(to_type[1]), len(check_type[1])) != 0:
+
+                    ptr_less_type = to_type[0]
+                    if len(check_type[1]) == 0:
+                        ptr_less_type = check_type[0]
+
+                    if ptr_less_type == "FLOAT" and len(to_type[1]) == 0:
+                        operator = child.getSiblingNeighbour(-1).text
+                        ErrorExporter.invalidOperation(node.linenr, operator, self.to_string_type(to_type),
+                                                       self.to_string_type(check_type))
 
                 """
                 for the non-first type, we will take the richest type
                 """
                 richest_native_type = self.rc.get_richest(to_type[0], check_type[0])
+
                 to_type = (richest_native_type, to_type[1])
 
         """
@@ -131,6 +155,7 @@ class ASTConversion(ASTVisitor):
             if type_tup != to_type:
 
                 self.pointer_warning_check(node.linenr, to_type, type_tup)
+                self.narrowing_warning_check(node.linenr, to_type, type_tup)
 
                 operator = self.get_sibling_operator(child)
                 if operator is not None and not self.compatible(type_tup, to_type, operator):
@@ -139,6 +164,12 @@ class ASTConversion(ASTVisitor):
                     """
                     ErrorExporter.invalidOperation(node.linenr, operator, self.to_string_type(to_type),
                                                    self.to_string_type(type_tup))
+
+                if operator is not None and len(to_type[1]) > 0 and len(type_tup[1]) == 0:
+                    """
+                    ptr+int, does not require to convert the int to an int*
+                    """
+                    continue
 
                 new_node = ASTNode("Conversion", node, child.getSymbolTable())
                 type_node = ASTNode("Type", new_node, new_node.getSymbolTable())
@@ -254,7 +285,7 @@ class ASTConversion(ASTVisitor):
         return None
 
     @staticmethod
-    def pointer_warning_check(line_nr: int, type_tup1: tuple, type_tup2: tuple):
+    def pointer_warning_check(line_nr: int, to_type: tuple, type_tup2: tuple):
         """
         when float* to int* convert we need to throw a warning
         This function will check for such situations and throw a warning accordingly
@@ -267,19 +298,42 @@ class ASTConversion(ASTVisitor):
         """
         when no ptrs are in the file, this check does nothing
         """
-        if max(len(type_tup1[1]), len(type_tup2[1])) == 0:
+        if min(len(to_type[1]), len(type_tup2[1])) == 0:
             return
 
-        if len(type_tup1[1]) != len(type_tup2[1]):
+        if len(to_type[1]) != len(type_tup2[1]):
             """
             when ptr amount is different
             """
-            ErrorExporter.IncompatiblePtrTypesWarning(line_nr, type_tup1, type_tup2)
+            ErrorExporter.IncompatiblePtrTypesWarning(line_nr, to_type, type_tup2)
             return
 
-        if type_tup1[0] != type_tup2[0]:
+        if to_type[0] != type_tup2[0]:
             """
             when type a ptr points to is different
             """
-            ErrorExporter.IncompatiblePtrTypesWarning(line_nr, type_tup1, type_tup2)
+            ErrorExporter.IncompatiblePtrTypesWarning(line_nr, to_type, type_tup2)
             return
+
+
+    def narrowing_warning_check(self, line_nr: int, to_tup: tuple, type_tup: tuple):
+
+        """
+        Give a warning when an implicit conversion narrows the type
+
+        :param line_nr:
+        :param to_tup:
+        :param type_tup:
+        :return:
+        """
+
+        """
+        ignore ptrs for this
+        """
+        if max(len(to_tup[1]), len(type_tup[1])) != 0:
+            return
+
+        if self.rc.get_poorest(to_tup[0], type_tup[0]) == type_tup[0]:
+            return
+
+        ErrorExporter.narrowingTypesWarning(line_nr, to_tup, type_tup)
