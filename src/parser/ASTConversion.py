@@ -105,6 +105,7 @@ class ASTConversion(ASTVisitor):
 
         """for declaration and assignment the type is the type of the value that is declared/assigned (and not the 
         necessarily the poorest type)"""
+
         if node.text in ("Declaration", "Assignment"):
             assign_node = node.getChild(0)
             assign_type = self.type_mapping[assign_node]
@@ -114,15 +115,23 @@ class ASTConversion(ASTVisitor):
             """
             to_type = (assign_type[0], assign_type[1][:-1])
 
+            """
+            make sure assignment doesn't convert to a ptr less
+            """
+            self.type_mapping[assign_node] = to_type
+
         """
         add implicit conversions as explicit
         """
         for child in node.children:
-            type_tup = self.type_mapping.get(child, None)
+            type_tup = self.type_mapping.get(child, (None, None))
             if type_tup == (None, None):
                 continue
 
             if type_tup != to_type:
+
+                self.pointer_warning_check(node.linenr, to_type, type_tup)
+
                 operator = self.get_sibling_operator(child)
                 if operator is not None and not self.compatible(type_tup, to_type, operator):
                     """
@@ -243,3 +252,34 @@ class ASTConversion(ASTVisitor):
             return node.getSiblingNeighbour(-1).text
 
         return None
+
+    @staticmethod
+    def pointer_warning_check(line_nr: int, type_tup1: tuple, type_tup2: tuple):
+        """
+        when float* to int* convert we need to throw a warning
+        This function will check for such situations and throw a warning accordingly
+        :param line_nr:
+        :param type_tup1:
+        :param type_tup2:
+        :return:
+        """
+
+        """
+        when no ptrs are in the file, this check does nothing
+        """
+        if max(type_tup1[1], type_tup2[1]) == 0:
+            return
+
+        if len(type_tup1[1]) != len(type_tup2[1]):
+            """
+            when ptr amount is different
+            """
+            ErrorExporter.IncompatiblePtrTypesWarning(line_nr, type_tup1, type_tup2)
+            return
+
+        if type_tup1[0] != type_tup2[0]:
+            """
+            when type a ptr points to is different
+            """
+            ErrorExporter.IncompatiblePtrTypesWarning(line_nr, type_tup1, type_tup2)
+            return

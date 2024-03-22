@@ -66,5 +66,12 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def conversionWarning(linenr: str):
-        print(f"[ Warning ] line {linenr}: Types do not match properly, a conversion was made")
+    def IncompatiblePtrTypesWarning(line_nr: int, type1: tuple, type2: tuple):
+        """
+        print a warning for an incompatible conversion of ptr types int** to float** for example
+        :param line_nr:
+        :param type1:
+        :param type2:
+        :return:
+        """
+        print(f"[ Warning ] line {line_nr}: incompatible pointer types initializing '{''.join(type1)}' with an expression of type '{''.join(type2)}' ")

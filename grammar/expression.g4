@@ -10,7 +10,7 @@ printf: 'printf' '(' '"' ('%s' | '%d' | '%x' | '%f' | '%c') (';')? '"' ',' (expr
 type: ('const')? ('int' | 'char' | 'float' | IDENTIFIER) ('*')*;
 declaration: type IDENTIFIER ('=' expr)?;
 assignment: ('*')* IDENTIFIER ('=' expr);
-conversion: '(' type ')' expr;
+conversion: '(' type ')' (literal | expr);
 expr : literal
      | '(' type ')' expr //explicit conversion
      | '(' expr ')'

@@ -6,7 +6,7 @@ from src.parser.ASTConversion import ASTConversion
 
 class TestConversion(unittest.TestCase):
     def testConversionsBasic(self):
-        file_indexes = range(1, 2)
+        file_indexes = range(1, 3)
         for index in file_indexes:
             file_path = f"tests/test{index}.json"
             with open(file_path, "rt") as f:
