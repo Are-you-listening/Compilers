@@ -1,5 +1,5 @@
 ; ModuleID = "testfiles/basic_tests_123/proj2_man_pass_conversionImplicit.c"
-target triple = "unknown-unknown-unknown"
+target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
 define i32 @"main"()
@@ -16,8 +16,8 @@ define i32 @"main"()
   store i32 -32682, i32* %".10", align 4
   ; INT z = - 32682
   %".13" = load i32, i32* %".3", align 4
-  %".14" = add i32 -1078506, %".13"
-  %".15" = fpext i32 %".14" to float
+  %".14" = fpext i32 %".13" to float
+  %".15" = fadd float 0xc13074ea00000000, %".14"
   store float %".15", float* %".7", align 4
   ; f = 33.0 * z + x
   %".18" = load float, float* %".7", align 4
@@ -25,7 +25,7 @@ define i32 @"main"()
   %".20" = fptosi float %".19" to i32
   store i32 %".20", i32* %".10", align 4
   ; z = f * 0.7
-  %".23" = zext i8 'Û' to i32
+  %".23" = zext i8 219 to i32
   %".24" = alloca i32, align 4
   store i32 %".23", i32* %".24", align 4
   ; INT k = 'a' + 'z'
