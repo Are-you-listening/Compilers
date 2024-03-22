@@ -267,7 +267,7 @@ class ASTConversion(ASTVisitor):
         """
         when no ptrs are in the file, this check does nothing
         """
-        if max(type_tup1[1], type_tup2[1]) == 0:
+        if max(len(type_tup1[1]), len(type_tup2[1])) == 0:
             return
 
         if len(type_tup1[1]) != len(type_tup2[1]):

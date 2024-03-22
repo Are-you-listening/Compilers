@@ -53,9 +53,6 @@ cfv = ConstantFoldingVisitor()
 cfv.visit(ast)
 
 
-v = ValueAdderVisitor()
-v.visit(ast)
-
 """
 add needed stuff above
 """

@@ -1,0 +1,1 @@
+{"3":  ["[ Warning ] line 7: incompatible pointer types initializing 'FLOAT**' with an expression of type 'INT**' ", "[ Warning ] line 9: incompatible pointer types initializing 'CHAR**' with an expression of type 'INT**' ", "[ Warning ] line 13: incompatible pointer types initializing 'INT***' with an expression of type 'INT**' "]}
