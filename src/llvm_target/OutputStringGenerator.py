@@ -222,10 +222,13 @@ class Printf:
             printf = ir.Function(module, printf_ty, name="printf")
             LLVMSingleton.getInstance().setPrintF(printf)
 
+        format_specifier+='\00'
         builder = LLVMSingleton.getInstance().getCurrentBlock()
-        format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(format_specifier) + 1),
+        format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(format_specifier)),
                                        bytearray(format_specifier.encode("utf8")))
         format_str_global = builder.module.globals.get(".str")
+        #format_str_const = builder.global_string(format_specifier+"\00")
+
         if not format_str_global:
             format_str_global = ir.GlobalVariable(builder.module, format_str_const.type, ".str")
             format_str_global.linkage = "internal"

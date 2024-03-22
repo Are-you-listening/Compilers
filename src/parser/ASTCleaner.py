@@ -96,8 +96,7 @@ class ASTCleaner(ASTVisitor):
         for child in node.children:
             node.parent.insertChild(line_index, child)
 
-    @staticmethod
-    def cleanPrintf(node: ASTNode):
+    def cleanPrintf(self, node: ASTNode):
         """
         Make the printf child nodes cleaner
         """
@@ -106,8 +105,12 @@ class ASTCleaner(ASTVisitor):
 
         for child in node.children:
             if child.text == "printf":
-                node.removeChild(child)
-            if child.text == ",":
-                node.removeChild(child)
+                self.to_remove.append((child,node))
+            elif child.text == ",":
+                self.to_remove.append((child,node))
+            elif child.text == '"':
+                self.to_remove.append((child,node))
+            elif child.text == "":
+                self.to_remove.append((child,node))
         id = node.children[0].text
         node.children[0].text = id[1:len(node.children[0].text) - 1]
