@@ -1,5 +1,6 @@
 from llvmlite import ir
-
+import llvmlite
+from llvmlite import binding as llvm
 
 class LLVMSingleton:
     __instance = None
@@ -8,7 +9,9 @@ class LLVMSingleton:
         if self.__instance is not None:
             raise Exception("This class is a singleton!")
 
-        self.__module = ir.Module(name=__file__)
+        self.__context = ir.Context()
+        self.__module = ir.Module(name=__file__, context=self.__context)
+        self.__module.triple = "x86_64-pc-linux-gnu"
         self.__last_function = None
         self.__Printf = None
         self.__current_block = ir.IRBuilder(ir.Block(self.__module))

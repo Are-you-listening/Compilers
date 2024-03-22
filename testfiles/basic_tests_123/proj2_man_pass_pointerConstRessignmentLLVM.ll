@@ -1,5 +1,5 @@
 ; ModuleID = "testfiles/basic_tests_123/proj2_man_pass_pointerConstRessignment.c"
-target triple = "unknown-unknown-unknown"
+target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
 define i32 @"main"()

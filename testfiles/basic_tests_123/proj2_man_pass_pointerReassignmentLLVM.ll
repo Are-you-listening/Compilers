@@ -1,5 +1,5 @@
 ; ModuleID = "testfiles/basic_tests_123/proj2_man_pass_pointerReassignment.c"
-target triple = "unknown-unknown-unknown"
+target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
 define i32 @"main"()
@@ -20,17 +20,6 @@ define i32 @"main"()
   store i32* %".3", i32** %".9", align 8
   ; non_const_pointer = & b
   %".17" = alloca i8, align 1
-  store i8 'x', i8* %".17", align 1
+  store i8 120, i8* %".17", align 1
   ; CHAR c = 'x'
-  %".20" = alloca i8, align 1
-  store i8 '\n', i8* %".20", align 1
-  ; CHAR nl = '\n'
-  %".23" = alloca i8*, align 8
-  store i8* %".17", i8** %".23", align 8
-  ; CHAR * char_ptr = & c
-  %".26" = load i8*, i8** %".23", align 8
-  store i8 '\t', i8* %".26", align 8
-  ; * char_ptr = '\t'
-  store i8* %".20", i8** %".23", align 8
-  ; char_ptr = & nl
 }

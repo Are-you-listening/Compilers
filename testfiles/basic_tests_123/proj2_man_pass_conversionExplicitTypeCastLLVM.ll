@@ -1,5 +1,5 @@
 ; ModuleID = "testfiles/basic_tests_123/proj2_man_pass_conversionExplicitTypeCast.c"
-target triple = "unknown-unknown-unknown"
+target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
 define i32 @"main"()
@@ -38,12 +38,11 @@ define i32 @"main"()
   %".33" = fmul float %".31", %".32"
   %".34" = fadd float %".30", %".33"
   %".35" = fptosi float %".34" to i32
-  %".36" = load float, float* %".14", align 4
-  %".37" = fpext i32 195696 to float
-  %".38" = fdiv float %".36", %".37"
-  %".39" = fptosi float %".38" to i32
-  %".40" = add i32 %".35", %".39"
-  %".41" = fpext i32 %".40" to float
-  store float %".41", float* %".27", align 4
+  %".36" = fpext i32 %".35" to float
+  %".37" = load float, float* %".14", align 4
+  %".38" = fpext i32 195696 to float
+  %".39" = fdiv float %".37", %".38"
+  %".40" = fadd float %".36", %".39"
+  store float %".40", float* %".27", align 4
   ; f2 = FLOAT a + z2 / 3 * 65232
 }

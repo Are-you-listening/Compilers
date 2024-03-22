@@ -102,8 +102,10 @@ class Declaration:
     def llvmLiteral(value: str, data_type: str, ptrs: str):
         if CTypesToLLVM.getIRType(data_type, ptrs) == ir.FloatType():
             value = float(value)
-        if CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(32):
+        elif CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(32):
             value = int(value)
+        elif CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(8):
+            value = ord(value[1:-1])  # Values are strings
 
         return ir.Constant(CTypesToLLVM.getIRType(data_type, ptrs), value)
 
@@ -220,13 +222,13 @@ class Printf:
             printf = ir.Function(module, printf_ty, name="printf")
             LLVMSingleton.getInstance().setPrintF(printf)
 
-        current_function = LLVMSingleton.getInstance().getLastFunction()
-        block = current_function.append_basic_block("printf_block")
-
-        builder = ir.IRBuilder(block)
-        format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(format_specifier) + 1),
+        format_specifier+='\00'
+        builder = LLVMSingleton.getInstance().getCurrentBlock()
+        format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(format_specifier)),
                                        bytearray(format_specifier.encode("utf8")))
         format_str_global = builder.module.globals.get(".str")
+        #format_str_const = builder.global_string(format_specifier+"\00")
+
         if not format_str_global:
             format_str_global = ir.GlobalVariable(builder.module, format_str_const.type, ".str")
             format_str_global.linkage = "internal"

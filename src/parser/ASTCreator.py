@@ -97,6 +97,14 @@ class ASTCreator(expressionVisitor):
     def visitComment(self, ctx: expressionParser.CommentContext):
         self.__makeNode(ctx, "Comment")
 
+    def visitReturn(self, ctx:expressionParser.ReturnContext):
+        node = ASTNode("Return", self.parent, self.table)  # Also attaches the current table/scope
+        node.linenr = ctx.start.line
+        self.parent.addChildren(node)
+        old_parent = self.parent
+        self.parent = node
+
+
     def visitTerminal(self, ctx):
         """
         :param ctx:

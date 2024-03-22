@@ -1,5 +1,5 @@
 ; ModuleID = "testfiles/basic_tests_123/proj2_opt_pass_constPointerToNonConstPointer2.c"
-target triple = "unknown-unknown-unknown"
+target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
 define i32 @"main"()

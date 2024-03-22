@@ -1,6 +1,6 @@
 import math
 from src.parser.CTypes.CFunctionExecuter import *
-
+import struct
 
 class _RangeCheck(BaseRangeCheck):
     @staticmethod
@@ -63,7 +63,23 @@ class _RelationalOperations(BaseRelationalOperations):
     """
     Relation functions equivalent to the functionality of C
     """
+class _Conversions:
 
+    @staticmethod
+    def ToInt(value):
+        """assume 4 bytes/ int"""
+        b = value.to_bytes(8, byteorder="big", signed=True)
+        b = b[-1:]
+        return int.from_bytes(b, 'big', signed=True)
+
+    @staticmethod
+    def ToFloat(value):
+        """assume 4 bytes/ float"""
+        value = float(value)
+        b = struct.pack("f", value)
+        b = b[-4:]
+
+        return struct.unpack("f", b)[0]
 
 class CFunctionExecuterChar(CFunctionExecuter):
     def __init__(self):
@@ -75,7 +91,7 @@ class CFunctionExecuterChar(CFunctionExecuter):
         self.LogicalOperations = _LogicalOperations
         self.BitOperations = _BitOperations
         self.RelationalOperations = _RelationalOperations
-        self.conversion_dict = {"FLOAT": ""}
+        self.conversion_dict = {"INT": _Conversions.ToInt, "FLOAT": _Conversions.ToFloat}
 
     def fromString(self, string: str):
         return ord(string[1])
@@ -83,6 +99,8 @@ class CFunctionExecuterChar(CFunctionExecuter):
     def convertTo(self, data, to_type):
         if to_type == "CHAR":
             return data
+
+        return self.conversion_dict[to_type](data)
 
     def getString(self, data):
         return f"'{chr(data)}'"

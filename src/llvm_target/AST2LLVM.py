@@ -91,6 +91,9 @@ class AST2LLVM(ASTVisitor):
         if node.text == "Conversion":
             self.handleConversions(node)
 
+        if node.text == "Return":
+            self.handleReturn(node)
+
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
             entry = self.map_table.getEntry(node.text)
@@ -204,6 +207,10 @@ class AST2LLVM(ASTVisitor):
     def handleComment(node: ASTNode):
         comment_text = node.children[0].text
         Declaration.addComment(comment_text)
+
+    @staticmethod
+    def handleReturn(node: ASTNode):
+        LLVMSingleton.getInstance().getCurrentBlock().ret(ir.Constant(ir.IntType(32),0))
 
     def handlePrintf(self, node: ASTNode):
         """

@@ -1,5 +1,5 @@
 ; ModuleID = "testfiles/basic_tests_123/proj2_man_pass_variableNormal.c"
-target triple = "unknown-unknown-unknown"
+target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
 define i32 @"main"()
@@ -33,8 +33,8 @@ define i32 @"main"()
   store float %".27", float* %".22", align 4
   ; f2 = f2 + f
   %".30" = alloca i8, align 1
-  store i8 'a', i8* %".30", align 1
+  store i8 97, i8* %".30", align 1
   ; CHAR c = 'a'
-  store i8 'b', i8* %".30", align 1
+  store i8 98, i8* %".30", align 1
   ; c = 'b'
 }
