@@ -101,4 +101,4 @@ class ErrorExporter:
         :param type2:
         :return:
         """
-        print(f"comparison of distinct pointer types ('{''.join(type1)}' and '{''.join(type2)}') ")
+        print(f"[ Warning ] line {line_nr}: comparison of distinct pointer types ('{''.join(type1)}' and '{''.join(type2)}') ")

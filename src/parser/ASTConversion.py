@@ -301,23 +301,14 @@ class ASTConversion(ASTVisitor):
         if min(len(to_type[1]), len(type_tup2[1])) == 0:
             return
 
-        if len(to_type[1]) != len(type_tup2[1]):
+        if len(to_type[1]) != len(type_tup2[1]) or to_type[0] != type_tup2[0]:
             """
-            when ptr amount is different
-            """
-            ErrorExporter.IncompatiblePtrTypesWarning(line_nr, to_type, type_tup2)
-            return
-
-        if to_type[0] != type_tup2[0]:
-            """
-            when type a ptr points to is different
+            when ptr amount is different or when type a ptr points to is different
             """
             ErrorExporter.IncompatiblePtrTypesWarning(line_nr, to_type, type_tup2)
             return
-
 
     def narrowing_warning_check(self, line_nr: int, to_tup: tuple, type_tup: tuple):
-
         """
         Give a warning when an implicit conversion narrows the type
 
