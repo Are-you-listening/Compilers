@@ -5,5 +5,7 @@
   "5":  ["[ Warning ] line 3: Narrowing type from 'INT' to 'CHAR' "],
   "6":  ["[ Warning ] line 3: Narrowing type from 'INT' to 'CHAR' ", "[ Warning ] line 4: incompatible pointer types initializing 'CHAR*' with an expression of type 'INT*' ", "[ Warning ] line 5: incompatible pointer types initializing 'FLOAT**' with an expression of type 'CHAR**' "],
   "7": ["[ Error ] line 4: invalid operation + on type(s): PTR  FLOAT"],
-  "8": ["[ Warning ] line 4: Narrowing type from 'FLOAT' to 'INT' "]
+  "8": ["[ Warning ] line 4: Narrowing type from 'FLOAT' to 'INT' "],
+  "9": ["[ Warning ] line 15: comparison of different types ('FLOAT*' and 'INT*') ", "[ Warning ] line 16: comparison of different types ('FLOAT*' and 'INT*') ", "[ Warning ] line 18: comparison of different types ('INT*' and 'INT') "],
+  "10": ["[ Warning ] line 12: Narrowing type from 'FLOAT' to 'INT' "]
 }

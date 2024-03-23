@@ -47,8 +47,19 @@ class ASTConversion(ASTVisitor):
             """
             When we have a conversion node, the new type will be the type defined in the conversion
             """
+
             type_value = node.getChild(0)
             data_type, ptrs = self.calculateType(type_value)
+
+            """
+            check first is the conversion is redundant (float) of float
+            """
+            if self.type_mapping[node.getChild(1)] == (data_type, ptrs):
+                """
+                this case the conversion is redundant
+                """
+                node.parent.replaceChild(node, node.getChild(1))
+
             self.type_mapping[node] = (data_type, ptrs)
             return
 
@@ -107,11 +118,11 @@ class ASTConversion(ASTVisitor):
                 """
                 if max(len(to_type[1]), len(check_type[1])) != 0:
 
-                    ptr_less_type = to_type[0]
+                    ptr_less_type = to_type
                     if len(check_type[1]) == 0:
-                        ptr_less_type = check_type[0]
+                        ptr_less_type = check_type
 
-                    if ptr_less_type == "FLOAT" and len(to_type[1]) == 0:
+                    if ptr_less_type[0] == "FLOAT" and len(ptr_less_type[1]) == 0:
                         operator = child.getSiblingNeighbour(-1).text
                         ErrorExporter.invalidOperation(node.linenr, operator, self.to_string_type(to_type),
                                                        self.to_string_type(check_type))
@@ -147,29 +158,37 @@ class ASTConversion(ASTVisitor):
         """
         add implicit conversions as explicit
         """
+
+        operator = self.get_operator(node)
         for child in node.children:
             type_tup = self.type_mapping.get(child, (None, None))
             if type_tup == (None, None):
                 continue
 
             if type_tup != to_type:
+                if operator is not None:
+                    if not self.compatible(type_tup, to_type, operator):
+                        """
+                        in case we have incompatible type
+                        """
+                        ErrorExporter.invalidOperation(child.linenr, operator, self.to_string_type(to_type),self.to_string_type(type_tup))
+                        continue
 
-                self.pointer_warning_check(node.linenr, to_type, type_tup)
-                self.narrowing_warning_check(node.linenr, to_type, type_tup)
+                    if operator in ("==", "!=", "<=", ">=", "<", ">"):
+                        ErrorExporter.IncompatibleComparison(child.linenr, to_type, type_tup)
+                        continue
 
-                operator = self.get_sibling_operator(child)
-                if operator is not None and not self.compatible(type_tup, to_type, operator):
-                    """
-                    in case we have incompatible type
-                    """
-                    ErrorExporter.invalidOperation(node.linenr, operator, self.to_string_type(to_type),
-                                                   self.to_string_type(type_tup))
-
-                if operator is not None and len(to_type[1]) > 0 and len(type_tup[1]) == 0:
+                """
+                in case ptr+int, or ptr=int, we don't need to convert the int
+                """
+                if len(to_type[1]) > 0 and len(type_tup[1]) == 0:
                     """
                     ptr+int, does not require to convert the int to an int*
                     """
                     continue
+
+                self.pointer_warning_check(child.linenr, to_type, type_tup, operator)
+                self.narrowing_warning_check(child.linenr, to_type, type_tup)
 
                 new_node = ASTNode("Conversion", node, child.getSymbolTable())
                 type_node = ASTNode("Type", new_node, new_node.getSymbolTable())
@@ -188,7 +207,13 @@ class ASTConversion(ASTVisitor):
                                         None))
                 child.addNodeParent(new_node)
 
-        self.type_mapping[node] = to_type
+        """
+        equality operators give an integer back
+        """
+        if operator in ("==", "!=", "<=", ">=", "<", ">"):
+            self.type_mapping[node] = ("INT", "")
+        else:
+            self.type_mapping[node] = to_type
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
@@ -267,30 +292,28 @@ class ASTConversion(ASTVisitor):
         return "PTR"
 
     @staticmethod
-    def get_sibling_operator(node: ASTNode):
-        if node.parent.getChildAmount() != 3:
-            return None
-
-        if node.parent.findChild(node) == 0:
-            """
-            if left operator
-            """
-            return node.getSiblingNeighbour(1).text
-        elif node.parent.findChild(node) == 2:
-            """
-            if right operator
-            """
-            return node.getSiblingNeighbour(-1).text
+    def get_operator(node: ASTNode):
+        """
+        Find the operator of a node
+        :param node: the node whose operator we want
+        :return:
+        """
+        for child in node.children:
+            if not isinstance(child, ASTNodeTerminal):
+                continue
+            if child.type not in types and child.type != "IDENTIFIER":
+                return child.text
 
         return None
 
     @staticmethod
-    def pointer_warning_check(line_nr: int, to_type: tuple, type_tup2: tuple):
+    def pointer_warning_check(line_nr: int, to_type: tuple, type_tup2: tuple, operator):
         """
         when float* to int* convert we need to throw a warning
         This function will check for such situations and throw a warning accordingly
+        :param operator:
         :param line_nr:
-        :param type_tup1:
+        :param to_type:
         :param type_tup2:
         :return:
         """
@@ -298,6 +321,7 @@ class ASTConversion(ASTVisitor):
         """
         when no ptrs are in the file, this check does nothing
         """
+
         if min(len(to_type[1]), len(type_tup2[1])) == 0:
             return
 
@@ -305,7 +329,13 @@ class ASTConversion(ASTVisitor):
             """
             when ptr amount is different or when type a ptr points to is different
             """
+
+            """
+            when comparison operator is given -> other error message
+            """
+
             ErrorExporter.IncompatiblePtrTypesWarning(line_nr, to_type, type_tup2)
+
             return
 
     def narrowing_warning_check(self, line_nr: int, to_tup: tuple, type_tup: tuple):
