@@ -4,7 +4,7 @@ from src.parser.CTypes.CFunctionExecuterFloat import *
 from src.parser.ErrorExporter import *
 
 
-types = ["CHAR", "INT", "FLOAT"]
+types = ["BOOL", "CHAR", "INT", "FLOAT"]
 
 
 class RichnessChecker:

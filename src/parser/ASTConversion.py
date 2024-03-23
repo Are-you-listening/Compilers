@@ -132,7 +132,15 @@ class ASTConversion(ASTVisitor):
                 """
                 richest_native_type = self.rc.get_richest(to_type[0], check_type[0])
 
-                to_type = (richest_native_type, to_type[1])
+                """
+                when 2 conflicting ptr types choose the one with the most ptrs: '*'
+                Because, PTR+PTR will be rejected in the future, and int+PTR, will be just fine
+                """
+                to_ptr = to_type[1]
+                if len(check_type[1]) > len(to_type[1]):
+                    to_ptr = check_type[1]
+
+                to_type = (richest_native_type, to_ptr)
 
         """
         Verify if the operators are allowed | Semantic Analyse
@@ -210,8 +218,8 @@ class ASTConversion(ASTVisitor):
         """
         equality operators give an integer back
         """
-        if operator in ("==", "!=", "<=", ">=", "<", ">"):
-            self.type_mapping[node] = ("INT", "")
+        if operator in ("==", "!=", "<=", ">=", "<", ">", "&&", "||", "!"):
+            self.type_mapping[node] = ("BOOL", "")
         else:
             self.type_mapping[node] = to_type
 

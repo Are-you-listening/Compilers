@@ -9,8 +9,7 @@ import json
 
 class TestConversion(unittest.TestCase):
     def testConversionsBasic(self):
-        file_indexes = range(1, 12)
-
+        file_indexes = range(1, 13)
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 

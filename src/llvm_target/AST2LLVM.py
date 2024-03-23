@@ -111,11 +111,18 @@ class AST2LLVM(ASTVisitor):
             self.llvm_map[node] = llvm_var
 
         if node.text == "&&":
+            """
+            add a logical 'AND' component to the control flow graph
+            """
             llvm_var = self.handleLogicalOperations(node.getSiblingNeighbour(-1))
             self.control_flow_graph.addLogicalAnd()
             self.llvm_map[node] = llvm_var
 
         if node.text == "||":
+            """
+            add a logical 'OR' component to the control flow graph
+            """
+
             llvm_var = self.handleLogicalOperations(node.getSiblingNeighbour(-1))
             self.control_flow_graph.addLogicalOr()
             self.llvm_map[node] = llvm_var
@@ -124,6 +131,10 @@ class AST2LLVM(ASTVisitor):
             return
 
         if node.getSiblingNeighbour(-1).text in ("||", "&&"):
+            """
+            When the terminal coming before the current node, is a logical operation, we will handle this
+            node as the right side part of this operation
+            """
             llvm_var = self.handleLogicalOperations(node)
             self.llvm_map[node] = llvm_var
 
@@ -329,8 +340,17 @@ class AST2LLVM(ASTVisitor):
         Declaration.addComment(code)
 
     def handleLogicalOperations(self, node):
+        """
+        handle operations part of a logical operation
+        """
+
+        """
+        check if an eval is started, if not start 1, An Eval is just a pending evaluation of the control flow,
+        with its corresponding branches
+        """
         if not self.control_flow_graph.isEval():
             self.control_flow_graph.startEval()
+
         """
         add syntax to make bool on right spot
         """

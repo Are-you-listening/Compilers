@@ -77,3 +77,21 @@ class ConstantFoldingVisitor(ASTVisitor):
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass
+
+    def logical_operations(self, node):
+        """
+        Constant folding does some things extra for logical operations
+        When we have a logical operation 'a || 1', we know the anwser will always be true
+        So we will directly evaluate this
+
+        :param node: the node that contains a logical operation
+        :return: result, datatype
+        """
+
+        """
+        This code has 4 scenario's
+        1. True || var => True
+        2. False || var => var (convert to int 1 bit)
+        3. True && var => var (convert to int 1 bit)
+        4. False && var => False
+        """
