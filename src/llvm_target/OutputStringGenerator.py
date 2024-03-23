@@ -272,7 +272,7 @@ class Conversion:
                            (ir.FloatType, "INT"): lambda x, x_to: block.fptosi(x, x_to),
                            (ir.IntType, "CHAR"): lambda x, x_to: block.trunc(x, x_to),
                            (ir.FloatType, "CHAR"): lambda x, x_to: block.zext(x, x_to),
-                           (ir.IntType, "INT"): lambda x, x_to: block.sext(x, x_to),
+                           (ir.IntType, "INT"): lambda x, x_to: block.zext(x, x_to),
                            (ir.IntType, "PTR"): lambda x, x_to: block.inttoptr(x, x_to),
                            (ir.FloatType, "PTR"): lambda x, x_to: block.inttoptr(x, x_to),
                            (ir.IntType, "BOOL"): lambda x, x_to: block.icmp_signed("!=", x, ir.Constant(x.type, 0)),
