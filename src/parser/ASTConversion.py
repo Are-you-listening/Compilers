@@ -73,6 +73,7 @@ class ASTConversion(ASTVisitor):
         now we are going to decide which type we should convert to if we do not yet have that type
         """
         to_type: tuple = (None, None)
+        operator = self.get_operator(node)
 
         if node.text in ("Literal", "Expr"):
             """
@@ -100,7 +101,6 @@ class ASTConversion(ASTVisitor):
                 to be 0, else we throw een error
                 """
                 if min(len(to_type[1]), len(check_type[1])) != 0:
-                    operator = child.getSiblingNeighbour(-1).text
 
                     """
                     pointers cannot do operation together unless condition operations
@@ -110,20 +110,6 @@ class ASTConversion(ASTVisitor):
                         """
                         when the op is invalid for ptrs
                         """
-                        ErrorExporter.invalidOperation(node.linenr, operator, self.to_string_type(to_type),
-                                                       self.to_string_type(check_type))
-
-                """
-                verify it is not ptr+float
-                """
-                if max(len(to_type[1]), len(check_type[1])) != 0:
-
-                    ptr_less_type = to_type
-                    if len(check_type[1]) == 0:
-                        ptr_less_type = check_type
-
-                    if ptr_less_type[0] == "FLOAT" and len(ptr_less_type[1]) == 0:
-                        operator = child.getSiblingNeighbour(-1).text
                         ErrorExporter.invalidOperation(node.linenr, operator, self.to_string_type(to_type),
                                                        self.to_string_type(check_type))
 
@@ -139,12 +125,11 @@ class ASTConversion(ASTVisitor):
                 to_ptr = to_type[1]
                 if len(check_type[1]) > len(to_type[1]):
                     to_ptr = check_type[1]
+                    richest_native_type = check_type[0]
+                elif len(to_type[1]) > len(check_type[1]):
+                    richest_native_type = to_type[0]
 
                 to_type = (richest_native_type, to_ptr)
-
-        """
-        Verify if the operators are allowed | Semantic Analyse
-        """
 
         """for declaration and assignment the type is the type of the value that is declared/assigned (and not the 
         necessarily the poorest type)"""
@@ -166,8 +151,6 @@ class ASTConversion(ASTVisitor):
         """
         add implicit conversions as explicit
         """
-
-        operator = self.get_operator(node)
         for child in node.children:
             type_tup = self.type_mapping.get(child, (None, None))
             if type_tup == (None, None):
@@ -176,6 +159,7 @@ class ASTConversion(ASTVisitor):
             if type_tup != to_type:
                 if operator is not None:
                     if not self.compatible(type_tup, to_type, operator):
+
                         """
                         in case we have incompatible type
                         """
@@ -286,8 +270,20 @@ class ASTConversion(ASTVisitor):
 
         type_set = {ASTConversion.to_string_type(type_tup), ASTConversion.to_string_type(to_type)}
 
-        if "FLOAT" in type_set and "PTR" in type_set:
-            incompatible = True
+        """
+        verify it is not ptr+float, or something like that
+        """
+        if max(len(to_type[1]), len(type_tup[1])) != 0:
+            ptr_less_type = to_type
+            if len(type_tup[1]) == 0:
+                ptr_less_type = type_tup
+
+            """
+            check if 1 is a PTR and 1 is a FLOAT to say the operation is invalid
+            Some operations like '&&' are still valid
+            """
+            if ptr_less_type[0] == "FLOAT" and len(ptr_less_type[1]) == 0 and operator not in ("==", "<=", ">=", "<", ">", "!=", "&&", "||"):
+                incompatible = True
 
         return not incompatible
 
