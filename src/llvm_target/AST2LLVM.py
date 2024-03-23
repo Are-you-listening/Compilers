@@ -333,11 +333,16 @@ class AST2LLVM(ASTVisitor):
         """"
         Extract the type of the AST node
         """
-        type_text = type_node.children[0].text
-        if type_node.getChildAmount() > 1:
-            type_text += type_node.children[1].text
+        type_text = ""
+        ptr_text = ""
 
-        return type_text
+        for child in type_node.children:
+            if "*" in child.text:
+                ptr_text += child.text
+            else:
+                type_text += child.text
+
+        return type_text, ptr_text
 
     def addOriginalCodeAsComment(self, node: ASTNode):
         """

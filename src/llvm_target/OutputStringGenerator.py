@@ -260,30 +260,36 @@ class Printf:
 class Conversion:
     @staticmethod
     def performConversion(llvm_var, to_type):
+        native_type = to_type[0]
+        ptrs = to_type[1]
+
         block = LLVMSingleton.getInstance().getCurrentBlock()  # Get the current block
-        if isinstance(llvm_var.type, ir.IntType) and to_type == "FLOAT":
-            return block.sitofp(llvm_var, ir.FloatType())
-        elif isinstance(llvm_var.type, ir.FloatType) and to_type == "INT":
-            return block.fptosi(llvm_var, ir.IntType(32))
-        elif isinstance(llvm_var.type, ir.IntType) and to_type == "CHAR":
-            return block.trunc(llvm_var, ir.IntType(8))
-        elif isinstance(llvm_var.type, ir.FloatType) and to_type == "CHAR":
-            return block.trunc(llvm_var, ir.IntType(8))
-        elif isinstance(llvm_var.type, ir.IntType) and to_type == "INT":
-            return block.zext(llvm_var, ir.IntType(32))
-        elif len(to_type) == 6:
-            if to_type[0:5] == "FLOAT" and to_type[5] == '*':
-                #return block.inttoptr(llvm_var, ir.PointerType(ir.FloatType()))
-                return block.bitcast(llvm_var, ir.FloatType.as_pointer())
-        elif to_type[0:3] == "INT" and to_type[3] == '*':
-            return block.inttoptr(llvm_var, ir.PointerType(ir.IntType(32)))
-        elif to_type[0:3] == "CHAR" and to_type[3] == '*':
-            return block.inttoptr(llvm_var, ir.PointerType(ir.IntType(8)))
-        elif to_type == "INT" and isinstance(llvm_var, ir.PointerType):
-            return block.ptrtoint(llvm_var, ir.IntType(32))
-        elif to_type == "CHAR" and isinstance(llvm_var, ir.PointerType):
-            return block.ptrtoint(llvm_var, ir.IntType(8))
-        elif to_type == "BOOL":
-            return block.icmp_signed("!=", llvm_var, ir.Constant(llvm_var.type, 0))
-        else:
-            return llvm_var
+
+        """
+        dict we use to retrieve which conversion command to call
+        """
+        conversion_dict = {(ir.IntType, "FLOAT"): lambda x, x_to: block.sitofp(x, x_to),
+                           (ir.FloatType, "INT"): lambda x, x_to: block.fptosi(x, x_to),
+                           (ir.IntType, "CHAR"): lambda x, x_to: block.trunc(x, x_to),
+                           (ir.FloatType, "CHAR"): lambda x, x_to: block.zext(x, x_to),
+                           (ir.IntType, "INT"): lambda x, x_to: block.sext(x, x_to),
+                           (ir.IntType, "PTR"): lambda x, x_to: block.inttoptr(x, x_to),
+                           (ir.FloatType, "PTR"): lambda x, x_to: block.inttoptr(x, x_to),
+                           (ir.IntType, "BOOL"): lambda x, x_to: block.icmp_signed("!=", x, ir.Constant(x.type, 0)),
+                           (ir.FloatType, "BOOL"): lambda x, x_to: block.icmp_signed("!=", x, ir.Constant(x.type, 0)),
+                           (ir.PointerType, "INT"): lambda x, x_to: block.ptrtoint(x, x_to),
+                           (ir.PointerType, "CHAR"): lambda x, x_to: block.ptrtoint(x, x_to),
+                           (ir.PointerType, "PTR"): lambda x, x_to: block.bitcast(x, x_to)}
+
+        llvm_to_type = CTypesToLLVM.getIRType(native_type, ptrs)
+
+        """
+        make a simplified to type for checking the conversion dict
+        """
+        simplified_to_type = native_type
+        if len(ptrs) > 0:
+            simplified_to_type = "PTR"
+
+        c = conversion_dict.get((type(llvm_var.type), simplified_to_type))
+        llvm_var = c(llvm_var, llvm_to_type)
+        return llvm_var
