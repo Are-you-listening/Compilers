@@ -2,10 +2,14 @@ int main(){
 
     int a = 1;
     int b = 1;
+    int d = 1;
     a = 1;
     b = 1;
+    d = 1;
 
-    int c = a && b;
+    int c = a && b || d;
+
+    int g = a == b;
 
     return 0;
 

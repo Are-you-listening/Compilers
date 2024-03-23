@@ -283,5 +283,7 @@ class Conversion:
             return block.ptrtoint(llvm_var, ir.IntType(32))
         elif to_type == "CHAR" and isinstance(llvm_var, ir.PointerType):
             return block.ptrtoint(llvm_var, ir.IntType(8))
+        elif to_type == "BOOL":
+            return block.icmp_signed("!=", llvm_var, ir.Constant(llvm_var.type, 0))
         else:
             return llvm_var

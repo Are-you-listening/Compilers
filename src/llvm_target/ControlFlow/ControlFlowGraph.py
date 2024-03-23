@@ -56,6 +56,10 @@ class ControlFlowGraph:
         self.reject: Vertex = None
         self.const_value_map = {}
 
+        """
+        node stores AST Node indicating when a eval needs to end
+        """
+        self.eval_scope_node = None
     def isEval(self):
         """
         check if the control flow is currently creating a control flow
@@ -99,13 +103,16 @@ class ControlFlowGraph:
 
             self.accepting.reverse_edges.extend(self.reject.reverse_edges)
 
-        self.__evalSetBranches()
+        phi = self.__evalSetBranches()
 
         self.current = self.accepting
         LLVMSingleton.getInstance().setCurrentBlock(self.current.llvm)
         LLVMSingleton.getInstance().removeBlock(self.reject.llvm)
         self.accepting = None
         self.reject = None
+        self.eval_scope_node = None
+
+        return phi
 
     def addLogicalAnd(self):
         builder = LLVMSingleton.getInstance().addBlock()
@@ -173,7 +180,7 @@ class ControlFlowGraph:
             if false_edge.to_vertex not in checked and false_edge.to_vertex not in to_check:
                 to_check.add(false_edge.to_vertex)
 
-        self.__evalFinalVertex(final_vertex)
+        return self.__evalFinalVertex(final_vertex)
 
     def __evalFinalVertex(self, final_vertex):
         """
@@ -224,6 +231,8 @@ class ControlFlowGraph:
                 phi.add_incoming(ir.Constant(bool_type, 1), vertex.llvm.block)
             elif in_false:
                 phi.add_incoming(ir.Constant(bool_type, 0), vertex.llvm.block)
+
+        return phi
 
     @staticmethod
     def __makeBool(builder):

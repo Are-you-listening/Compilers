@@ -44,6 +44,10 @@ class AST2LLVM(ASTVisitor):
                 self.map_table = MapTable(self.map_table)
                 self.handleFunction(currentNode)
 
+            if currentNode.text == "Expr" and currentNode.getChildAmount() == 3 and currentNode.getChild(1).text in ("&&", "||"):
+                if self.control_flow_graph.eval_scope_node is None:
+                    self.control_flow_graph.eval_scope_node = currentNode
+
             childNotVisited = False
             for child in reversed(currentNode.getChildren()):
                 if child not in visited:
@@ -61,9 +65,6 @@ class AST2LLVM(ASTVisitor):
         :param node:
         :return:
         """
-        if node.text in ("Declaration", "Assignment", "Function"):
-            if self.control_flow_graph.isEval():
-                self.control_flow_graph.endEval()
 
         if node.text == "Declaration":
             self.handleDeclaration(node)
@@ -93,6 +94,14 @@ class AST2LLVM(ASTVisitor):
 
         if node.text == "Return":
             self.handleReturn(node)
+
+        """
+        end an eval, and give the llvm var, the phi after the eval
+        """
+        if self.control_flow_graph.eval_scope_node == node:
+            if self.control_flow_graph.isEval():
+                phi = self.control_flow_graph.endEval()
+                self.llvm_map[node] = phi
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
@@ -351,16 +360,13 @@ class AST2LLVM(ASTVisitor):
         if not self.control_flow_graph.isEval():
             self.control_flow_graph.startEval()
 
-        """
-        add syntax to make bool on right spot
-        """
-        llvm_zero = Declaration.llvmLiteral("0", "INT", "")
-
         var = self.llvm_map[node]
+
+        """
+        deprecated: need to make sure that 0 ne 5 etc will be eval in future
+        """
         if isinstance(var, ir.values.Constant):
             self.control_flow_graph.const_value_map[LLVMSingleton.getInstance().getCurrentBlock()] = var
             return var
 
-        llvm_var = Calculation.operation(var, llvm_zero, "!=")
-
-        return llvm_var
+        return var
