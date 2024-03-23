@@ -148,6 +148,12 @@ class ASTConversion(ASTVisitor):
             """
             self.type_mapping[assign_node] = to_type
 
+        if operator in ("&&", "||"):
+            """
+            logical operators expect booleans so we convert the given entry into a boolean
+            """
+            to_type = ("BOOL", "")
+
         """
         add implicit conversions as explicit
         """
@@ -157,9 +163,19 @@ class ASTConversion(ASTVisitor):
                 continue
 
             if type_tup != to_type:
+                if to_type == ("BOOL", ""):
+                    """
+                    logical operators expect booleans so we convert the given entry into a boolean
+                    """
+                    self.addConversion(child, ("BOOL", ""))
+
+                    """
+                    use continue so we don't throw warnings/errors for booleans
+                    """
+                    continue
+
                 if operator is not None:
                     if not self.compatible(type_tup, to_type, operator):
-
                         """
                         in case we have incompatible type
                         """
@@ -182,22 +198,7 @@ class ASTConversion(ASTVisitor):
                 self.pointer_warning_check(child.linenr, to_type, type_tup, operator)
                 self.narrowing_warning_check(child.linenr, to_type, type_tup)
 
-                new_node = ASTNode("Conversion", node, child.getSymbolTable())
-                type_node = ASTNode("Type", new_node, new_node.getSymbolTable())
-                new_node.addChildren(type_node)
-
-                """
-                add datatype
-                """
-                type_node.addChildren(
-                    ASTNodeTerminal(to_type[0], type_node, type_node.getSymbolTable(), "Not Used",
-                                    None))
-
-                for t_child in to_type[1].split():
-                    type_node.addChildren(
-                        ASTNodeTerminal(t_child, type_node, type_node.getSymbolTable(), "Not Used",
-                                        None))
-                child.addNodeParent(new_node)
+                self.addConversion(child, to_type)
 
         """
         equality operators give an integer back
@@ -362,3 +363,29 @@ class ASTConversion(ASTVisitor):
             return
 
         ErrorExporter.narrowingTypesWarning(line_nr, to_tup, type_tup)
+
+    def addConversion(self, node: ASTNode, to_type: tuple):
+        """
+        add a conversion to the provided type
+
+        :param to_type:
+        :param node:
+        :return:
+        """
+
+        new_node = ASTNode("Conversion", node.parent, node.getSymbolTable())
+        type_node = ASTNode("Type", new_node, new_node.getSymbolTable())
+        new_node.addChildren(type_node)
+
+        """
+        add datatype
+        """
+        type_node.addChildren(
+            ASTNodeTerminal(to_type[0], type_node, type_node.getSymbolTable(), "Not Used",
+                            None))
+
+        for t_child in to_type[1].split():
+            type_node.addChildren(
+                ASTNodeTerminal(t_child, type_node, type_node.getSymbolTable(), "Not Used",
+                                None))
+        node.addNodeParent(new_node)
