@@ -264,6 +264,16 @@ class AST2LLVM(ASTVisitor):
             when ! is inside a logical expression
             """
 
+            sub_control_graph_right = self.control_flow_map.get(node.getChild(1), None)
+            if operator == "!" and self.eval_scope_node is not None and sub_control_graph_right is not None:
+                own_sub_control = ControlFlowGraph.mergeLogicalNot(sub_control_graph_right)
+
+                self.control_flow_map[node.getChild(0)] = own_sub_control
+                self.control_flow_map[node.getChild(1)] = own_sub_control
+
+                self.llvm_map[node] = self.llvm_map[node.getChild(1)]
+                return
+
             if child.text in ("++", "--"):
                 operator = child.text
                 child = node.getChild(0)
@@ -276,17 +286,6 @@ class AST2LLVM(ASTVisitor):
                 super_child = child.getChild(0)
                 u = self.llvm_map[super_child]
                 Declaration.assignment(u, llvm_var, u.align)
-
-            sub_control_graph_right = self.control_flow_map.get(node.getChild(1), None)
-            if operator == "!" and self.eval_scope_node is not None and sub_control_graph_right is not None:
-                own_sub_control = ControlFlowGraph.mergeLogicalNot(sub_control_graph_right)
-
-                self.control_flow_map[node.getChild(0)] = own_sub_control
-                self.control_flow_map[node.getChild(1)] = own_sub_control
-
-                self.llvm_map[node] = self.llvm_map[node.getChild(1)]
-
-                return
 
             if post_incr:
                 llvm_var = child

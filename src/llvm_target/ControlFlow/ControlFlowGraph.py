@@ -141,6 +141,9 @@ class ControlFlowGraph:
                 """
                 In this case both true and false go to this branch
                 """
+                if true_edge.flip_eval:
+                    last_instruction = current_vertex.llvm.block.instructions[-1]
+                    current_vertex.llvm.xor(last_instruction, ir.Constant(last_instruction.type, 1))
 
                 """
                 make branch statement a boolean
@@ -193,6 +196,7 @@ class ControlFlowGraph:
             in_false = vertex in edge_false_list
 
             if in_true and in_false:
+
                 if vertex.llvm in self.const_value_map:
                     const_val = self.const_value_map[vertex.llvm]
 
@@ -201,13 +205,14 @@ class ControlFlowGraph:
                     else:
                         bool_val = 1
 
-                    phi.add_incoming(ir.Constant(bool_type, bool_val), vertex.llvm.block)
+                    last_instruction = ir.Constant(bool_type, bool_val)
                 else:
                     last_instruction = vertex.llvm.block.instructions[-2]
                     """
                     make bool if not a bool type
                     """
-                    phi.add_incoming(last_instruction, vertex.llvm.block)
+
+                phi.add_incoming(last_instruction, vertex.llvm.block)
 
             elif in_true:
                 phi.add_incoming(ir.Constant(bool_type, 1), vertex.llvm.block)
@@ -276,15 +281,15 @@ class ControlFlowGraph:
 
     @staticmethod
     def mergeLogicalNot(control_flow_1: "ControlFlowGraph"):
-        visited = set()
+        temp = control_flow_1.accepting
+        control_flow_1.accepting = control_flow_1.reject
 
-        check_set = {control_flow_1.root}
-        while len(check_set) != 0:
-            current_vertex: Vertex = check_set.pop()
-            visited.add(current_vertex)
-            for edge in current_vertex.edges:
-                edge.switchFlip()
-                if edge.to_vertex not in check_set and edge.to_vertex not in visited:
-                    check_set.add(edge.to_vertex)
+        control_flow_1.reject = temp
+
+        for edge in control_flow_1.accepting.reverse_edges:
+            edge.switchFlip()
+
+        for edge in control_flow_1.reject.reverse_edges:
+            edge.switchFlip()
 
         return control_flow_1

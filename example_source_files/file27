@@ -14,8 +14,12 @@ int main(){
     d = 0;
     e = 0;
 
-    f = (a && !(b || c) || !(b && !d || (e && !a)));
+
+    a = 1;
+    f = (a && !(b || c));
     printf("%d", f);
+
+
 
     return 0;
 

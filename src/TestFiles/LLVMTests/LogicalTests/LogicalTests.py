@@ -20,8 +20,6 @@ class PrintTests(unittest.TestCase):
     def testSimplePrints(self):
         file_range = range(1, 15)
         for i in file_range:
-            if i == 8:
-                continue
 
             file_name = f"tests/test{i}.c"
             self.runAST(file_name)
