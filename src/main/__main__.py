@@ -48,8 +48,9 @@ def cleanGreen(input_file, symbol_file, codegetter):
     ast_deref = ASTDereferencer()  # Correct the use of references & pointers into our format
     ast_deref.visit(ast)
 
-    s = TableDotVisitor(symbol_file)
-    s.visit(ast.root.getSymbolTable())
+    if symbol_file is not None:
+        s = TableDotVisitor(symbol_file)
+        s.visit(ast.root.getSymbolTable())
 
     return ast
 
@@ -68,8 +69,9 @@ def Processing(ast, dot_file, fold):
     ast_conv = ASTConversion()
     ast_conv.visit(ast)
 
-    d = DotVisitor(dot_file)  # Export AST in Dot
-    d.visit(ast)
+    if dot_file is not None:
+        d = DotVisitor(dot_file)  # Export AST in Dot
+        d.visit(ast)
 
     return ast
 
@@ -84,8 +86,8 @@ def main(argv, clang=False):
     """
 
     input_file = "example_source_files/file0"  # Define some standard variables & settings
-    dot_file = "output/ASTvisual"
-    symbol_file = "output/SymbolTablevisual"
+    dot_file = None
+    symbol_file = None
     llvm_file = "output/output.ll"
     mips_file = None
     clang_file = "output/outputClang.ll"
@@ -125,7 +127,8 @@ def main(argv, clang=False):
 
     if control_flow_file is not None:
         control_dot = ControlFlowDotVisitor(control_flow_file)  # Create a CFG
-        control_dot.visit(to_llvm.control_flow_graph.root)
+        control_dot.visit(to_llvm.getControlFlowGraph().root)
+
 
 
 if __name__ == '__main__':

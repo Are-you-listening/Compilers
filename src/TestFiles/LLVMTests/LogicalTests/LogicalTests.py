@@ -13,15 +13,16 @@ Filename Extension Explanation:
 """
 
 
-class PrintTests(unittest.TestCase):
+class LogicTests(unittest.TestCase):
     """
     Test case to run all created llvm output
     """
-    def testSimplePrints(self):
-        file_range = range(1, 7)
+    def testSimpleLogic(self):
+        file_range = range(1, 18)
         for i in file_range:
-            if i == 5:
+            if i < 16:
                 continue
+
             file_name = f"tests/test{i}.c"
             self.runAST(file_name)
             c_out = self.runC(file_name)
@@ -32,7 +33,8 @@ class PrintTests(unittest.TestCase):
             """
             assert for same output
             """
-            print(out.stdout, c_out.stdout)
+            print(i, out.stdout, c_out.stdout)
+            print(out.stderr)
             assert out.stdout == c_out.stdout
 
 
@@ -45,9 +47,7 @@ class PrintTests(unittest.TestCase):
         """
         LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
 
-        main([0, "--input", file_name, "--render_ast", file_name[:-2] + "ASTVisual", "--render_symb",
-              file_name[:-2] + "SymbolTable",
-              "--target_llvm", file_name[:-2] + "LLVM.ll"], False)
+        main([0, "--input", file_name, "--target_llvm", file_name[:-2] + "LLVM.ll"], False)
 
         subprocess.run(f"""clang-14 -S -emit-llvm {file_name} -o {file_name[:-2]}.ll""",
                        shell=True, capture_output=True)

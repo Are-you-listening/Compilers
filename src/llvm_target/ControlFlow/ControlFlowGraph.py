@@ -40,35 +40,42 @@ class Edge:
         self.from_vertex = from_vertex
         self.to_vertex = to_vertex
         self.on = on
+        self.flip_eval = False
+
+    def switchFlip(self):
+        self.flip_eval = not self.flip_eval
 
 
 class ControlFlowGraph:
-    def __init__(self):
-        self.current: Vertex = Vertex(LLVMSingleton.getInstance().getCurrentBlock())
-        self.root: Vertex = self.current
+    def __init__(self, new_block=False):
+        if new_block:
+            block = LLVMSingleton.getInstance().addBlock()
+            LLVMSingleton.getInstance().setCurrentBlock(block)
+
+        self.root: Vertex = Vertex(LLVMSingleton.getInstance().getCurrentBlock())
 
         """
         To easily support Control flow construction for example for logical '&&','||',...
         We have an accept vertex and a reject vertex, these will come handy for making the proper 
         control flow
         """
-        self.accepting: Vertex = None
+        self.accepting: Vertex = self.root
         self.reject: Vertex = None
         self.const_value_map = {}
+        self.flip_eval = False
 
-        """
-        node stores AST Node indicating when a eval needs to end
-        """
-        self.eval_scope_node = None
+
     def isEval(self):
         """
         check if the control flow is currently creating a control flow
         :return:
         """
-        return (self.accepting is not None) and (self.reject is not None)
+        return self.reject is not None
 
     def startEval(self):
-        self.current.llvm = LLVMSingleton.getInstance().getCurrentBlock()
+        old_accepting = self.accepting
+        current_block = LLVMSingleton.getInstance().getCurrentBlock()
+        self.accepting.llvm = current_block
         """
         start an eval situation providing the node that causes a splitup
         We will create a condition branch checking for true/false
@@ -76,11 +83,8 @@ class ControlFlowGraph:
         :return:
         """
 
-        builder_true = LLVMSingleton.getInstance().addBlock()
-        builder_false = LLVMSingleton.getInstance().addBlock()
-
-        on_true_vertex = Vertex(builder_true)
-        on_false_vertex = Vertex(builder_false)
+        on_true_vertex = Vertex(None)
+        on_false_vertex = Vertex(None)
 
         self.accepting = on_true_vertex
         self.reject = on_false_vertex
@@ -88,10 +92,15 @@ class ControlFlowGraph:
         """
         add edges for start construction
         """
-        self.current.addEdge(Edge(self.current, on_true_vertex, True))
-        self.current.addEdge(Edge(self.current, on_false_vertex, False))
+        old_accepting.addEdge(Edge(old_accepting, on_true_vertex, True))
+        old_accepting.addEdge(Edge(old_accepting, on_false_vertex, False))
 
     def endEval(self):
+        ending_block = LLVMSingleton.getInstance().addBlock()
+        self.accepting.llvm = ending_block
+        self.reject.llvm = ending_block
+        LLVMSingleton.getInstance().setCurrentBlock(ending_block)
+
         for edge in self.reject.reverse_edges:
             """
             every edge to reject needs to be redirected to accepting
@@ -105,43 +114,12 @@ class ControlFlowGraph:
 
         phi = self.__evalSetBranches()
 
-        self.current = self.accepting
-        LLVMSingleton.getInstance().setCurrentBlock(self.current.llvm)
-        LLVMSingleton.getInstance().removeBlock(self.reject.llvm)
-        self.accepting = None
         self.reject = None
-        self.eval_scope_node = None
 
         return phi
 
-    def addLogicalAnd(self):
-        builder = LLVMSingleton.getInstance().addBlock()
-        new_accepting = Vertex(builder)
-
-        LLVMSingleton.getInstance().setCurrentBlock(self.accepting.llvm)
-
-        self.accepting.addEdge(Edge(self.accepting, new_accepting, True))
-        self.accepting.addEdge(Edge(self.accepting, self.reject, False))
-
-        self.accepting = new_accepting
-
-    def addLogicalOr(self):
-        builder = LLVMSingleton.getInstance().addBlock()
-        new_reject = Vertex(builder)
-
-        LLVMSingleton.getInstance().setCurrentBlock(self.reject.llvm)
-
-        self.reject.addEdge(Edge(self.reject, new_reject, False))
-        self.reject.addEdge(Edge(self.reject, self.accepting, True))
-
-        self.reject = new_reject
-
-    def addSubLogical(self):
-        pass
-
     def __evalSetBranches(self):
-
-        to_check = {self.current}
+        to_check = {self.root}
         checked = set()
         final_vertex = None
 
@@ -163,11 +141,15 @@ class ControlFlowGraph:
                 """
                 In this case both true and false go to this branch
                 """
+                if true_edge.flip_eval:
+                    last_instruction = current_vertex.llvm.block.instructions[-1]
+                    current_vertex.llvm.xor(last_instruction, ir.Constant(last_instruction.type, 1))
 
                 """
                 make branch statement a boolean
                 """
                 current_vertex.llvm.branch(true_edge.to_vertex.llvm.block)
+
             else:
                 """
                 when different endpoints for true and false
@@ -195,7 +177,7 @@ class ControlFlowGraph:
         edge_true_list = set()
         edge_false_list = set()
         for edge in current_vertex.reverse_edges:
-            if edge.on:
+            if edge.on ^ edge.flip_eval:
                 edge_true_list.add(edge.from_vertex)
             else:
                 edge_false_list.add(edge.from_vertex)
@@ -214,6 +196,7 @@ class ControlFlowGraph:
             in_false = vertex in edge_false_list
 
             if in_true and in_false:
+
                 if vertex.llvm in self.const_value_map:
                     const_val = self.const_value_map[vertex.llvm]
 
@@ -222,13 +205,14 @@ class ControlFlowGraph:
                     else:
                         bool_val = 1
 
-                    phi.add_incoming(ir.Constant(bool_type, bool_val), vertex.llvm.block)
+                    last_instruction = ir.Constant(bool_type, bool_val)
                 else:
                     last_instruction = vertex.llvm.block.instructions[-2]
                     """
                     make bool if not a bool type
                     """
-                    phi.add_incoming(last_instruction, vertex.llvm.block)
+
+                phi.add_incoming(last_instruction, vertex.llvm.block)
 
             elif in_true:
                 phi.add_incoming(ir.Constant(bool_type, 1), vertex.llvm.block)
@@ -244,3 +228,68 @@ class ControlFlowGraph:
             instruction = builder.icmp_signed("!=", instruction, ir.Constant(instruction.type, 0))
 
         return instruction
+
+    @staticmethod
+    def mergeLogicalAnd(control_flow_1: "ControlFlowGraph", control_flow_2: "ControlFlowGraph"):
+        new_graph: ControlFlowGraph = ControlFlowGraph()
+        new_graph.root = control_flow_1.root
+        """
+        logical AND
+        """
+        original_accepting = control_flow_1.accepting
+        for e in original_accepting.reverse_edges:
+            e.to_vertex = control_flow_2.root
+            control_flow_2.root.reverse_edges.append(e)
+
+        original_reject = control_flow_1.reject
+        for e in original_reject.reverse_edges:
+            e.to_vertex = control_flow_2.reject
+            control_flow_2.reject.reverse_edges.append(e)
+
+        new_graph.accepting = control_flow_2.accepting
+        new_graph.reject = control_flow_2.reject
+
+        LLVMSingleton.getInstance().setCurrentBlock(control_flow_2.accepting.reverse_edges[0].from_vertex.llvm)
+
+        return new_graph
+
+    @staticmethod
+    def mergeLogicalOr(control_flow_1: "ControlFlowGraph", control_flow_2: "ControlFlowGraph"):
+        new_graph: ControlFlowGraph = ControlFlowGraph()
+        new_graph.root = control_flow_1.root
+
+        """
+        logical OR
+        """
+
+        original_accepting = control_flow_1.accepting
+        for i, e in enumerate(original_accepting.reverse_edges):
+            e.to_vertex = control_flow_2.accepting
+            control_flow_2.accepting.reverse_edges.append(e)
+
+        original_reject = control_flow_1.reject
+        for e in original_reject.reverse_edges:
+            e.to_vertex = control_flow_2.root
+            control_flow_2.root.reverse_edges.append(e)
+
+        new_graph.reject = control_flow_2.reject
+        new_graph.accepting = control_flow_2.accepting
+
+        LLVMSingleton.getInstance().setCurrentBlock(control_flow_2.accepting.reverse_edges[0].from_vertex.llvm)
+
+        return new_graph
+
+    @staticmethod
+    def mergeLogicalNot(control_flow_1: "ControlFlowGraph"):
+        temp = control_flow_1.accepting
+        control_flow_1.accepting = control_flow_1.reject
+
+        control_flow_1.reject = temp
+
+        for edge in control_flow_1.accepting.reverse_edges:
+            edge.switchFlip()
+
+        for edge in control_flow_1.reject.reverse_edges:
+            edge.switchFlip()
+
+        return control_flow_1

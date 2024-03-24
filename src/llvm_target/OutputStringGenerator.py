@@ -30,7 +30,6 @@ class UnaryWrapper:
         llvm_type = llvm_var.type
         sub_bool = block.icmp_signed("!=", llvm_var, ir.Constant(llvm_type, 0))
         llvm_var = block.xor(sub_bool, ir.Constant(ir.IntType(1), 1))
-        llvm_var = block.zext(llvm_var, llvm_type)
         return llvm_var
 
     @staticmethod
@@ -180,10 +179,6 @@ class Calculation:
             llvm_op = op_translate_icmp.get(operator, None)
             llvm_var = llvm_op(operator, left, right)
 
-            """
-            convert 1 bit to 32 bit
-            """
-            llvm_var = block.zext(llvm_var, ir.IntType(32))
             return llvm_var
 
     @staticmethod
@@ -209,7 +204,8 @@ class Calculation:
         else:
             llvm_op = op_translate.get(op, None)
 
-        return llvm_op(llvm_val)
+        llvm_var = llvm_op(llvm_val)
+        return llvm_var
 
 
 class Printf:
