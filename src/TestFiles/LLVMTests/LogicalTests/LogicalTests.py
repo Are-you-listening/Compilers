@@ -18,10 +18,11 @@ class PrintTests(unittest.TestCase):
     Test case to run all created llvm output
     """
     def testSimplePrints(self):
-        file_range = range(1, 7)
+        file_range = range(1, 15)
         for i in file_range:
-            if i == 5:
+            if i == 8:
                 continue
+
             file_name = f"tests/test{i}.c"
             self.runAST(file_name)
             c_out = self.runC(file_name)
@@ -33,6 +34,7 @@ class PrintTests(unittest.TestCase):
             assert for same output
             """
             print(i, out.stdout, c_out.stdout)
+            print(out.stderr)
             assert out.stdout == c_out.stdout
 
 

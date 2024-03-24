@@ -40,6 +40,10 @@ class Edge:
         self.from_vertex = from_vertex
         self.to_vertex = to_vertex
         self.on = on
+        self.flip_eval = False
+
+    def switchFlip(self):
+        self.flip_eval = not self.flip_eval
 
 
 class ControlFlowGraph:
@@ -58,6 +62,8 @@ class ControlFlowGraph:
         self.accepting: Vertex = self.root
         self.reject: Vertex = None
         self.const_value_map = {}
+        self.flip_eval = False
+
 
     def isEval(self):
         """
@@ -111,9 +117,6 @@ class ControlFlowGraph:
         self.reject = None
 
         return phi
-
-    def addSubLogical(self):
-        pass
 
     def __evalSetBranches(self):
         to_check = {self.root}
@@ -171,7 +174,7 @@ class ControlFlowGraph:
         edge_true_list = set()
         edge_false_list = set()
         for edge in current_vertex.reverse_edges:
-            if edge.on:
+            if edge.on ^ edge.flip_eval:
                 edge_true_list.add(edge.from_vertex)
             else:
                 edge_false_list.add(edge.from_vertex)
@@ -241,7 +244,7 @@ class ControlFlowGraph:
         new_graph.accepting = control_flow_2.accepting
         new_graph.reject = control_flow_2.reject
 
-        LLVMSingleton.getInstance().setCurrentBlock(control_flow_2.root.llvm)
+        LLVMSingleton.getInstance().setCurrentBlock(control_flow_2.accepting.reverse_edges[0].from_vertex.llvm)
 
         return new_graph
 
@@ -267,6 +270,21 @@ class ControlFlowGraph:
         new_graph.reject = control_flow_2.reject
         new_graph.accepting = control_flow_2.accepting
 
-        LLVMSingleton.getInstance().setCurrentBlock(control_flow_2.root.llvm)
+        LLVMSingleton.getInstance().setCurrentBlock(control_flow_2.accepting.reverse_edges[0].from_vertex.llvm)
 
         return new_graph
+
+    @staticmethod
+    def mergeLogicalNot(control_flow_1: "ControlFlowGraph"):
+        visited = set()
+
+        check_set = {control_flow_1.root}
+        while len(check_set) != 0:
+            current_vertex: Vertex = check_set.pop()
+            visited.add(current_vertex)
+            for edge in current_vertex.edges:
+                edge.switchFlip()
+                if edge.to_vertex not in check_set and edge.to_vertex not in visited:
+                    check_set.add(edge.to_vertex)
+
+        return control_flow_1
