@@ -125,7 +125,8 @@ def main(argv, clang=False):
 
     if control_flow_file is not None:
         control_dot = ControlFlowDotVisitor(control_flow_file)  # Create a CFG
-        control_dot.visit(to_llvm.control_flow_graph.root)
+        control_dot.visit(to_llvm.getControlFlowGraph().root)
+
 
 
 if __name__ == '__main__':

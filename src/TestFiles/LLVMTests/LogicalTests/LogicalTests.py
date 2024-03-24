@@ -32,7 +32,7 @@ class PrintTests(unittest.TestCase):
             """
             assert for same output
             """
-            print(out.stdout, c_out.stdout)
+            print(i, out.stdout, c_out.stdout)
             assert out.stdout == c_out.stdout
 
 
