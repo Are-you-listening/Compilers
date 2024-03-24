@@ -17,6 +17,7 @@ class AST2LLVM(ASTVisitor):
         self.fileName = fileName
         self.control_flow_graph = ControlFlowGraph()
 
+
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
         self.llvm_map = {}
@@ -348,6 +349,9 @@ class AST2LLVM(ASTVisitor):
         """
         if not self.control_flow_graph.isEval():
             self.control_flow_graph.startEval()
+
+        if node.parent.findChild(node) == 0:
+            self.control_flow_graph.addSubLogical()
 
         var = self.llvm_map[node]
 

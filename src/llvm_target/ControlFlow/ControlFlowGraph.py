@@ -136,6 +136,9 @@ class ControlFlowGraph:
 
         self.reject = new_reject
 
+    def addSubLogical(self):
+        pass
+
     def __evalSetBranches(self):
 
         to_check = {self.current}
