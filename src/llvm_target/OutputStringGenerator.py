@@ -215,6 +215,8 @@ class Calculation:
 class Printf:
     @staticmethod
     def printf(format_specifier: str, *args):
+        base_format = format_specifier
+
         if LLVMSingleton.getInstance().getPrintF() is None:
             module = LLVMSingleton.getInstance().getModule()
             voidptr_ty = ir.IntType(8).as_pointer()
@@ -226,11 +228,10 @@ class Printf:
         builder = LLVMSingleton.getInstance().getCurrentBlock()
         format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(format_specifier)),
                                        bytearray(format_specifier.encode("utf8")))
-        format_str_global = builder.module.globals.get(".str")
-        #format_str_const = builder.global_string(format_specifier+"\00")
+        format_str_global = builder.module.globals.get(f".str.{base_format[1:]}")
 
         if not format_str_global:
-            format_str_global = ir.GlobalVariable(builder.module, format_str_const.type, ".str")
+            format_str_global = ir.GlobalVariable(builder.module, format_str_const.type, f".str.{base_format[1:]}")
             format_str_global.linkage = "internal"
             format_str_global.global_constant = True
             format_str_global.initializer = format_str_const
@@ -244,17 +245,34 @@ class Printf:
         """
         Store the arguments in their respective alloca instructions
         """
+
         for arg_alloca, arg_value in zip(args_alloca, args):
             builder.store(arg_value, arg_alloca)
 
         """ 
         Load the arguments from their respective alloca instructions 
         """
-        args_values = [format_str_ptr] + [builder.load(arg_alloca) for arg_alloca in args_alloca]
 
+        args_values = [format_str_ptr] + [Printf.__reformat(base_format, builder.load(arg_alloca)) for arg_alloca in args_alloca]
         printf_call = builder.call(LLVMSingleton.getInstance().getPrintF(), args_values)
 
         return printf_call
+
+    @staticmethod
+    def __reformat(base_format: str, llvm_var):
+        """
+        for certain formats we need to do a conversion
+
+        :param base_format: format we use to print
+        :param llvm_var:
+        :return:
+        """
+        builder = LLVMSingleton.getInstance().getCurrentBlock()
+
+        if base_format == "%f":
+            return builder.fpext(llvm_var, ir.DoubleType())
+
+        return llvm_var
 
 
 class Conversion:

@@ -241,31 +241,15 @@ class AST2LLVM(ASTVisitor):
         formatSpecifier = node.children[0].text
         args = []
 
+        """
+        load part of printf statement we want to print
+        """
         for child in node.children[1:]:
-            var_node = self.getVariableNode(child)
-            if var_node is None:
-                continue
-
-            if isinstance(var_node, ASTNodeTerminal) and var_node.type == "IDENTIFIER":
-                llvm_var = self.map_table.getEntry(var_node.text).llvm
-                if llvm_var is not None:
-                    args.append(llvm_var)
-
-            elif isinstance(var_node, ASTNodeTerminal) and var_node.type in ("INT", "FLOAT", "CHAR"):
-                llvm_literal = self.llvm_map.get(var_node)
-                if llvm_literal is not None:
-                    args.append(llvm_literal)
+            llvm_var = self.llvm_map.get(child, None)
+            if llvm_var is not None:
+                args.append(llvm_var)
 
         Printf.printf(formatSpecifier, *args)
-
-    def getVariableNode(self, node):
-        """
-        Recursive function to get the actual variable or literal node from a chain of dereference nodes.
-        """
-        if node.text == "Dereference":
-            return self.getVariableNode(node.children[0])
-        else:
-            return node
 
     def handleOperations(self, node: ASTNode):
         """

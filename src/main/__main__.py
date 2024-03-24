@@ -90,6 +90,7 @@ def main(argv, clang=False):
     mips_file = None
     clang_file = "output/outputClang.ll"
     fold = True
+    control_flow_file = None
 
     for arg_index in range(1, len(argv), 2):  # Retrieve correct arguments
         param = argv[arg_index]
@@ -104,6 +105,8 @@ def main(argv, clang=False):
             llvm_file = arg
         elif param == "--target_mips":
             mips_file = arg
+        elif param == "--target_control_flow":
+            control_flow_file = arg
         elif param == "--fold":
             if arg != 'True':
                 fold = False
@@ -120,8 +123,9 @@ def main(argv, clang=False):
     to_llvm = AST2LLVM(codegetter, llvm_file)  # The codegetter is used to add the original code as comments
     to_llvm.visit(ast)
 
-    control_dot = ControlFlowDotVisitor("output/ControlFlow")  # Create a CFG
-    control_dot.visit(to_llvm.control_flow_graph.root)
+    if control_flow_file is not None:
+        control_dot = ControlFlowDotVisitor(control_flow_file)  # Create a CFG
+        control_dot.visit(to_llvm.control_flow_graph.root)
 
 
 if __name__ == '__main__':
