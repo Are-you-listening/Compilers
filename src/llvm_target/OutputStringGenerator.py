@@ -179,10 +179,6 @@ class Calculation:
             llvm_op = op_translate_icmp.get(operator, None)
             llvm_var = llvm_op(operator, left, right)
 
-            """
-            convert 1 bit to 32 bit
-            """
-            llvm_var = block.zext(llvm_var, ir.IntType(32))
             return llvm_var
 
     @staticmethod
