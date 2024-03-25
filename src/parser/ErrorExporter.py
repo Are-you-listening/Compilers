@@ -15,6 +15,11 @@ class ErrorExporter:
         self.listener = EListener()
 
     @staticmethod
+    def incompatibleTypedef(linenr: str):
+        print("[ Error ] line {linenr}: typedef not allowed", file=sys.stderr)
+        exit()
+
+    @staticmethod
     def mainNotFound():
         print("[ Error ] main function not found", file=sys.stderr)
         exit()

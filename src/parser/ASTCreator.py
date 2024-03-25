@@ -68,7 +68,10 @@ class ASTCreator(expressionVisitor):
     def visitTypedef(self, ctx: expressionParser.TypedefContext):
         typedef = ctx.stop.text
         translation = ctx.children[1].children[0].symbol.text.upper()
-        self.typedefs[typedef] = translation
+        if self.__isValidTypeDef(typedef,translation):
+            self.typedefs[typedef] = translation
+        else:
+            ErrorExporter.incompatibleTypedef(ctx.start.line)
 
     def visitPrintf(self, ctx: expressionParser.PrintfContext):
         self.__makeNode(ctx, "printf")
@@ -184,6 +187,13 @@ class ASTCreator(expressionVisitor):
                 """
                 symbol_entry = SymbolEntry(self.parent.text, latest_datatype, ctx.getText(), is_const, None, node, None)
                 self.table.add(symbol_entry)
+
+    @staticmethod
+    def __isValidTypeDef(typedef: str, translation: str):
+        if translation.lower() in ["char","int","float","string","ptr"]:
+            return False
+
+        return True
 
     def translateLexerID(self, id):
         return self.lexer.ruleNames[id - 1]
