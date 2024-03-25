@@ -111,6 +111,9 @@ class AST2LLVM(ASTVisitor):
             self.llvm_map[node] = phi
             self.eval_scope_node = None
 
+        if node.text == "Start" and self.llvm_map.get(node, None) is None:
+            self.control_flow_map[node] = ControlFlowGraph()
+
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
             entry = self.map_table.getEntry(node.text)
@@ -288,7 +291,7 @@ class AST2LLVM(ASTVisitor):
                 Declaration.assignment(u, llvm_var, u.align)
 
             if post_incr:
-                llvm_var = child
+                llvm_var = child_llvm
 
         if node.getChildAmount() == 3:
 
@@ -384,6 +387,8 @@ class AST2LLVM(ASTVisitor):
 
         if sub_control_graph_right is None:
             sub_control_graph_right = ControlFlowGraph(False)
+
+        if not sub_control_graph_right.isEval():
             sub_control_graph_right.startEval()
 
         if node.text == "&&":

@@ -13,12 +13,12 @@ Filename Extension Explanation:
 """
 
 
-class LogicTests(unittest.TestCase):
+class CalculationTests(unittest.TestCase):
     """
     Test case to run all created llvm output
     """
-    def testSimpleLogic(self):
-        file_range = range(1, 18)
+    def testSimpleCalculations(self):
+        file_range = range(1, 7)
         for i in file_range:
 
             file_name = f"tests/test{i}.c"

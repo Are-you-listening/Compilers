@@ -184,16 +184,18 @@ class ASTConversion(ASTVisitor):
 
                     if operator in ("==", "!=", "<=", ">=", "<", ">"):
                         ErrorExporter.IncompatibleComparison(child.linenr, to_type, type_tup)
+                        self.addConversion(child, to_type)
                         continue
 
-                """
-                in case ptr+int, or ptr=int, we don't need to convert the int
-                """
-                if len(to_type[1]) > 0 and len(type_tup[1]) == 0:
                     """
-                    ptr+int, does not require to convert the int to an int*
+                    in case ptr+int, or ptr=int, we don't need to convert the int,
+                    only counts for operators not assignments
                     """
-                    continue
+                    if len(to_type[1]) > 0 and len(type_tup[1]) == 0:
+                        """
+                        ptr+int, does not require to convert the int to an int*
+                        """
+                        continue
 
                 self.pointer_warning_check(child.linenr, to_type, type_tup, operator)
                 self.narrowing_warning_check(child.linenr, to_type, type_tup)

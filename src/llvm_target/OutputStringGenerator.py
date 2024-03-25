@@ -91,6 +91,14 @@ class Declaration:
     @staticmethod
     def assignment(store_register: int, value: int, align: int):
 
+        """
+        assignment
+        :param store_register:
+        :param value:
+        :param align:
+        :return:
+        """
+
         block = LLVMSingleton.getInstance().getCurrentBlock()
         llvm_val = block.store(value, store_register)
 
@@ -166,7 +174,7 @@ class Calculation:
                 right = block.sext(right, ir.IntType(64))
 
             if operator == "-":  # Add subtract
-                Calculation.operation(right, right, operator)
+                right = Calculation.unary(right, "-")
 
             new_value = block.gep(left, [right], True)  # Create the gep instruction
             return new_value
@@ -282,6 +290,7 @@ class Conversion:
         """
         dict we use to retrieve which conversion command to call
         """
+
         conversion_dict = {(ir.IntType, "FLOAT"): lambda x, x_to: block.sitofp(x, x_to),
                            (ir.FloatType, "INT"): lambda x, x_to: block.fptosi(x, x_to),
                            (ir.IntType, "CHAR"): lambda x, x_to: block.trunc(x, x_to),
