@@ -83,7 +83,7 @@ class ErrorExporter:
 
     @staticmethod
     def devideByZero(line_nr: int, numerator):
-        print(f"[ Error ] line {line_nr}: can't devide {numerator} by zero")
+        print(f"[ Error ] line {line_nr}: can't divide {numerator} by zero", file=sys.stderr)
         exit()
 
     @staticmethod

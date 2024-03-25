@@ -1,6 +1,5 @@
 import unittest
 from src.TestFiles.ASTTests.AstLoader import AstLoader
-import json
 from src.parser.ASTConversion import ASTConversion
 import sys
 from io import StringIO
