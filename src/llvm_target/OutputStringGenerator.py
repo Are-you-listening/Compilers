@@ -112,7 +112,18 @@ class Declaration:
         elif CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(32):
             value = int(value)
         elif CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(8):
-            value = ord(value[1:-1])  # Values are strings
+
+            """
+            removes "'" before and after character
+            """
+            value = value[1:-1]
+
+            """
+            support right interpretation special characters like \n
+            """
+            value = value.encode('utf-8').decode('unicode-escape')
+
+            value = ord(value)  # Values are strings
 
         return ir.Constant(CTypesToLLVM.getIRType(data_type, ptrs), value)
 
@@ -164,9 +175,14 @@ class Calculation:
                              }
 
         if left.type == ir.FloatType():
-            llvm_op = op_translate_float.get(operator, "")
-            llvm_var = llvm_op(left, right)
-            return llvm_var
+            llvm_op = op_translate_float.get(operator, None)
+
+            """
+            In case the operation is float specific execute it, if not check with other operations
+            """
+            if llvm_op is not None:
+                llvm_var = llvm_op(left, right)
+                return llvm_var
 
         elif left.type.is_pointer and operator in ["+", "-"]:
             if not isinstance(right,
