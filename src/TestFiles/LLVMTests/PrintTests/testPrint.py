@@ -20,6 +20,7 @@ class PrintTests(unittest.TestCase):
     def testSimplePrints(self):
         file_range = range(1, 9)
         for i in file_range:
+            print(i)
             file_name = f"tests/test{i}.c"
             self.runAST(file_name)
             c_out = self.runC(file_name)
@@ -30,6 +31,7 @@ class PrintTests(unittest.TestCase):
             """
             assert for same output
             """
+            print(out.stdout, c_out.stdout)
             assert out.stdout == c_out.stdout
 
             """

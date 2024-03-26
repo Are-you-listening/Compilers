@@ -39,6 +39,13 @@ class ASTConversion(ASTVisitor):
             """
             child = node.getChild(0)
             data_type, ptrs = self.type_mapping[child]
+
+            """
+            when trying to dereference a non-ptr, throw an error
+            """
+            if len(ptrs) == 0:
+                ErrorExporter.invalidDereferenceNotPtr(node.linenr, (data_type, ptrs))
+
             ptrs = ptrs[:-1]  # Remove 1 ptr
             self.type_mapping[node] = (data_type, ptrs)
             return

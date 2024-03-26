@@ -103,14 +103,16 @@ class ASTCleaner(ASTVisitor):
         if node.text != "printf":
             return
 
-        for child in node.children:
-            if child.text == "printf":
-                self.to_remove.append((child,node))
-            elif child.text == ",":
-                self.to_remove.append((child,node))
-            elif child.text == '"':
-                self.to_remove.append((child,node))
-            elif child.text == "":
-                self.to_remove.append((child,node))
-        id = node.children[0].text
-        node.children[0].text = id[1:len(node.children[0].text) - 1]
+        format_child_text = ""
+
+        """
+        support printf format stuff %d;lol with ';lol' as sperator
+        """
+        for i, child in enumerate(node.children[:-1]):
+            self.to_remove.append((child, node))
+            format_child_text += child.text
+
+        format_child_text = format_child_text[len("printf")+1:-2]
+
+        format_node = ASTNodeTerminal(format_child_text, node, node.getSymbolTable(), -1)
+        node.insertChild(0, format_node)

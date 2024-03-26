@@ -235,7 +235,7 @@ class Calculation:
 class Printf:
     @staticmethod
     def printf(format_specifier: str, *args):
-        base_format = format_specifier
+        base_format = format_specifier[format_specifier.index("%"):format_specifier.index("%")+2]
 
         if LLVMSingleton.getInstance().getPrintF() is None:
             module = LLVMSingleton.getInstance().getModule()
