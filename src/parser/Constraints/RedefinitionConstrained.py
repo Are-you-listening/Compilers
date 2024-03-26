@@ -13,13 +13,10 @@ class RedefinitionConstraint(Constraint):
 
     def checkTerminalNode(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
-            print("redef1", node.text)
             if node.symbol_table.exists(node.text):
-                print("f2", node.symbol_table.getEntry(node.text).firstDeclared.text)
                 if node.symbol_table.getEntry(node.text).firstDeclared != node:
                     if node.parent.text == "Declaration":
                         if node.parent.findChild(node) != 1:  # If it is no rvalue (index 1)
-                            print("redef", node.text)
                             self.rejected = True
                             self.errorNode = node
 
