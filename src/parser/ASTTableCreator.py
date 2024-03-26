@@ -29,7 +29,7 @@ class ASTTableCreator(ASTVisitor):
             the value in the symbol table is initially empty
             """
             symbol_entry = SymbolEntry(node.text, latest_datatype, node.children[1].text, is_const, None,
-                                       node,
+                                       node.children[1],
                                        None)
             node.symbol_table.add(symbol_entry)
 
