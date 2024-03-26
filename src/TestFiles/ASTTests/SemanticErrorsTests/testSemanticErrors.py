@@ -10,7 +10,7 @@ import os
 from src.parser.ASTDereferencer import ASTDereferencer
 class TestSemanticErrors(unittest.TestCase):
     def testSemanticErrors(self):
-        file_indexes = range(1, 6)
+        file_indexes = range(1, 7)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

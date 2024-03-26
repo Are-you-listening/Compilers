@@ -2,5 +2,6 @@
  "2": ["[ Warning ] line 9: incompatible pointer types initializing 'INT**' with an expression of type 'INT*' "],
  "3": ["[ Warning ] line 6: incompatible pointer types initializing 'INT**' with an expression of type 'INT*' ", "[ Warning ] line 7: incompatible pointer types initializing 'INT**' with an expression of type 'INT*' "],
  "4": ["[ Error ] line 5: assignment of incompatible types ('FLOAT' and 'PTR') "],
- "5": ["[ Error ] line 7: invalid operation + on type(s): PTR  PTR"]
+ "5": ["[ Error ] line 7: invalid operation + on type(s): PTR  PTR"],
+ "6": ["[ Error ] line 9:  indirection requires pointer operand ('INT' invalid)"]
 }
