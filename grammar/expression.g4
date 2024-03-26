@@ -1,6 +1,6 @@
 grammar expression;
 start_ : (include)? code EOF;
-code: (function | line  | comment)*;
+code: (function | line  | comment)* (';')*;
 include: '#include <stdio.h>';
 comment : MULTILINE | SINGLECOMMENT;
 function : type IDENTIFIER '(' ')' '{' code (return)? '}';

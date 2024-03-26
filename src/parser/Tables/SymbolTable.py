@@ -53,6 +53,18 @@ class SymbolTable:
         self.symbols: Dict[str, SymbolEntry] = {}
         self.prev: "SymbolTable" = prev
         self.next = []
+        self.typedefs = {}
+
+    def addTypeDef(self, type, translation):
+        """
+        Adds a new typedef and already tries to translate it to the main time
+        :param type:
+        :param translation:
+        :return:
+        """
+        if self.isTypedef(type):
+            self.traverse(self.__typedefTranslate(type, translation), True)  # Traverse upwards in the tables
+        self.typedefs[type] = translation   # Add the retrieved type translation
 
     def add(self, entry: SymbolEntry):
         """
@@ -65,6 +77,13 @@ class SymbolTable:
                                        entry.name)  # This allows earlier detection of errors but unsure how we would
             # retrieve the lineNr
             return
+
+        # Check if the entry's type is actually a typedef
+        type = SymbolEntry.getType()
+        if self.isTypedef(type):  # Then replace it to the base type (int, char, ..)
+            translation = self.typedefs[type]
+            SymbolEntry.typeObject = SymbolType(translation)
+
         self.symbols[entry.name] = entry
 
     def remove(self, symbol: SymbolEntry):
@@ -132,3 +151,25 @@ class SymbolTable:
 
     def accept(self, v):
         v.visitSym(self)
+
+    @staticmethod
+    def isTypedef(type):
+        if type not in ["INT", "CHAR", "FLOAT"]:
+            return True
+        return False
+
+    def __typedefTranslate(self, type, translation):
+        """
+        Function to give to the SymbolTable Traverse to retrieve the type a typedef is referring to
+        The function may stop when a recognised type is found, e.g. INT, CHAR, FLOAT
+        :param type: Typedef first parameter
+        :param translation: Current found translation
+        :return:
+        """
+        if not self.isTypedef(translation):  # Translation is nota typedef anymore
+            return
+        else:
+            translation = self.typedefs[type]
+
+            if translation is None and self.prev is None:  # Searching for a typedef that doesn't exist!
+                ErrorExporter.incompatibleTypedef("")

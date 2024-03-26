@@ -39,6 +39,11 @@ def cleanGreen(input_file, symbol_file, codegetter):
 
     codegetter.visit(ast)
 
+    #
+
+    d = DotVisitor('output/debug0')  # Export AST in Dot
+    d.visit(ast)
+
     astcleaner = ASTCleaner()  # Do a standard cleaning
     astcleaner.visit(ast)
 

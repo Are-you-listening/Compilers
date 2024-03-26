@@ -23,7 +23,6 @@ class ASTCreator(expressionVisitor):
         self.parent = None
         self.AST = None
         self.table = SymbolTable(None)
-        self.typedefs = {}
 
     def __setup(self):
         self.parent = None
@@ -67,9 +66,15 @@ class ASTCreator(expressionVisitor):
 
     def visitTypedef(self, ctx: expressionParser.TypedefContext):
         typedef = ctx.stop.text
-        translation = ctx.children[1].children[0].symbol.text.upper()
+        translationList = ctx.children[1].children
+        translation = ""
+
+        for part in translationList:
+            translation+=part.symbol.text.upper()
+
         if self.__isValidTypeDef(typedef,translation):
-            self.typedefs[typedef] = translation
+            #self.typedefs[typedef] = translation
+            pass
         else:
             ErrorExporter.incompatibleTypedef(ctx.start.line)
 
@@ -190,6 +195,7 @@ class ASTCreator(expressionVisitor):
 
     @staticmethod
     def __isValidTypeDef(typedef: str, translation: str):
+        return True;
         if translation.lower() in ["char","int","float","string","ptr"]:
             return False
 

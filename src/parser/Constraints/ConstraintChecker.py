@@ -12,7 +12,7 @@ class ConstraintChecker(ASTVisitor):
     Visitor to check all nodes to verify certain constraints
     """
     def __init__(self):
-        self.constraints = [MainFoundConstraint(), UndeclaredConstrained(), RedefinitionConstraint(), ConstConstraint(),AmpersandConstraint(),PrintfConstraint()]
+        self.constraints = [MainFoundConstraint(), RedefinitionConstraint(), ConstConstraint(),AmpersandConstraint(),PrintfConstraint()]
 
     def visitNode(self, node: ASTNode):
         for c in self.constraints:

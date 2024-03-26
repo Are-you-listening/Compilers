@@ -6,7 +6,7 @@
 
 typedef
 
-int appel;
+char appel;
 
 int main(){
     appel x = 5;
