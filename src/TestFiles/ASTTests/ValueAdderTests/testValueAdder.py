@@ -1,21 +1,21 @@
 import unittest
 from src.TestFiles.ASTTests.AstLoader import AstLoader
-from src.parser.ASTConversion import ASTConversion
-from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
+import json
+from src.parser.ValueAdderVisitor import *
 import sys
 from io import StringIO
 import json
-from src.parser.Constraints.ConstraintChecker import ConstraintChecker
+import os
 
+class TestValueAdder(unittest.TestCase):
+    def testValueAdder(self):
+        file_indexes = range(1, 6)
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-class TestSemanticErrors(unittest.TestCase):
-    def testSemanticErrors(self):
-        file_indexes = range(1, 2)
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
-            print(index)
             file_path = f"tests/test{index}.json"
             with open(file_path, "rt") as f:
                 json_data = f.read()
@@ -34,17 +34,11 @@ class TestSemanticErrors(unittest.TestCase):
             sys.stderr = error_buff
 
             """
-            conversion
+            value adder visit
             """
             try:
-                constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
-                constraint_checker.visit(ast_tree)
-
-                cfv = ConstantFoldingVisitor()
-                cfv.visit(ast_tree)
-
-                ast_conv = ASTConversion()
-                ast_conv.visit(ast_tree)
+                value_adder = ValueAdderVisitor()
+                value_adder.visit(ast_tree)
 
                 file_path_result = f"tests/test{index}_result.json"
                 with open(file_path_result, "rt") as f:

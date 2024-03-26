@@ -4,16 +4,19 @@ from src.parser.ASTConversion import ASTConversion
 import sys
 from io import StringIO
 import json
-
+import os
 
 class TestConversion(unittest.TestCase):
     def testConversionsBasic(self):
         file_indexes = range(1, 15)
+
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
-            print(index)
+            #print(index)
             file_path = f"tests/test{index}.json"
             with open(file_path, "rt") as f:
                 json_data = f.read()

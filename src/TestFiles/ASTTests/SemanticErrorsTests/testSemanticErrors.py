@@ -1,14 +1,19 @@
 import unittest
 from src.TestFiles.ASTTests.AstLoader import AstLoader
-import json
+from src.parser.ASTConversion import ASTConversion
 from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
 import sys
 from io import StringIO
+import json
+from src.parser.Constraints.ConstraintChecker import ConstraintChecker
+import os
 
+class TestSemanticErrors(unittest.TestCase):
+    def testSemanticErrors(self):
+        file_indexes = range(1, 2)
 
-class TestConstantFolding(unittest.TestCase):
-    def testConstantFolding(self):
-        file_indexes = range(1, 4)
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 
@@ -35,8 +40,14 @@ class TestConstantFolding(unittest.TestCase):
             conversion
             """
             try:
-                ast_const = ConstantFoldingVisitor()
-                ast_const.visit(ast_tree)
+                constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
+                constraint_checker.visit(ast_tree)
+
+                cfv = ConstantFoldingVisitor()
+                cfv.visit(ast_tree)
+
+                ast_conv = ASTConversion()
+                ast_conv.visit(ast_tree)
 
                 file_path_result = f"tests/test{index}_result.json"
                 with open(file_path_result, "rt") as f:
@@ -64,3 +75,7 @@ class TestConstantFolding(unittest.TestCase):
 
             sys.stdout = original
             sys.stderr = original_error
+
+
+
+

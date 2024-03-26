@@ -26,7 +26,7 @@ class ValueAdderVisitor(ASTVisitor):
         and if they occur, we will skip this check
         """
 
-        if node.getChild(1).getChildAmount() == 2 and len({node.getChild(1).getChild(0).text, node.getChild(1).getChild(1).text}.intersection({"++", "--"})) != 0:
+        if node.getChildAmount() == 2 and node.getChild(1).getChildAmount() == 2 and len({node.getChild(1).getChild(0).text, node.getChild(1).getChild(1).text}.intersection({"++", "--"})) != 0:
             return
 
         val = node.getChild(-1)
