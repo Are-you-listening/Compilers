@@ -9,9 +9,7 @@ from src.parser.ASTDereferencer import *
 from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
 from src.parser.ASTCleanerAfter import *
-from src.parser.TableDotVisitor import *
-from src.llvm_target.AST2LLVM import *
-from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
+from src.parser.Tables.TableDotVisitor import *
 from src.parser.CodeGetter import *
 from src.TestFiles.ASTTests.AstLoader import AstLoader
 

@@ -65,18 +65,13 @@ class ASTCreator(expressionVisitor):
         self.__makeNode(ctx, "Code")
 
     def visitTypedef(self, ctx: expressionParser.TypedefContext):
-        typedef = ctx.stop.text
-        translationList = ctx.children[1].children
-        translation = ""
+        self.__makeNode(ctx, "Typedef")
 
-        for part in translationList:
-            translation+=part.symbol.text.upper()
+        typedefSubTree = self.parent.getChild(0)  # Retrieve the subtree with all typedef data
+        table = self.parent.getSymbolTable()
 
-        if self.__isValidTypeDef(typedef,translation):
-            #self.typedefs[typedef] = translation
-            pass
-        else:
-            ErrorExporter.incompatibleTypedef(ctx.start.line)
+        table.addTypeDef(typedefSubTree)  # Add it to the symbolTable
+        self.parent.clearChildren()  # Remove the children from the real AST
 
     def visitPrintf(self, ctx: expressionParser.PrintfContext):
         self.__makeNode(ctx, "printf")
@@ -125,14 +120,8 @@ class ASTCreator(expressionVisitor):
         if text in ["int", "float", "char"]:
             text = text.upper()
 
-        if self.translateLexerID(ctx.getSymbol().type) == "IDENTIFIER":
-            text = ctx.getText()
-            if text in self.typedefs.keys():
-                text = self.typedefs[text]
-
         node = ASTNodeTerminal(text, self.parent, self.table, self.translateLexerID(ctx.getSymbol().type))
         node.linenr = ctx.getSymbol().line
-        self.__updateSymbolTable(ctx, node)
 
         self.parent.addChildren(node)
 
@@ -165,41 +154,6 @@ class ASTCreator(expressionVisitor):
         :return: self.AST
         """
         return self.AST
-
-    def __updateSymbolTable(self, ctx, node):
-        """
-        self.parent.getChild #traverse through children and get type if exist + get const
-        """
-
-        child = self.parent.findType("Type")
-
-        if self.lexer.IDENTIFIER == ctx.getSymbol().type:
-            if self.parent.text == "Declaration" or self.parent.text == "Function":
-
-                is_const = False
-                latest_datatype = ""
-
-                for grandchild in child.children:
-                    if grandchild.text == "const":
-                        is_const = True
-                    elif grandchild.text == "*":
-                        latest_datatype = SymbolTypePtr(latest_datatype)
-                    else:
-                        latest_datatype = SymbolType(grandchild.text.upper())
-
-                """
-                the value in the symbol table is initially empty
-                """
-                symbol_entry = SymbolEntry(self.parent.text, latest_datatype, ctx.getText(), is_const, None, node, None)
-                self.table.add(symbol_entry)
-
-    @staticmethod
-    def __isValidTypeDef(typedef: str, translation: str):
-        return True;
-        if translation.lower() in ["char","int","float","string","ptr"]:
-            return False
-
-        return True
 
     def translateLexerID(self, id):
         return self.lexer.ruleNames[id - 1]

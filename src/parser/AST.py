@@ -1,3 +1,4 @@
+import copy
 class ASTVisitor:  # Prevent circular inclusion
     pass
 
@@ -91,6 +92,15 @@ class ASTNode:
     def insertChild(self, index: int, new_child):
         self.children.insert(index, new_child)
         new_child.parent = self
+
+    def typedefReplaceChildren(self, kids, index):
+        for kid in kids:
+            if kid == kids[0]:
+                self.replaceChild(self.children[index], kids[0])  # Replace the first one with the first of the new types
+            else:  # Simple insert the rest
+                newKid = copy.deepcopy(kid)
+                self.children.insert(index+1, newKid)
+                newKid.parent = self
 
 
 class ASTNodeTerminal(ASTNode):

@@ -3,10 +3,11 @@ typedef const kaas beer;
 
 int main(){
 
-    beer beer = 3;
+    const beer* beer = 3;
     int appel;
     typedef char kaas;
     //beer > 3; // Use the identifier beer,  not the typedef beer!
-
+    //cry
+    //cry2
     return 0;
 };

@@ -1,5 +1,7 @@
 from src.parser.ErrorExporter import *
 from src.parser.Tables.SymbolTypePtr import *
+from src.parser.AST import *
+from src.parser.ASTTypedefReplacer import *
 from typing import Dict
 
 
@@ -53,18 +55,8 @@ class SymbolTable:
         self.symbols: Dict[str, SymbolEntry] = {}
         self.prev: "SymbolTable" = prev
         self.next = []
-        self.typedefs = {}
-
-    def addTypeDef(self, type, translation):
-        """
-        Adds a new typedef and already tries to translate it to the main time
-        :param type:
-        :param translation:
-        :return:
-        """
-        if self.isTypedef(type):
-            self.traverse(self.__typedefTranslate(type, translation), True)  # Traverse upwards in the tables
-        self.typedefs[type] = translation   # Add the retrieved type translation
+        self.typedefs = []  # List of TypeDef-Subtrees (These are not present anymore in the AST)
+        self.translation = []  # Helper variable
 
     def add(self, entry: SymbolEntry):
         """
@@ -77,12 +69,6 @@ class SymbolTable:
                                        entry.name)  # This allows earlier detection of errors but unsure how we would
             # retrieve the lineNr
             return
-
-        # Check if the entry's type is actually a typedef
-        type = SymbolEntry.getType()
-        if self.isTypedef(type):  # Then replace it to the base type (int, char, ..)
-            translation = self.typedefs[type]
-            SymbolEntry.typeObject = SymbolType(translation)
 
         self.symbols[entry.name] = entry
 
@@ -108,7 +94,7 @@ class SymbolTable:
             rep_string += f"{str(entry)}\n"
         rep_string += f"self.symbols"
 
-    def traverse(self, function, up: bool, do_print=False):
+    def traverse(self, function, up: bool, args: list, do_print=False):
         """
         :param do_print: bool indication whether to print or not
         :param function: function to execute
@@ -119,13 +105,16 @@ class SymbolTable:
         if do_print:
             print(self)
 
+        function(self, args[0], args[1])
+
+
         if up:
             if self.prev is None:
                 return
-            self.prev.traverse(function, up, do_print)
+            self.prev.traverse(function, up, args, do_print)
         else:
             for child in self.next:
-                child.traverse(function, up, do_print)
+                child.traverse(function, up,args, do_print)
 
     def nextTable(self, next_table: "SymbolTable"):
         """Add a new table as child"""
@@ -152,24 +141,40 @@ class SymbolTable:
     def accept(self, v):
         v.visitSym(self)
 
-    @staticmethod
-    def isTypedef(type):
-        if type not in ["INT", "CHAR", "FLOAT"]:
-            return True
-        return False
-
-    def __typedefTranslate(self, type, translation):
+    def addTypeDef(self, node: ASTNode):
         """
-        Function to give to the SymbolTable Traverse to retrieve the type a typedef is referring to
-        The function may stop when a recognised type is found, e.g. INT, CHAR, FLOAT
-        :param type: Typedef first parameter
-        :param translation: Current found translation
+        Adds a new typedef and already tries to translate it to the main type
+        :param node: The subtree containing the typedef
         :return:
         """
-        if not self.isTypedef(translation):  # Translation is nota typedef anymore
-            return
-        else:
-            translation = self.typedefs[type]
+        while ASTTypedefReplacer.containsNonBaseType(node.children[1].children):  # Check if the typedef is of the form "typedef beer appel;"
+            self.translate(node.children[1])  # Translate the type from the typedef node
+        self.typedefs.append(node)
 
-            if translation is None and self.prev is None:  # Searching for a typedef that doesn't exist!
-                ErrorExporter.incompatibleTypedef("")
+    def translate(self, node: ASTNode):
+        """
+        Translate a typedef to a base class typedef
+        :param node:
+        :return:
+        """
+        identifier, index = ASTTypedefReplacer.getTypeName(node.children)
+        translation = []
+        args = (identifier,translation)
+        self.traverse( lambda x, a, b: x.getTranslation(a, b), True, args)
+        node.typedefReplaceChildren(translation, index)
+
+    def getTranslation(self, identifier: str, translation, done=False):
+        """
+        :param done: Indicating if we found something and may stop traversing
+        :param identifier: kaas in e.g. typedef int* kaas;
+        :return: Returns all type child nodes, e.g. [int,*]
+        """
+        for defi in self.typedefs:
+            if done:
+                return
+            if defi.children[2].text == identifier:
+                translation += defi.children[1].children
+                done = True
+
+    def clearTypeDefs(self):
+        self.typedefs.clear()

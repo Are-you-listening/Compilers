@@ -6,7 +6,8 @@ class CodeGetter(ASTVisitor):
     precondition: this class is the first visitor on the AST, ie before any cleaner visitors change the tree
     """
 
-    def __init__(self):
+    def __init__(self, ast: AST):
+        super().__init__(ast)
         self.codeLines = {}
 
     def visitNode(self, node: ASTNode):

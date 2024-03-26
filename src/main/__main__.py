@@ -9,13 +9,14 @@ from src.parser.ASTDereferencer import *
 from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
 from src.parser.ASTCleanerAfter import *
-from src.parser.TableDotVisitor import *
+from src.parser.Tables.TableDotVisitor import *
+from src.parser.ASTTableCreator import *
 from src.llvm_target.AST2LLVM import *
 from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
-from src.parser.CodeGetter import *
 
 
-def cleanGreen(input_file, symbol_file, codegetter):
+
+def cleanGreen(input_file, symbol_file):
     """
     Standard function to generate parseTree & Export it to Dot
     :param input_file:
@@ -37,46 +38,40 @@ def cleanGreen(input_file, symbol_file, codegetter):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    codegetter.visit(ast)
+    codegetter = CodeGetter(ast)  # Link each line of code to a line number
+    codegetter.visit()
 
-    #
+    ASTTypedefReplacer(ast).visit()  # Replace all uses of typedefs
 
-    d = DotVisitor('output/debug0')  # Export AST in Dot
-    d.visit(ast)
+    ASTCleaner(ast).visit()  # Do a standard cleaning
 
-    astcleaner = ASTCleaner()  # Do a standard cleaning
-    astcleaner.visit(ast)
+    ASTTableCreator(ast).visit()  # Create the symbol table
 
-    astcleanerafter = ASTCleanerAfter()  # Do a standard cleaning
-    astcleanerafter.visit(ast)
+    ASTCleanerAfter(ast).visit()  # Clean even more :)
 
-    ast_deref = ASTDereferencer()  # Correct the use of references & pointers into our format
-    ast_deref.visit(ast)
+    ASTDereferencer(ast).visit()  # Correct the use of references & pointers into our format
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
-        s.visit(ast.root.getSymbolTable())
+        s.visit(ast.root.getSymbolTable(), True)
 
-    return ast
+    DotVisitor(ast, "output/debug0").visit()  # Export AST in Dot
+
+    return ast, codegetter
 
 
 def Processing(ast, dot_file, fold):
-    constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
-    constraint_checker.visit(ast)
+    ConstraintChecker(ast).visit()  # Checkup Semantic & Syntax Errors
 
     if fold:
-        cfv = ConstantFoldingVisitor()
-        cfv.visit(ast)
+        ConstantFoldingVisitor(ast).visit()
 
-    v = ValueAdderVisitor()
-    v.visit(ast)
+    ValueAdderVisitor(ast).visit()
 
-    ast_conv = ASTConversion()
-    ast_conv.visit(ast)
+    ASTConversion(ast).visit()
 
     if dot_file is not None:
-        d = DotVisitor(dot_file)  # Export AST in Dot
-        d.visit(ast)
+        DotVisitor(ast, dot_file).visit()  # Export AST in Dot
 
     return ast
 
@@ -122,8 +117,7 @@ def main(argv, clang=False):
         subprocess.run(f"""clang-14 -S -emit-llvm {input_file} -o {clang_file}""",
                        shell=True, capture_output=True)
 
-    codegetter = CodeGetter()  # Link each line of code to a line number
-    ast = cleanGreen(input_file, symbol_file, codegetter)  # Start AST cleanup & Dot Conversion
+    ast, codegetter = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
     Processing(ast, dot_file, fold)  # Check for Errors , Apply Folding Techniques , ...
 
     LLVMSingleton.setName(input_file)

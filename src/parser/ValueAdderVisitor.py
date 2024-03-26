@@ -8,8 +8,8 @@ class ValueAdderVisitor(ASTVisitor):
     """
     AST visitor that adds identifier values to the symbol table
     """
-    def __init__(self):
-        pass
+    def __init__(self, ast: AST):
+        super().__init__(ast)
 
     def visitNode(self, node: ASTNode):
         if node.text in ("Declaration", "Assignment"):

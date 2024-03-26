@@ -7,7 +7,8 @@ class DotVisitor(ASTVisitor):
     Visitor to visualize the AST tree using dot
     """
 
-    def __init__(self, outfile="ASTvisual.dot"):
+    def __init__(self, ast: AST, outfile="ASTvisual.dot"):
+        super().__init__(ast)
         self.filename = outfile.split('.')[0]
         self.outfile = open(self.filename + ".dot", "w")
         self.outfile.write("digraph AST {\n")

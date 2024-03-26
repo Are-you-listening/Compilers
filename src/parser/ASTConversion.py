@@ -1,4 +1,3 @@
-from src.parser.ASTVisitor import *
 from src.parser.CTypes.COperationHandler import *
 from src.parser.Tables.SymbolTable import *
 
@@ -8,7 +7,8 @@ class ASTConversion(ASTVisitor):
     Makes implicit conversions explicit
     """
 
-    def __init__(self):
+    def __init__(self, ast: AST):
+        super().__init__(ast)
         self.rc = RichnessChecker(types)
 
         """
@@ -16,14 +16,13 @@ class ASTConversion(ASTVisitor):
         """
         self.type_mapping = {}
 
-    def visit(self, ast: AST):
+    def visit(self):
         """
         do a visitor in postorder, so we can construct type_mapping to the node types of the children first.
         This makes it possible for parents to access the types of their children and set its own type accordingly
-        :param ast:
         :return:
         """
-        root = ast.root
+        root = self.ast.root
         self.postorder(root)
 
     def visitNode(self, node: ASTNode):
@@ -34,9 +33,8 @@ class ASTConversion(ASTVisitor):
         """
 
         if node.text == "Dereference":
-            """
-            when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was before
-            """
+            """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was 
+            before"""
             child = node.getChild(0)
             data_type, ptrs = self.type_mapping[child]
             ptrs = ptrs[:-1]  # Remove 1 ptr
@@ -179,7 +177,8 @@ class ASTConversion(ASTVisitor):
                         """
                         in case we have incompatible type
                         """
-                        ErrorExporter.invalidOperation(child.linenr, operator, self.to_string_type(to_type),self.to_string_type(type_tup))
+                        ErrorExporter.invalidOperation(child.linenr, operator, self.to_string_type(to_type),
+                                                       self.to_string_type(type_tup))
                         continue
 
                     if operator in ("==", "!=", "<=", ">=", "<", ">"):
@@ -285,11 +284,11 @@ class ASTConversion(ASTVisitor):
             check if 1 is a PTR and 1 is a FLOAT to say the operation is invalid
             Some operations like '&&' are still valid
             """
-            if ptr_less_type[0] == "FLOAT" and len(ptr_less_type[1]) == 0 and operator not in ("==", "<=", ">=", "<", ">", "!=", "&&", "||"):
+            if ptr_less_type[0] == "FLOAT" and len(ptr_less_type[1]) == 0 and operator not in (
+                    "==", "<=", ">=", "<", ">", "!=", "&&", "||"):
                 incompatible = True
 
         return not incompatible
-
 
     @staticmethod
     def to_string_type(type_tup):

@@ -6,11 +6,11 @@ class ASTDereferencer(ASTVisitor):
     Make sure identifiers are dereferenced if needed
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, ast: AST):
+        super().__init__(ast)
 
-    def visit(self, ast: AST):
-        root = ast.root
+    def visit(self):
+        root = self.ast.root
         self.postorder(root)
 
     def visitNode(self, node: ASTNode):

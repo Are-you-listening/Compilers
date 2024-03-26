@@ -1,16 +1,15 @@
-from src.parser.ASTVisitor import *
 from src.parser.CTypes.COperationHandler import COperationHandler
+from src.parser.Tables.SymbolTable import *
 
 
 class ASTCleaner(ASTVisitor):
-    def __init__(self):
+    def __init__(self, ast: AST):
+        super().__init__(ast)
         self.operation_handler = COperationHandler()
         self.to_remove = []  # list of child parent of nodes we need to remove, can't be done directly because of loops
-        self.ast = None
 
-    def visit(self, ast: AST):
-        root = ast.root
-        self.ast = ast
+    def visit(self):
+        root = self.ast.root
         self.to_remove = []
         self.postorder(root)
 
@@ -22,10 +21,29 @@ class ASTCleaner(ASTVisitor):
         self.cleanComments(node)
         self.cleanLine(node)
         self.cleanPrintf(node)
+        self.cleanOvershootConst(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.cleanEqualSign(node)
         self.cleanEOF(node)
+
+    def cleanOvershootConst(self, node: ASTNode):
+        """
+        Identifies if there are too many cost nodes and add the overshoot to the to_remove list
+        :param node: Node to check
+        :return:
+        """
+        if node.text != "Type":  # This problem is only apparent by Type nodes
+            return
+
+        constNodes = []
+
+        for child in node.children:
+            if child.text == "const":
+                constNodes.append((child, node))
+
+        if len(constNodes) > 1:
+            self.to_remove += constNodes[1:]
 
     @staticmethod
     def cleanUseless(node: ASTNode):
@@ -105,12 +123,12 @@ class ASTCleaner(ASTVisitor):
 
         for child in node.children:
             if child.text == "printf":
-                self.to_remove.append((child,node))
+                self.to_remove.append((child, node))
             elif child.text == ",":
-                self.to_remove.append((child,node))
+                self.to_remove.append((child, node))
             elif child.text == '"':
-                self.to_remove.append((child,node))
+                self.to_remove.append((child, node))
             elif child.text == "":
-                self.to_remove.append((child,node))
+                self.to_remove.append((child, node))
         id = node.children[0].text
         node.children[0].text = id[1:len(node.children[0].text) - 1]

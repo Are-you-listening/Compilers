@@ -1,36 +1,51 @@
-### TODO Re-enable constrains
-### TODO Make test files
-### TODO Make a Test Case by comparing ast outputs
-### TODO ASTCreator: Create typedef Nodes
-### TODO ASTTypeDefReplacer
-
-### Preorder
-
-### Go through tree and replace each typenode with the symbol table translation
-### After this is done, replace each type in the symbol table as well
-
-
 from src.parser.ASTVisitor import *
-from src.parser.Tables.SymbolTable import *
 
-class ASTCleaner(ASTVisitor):
-    def __init__(self):
-        self.ast = None
+BaseTypes = ["INT", "FLOAT", "CHAR"]
 
-    def visit(self, ast: AST):
-        root = ast.root
-        self.ast = ast
+
+class ASTTypedefReplacer(ASTVisitor):
+    def __init__(self, ast: AST):
+        super().__init__(ast)
+
+    def visit(self):
+        root = self.ast.root
         self.preorder(root)
 
     def visitNode(self, node: ASTNode):
-        if node.text == "Type":
-            if node.getChildAmount() == 1:
-                child = node.getChild(0)
-            elif node.getChildAmount() == 2:
-                child = node.getChild(1)
+        if node.text == "Type" and self.containsNonBaseType(node.children):
+            table = node.symbol_table
+            table.translate(node)
 
-            if SymbolTable.isTypedef(child.text):
-                identifier = node.getSiblingNeighbour(1)  # Retrieve the identifier from the declaration
-                table = node.symbol_table
-                translation = table.getEntry(identifier.text).getType()  # Get the type of the identifier;  this is the new type that needs to fit in the node
-                child.text = translation  # Replace the type
+    def visitNodeTerminal(self, node: ASTNodeTerminal):
+        pass
+
+    @staticmethod
+    def isBaseType(child: ASTNode):
+        """
+        Check if the node is a BaseType Type Node
+        :param child: ASTNode
+        :return:
+        """
+        if child.text in BaseTypes:
+            return True
+        return False
+
+    @staticmethod
+    def getTypeName(children: list):
+        """
+        Retrieve the identifier string of the type
+        :param children: List of AST Nodes
+        :return: identifier in string format
+        """
+        index = 0
+        for child in children:
+            if child.text != '*' and child.text != "const":
+                return child.text, index
+            index += 1
+
+    @staticmethod
+    def containsNonBaseType(children: list):
+        for child in children:
+            if child.text != '*' and child.text != "const" and not ASTTypedefReplacer.isBaseType(child):
+                return True
+        return False

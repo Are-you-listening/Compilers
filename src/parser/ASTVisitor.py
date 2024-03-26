@@ -7,8 +7,11 @@ class ASTVisitor:
     Abstract visitor for the AST
     """
 
-    def visit(self, ast: AST):
-        root = ast.root
+    def __init__(self, ast: AST):
+        self.ast = ast
+
+    def visit(self):
+        root = self.ast.root
         self.preorder(root)
 
     def preorder(self, root: ASTNode):
