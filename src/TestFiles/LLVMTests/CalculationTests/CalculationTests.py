@@ -18,7 +18,7 @@ class CalculationTests(unittest.TestCase):
     Test case to run all created llvm output
     """
     def testSimpleCalculations(self):
-        file_range = range(1, 7)
+        file_range = range(1, 16)
         for i in file_range:
 
             file_name = f"tests/test{i}.c"

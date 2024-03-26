@@ -287,6 +287,7 @@ class AST2LLVM(ASTVisitor):
 
             if operator in ("++", "--"):
                 super_child = child.getChild(0)
+
                 u = self.llvm_map[super_child]
                 Declaration.assignment(u, llvm_var, u.align)
 

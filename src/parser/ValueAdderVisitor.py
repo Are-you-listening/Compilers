@@ -21,6 +21,14 @@ class ValueAdderVisitor(ASTVisitor):
         if ident.text == "Dereference":
             return
 
+        """
+        the ++, and -- operator should not be evaluated by the value Adder, so we detect those situations
+        and if they occur, we will skip this check
+        """
+
+        if node.getChild(1).getChildAmount() == 2 and len({node.getChild(1).getChild(0).text, node.getChild(1).getChild(1).text}.intersection({"++", "--"})) != 0:
+            return
+
         val = node.getChild(-1)
 
         if val == ident and node.text == "Declaration":
