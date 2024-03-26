@@ -11,12 +11,11 @@ class TestConstantFolding(unittest.TestCase):
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-        file_indexes = range(1, 8)
+        file_indexes = range(1, 9)
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
-            print(index)
             file_path = f"tests/test{index}.json"
             with open(file_path, "rt") as f:
                 json_data = f.read()

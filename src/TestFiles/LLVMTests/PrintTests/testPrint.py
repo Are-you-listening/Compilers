@@ -13,14 +13,16 @@ Filename Extension Explanation:
 """
 
 
-class LogicTests(unittest.TestCase):
+class PrintTests(unittest.TestCase):
     """
     Test case to run all created llvm output
     """
-    def testSimpleLogic(self):
-        file_range = range(1, 18)
-        for i in file_range:
+    def testSimplePrints(self):
+        file_range = range(1, 9)
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+        for i in file_range:
+            print(i)
             file_name = f"tests/test{i}.c"
             self.runAST(file_name)
             c_out = self.runC(file_name)
@@ -31,10 +33,13 @@ class LogicTests(unittest.TestCase):
             """
             assert for same output
             """
-            #print(i, out.stdout, c_out.stdout)
-            #print(out.stderr)
+            print(out.stdout, c_out.stdout)
             assert out.stdout == c_out.stdout
 
+            """
+            asser for no error
+            """
+            assert out.stderr == c_out.stderr
 
     @staticmethod
     def runAST(file_name: str):
@@ -45,7 +50,9 @@ class LogicTests(unittest.TestCase):
         """
         LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
 
-        main([0, "--input", file_name, "--target_llvm", file_name[:-2] + "LLVM.ll"], False)
+        main([0, "--input", file_name, "--render_ast", file_name[:-2] + "ASTVisual", "--render_symb",
+              file_name[:-2] + "SymbolTable",
+              "--target_llvm", file_name[:-2] + "LLVM.ll"], False)
 
         subprocess.run(f"""clang-14 -S -emit-llvm {file_name} -o {file_name[:-2]}.ll""",
                        shell=True, capture_output=True)

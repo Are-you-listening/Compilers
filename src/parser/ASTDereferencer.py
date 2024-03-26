@@ -28,8 +28,8 @@ class ASTDereferencer(ASTVisitor):
 
         left_child = node.getChild(0)
         right_child = node.getChild(1)
-
         if left_child.text == "*":
+
             ref = self.addDereference(right_child)
             node.parent.replaceChild(node, ref)
             node.removeChild(left_child)

@@ -37,6 +37,13 @@ class ASTConversion(ASTVisitor):
             before"""
             child = node.getChild(0)
             data_type, ptrs = self.type_mapping[child]
+
+            """
+            when trying to dereference a non-ptr, throw an error
+            """
+            if len(ptrs) == 0:
+                ErrorExporter.invalidDereferenceNotPtr(node.linenr, (data_type, ptrs))
+
             ptrs = ptrs[:-1]  # Remove 1 ptr
             self.type_mapping[node] = (data_type, ptrs)
             return
@@ -172,6 +179,22 @@ class ASTConversion(ASTVisitor):
                     """
                     continue
 
+                """
+                make sure that ptr's and floats are not combininded in invalid ways
+                int* v = 0.0; or float v = (ptr)              
+                """
+                if not self.compatible_2(type_tup, to_type, operator):
+                    if operator is None:
+                        """
+                        when no operator, it is an assignment
+                        """
+                        ErrorExporter.invalidAssignment(child.linenr, self.to_string_type(to_type),
+                                                       self.to_string_type(type_tup))
+                    else:
+                        ErrorExporter.invalidOperation(child.linenr, operator, self.to_string_type(to_type),
+                                                       self.to_string_type(type_tup))
+                    continue
+
                 if operator is not None:
                     if not self.compatible(type_tup, to_type, operator):
                         """
@@ -270,11 +293,22 @@ class ASTConversion(ASTVisitor):
         if ASTConversion.to_string_type(to_type) in incompatible_ops.keys():
             incompatible = incompatible or operator in incompatible_ops.get(ASTConversion.to_string_type(to_type))
 
-        type_set = {ASTConversion.to_string_type(type_tup), ASTConversion.to_string_type(to_type)}
+        return not incompatible
+
+    def compatible_2(self, type_tup: tuple, to_type: tuple, operator: str):
+        """
+        check specific compatiblity for ptrs and float combinations
+        :param type_tup:
+        :param to_type:
+        :param operator:
+        :return:
+        """
 
         """
         verify it is not ptr+float, or something like that
         """
+        incompatible = False
+
         if max(len(to_type[1]), len(type_tup[1])) != 0:
             ptr_less_type = to_type
             if len(type_tup[1]) == 0:
@@ -327,7 +361,6 @@ class ASTConversion(ASTVisitor):
         """
         when no ptrs are in the file, this check does nothing
         """
-
         if min(len(to_type[1]), len(type_tup2[1])) == 0:
             return
 
@@ -365,7 +398,8 @@ class ASTConversion(ASTVisitor):
 
         ErrorExporter.narrowingTypesWarning(line_nr, to_tup, type_tup)
 
-    def addConversion(self, node: ASTNode, to_type: tuple):
+    @staticmethod
+    def addConversion(node: ASTNode, to_type: tuple):
         """
         add a conversion to the provided type
 

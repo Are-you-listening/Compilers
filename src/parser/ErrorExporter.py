@@ -107,3 +107,28 @@ class ErrorExporter:
         :return:
         """
         print(f"[ Warning ] line {line_nr}: comparison of different types ('{''.join(type1)}' and '{''.join(type2)}') ")
+
+    @staticmethod
+    def invalidAssignment(line_nr: int, type1: tuple, type2: tuple):
+        """
+        an assignment between invalid types
+        :param line_nr:
+        :param type1:
+        :param type2:
+        :return:
+        """
+        print(f"[ Error ] line {line_nr}: assignment of incompatible types ('{''.join(type1)}' and '{''.join(type2)}') ", file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def invalidDereferenceNotPtr(line_nr: int, type1: tuple):
+        """
+        an assignment between invalid types
+        :param line_nr:
+        :param type1:
+        :return:
+        """
+        print(
+            f"[ Error ] line {line_nr}:  indirection requires pointer operand ('{''.join(type1)}' invalid)",
+            file=sys.stderr)
+        exit()

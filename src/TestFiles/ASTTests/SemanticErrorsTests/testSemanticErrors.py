@@ -7,10 +7,10 @@ from io import StringIO
 import json
 from src.parser.Constraints.ConstraintChecker import ConstraintChecker
 import os
-
+from src.parser.ASTDereferencer import ASTDereferencer
 class TestSemanticErrors(unittest.TestCase):
     def testSemanticErrors(self):
-        file_indexes = range(1, 2)
+        file_indexes = range(1, 7)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -40,6 +40,9 @@ class TestSemanticErrors(unittest.TestCase):
             conversion
             """
             try:
+                ast_deref = ASTDereferencer()  # Correct the use of references & pointers into our format
+                ast_deref.visit(ast_tree)
+
                 constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
                 constraint_checker.visit(ast_tree)
 

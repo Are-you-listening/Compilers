@@ -1,22 +1,22 @@
+#include <stdio.h>
+
 int main() {
-int number = -55;
-int a = 1;
-a = number++;
-printf("%d", a);
-printf("%d", number);
-number = number++;
-printf("%d", number);
+    int x = 5;
+    printf("%d%f", x, y);
+    int z = x + 3;
+    printf("%d", z);
 
-int n = number++;
-printf("%d", number);
-printf("%d", n);
+    x = z * z * z * (x + x);
+    printf("%d", x);
+    float f = 0.986312;
+    float f2 = f * 33.0 + 2.0;
+    printf("%d", (int) f2);
+    f2 = f2 + f;
+    printf("%d", (int) f2);
+    char c = 'a';
+    c = 'b';
+    printf("%c", c);
 
-n = n - n++;
-printf("%d", n);
-
-a = ++n;
-printf("%d", a);
-printf("%d", n);
     return 0;
 
 }

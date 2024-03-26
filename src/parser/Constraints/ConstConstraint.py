@@ -15,6 +15,7 @@ class ConstConstraint(Constraint):
         if node.text == "Assignment":
             entry = node.symbol_table.getEntry(
                 node.getChild(0).text)
+
             if node.symbol_table.getEntry(node.getChild(0).text) is not None and entry.const:
                 if entry.getType() != "PTR":
                     ErrorExporter.constComplaint(node.getChild(0).linenr, node.getChild(0).text, "const")
