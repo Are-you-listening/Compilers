@@ -8,10 +8,10 @@ import os
 
 class TestConstantFolding(unittest.TestCase):
     def testConstantFolding(self):
-        file_indexes = range(1, 4)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+        file_indexes = range(1, 8)
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 
