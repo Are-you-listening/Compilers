@@ -1,13 +1,10 @@
 int main() {
 
-    int x = 478;
-    int b = -251454;
+int x = 54;
 
-    int* b_ptr = &b;
+int z = -33;
 
-    int** x_ptr = &b_ptr;
-    x_ptr = &b;
+int* p = &z;
 
-    return 0;
-
+p = *x;
 }
