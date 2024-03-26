@@ -1,4 +1,6 @@
 import copy
+
+
 class ASTVisitor:  # Prevent circular inclusion
     pass
 
@@ -8,12 +10,12 @@ class ASTNode:
     A node inside the AST
     """
 
-    def __init__(self, text, parent, symbol_table):
+    def __init__(self, text, parent, symbol_table, linenr):
         self.children = []
         self.text = text
         self.parent = parent
         self.symbol_table = symbol_table
-        self.linenr = None
+        self.linenr = linenr
 
     def addChildren(self, child):
         self.children.append(child)
@@ -96,10 +98,11 @@ class ASTNode:
     def typedefReplaceChildren(self, kids, index):
         for kid in kids:
             if kid == kids[0]:
-                self.replaceChild(self.children[index], kids[0])  # Replace the first one with the first of the new types
+                self.replaceChild(self.children[index],
+                                  kids[0])  # Replace the first one with the first of the new types
             else:  # Simple insert the rest
                 newKid = copy.deepcopy(kid)
-                self.children.insert(index+1, newKid)
+                self.children.insert(index + 1, newKid)
                 newKid.parent = self
 
 
@@ -108,8 +111,8 @@ class ASTNodeTerminal(ASTNode):
     A node inside the AST that contains a terminal
     """
 
-    def __init__(self, text, parent, symbol_table, terminal_type, operation_type=None):
-        super(ASTNodeTerminal, self).__init__(text, parent, symbol_table)
+    def __init__(self, text, parent, symbol_table, terminal_type, linenr, operation_type=None):
+        super(ASTNodeTerminal, self).__init__(text, parent, symbol_table, linenr)
         self.type = terminal_type
         self.operation_type = operation_type
 

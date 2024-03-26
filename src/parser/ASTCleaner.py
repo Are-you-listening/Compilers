@@ -86,7 +86,7 @@ class ASTCleaner(ASTVisitor):
         else:
             resulting_comment = resulting_comment[2:len(resulting_comment) - 2]
         node.clearChildren()
-        comment_node = ASTNodeTerminal(resulting_comment, node, node.getSymbolTable(), "COMMENT")
+        comment_node = ASTNodeTerminal(resulting_comment, node, node.getSymbolTable(), "COMMENT",node.linenr)
         node.addChildren(comment_node)
 
     @staticmethod

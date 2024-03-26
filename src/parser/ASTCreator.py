@@ -1,8 +1,6 @@
 from src.antlr_files.expressionVisitor import *
 from src.antlr_files.expressionParser import *
-from src.parser.AST import *
 from src.parser.Tables.SymbolTable import *
-from src.parser.Tables.SymbolTypePtr import *
 
 black_list = ['(', ')', ';', '{', '}']
 
@@ -51,7 +49,7 @@ class ASTCreator(expressionVisitor):
         self.AST = AST(self.parent)
 
     def visitStart_(self, ctx: expressionParser.Start_Context):
-        self.parent = ASTNode("Start", None, self.table)
+        self.parent = ASTNode("Start", None, self.table, ctx.start.line)
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx: expressionParser.FunctionContext):
@@ -101,10 +99,8 @@ class ASTCreator(expressionVisitor):
         self.__makeNode(ctx, "Comment")
 
     def visitReturn(self, ctx: expressionParser.ReturnContext):
-        node = ASTNode("Return", self.parent, self.table)  # Also attaches the current table/scope
-        node.linenr = ctx.start.line
+        node = ASTNode("Return", self.parent, self.table, ctx.start.line)  # Also attaches the current table/scope
         self.parent.addChildren(node)
-        old_parent = self.parent
         self.parent = node
 
     def visitTerminal(self, ctx):
@@ -120,8 +116,7 @@ class ASTCreator(expressionVisitor):
         if text in ["int", "float", "char"]:
             text = text.upper()
 
-        node = ASTNodeTerminal(text, self.parent, self.table, self.translateLexerID(ctx.getSymbol().type))
-        node.linenr = ctx.getSymbol().line
+        node = ASTNodeTerminal(text, self.parent, self.table, self.translateLexerID(ctx.getSymbol().type), ctx.getSymbol().line)
 
         self.parent.addChildren(node)
 
@@ -135,7 +130,7 @@ class ASTCreator(expressionVisitor):
         """
         makes new Object and makes sure this will be a child of it's parent
         """
-        node = ASTNode(terminal_type, self.parent, self.table)  # Also attaches the current table/scope
+        node = ASTNode(terminal_type, self.parent, self.table, ctx.start.line)  # Also attaches the current table/scope
         node.linenr = ctx.start.line
         self.parent.addChildren(node)
         old_parent = self.parent

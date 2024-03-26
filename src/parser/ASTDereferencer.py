@@ -84,7 +84,6 @@ class ASTDereferencer(ASTVisitor):
 
     @staticmethod
     def addDereference(node):
-        new_node = ASTNode("Dereference", None, node.symbol_table)
-        new_node.linenr = node.linenr
+        new_node = ASTNode("Dereference", None, node.symbol_table,node.linenr)
         node.addNodeParent(new_node)
         return new_node
