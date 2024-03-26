@@ -64,7 +64,7 @@ def Processing(ast, dot_file, fold):
         cfv.visit(ast)
 
     v = ValueAdderVisitor()
-    #v.visit(ast)
+    v.visit(ast)
 
     ast_conv = ASTConversion()
     ast_conv.visit(ast)
