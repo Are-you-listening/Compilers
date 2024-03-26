@@ -30,9 +30,11 @@ class CatchAllTest(unittest.TestCase):
         LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton instance
         valid = True
 
-        if file_name.startswith("testfiles/ownTests/proj1") or file_name.startswith("testfiles/advanced_tests"):  # Don't want to run those bad boys for now
+        if file_name.startswith("testfiles/ownTests/proj1") or file_name.startswith(
+                "testfiles/advanced_tests"):  # Don't want to run those bad boys for now
             return
-        if file_name in ["testfiles/basic_tests_123/proj2_man_semanticErr_undeclaredVariable3.c","testfiles/basic_tests_123/proj2_man_syntaxErr_variableConst2.c"]:
+        if file_name in ["testfiles/basic_tests_123/proj2_man_semanticErr_undeclaredVariable3.c",
+                         "testfiles/basic_tests_123/proj2_man_syntaxErr_variableConst2.c"]:
             return
 
         out = subprocess.run(f"""clang-14 -S -emit-llvm {file_name} -o {file_name[:-2]}.ll""",

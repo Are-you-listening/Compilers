@@ -1,5 +1,4 @@
 import os
-import filecmp
 import unittest
 import subprocess
 from src.main.__main__ import main

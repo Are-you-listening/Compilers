@@ -6,13 +6,11 @@ class ASTCleanerAfter(ASTVisitor):
     """
     Cleaner after symbol table is created
     """
-    def __init__(self, ast: AST):
-        super().__init__(ast)
+    def __init__(self):
         self.operation_handler = COperationHandler()
 
-    def visit(self):
-        root = self.ast.root
-        self.postorder(root)
+    def visit(self, ast: AST):
+        self.postorder(ast.root)
 
     def visitNode(self, node: ASTNodeTerminal):
         self.cleanDeclaration(node)

@@ -1,11 +1,11 @@
 import unittest
 from src.TestFiles.ASTTests.AstLoader import AstLoader
-import json
 from src.parser.ValueAdderVisitor import *
 import sys
 from io import StringIO
 import json
 import os
+
 
 class TestValueAdder(unittest.TestCase):
     def testValueAdder(self):
@@ -37,8 +37,7 @@ class TestValueAdder(unittest.TestCase):
             value adder visit
             """
             try:
-                value_adder = ValueAdderVisitor()
-                value_adder.visit(ast_tree)
+                ValueAdderVisitor().visit(ast_tree)
 
                 file_path_result = f"tests/test{index}_result.json"
                 with open(file_path_result, "rt") as f:
@@ -66,7 +65,3 @@ class TestValueAdder(unittest.TestCase):
 
             sys.stdout = original
             sys.stderr = original_error
-
-
-
-

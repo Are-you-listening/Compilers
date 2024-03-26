@@ -15,14 +15,11 @@ from src.llvm_target.AST2LLVM import *
 from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
 
 
-
 def cleanGreen(input_file, symbol_file):
     """
     Standard function to generate parseTree & Export it to Dot
     :param input_file:
-    :param dot_file:
     :param symbol_file:
-    :param codegetter:
     :return:
     """
     input_stream = FileStream(input_file)  # Declare some variables
@@ -38,40 +35,40 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    codegetter = CodeGetter(ast)  # Link each line of code to a line number
-    codegetter.visit()
+    codegetter = CodeGetter()  # Link each line of code to a line number
+    codegetter.visit(ast)
 
-    ASTTypedefReplacer(ast).visit()  # Replace all uses of typedefs
+    ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
-    ASTCleaner(ast).visit()  # Do a standard cleaning
+    ASTCleaner().visit(ast)  # Do a standard cleaning
 
-    ASTTableCreator(ast).visit()  # Create the symbol table
+    ASTTableCreator().visit(ast)  # Create the symbol table
 
-    ASTCleanerAfter(ast).visit()  # Clean even more :)
+    ASTCleanerAfter().visit(ast)  # Clean even more :)
 
-    ASTDereferencer(ast).visit()  # Correct the use of references & pointers into our format
+    ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
         s.visit(ast.root.getSymbolTable(), True)
 
-    DotVisitor(ast, "output/debug0").visit()  # Export AST in Dot
+    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     return ast, codegetter
 
 
 def Processing(ast, dot_file, fold):
-    ConstraintChecker(ast).visit()  # Checkup Semantic & Syntax Errors
+    ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 
     if fold:
-        ConstantFoldingVisitor(ast).visit()
+        ConstantFoldingVisitor().visit(ast)
 
-    ValueAdderVisitor(ast).visit()
+    ValueAdderVisitor().visit(ast)
 
-    ASTConversion(ast).visit()
+    ASTConversion().visit(ast)
 
     if dot_file is not None:
-        DotVisitor(ast, dot_file).visit()  # Export AST in Dot
+        DotVisitor(dot_file).visit(ast)  # Export AST in Dot
 
     return ast
 
@@ -80,7 +77,6 @@ def main(argv, clang=False):
     """
     Main function to start program
     :param argv: Argument list as defined in the project description
-    :param fold:
     :param clang:
     :return:
     """
@@ -129,8 +125,6 @@ def main(argv, clang=False):
         control_dot.visit(to_llvm.getControlFlowGraph().root)
 
 
-
 if __name__ == '__main__':
     main(sys.argv)
     LLVMSingleton.getInstance().clear()
-

@@ -1,5 +1,4 @@
 import json
-from src.parser.AST import *
 from src.parser.Tables.SymbolTable import *
 from typing import List
 
@@ -65,7 +64,7 @@ class AstLoader:
                                        ast_node_entry["operation_type"])
 
         else:
-            ast_node = ASTNode(text, parent, ast_node_entry["symbol_table_nr"])
+            ast_node = ASTNode(text, parent, ast_node_entry["symbol_table_nr"], 0)
 
         map_id_to_node[ast_tree["id"]] = ast_node
 
@@ -103,10 +102,7 @@ class AstLoader:
     @staticmethod
     def __make_dict(ast_node: ASTNode, ast_node_list: list, ast_tree: dict, symbol_tables: list, ast_to_id_map):
 
-        ast_dict = {}
-        ast_dict["text"] = ast_node.text
-
-        ast_dict["linenr"] = ast_node.linenr
+        ast_dict = {"text": ast_node.text, "linenr": ast_node.linenr}
 
         symbol_table = ast_node.getSymbolTable()
 
@@ -142,16 +138,11 @@ class AstLoader:
         for symbol_table in symbol_tables:
             symbol_entries = []
             for keys, symbol_entry in symbol_table.symbols.items():
-                symbol_entry_dict = {}
-                symbol_entry_dict["fitype"] = symbol_entry.fitype
-                symbol_entry_dict["type"] = symbol_entry.getPtrTuple()
-                symbol_entry_dict["name"] = symbol_entry.name
-                symbol_entry_dict["const"] = symbol_entry.const
-
-                symbol_entry_dict["value"] = ast_to_id_map.get(symbol_entry.value, None)
-
-                symbol_entry_dict["firstDeclared"] = ast_to_id_map.get(symbol_entry.firstDeclared)
-                symbol_entry_dict["firstUsed"] = ast_to_id_map.get(symbol_entry.firstUsed)
+                symbol_entry_dict = {"fitype": symbol_entry.fitype, "type": symbol_entry.getPtrTuple(),
+                                     "name": symbol_entry.name, "const": symbol_entry.const,
+                                     "value": ast_to_id_map.get(symbol_entry.value, None),
+                                     "firstDeclared": ast_to_id_map.get(symbol_entry.firstDeclared),
+                                     "firstUsed": ast_to_id_map.get(symbol_entry.firstUsed)}
 
                 symbol_entries.append(symbol_entry_dict)
 

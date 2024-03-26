@@ -1,4 +1,3 @@
-from src.parser.ASTVisitor import *
 from src.parser.Tables.SymbolTable import *
 
 
@@ -6,13 +5,8 @@ class ASTTableCreator(ASTVisitor):
     """
     Traverses through the three and creates the symbol table
     """
-
-    def __init__(self, ast: AST):
-        super().__init__(ast)
-
-    def visit(self):
-        root = self.ast.root
-        self.postorder(root)
+    def visit(self, ast: AST):
+        self.postorder(ast.root)
 
     def visitNode(self, node: ASTNode):
         if node.text == "Declaration" or node.text == "Function":

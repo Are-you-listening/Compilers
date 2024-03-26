@@ -6,13 +6,8 @@ class ASTVisitor:
     """
     Abstract visitor for the AST
     """
-
-    def __init__(self, ast: AST):
-        self.ast = ast
-
-    def visit(self):
-        root = self.ast.root
-        self.preorder(root)
+    def visit(self, ast: AST):
+        self.preorder(ast.root)
 
     def preorder(self, root: ASTNode):
         """root.accept(self)

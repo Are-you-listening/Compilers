@@ -6,6 +6,7 @@ from io import StringIO
 import json
 import os
 
+
 class TestConversion(unittest.TestCase):
     def testConversionsBasic(self):
         file_indexes = range(1, 15)
@@ -16,7 +17,7 @@ class TestConversion(unittest.TestCase):
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
-            #print(index)
+            # print(index)
             file_path = f"tests/test{index}.json"
             with open(file_path, "rt") as f:
                 json_data = f.read()
@@ -67,7 +68,3 @@ class TestConversion(unittest.TestCase):
 
             sys.stdout = original
             sys.stderr = original_error
-
-
-
-

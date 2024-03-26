@@ -4,8 +4,7 @@ from src.parser.ErrorExporter import *
 
 
 class IdentifierReplacerVisitor(ASTVisitor):
-    def __init__(self, ast: AST):
-        super().__init__(ast)
+    def __init__(self):
         self.previousNode = None
 
     def visitNode(self, node: ASTNode):

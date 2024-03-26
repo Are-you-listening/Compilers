@@ -7,8 +7,7 @@ class ASTConversion(ASTVisitor):
     Makes implicit conversions explicit
     """
 
-    def __init__(self, ast: AST):
-        super().__init__(ast)
+    def __init__(self):
         self.rc = RichnessChecker(types)
 
         """
@@ -16,14 +15,13 @@ class ASTConversion(ASTVisitor):
         """
         self.type_mapping = {}
 
-    def visit(self):
+    def visit(self, ast: AST):
         """
         do a visitor in postorder, so we can construct type_mapping to the node types of the children first.
         This makes it possible for parents to access the types of their children and set its own type accordingly
         :return:
         """
-        root = self.ast.root
-        self.postorder(root)
+        self.postorder(ast.root)
 
     def visitNode(self, node: ASTNode):
         """
@@ -295,7 +293,8 @@ class ASTConversion(ASTVisitor):
 
         return not incompatible
 
-    def compatible_2(self, type_tup: tuple, to_type: tuple, operator: str):
+    @staticmethod
+    def compatible_2(type_tup: tuple, to_type: tuple, operator: str):
         """
         check specific compatiblity for ptrs and float combinations
         :param type_tup:
@@ -408,8 +407,8 @@ class ASTConversion(ASTVisitor):
         :return:
         """
 
-        new_node = ASTNode("Conversion", node.parent, node.getSymbolTable())
-        type_node = ASTNode("Type", new_node, new_node.getSymbolTable())
+        new_node = ASTNode("Conversion", node.parent, node.getSymbolTable(), node.linenr)
+        type_node = ASTNode("Type", new_node, new_node.getSymbolTable(), node.linenr)
         new_node.addChildren(type_node)
 
         """

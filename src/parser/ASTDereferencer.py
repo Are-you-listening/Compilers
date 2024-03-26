@@ -6,12 +6,8 @@ class ASTDereferencer(ASTVisitor):
     Make sure identifiers are dereferenced if needed
     """
 
-    def __init__(self, ast: AST):
-        super().__init__(ast)
-
-    def visit(self):
-        root = self.ast.root
-        self.postorder(root)
+    def visit(self, ast: AST):
+        self.postorder(ast.root)
 
     def visitNode(self, node: ASTNode):
         if node.text in ("Declaration", "Function", "Assignment"):
@@ -29,7 +25,6 @@ class ASTDereferencer(ASTVisitor):
         left_child = node.getChild(0)
         right_child = node.getChild(1)
         if left_child.text == "*":
-
             ref = self.addDereference(right_child)
             node.parent.replaceChild(node, ref)
             node.removeChild(left_child)
@@ -84,6 +79,6 @@ class ASTDereferencer(ASTVisitor):
 
     @staticmethod
     def addDereference(node):
-        new_node = ASTNode("Dereference", None, node.symbol_table,node.linenr)
+        new_node = ASTNode("Dereference", None, node.symbol_table, node.linenr)
         node.addNodeParent(new_node)
         return new_node

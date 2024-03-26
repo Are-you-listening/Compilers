@@ -20,6 +20,7 @@ class CompareAll(unittest.TestCase):
 
     NOTE: All the tests are run with constant folding enabled! (As by default)
     """
+
     def testEvaluateResults(self):
         path = "testfiles/"
         for root, dirs, filenames in os.walk(path):
@@ -35,7 +36,7 @@ class CompareAll(unittest.TestCase):
                         continue
 
                     if self.runAST(filename):
-                        assert self.compareLLVM(filename[:-2] + "LLVMtoCompare.ll", filename[:-2]+"LLVM.ll")
+                        assert self.compareLLVM(filename[:-2] + "LLVMtoCompare.ll", filename[:-2] + "LLVM.ll")
 
     @staticmethod
     def createEmptyLLVMFile(filename):
@@ -55,7 +56,7 @@ class CompareAll(unittest.TestCase):
         :param right:
         :return: True if they are the same
         """
-        return filecmp.cmp(newly, right,False)
+        return filecmp.cmp(newly, right, False)
 
     @staticmethod
     def runAST(file_name: str):
@@ -68,11 +69,12 @@ class CompareAll(unittest.TestCase):
 
         try:  # This test ignores thrown errors
             # Create LLVM file
-            main([0, "--input", file_name, "--render_ast", file_name[:-2] + "ASTVisual", "--render_symb", file_name[:-2] + "SymbolTable",
-                  "--target_llvm", file_name[:-2] + "LLVM.ll",], False)
+            main([0, "--input", file_name, "--render_ast", file_name[:-2] + "ASTVisual", "--render_symb",
+                  file_name[:-2] + "SymbolTable",
+                  "--target_llvm", file_name[:-2] + "LLVM.ll", ], False)
 
             subprocess.run(f"""clang-14 -S -emit-llvm {file_name} -o {file_name[:-2]}.ll""",
-                                 shell=True, capture_output=True)
+                           shell=True, capture_output=True)
             return True
         except:
             return False

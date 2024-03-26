@@ -1,5 +1,4 @@
 import os
-import filecmp
 import unittest
 import subprocess
 from src.main.__main__ import main
@@ -17,11 +16,11 @@ class LogicTests(unittest.TestCase):
     """
     Test case to run all created llvm output
     """
+
     def testSimpleLogic(self):
         file_range = range(1, 18)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
         for i in file_range:
-
             file_name = f"tests/test{i}.c"
             self.runAST(file_name)
             c_out = self.runC(file_name)
@@ -32,10 +31,9 @@ class LogicTests(unittest.TestCase):
             """
             assert for same output
             """
-            #print(i, out.stdout, c_out.stdout)
-            #print(out.stderr)
+            # print(i, out.stdout, c_out.stdout)
+            # print(out.stderr)
             assert out.stdout == c_out.stdout
-
 
     @staticmethod
     def runAST(file_name: str):

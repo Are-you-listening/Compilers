@@ -1,16 +1,12 @@
-from src.parser.ASTVisitor import *
-from src.parser.CTypes.COperationHandler import COperationHandler
 from src.parser.ASTConversion import *
 
 
 class ConstantFoldingVisitor(ASTVisitor):
-    def __init__(self, ast: AST):
-        super().__init__(ast)
+    def __init__(self):
         self.operation_handler = COperationHandler()
 
-    def visit(self):
-        root = self.ast.root
-        self.postorder(root)
+    def visit(self, ast: AST):
+        self.postorder(ast.root)
 
     def visitNode(self, node: ASTNode):
         """
@@ -36,8 +32,9 @@ class ConstantFoldingVisitor(ASTVisitor):
         if node.text != "Expr":
             return
         # Check for constant folding with logical operators and variables
-        if node.getChildAmount() == 3 and node.getTerminalAmount() == 2 and (node.getChild(1).text == "&&" or node.getChild(1).text == "||"):
-            if(self.logical_operations(node) is not None):
+        if node.getChildAmount() == 3 and node.getTerminalAmount() == 2 and (
+                node.getChild(1).text == "&&" or node.getChild(1).text == "||"):
+            if self.logical_operations(node) is not None:
                 result, datatype_name = self.logical_operations(node)
             else:
                 index = parent.findChild(node)
@@ -82,7 +79,7 @@ class ConstantFoldingVisitor(ASTVisitor):
         index = parent.findChild(node)
 
         node = ASTNodeTerminal(result,
-                               parent, parent.getSymbolTable(), datatype_name)
+                               parent, parent.getSymbolTable(), datatype_name, node.linenr)
         parent.setChild(index, node)
 
         """do the visiting again"""
@@ -91,7 +88,8 @@ class ConstantFoldingVisitor(ASTVisitor):
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass
 
-    def logical_operations(self, node: ASTNode):
+    @staticmethod
+    def logical_operations(node: ASTNode):
         """
         Constant folding does some things extra for logical operations
         When we have a logical operation 'a || 1', we know the answer will always be true
@@ -113,7 +111,8 @@ class ConstantFoldingVisitor(ASTVisitor):
 
         if logical_operator == "||":
             if operand.text == "0":
-                ASTConversion.addConversion(node.getChild(0) if operand == node.getChild(2) else node.getChild(2),("BOOL", ""))
+                ASTConversion.addConversion(node.getChild(0) if operand == node.getChild(2) else node.getChild(2),
+                                            ("BOOL", ""))
                 return None
             else:
                 return "1", "INT"
@@ -121,8 +120,8 @@ class ConstantFoldingVisitor(ASTVisitor):
             if operand.text == "0":
                 return "0", "INT"
             else:
-                ASTConversion.addConversion(node.getChild(0) if operand == node.getChild(2) else node.getChild(2),("BOOL", ""))
+                ASTConversion.addConversion(node.getChild(0) if operand == node.getChild(2) else node.getChild(2),
+                                            ("BOOL", ""))
                 return None
 
         return None
-

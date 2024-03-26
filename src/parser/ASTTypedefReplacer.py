@@ -4,12 +4,8 @@ BaseTypes = ["INT", "FLOAT", "CHAR"]
 
 
 class ASTTypedefReplacer(ASTVisitor):
-    def __init__(self, ast: AST):
-        super().__init__(ast)
-
-    def visit(self):
-        root = self.ast.root
-        self.preorder(root)
+    def visit(self, ast: AST):
+        self.preorder(ast.root)
 
     def visitNode(self, node: ASTNode):
         if node.text == "Type" and self.containsNonBaseType(node.children):

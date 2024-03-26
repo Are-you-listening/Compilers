@@ -1,5 +1,4 @@
 import os
-import filecmp
 import unittest
 import subprocess
 from src.main.__main__ import main
@@ -17,6 +16,7 @@ class CalculationTests(unittest.TestCase):
     """
     Test case to run all created llvm output
     """
+
     def testSimpleCalculations(self):
         file_range = range(1, 16)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -33,10 +33,9 @@ class CalculationTests(unittest.TestCase):
             """
             assert for same output
             """
-            #print(i, out.stdout, c_out.stdout)
-            #print(out.stderr)
+            # print(i, out.stdout, c_out.stdout)
+            # print(out.stderr)
             assert out.stdout == c_out.stdout
-
 
     @staticmethod
     def runAST(file_name: str):

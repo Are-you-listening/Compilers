@@ -8,6 +8,8 @@ import json
 from src.parser.Constraints.ConstraintChecker import ConstraintChecker
 import os
 from src.parser.ASTDereferencer import ASTDereferencer
+
+
 class TestSemanticErrors(unittest.TestCase):
     def testSemanticErrors(self):
         file_indexes = range(1, 7)
@@ -40,17 +42,13 @@ class TestSemanticErrors(unittest.TestCase):
             conversion
             """
             try:
-                ast_deref = ASTDereferencer()  # Correct the use of references & pointers into our format
-                ast_deref.visit(ast_tree)
+                ASTDereferencer().visit(ast_tree)  # Correct the use of references & pointers into our format
 
-                constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
-                constraint_checker.visit(ast_tree)
+                ConstraintChecker().visit(ast_tree)  # Checkup Semantic & Syntax Errors
 
-                cfv = ConstantFoldingVisitor()
-                cfv.visit(ast_tree)
+                ConstantFoldingVisitor().visit(ast_tree)
 
-                ast_conv = ASTConversion()
-                ast_conv.visit(ast_tree)
+                ASTConversion().visit(ast_tree)
 
                 file_path_result = f"tests/test{index}_result.json"
                 with open(file_path_result, "rt") as f:
@@ -78,7 +76,3 @@ class TestSemanticErrors(unittest.TestCase):
 
             sys.stdout = original
             sys.stderr = original_error
-
-
-
-

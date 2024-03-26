@@ -6,6 +6,7 @@ import sys
 from io import StringIO
 import os
 
+
 class TestConstantFolding(unittest.TestCase):
     def testConstantFolding(self):
 

@@ -3,15 +3,13 @@ from src.parser.Tables.SymbolTable import *
 
 
 class ASTCleaner(ASTVisitor):
-    def __init__(self, ast: AST):
-        super().__init__(ast)
+    def __init__(self):
         self.operation_handler = COperationHandler()
         self.to_remove = []  # list of child parent of nodes we need to remove, can't be done directly because of loops
 
-    def visit(self):
-        root = self.ast.root
+    def visit(self, ast: AST):
         self.to_remove = []
-        self.postorder(root)
+        self.postorder(ast.root)
 
         for c, p in self.to_remove:
             p.removeChild(c)
@@ -86,7 +84,7 @@ class ASTCleaner(ASTVisitor):
         else:
             resulting_comment = resulting_comment[2:len(resulting_comment) - 2]
         node.clearChildren()
-        comment_node = ASTNodeTerminal(resulting_comment, node, node.getSymbolTable(), "COMMENT",node.linenr)
+        comment_node = ASTNodeTerminal(resulting_comment, node, node.getSymbolTable(), "COMMENT", node.linenr)
         node.addChildren(comment_node)
 
     @staticmethod
@@ -124,13 +122,13 @@ class ASTCleaner(ASTVisitor):
         format_child_text = ""
 
         """
-        support printf format stuff %d;lol with ';lol' as sperator
+        support printf format stuff %d;lol with ';lol' as operator
         """
         for i, child in enumerate(node.children[:-1]):
             self.to_remove.append((child, node))
             format_child_text += child.text
 
-        format_child_text = format_child_text[len("printf")+1:-2]
+        format_child_text = format_child_text[len("printf") + 1:-2]
 
-        format_node = ASTNodeTerminal(format_child_text, node, node.getSymbolTable(), -1)
+        format_node = ASTNodeTerminal(format_child_text, node, node.getSymbolTable(), -1, node.linenr)
         node.insertChild(0, format_node)
