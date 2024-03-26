@@ -19,6 +19,8 @@ class PrintTests(unittest.TestCase):
     """
     def testSimplePrints(self):
         file_range = range(1, 9)
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
         for i in file_range:
             print(i)
             file_name = f"tests/test{i}.c"

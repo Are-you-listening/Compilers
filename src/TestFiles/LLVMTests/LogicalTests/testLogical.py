@@ -19,6 +19,7 @@ class LogicTests(unittest.TestCase):
     """
     def testSimpleLogic(self):
         file_range = range(1, 18)
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
         for i in file_range:
 
             file_name = f"tests/test{i}.c"

@@ -1,13 +1,22 @@
 #include <stdio.h>
 
-// This should print the number 10 for each basic operation (int and float)
-int main(){
-        printf("%d; ", 5+5);
-        printf("%f; ", 4.5+5.5);
-        printf("%d; ", 15-5);
-        printf("%f; ", 10.5-0.5);
-        printf("%d; ", 2*5);
-        printf("%f; ", 20.0*0.5);
-        printf("%d; ", 20/2);
-        printf("%f; ", 5.0/0.5);
+int main() {
+    int x = 5;
+    printf("%d", x);
+    int z = x + 3;
+    printf("%d", z);
+
+    x = z * z * z * (x + x);
+    printf("%d", x);
+    float f = 0.986312;
+    float f2 = f * 33.0 + 2.0;
+    printf("%d", (int) f2);
+    f2 = f2 + f;
+    printf("%d", (int) f2);
+    char c = 'a';
+    c = 'b';
+    printf("%c", c);
+
+    return 0;
+
 }
