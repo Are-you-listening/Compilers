@@ -1,14 +1,17 @@
 import unittest
 from src.TestFiles.ASTTests.AstLoader import AstLoader
-from src.parser.ASTConversion import ASTConversion
+import json
+from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
 import sys
 from io import StringIO
-import json
+import os
 
+class TestConstantFolding(unittest.TestCase):
+    def testConstantFolding(self):
 
-class TestConversion(unittest.TestCase):
-    def testConversionsBasic(self):
-        file_indexes = range(1, 15)
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+        file_indexes = range(1, 8)
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 
@@ -35,8 +38,8 @@ class TestConversion(unittest.TestCase):
             conversion
             """
             try:
-                ast_conv = ASTConversion()
-                ast_conv.visit(ast_tree)
+                ast_const = ConstantFoldingVisitor()
+                ast_const.visit(ast_tree)
 
                 file_path_result = f"tests/test{index}_result.json"
                 with open(file_path_result, "rt") as f:
@@ -64,7 +67,3 @@ class TestConversion(unittest.TestCase):
 
             sys.stdout = original
             sys.stderr = original_error
-
-
-
-

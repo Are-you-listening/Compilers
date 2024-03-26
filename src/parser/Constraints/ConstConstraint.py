@@ -9,16 +9,15 @@ class ConstConstraint(Constraint):
 
     def __init__(self):
         super().__init__()
-        self.node = None
         self.rejected = False
 
     def checkNode(self, node: ASTNode):
-        self.node = node
         if node.text == "Assignment":
             entry = node.symbol_table.getEntry(
                 node.getChild(0).text)
             if node.symbol_table.getEntry(node.getChild(0).text) is not None and entry.const:
                 if entry.getType() != "PTR":
+                    ErrorExporter.constComplaint(node.getChild(0).linenr, node.getChild(0).text, "const")
                     self.rejected = True
         elif node.text == "Dereference":
             UnaryOps = ["++", "--"]
@@ -26,11 +25,13 @@ class ConstConstraint(Constraint):
             if node.getSiblingNeighbour(1) is not None:
                 if node.getSiblingNeighbour(1).text in UnaryOps:
                     if node.symbol_table.getEntry(node.getChild(0).text).const:
+                        ErrorExporter.constComplaint(node.getChild(0).linenr, node.getChild(0).text, "const")
                         self.rejected = True
 
             elif node.getSiblingNeighbour(-1) is not None:
                 if node.getSiblingNeighbour(-1).text in UnaryOps:
                     if node.symbol_table.getEntry(node.getChild(0).text).const:
+                        ErrorExporter.constComplaint(node.getChild(0).linenr, node.getChild(0).text, "const")
                         self.rejected = True
 
     def checkTerminalNode(self, node: ASTNodeTerminal):
@@ -40,8 +41,9 @@ class ConstConstraint(Constraint):
             if entry.getType() == "PTR":
                 if (node.parent.text == "Dereference" and node.parent.parent.text == "Dereference"
                         and node.symbol_table.getEntry(node.text).const):
-                    self.node = node.parent
+                    node = node.parent
+                    ErrorExporter.constComplaint(node.getChild(0).linenr, node.getChild(0).text, "const")
                     self.rejected = True
 
     def throwException(self):
-        ErrorExporter.constComplaint(self.node.getChild(0).linenr, self.node.getChild(0).text, "const")
+        pass

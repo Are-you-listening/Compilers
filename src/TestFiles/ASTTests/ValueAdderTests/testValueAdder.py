@@ -1,19 +1,21 @@
 import unittest
 from src.TestFiles.ASTTests.AstLoader import AstLoader
 import json
-from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
+from src.parser.ValueAdderVisitor import *
 import sys
 from io import StringIO
+import json
+import os
 
+class TestValueAdder(unittest.TestCase):
+    def testValueAdder(self):
+        file_indexes = range(1, 6)
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-class TestConstantFolding(unittest.TestCase):
-    def testConstantFolding(self):
-        file_indexes = range(1, 4)
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
-            print(index)
             file_path = f"tests/test{index}.json"
             with open(file_path, "rt") as f:
                 json_data = f.read()
@@ -32,11 +34,11 @@ class TestConstantFolding(unittest.TestCase):
             sys.stderr = error_buff
 
             """
-            conversion
+            value adder visit
             """
             try:
-                ast_const = ConstantFoldingVisitor()
-                ast_const.visit(ast_tree)
+                value_adder = ValueAdderVisitor()
+                value_adder.visit(ast_tree)
 
                 file_path_result = f"tests/test{index}_result.json"
                 with open(file_path_result, "rt") as f:
@@ -64,3 +66,7 @@ class TestConstantFolding(unittest.TestCase):
 
             sys.stdout = original
             sys.stderr = original_error
+
+
+
+
