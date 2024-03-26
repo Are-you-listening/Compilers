@@ -8,7 +8,7 @@ from io import StringIO
 
 class TestConstantFolding(unittest.TestCase):
     def testConstantFolding(self):
-        file_indexes = range(1, 4)
+        file_indexes = range(1, 8)
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 

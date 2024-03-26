@@ -24,6 +24,14 @@ class _BinaryOperations(BaseBinaryOperations):
     """
     Binary functions equivalent to the functionality of C
     """
+    @staticmethod
+    def Divide(a, b):
+        if isinstance(b, float) and math.copysign(1, b) == -1.0 and b == 0.0:
+            return float('-inf')  # Return negative infinity for -0.0
+        elif b == 0.0:
+            return float('inf')  # Return positive infinity for 0.0
+        else:
+            return a / b
 
     @staticmethod
     def Modulus(a, b):
