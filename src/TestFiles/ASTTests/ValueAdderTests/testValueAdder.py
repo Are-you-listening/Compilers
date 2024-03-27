@@ -9,7 +9,7 @@ import os
 
 class TestValueAdder(unittest.TestCase):
     def testValueAdder(self):
-        file_indexes = range(1, 5)
+        file_indexes = range(1, 11)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         with open("tests/error_dict.json", "rt") as f:

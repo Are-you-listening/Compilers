@@ -1,7 +1,6 @@
-int main() {
-    float f = 3.14;
-    const float* pf = &f;
-    const float** ppf = &pf;
-    int* pi = (int*)ppf;
-    int result = *pi + 1;
+int main(){
+int******************************************************** a = 0;
+***************************a;
+return 0;
+
 }
