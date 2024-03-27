@@ -132,3 +132,14 @@ class ErrorExporter:
             f"[ Error ] line {line_nr}:  indirection requires pointer operand ('{''.join(type1)}' invalid)",
             file=sys.stderr)
         exit()
+
+    @staticmethod
+    def invalidDereference(line_nr: int, type: str):
+        """
+        attempting to dereference something that cannot be dereferenced
+        :param line_nr:
+        :param type:
+        :return:
+        """
+        print(f"[ Error ] line {line_nr}:  attempted dereference of invalid type: {type}", file=sys.stderr)
+        exit()

@@ -17,6 +17,7 @@ class IdentifierReplacerVisitor(ASTVisitor):
             toReplace = node.text
 
             if node.type != "IDENTIFIER":
+                ErrorExporter.invalidDereference(node.linenr, node.type)
                 return
 
             # get the symbolTable entry of the identifier we are going to replace

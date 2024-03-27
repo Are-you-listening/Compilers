@@ -61,13 +61,6 @@ class ValueAdderVisitor(ASTVisitor):
             val = node.getChild(-1)
             entry.value = val
 
-            # check if the constant folder was able to do something
-            # if the value node contains "expr" then there is still something on the RHS that we couldn't replace
-            """
-            if (val.text not in ("Expr", "Dereference")) and (ident.text != "Dereference"):
-                ST = ident.getSymbolTable()
-                entry = ST.symbols[ident.text]
-"""
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
             # if it is a variable, and it is not the node where it is first declared -> update firstUsed if necessary
