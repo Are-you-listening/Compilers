@@ -56,8 +56,6 @@ def cleanGreen(input_file, symbol_file):
         s = TableDotVisitor(symbol_file)
         s.visit(ast.root.getSymbolTable(), True)
 
-    #DotVisitor('output/debug0').visit(ast)  # Export AST in Dot
-
     return ast, codegetter
 
 

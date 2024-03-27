@@ -1,14 +1,14 @@
+
+
+typedef int bool;
+
 int main() {
-int number = -55;
+    bool x = 1;
+    bool y = 0;
+    int z = x && y;
 
-number++;
-number = number++;
+    bool b = y * z * 57809;
 
-int n = number++;
-
-n = n - n++;
-
-++n;
-    return 0;
+        return 0;
 
 }

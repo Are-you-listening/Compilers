@@ -137,6 +137,7 @@ class Declaration:
     @staticmethod
     def addComment(text: str):
         block = LLVMSingleton.getInstance().getCurrentBlock()
+        text = text.replace("\n","")  # Comments in LLVM cannot contain new lines
         block.comment(text)
 
 
