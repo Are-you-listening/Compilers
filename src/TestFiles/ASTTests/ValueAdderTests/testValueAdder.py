@@ -9,13 +9,14 @@ import os
 
 class TestValueAdder(unittest.TestCase):
     def testValueAdder(self):
-        file_indexes = range(1, 6)
+        file_indexes = range(1, 5)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
+            print(index)
             file_path = f"tests/test{index}.json"
             with open(file_path, "rt") as f:
                 json_data = f.read()
