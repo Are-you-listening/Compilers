@@ -28,6 +28,9 @@ def cleanGreen(input_file, symbol_file):
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
 
+    #lexer.removeErrorListeners()
+    #lexer.addErrorListener()
+
     parser.removeErrorListeners()  # Add our own error Listener
     parser.addErrorListener(EListener())
     tree = parser.start_()

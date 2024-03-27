@@ -5,5 +5,21 @@
   "5": ["[ Syntax Error ] line 9:6 invalid symbol: '0.3'"],
   "6": ["[ Syntax Error ] line 7:12 invalid symbol: 'typedef'"],
   "7": ["[ Syntax Error ] line 11:1 invalid symbol: '45475689841321'"],
-  "8": ["[ Syntax Error ] line 2:2 invalid symbol: '++'"]
+  "8": ["[ Syntax Error ] line 2:2 invalid symbol: '++'"],
+  "9": ["[ Syntax Error ] line 3:29 invalid symbol: '/'"],
+  "10": ["[ Syntax Error ] line 4:0 invalid symbol: '/'"],
+  "11": ["[ Syntax Error ] line 2:0 invalid symbol: '/'"],
+  "12": ["[ Syntax Error ] line 10:8 invalid symbol: '/'"],
+  "13": ["[ Syntax Error ] line 4:3 invalid symbol: '/'"],
+  "14": ["[ Syntax Error ] line 2:8 invalid symbol: 'const'"],
+  "15": ["[ Syntax Error ] line 2:6 invalid symbol: 'const'"],
+  "16": ["[ Syntax Error ] line 2:4 invalid symbol: 'const'"],
+  "17": ["[ Syntax Error ] line 2:8 invalid symbol: '='"],
+  "18": ["[ Syntax Error ] line 3:2 invalid symbol: 'float'"],
+  "19": ["[ Syntax Error ] line 11:3 invalid symbol: '='"],
+  "20": ["[ Syntax Error ] line 7:11 invalid symbol: ';'"],
+  "21": ["[ Syntax Error ] line 9:6 invalid symbol: ';'"],
+  "22": ["[ Syntax Error ] line 3:7 invalid symbol: '*'"],
+  "23": ["[ Syntax Error ] line 3:1 invalid symbol: 'int'"],
+  "24": ["[ Syntax Error ] line 4:11 invalid symbol: '.56487'"]
 }

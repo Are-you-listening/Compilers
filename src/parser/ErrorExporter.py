@@ -8,6 +8,16 @@ class EListener(ErrorListener):
         print(f"[ Syntax Error ] line {line}:{column} invalid symbol: '{offendingSymbol.text}'", file=sys.stderr)
         exit()
         # print(f"[ Syntax Error ] line {line}:{column} invalid symbol: '{offendingSymbol.text}'", file=sys.stderr)
+    def reportAmbiguity(self, recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs):
+        #print(f"[ Syntax Error ] line {line}:{column} invalid symbol: '{offendingSymbol.text}'", file=sys.stderr)
+        exit()
+        pass
+
+    def reportAttemptingFullContext(self, recognizer, dfa, startIndex, stopIndex, conflictingAlts, configs):
+        pass
+
+    def reportContextSensitivity(self, recognizer, dfa, startIndex, stopIndex, prediction, configs):
+        pass
 
 
 class ErrorExporter:
