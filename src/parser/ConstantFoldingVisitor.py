@@ -36,7 +36,7 @@ class ConstantFoldingVisitor(ASTVisitor):
         if node.text == "Conversion" and node.getTerminalAmount() == 1:
             c_type_executors = {"INT": CFunctionExecuterInt, "CHAR": CFunctionExecuterChar, "FLOAT": CFunctionExecuterFloat}
             for child in node.getChild(0).getChildren():
-                if child.text == "*":
+                if "*" in child.text:
                     return
             for child in node.getChild(0).getChildren():
                 if child.text in c_type_executors:
