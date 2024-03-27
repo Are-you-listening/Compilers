@@ -1,6 +1,16 @@
-typedef const char const appel;
+int main() {
 
-int main(){
-    appel apple = 'c';
-    return 0;
-};
+int x = 478;
+int b = -251454;
+
+int* b_ptr = &b;
+
+int** x_ptr = &b_ptr;
+x_ptr = b_ptr; //Warning
+x_ptr = b; //Warning
+x_ptr = &b; //Warning
+x_ptr = b_ptr / 5; // Should not be possible
+x_ptr = x_ptr / 5; // Should not be possible
+x_ptr = 3 / 5; //Warning
+x_ptr = &(b++); // Should not be possible
+}
