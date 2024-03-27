@@ -40,11 +40,11 @@ class AstLoader:
                 type_tup = entry["type"]
                 base_type, ptrs, const_list = type_tup
                 symbol_type = SymbolType(base_type, const_list[0])
-                const_list = const_list[1:-1]
 
                 for i in range(len(ptrs)):
-                    symbol_type = SymbolTypePtr(symbol_type, const_list[0])
                     const_list = const_list[1:-1]
+                    symbol_type = SymbolTypePtr(symbol_type, const_list[0])
+
 
                 symbol_table_entry = SymbolEntry(entry["fitype"], symbol_type, entry["name"], map_id_to_node.get(entry["value"], None), map_id_to_node.get(entry["firstDeclared"]), map_id_to_node.get(entry["firstUsed"]))
                 symbol_table_real.add(symbol_table_entry)
