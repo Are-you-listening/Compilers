@@ -40,7 +40,7 @@ class ConstantFoldingVisitor(ASTVisitor):
                     return
             for child in node.getChild(0).getChildren():
                 if child.text in c_type_executors:
-                    to_type = child.text
+                    to_type = child.text  # This scares me a little :( - Kars
             from_type = node.getChild(1).type
             c_type = c_type_executors[from_type]()
             data1 = c_type.fromString(node.getChild(1).text)
