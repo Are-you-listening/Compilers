@@ -5,6 +5,7 @@ int main(){
 
     const beer* beer = 3;
     int appel;
+    kaas integer = 5;
 
 
     typedef char kaas;

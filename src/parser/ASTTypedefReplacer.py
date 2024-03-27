@@ -9,7 +9,7 @@ class ASTTypedefReplacer(ASTVisitor):
 
     def visitNode(self, node: ASTNode):
         if node.text == "Type" and self.containsNonBaseType(node.children):
-            table = node.symbol_table
+            table = node.typedef_table
             table.translate(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):

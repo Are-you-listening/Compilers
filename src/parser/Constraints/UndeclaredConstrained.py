@@ -21,7 +21,7 @@ class UndeclaredConstrained(Constraint):
         if node.text == "Assignment":
             self.checkViableAssignment(node)
         elif node.text == "Declaration":
-            if len(node.children)>=2:
+            if len(node.children) >= 2:
                 if not self.viableDeclaration(node.children[0].text, [node.children[1]]):
                     self.errorNode = node.children[0]
                     self.rejected = True

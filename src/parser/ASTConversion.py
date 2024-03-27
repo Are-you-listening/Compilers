@@ -187,7 +187,7 @@ class ASTConversion(ASTVisitor):
                         when no operator, it is an assignment
                         """
                         ErrorExporter.invalidAssignment(child.linenr, self.to_string_type(to_type),
-                                                       self.to_string_type(type_tup))
+                                                        self.to_string_type(type_tup))
                     else:
                         ErrorExporter.invalidOperation(child.linenr, operator, self.to_string_type(to_type),
                                                        self.to_string_type(type_tup))
@@ -284,7 +284,8 @@ class ASTConversion(ASTVisitor):
         }
 
         incompatible = False
-        incompatible = incompatible or (ASTConversion.to_string_type(type_tup), operator, ASTConversion.to_string_type(to_type)) in blocklist
+        incompatible = incompatible or (
+        ASTConversion.to_string_type(type_tup), operator, ASTConversion.to_string_type(to_type)) in blocklist
         if ASTConversion.to_string_type(type_tup) in incompatible_ops.keys():
             incompatible = incompatible or operator in incompatible_ops.get(ASTConversion.to_string_type(type_tup))
 
@@ -407,8 +408,8 @@ class ASTConversion(ASTVisitor):
         :return:
         """
 
-        new_node = ASTNode("Conversion", node.parent, node.getSymbolTable(), node.linenr)
-        type_node = ASTNode("Type", new_node, new_node.getSymbolTable(), node.linenr)
+        new_node = ASTNode("Conversion", node.parent, node.getSymbolTable(), node.linenr, node.typedef_table)
+        type_node = ASTNode("Type", new_node, new_node.getSymbolTable(), node.linenr, node.typedef_table)
         new_node.addChildren(type_node)
 
         """
@@ -416,10 +417,10 @@ class ASTConversion(ASTVisitor):
         """
         type_node.addChildren(
             ASTNodeTerminal(to_type[0], type_node, type_node.getSymbolTable(), "Not Used",
-                            None))
+                            None, node.typedef_table))
 
         for t_child in to_type[1].split():
             type_node.addChildren(
                 ASTNodeTerminal(t_child, type_node, type_node.getSymbolTable(), "Not Used",
-                                None))
+                                None, node.typedef_table))
         node.addNodeParent(new_node)

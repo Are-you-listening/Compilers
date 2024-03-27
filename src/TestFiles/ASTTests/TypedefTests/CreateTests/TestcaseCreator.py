@@ -12,7 +12,7 @@ from src.parser.ASTCleanerAfter import *
 from src.parser.Tables.TableDotVisitor import *
 from src.parser.CodeGetter import *
 from src.TestFiles.ASTTests.AstLoader import AstLoader
-from src.parser.ASTTableCreator import  *
+from src.parser.ASTTableCreator import *
 
 input_file = "read_file"
 
@@ -44,10 +44,8 @@ json = AstLoader.store(ast)
 with open("file_read_json.json", "wt") as f:
     f.write(json)
 
-
 d = DotVisitor("read_file_before")  # Export AST in Dot
 d.visit(ast)
-
 
 """
 add check stuff

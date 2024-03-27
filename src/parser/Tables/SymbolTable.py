@@ -3,9 +3,10 @@ from src.parser.Tables.SymbolTypePtr import *
 from src.parser.AST import *
 from src.parser.ASTTypedefReplacer import *
 from typing import Dict
+from src.parser.Tables.AbstractTable import *
 
 
-class SymbolEntry:
+class SymbolEntry(TableEntry):
     def __init__(self, fitype: str, datatype: SymbolType, name: str, value, first_declared, first_used):
         self.fitype = fitype
         self.typeObject = datatype
@@ -64,15 +65,14 @@ class SymbolEntry:
         return d_t.getType(), ptr_string, const_list
 
 
-class SymbolTable:
+class SymbolTable(AbstractTable):
     def __init__(self, prev):
         """
         Init a symbol table
         :param prev: a ptr to the prev symbol table we need to point to
         """
+        super().__init__(prev)
         self.symbols: Dict[str, SymbolEntry] = {}
-        self.prev: "SymbolTable" = prev
-        self.next = []
         self.typedefs = []  # List of TypeDef-Subtrees (These are not present anymore in the AST)
         self.translation = []  # Helper variable
 
@@ -112,32 +112,6 @@ class SymbolTable:
             rep_string += f"{str(entry)}\n"
         rep_string += f"self.symbols"
 
-    def traverse(self, function, up: bool, args: list, do_print=False):
-        """
-        :param do_print: bool indication whether to print or not
-        :param function: function to execute
-        :param up: go up or down the list
-        :return:
-        """
-
-        if do_print:
-            print(self)
-
-        function(self, args[0], args[1])
-
-
-        if up:
-            if self.prev is None:
-                return
-            self.prev.traverse(function, up, args, do_print)
-        else:
-            for child in self.next:
-                child.traverse(function, up,args, do_print)
-
-    def nextTable(self, next_table: "SymbolTable"):
-        """Add a new table as child"""
-        self.next.append(next_table)
-
     def exists(self, entry_name: str):
         """
         Check if a given symbolEntry already exists in the scope
@@ -158,42 +132,3 @@ class SymbolTable:
 
     def accept(self, v):
         v.visitSym(self)
-
-    def addTypeDef(self, node: ASTNode):
-        """
-        Adds a new typedef and already tries to translate it to the main type
-        :param node: The subtree containing the typedef
-        :return:
-        """
-        while ASTTypedefReplacer.containsNonBaseType(node.children[1].children):  # Check if the typedef is of the form "typedef beer appel;"
-            self.translate(node.children[1])  # Translate the type from the typedef node
-        self.typedefs.append(node)
-
-    def translate(self, node: ASTNode):
-        """
-        Translate a typedef to a base class typedef
-        :param node:
-        :return:
-        """
-        identifier, index = ASTTypedefReplacer.getTypeName(node.children)
-        translation = []
-        done = False
-        args = (identifier,translation)
-        self.traverse( lambda x, a, b: x.getTranslation(a, b), True, args)
-        node.typedefReplaceChildren(translation, index)
-
-    def getTranslation(self, identifier: str, translation):
-        """
-        :param identifier: kaas in e.g. typedef int* kaas;
-        :return: Returns all type child nodes, e.g. [int,*]
-        """
-
-
-        for defi in self.typedefs:
-            if translation != []:  # Found a translation, we may stop now
-                return
-            if defi.children[2].text == identifier:
-                translation += defi.children[1].children
-
-    def clearTypeDefs(self):
-        self.typedefs.clear()
