@@ -12,7 +12,7 @@ from src.parser.ASTCleanerAfter import *
 from src.parser.Tables.TableDotVisitor import *
 from src.parser.CodeGetter import *
 from src.TestFiles.ASTTests.AstLoader import AstLoader
-
+from src.parser.ASTTableCreator import ASTTableCreator
 input_file = "read_file"
 
 input_stream = FileStream(input_file)  # Declare some variables
@@ -35,8 +35,13 @@ below add needed stuff
 codegetter = CodeGetter()
 codegetter.visit(ast)
 
+ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
+
 astcleaner = ASTCleaner()  # Do a standard cleaning
 astcleaner.visit(ast)
+
+ASTTableCreator().visit(ast)  # Create the symbol table
+
 
 astcleanerafter = ASTCleanerAfter()  # Do a standard cleaning
 astcleanerafter.visit(ast)

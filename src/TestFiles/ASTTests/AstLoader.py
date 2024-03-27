@@ -42,7 +42,7 @@ class AstLoader:
                 symbol_type = SymbolType(base_type, const_list[0])
 
                 for i in range(len(ptrs)):
-                    const_list = const_list[1:-1]
+                    const_list = const_list[1:]
                     symbol_type = SymbolTypePtr(symbol_type, const_list[0])
 
 

@@ -62,7 +62,7 @@ def Processing(ast, dot_file, fold):
     if fold:
         ConstantFoldingVisitor().visit(ast)
 
-    ValueAdderVisitor().visit(ast)
+    #ValueAdderVisitor().visit(ast)
 
     ASTConversion().visit(ast)
 

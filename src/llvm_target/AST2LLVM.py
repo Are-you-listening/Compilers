@@ -354,6 +354,8 @@ class AST2LLVM(ASTVisitor):
         ptr_text = ""
 
         for child in type_node.children:
+            if child.text == "const":
+                continue
             if "*" in child.text:
                 ptr_text += child.text
             else:
