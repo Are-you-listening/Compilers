@@ -94,7 +94,7 @@ class _Conversions:
         value = int(math.floor(float(value)))
         b = value.to_bytes(8, byteorder="big", signed=True)
         b = b[-1:]
-        return int.from_bytes(b, 'big', signed=True)
+        return f"'{chr(int.from_bytes(b, 'big', signed=True))}'"
 
     @staticmethod
     def ToInt(value):
