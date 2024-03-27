@@ -1,17 +1,12 @@
-typedef int appel;
-typedef appel apple;
+typedef int bool;
 
-int main(){
+int main() {
+    bool x = 1;
+    bool y = 0;
+    int z = x && y;
 
-    appel K;
+    bool b = y * z * 57809;
 
-    K++;
+        return 0;
 
-    K = 39 - 7;
-
-    apple z = K+1;
-
-    (appel) z;
-
-    return 0;
-};
+}

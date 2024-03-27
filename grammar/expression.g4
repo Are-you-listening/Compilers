@@ -5,7 +5,7 @@ include: '#include <stdio.h>';
 comment : MULTILINE | SINGLECOMMENT;
 function : type IDENTIFIER '(' ')' '{' code (return)? '}';
 line: (declaration | expr| assignment| typedef | printf )(';')+;
-typedef: 'typedef' type IDENTIFIER;
+typedef: 'typedef' type ('int' | 'char' | 'float' | IDENTIFIER);
 printf: 'printf' '(' '"' (.)*? ('%s' | '%d' | '%x' | '%f' | '%c') (.)*? '"' ',' (expr) ')';
 type: ('const')? ('int' | 'char' | 'float' | IDENTIFIER) ('*')*;
 declaration: type IDENTIFIER ('=' expr)?;

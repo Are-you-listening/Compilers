@@ -408,8 +408,8 @@ class ASTConversion(ASTVisitor):
         :return:
         """
 
-        new_node = ASTNode("Conversion", node.parent, node.getSymbolTable(), node.linenr, node.typedef_table)
-        type_node = ASTNode("Type", new_node, new_node.getSymbolTable(), node.linenr, node.typedef_table)
+        new_node = ASTNode("Conversion", node.parent, node.getSymbolTable(), node.linenr)
+        type_node = ASTNode("Type", new_node, new_node.getSymbolTable(), node.linenr)
         new_node.addChildren(type_node)
 
         """
@@ -417,10 +417,10 @@ class ASTConversion(ASTVisitor):
         """
         type_node.addChildren(
             ASTNodeTerminal(to_type[0], type_node, type_node.getSymbolTable(), "Not Used",
-                            None, node.typedef_table))
+                            None))
 
         for t_child in to_type[1].split():
             type_node.addChildren(
                 ASTNodeTerminal(t_child, type_node, type_node.getSymbolTable(), "Not Used",
-                                None, node.typedef_table))
+                                None))
         node.addNodeParent(new_node)

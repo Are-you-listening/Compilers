@@ -63,10 +63,10 @@ class AstLoader:
 
         if "type" in ast_node_entry:
             ast_node = ASTNodeTerminal(text, parent, ast_node_entry["symbol_table_nr"], ast_node_entry["type"],
-                                       ast_node_entry["operation_type"],0)
+                                       ast_node_entry["operation_type"])
 
         else:
-            ast_node = ASTNode(text, parent, ast_node_entry["symbol_table_nr"], 0,0)
+            ast_node = ASTNode(text, parent, ast_node_entry["symbol_table_nr"], 0)
 
         map_id_to_node[ast_tree["id"]] = ast_node
 

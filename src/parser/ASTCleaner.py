@@ -84,7 +84,7 @@ class ASTCleaner(ASTVisitor):
         else:
             resulting_comment = resulting_comment[2:len(resulting_comment) - 2]
         node.clearChildren()
-        comment_node = ASTNodeTerminal(resulting_comment, node, node.getSymbolTable(), "COMMENT", node.linenr, node.typedef_table)
+        comment_node = ASTNodeTerminal(resulting_comment, node, node.getSymbolTable(), "COMMENT", node.linenr)
         node.addChildren(comment_node)
 
     @staticmethod
@@ -130,5 +130,5 @@ class ASTCleaner(ASTVisitor):
 
         format_child_text = format_child_text[len("printf") + 1:-2]
 
-        format_node = ASTNodeTerminal(format_child_text, node, node.getSymbolTable(), -1, node.linenr, node.typedef_table)
+        format_node = ASTNodeTerminal(format_child_text, node, node.getSymbolTable(), -1, node.linenr)
         node.insertChild(0, format_node)

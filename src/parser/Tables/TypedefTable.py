@@ -1,9 +1,10 @@
 from src.parser.ErrorExporter import *
 from src.parser.Tables.SymbolTypePtr import *
 from src.parser.AST import *
-from src.parser.ASTTypedefReplacer import *
+
 from typing import Dict
 from src.parser.Tables.AbstractTable import *
+from src.parser.ASTTypedefReplacer import ASTTypedefReplacer
 
 
 class TypedefEntry(TableEntry):
@@ -38,9 +39,40 @@ class TypedefTable(AbstractTable):
         :param node: The subtree containing the typedef
         :return:
         """
+        to_type_mapping = node.getChild(2).text
+
+        """
+        before adding the typdef, we will check if the original type exists
+        """
+        self.syntax_check(node.getChild(1))
+
+        """
+        if the typename already exists, we need to throw an semantic error, because we are not allowed to override it
+        We can only override this when the typedef is in a different scope
+        """
+        if to_type_mapping in ("INT", "CHAR", "FLOAT"):
+            ErrorExporter.TypeDefNativeType(node.linenr, to_type_mapping)
+            return True
+
+        """
+        within the same scope 2 typedefs for the same name are not allowed, unless the typedefs do exactly the same
+        
+        We will check if it already exists, if so we check if the types are the same, if not thow an error
+        """
+        exists, sub_node = self.existsLocally(to_type_mapping)
+        if exists:
+            type_node1 = sub_node.getChild(1)
+            type_node2 = node.getChild(1)
+            s1 = self.getNodeString(type_node1)
+            s2 = self.getNodeString(type_node2)
+            if s1 != s2:
+                ErrorExporter.TypeDefDoubleDeclare(node.linenr, s1, s2)
+            return
+
         while ASTTypedefReplacer.containsNonBaseType(
                 node.children[1].children):  # Check if the typedef is of the form "typedef beer appel;"
             self.translate(node.children[1])  # Translate the type from the typedef node
+
         self.typedefs.append(node)
 
     def translate(self, node: ASTNode):
@@ -66,3 +98,62 @@ class TypedefTable(AbstractTable):
                 return
             if defi.children[2].text == args[0]:
                 args[1] += defi.children[1].children
+
+    def existsLocally(self, type_name: str):
+        """
+        indicates if a typedef translation exists within this table
+        :param type_name:
+        :return:
+        """
+
+        for d_node in self.typedefs:
+            defined_type = d_node.getChild(2).text
+            if type_name == defined_type:
+                return True, d_node
+
+        return False, None
+
+    def exists(self, type_name: str):
+        """
+        indicates if a typedef translation exists within this table
+        :param type_name:
+        :return:
+        """
+
+        exists, node = self.existsLocally(type_name)
+        if not exists and self.prev is not None:
+            exists, node = self.prev.exists(type_name)
+
+        return exists, node
+
+    def syntax_check(self, node: ASTNode):
+        """
+        Syntax check of type defs
+        node is a 'Type' node
+        """
+        for c in node.children:
+            if not isinstance(c, ASTNodeTerminal):
+                continue
+
+            """
+            when the translate to type is an IDENTIFIER and does not yet exist, throw error
+            """
+            if c.type == "IDENTIFIER" and not self.exists(c.text)[0]:
+                ErrorExporter.TypeDefUndefined(node.linenr, self.getNodeString(node))
+
+    @staticmethod
+    def getNodeString(node: ASTNode):
+        """
+        goes through all the terminal children and make 1 long string
+        :param node: the parent node
+        :return: string of terminals
+        """
+        out = ""
+
+        for c in node.children:
+            if not isinstance(c, ASTNodeTerminal):
+                continue
+
+            out += c.text
+
+        return out

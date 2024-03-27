@@ -21,13 +21,12 @@ class ASTCreator(expressionVisitor):
         self.parent = None
         self.AST = None
         self.table = SymbolTable(None)
-        self.typedefTable = TypedefTable(None)
+
 
     def __setup(self):
         self.parent = None
         self.AST = None
         self.table = SymbolTable(None)
-        self.typedefTable = TypedefTable(None)
 
     def visit(self, tree):
         """
@@ -51,7 +50,7 @@ class ASTCreator(expressionVisitor):
         self.AST = AST(self.parent)
 
     def visitStart_(self, ctx: expressionParser.Start_Context):
-        self.parent = ASTNode("Start", None, self.table, ctx.start.line, self.typedefTable)
+        self.parent = ASTNode("Start", None, self.table, ctx.start.line)
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx: expressionParser.FunctionContext):
@@ -65,16 +64,7 @@ class ASTCreator(expressionVisitor):
         self.__makeNode(ctx, "Code")
 
     def visitTypedef(self, ctx: expressionParser.TypedefContext):
-        self.typedefTable.nextTable(TypedefTable(self.typedefTable))
-        self.typedefTable = self.typedefTable.next[0]
-
         self.__makeNode(ctx, "Typedef")
-
-        typedefSubTree = self.parent.getChild(0)  # Retrieve the subtree with all typedef data
-        table = self.typedefTable
-
-        table.addTypeDef(typedefSubTree)  # Add it to the symbolTable
-        self.parent.clearChildren()  # Remove the children from the real AST
 
     def visitPrintf(self, ctx: expressionParser.PrintfContext):
         self.__makeNode(ctx, "printf")
@@ -104,8 +94,7 @@ class ASTCreator(expressionVisitor):
         self.__makeNode(ctx, "Comment")
 
     def visitReturn(self, ctx: expressionParser.ReturnContext):
-        node = ASTNode("Return", self.parent, self.table, ctx.start.line,
-                       self.typedefTable)  # Also attaches the current table/scope
+        node = ASTNode("Return", self.parent, self.table, ctx.start.line)  # Also attaches the current table/scope
         self.parent.addChildren(node)
         self.parent = node
 
@@ -123,7 +112,7 @@ class ASTCreator(expressionVisitor):
             text = text.upper()
 
         node = ASTNodeTerminal(text, self.parent, self.table, self.translateLexerID(ctx.getSymbol().type),
-                               ctx.getSymbol().line, self.typedefTable)
+                               ctx.getSymbol().line)
 
         self.parent.addChildren(node)
 
@@ -137,8 +126,7 @@ class ASTCreator(expressionVisitor):
         """
         makes new Object and makes sure this will be a child of it's parent
         """
-        node = ASTNode(terminal_type, self.parent, self.table, ctx.start.line,
-                       self.typedefTable)  # Also attaches the current table/scope
+        node = ASTNode(terminal_type, self.parent, self.table, ctx.start.line)  # Also attaches the current table/scope
         node.linenr = ctx.start.line
         self.parent.addChildren(node)
         old_parent = self.parent

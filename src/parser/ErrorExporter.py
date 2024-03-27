@@ -143,3 +143,32 @@ class ErrorExporter:
         """
         print(f"[ Error ] line {line_nr}:  attempted dereference of invalid type: {type}", file=sys.stderr)
         exit()
+
+    @staticmethod
+    def TypeDefDoubleDeclare(line_nr: int, from_type1: str, from_type2: str):
+        """
+        an error in case we have a typedef that is not allowed because it already exists (within scope)
+        :return:
+        """
+        print(f"[ Error ] line {line_nr}: typedef redefinition with different types ('{from_type1}' vs '{from_type2}')", file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def TypeDefNativeType(line_nr: int, to_type: str):
+        """
+        an error in case we have a typedef that is not allowed because it already exists (within scope)
+        :return:
+        """
+        print(f"[ Error ] line {line_nr}: typedef cannot be assigned to native type ('{to_type}')",
+              file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def TypeDefUndefined(line_nr: int, to_type: str):
+        """
+        an error in case we have a typedef that is not allowed because it already exists (within scope)
+        :return:
+        """
+        print(f"[ Error ] line {line_nr}: typedef cannot be done for a type that does not exist ('{to_type}')",
+              file=sys.stderr)
+        exit()
