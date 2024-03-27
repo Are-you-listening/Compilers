@@ -162,3 +162,13 @@ class ErrorExporter:
         print(f"[ Error ] line {line_nr}: typedef cannot be assigned to native type ('{to_type}')",
               file=sys.stderr)
         exit()
+
+    @staticmethod
+    def TypeDefUndefined(line_nr: int, to_type: str):
+        """
+        an error in case we have a typedef that is not allowed because it already exists (within scope)
+        :return:
+        """
+        print(f"[ Error ] line {line_nr}: typedef cannot be done for a type that does not exist ('{to_type}')",
+              file=sys.stderr)
+        exit()

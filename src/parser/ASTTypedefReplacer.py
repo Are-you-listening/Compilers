@@ -84,7 +84,6 @@ class ASTTypedefReplacer(ASTVisitor):
         """
         self.typedef_table_map[node] = self.typedefTable
 
-
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass
 

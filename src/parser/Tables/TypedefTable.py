@@ -42,6 +42,11 @@ class TypedefTable(AbstractTable):
         to_type_mapping = node.getChild(2).text
 
         """
+        before adding the typdef, we will check if the original type exists
+        """
+        self.syntax_check(node.getChild(1))
+
+        """
         if the typename already exists, we need to throw an semantic error, because we are not allowed to override it
         We can only override this when the typedef is in a different scope
         """
@@ -107,6 +112,34 @@ class TypedefTable(AbstractTable):
                 return True, d_node
 
         return False, None
+
+    def exists(self, type_name: str):
+        """
+        indicates if a typedef translation exists within this table
+        :param type_name:
+        :return:
+        """
+
+        exists, node = self.existsLocally(type_name)
+        if not exists and self.prev is not None:
+            exists, node = self.prev.exists(type_name)
+
+        return exists, node
+
+    def syntax_check(self, node: ASTNode):
+        """
+        Syntax check of type defs
+        node is a 'Type' node
+        """
+        for c in node.children:
+            if not isinstance(c, ASTNodeTerminal):
+                continue
+
+            """
+            when the translate to type is an IDENTIFIER and does not yet exist, throw error
+            """
+            if c.type == "IDENTIFIER" and not self.exists(c.text)[0]:
+                ErrorExporter.TypeDefUndefined(node.linenr, self.getNodeString(node))
 
     @staticmethod
     def getNodeString(node: ASTNode):
