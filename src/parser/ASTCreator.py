@@ -17,7 +17,6 @@ class ASTCreator(expressionVisitor):
         self.parent: will store the parent ASTNode of the Node we create in the visit function
         self.AST: will create an AST tree containing a ptr to the parent
         """
-
         self.lexer = lexer
         self.parent = None
         self.AST = None
