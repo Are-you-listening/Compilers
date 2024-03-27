@@ -13,6 +13,7 @@ from src.parser.Tables.TableDotVisitor import *
 from src.parser.ASTTableCreator import *
 from src.llvm_target.AST2LLVM import *
 from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
+from src.TestFiles.ASTTests.AstLoader import *
 
 
 def cleanGreen(input_file, symbol_file):
@@ -51,7 +52,6 @@ def cleanGreen(input_file, symbol_file):
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
         s.visit(ast.root.getSymbolTable(), True)
-
 
     return ast, codegetter
 

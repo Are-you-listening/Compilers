@@ -18,19 +18,17 @@ class ASTTableCreator(ASTVisitor):
                 if grandchild.text == "const":
                     is_const = True
                 elif grandchild.text == "*":
-                    latest_datatype = SymbolTypePtr(latest_datatype)
+                    latest_datatype = SymbolTypePtr(latest_datatype, is_const)
                 else:
                     if not ASTTypedefReplacer.isBaseType(grandchild):
-                        latest_datatype = SymbolType(grandchild.text)  # Keep the typedef name
+                        latest_datatype = SymbolType(grandchild.text, is_const)  # Keep the typedef name
                     else:
-                        latest_datatype = SymbolType(grandchild.text.upper())
+                        latest_datatype = SymbolType(grandchild.text.upper(), is_const)
 
             """
             the value in the symbol table is initially empty
             """
-            symbol_entry = SymbolEntry(node.text, latest_datatype, node.children[1].text, is_const, None,
-                                       node.children[1],
-                                       None)
+            symbol_entry = SymbolEntry(node.text, latest_datatype, node.children[1].text, None, node.children[1], None)
             node.symbol_table.add(symbol_entry)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):

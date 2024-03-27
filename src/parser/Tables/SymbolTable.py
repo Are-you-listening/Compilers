@@ -6,11 +6,10 @@ from typing import Dict
 
 
 class SymbolEntry:
-    def __init__(self, fitype: str, datatype: SymbolType, name: str, const: bool, value, first_declared, first_used):
+    def __init__(self, fitype: str, datatype: SymbolType, name: str, value, first_declared, first_used):
         self.fitype = fitype
         self.typeObject = datatype
         self.name = name
-        self.const = const
         self.value = value
         self.firstDeclared = first_declared  # The node this Entry is first declared
         self.firstUsed = first_used  # The node this Entry is first used
@@ -19,10 +18,13 @@ class SymbolEntry:
         return f"""fi type: {self.fitype} 
                    type: {self.typeObject} 
                    name: {self.name}
-                   const: {self.const}
+                   const: {self.isConst()}
                    value: {self.value}
                    first declared: {self.firstDeclared}
                    first used: {self.firstUsed})"""
+
+    def isConst(self):
+        return self.typeObject.isConst()
 
     def getType(self):
         return self.typeObject.getType()

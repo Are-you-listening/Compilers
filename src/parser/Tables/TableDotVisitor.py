@@ -59,7 +59,7 @@ class TableDotVisitor:
             #     out.append(f"{k}: {str(e)}")
             # else:
             dtype, ptr = e.getPtrTuple()
-            if e.const:
+            if e.isConst():
                 dtype = "const "+dtype
 
             out.append(f"{k}: {dtype}{ptr}")

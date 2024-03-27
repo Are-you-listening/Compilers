@@ -139,7 +139,7 @@ class AstLoader:
             symbol_entries = []
             for keys, symbol_entry in symbol_table.symbols.items():
                 symbol_entry_dict = {"fitype": symbol_entry.fitype, "type": symbol_entry.getPtrTuple(),
-                                     "name": symbol_entry.name, "const": symbol_entry.const,
+                                     "name": symbol_entry.name, "const": symbol_entry.isConst(),
                                      "value": ast_to_id_map.get(symbol_entry.value, None),
                                      "firstDeclared": ast_to_id_map.get(symbol_entry.firstDeclared),
                                      "firstUsed": ast_to_id_map.get(symbol_entry.firstUsed)}

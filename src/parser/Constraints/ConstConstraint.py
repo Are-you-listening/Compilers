@@ -16,7 +16,7 @@ class ConstConstraint(Constraint):
             entry = node.symbol_table.getEntry(
                 node.getChild(0).text)
 
-            if node.symbol_table.getEntry(node.getChild(0).text) is not None and entry.const:
+            if node.symbol_table.getEntry(node.getChild(0).text) is not None and entry.isConst():
                 if entry.getType() != "PTR":
                     ErrorExporter.constComplaint(node.getChild(0).linenr, node.getChild(0).text, "const")
                     self.rejected = True
@@ -25,13 +25,13 @@ class ConstConstraint(Constraint):
 
             if node.getSiblingNeighbour(1) is not None:
                 if node.getSiblingNeighbour(1).text in UnaryOps:
-                    if node.symbol_table.getEntry(node.getChild(0).text).const:
+                    if node.symbol_table.getEntry(node.getChild(0).text).isConst():
                         ErrorExporter.constComplaint(node.getChild(0).linenr, node.getChild(0).text, "const")
                         self.rejected = True
 
             elif node.getSiblingNeighbour(-1) is not None:
                 if node.getSiblingNeighbour(-1).text in UnaryOps:
-                    if node.symbol_table.getEntry(node.getChild(0).text).const:
+                    if node.symbol_table.getEntry(node.getChild(0).text).isConst():
                         ErrorExporter.constComplaint(node.getChild(0).linenr, node.getChild(0).text, "const")
                         self.rejected = True
 
@@ -41,7 +41,7 @@ class ConstConstraint(Constraint):
         if entry is not None:
             if entry.getType() == "PTR":
                 if (node.parent.text == "Dereference" and node.parent.parent.text == "Dereference"
-                        and node.symbol_table.getEntry(node.text).const):
+                        and node.symbol_table.getEntry(node.text).isConst()):
                     node = node.parent
                     ErrorExporter.constComplaint(node.getChild(0).linenr, node.getChild(0).text, "const")
                     self.rejected = True
