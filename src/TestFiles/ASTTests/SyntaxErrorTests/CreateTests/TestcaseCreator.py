@@ -21,6 +21,9 @@ lexer = expressionLexer(input_stream)
 stream = CommonTokenStream(lexer)
 parser = expressionParser(stream)
 
+lexer.removeErrorListeners()
+lexer.addErrorListener(EListener())
+
 parser.removeErrorListeners()  # Add our own error Listener
 parser.addErrorListener(EListener())
 tree = parser.start_()

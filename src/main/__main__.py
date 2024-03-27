@@ -28,8 +28,8 @@ def cleanGreen(input_file, symbol_file):
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
 
-    #lexer.removeErrorListeners()
-    #lexer.addErrorListener()
+    lexer.removeErrorListeners()
+    lexer.addErrorListener(EListener())
 
     parser.removeErrorListeners()  # Add our own error Listener
     parser.addErrorListener(EListener())
@@ -41,8 +41,6 @@ def cleanGreen(input_file, symbol_file):
 
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
-
-    #DotVisitor('output/debug0').visit(ast)
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
@@ -69,7 +67,7 @@ def Processing(ast, dot_file, fold):
 
     ASTConversion().visit(ast)
 
-    #ValueAdderVisitor().visit(ast)
+    ValueAdderVisitor().visit(ast)
 
     if dot_file is not None:
         DotVisitor(dot_file).visit(ast)  # Export AST in Dot
