@@ -47,6 +47,22 @@ class SymbolEntry:
 
         return d_t.getType(), ptr_string
 
+    def getJsonDataType(self):
+        """
+        returns a tuple: (type, amount of * depending on how many ptrs there are in the chain)
+        """
+        ptr_string = ""
+        const_list = []
+        d_t = self.typeObject
+        while isinstance(d_t, SymbolTypePtr):
+            ptr_string += "*"
+            d_t = d_t.deReference()
+            const_list.insert(0, d_t.isConst())
+
+        const_list.insert(0, d_t.isConst())
+
+        return d_t.getType(), ptr_string, const_list
+
 
 class SymbolTable:
     def __init__(self, prev):

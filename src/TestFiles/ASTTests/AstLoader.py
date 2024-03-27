@@ -38,13 +38,15 @@ class AstLoader:
 
             for entry in symbol_table["entries"]:
                 type_tup = entry["type"]
-                base_type, ptrs = type_tup
+                base_type, ptrs, const_list = type_tup
+                symbol_type = SymbolType(base_type, const_list[0])
+                const_list = const_list[1:-1]
 
-                symbol_type = SymbolType(base_type)
                 for i in range(len(ptrs)):
-                    symbol_type = SymbolTypePtr(symbol_type)
+                    symbol_type = SymbolTypePtr(symbol_type, const_list[0])
+                    const_list = const_list[1:-1]
 
-                symbol_table_entry = SymbolEntry(entry["fitype"], symbol_type, entry["name"], entry["const"], map_id_to_node.get(entry["value"], None), map_id_to_node.get(entry["firstDeclared"]), map_id_to_node.get(entry["firstUsed"]))
+                symbol_table_entry = SymbolEntry(entry["fitype"], symbol_type, entry["name"], map_id_to_node.get(entry["value"], None), map_id_to_node.get(entry["firstDeclared"]), map_id_to_node.get(entry["firstUsed"]))
                 symbol_table_real.add(symbol_table_entry)
 
         return output_symbol_tables
@@ -138,8 +140,8 @@ class AstLoader:
         for symbol_table in symbol_tables:
             symbol_entries = []
             for keys, symbol_entry in symbol_table.symbols.items():
-                symbol_entry_dict = {"fitype": symbol_entry.fitype, "type": symbol_entry.getPtrTuple(),
-                                     "name": symbol_entry.name, "const": symbol_entry.isConst(),
+                symbol_entry_dict = {"fitype": symbol_entry.fitype, "type": symbol_entry.getJsonDataType(),
+                                     "name": symbol_entry.name,
                                      "value": ast_to_id_map.get(symbol_entry.value, None),
                                      "firstDeclared": ast_to_id_map.get(symbol_entry.firstDeclared),
                                      "firstUsed": ast_to_id_map.get(symbol_entry.firstUsed)}
