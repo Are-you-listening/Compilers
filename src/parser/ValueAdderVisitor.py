@@ -29,37 +29,30 @@ class ValueAdderVisitor(ASTVisitor):
         val = node.getChild(-1)
 
         if val == ident and node.text == "Declaration":
-            # this means that it is a dereference without a value
+            # this means that it is a declaration without a value
             return
 
-        entry = ident.getSymbolTable().symbols[ident.text]
+        entry = ident.getSymbolTable().getEntry(ident.text)
         entry.value = val
         # If the left side has a dereference this means that it is a pointer,
         # so we only do replacements on the left side and don't change anything in the symbol table
-        if (val.text not in ("Expr", "Dereference", "Conversion")) and (ident.text != "Dereference"):
 
-            convertDict = dict(INT=CFunctionExecuterInt(), FLOAT=CFunctionExecuterFloat(), CHAR=CFunctionExecuterChar())
+        """
+        before here was deprecated code and checks, the code was always True/False so we removed it
+        because these situation cannot occur
+        """
 
-            if val.type in convertDict.keys() and entry.typeObject in convertDict:
-                converter = convertDict[val.type]
-                ST = node.getSymbolTable().getEntry(ident.text)
-                newVal = converter.convertTo(val.text, ST.typeObject.data_type)
-                val.text = newVal
+        # replace all the identifiers in the RHS with their symbol table value
+        replacer = IdentifierReplacerVisitor()
+        replacer.preorder(val)
 
-            entry.value = val
+        # it is possible that some identifiers have been replaced with their values,
+        # so we retry the constant folding and see if we are able to get a single value out of it
+        constantFolder = ConstantFoldingVisitor()
+        constantFolder.postorder(val)
 
-        else:
-            # replace all the identifiers in the RHS with their symbol table value
-            replacer = IdentifierReplacerVisitor()
-            replacer.preorder(val)
-
-            # it is possible that some identifiers have been replaced with their values,
-            # so we retry the constant folding and see if we are able to get a single value out of it
-            constantFolder = ConstantFoldingVisitor()
-            constantFolder.postorder(val)
-
-            val = node.getChild(-1)
-            entry.value = val
+        val = node.getChild(-1)
+        entry.value = val
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":

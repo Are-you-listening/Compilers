@@ -1,1 +1,1 @@
-{"5": ["[ Error ] line 4: use of uninitialized variable a"]}
+{"5": ["[ Warning ] line 3: Narrowing type from 'FLOAT' to 'INT'"]}
