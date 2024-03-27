@@ -15,7 +15,7 @@ from src.parser.ASTCleaner import *
 
 class TestTypedef(unittest.TestCase):
     def testTypedefErrors(self):
-        file_indexes = range(1, 2)
+        file_indexes = range(1, 10)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

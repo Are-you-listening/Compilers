@@ -1,1 +1,2 @@
-{"5": ["[ Error ] line 4: use of uninitialized variable a"]}
+{"7":  ["[ Error ] line 2: typedef cannot be assigned to native type ('INT')"],
+ "8":  ["[ Error ] line 3: typedef redefinition with different types ('FLOAT' vs 'INT')"]}

@@ -79,7 +79,7 @@ class ConstantFoldingVisitor(ASTVisitor):
         index = parent.findChild(node)
 
         node = ASTNodeTerminal(result,
-                               parent, parent.getSymbolTable(), datatype_name, node.linenr,node.typedef_table)
+                               parent, parent.getSymbolTable(), datatype_name, node.linenr)
         parent.setChild(index, node)
 
         """do the visiting again"""
