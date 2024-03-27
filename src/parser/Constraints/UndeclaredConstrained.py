@@ -16,6 +16,7 @@ class UndeclaredConstrained(Constraint):
             if not node.symbol_table.exists(node.text):
                 self.rejected = True
                 self.errorNode = node
+                self.throwException()
 
     def checkNode(self, node: ASTNode):
         if node.text == "Assignment":
@@ -25,6 +26,7 @@ class UndeclaredConstrained(Constraint):
                 if not self.viableDeclaration(node.children[0].text, [node.children[1]]):
                     self.errorNode = node.children[0]
                     self.rejected = True
+                    self.throwException()
 
     def throwException(self):
         if self.errorNode is None:

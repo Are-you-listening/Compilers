@@ -1,8 +1,10 @@
 
 
-// type does not exist
-typedef vector b;
 
-int main() {
-    vector = 'c';
-}
+
+typedef const char const appel;
+
+int main(){
+    appel = 'c';
+    return 0;
+};
