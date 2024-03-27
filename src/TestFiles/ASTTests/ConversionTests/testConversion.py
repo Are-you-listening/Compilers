@@ -9,7 +9,7 @@ import os
 
 class TestConversion(unittest.TestCase):
     def testConversionsBasic(self):
-        file_indexes = range(1, 15)
+        file_indexes = range(1, 16)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -17,6 +17,7 @@ class TestConversion(unittest.TestCase):
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
+            print(index)
             # print(index)
             file_path = f"tests/test{index}.json"
             with open(file_path, "rt") as f:

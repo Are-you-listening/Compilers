@@ -10,4 +10,6 @@ int main() {
     x_ptr = b; //Warning
     x_ptr = &b; //Warning
 
+
+
 }

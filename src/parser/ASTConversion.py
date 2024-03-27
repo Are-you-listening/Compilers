@@ -208,7 +208,7 @@ class ASTConversion(ASTVisitor):
                         continue
 
                     """
-                    in case ptr+int, or ptr=int, we don't need to convert the int,
+                    in case ptr+int, we don't need to convert the int,
                     only counts for operators not assignments
                     """
                     if len(to_type[1]) > 0 and len(type_tup[1]) == 0:
@@ -361,7 +361,7 @@ class ASTConversion(ASTVisitor):
         """
         when no ptrs are in the file, this check does nothing
         """
-        if min(len(to_type[1]), len(type_tup2[1])) == 0:
+        if max(len(to_type[1]), len(type_tup2[1])) == 0:
             return
 
         if len(to_type[1]) != len(type_tup2[1]) or to_type[0] != type_tup2[0]:
