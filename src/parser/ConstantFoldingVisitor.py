@@ -41,19 +41,15 @@ class ConstantFoldingVisitor(ASTVisitor):
             for child in node.getChild(0).getChildren():
                 if child.text in c_type_executors:
                     to_type = child.text
-                    print(to_type, "to_type")
             from_type = node.getChild(1).type
-            print(from_type, "from type")
             c_type = c_type_executors[from_type]()
             data1 = c_type.fromString(node.getChild(1).text)
-            print(data1, "data")
             result = c_type.convertTo(data1,to_type)
             index = parent.findChild(node)
 
             node = ASTNodeTerminal(str(result),
                                    parent, parent.getSymbolTable(), to_type, node.linenr)
             parent.setChild(index, node)
-            print(node.type)
             return
 
         if node.text != "Expr":

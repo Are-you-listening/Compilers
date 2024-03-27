@@ -23,47 +23,54 @@ class IdentifierReplacerVisitor(ASTVisitor):
             # get the symbolTable entry of the identifier we are going to replace
             entry = node.getSymbolTable().getEntry(toReplace)
 
-            if entry.isConst() or entry.firstUsed is None:
-                # the variable is const, so we can replace it with its value
-                # or the value has not been used before, so we can still replace it
+            if not entry.isConst() and entry.firstUsed is not None:
+                return
 
-                # from now on the identifier has been used,
-                # but we only change it if it is actually hasn't been used before
-                # we could have also gotten  here just because it is const
-                if entry.firstUsed is None:
-                    entry.firstUsed = node
+            # the variable is const, so we can replace it with its value
+            # or the value has not been used before, so we can still replace it
 
-                if entry.value is not None:
-                    if entry.value.text in ("Expr", "Dereference"):
-                        return
-                    if entry.value.text == "Conversion":
-                        temp = copy.deepcopy(entry.value)
-                        temp.parent = node.parent
-                        temp.symbol_table = node.symbol_table
-                        node = temp
-                    else:
-                        node.text = entry.value.text
-                        if entry.getType() == "INT":
-                            node.type = "INT"
+            # from now on the identifier has been used,
+            # but we only change it if it is actually hasn't been used before
+            # we could have also gotten  here just because it is const
+            if entry.firstUsed is None:
+                entry.firstUsed = node
 
-                        elif entry.getType() == "CHAR":
-                            node.type = "CHAR"
+            """
+            In case the value is None
+            """
+            if entry.value is None:
+                ErrorExporter.uninitializedVariable(toReplace, node.linenr)
+                return
 
-                        elif entry.getType() == "FLOAT":
-                            node.type = "FLOAT"
+            if entry.value.text in ("Expr", "Dereference"):
+                return
 
-                    # replaces a dereference -> identifier pair with the value of that identifier
-                    parentSiblings = node.parent.parent.children
-                    for i in range(len(parentSiblings)):
-                        if parentSiblings[i] == node.parent:
-                            node.parent = parentSiblings[i].parent
-                            parentSiblings[i] = node
-                            break
-
-                else:
-                    ErrorExporter.uninitializedVariable(toReplace, node.linenr)
-                    break
+            if entry.value.text == "Conversion":
+                """
+                This breaks things, the children all need to have a changed symbol table
+                """
+                temp = copy.deepcopy(entry.value)
+                temp.parent = node.parent
+                temp.symbol_table = node.symbol_table
+                node = temp
             else:
-                # print("variable is not const -> not replacing")
-                break
+                """
+                changes IDENTIFIER -> its type
+                """
+                node.text = entry.value.text
+                if entry.getType() == "INT":
+                    node.type = "INT"
+
+                elif entry.getType() == "CHAR":
+                    node.type = "CHAR"
+
+                elif entry.getType() == "FLOAT":
+                    node.type = "FLOAT"
+
+            # replaces a dereference -> identifier pair with the value of that identifier
+
+            parent = node.parent
+            grand_parent = parent.parent
+            grand_parent.replaceChild(parent, node)
+
         return
