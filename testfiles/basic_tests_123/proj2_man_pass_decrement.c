@@ -6,6 +6,7 @@ int z = x--;
 x = x-- + z--;
 
 --x;
-    return 0;
+
+return 0;
 
 }

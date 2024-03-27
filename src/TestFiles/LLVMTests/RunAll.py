@@ -26,7 +26,7 @@ class RunAll(unittest.TestCase):
                     # be ignored
                     filename = root + "/" + file
 
-                    # if filename in ["testfiles/basic_tests_123/proj2_man_pass_conversionExplicitTypeCast.c","testfiles/basic_tests_123/proj2_man_pass_advancedPointerOperations.c","testfiles/basic_tests_123/proj2_opt_pass_constPointerToNonConstPointer1.c","testfiles/basic_tests_123/proj2_opt_pass_constPointerToNonConstPointer2.c","testfiles/basic_tests_123/proj2_man_pass_conversionImplicit.c"]:
+                    # if filename in ["testfiles/basic_tests_123/proj2_man_pass_conversionExplicitTypeCast.c","testfiles/basic_tests_123/p3.c","testfiles/basic_tests_123/proj2_opt_pass_constPointerToNonConstPointer1.c","testfiles/basic_tests_123/proj2_opt_pass_constPointerToNonConstPointer2.c","testfiles/basic_tests_123/p4.c"]:
                     #     continue
                     if filename.startswith("testfiles/advanced_tests/"):
                         continue

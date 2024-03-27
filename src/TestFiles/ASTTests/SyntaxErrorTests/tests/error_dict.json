@@ -3,5 +3,7 @@
 "3":  ["[ Syntax Error ] line 1:12 invalid symbol: 'int'"],
   "4": ["[ Syntax Error ] line 5:20 invalid symbol: 'const'"],
   "5": ["[ Syntax Error ] line 9:6 invalid symbol: '0.3'"],
-  "6": ["[ Syntax Error ] line 7:12 invalid symbol: 'typedef'"]
+  "6": ["[ Syntax Error ] line 7:12 invalid symbol: 'typedef'"],
+  "7": ["[ Syntax Error ] line 11:1 invalid symbol: '45475689841321'"],
+  "8": ["[ Syntax Error ] line 2:2 invalid symbol: '++'"]
 }

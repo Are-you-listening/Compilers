@@ -1,8 +1,0 @@
-digraph AST {
-  "139557599151488" [label=""];
-  "139557599151488" -> "139557487293680";
-  "139557487293680" [label="main: INT
-x: CHAR
-chr_ptr: CHAR*
-another_char: CHAR"];
-}

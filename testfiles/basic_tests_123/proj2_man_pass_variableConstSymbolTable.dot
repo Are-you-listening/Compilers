@@ -1,9 +1,0 @@
-digraph AST {
-  "139557598722224" [label=""];
-  "139557598722224" -> "139557598721936";
-  "139557598721936" [label="main: INT
-x: const INT
-f: const FLOAT
-y: const INT
-z: const FLOAT"];
-}

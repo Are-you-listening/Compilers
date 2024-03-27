@@ -39,6 +39,8 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
+    #DotVisitor('output/debug0').visit(ast)
+
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     ASTCleaner().visit(ast)  # Do a standard cleaning

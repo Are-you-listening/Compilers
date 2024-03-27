@@ -1,13 +1,15 @@
 int main() {
+int x = 5;
+float f = 33989.586265;
 
-    int x = 478;
-    int b = -251454;
+int z = (int) f;
+float z2 = (float) x;
 
-    int* b_ptr = &b;
+int a = (int) (f + z2 * 2);
 
-    int** x_ptr = &b_ptr;
-    x_ptr = b_ptr; //Warning
-    x_ptr = b; //Warning
-    x_ptr = &b; //Warning
+float f2 = (float) f;
+
+f2 = (float) (a + z2 / (3*65232));
+    return 0;
 
 }
