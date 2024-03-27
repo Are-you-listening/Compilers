@@ -20,8 +20,8 @@ class TestConstantExpression(unittest.TestCase):
         Files that are checked
         """
         filenames = ["proj1_man_pass_constantFolding.c", "proj1_man_pass_intLiteral.c",
-                     "proj1_man_pass_operators.c", "proj1_man_pass_whitespace.c", "../ownTests/proj1_own1.c",
-                     "../ownTests/p2.c"]
+                     "proj1_man_pass_operators.c", "proj1_man_pass_whitespace.c", "../HELP/proj1_own1.c",
+                     "../HELP/p2.c"]
 
         for file in filenames:
             self.compareData(file, "d")
@@ -35,7 +35,7 @@ class TestConstantExpression(unittest.TestCase):
         """
         Files that are checked
         """
-        filenames = ["../ownTests/p1.c"]
+        filenames = ["../HELP/p1.c"]
 
         for file in filenames:
             self.compareData(file, "c")
@@ -49,7 +49,7 @@ class TestConstantExpression(unittest.TestCase):
         """
         Files that are checked
         """
-        filenames = ["../ownTests/proj2_own4.c", "../ownTests/proj2_own5.c"]
+        filenames = ["../HELP/proj2_own4.c", "../HELP/proj2_own5.c"]
 
         for file in filenames:
             self.compareData(file, ".5f", 5, "(float)")

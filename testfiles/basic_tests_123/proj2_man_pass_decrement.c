@@ -1,12 +1,14 @@
 int main() {
-int x = 5;
-x--;
+int number = -55;
 
-int z = x--;
-x = x-- + z--;
+number++;
+number = number++;
 
---x;
+int n = number++;
 
-return 0;
+n = n - n++;
+
+++n;
+    return 0;
 
 }

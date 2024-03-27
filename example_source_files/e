@@ -1,8 +1,14 @@
 int main() {
-//Incompatible Types?
-int x = 478;
-int b = -251454;
+int number = -55;
 
-int** x_ptr = &x;
-x_ptr = &b;
+number++;
+number = number++;
+
+int n = number++;
+
+n = n - n++;
+
+++n;
+    return 0;
+
 }
