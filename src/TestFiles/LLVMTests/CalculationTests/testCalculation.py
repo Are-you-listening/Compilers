@@ -18,7 +18,7 @@ class CalculationTests(unittest.TestCase):
     """
 
     def testSimpleCalculations(self):
-        file_range = range(1, 16)
+        file_range = range(1, 17)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         for i in file_range:

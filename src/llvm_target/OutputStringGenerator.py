@@ -1,5 +1,12 @@
 from src.llvm_target.LLVMSingleton import LLVMSingleton
 from llvmlite import ir
+import sys
+
+"""
+This line is not because our lack of capabilities to avoid recursions, this line exist because LLVMLite itself
+uses recursions 
+"""
+sys.setrecursionlimit(10000000)
 
 
 class UnaryWrapper:
