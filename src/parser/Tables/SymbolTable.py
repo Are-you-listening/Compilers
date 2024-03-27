@@ -177,22 +177,23 @@ class SymbolTable:
         """
         identifier, index = ASTTypedefReplacer.getTypeName(node.children)
         translation = []
+        done = False
         args = (identifier,translation)
         self.traverse( lambda x, a, b: x.getTranslation(a, b), True, args)
         node.typedefReplaceChildren(translation, index)
 
-    def getTranslation(self, identifier: str, translation, done=False):
+    def getTranslation(self, identifier: str, translation):
         """
-        :param done: Indicating if we found something and may stop traversing
         :param identifier: kaas in e.g. typedef int* kaas;
         :return: Returns all type child nodes, e.g. [int,*]
         """
+
+
         for defi in self.typedefs:
-            if done:
+            if translation != []:  # Found a translation, we may stop now
                 return
             if defi.children[2].text == identifier:
                 translation += defi.children[1].children
-                done = True
 
     def clearTypeDefs(self):
         self.typedefs.clear()
