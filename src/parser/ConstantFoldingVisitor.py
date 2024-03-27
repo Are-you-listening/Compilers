@@ -1,4 +1,7 @@
 from src.parser.ASTConversion import *
+from src.parser.CTypes.CFunctionExecuterInt import *
+from src.parser.CTypes.CFunctionExecuterChar import *
+from src.parser.CTypes.CFunctionExecuterFloat import *
 
 
 class ConstantFoldingVisitor(ASTVisitor):
@@ -29,6 +32,30 @@ class ConstantFoldingVisitor(ASTVisitor):
             parent.setChild(index, node.getChild(0))
             # Overwrite index of parent with node
 
+            #constant fold conversions
+        if node.text == "Conversion" and node.getTerminalAmount() == 1:
+            c_type_executors = {"INT": CFunctionExecuterInt, "CHAR": CFunctionExecuterChar, "FLOAT": CFunctionExecuterFloat}
+            for child in node.getChild(0).getChildren():
+                if child.text == "*":
+                    return
+            for child in node.getChild(0).getChildren():
+                if child.text in c_type_executors:
+                    to_type = child.text
+                    print(to_type, "to_type")
+            from_type = node.getChild(1).type
+            print(from_type, "from type")
+            c_type = c_type_executors[from_type]()
+            data1 = c_type.fromString(node.getChild(1).text)
+            print(data1, "data")
+            result = c_type.convertTo(data1,to_type)
+            index = parent.findChild(node)
+
+            node = ASTNodeTerminal(str(result),
+                                   parent, parent.getSymbolTable(), to_type, node.linenr)
+            parent.setChild(index, node)
+            print(node.type)
+            return
+
         if node.text != "Expr":
             return
         # Check for constant folding with logical operators and variables
@@ -44,7 +71,6 @@ class ConstantFoldingVisitor(ASTVisitor):
                     node = node.getChild(2)
                 parent.setChild(index, node)
                 return
-
         elif node.getChildAmount() == node.getTerminalAmount() == 3:
             """Checked for BINARY operations"""
 
