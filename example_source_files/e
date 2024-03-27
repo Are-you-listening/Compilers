@@ -1,5 +1,8 @@
 int main() {
+//Incompatible Types?
+int x = 478;
+int b = -251454;
 
-float f = 0.5487;
-float f = 48471425.5487845145;
+int** x_ptr = &x;
+x_ptr = &b;
 }

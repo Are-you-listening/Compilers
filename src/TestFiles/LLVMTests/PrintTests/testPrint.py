@@ -21,7 +21,7 @@ class PrintTests(unittest.TestCase):
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         for i in file_range:
-            print(i)
+            #print(i)
             file_name = f"tests/test{i}.c"
             self.runAST(file_name)
             c_out = self.runC(file_name)
@@ -32,7 +32,7 @@ class PrintTests(unittest.TestCase):
             """
             assert for same output
             """
-            print(out.stdout, c_out.stdout)
+            #print(out.stdout, c_out.stdout)
             assert out.stdout == c_out.stdout
 
             """

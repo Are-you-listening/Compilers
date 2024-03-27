@@ -22,7 +22,7 @@ class CalculationTests(unittest.TestCase):
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         for i in file_range:
-            print(i)
+            #print(i)
             file_name = f"tests/test{i}.c"
             self.runAST(file_name)
             c_out = self.runC(file_name)

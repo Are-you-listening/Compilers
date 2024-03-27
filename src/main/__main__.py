@@ -28,8 +28,8 @@ def cleanGreen(input_file, symbol_file):
     stream = CommonTokenStream(lexer)
     parser = expressionParser(stream)
 
-    # lexer.removeErrorListeners()
-    # lexer.addErrorListener(EListener())
+    lexer.removeErrorListeners()
+    lexer.addErrorListener(EListener())
 
     parser.removeErrorListeners()  # Add our own error Listener
     parser.addErrorListener(EListener())
@@ -55,6 +55,8 @@ def cleanGreen(input_file, symbol_file):
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
         s.visit(ast.root.getSymbolTable(), True)
+
+    #DotVisitor('output/debug0').visit(ast)  # Export AST in Dot
 
     return ast, codegetter
 
