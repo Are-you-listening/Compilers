@@ -30,7 +30,7 @@ from src.parser.ASTTableCreator import *
 
 class TestSyntaxError(unittest.TestCase):
     def testSyntaxErrors(self):
-        file_indexes = range(1, 7)
+        file_indexes = range(1, 9)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -38,7 +38,7 @@ class TestSyntaxError(unittest.TestCase):
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
-            print(index)
+            #print(index)
             file_path = f"tests/test{index}.c"
 
             """

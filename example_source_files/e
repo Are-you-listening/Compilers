@@ -1,10 +1,12 @@
 int main() {
+int x = 5;
+x--;
 
-int x = 478;
-int b = -251454;
+int z = x--;
+x = x-- + z--;
 
-int* b_ptr = &b;
+--x;
 
-int** x_ptr = &b_ptr;
-x_ptr = &(b+1); // This should not be possible
+return 0;
+
 }
