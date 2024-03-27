@@ -8,5 +8,14 @@
  "8": ["[ Error ] line 12: invalid operation / on type(s): PTR  INT"],
  "9": ["[ Error ] line 12: invalid operation / on type(s): PTR  INT"],
  "10": ["[ Error ] line 9: invalid ptr operation "],
- "11": ["[ Warning ] line 9: incompatible pointer types initializing 'INT**' with an expression of type 'INT*' ", "[ Warning ] line 10: incompatible pointer types initializing 'INT**' with an expression of type 'INT' ", "[ Warning ] line 11: incompatible pointer types initializing 'INT**' with an expression of type 'INT*' "]
+ "11": ["[ Warning ] line 9: incompatible pointer types initializing 'INT**' with an expression of type 'INT*' ", "[ Warning ] line 10: incompatible pointer types initializing 'INT**' with an expression of type 'INT' ", "[ Warning ] line 11: incompatible pointer types initializing 'INT**' with an expression of type 'INT*' "],
+ "12": ["[ Error ] line 2: use of undeclared variable z"],
+ "13": ["[ Error ] line 3: use of undeclared variable x"],
+ "14": ["[ Error ] line 6: use of undeclared variable x"],
+ "15": ["[ Error ] line 4: redefinition or redeclaration of FLOAT f"],
+ "16": ["[ Error ] line 5: redefinition or redeclaration of INT x"],
+ "17": ["[ Error ] line 9:  indirection requires pointer operand ('INT' invalid)"],
+ "18": ["[ Error ] line 7: invalid operation + on type(s): PTR  PTR"],
+ "19": ["[ Error ] line 5: assignment of incompatible types ('FLOAT' and 'PTR') "],
+ "20": ["[ Error ] line 4: Manipulation of variable x which is of type const"]
 }
