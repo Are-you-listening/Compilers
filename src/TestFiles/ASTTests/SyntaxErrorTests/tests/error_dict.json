@@ -1,0 +1,7 @@
+{"1":  ["[ Syntax Error ] line 2:14 invalid symbol: 'int'"],
+"2":  ["[ Syntax Error ] line 1:7 invalid symbol: ';'"],
+"3":  ["[ Syntax Error ] line 1:12 invalid symbol: 'int'"],
+  "4": ["[ Syntax Error ] line 5:20 invalid symbol: 'const'"],
+  "5": ["[ Syntax Error ] line 9:6 invalid symbol: '0.3'"],
+  "6": ["[ Syntax Error ] line 7:12 invalid symbol: 'typedef'"]
+}

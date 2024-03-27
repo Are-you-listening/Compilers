@@ -6,8 +6,7 @@
 
 typedef
 
-
-char while;
+float 0.3;
 
 
 

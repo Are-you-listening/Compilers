@@ -2,9 +2,10 @@
 
 
 
-typedef const char const appel;
+
+
+typedef int typedef;
 
 int main(){
-    appel = 'c';
     return 0;
 };

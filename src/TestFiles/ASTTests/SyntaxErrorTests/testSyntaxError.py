@@ -11,11 +11,26 @@ from src.parser.ASTDereferencer import ASTDereferencer
 from src.parser.ASTTypedefReplacer import *
 from src.parser.ASTTableCreator import *
 from src.parser.ASTCleaner import *
+from antlr4 import *
+from src.antlr_files.expressionLexer import expressionLexer
+from src.antlr_files.expressionParser import expressionParser
+from src.parser.ASTCreator import ASTCreator
+from src.parser.DotVisitor import *
+from src.parser.Constraints.ConstraintChecker import *
+from src.parser.ValueAdderVisitor import *
+from src.parser.ASTDereferencer import *
+from src.parser.ASTConversion import *
+from src.parser.ASTCleaner import *
+from src.parser.ASTCleanerAfter import *
+from src.parser.Tables.TableDotVisitor import *
+from src.parser.CodeGetter import *
+from src.TestFiles.ASTTests.AstLoader import AstLoader
+from src.parser.ASTTableCreator import *
 
 
-class TestTypedef(unittest.TestCase):
-    def testTypedefErrors(self):
-        file_indexes = range(1, 24)
+class TestSyntaxError(unittest.TestCase):
+    def testSyntaxErrors(self):
+        file_indexes = range(1, 7)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -24,11 +39,7 @@ class TestTypedef(unittest.TestCase):
 
         for index in file_indexes:
             print(index)
-            file_path = f"tests/test{index}.json"
-            with open(file_path, "rt") as f:
-                json_data = f.read()
-
-            ast_tree = AstLoader.load(json_data)
+            file_path = f"tests/test{index}.c"
 
             """
             make print buff
@@ -45,28 +56,14 @@ class TestTypedef(unittest.TestCase):
             conversion
             """
             try:
+                input_stream = FileStream(file_path)  # Declare some variables
+                lexer = expressionLexer(input_stream)
+                stream = CommonTokenStream(lexer)
+                parser = expressionParser(stream)
 
-                ASTTypedefReplacer().visit(ast_tree)  # Replace all uses of typedefs
-
-                ASTCleaner().visit(ast_tree)  # Do a standard cleaning
-
-                ASTTableCreator().visit(ast_tree)  # Create the symbol table
-
-                file_path_result = f"tests/test{index}_result.json"
-                with open(file_path_result, "rt") as f:
-                    json_data_result = f.read()
-
-                json_test_result = AstLoader.store(ast_tree)
-                assert json_test_result == json_data_result
-
-                """
-                test errors (warnings)
-                """
-                errors = str(buff.getvalue().splitlines())
-                expected_errors = str(error_dict.get(str(index), []))
-                print("buff", buff.getvalue().splitlines(), index)
-                assert errors == expected_errors
-
+                parser.removeErrorListeners()  # Add our own error Listener
+                parser.addErrorListener(EListener())
+                parser.start_()
             except SystemExit as e:
                 """
                 test errors Real errors

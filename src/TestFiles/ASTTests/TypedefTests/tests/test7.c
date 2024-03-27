@@ -1,8 +1,9 @@
-// type already exists
-typedef float int;
+typedef int appel;
 
-int main() {
-    int x = 4;
-        return 0;
 
-}
+int main(){
+typedef int appel;
+
+    appel x = 5;
+    return 0;
+};

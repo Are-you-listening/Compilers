@@ -1,8 +1,12 @@
 
 
 
-typedef int appel;
-typedef const appel const kaas;
+
+
+
+typedef
+
+float main;
 
 int main(){
     return 0;

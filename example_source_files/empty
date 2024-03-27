@@ -1,6 +1,6 @@
 typedef const char const appel;
 
 int main(){
-    appel = 'c';
+    appel apple = 'c';
     return 0;
 };

@@ -2,7 +2,7 @@
 
 
 typedef int appel;
-typedef const appel kaas;
+typedef const appel const kaas;
 
 int main(){
     kaas k = 3;

@@ -6,6 +6,8 @@ from typing import Dict
 from src.parser.Tables.AbstractTable import *
 from src.parser.ASTTypedefReplacer import ASTTypedefReplacer
 
+keywords = ["main", "for", "while", "if", "else", "else if", "switch", "break", "continue", "return"]
+
 
 class TypedefEntry(TableEntry):
     def __init__(self, node: ASTNode):
@@ -50,8 +52,8 @@ class TypedefTable(AbstractTable):
         if the typename already exists, we need to throw an semantic error, because we are not allowed to override it
         We can only override this when the typedef is in a different scope
         """
-        if to_type_mapping in ("INT", "CHAR", "FLOAT"):
-            ErrorExporter.TypeDefNativeType(node.linenr, to_type_mapping)
+        if to_type_mapping.lower() in keywords:
+            ErrorExporter.TypeDefKeyword(node.linenr, to_type_mapping)
             return True
 
         """
@@ -85,6 +87,10 @@ class TypedefTable(AbstractTable):
         translation = []
         args = [identifier, translation]
         self.traverse(lambda x, a: x.getTranslation(a), True, args)
+
+        if translation == []:  # No translation was found
+            ErrorExporter.undeclaredTypedef(node.linenr, identifier)
+
         node.typedefReplaceChildren(translation, index)
 
     def getTranslation(self, args):
@@ -115,7 +121,7 @@ class TypedefTable(AbstractTable):
 
     def exists(self, type_name: str):
         """
-        indicates if a typedef translation exists within this table
+        indicates if a typedef translation exists from within this table (traverse up)
         :param type_name:
         :return:
         """

@@ -15,8 +15,8 @@ class ErrorExporter:
         self.listener = EListener()
 
     @staticmethod
-    def incompatibleTypedef(linenr: str):
-        print("[ Error ] line {linenr}: typedef not allowed", file=sys.stderr)
+    def undeclaredTypedef(linenr: str, type: str ):
+        print(f"[ Error ] line {linenr}: unknown type name '( {type} )'", file=sys.stderr)
         exit()
 
     @staticmethod
@@ -154,12 +154,12 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def TypeDefNativeType(line_nr: int, to_type: str):
+    def TypeDefKeyword(line_nr: int, key: str):
         """
-        an error in case we have a typedef that is not allowed because it already exists (within scope)
+        an error in case we have a typedef that is not allowed because it uses a keyword
         :return:
         """
-        print(f"[ Error ] line {line_nr}: typedef cannot be assigned to native type ('{to_type}')",
+        print(f"[ Error ] line {line_nr}: typedef cannot be assigned to keyword ('{key}')",
               file=sys.stderr)
         exit()
 
