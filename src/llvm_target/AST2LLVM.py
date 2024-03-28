@@ -1,4 +1,4 @@
-from src.llvm_target.OutputStringGenerator import *
+from src.llvm_target.OutputLLVMGenerator import *
 from src.llvm_target.MapTable.MapTable import *
 from src.llvm_target.ControlFlow.ControlFlowGraph import *
 from src.parser.CodeGetter import *
