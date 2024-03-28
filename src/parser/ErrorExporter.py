@@ -186,3 +186,13 @@ class ErrorExporter:
         print(f"[ Error ] line {line_nr}: typedef cannot be done for a type that does not exist ('{to_type}')",
               file=sys.stderr)
         exit()
+
+    @staticmethod
+    def StupidUser():
+        """
+        The user has not specified an input file
+        :return:
+        """
+        print(f"[ Error ] No input file specified",
+              file=sys.stderr)
+        exit()

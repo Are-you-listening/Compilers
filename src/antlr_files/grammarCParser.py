@@ -1,4 +1,4 @@
-# Generated from /home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/grammar/expression.g4 by ANTLR 4.13.1
+# Generated from /home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -89,9 +89,9 @@ def serializedATN():
         129,141,160,192,194,202,206
     ]
 
-class expressionParser ( Parser ):
+class grammarCParser ( Parser ):
 
-    grammarFileName = "expression.g4"
+    grammarFileName = "grammarC.g4"
 
     atn = ATNDeserializer().deserialize(serializedATN())
 
@@ -210,18 +210,18 @@ class expressionParser ( Parser ):
             self.parser = parser
 
         def code(self):
-            return self.getTypedRuleContext(expressionParser.CodeContext,0)
+            return self.getTypedRuleContext(grammarCParser.CodeContext,0)
 
 
         def EOF(self):
-            return self.getToken(expressionParser.EOF, 0)
+            return self.getToken(grammarCParser.EOF, 0)
 
         def include(self):
-            return self.getTypedRuleContext(expressionParser.IncludeContext,0)
+            return self.getTypedRuleContext(grammarCParser.IncludeContext,0)
 
 
         def getRuleIndex(self):
-            return expressionParser.RULE_start_
+            return grammarCParser.RULE_start_
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterStart_" ):
@@ -242,7 +242,7 @@ class expressionParser ( Parser ):
 
     def start_(self):
 
-        localctx = expressionParser.Start_Context(self, self._ctx, self.state)
+        localctx = grammarCParser.Start_Context(self, self._ctx, self.state)
         self.enterRule(localctx, 0, self.RULE_start_)
         self._la = 0 # Token type
         try:
@@ -258,7 +258,7 @@ class expressionParser ( Parser ):
             self.state = 33
             self.code()
             self.state = 34
-            self.match(expressionParser.EOF)
+            self.match(grammarCParser.EOF)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -277,27 +277,27 @@ class expressionParser ( Parser ):
 
         def function(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(expressionParser.FunctionContext)
+                return self.getTypedRuleContexts(grammarCParser.FunctionContext)
             else:
-                return self.getTypedRuleContext(expressionParser.FunctionContext,i)
+                return self.getTypedRuleContext(grammarCParser.FunctionContext,i)
 
 
         def line(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(expressionParser.LineContext)
+                return self.getTypedRuleContexts(grammarCParser.LineContext)
             else:
-                return self.getTypedRuleContext(expressionParser.LineContext,i)
+                return self.getTypedRuleContext(grammarCParser.LineContext,i)
 
 
         def comment(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(expressionParser.CommentContext)
+                return self.getTypedRuleContexts(grammarCParser.CommentContext)
             else:
-                return self.getTypedRuleContext(expressionParser.CommentContext,i)
+                return self.getTypedRuleContext(grammarCParser.CommentContext,i)
 
 
         def getRuleIndex(self):
-            return expressionParser.RULE_code
+            return grammarCParser.RULE_code
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterCode" ):
@@ -318,7 +318,7 @@ class expressionParser ( Parser ):
 
     def code(self):
 
-        localctx = expressionParser.CodeContext(self, self._ctx, self.state)
+        localctx = grammarCParser.CodeContext(self, self._ctx, self.state)
         self.enterRule(localctx, 2, self.RULE_code)
         self._la = 0 # Token type
         try:
@@ -355,7 +355,7 @@ class expressionParser ( Parser ):
             _la = self._input.LA(1)
             while _la==1:
                 self.state = 44
-                self.match(expressionParser.T__0)
+                self.match(grammarCParser.T__0)
                 self.state = 49
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
@@ -378,7 +378,7 @@ class expressionParser ( Parser ):
 
 
         def getRuleIndex(self):
-            return expressionParser.RULE_include
+            return grammarCParser.RULE_include
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterInclude" ):
@@ -399,12 +399,12 @@ class expressionParser ( Parser ):
 
     def include(self):
 
-        localctx = expressionParser.IncludeContext(self, self._ctx, self.state)
+        localctx = grammarCParser.IncludeContext(self, self._ctx, self.state)
         self.enterRule(localctx, 4, self.RULE_include)
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 50
-            self.match(expressionParser.T__1)
+            self.match(grammarCParser.T__1)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -422,13 +422,13 @@ class expressionParser ( Parser ):
             self.parser = parser
 
         def MULTILINE(self):
-            return self.getToken(expressionParser.MULTILINE, 0)
+            return self.getToken(grammarCParser.MULTILINE, 0)
 
         def SINGLECOMMENT(self):
-            return self.getToken(expressionParser.SINGLECOMMENT, 0)
+            return self.getToken(grammarCParser.SINGLECOMMENT, 0)
 
         def getRuleIndex(self):
-            return expressionParser.RULE_comment
+            return grammarCParser.RULE_comment
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterComment" ):
@@ -449,7 +449,7 @@ class expressionParser ( Parser ):
 
     def comment(self):
 
-        localctx = expressionParser.CommentContext(self, self._ctx, self.state)
+        localctx = grammarCParser.CommentContext(self, self._ctx, self.state)
         self.enterRule(localctx, 6, self.RULE_comment)
         self._la = 0 # Token type
         try:
@@ -478,22 +478,22 @@ class expressionParser ( Parser ):
             self.parser = parser
 
         def type_(self):
-            return self.getTypedRuleContext(expressionParser.TypeContext,0)
+            return self.getTypedRuleContext(grammarCParser.TypeContext,0)
 
 
         def IDENTIFIER(self):
-            return self.getToken(expressionParser.IDENTIFIER, 0)
+            return self.getToken(grammarCParser.IDENTIFIER, 0)
 
         def code(self):
-            return self.getTypedRuleContext(expressionParser.CodeContext,0)
+            return self.getTypedRuleContext(grammarCParser.CodeContext,0)
 
 
         def return_(self):
-            return self.getTypedRuleContext(expressionParser.ReturnContext,0)
+            return self.getTypedRuleContext(grammarCParser.ReturnContext,0)
 
 
         def getRuleIndex(self):
-            return expressionParser.RULE_function
+            return grammarCParser.RULE_function
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterFunction" ):
@@ -514,7 +514,7 @@ class expressionParser ( Parser ):
 
     def function(self):
 
-        localctx = expressionParser.FunctionContext(self, self._ctx, self.state)
+        localctx = grammarCParser.FunctionContext(self, self._ctx, self.state)
         self.enterRule(localctx, 8, self.RULE_function)
         self._la = 0 # Token type
         try:
@@ -522,13 +522,13 @@ class expressionParser ( Parser ):
             self.state = 54
             self.type_()
             self.state = 55
-            self.match(expressionParser.IDENTIFIER)
+            self.match(grammarCParser.IDENTIFIER)
             self.state = 56
-            self.match(expressionParser.T__2)
+            self.match(grammarCParser.T__2)
             self.state = 57
-            self.match(expressionParser.T__3)
+            self.match(grammarCParser.T__3)
             self.state = 58
-            self.match(expressionParser.T__4)
+            self.match(grammarCParser.T__4)
             self.state = 59
             self.code()
             self.state = 61
@@ -540,14 +540,14 @@ class expressionParser ( Parser ):
 
 
             self.state = 63
-            self.match(expressionParser.T__5)
+            self.match(grammarCParser.T__5)
             self.state = 67
             self._errHandler.sync(self)
             _alt = self._interp.adaptivePredict(self._input,5,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1:
                     self.state = 64
-                    self.match(expressionParser.T__0) 
+                    self.match(grammarCParser.T__0) 
                 self.state = 69
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,5,self._ctx)
@@ -569,27 +569,27 @@ class expressionParser ( Parser ):
             self.parser = parser
 
         def declaration(self):
-            return self.getTypedRuleContext(expressionParser.DeclarationContext,0)
+            return self.getTypedRuleContext(grammarCParser.DeclarationContext,0)
 
 
         def expr(self):
-            return self.getTypedRuleContext(expressionParser.ExprContext,0)
+            return self.getTypedRuleContext(grammarCParser.ExprContext,0)
 
 
         def assignment(self):
-            return self.getTypedRuleContext(expressionParser.AssignmentContext,0)
+            return self.getTypedRuleContext(grammarCParser.AssignmentContext,0)
 
 
         def typedef(self):
-            return self.getTypedRuleContext(expressionParser.TypedefContext,0)
+            return self.getTypedRuleContext(grammarCParser.TypedefContext,0)
 
 
         def printf(self):
-            return self.getTypedRuleContext(expressionParser.PrintfContext,0)
+            return self.getTypedRuleContext(grammarCParser.PrintfContext,0)
 
 
         def getRuleIndex(self):
-            return expressionParser.RULE_line
+            return grammarCParser.RULE_line
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterLine" ):
@@ -610,7 +610,7 @@ class expressionParser ( Parser ):
 
     def line(self):
 
-        localctx = expressionParser.LineContext(self, self._ctx, self.state)
+        localctx = grammarCParser.LineContext(self, self._ctx, self.state)
         self.enterRule(localctx, 10, self.RULE_line)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -649,7 +649,7 @@ class expressionParser ( Parser ):
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt == 1:
                     self.state = 77
-                    self.match(expressionParser.T__0)
+                    self.match(grammarCParser.T__0)
 
                 else:
                     raise NoViableAltException(self)
@@ -674,14 +674,14 @@ class expressionParser ( Parser ):
             self.parser = parser
 
         def type_(self):
-            return self.getTypedRuleContext(expressionParser.TypeContext,0)
+            return self.getTypedRuleContext(grammarCParser.TypeContext,0)
 
 
         def IDENTIFIER(self):
-            return self.getToken(expressionParser.IDENTIFIER, 0)
+            return self.getToken(grammarCParser.IDENTIFIER, 0)
 
         def getRuleIndex(self):
-            return expressionParser.RULE_typedef
+            return grammarCParser.RULE_typedef
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterTypedef" ):
@@ -702,16 +702,16 @@ class expressionParser ( Parser ):
 
     def typedef(self):
 
-        localctx = expressionParser.TypedefContext(self, self._ctx, self.state)
+        localctx = grammarCParser.TypedefContext(self, self._ctx, self.state)
         self.enterRule(localctx, 12, self.RULE_typedef)
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 82
-            self.match(expressionParser.T__6)
+            self.match(grammarCParser.T__6)
             self.state = 83
             self.type_()
             self.state = 84
-            self.match(expressionParser.IDENTIFIER)
+            self.match(grammarCParser.IDENTIFIER)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -729,11 +729,11 @@ class expressionParser ( Parser ):
             self.parser = parser
 
         def expr(self):
-            return self.getTypedRuleContext(expressionParser.ExprContext,0)
+            return self.getTypedRuleContext(grammarCParser.ExprContext,0)
 
 
         def getRuleIndex(self):
-            return expressionParser.RULE_printf
+            return grammarCParser.RULE_printf
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterPrintf" ):
@@ -754,17 +754,17 @@ class expressionParser ( Parser ):
 
     def printf(self):
 
-        localctx = expressionParser.PrintfContext(self, self._ctx, self.state)
+        localctx = grammarCParser.PrintfContext(self, self._ctx, self.state)
         self.enterRule(localctx, 14, self.RULE_printf)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 86
-            self.match(expressionParser.T__7)
+            self.match(grammarCParser.T__7)
             self.state = 87
-            self.match(expressionParser.T__2)
+            self.match(grammarCParser.T__2)
             self.state = 88
-            self.match(expressionParser.T__8)
+            self.match(grammarCParser.T__8)
             self.state = 92
             self._errHandler.sync(self)
             _alt = self._interp.adaptivePredict(self._input,8,self._ctx)
@@ -795,14 +795,14 @@ class expressionParser ( Parser ):
                 _alt = self._interp.adaptivePredict(self._input,9,self._ctx)
 
             self.state = 102
-            self.match(expressionParser.T__8)
+            self.match(grammarCParser.T__8)
             self.state = 103
-            self.match(expressionParser.T__14)
+            self.match(grammarCParser.T__14)
 
             self.state = 104
             self.expr(0)
             self.state = 105
-            self.match(expressionParser.T__3)
+            self.match(grammarCParser.T__3)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -820,10 +820,10 @@ class expressionParser ( Parser ):
             self.parser = parser
 
         def IDENTIFIER(self):
-            return self.getToken(expressionParser.IDENTIFIER, 0)
+            return self.getToken(grammarCParser.IDENTIFIER, 0)
 
         def getRuleIndex(self):
-            return expressionParser.RULE_type
+            return grammarCParser.RULE_type
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterType" ):
@@ -844,7 +844,7 @@ class expressionParser ( Parser ):
 
     def type_(self):
 
-        localctx = expressionParser.TypeContext(self, self._ctx, self.state)
+        localctx = grammarCParser.TypeContext(self, self._ctx, self.state)
         self.enterRule(localctx, 16, self.RULE_type)
         self._la = 0 # Token type
         try:
@@ -854,7 +854,7 @@ class expressionParser ( Parser ):
             _la = self._input.LA(1)
             if _la==16:
                 self.state = 107
-                self.match(expressionParser.T__15)
+                self.match(grammarCParser.T__15)
 
 
             self.state = 110
@@ -869,13 +869,13 @@ class expressionParser ( Parser ):
             _la = self._input.LA(1)
             while _la==20:
                 self.state = 111
-                self.match(expressionParser.T__19)
+                self.match(grammarCParser.T__19)
                 self.state = 113
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 if _la==16:
                     self.state = 112
-                    self.match(expressionParser.T__15)
+                    self.match(grammarCParser.T__15)
 
 
                 self.state = 119
@@ -899,18 +899,18 @@ class expressionParser ( Parser ):
             self.parser = parser
 
         def type_(self):
-            return self.getTypedRuleContext(expressionParser.TypeContext,0)
+            return self.getTypedRuleContext(grammarCParser.TypeContext,0)
 
 
         def IDENTIFIER(self):
-            return self.getToken(expressionParser.IDENTIFIER, 0)
+            return self.getToken(grammarCParser.IDENTIFIER, 0)
 
         def expr(self):
-            return self.getTypedRuleContext(expressionParser.ExprContext,0)
+            return self.getTypedRuleContext(grammarCParser.ExprContext,0)
 
 
         def getRuleIndex(self):
-            return expressionParser.RULE_declaration
+            return grammarCParser.RULE_declaration
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterDeclaration" ):
@@ -931,7 +931,7 @@ class expressionParser ( Parser ):
 
     def declaration(self):
 
-        localctx = expressionParser.DeclarationContext(self, self._ctx, self.state)
+        localctx = grammarCParser.DeclarationContext(self, self._ctx, self.state)
         self.enterRule(localctx, 18, self.RULE_declaration)
         self._la = 0 # Token type
         try:
@@ -939,13 +939,13 @@ class expressionParser ( Parser ):
             self.state = 120
             self.type_()
             self.state = 121
-            self.match(expressionParser.IDENTIFIER)
+            self.match(grammarCParser.IDENTIFIER)
             self.state = 124
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==21:
                 self.state = 122
-                self.match(expressionParser.T__20)
+                self.match(grammarCParser.T__20)
                 self.state = 123
                 self.expr(0)
 
@@ -967,14 +967,14 @@ class expressionParser ( Parser ):
             self.parser = parser
 
         def IDENTIFIER(self):
-            return self.getToken(expressionParser.IDENTIFIER, 0)
+            return self.getToken(grammarCParser.IDENTIFIER, 0)
 
         def expr(self):
-            return self.getTypedRuleContext(expressionParser.ExprContext,0)
+            return self.getTypedRuleContext(grammarCParser.ExprContext,0)
 
 
         def getRuleIndex(self):
-            return expressionParser.RULE_assignment
+            return grammarCParser.RULE_assignment
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterAssignment" ):
@@ -995,7 +995,7 @@ class expressionParser ( Parser ):
 
     def assignment(self):
 
-        localctx = expressionParser.AssignmentContext(self, self._ctx, self.state)
+        localctx = grammarCParser.AssignmentContext(self, self._ctx, self.state)
         self.enterRule(localctx, 20, self.RULE_assignment)
         self._la = 0 # Token type
         try:
@@ -1005,16 +1005,16 @@ class expressionParser ( Parser ):
             _la = self._input.LA(1)
             while _la==20:
                 self.state = 126
-                self.match(expressionParser.T__19)
+                self.match(grammarCParser.T__19)
                 self.state = 131
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
             self.state = 132
-            self.match(expressionParser.IDENTIFIER)
+            self.match(grammarCParser.IDENTIFIER)
 
             self.state = 133
-            self.match(expressionParser.T__20)
+            self.match(grammarCParser.T__20)
             self.state = 134
             self.expr(0)
         except RecognitionException as re:
@@ -1034,19 +1034,19 @@ class expressionParser ( Parser ):
             self.parser = parser
 
         def type_(self):
-            return self.getTypedRuleContext(expressionParser.TypeContext,0)
+            return self.getTypedRuleContext(grammarCParser.TypeContext,0)
 
 
         def literal(self):
-            return self.getTypedRuleContext(expressionParser.LiteralContext,0)
+            return self.getTypedRuleContext(grammarCParser.LiteralContext,0)
 
 
         def expr(self):
-            return self.getTypedRuleContext(expressionParser.ExprContext,0)
+            return self.getTypedRuleContext(grammarCParser.ExprContext,0)
 
 
         def getRuleIndex(self):
-            return expressionParser.RULE_conversion
+            return grammarCParser.RULE_conversion
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterConversion" ):
@@ -1067,16 +1067,16 @@ class expressionParser ( Parser ):
 
     def conversion(self):
 
-        localctx = expressionParser.ConversionContext(self, self._ctx, self.state)
+        localctx = grammarCParser.ConversionContext(self, self._ctx, self.state)
         self.enterRule(localctx, 22, self.RULE_conversion)
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 136
-            self.match(expressionParser.T__2)
+            self.match(grammarCParser.T__2)
             self.state = 137
             self.type_()
             self.state = 138
-            self.match(expressionParser.T__3)
+            self.match(grammarCParser.T__3)
             self.state = 141
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,15,self._ctx)
@@ -1108,25 +1108,25 @@ class expressionParser ( Parser ):
             self.parser = parser
 
         def literal(self):
-            return self.getTypedRuleContext(expressionParser.LiteralContext,0)
+            return self.getTypedRuleContext(grammarCParser.LiteralContext,0)
 
 
         def type_(self):
-            return self.getTypedRuleContext(expressionParser.TypeContext,0)
+            return self.getTypedRuleContext(grammarCParser.TypeContext,0)
 
 
         def expr(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(expressionParser.ExprContext)
+                return self.getTypedRuleContexts(grammarCParser.ExprContext)
             else:
-                return self.getTypedRuleContext(expressionParser.ExprContext,i)
+                return self.getTypedRuleContext(grammarCParser.ExprContext,i)
 
 
         def IDENTIFIER(self):
-            return self.getToken(expressionParser.IDENTIFIER, 0)
+            return self.getToken(grammarCParser.IDENTIFIER, 0)
 
         def getRuleIndex(self):
-            return expressionParser.RULE_expr
+            return grammarCParser.RULE_expr
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterExpr" ):
@@ -1147,7 +1147,7 @@ class expressionParser ( Parser ):
     def expr(self, _p:int=0):
         _parentctx = self._ctx
         _parentState = self.state
-        localctx = expressionParser.ExprContext(self, self._ctx, _parentState)
+        localctx = grammarCParser.ExprContext(self, self._ctx, _parentState)
         _prevctx = localctx
         _startState = 24
         self.enterRecursionRule(localctx, 24, self.RULE_expr, _p)
@@ -1164,22 +1164,22 @@ class expressionParser ( Parser ):
 
             elif la_ == 2:
                 self.state = 145
-                self.match(expressionParser.T__2)
+                self.match(grammarCParser.T__2)
                 self.state = 146
                 self.type_()
                 self.state = 147
-                self.match(expressionParser.T__3)
+                self.match(grammarCParser.T__3)
                 self.state = 148
                 self.expr(15)
                 pass
 
             elif la_ == 3:
                 self.state = 150
-                self.match(expressionParser.T__2)
+                self.match(grammarCParser.T__2)
                 self.state = 151
                 self.expr(0)
                 self.state = 152
-                self.match(expressionParser.T__3)
+                self.match(grammarCParser.T__3)
                 pass
 
             elif la_ == 4:
@@ -1196,7 +1196,7 @@ class expressionParser ( Parser ):
 
             elif la_ == 5:
                 self.state = 156
-                self.match(expressionParser.IDENTIFIER)
+                self.match(grammarCParser.IDENTIFIER)
                 self.state = 157
                 _la = self._input.LA(1)
                 if not(_la==22 or _la==23):
@@ -1232,7 +1232,7 @@ class expressionParser ( Parser ):
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,17,self._ctx)
                     if la_ == 1:
-                        localctx = expressionParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 162
                         if not self.precpred(self._ctx, 10):
@@ -1250,7 +1250,7 @@ class expressionParser ( Parser ):
                         pass
 
                     elif la_ == 2:
-                        localctx = expressionParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 165
                         if not self.precpred(self._ctx, 9):
@@ -1268,7 +1268,7 @@ class expressionParser ( Parser ):
                         pass
 
                     elif la_ == 3:
-                        localctx = expressionParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 168
                         if not self.precpred(self._ctx, 8):
@@ -1286,7 +1286,7 @@ class expressionParser ( Parser ):
                         pass
 
                     elif la_ == 4:
-                        localctx = expressionParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 171
                         if not self.precpred(self._ctx, 7):
@@ -1304,7 +1304,7 @@ class expressionParser ( Parser ):
                         pass
 
                     elif la_ == 5:
-                        localctx = expressionParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 174
                         if not self.precpred(self._ctx, 6):
@@ -1322,66 +1322,66 @@ class expressionParser ( Parser ):
                         pass
 
                     elif la_ == 6:
-                        localctx = expressionParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 177
                         if not self.precpred(self._ctx, 5):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 5)")
                         self.state = 178
-                        self.match(expressionParser.T__23)
+                        self.match(grammarCParser.T__23)
                         self.state = 179
                         self.expr(6)
                         pass
 
                     elif la_ == 7:
-                        localctx = expressionParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 180
                         if not self.precpred(self._ctx, 4):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 4)")
                         self.state = 181
-                        self.match(expressionParser.T__38)
+                        self.match(grammarCParser.T__38)
                         self.state = 182
                         self.expr(5)
                         pass
 
                     elif la_ == 8:
-                        localctx = expressionParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 183
                         if not self.precpred(self._ctx, 3):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 3)")
                         self.state = 184
-                        self.match(expressionParser.T__39)
+                        self.match(grammarCParser.T__39)
                         self.state = 185
                         self.expr(4)
                         pass
 
                     elif la_ == 9:
-                        localctx = expressionParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 186
                         if not self.precpred(self._ctx, 2):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 2)")
                         self.state = 187
-                        self.match(expressionParser.T__40)
+                        self.match(grammarCParser.T__40)
                         self.state = 188
                         self.expr(3)
                         pass
 
                     elif la_ == 10:
-                        localctx = expressionParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 189
                         if not self.precpred(self._ctx, 1):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 1)")
                         self.state = 190
-                        self.match(expressionParser.T__41)
+                        self.match(grammarCParser.T__41)
                         self.state = 191
                         self.expr(2)
                         pass
@@ -1408,23 +1408,23 @@ class expressionParser ( Parser ):
             self.parser = parser
 
         def INT(self):
-            return self.getToken(expressionParser.INT, 0)
+            return self.getToken(grammarCParser.INT, 0)
 
         def FLOAT(self):
-            return self.getToken(expressionParser.FLOAT, 0)
+            return self.getToken(grammarCParser.FLOAT, 0)
 
         def CHAR(self):
-            return self.getToken(expressionParser.CHAR, 0)
+            return self.getToken(grammarCParser.CHAR, 0)
 
         def IDENTIFIER(self):
-            return self.getToken(expressionParser.IDENTIFIER, 0)
+            return self.getToken(grammarCParser.IDENTIFIER, 0)
 
         def conversion(self):
-            return self.getTypedRuleContext(expressionParser.ConversionContext,0)
+            return self.getTypedRuleContext(grammarCParser.ConversionContext,0)
 
 
         def getRuleIndex(self):
-            return expressionParser.RULE_literal
+            return grammarCParser.RULE_literal
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterLiteral" ):
@@ -1445,7 +1445,7 @@ class expressionParser ( Parser ):
 
     def literal(self):
 
-        localctx = expressionParser.LiteralContext(self, self._ctx, self.state)
+        localctx = grammarCParser.LiteralContext(self, self._ctx, self.state)
         self.enterRule(localctx, 26, self.RULE_literal)
         try:
             self.enterOuterAlt(localctx, 1)
@@ -1454,19 +1454,19 @@ class expressionParser ( Parser ):
             token = self._input.LA(1)
             if token in [47]:
                 self.state = 197
-                self.match(expressionParser.INT)
+                self.match(grammarCParser.INT)
                 pass
             elif token in [48]:
                 self.state = 198
-                self.match(expressionParser.FLOAT)
+                self.match(grammarCParser.FLOAT)
                 pass
             elif token in [49]:
                 self.state = 199
-                self.match(expressionParser.CHAR)
+                self.match(grammarCParser.CHAR)
                 pass
             elif token in [46]:
                 self.state = 200
-                self.match(expressionParser.IDENTIFIER)
+                self.match(grammarCParser.IDENTIFIER)
                 pass
             elif token in [3]:
                 self.state = 201
@@ -1493,7 +1493,7 @@ class expressionParser ( Parser ):
 
 
         def getRuleIndex(self):
-            return expressionParser.RULE_return
+            return grammarCParser.RULE_return
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterReturn" ):
@@ -1514,19 +1514,19 @@ class expressionParser ( Parser ):
 
     def return_(self):
 
-        localctx = expressionParser.ReturnContext(self, self._ctx, self.state)
+        localctx = grammarCParser.ReturnContext(self, self._ctx, self.state)
         self.enterRule(localctx, 28, self.RULE_return)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 204
-            self.match(expressionParser.T__42)
+            self.match(grammarCParser.T__42)
             self.state = 206
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==1:
                 self.state = 205
-                self.match(expressionParser.T__0)
+                self.match(grammarCParser.T__0)
 
 
         except RecognitionException as re:

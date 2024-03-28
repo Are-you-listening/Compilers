@@ -3,8 +3,8 @@ from io import StringIO
 import json
 import os
 from antlr4 import *
-from src.antlr_files.expressionLexer import expressionLexer
-from src.antlr_files.expressionParser import expressionParser
+from src.antlr_files.grammarCLexer import grammarCLexer
+from src.antlr_files.grammarCParser import grammarCParser
 from src.parser.ASTTableCreator import *
 
 
@@ -37,9 +37,9 @@ class TestSyntaxError(unittest.TestCase):
             """
             try:
                 input_stream = FileStream(file_path)  # Declare some variables
-                lexer = expressionLexer(input_stream)
+                lexer = grammarCLexer(input_stream)
                 stream = CommonTokenStream(lexer)
-                parser = expressionParser(stream)
+                parser = grammarCParser(stream)
 
                 lexer.removeErrorListeners()
                 lexer.addErrorListener(EListener())

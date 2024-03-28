@@ -1,4 +1,4 @@
-# Generated from /home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/grammar/expression.g4 by ANTLR 4.13.1
+# Generated from /home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
 from antlr4 import *
 from io import StringIO
 import sys
@@ -126,7 +126,7 @@ def serializedATN():
         0,0
     ]
 
-class expressionLexer(Lexer):
+class grammarCLexer(Lexer):
 
     atn = ATNDeserializer().deserialize(serializedATN())
 
@@ -209,7 +209,7 @@ class expressionLexer(Lexer):
                   "SINGLECOMMENT", "IDENTIFIER", "INT", "FLOAT", "CHAR", 
                   "WS" ]
 
-    grammarFileName = "expression.g4"
+    grammarFileName = "grammarC.g4"
 
     def __init__(self, input=None, output:TextIO = sys.stdout):
         super().__init__(input, output)

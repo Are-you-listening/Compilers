@@ -1,6 +1,6 @@
 from antlr4 import *
-from src.antlr_files.expressionLexer import expressionLexer
-from src.antlr_files.expressionParser import expressionParser
+from src.antlr_files.grammarCLexer import grammarCLexer
+from src.antlr_files.grammarCParser import grammarCParser
 from src.parser.ASTCreator import ASTCreator
 from src.parser.DotVisitor import *
 from src.parser.ASTCleaner import *
@@ -11,9 +11,9 @@ from src.parser.ASTTableCreator import *
 input_file = "read_file"
 
 input_stream = FileStream(input_file)  # Declare some variables
-lexer = expressionLexer(input_stream)
+lexer = grammarCLexer(input_stream)
 stream = CommonTokenStream(lexer)
-parser = expressionParser(stream)
+parser = grammarCParser(stream)
 
 lexer.removeErrorListeners()
 lexer.addErrorListener(EListener())
