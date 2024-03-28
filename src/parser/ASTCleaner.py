@@ -5,7 +5,8 @@ from src.parser.Tables.SymbolTable import *
 class ASTCleaner(ASTVisitor):
     def __init__(self):
         self.operation_handler = COperationHandler()
-        self.to_remove = set()  # list of child parent of nodes we need to remove, can't be done directly because of loops
+        # list of child parent of nodes we need to remove, can't be done directly because of loops
+        self.to_remove = set()
 
     def visit(self, ast: AST):
         self.to_remove = set()
