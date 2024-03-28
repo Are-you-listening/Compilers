@@ -162,6 +162,14 @@ class Calculation:
             "/": block.fdiv
         }
 
+        op_translate_fcmp_float = {"<": block.fcmp_ordered,
+                              ">": block.fcmp_ordered,
+                              "==": block.fcmp_ordered,
+                              "!=": block.fcmp_ordered,
+                              "<=": block.fcmp_ordered,
+                              ">=": block.fcmp_ordered
+                              }
+
         op_translate = {"+": block.add,
                         "-": block.sub,
                         "*": block.mul,
@@ -192,7 +200,13 @@ class Calculation:
                 llvm_var = llvm_op(left, right)
                 return llvm_var
 
-        elif left.type.is_pointer and operator in ["+", "-"]:
+            llvm_op = op_translate_fcmp_float.get(operator, None)
+            if llvm_op is not None:
+                llvm_var = llvm_op(operator, left, right)
+                return llvm_var
+
+
+        if left.type.is_pointer and operator in ["+", "-"]:
             if not isinstance(right,
                               ir.Constant):  # If it is not a constant, LLVM requires a sign extend to match the size
                 right = block.sext(right, ir.IntType(64))
@@ -201,17 +215,25 @@ class Calculation:
                 right = Calculation.unary(right, "-")
 
             new_value = block.gep(left, [right], True)  # Create the gep instruction
+
             return new_value
 
-        else:
-            llvm_op = op_translate.get(operator, None)
-            if llvm_op is not None:
-                llvm_var = llvm_op(left, right)
-                return llvm_var
-            llvm_op = op_translate_icmp.get(operator, None)
-            llvm_var = llvm_op(operator, left, right)
+        """
+        check normal operations
+        """
+        llvm_op = op_translate.get(operator, None)
+
+        if llvm_op is not None:
+            llvm_var = llvm_op(left, right)
 
             return llvm_var
+
+        llvm_op = op_translate_icmp.get(operator, None)
+
+        llvm_var = llvm_op(operator, left, right)
+
+        return llvm_var
+
 
     @staticmethod
     def unary(llvm_val, op: str):

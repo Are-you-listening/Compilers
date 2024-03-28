@@ -15,7 +15,7 @@ int main() {
     float a = 856.25668;
     float* a_ptr = &a;
 
-    printf("%f", *a_ptr == a);
+    printf("%d", (int) (*a_ptr == a));
 
     return 0;
 

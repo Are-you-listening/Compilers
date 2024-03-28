@@ -55,6 +55,9 @@ class ASTDereferencer(ASTVisitor):
 
         if sibling_before.text == "&" and node.getSiblingNeighbour(-2) is None:  # Removes the de reference sign
             parent = node.parent
+
+            node.getSymbolTable().reference(node.text)
+
             parent.removeChild(sibling_before)
             while parent.text in ("Expr", "Literal") and parent.getChildAmount() == 1:
                 grand_parent = parent.parent

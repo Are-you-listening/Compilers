@@ -8,4 +8,5 @@ int main(){
     const int g = e+d+c+b+a+f;
     const int h = g%12;
     const int i = h-g*b/e;
+    return 0;
 }

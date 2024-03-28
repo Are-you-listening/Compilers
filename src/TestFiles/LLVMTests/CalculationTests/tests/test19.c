@@ -6,6 +6,6 @@ int main(){
     float* non_const_f_ptr = f_ptr;
     *non_const_f_ptr = 3.1492;
     printf("%f", *non_const_f_ptr);
-    /*printf("%f", f);*/
+    printf("%f", f);
     return 0;
 }

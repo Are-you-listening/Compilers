@@ -45,9 +45,12 @@ class AstLoader:
                     const_list = const_list[1:]
                     symbol_type = SymbolTypePtr(symbol_type, const_list[0])
 
-
                 symbol_table_entry = SymbolEntry(entry["fitype"], symbol_type, entry["name"], map_id_to_node.get(entry["value"], None), map_id_to_node.get(entry["firstDeclared"]), map_id_to_node.get(entry["firstUsed"]))
                 symbol_table_real.add(symbol_table_entry)
+
+                ref = entry.get("reference")
+                if ref is not None:
+                    symbol_table_entry.referenced = ref
 
         return output_symbol_tables
 
@@ -145,6 +148,9 @@ class AstLoader:
                                      "value": ast_to_id_map.get(symbol_entry.value, None),
                                      "firstDeclared": ast_to_id_map.get(symbol_entry.firstDeclared),
                                      "firstUsed": ast_to_id_map.get(symbol_entry.firstUsed)}
+
+                if symbol_entry.referenced:
+                    symbol_entry_dict.update({"reference": symbol_entry.referenced})
 
                 symbol_entries.append(symbol_entry_dict)
 

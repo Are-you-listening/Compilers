@@ -324,7 +324,6 @@ class AST2LLVM(ASTVisitor):
 
             left = self.llvm_map.get(node.getChild(0))
             right = self.llvm_map.get(node.getChild(2))
-
             llvm_var = Calculation.operation(left, right, operator)
 
         self.llvm_map[node] = llvm_var

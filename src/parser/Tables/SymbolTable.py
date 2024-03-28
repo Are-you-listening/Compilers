@@ -14,6 +14,7 @@ class SymbolEntry(TableEntry):
         self.value = value
         self.firstDeclared = first_declared  # The node this Entry is first declared
         self.firstUsed = first_used  # The node this Entry is first used
+        self.referenced = False
 
     def __str__(self):
         return f"""fi type: {self.fitype} 
@@ -65,6 +66,13 @@ class SymbolEntry(TableEntry):
         const_list.insert(0, d_t.isConst())
 
         return d_t.getType(), ptr_string, const_list
+
+    def reference(self):
+        self.referenced = True
+
+    def is_referenced(self):
+        return self.referenced
+
 
 class SymbolTable(AbstractTable):
     def __init__(self, prev):
@@ -133,3 +141,16 @@ class SymbolTable(AbstractTable):
 
     def accept(self, v):
         v.visitSym(self)
+
+    def reference(self, identifier: str):
+        """
+        when we reference an identifier its corresponding symbol entry needs to store that information
+        So we can take that into account for Constant Propagation
+
+        :param identifier: name of the variable
+        :return:
+        """
+        entry = self.getEntry(identifier)
+        if entry is None:
+            return 
+        entry.reference()
