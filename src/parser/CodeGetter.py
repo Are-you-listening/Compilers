@@ -8,11 +8,14 @@ class CodeGetter(ASTVisitor):
 
     def __init__(self):
         self.codeLines = {}
+        self.lineNrsChecked = []
 
     def visitNode(self, node: ASTNode):
         pass
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
+        if node.type in {"MULTILINE" , "SINGLECOMMENT"}:
+            return
         if node.linenr in self.codeLines:
             self.codeLines[node.linenr] += " " + node.text
         else:
@@ -21,5 +24,8 @@ class CodeGetter(ASTVisitor):
 
     def getLine(self, node: ASTNode):
         lineNR = node.linenr
+        if lineNR in self.lineNrsChecked:
+            return
+        self.lineNrsChecked.append(lineNR)
         if node.linenr in self.codeLines:
             return self.codeLines[lineNR]
