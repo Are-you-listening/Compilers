@@ -1,6 +1,6 @@
 from antlr4 import *
-from src.antlr_files.expressionLexer import expressionLexer
-from src.antlr_files.expressionParser import expressionParser
+from src.antlr_files.grammarCLexer import grammarCLexer
+from src.antlr_files.grammarCParser import grammarCParser
 from src.parser.ASTCreator import ASTCreator
 from src.parser.DotVisitor import *
 from src.parser.Constraints.ConstraintChecker import *
@@ -23,9 +23,9 @@ def cleanGreen(input_file, symbol_file):
     :return:
     """
     input_stream = FileStream(input_file)  # Declare some variables
-    lexer = expressionLexer(input_stream)
+    lexer = grammarCLexer(input_stream)
     stream = CommonTokenStream(lexer)
-    parser = expressionParser(stream)
+    parser = grammarCParser(stream)
 
     lexer.removeErrorListeners()
     lexer.addErrorListener(EListener())
@@ -80,12 +80,11 @@ def main(argv):
     :return:
     """
 
-    input_file = "example_source_files/file0"  # Define some standard variables & settings
+    input_file = None  # Define some standard variables & settings
     dot_file = None
     symbol_file = None
-    llvm_file = "output/output.ll"
+    llvm_file = None
     mips_file = None
-    clang_file = "output/outputClang.ll"
     fold = True
     control_flow_file = None
 
@@ -108,16 +107,20 @@ def main(argv):
             if arg != 'True':
                 fold = False
 
+    if input_file is None:
+        ErrorExporter.StupidUser()
+
     ast, codegetter = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
     Processing(ast, dot_file, fold)  # Check for Errors , Apply Folding Techniques , ...
 
-    LLVMSingleton.setName(input_file)
-    to_llvm = AST2LLVM(codegetter, llvm_file)  # The codegetter is used to add the original code as comments
-    to_llvm.visit(ast)
+    if llvm_file is not None:
+        LLVMSingleton.setName(input_file)
+        to_llvm = AST2LLVM(codegetter, llvm_file)  # The codegetter is used to add the original code as comments
+        to_llvm.visit(ast)
 
-    if control_flow_file is not None:
-        control_dot = ControlFlowDotVisitor(control_flow_file)  # Create a CFG
-        control_dot.visit(to_llvm.getControlFlowGraph().root)
+        if control_flow_file is not None:
+            control_dot = ControlFlowDotVisitor(control_flow_file)  # Create a CFG
+            control_dot.visit(to_llvm.getControlFlowGraph().root)
 
 
 if __name__ == '__main__':

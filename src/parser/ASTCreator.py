@@ -1,12 +1,12 @@
-from src.antlr_files.expressionVisitor import *
-from src.antlr_files.expressionParser import *
+from src.antlr_files.grammarCVisitor import *
+from src.antlr_files.grammarCParser import *
 from src.parser.Tables.SymbolTable import *
 from src.parser.Tables.TypedefTable import *
 
 black_list = ['(', ')', ';', '{', '}']
 
 
-class ASTCreator(expressionVisitor):
+class ASTCreator(grammarCVisitor):
     """
     This class converts the Parse tree created from antlr4 file into our explicit defined AST
     """
@@ -49,51 +49,51 @@ class ASTCreator(expressionVisitor):
         """
         self.AST = AST(self.parent)
 
-    def visitStart_(self, ctx: expressionParser.Start_Context):
+    def visitStart_(self, ctx: grammarCParser.Start_Context):
         self.parent = ASTNode("Start", None, self.table, ctx.start.line)
         self.visitChildren(ctx)
 
-    def visitFunction(self, ctx: expressionParser.FunctionContext):
+    def visitFunction(self, ctx: grammarCParser.FunctionContext):
         tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
         self.table.nextTable(tempTable)
         self.table = tempTable
 
         self.__makeNode(ctx, "Function")
 
-    def visitCode(self, ctx: expressionParser.CodeContext):
+    def visitCode(self, ctx: grammarCParser.CodeContext):
         self.__makeNode(ctx, "Code")
 
-    def visitTypedef(self, ctx: expressionParser.TypedefContext):
+    def visitTypedef(self, ctx: grammarCParser.TypedefContext):
         self.__makeNode(ctx, "Typedef")
 
-    def visitPrintf(self, ctx: expressionParser.PrintfContext):
+    def visitPrintf(self, ctx: grammarCParser.PrintfContext):
         self.__makeNode(ctx, "printf")
 
-    def visitLine(self, ctx: expressionParser.LineContext):
+    def visitLine(self, ctx: grammarCParser.LineContext):
         self.__makeNode(ctx, "Line")
 
-    def visitType(self, ctx: expressionParser.TypeContext):
+    def visitType(self, ctx: grammarCParser.TypeContext):
         self.__makeNode(ctx, "Type")
 
-    def visitDeclaration(self, ctx: expressionParser.DeclarationContext):
+    def visitDeclaration(self, ctx: grammarCParser.DeclarationContext):
         self.__makeNode(ctx, "Declaration")
 
-    def visitAssignment(self, ctx: expressionParser.AssignmentContext):
+    def visitAssignment(self, ctx: grammarCParser.AssignmentContext):
         self.__makeNode(ctx, "Assignment")
 
-    def visitExpr(self, ctx: expressionParser.ExprContext):
+    def visitExpr(self, ctx: grammarCParser.ExprContext):
         self.__makeNode(ctx, "Expr")
 
     def visitLiteral(self, ctx):
         self.__makeNode(ctx, "Literal")
 
-    def visitConversion(self, ctx: expressionParser.ConversionContext):
+    def visitConversion(self, ctx: grammarCParser.ConversionContext):
         self.__makeNode(ctx, "Conversion")
 
-    def visitComment(self, ctx: expressionParser.CommentContext):
+    def visitComment(self, ctx: grammarCParser.CommentContext):
         self.__makeNode(ctx, "Comment")
 
-    def visitReturn(self, ctx: expressionParser.ReturnContext):
+    def visitReturn(self, ctx: grammarCParser.ReturnContext):
         node = ASTNode("Return", self.parent, self.table, ctx.start.line)  # Also attaches the current table/scope
         self.parent.addChildren(node)
         self.parent = node

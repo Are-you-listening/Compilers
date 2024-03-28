@@ -1,4 +1,4 @@
-grammar expression;
+grammar grammarC;
 start_ : (include)? code EOF;
 code: (function | line  | comment)* (';')*;
 include: '#include <stdio.h>';
