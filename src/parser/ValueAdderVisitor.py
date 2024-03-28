@@ -1,7 +1,6 @@
 from src.parser.ASTVisitor import *
 from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
 from src.parser.IdentifierReplacerVisitor import IdentifierReplacerVisitor
-from src.parser.CTypes.COperationHandler import *
 
 
 class ValueAdderVisitor(ASTVisitor):
