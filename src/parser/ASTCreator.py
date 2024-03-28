@@ -22,7 +22,6 @@ class ASTCreator(grammarCVisitor):
         self.AST = None
         self.table = SymbolTable(None)
 
-
     def __setup(self):
         self.parent = None
         self.AST = None
@@ -146,5 +145,5 @@ class ASTCreator(grammarCVisitor):
         """
         return self.AST
 
-    def translateLexerID(self, id):
-        return self.lexer.ruleNames[id - 1]
+    def translateLexerID(self, l_id):
+        return self.lexer.ruleNames[l_id - 1]

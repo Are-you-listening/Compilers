@@ -12,12 +12,13 @@ class EListener(ErrorListener):
         print(f"[ Syntax Error ] line {line}:{column} invalid symbol: '{text}'", file=sys.stderr)
         exit()
 
+
 class ErrorExporter:
     def __init__(self):
         self.listener = EListener()
 
     @staticmethod
-    def undeclaredTypedef(linenr: str, type: str ):
+    def undeclaredTypedef(linenr: str, type: str):
         print(f"[ Error ] line {linenr}: unknown type name '( {type} )'", file=sys.stderr)
         exit()
 
@@ -84,7 +85,7 @@ class ErrorExporter:
         print(f"[ Warning ] line {line_nr}: incompatible pointer types initializing '{''.join(type1)}' with an expression of type '{''.join(type2)}' ")
 
     @staticmethod
-    def devideByZero(line_nr: int, numerator):
+    def divideByZero(line_nr: int, numerator):
         print(f"[ Error ] line {line_nr}: can't divide {numerator} by zero", file=sys.stderr)
         exit()
 

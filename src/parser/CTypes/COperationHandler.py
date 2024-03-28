@@ -75,7 +75,7 @@ class COperationHandler:
             sub_result = c_type.RangeCheck.checkRange(
             foldable[operation](data1, data2))
         except ZeroDivisionError as e:
-            ErrorExporter.devideByZero(lineNr, data1)
+            ErrorExporter.divideByZero(lineNr, data1)
         except InvalidOperatorFloatError as e:
             ErrorExporter.invalidOperatorFloat(operation, lineNr)
         except InvalidOperatorPtrError as e:

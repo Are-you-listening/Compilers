@@ -32,9 +32,12 @@ class ConstantFoldingVisitor(ASTVisitor):
             parent.setChild(index, node.getChild(0))
             # Overwrite index of parent with node
 
-            #constant fold conversions
+            # constant fold conversions
         if node.text == "Conversion" and node.getTerminalAmount() == 1:
-            c_type_executors = {"INT": CFunctionExecuterInt, "CHAR": CFunctionExecuterChar, "FLOAT": CFunctionExecuterFloat, "BOOL": CFunctionExecuterInt}
+            c_type_executors = {"INT": CFunctionExecuterInt,
+                                "CHAR": CFunctionExecuterChar,
+                                "FLOAT": CFunctionExecuterFloat,
+                                "BOOL": CFunctionExecuterInt}
             for child in node.getChild(0).getChildren():
                 if "*" in child.text:
                     return
@@ -45,8 +48,8 @@ class ConstantFoldingVisitor(ASTVisitor):
             from_type = node.getChild(1).type
             c_type = c_type_executors[from_type]()
             data1 = c_type.fromString(node.getChild(1).text)
-            #print(node.text, parent.text, "somehow to_type is not initialised, BOOL issue? - Kars")
-            result = c_type.convertTo(data1,to_type)
+            # print(node.text, parent.text, "somehow to_type is not initialised, BOOL issue? - Kars")
+            result = c_type.convertTo(data1, to_type)
 
             index = parent.findChild(node)
 

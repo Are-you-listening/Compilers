@@ -14,7 +14,7 @@ class CodeGetter(ASTVisitor):
         pass
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        if node.type in {"MULTILINE" , "SINGLECOMMENT"}:
+        if node.type in {"MULTILINE", "SINGLECOMMENT"}:
             return
         if node.linenr in self.codeLines:
             self.codeLines[node.linenr] += " " + node.text
