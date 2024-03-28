@@ -20,6 +20,7 @@ class ASTCleaner(ASTVisitor):
         self.cleanLine(node)
         self.cleanPrintf(node)
         self.cleanOvershootConst(node)
+        self.cleanDereferenceAssignments(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.cleanEqualSign(node)
@@ -139,3 +140,43 @@ class ASTCleaner(ASTVisitor):
 
         format_node = ASTNodeTerminal(format_child_text, node, node.getSymbolTable(), -1, node.linenr)
         node.insertChild(0, format_node)
+
+
+    def cleanDereferenceAssignments(self, node: ASTNode):
+        """
+        Have some '*' on the left side on an assignment/declaration
+        causes the AST format to be less pleasing for the future visitors.
+
+        When we have a situation like 'Assignment' -> ['*', 'a']
+        We will convert it to 'Assignment' -> [Expr -> ['*', 'a']] and so for each * on the left side
+
+        :param node:
+        :return:
+        """
+
+        if node.text not in ("Assignment", "Declaration"):
+            return
+
+        dereference_counter = []
+        identifier_node = None
+
+        for child in node.children:
+            """
+            count the amount of dereferences
+            """
+            if child.text == "*":
+                dereference_counter.append(child.linenr)
+                self.to_remove.append((child, child.parent))
+
+            """
+            stores variable we want to assign to
+            """
+            if isinstance(child, ASTNodeTerminal) and child.type == "IDENTIFIER" and identifier_node is None:
+                identifier_node = child
+
+        for i, ln in enumerate(dereference_counter):
+            id_parent = identifier_node.parent
+            parent_expr = ASTNode("Expr", id_parent, id_parent.getSymbolTable(), id_parent.linenr)
+            parent_expr.addChildren(ASTNodeTerminal("*", parent_expr, parent_expr.getSymbolTable(), ln, ""))
+
+            identifier_node.addNodeParent(parent_expr)

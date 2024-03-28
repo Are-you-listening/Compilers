@@ -64,8 +64,9 @@ class ASTDereferencer(ASTVisitor):
 
         if sibling_before.text == "*" and node.getSiblingNeighbour(-2) is None:  # Removes the dereference sign
             parent = node.parent
+
             parent.removeChild(sibling_before)
-            self.addDereference(node)
+            node = self.addDereference(node)
 
         new_node = self.addDereference(node)
 

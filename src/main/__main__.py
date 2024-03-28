@@ -51,10 +51,9 @@ def cleanGreen(input_file, symbol_file):
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
-
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
-        s.visit(ast.root.getSymbolTable(), True)
+        s.visit(ast.root.getSymbolTable(), False)
 
     return ast, codegetter
 

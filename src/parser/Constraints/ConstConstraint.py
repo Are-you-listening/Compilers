@@ -36,6 +36,13 @@ class ConstConstraint(Constraint):
             entry = node.symbol_table.getEntry(assign_child.text)
             data_type, ptrs, const_list = entry.getJsonDataType()
 
+            """
+            When a LHS var has too many dereferences, we should throw an error, this error will be thrown by ASTConversion
+            And has nothing to do with this check, so If we come across such a thing ignore it here
+            """
+            if deref_counter >= len(const_list):
+                return
+
             is_const = const_list[-deref_counter-1]
 
             if is_const:
