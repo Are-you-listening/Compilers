@@ -16,6 +16,17 @@ class IdentifierReplacerVisitor(ASTVisitor):
         while node.parent.text == "Dereference" and node.text != "Conversion":
             toReplace = node.text
 
+            """
+            the ++, and -- operator should not be evaluated by the value Adder, so we detect those situations
+            and if they occur, we will skip this check
+            """
+            left_up_neighbour = node.parent.getSiblingNeighbour(-1)
+            right_up_neighbour = node.parent.getSiblingNeighbour(1)
+            pre_incr = (left_up_neighbour is not None and left_up_neighbour.text in ("++", "--"))
+            post_incr = (right_up_neighbour is not None and right_up_neighbour.text in ("++", "--"))
+            if post_incr or pre_incr:
+                return
+
             if node.type != "IDENTIFIER":
                 ErrorExporter.invalidDereference(node.linenr, node.type)
                 return
