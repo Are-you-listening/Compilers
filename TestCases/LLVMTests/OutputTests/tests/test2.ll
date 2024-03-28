@@ -19,7 +19,8 @@ define i32 @"main"()
   store i32** %".10", i32*** %".13", align 8
   ; INT * * x_ptr = & b_ptr
   %".16" = bitcast i32* %".7" to i32**
-  store i32** %".16", i32*** %".13", align 8
   ; x_ptr = & b
+  store i32** %".16", i32*** %".13", align 8
   ret i32 0
+  ; INT main
 }

@@ -12,4 +12,5 @@ define i32 @"main"()
   store i8 46, i8* %".6", align 1
   ; CHAR dot = '.'
   ret i32 0
+  ; INT main
 }
