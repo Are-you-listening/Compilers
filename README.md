@@ -7,10 +7,44 @@ Requirements:
 - for running our testcases: ``having a linux device with sudo apt install llvm (installed for lli)``
 - being able to run the gcc compiler on your device
 
-### Functionalities: 
-- [X] Auto-Build to server (Follow Setup Guide)
-- [ ] Auto-Build to server (Follow Setup Guide)
-- [ ] Auto-Build to server (Follow Setup Guide)
+### Mandatory Functionality: 
+- [X] Binary operations +, -, *, and /
+- [X] Binary operations >, <, and ==
+- [X] Unary operators + and -
+- [X] Parenthesis to overwrite the order of operations
+- [X] Logical operators &&, ||, and !
+- [X] Comparison operators >=, <=, and !=
+- [X] Binary operator %
+- [X] Shift operators <<, >>
+- [X] Bitwise operators &, |, ~, and ^
+- [X] Use of Abstract Syntax Tree
+- [X] Constant Folding
+- [X] Visualisation of Abstract Syntax Tree (using dot)
+- [X] Mandatory main() Function 
+- [X] Keywords: 'const', 'char', 'int' and 'float'
+- [X] Expressions
+- [X] Literals of types: 'char', 'int', 'float' and pointers for these types
+- [X] Variables: variable declarations, variable definitions, assignment statements, and identifiers
+- [X] Pointers & Unary Operations: '*' (dereference) and '&' (adress)
+- [X] Constants
+- [X] Implicit Conversions
+- [X] Explicit Conversions
+- [X] Pointer Arithmetic
+- [X] Increment/Decrement Operations
+- [X] Error Analysis: Syntax Errors
+- [X] Error Analysis: Semantic Errors
+- [X] Singleline Comments
+- [X] Multiline Comments
+- [X] Error Analysis: Semantic Errors
+- [X] Error Analysis: Semantic Errors
+- [X] Error Analysis: Semantic Errors
+- [X] Error Analysis: Semantic Errors
+- [X] Error Analysis: Semantic Errors
+- [X] Error Analysis: Semantic Errors
+
+### Optional Functionality: 
+- [X] Const Casting
+- [X] ControlFlow and visualization
 
 
 ProjectStructure:
