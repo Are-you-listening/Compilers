@@ -2,7 +2,7 @@ import math
 from src.parser.CTypes.CFunctionExecuter import *
 import struct
 from src.parser.ErrorExporter import *
-
+from src.parser.CTypes.InvalidOperatorFloatError import InvalidOperatorFloatError
 
 class _RangeCheck(BaseRangeCheck):
     @staticmethod
@@ -35,8 +35,7 @@ class _BinaryOperations(BaseBinaryOperations):
 
     @staticmethod
     def Modulus(a, b):
-        ErrorExporter.invalidOperatorFloat("%")
-        return -1
+        raise InvalidOperatorFloatError("%")
 
 
 class _LogicalOperations(BaseLogicalOperations):
@@ -52,34 +51,27 @@ class _BitOperations(BaseBitOperations):
 
     @staticmethod
     def BitAnd(a, b):
-        ErrorExporter.invalidOperatorFloat("&")
-        return -1
+        raise InvalidOperatorFloatError("&")
 
     @staticmethod
     def BitOr(a, b):
-        ErrorExporter.invalidOperatorFloat("|")
-        return -1
+        raise InvalidOperatorFloatError("|")
 
     @staticmethod
     def BitNot(a):
-        ErrorExporter.invalidOperatorFloat("~")
-        return -1
+        raise InvalidOperatorFloatError("~")
 
     @staticmethod
     def BitExclusive(a, b):
-        ErrorExporter.invalidOperatorFloat("^")
-        return -1
+        raise InvalidOperatorFloatError("^")
 
     @staticmethod
     def BitwiseLeftshift(a, b):
-        ErrorExporter.invalidOperatorFloat("<<")
-        return -1
+        raise InvalidOperatorFloatError("<<")
 
     @staticmethod
     def BitwiseRightshift(a, b):
-        ErrorExporter.invalidOperatorFloat(">>")
-        return -1
-
+        raise InvalidOperatorFloatError(">>")
 
 class _RelationalOperations(BaseRelationalOperations):
     """

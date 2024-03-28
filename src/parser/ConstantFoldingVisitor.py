@@ -95,7 +95,7 @@ class ConstantFoldingVisitor(ASTVisitor):
 
             result, datatype_name = self.operation_handler.doOperationUnary(
                 (node.getChild(1).text, node.getChild(1).type),
-                node.getChild(0).text)
+                node.getChild(0).text, node.linenr)
 
         else:
             return

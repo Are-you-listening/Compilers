@@ -2,7 +2,7 @@ import math
 from src.parser.CTypes.CFunctionExecuter import *
 import struct
 from src.parser.ErrorExporter import *
-
+from src.parser.CTypes.InvalidOperatorPtrError import *
 
 class _RangeCheck(BaseRangeCheck):
     @staticmethod
@@ -21,13 +21,10 @@ class _UnaryOperations(BaseUnaryOperations):
 
     @staticmethod
     def Plus(a):
-        ErrorExporter.invalidOperatorPtr("UNARY +")
-        return -1
-
+        raise InvalidOperatorPtrError("UNARY +")
     @staticmethod
     def Min(a):
-        ErrorExporter.invalidOperatorPtr("UNARY -")
-        return -1
+        raise InvalidOperatorPtrError("UNARY -")
 
 
 class _BinaryOperations(BaseBinaryOperations):
@@ -37,28 +34,23 @@ class _BinaryOperations(BaseBinaryOperations):
 
     @staticmethod
     def Add(a, b):
-        ErrorExporter.invalidOperatorPtr("+")
-        return -1
+        raise InvalidOperatorPtrError("+")
 
     @staticmethod
     def Subtract(a, b):
-        ErrorExporter.invalidOperatorPtr("-")
-        return -1
+        raise InvalidOperatorPtrError("-")
 
     @staticmethod
     def Divide(a, b):
-        ErrorExporter.invalidOperatorPtr("/")
-        return -1
+        raise InvalidOperatorPtrError("/")
 
     @staticmethod
     def Multiply(a, b):
-        ErrorExporter.invalidOperatorPtr("*")
-        return -1
+        raise InvalidOperatorPtrError("*")
 
     @staticmethod
     def Modulus(a, b):
-        ErrorExporter.invalidOperatorPtr("%")
-        return -1
+        raise InvalidOperatorPtrError("%")
 
 
 class _LogicalOperations(BaseLogicalOperations):
@@ -68,18 +60,15 @@ class _LogicalOperations(BaseLogicalOperations):
 
     @staticmethod
     def LogicalAnd(a, b):
-        ErrorExporter.invalidOperatorPtr("&&")
-        return -1
+        raise InvalidOperatorPtrError("&&")
 
     @staticmethod
     def LogicalOr(a, b):
-        ErrorExporter.invalidOperatorPtr("||")
-        return -1
+        raise InvalidOperatorPtrError("||")
 
     @staticmethod
     def LogicalNot(a):
-        ErrorExporter.invalidOperatorPtr("!")
-        return -1
+        raise InvalidOperatorPtrError("!")
 
 
 class _BitOperations(BaseBitOperations):
@@ -89,33 +78,27 @@ class _BitOperations(BaseBitOperations):
 
     @staticmethod
     def BitAnd(a, b):
-        ErrorExporter.invalidOperatorFloat("&")
-        return -1
+        raise InvalidOperatorPtrError("&")
 
     @staticmethod
     def BitOr(a, b):
-        ErrorExporter.invalidOperatorFloat("|")
-        return -1
+        raise InvalidOperatorPtrError("|")
 
     @staticmethod
     def BitNot(a):
-        ErrorExporter.invalidOperatorFloat("~")
-        return -1
+        raise InvalidOperatorPtrError("~")
 
     @staticmethod
     def BitExclusive(a, b):
-        ErrorExporter.invalidOperatorFloat("^")
-        return -1
+        raise InvalidOperatorPtrError("^")
 
     @staticmethod
     def BitwiseLeftshift(a, b):
-        ErrorExporter.invalidOperatorFloat("<<")
-        return -1
+        raise InvalidOperatorPtrError("<<")
 
     @staticmethod
     def BitwiseRightshift(a, b):
-        ErrorExporter.invalidOperatorFloat(">>")
-        return -1
+        raise InvalidOperatorPtrError(">>")
 
 
 class _RelationalOperations(BaseRelationalOperations):

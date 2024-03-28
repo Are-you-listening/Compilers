@@ -2,8 +2,8 @@ from src.parser.CTypes.CFunctionExecuterInt import *
 from src.parser.CTypes.CFunctionExecuterChar import *
 from src.parser.CTypes.CFunctionExecuterFloat import *
 from src.parser.ErrorExporter import *
-
-
+from src.parser.CTypes.InvalidOperatorFloatError import InvalidOperatorFloatError
+from src.parser.CTypes.InvalidOperatorPtrError import InvalidOperatorPtrError
 types = ["BOOL", "CHAR", "INT", "FLOAT"]
 
 
@@ -74,13 +74,18 @@ class COperationHandler:
         try:
             sub_result = c_type.RangeCheck.checkRange(
             foldable[operation](data1, data2))
-        except:
+        except ZeroDivisionError as e:
             ErrorExporter.devideByZero(lineNr, data1)
+        except InvalidOperatorFloatError as e:
+            ErrorExporter.invalidOperatorFloat(operation, lineNr)
+        except InvalidOperatorPtrError as e:
+            ErrorExporter.invalidOperatorPtr(operation, lineNr)
+
         result = c_type.getString(sub_result)
 
         return result, poorest_type
 
-    def doOperationUnary(self, val1: tuple, operation: str):
+    def doOperationUnary(self, val1: tuple, operation: str, lineNr: int):
 
         c_type = self.c_type_executors[val1[1]]()
         data1 = c_type.fromString(val1[0])
@@ -93,7 +98,14 @@ class COperationHandler:
         if operation not in foldable:
             return
 
-        sub_result = c_type.RangeCheck.checkRange(foldable[operation](data1))
+        try:
+            sub_result = c_type.RangeCheck.checkRange(foldable[operation](data1))
+
+        except InvalidOperatorFloatError as e:
+            ErrorExporter.invalidOperatorFloat("UNARY "+operation, lineNr)
+        except InvalidOperatorPtrError as e:
+            ErrorExporter.invalidOperatorPtr("UNARY "+operation, lineNr)
+
         result = c_type.getString(sub_result)
 
         return result, val1[1]

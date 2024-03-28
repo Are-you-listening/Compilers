@@ -1,3 +1,4 @@
 {
-  "3": ["[ Error ] line 2: can't divide 5 by zero"]
+  "3": ["[ Error ] line 2: can't divide 5 by zero"],
+  "16": ["[ Error ] line 2: invalid float operation <<"]
 }
