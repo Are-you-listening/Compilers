@@ -12,7 +12,7 @@ sudo apt install llvm
 ```
 
 ### Mandatory Functionality: 
-- [X] Binary operations +, -, *, and /
+- [X] Binary operations +, -,* and /
 - [X] Binary operations >, <, and ==
 - [X] Unary operators + and -
 - [X] Parenthesis to overwrite the order of operations
@@ -20,7 +20,7 @@ sudo apt install llvm
 - [X] Comparison operators >=, <=, and !=
 - [X] Binary operator %
 - [X] Shift operators <<, >>
-- [X] Bitwise operators &, |, ~, and ^
+- [X] Bitwise operators &, |,~ and ^
 - [X] Use of Abstract Syntax Tree
 - [X] Constant Folding
 - [X] Visualisation of Abstract Syntax Tree (using dot)
@@ -29,7 +29,7 @@ sudo apt install llvm
 - [X] Expressions
 - [X] Literals of types: 'char', 'int', 'float' and pointers for these types
 - [X] Variables: variable declarations, variable definitions, assignment statements, and identifiers
-- [X] Pointers & Unary Operations: '*' (dereference) and '&' (adress)
+- [X] Pointers & Unary Operations: '*' (dereference) and '&' (address)
 - [X] Constants
 - [X] Implicit Conversions
 - [X] Explicit Conversions
@@ -102,6 +102,16 @@ sudo apt install llvm
         ├── ValueAdderVisitor.py - Applies Constant Propagation; uses Constant Folding
         └── DotVisitor.py - Create an dot image of our AST
 ```
+
+### Tests
+
+You can test our example files by running: 
+
+```bash
+python3 script.py
+```
+
+This will run the provided examples from ``example_source_files``
 
 ### Unit Tests
 Run our testcases using:
