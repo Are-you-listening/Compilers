@@ -2,10 +2,14 @@
 > Compiler from a C-subset to LLVM IR & MIPS. A group project for the course Compilers (INFORMAT 1001WETCOP)
 > > By Emil Lambert, Lucas Vanden Abeele, Tibo Verreycken, Kars van Velzen.
 
-Requirements:
-- having the right pip libraries see ``requirements.txt``
-- for running our testcases: ``having a linux device with sudo apt install llvm (installed for lli)``
-- being able to run the gcc compiler on your device
+### Requirements & Dependencies:
+- Install the python packages, ee ``requirements.txt``
+- Working gcc compiler on your device
+- For unit tests, a linux Kernel with lli package installed: 
+
+```bash
+sudo apt install llvm
+```
 
 ### Mandatory Functionality: 
 - [X] Binary operations +, -, *, and /
@@ -35,69 +39,72 @@ Requirements:
 - [X] Error Analysis: Semantic Errors
 - [X] Singleline Comments
 - [X] Multiline Comments
-- [X] Error Analysis: Semantic Errors
-- [X] Error Analysis: Semantic Errors
-- [X] Error Analysis: Semantic Errors
-- [X] Error Analysis: Semantic Errors
-- [X] Error Analysis: Semantic Errors
-- [X] Error Analysis: Semantic Errors
+- [X] Original Code as Comments
+- [X] Outputting to the standard output using printf
+- [X] Typedefs
+- [X] Code Generation: LLVM IR
 
 ### Optional Functionality: 
 - [X] Const Casting
 - [X] ControlFlow and visualization
 
+### Technical Functionality: 
+- [X] README
+- [X] Documentation
+- [X] Unit Tests
+- [X] Start Script
+- [X] PNG Creation from .dot-files
 
-ProjectStructure:
+### ProjectStructure:
 
 ```
 .
 └── src/
     ├── antlr_files/
-    │   └── here are the antlr created files
+    │   └── Grammar files created by ANTLR
     ├── llvm_target/
     │   ├── ControlFlow/
-    │   │   └── here is code related to creating the control flow graph
+    │   │   └── Code related to creating the Control Flow Graph
     │   ├── MapTable/
-    │   │   └── here is code so we can map an variable to the LLVM register that stores its allocation
-    │   ├── AST2LLVM.py (convert our AST to an LLVM output)
-    │   ├── LLVMSingleton.py (manage the LLVMLite library so it is easy to use for our visitor)
-    │   └── OutputLLVMGenerator.py (this file contains the code to convert an operation,assignment,... to its equivalent LLVM code)
+    │   │   └── Code to map a variable to the LLVM register that stores its allocation
+    │   ├── AST2LLVM.py - Convert our AST to LLVM output
+    │   ├── LLVMSingleton.py - Manages the LLVMLite Library to ease the work of our visitor
+    │   └── OutputLLVMGenerator.py - Contains methods to convert operations,assignments, ... to equivalent LLVM code
     ├── mips_target/
-    │   └── not yet needed for project 1-3
+    │   └── Not yet needed for project 1-3
     ├── main/
-    │   └── __main__ the main function that will be called to run the program
+    │   └── __main__ - Function to start execution of the program
     └── parser/
         ├── Constraints/
-        │   ├── ConstraintChecker.py (checks all its constraints)
+        │   ├── ConstraintChecker.py - Applies the constrains
         │   └── Constraints we want to check
         ├── CTypes/
-        │   ├── COperationHandler.py (simulate operations like it would behave in C)
-        │   └── CFunctionExecuter makes sure that each C type has the right operation behaviour
+        │   ├── COperationHandler.py - Simulates operations like it would behave in C
+        │   └── CFunctionExecuter - Makes sure that each C type has the right operation behaviour
         ├── Tables/
-        │   ├── AbstractTable.py (abstract table that support the chain of tables behaviour which is needed for scoping)
-        │   ├── SymbolTable.py (having a symboltable of symbolEntries)
-        │   ├── SymbolType.py (An object representing our symbol table entry type)
-        │   ├── SymbolTypePtr.py (Same as SymbolType, but type is a PTR and points to another type)
-        │   ├── TableDotVisitor.py (visualizes the symbol table)
-        │   └── TypeDefTable.py (table to handle typedef translations)
-        ├── AST.py (the structure for our Abstract syntax Tree)
-        ├── ASTVisitor.py (Abstract class for a visitor for our AST)
-        ├── ASTCreator.py (converts ANTLR CST to our own AST)
-        ├── CodeGetter.py (Links each line of code to a line number)
-        ├── ASTTypedefReplacer.py (convert each type to the type they are referring to)
-        ├── ASTCleaner.py (Does some cleanup of our AST)
-        ├── ASTTableCreator.py (Creates the symbol tables)
-        ├── ASTCleanerAfter.py (AST cleaner that occurs after the symbol tables are created)
-        ├── ASTDereferencer.py (Alter the AST so it is easier to see when we want to access the value of an identifier)
-        ├── ConstantFoldingVisitor.py (does constant folding)
-        ├── ASTConversion.py (makes all the implicit conversions explicit, and checks type semantic errors)
-        ├── ValueAdderVisitor.py (does constant propagation and uses constantfolding)
-        └── DotVisitor.py (create the dot image of our AST)
+        │   ├── AbstractTable.py - Abstract Base Class
+        │   ├── SymbolTable.py 
+        │   ├── SymbolType.py - Object representing type of an SymbolTableEntry
+        │   ├── SymbolTypePtr.py - Specialisation of SymbolType
+        │   ├── TableDotVisitor.py - Visualizes the SymbolTable
+        │   └── TypeDefTable.py - Table to handle typedef translations
+        ├── AST.py - Datastructure for our Abstract Syntax Tree
+        ├── ASTVisitor.py - Abstract Base Class
+        ├── ASTCreator.py - Creates our datastructure from the ANTLR CST
+        ├── CodeGetter.py - Links each line of code to a line number
+        ├── ASTTypedefReplacer.py - Resolves typedefs to their actual type
+        ├── ASTCleaner.py - Massages our AST to a desired format
+        ├── ASTTableCreator.py - Creates the SymbolTables
+        ├── ASTCleanerAfter.py - Massages our AST to a desired format, after table creation
+        ├── ASTDereferencer.py - Alters the AST to ease the use of adressess
+        ├── ConstantFoldingVisitor.py - Applies Constant Folding
+        ├── ASTConversion.py - Reforms implicit conversions to explicits, also verifies semantics
+        ├── ValueAdderVisitor.py - Applies Constant Propagation; uses Constant Folding
+        └── DotVisitor.py - Create an dot image of our AST
 ```
 
-you can run our testcases using:
-
-```
+### Unit Tests
+Run our testcases using:
+```bash
 python3 -m unittest discover -v
 ```
-
