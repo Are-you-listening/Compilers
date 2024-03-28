@@ -11,9 +11,8 @@ from src.parser.ASTCleaner import *
 from src.parser.ASTCleanerAfter import *
 from src.parser.Tables.TableDotVisitor import *
 from src.parser.CodeGetter import *
-from src.TestFiles.ASTTests.AstLoader import AstLoader
-from src.parser.ASTTableCreator import *
-
+from TestCases.ASTTests.AstLoader import AstLoader
+from src.parser.ASTTableCreator import ASTTableCreator
 input_file = "read_file"
 
 input_stream = FileStream(input_file)  # Declare some variables
@@ -36,6 +35,27 @@ below add needed stuff
 codegetter = CodeGetter()
 codegetter.visit(ast)
 
+ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
+
+astcleaner = ASTCleaner()  # Do a standard cleaning
+astcleaner.visit(ast)
+
+ASTTableCreator().visit(ast)  # Create the symbol table
+
+
+astcleanerafter = ASTCleanerAfter()  # Do a standard cleaning
+astcleanerafter.visit(ast)
+
+ast_deref = ASTDereferencer()  # Correct the use of references & pointers into our format
+ast_deref.visit(ast)
+
+constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
+constraint_checker.visit(ast)
+
+cfv = ConstantFoldingVisitor()
+cfv.visit(ast)
+
+
 """
 add needed stuff above
 """
@@ -44,18 +64,17 @@ json = AstLoader.store(ast)
 with open("file_read_json.json", "wt") as f:
     f.write(json)
 
+
 d = DotVisitor("read_file_before")  # Export AST in Dot
 d.visit(ast)
+
 
 """
 add check stuff
 """
 
-ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
-
-ASTCleaner().visit(ast)  # Do a standard cleaning
-
-ASTTableCreator().visit(ast)  # Create the symbol table
+ast_conv = ASTConversion()
+ast_conv.visit(ast)
 
 """
 add check stuff above

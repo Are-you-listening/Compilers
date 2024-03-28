@@ -1,15 +1,18 @@
 import unittest
-from src.TestFiles.ASTTests.AstLoader import AstLoader
+from TestCases.ASTTests.AstLoader import AstLoader
 from src.parser.ASTConversion import ASTConversion
+from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
 import sys
 from io import StringIO
 import json
+from src.parser.Constraints.ConstraintChecker import ConstraintChecker
 import os
+from src.parser.ASTDereferencer import ASTDereferencer
 
 
-class TestConversion(unittest.TestCase):
-    def testConversionsBasic(self):
-        file_indexes = range(1, 16)
+class TestSemanticErrors(unittest.TestCase):
+    def testSemanticErrors(self):
+        file_indexes = range(1, 23)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -17,7 +20,7 @@ class TestConversion(unittest.TestCase):
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
-            # print(index)
+            print(index)
             file_path = f"tests/test{index}.json"
             with open(file_path, "rt") as f:
                 json_data = f.read()
@@ -39,8 +42,13 @@ class TestConversion(unittest.TestCase):
             conversion
             """
             try:
-                ast_conv = ASTConversion()
-                ast_conv.visit(ast_tree)
+                ASTDereferencer().visit(ast_tree)  # Correct the use of references & pointers into our format
+
+                ConstraintChecker().visit(ast_tree)  # Checkup Semantic & Syntax Errors
+
+                ConstantFoldingVisitor().visit(ast_tree)
+
+                ASTConversion().visit(ast_tree)
 
                 file_path_result = f"tests/test{index}_result.json"
                 with open(file_path_result, "rt") as f:

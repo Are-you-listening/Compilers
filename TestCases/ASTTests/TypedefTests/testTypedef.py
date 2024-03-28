@@ -1,22 +1,23 @@
 import unittest
-from src.TestFiles.ASTTests.AstLoader import AstLoader
-import json
-from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
-import sys
+from TestCases.ASTTests.AstLoader import AstLoader
 from io import StringIO
+import json
 import os
+from src.parser.ASTTableCreator import *
+from src.parser.ASTCleaner import *
 
 
-class TestConstantFolding(unittest.TestCase):
-    def testConstantFolding(self):
+class TestTypedef(unittest.TestCase):
+    def testTypedefErrors(self):
+        file_indexes = range(1, 24)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-        file_indexes = range(1, 17)
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
+            print(index)
             #print(index)
             file_path = f"tests/test{index}.json"
             with open(file_path, "rt") as f:
@@ -39,8 +40,12 @@ class TestConstantFolding(unittest.TestCase):
             conversion
             """
             try:
-                ast_const = ConstantFoldingVisitor()
-                ast_const.visit(ast_tree)
+
+                ASTTypedefReplacer().visit(ast_tree)  # Replace all uses of typedefs
+
+                ASTCleaner().visit(ast_tree)  # Do a standard cleaning
+
+                ASTTableCreator().visit(ast_tree)  # Create the symbol table
 
                 file_path_result = f"tests/test{index}_result.json"
                 with open(file_path_result, "rt") as f:

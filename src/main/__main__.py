@@ -13,7 +13,6 @@ from src.parser.Tables.TableDotVisitor import *
 from src.parser.ASTTableCreator import *
 from src.llvm_target.AST2LLVM import *
 from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
-from src.TestFiles.ASTTests.AstLoader import *
 
 
 def cleanGreen(input_file, symbol_file):

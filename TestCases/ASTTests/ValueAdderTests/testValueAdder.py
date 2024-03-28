@@ -1,29 +1,21 @@
 import unittest
-from src.TestFiles.ASTTests.AstLoader import AstLoader
-from src.parser.ASTConversion import ASTConversion
-from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
+from TestCases.ASTTests.AstLoader import AstLoader
+from src.parser.ValueAdderVisitor import *
 import sys
 from io import StringIO
 import json
-from src.parser.Constraints.ConstraintChecker import ConstraintChecker
 import os
-from src.parser.ASTDereferencer import ASTDereferencer
-from src.parser.ASTTypedefReplacer import *
-from src.parser.ASTTableCreator import *
-from src.parser.ASTCleaner import *
 
 
-class TestTypedef(unittest.TestCase):
-    def testTypedefErrors(self):
-        file_indexes = range(1, 24)
-
+class TestValueAdder(unittest.TestCase):
+    def testValueAdder(self):
+        file_indexes = range(1, 12)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
-            print(index)
             #print(index)
             file_path = f"tests/test{index}.json"
             with open(file_path, "rt") as f:
@@ -43,15 +35,10 @@ class TestTypedef(unittest.TestCase):
             sys.stderr = error_buff
 
             """
-            conversion
+            value adder visit
             """
             try:
-
-                ASTTypedefReplacer().visit(ast_tree)  # Replace all uses of typedefs
-
-                ASTCleaner().visit(ast_tree)  # Do a standard cleaning
-
-                ASTTableCreator().visit(ast_tree)  # Create the symbol table
+                ValueAdderVisitor().visit(ast_tree)
 
                 file_path_result = f"tests/test{index}_result.json"
                 with open(file_path_result, "rt") as f:
