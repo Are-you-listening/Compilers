@@ -73,11 +73,10 @@ def Processing(ast, dot_file, fold):
     return ast
 
 
-def main(argv, clang=False):
+def main(argv):
     """
     Main function to start program
     :param argv: Argument list as defined in the project description
-    :param clang:
     :return:
     """
 
@@ -108,10 +107,6 @@ def main(argv, clang=False):
         elif param == "--fold":
             if arg != 'True':
                 fold = False
-
-    if clang:  # Generate a reference clang file
-        subprocess.run(f"""clang-14 -S -emit-llvm {input_file} -o {clang_file}""",
-                       shell=True, capture_output=True)
 
     ast, codegetter = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
     Processing(ast, dot_file, fold)  # Check for Errors , Apply Folding Techniques , ...

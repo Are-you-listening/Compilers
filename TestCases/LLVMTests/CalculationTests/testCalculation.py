@@ -55,7 +55,7 @@ class CalculationTests(unittest.TestCase):
         """
         LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
 
-        main([0, "--input", file_name, "--target_llvm", file_name[:-2] + "LLVM.ll"], False)
+        main([0, "--input", file_name, "--target_llvm", file_name[:-2] + "LLVM.ll"])
 
     @staticmethod
     def runC(file_name: str):

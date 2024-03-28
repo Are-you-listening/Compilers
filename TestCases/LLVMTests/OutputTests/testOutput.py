@@ -56,4 +56,4 @@ class OutputTests(unittest.TestCase):
         """
         LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
 
-        main([0, "--input", file_name, "--target_llvm", "temp/output.ll"], False)
+        main([0, "--input", file_name, "--target_llvm", "temp/output.ll"])

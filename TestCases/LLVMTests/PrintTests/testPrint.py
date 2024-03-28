@@ -51,7 +51,7 @@ class PrintTests(unittest.TestCase):
 
         main([0, "--input", file_name, "--render_ast", file_name[:-2] + "ASTVisual", "--render_symb",
               file_name[:-2] + "SymbolTable",
-              "--target_llvm", file_name[:-2] + "LLVM.ll"], False)
+              "--target_llvm", file_name[:-2] + "LLVM.ll"])
 
         subprocess.run(f"""clang-14 -S -emit-llvm {file_name} -o {file_name[:-2]}.ll""",
                        shell=True, capture_output=True)
