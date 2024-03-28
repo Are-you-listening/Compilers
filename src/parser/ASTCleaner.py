@@ -45,11 +45,13 @@ class ASTCleaner(ASTVisitor):
             else ptr cannot be const when value itself is cont
             """
             if "*" in child.text:
-                self.to_remove += constNodes[1:]
+                for c in constNodes[1:]:
+                    self.to_remove.add(c)
                 constNodes = []
 
         if len(constNodes) > 1:
-            self.to_remove += constNodes[1:]
+            for c in constNodes[1:]:
+                self.to_remove.add(c)
 
     @staticmethod
     def cleanUseless(node: ASTNode):
