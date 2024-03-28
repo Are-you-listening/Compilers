@@ -12,12 +12,20 @@ class ASTTableCreator(ASTVisitor):
         if node.text == "Declaration" or node.text == "Function":
             child = node.findType("Type")
             is_const = False
-            latest_datatype = ""
+            latest_datatype = None
 
             for grandchild in child.children:
                 if grandchild.text == "const":
+
+                    """
+                    in case *const, the const is after, but it still needs to be applied
+                    """
+                    if latest_datatype is not None:
+                        latest_datatype.const = True
+
                     is_const = True
                 elif grandchild.text == "*":
+                    is_const = False
                     latest_datatype = SymbolTypePtr(latest_datatype, is_const)
                 else:
                     if not ASTTypedefReplacer.isBaseType(grandchild):

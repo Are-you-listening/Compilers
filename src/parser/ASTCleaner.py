@@ -40,6 +40,13 @@ class ASTCleaner(ASTVisitor):
             if child.text == "const":
                 constNodes.append((child, node))
 
+            """
+            else ptr cannot be const when value itself is cont
+            """
+            if "*" in child.text:
+                self.to_remove += constNodes[1:]
+                constNodes = []
+
         if len(constNodes) > 1:
             self.to_remove += constNodes[1:]
 

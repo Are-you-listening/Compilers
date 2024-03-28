@@ -57,13 +57,14 @@ class SymbolEntry(TableEntry):
         d_t = self.typeObject
         while isinstance(d_t, SymbolTypePtr):
             ptr_string += "*"
-            d_t = d_t.deReference()
+
             const_list.insert(0, d_t.isConst())
+            d_t = d_t.deReference()
+
 
         const_list.insert(0, d_t.isConst())
 
         return d_t.getType(), ptr_string, const_list
-
 
 class SymbolTable(AbstractTable):
     def __init__(self, prev):

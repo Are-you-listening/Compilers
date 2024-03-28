@@ -7,7 +7,7 @@ function : type IDENTIFIER '(' ')' '{' code (return)? '}'(';')*;
 line: (declaration | expr| assignment| typedef | printf )(';')+;
 typedef: 'typedef' type IDENTIFIER;
 printf: 'printf' '(' '"' (.)*? ('%s' | '%d' | '%x' | '%f' | '%c') (.)*? '"' ',' (expr) ')';
-type: ('const')? ('int' | 'char' | 'float' | IDENTIFIER) ('*')*;
+type: ('const')? ('int' | 'char' | 'float' | IDENTIFIER) ('*' ('const')?)*;
 declaration: type IDENTIFIER ('=' expr)?;
 assignment: ('*')* IDENTIFIER ('=' expr);
 conversion: '(' type ')' (literal | expr);

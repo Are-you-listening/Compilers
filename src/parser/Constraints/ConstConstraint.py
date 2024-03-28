@@ -12,39 +12,38 @@ class ConstConstraint(Constraint):
         self.rejected = False
 
     def checkNode(self, node: ASTNode):
+        """
+        We check that we don't do an assignment to a const value
+        :param node:
+        :return:
+        """
+
+        """
+        check if we have an assignment
+        """
         if node.text == "Assignment":
-            entry = node.symbol_table.getEntry(
-                node.getChild(0).text)
 
-            if node.symbol_table.getEntry(node.getChild(0).text) is not None and entry.isConst():
-                if entry.getType() != "PTR":
-                    ErrorExporter.constComplaint(node.getChild(0).linenr, node.getChild(0).text, "const")
-                    self.rejected = True
-        elif node.text == "Dereference":
-            UnaryOps = ["++", "--"]
+            deref_counter = 0
+            assign_child = node.getChild(0)
 
-            if node.getSiblingNeighbour(1) is not None:
-                if node.getSiblingNeighbour(1).text in UnaryOps:
-                    if node.symbol_table.getEntry(node.getChild(0).text).isConst():
-                        ErrorExporter.constComplaint(node.getChild(0).linenr, node.getChild(0).text, "const")
-                        self.rejected = True
+            """
+            the not isinstance(assign_child, ASTNodeTerminal) is to support a terminal called 'Dereference'
+            """
+            while assign_child.text == "Dereference" and not isinstance(assign_child, ASTNodeTerminal):
+                assign_child = assign_child.getChild(0)
+                deref_counter += 1
 
-            elif node.getSiblingNeighbour(-1) is not None:
-                if node.getSiblingNeighbour(-1).text in UnaryOps:
-                    if node.symbol_table.getEntry(node.getChild(0).text).isConst():
-                        ErrorExporter.constComplaint(node.getChild(0).linenr, node.getChild(0).text, "const")
-                        self.rejected = True
+            entry = node.symbol_table.getEntry(assign_child.text)
+            data_type, ptrs, const_list = entry.getJsonDataType()
+
+            is_const = const_list[-deref_counter-1]
+
+            if is_const:
+                ErrorExporter.constComplaint(node.linenr, ("*"*deref_counter)+assign_child.text, assign_child.text, entry.getTypeObject().getStringType())
+
 
     def checkTerminalNode(self, node: ASTNodeTerminal):
-        entry = node.symbol_table.getEntry(node.text)
-
-        if entry is not None:
-            if entry.getType() == "PTR":
-                if (node.parent.text == "Dereference" and node.parent.parent.text == "Dereference"
-                        and node.symbol_table.getEntry(node.text).isConst()):
-                    node = node.parent
-                    ErrorExporter.constComplaint(node.getChild(0).linenr, node.getChild(0).text, "const")
-                    self.rejected = True
+        pass
 
     def throwException(self):
         pass

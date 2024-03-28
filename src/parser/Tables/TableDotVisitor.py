@@ -13,7 +13,7 @@ class TableDotVisitor:
         self.debug = debug
 
     def visitSym(self, node: SymbolTable):
-        self.outfile.write(f'  "{id(node)}" [label="{self.getOutStr(node,self.debug)+self.getOutStrTypedefs(node, self.debug)}"];\n')
+        self.outfile.write(f'  "{id(node)}" [label="{self.getOutStr(node,self.debug)}"];\n')
         for child in node.next:
             self.outfile.write(f'  "{id(node)}" -> "{id(child)}";\n')
 
@@ -22,25 +22,6 @@ class TableDotVisitor:
         self.outfile.close()
         dot_command = "dot -Tpng " + self.filename+".dot" + " -o "+self.filename+".png"
         subprocess.run(dot_command, shell=True)
-
-    @staticmethod
-    def getOutStrTypedefs(node, debug):
-        if not debug:
-            return
-
-        out = []
-
-        for defi in node.typedefs:
-            typenode = defi.children[1]
-            temp = ""
-            for kid in typenode.children:
-                temp += " " + kid.text
-            if temp != "":
-                temp = "\n typedef" + temp + " " + defi.children[2].text
-
-            out.append(temp)
-
-        return "\n".join(out)
 
 
     @staticmethod
@@ -54,15 +35,14 @@ class TableDotVisitor:
         out = []
 
         for k, e in node.symbols.items():
-            # if debug:
-            #     continue
-            #     out.append(f"{k}: {str(e)}")
-            # else:
-            dtype, ptr = e.getPtrTuple()
-            if e.isConst():
-                dtype = "const "+dtype
+            """
+            When debug mode represent the entire symbol entry table structure
+            """
+            if debug:
+                out.append(f"{k}: {str(e)}")
 
-            out.append(f"{k}: {dtype}{ptr}")
+            else:
+                out.append(f"{k}: {e.getTypeObject().getStringType()}")
 
         return "\n".join(out)
 

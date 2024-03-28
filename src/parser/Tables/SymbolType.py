@@ -12,4 +12,10 @@ class SymbolType:
         return self.const
 
     def __str__(self):
-        return str(self.data_type) + " " + str(self.const)
+        return f"{str(self.data_type)} {str(self.const)} "
+
+    def getStringType(self):
+        const_str = "const"
+        if not self.const:
+            const_str = ""
+        return f"{const_str} {self.data_type} "

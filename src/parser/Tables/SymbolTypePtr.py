@@ -8,3 +8,14 @@ class SymbolTypePtr(SymbolType):
 
     def deReference(self):
         return self.pts_to
+
+    def __str__(self):
+        return f"{str(self.data_type)} {str(self.const)} {str(self.pts_to)}"
+
+    def getStringType(self):
+        const_str = "const"
+        if not self.const:
+            const_str = ""
+
+        return f"{self.pts_to.getStringType()}* {const_str} "
+

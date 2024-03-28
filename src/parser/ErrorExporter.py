@@ -69,8 +69,8 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def constComplaint(linenr: str, identifier: str, type: str):
-        print(f"[ Error ] line {linenr}: Manipulation of variable {identifier} which is of type {type}",
+    def constComplaint(linenr: str, real_expression: str, identifier: str, type: str):
+        print(f"[ Error ] line {linenr}: Manipulation of variable '{real_expression}' is not allowed, because '{identifier}' has type '{type}'",
               file=sys.stderr)
         exit()
 

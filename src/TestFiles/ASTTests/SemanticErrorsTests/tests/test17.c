@@ -1,10 +1,10 @@
 int main() {
+    int x = 4;
+    int* ptr = &x;
+    float* ptr2 = 0;
 
-int x = 54;
+    // wrong types
+    float* ptr3 = ptr2 + ptr;
+    ptr3 = ptr - ptr3;
 
-int z = -33;
-
-int* p = &z;
-
-p = *x;
 }
