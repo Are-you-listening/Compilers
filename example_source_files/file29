@@ -1,9 +1,0 @@
-typedef
-
-char appel;
-typedef const appel dear;
-
-int main(){
-    dear x = 5;
-    return 0;
-};

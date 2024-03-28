@@ -1,6 +1,0 @@
-int main() {
-
-int* x = 478;
-float b = (float) x;
-x + x
-}

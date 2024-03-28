@@ -1,7 +1,0 @@
-int main() {
-
-const float z = 5;
-
-z++;
-
-}
