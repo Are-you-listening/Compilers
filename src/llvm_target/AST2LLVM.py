@@ -72,17 +72,16 @@ class AST2LLVM(ASTVisitor):
 
         if node.text == "Declaration":
             self.handleDeclaration(node)
-            self.addOriginalCodeAsComment(node)
 
         if node.text == "Function":
             self.map_table = self.map_table.prev
+
 
         if node.text == "Dereference":
             self.handleDereference(node)
 
         if node.text == "Assignment":
             self.handleAssignment(node)
-            self.addOriginalCodeAsComment(node)
 
         if node.text == "Comment":
             self.handleComment(node)
@@ -99,6 +98,8 @@ class AST2LLVM(ASTVisitor):
         if node.text == "Return":
             self.handleReturn(node)
 
+        self.addOriginalCodeAsComment(node)
+
         for child in node.children:
             cf = self.control_flow_map.get(child, None)
             if cf is not None:
@@ -113,6 +114,7 @@ class AST2LLVM(ASTVisitor):
 
         if node.text == "Start" and self.llvm_map.get(node, None) is None:
             self.control_flow_map[node] = ControlFlowGraph()
+
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
@@ -368,8 +370,11 @@ class AST2LLVM(ASTVisitor):
         :param node: the node in the AST that we are currently handling
         :return:
         """
+        if node.getChildAmount() == 0:
+            return
         code = self.codegetter.getLine(node.getChild(0))
-        Declaration.addComment(code)
+        if code is not None:
+            Declaration.addComment(code)
 
     def handleLogicalOperations(self, node):
         """
