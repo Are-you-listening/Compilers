@@ -1,7 +1,8 @@
 import os
 import filecmp
 import unittest
-import subprocess
+import sys
+from io import StringIO
 from src.main.__main__ import main
 from src.llvm_target.LLVMSingleton import *
 
@@ -19,17 +20,22 @@ NOTE: All the tests are run with constant folding enabled! (As by default)
 """
 class OutputTests(unittest.TestCase):
     def testOutput(self):
-        file_range = range(1, 3)
+        file_range = range(1, 22)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+        original = sys.stdout  # Temp catch any output
+        buff = StringIO()
+        sys.stdout = buff
 
         for i in file_range:
             file_name = f"tests/test{i}."
-            print('\n' + file_name)
+            print(file_name)
 
             self.runAST(file_name+"c")
 
             assert self.compareLLVM(file_name+"ll", 'temp/output.ll')  # assert for same output
 
+        sys.stdout = original  # Reset output
 
     @staticmethod
     def compareLLVM(newly, right):
