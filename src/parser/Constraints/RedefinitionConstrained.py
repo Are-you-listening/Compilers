@@ -11,6 +11,9 @@ class RedefinitionConstraint(Constraint):
         super().__init__()
         self.rejected = False
 
+    def checkNode(self, node: ASTNode):
+        pass
+
     def checkTerminalNode(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
             if node.symbol_table.exists(node.text):

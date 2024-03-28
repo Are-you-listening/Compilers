@@ -1,8 +1,8 @@
-import math
 from src.parser.CTypes.CFunctionExecuter import *
 import struct
 from src.parser.ErrorExporter import *
 from src.parser.CTypes.InvalidOperatorPtrError import *
+
 
 class _RangeCheck(BaseRangeCheck):
     @staticmethod
@@ -22,6 +22,7 @@ class _UnaryOperations(BaseUnaryOperations):
     @staticmethod
     def Plus(a):
         raise InvalidOperatorPtrError("UNARY +")
+
     @staticmethod
     def Min(a):
         raise InvalidOperatorPtrError("UNARY -")

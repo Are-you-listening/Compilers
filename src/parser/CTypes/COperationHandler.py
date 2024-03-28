@@ -4,6 +4,7 @@ from src.parser.CTypes.CFunctionExecuterFloat import *
 from src.parser.ErrorExporter import *
 from src.parser.CTypes.InvalidOperatorFloatError import InvalidOperatorFloatError
 from src.parser.CTypes.InvalidOperatorPtrError import InvalidOperatorPtrError
+
 types = ["BOOL", "CHAR", "INT", "FLOAT"]
 
 
@@ -12,7 +13,6 @@ class RichnessChecker:
         self.rich_order = rich_order
 
     def get_poorest(self, val1: str, val2: str):
-
         index1 = self.rich_order.index(val1)
         index2 = self.rich_order.index(val2)
         return self.rich_order[min(index1, index2)]
@@ -26,7 +26,10 @@ class RichnessChecker:
 class COperationHandler:
     def __init__(self):
         self.richness_checker = RichnessChecker(types)
-        self.c_type_executors = {"INT": CFunctionExecuterInt, "CHAR": CFunctionExecuterChar, "FLOAT": CFunctionExecuterFloat, "BOOL": CFunctionExecuterInt}
+        self.c_type_executors = {"INT": CFunctionExecuterInt,
+                                 "CHAR": CFunctionExecuterChar,
+                                 "FLOAT": CFunctionExecuterFloat,
+                                 "BOOL": CFunctionExecuterInt}
 
     def doOperationBinary(self, val1: tuple, val2: tuple, operation: str, lineNr: int):
 
@@ -73,13 +76,13 @@ class COperationHandler:
             return None
         try:
             sub_result = c_type.RangeCheck.checkRange(
-            foldable[operation](data1, data2))
+                foldable[operation](data1, data2))
         except ZeroDivisionError as e:
             ErrorExporter.divideByZero(lineNr, data1)
         except InvalidOperatorFloatError as e:
-            ErrorExporter.invalidOperatorFloat(operation, lineNr)
+            ErrorExporter.invalidOperatorFloat(operation, str(lineNr))
         except InvalidOperatorPtrError as e:
-            ErrorExporter.invalidOperatorPtr(operation, lineNr)
+            ErrorExporter.invalidOperatorPtr(operation, str(lineNr))
 
         result = c_type.getString(sub_result)
 
@@ -102,9 +105,9 @@ class COperationHandler:
             sub_result = c_type.RangeCheck.checkRange(foldable[operation](data1))
 
         except InvalidOperatorFloatError as e:
-            ErrorExporter.invalidOperatorFloat("UNARY "+operation, lineNr)
+            ErrorExporter.invalidOperatorFloat("UNARY " + operation, str(lineNr))
         except InvalidOperatorPtrError as e:
-            ErrorExporter.invalidOperatorPtr("UNARY "+operation, lineNr)
+            ErrorExporter.invalidOperatorPtr("UNARY " + operation, str(lineNr))
 
         result = c_type.getString(sub_result)
 

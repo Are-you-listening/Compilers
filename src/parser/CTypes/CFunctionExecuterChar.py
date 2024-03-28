@@ -2,6 +2,7 @@ import math
 from src.parser.CTypes.CFunctionExecuter import *
 import struct
 
+
 class _RangeCheck(BaseRangeCheck):
     @staticmethod
     def checkRange(value):
@@ -63,6 +64,8 @@ class _RelationalOperations(BaseRelationalOperations):
     """
     Relation functions equivalent to the functionality of C
     """
+
+
 class _Conversions:
 
     @staticmethod
@@ -90,6 +93,7 @@ class _Conversions:
         b = b[-4:]
 
         return int.from_bytes(b, 'big', signed=True)
+
 
 class CFunctionExecuterChar(CFunctionExecuter):
     def __init__(self):

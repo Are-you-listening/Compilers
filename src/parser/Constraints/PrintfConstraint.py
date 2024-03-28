@@ -11,6 +11,9 @@ class PrintfConstraint(Constraint):
         super().__init__()
         self.rejected = False
 
+    def checkNode(self, node: ASTNode):
+        pass
+
     def checkTerminalNode(self, node: ASTNodeTerminal):
         if node.text == "printf":
             printType = self.getPrintType(node.children[0].text)
@@ -30,3 +33,6 @@ class PrintfConstraint(Constraint):
             return "FLOAT"
         elif text == "%c":
             return "CHAR"
+
+    def throwException(self):
+        pass

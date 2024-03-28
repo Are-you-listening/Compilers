@@ -1,8 +1,8 @@
 import math
 from src.parser.CTypes.CFunctionExecuter import *
 import struct
-from src.parser.ErrorExporter import *
 from src.parser.CTypes.InvalidOperatorFloatError import InvalidOperatorFloatError
+
 
 class _RangeCheck(BaseRangeCheck):
     @staticmethod
@@ -72,6 +72,7 @@ class _BitOperations(BaseBitOperations):
     @staticmethod
     def BitwiseRightshift(a, b):
         raise InvalidOperatorFloatError(">>")
+
 
 class _RelationalOperations(BaseRelationalOperations):
     """
