@@ -22,13 +22,14 @@ class CalculationTests(unittest.TestCase):
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         for i in file_range:
-            print(i)
+            #print(i)
             file_name = f"tests/test{i}.c"
             self.runAST(file_name)
             c_out = self.runC(file_name)
 
             out = subprocess.run(f"""lli {file_name[:-2]}LLVM.ll""",
                                  shell=True, capture_output=True)
+            print(out.stderr)
 
             """
             assert for same output
