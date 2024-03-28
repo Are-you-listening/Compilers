@@ -26,7 +26,7 @@ class RichnessChecker:
 class COperationHandler:
     def __init__(self):
         self.richness_checker = RichnessChecker(types)
-        self.c_type_executors = {"INT": CFunctionExecuterInt, "CHAR": CFunctionExecuterChar, "FLOAT": CFunctionExecuterFloat}
+        self.c_type_executors = {"INT": CFunctionExecuterInt, "CHAR": CFunctionExecuterChar, "FLOAT": CFunctionExecuterFloat, "BOOL": CFunctionExecuterInt}
 
     def doOperationBinary(self, val1: tuple, val2: tuple, operation: str, lineNr: int):
 

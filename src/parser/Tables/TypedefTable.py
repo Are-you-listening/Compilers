@@ -84,6 +84,7 @@ class TypedefTable(AbstractTable):
         :return:
         """
         identifier, index = ASTTypedefReplacer.getTypeName(node.children)
+
         translation = []
         args = [identifier, translation]
         self.traverse(lambda x, a: x.getTranslation(a), True, args)

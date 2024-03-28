@@ -104,6 +104,16 @@ class _Conversions:
         b = b[-4:]
         return int.from_bytes(b, 'big', signed=True)
 
+    @staticmethod
+    def ToBool(value):
+        """assume 4 bytes/ float"""
+        value = int(value != 0)
+
+        b = value.to_bytes(32, byteorder="big", signed=True)
+        b = b[-4:]
+
+        return int.from_bytes(b, 'big', signed=True)
+
 
 class CFunctionExecuterFloat(CFunctionExecuter):
     def __init__(self):
@@ -116,7 +126,8 @@ class CFunctionExecuterFloat(CFunctionExecuter):
         self.BitOperations = _BitOperations
         self.RelationalOperations = _RelationalOperations
         self.conversion_dict = {"CHAR": _Conversions.ToChar,
-                                "INT": _Conversions.ToInt}
+                                "INT": _Conversions.ToInt,
+                                "BOOL": _Conversions.ToBool}
 
     def fromString(self, string):
         return float(string)

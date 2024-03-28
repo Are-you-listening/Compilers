@@ -98,8 +98,11 @@ class ASTNode:
     def typedefReplaceChildren(self, kids, index):
         for kid in kids:
             if kid == kids[0]:
+                newKid = copy.deepcopy(kid)
+                newKid.symbol_table = kid.symbol_table
+
                 self.replaceChild(self.children[index],
-                                  kids[0])  # Replace the first one with the first of the new types
+                                  newKid)  # Replace the first one with the first of the new types
             else:  # Simple insert the rest
                 newKid = copy.deepcopy(kid)
                 self.children.insert(index + 1, newKid)

@@ -154,6 +154,18 @@ class _RelationalOperations(BaseRelationalOperations):
         return -1
 
 
+class _Conversions:
+    @staticmethod
+    def ToBool(value):
+        """assume 4 bytes/ float"""
+        value = int(value != 0)
+
+        b = value.to_bytes(32, byteorder="big", signed=True)
+        b = b[-4:]
+
+        return int.from_bytes(b, 'big', signed=True)
+
+
 class CFunctionExecuterPtr(CFunctionExecuter):
     def __init__(self):
         super(CFunctionExecuter, self).__init__()
@@ -164,7 +176,7 @@ class CFunctionExecuterPtr(CFunctionExecuter):
         self.LogicalOperations = _LogicalOperations
         self.BitOperations = _BitOperations
         self.RelationalOperations = _RelationalOperations
-        self.conversion_dict = {}
+        self.conversion_dict = {"BOOL": _Conversions.ToBool}
 
     def fromString(self, string):
         return float(string)
