@@ -20,7 +20,7 @@ class LogicTests(unittest.TestCase):
     """
 
     def testSimpleLogic(self):
-        file_range = range(1, 18)
+        file_range = range(1, 19)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         original = sys.stdout  # Temp catch any output
