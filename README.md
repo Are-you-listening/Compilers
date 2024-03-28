@@ -7,6 +7,12 @@ Requirements:
 - for running our testcases: ``having a linux device with sudo apt install llvm (installed for lli)``
 - being able to run the gcc compiler on your device
 
+### Functionalities: 
+- [X] Auto-Build to server (Follow Setup Guide)
+- [ ] Auto-Build to server (Follow Setup Guide)
+- [ ] Auto-Build to server (Follow Setup Guide)
+
+
 ProjectStructure:
 
 ```
