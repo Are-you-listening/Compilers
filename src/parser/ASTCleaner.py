@@ -5,10 +5,10 @@ from src.parser.Tables.SymbolTable import *
 class ASTCleaner(ASTVisitor):
     def __init__(self):
         self.operation_handler = COperationHandler()
-        self.to_remove = []  # list of child parent of nodes we need to remove, can't be done directly because of loops
+        self.to_remove = set()  # list of child parent of nodes we need to remove, can't be done directly because of loops
 
     def visit(self, ast: AST):
-        self.to_remove = []
+        self.to_remove = set()
         self.postorder(ast.root)
 
         for c, p in self.to_remove:
@@ -72,7 +72,7 @@ class ASTCleaner(ASTVisitor):
         By a declaration or an assignment the '=' is not needed anymore.
         """
         if node.text == "=":
-            self.to_remove.append((node, node.parent))
+            self.to_remove.add((node, node.parent))
 
     @staticmethod
     def cleanComments(node: ASTNode):
@@ -133,7 +133,7 @@ class ASTCleaner(ASTVisitor):
         support printf format stuff %d;lol with ';lol' as operator
         """
         for i, child in enumerate(node.children[:-1]):
-            self.to_remove.append((child, node))
+            self.to_remove.add((child, node))
             format_child_text += child.text
 
         format_child_text = format_child_text[len("printf") + 1:-2]
@@ -166,7 +166,7 @@ class ASTCleaner(ASTVisitor):
             """
             if child.text == "*":
                 dereference_counter.append(child.linenr)
-                self.to_remove.append((child, child.parent))
+                self.to_remove.add((child, child.parent))
 
             """
             stores variable we want to assign to
