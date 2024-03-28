@@ -18,7 +18,7 @@ class CalculationTests(unittest.TestCase):
     """
 
     def testSimpleCalculations(self):
-        file_range = range(1, 19)
+        file_range = range(1, 20)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         for i in file_range:
@@ -33,7 +33,7 @@ class CalculationTests(unittest.TestCase):
             """
             assert for same output
             """
-            # print(i, out.stdout, c_out.stdout)
+            #print(i, out.stdout, c_out.stdout)
             # print(out.stderr)
             assert out.stdout == c_out.stdout
 
