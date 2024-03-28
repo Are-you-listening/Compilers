@@ -1,7 +1,0 @@
-int main() {
-
-    int* ptr2;
-    int k = ptr2;
-    ptr2 = k;
-
-}

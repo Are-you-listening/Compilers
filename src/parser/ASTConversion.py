@@ -68,7 +68,8 @@ class ASTConversion(ASTVisitor):
 
         if node.text not in ("Literal", "Expr", "Declaration", "Assignment"):
             """
-            For our conversion we are only interested in Nodes that have a type, things like comments are useless to check
+            For our conversion we are only interested in Nodes that have a type,
+             things like comments are useless to check
             """
             return
 
@@ -178,7 +179,7 @@ class ASTConversion(ASTVisitor):
                     continue
 
                 """
-                make sure that ptr's and floats are not combininded in invalid ways
+                make sure that pointers and floats are not combined in invalid ways
                 int* v = 0.0; or float v = (ptr)              
                 """
                 if not self.compatible_2(type_tup, to_type, operator):
@@ -217,7 +218,7 @@ class ASTConversion(ASTVisitor):
                         """
                         continue
 
-                self.pointer_warning_check(child.linenr, to_type, type_tup, operator)
+                self.pointer_warning_check(child.linenr, to_type, type_tup)
                 self.narrowing_warning_check(child.linenr, to_type, type_tup)
 
                 self.addConversion(child, to_type)
@@ -285,7 +286,7 @@ class ASTConversion(ASTVisitor):
 
         incompatible = False
         incompatible = incompatible or (
-        ASTConversion.to_string_type(type_tup), operator, ASTConversion.to_string_type(to_type)) in blocklist
+            ASTConversion.to_string_type(type_tup), operator, ASTConversion.to_string_type(to_type)) in blocklist
         if ASTConversion.to_string_type(type_tup) in incompatible_ops.keys():
             incompatible = incompatible or operator in incompatible_ops.get(ASTConversion.to_string_type(type_tup))
 
@@ -297,7 +298,7 @@ class ASTConversion(ASTVisitor):
     @staticmethod
     def compatible_2(type_tup: tuple, to_type: tuple, operator: str):
         """
-        check specific compatiblity for ptrs and float combinations
+        check specific compatibility for ptrs and float combinations
         :param type_tup:
         :param to_type:
         :param operator:
@@ -347,11 +348,10 @@ class ASTConversion(ASTVisitor):
         return None
 
     @staticmethod
-    def pointer_warning_check(line_nr: int, to_type: tuple, type_tup2: tuple, operator):
+    def pointer_warning_check(line_nr: int, to_type: tuple, type_tup2: tuple):
         """
         when float* to int* convert we need to throw a warning
         This function will check for such situations and throw a warning accordingly
-        :param operator:
         :param line_nr:
         :param to_type:
         :param type_tup2:

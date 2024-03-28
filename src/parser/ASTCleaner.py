@@ -141,7 +141,6 @@ class ASTCleaner(ASTVisitor):
         format_node = ASTNodeTerminal(format_child_text, node, node.getSymbolTable(), -1, node.linenr)
         node.insertChild(0, format_node)
 
-
     def cleanDereferenceAssignments(self, node: ASTNode):
         """
         Have some '*' on the left side on an assignment/declaration
