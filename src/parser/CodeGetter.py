@@ -27,5 +27,6 @@ class CodeGetter(ASTVisitor):
         if lineNR in self.lineNrsChecked:
             return
         self.lineNrsChecked.append(lineNR)
-        if node.linenr in self.codeLines:
+
+        if lineNR in self.codeLines:
             return self.codeLines[lineNR]
