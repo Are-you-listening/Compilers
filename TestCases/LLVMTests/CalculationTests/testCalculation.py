@@ -1,6 +1,8 @@
 import os
 import unittest
 import subprocess
+import sys
+from io import StringIO
 from src.main.__main__ import main
 from src.llvm_target.LLVMSingleton import *
 
@@ -21,6 +23,10 @@ class CalculationTests(unittest.TestCase):
         file_range = range(1, 20)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+        original = sys.stdout  # Temp catch any output
+        buff = StringIO()
+        sys.stdout = buff
+
         for i in file_range:
             #print(i)
             file_name = f"tests/test{i}.c"
@@ -29,7 +35,7 @@ class CalculationTests(unittest.TestCase):
 
             out = subprocess.run(f"""lli {file_name[:-2]}LLVM.ll""",
                                  shell=True, capture_output=True)
-            print(out.stderr)
+            #print(out.stderr)
 
             """
             assert for same output
@@ -37,6 +43,8 @@ class CalculationTests(unittest.TestCase):
             #print(i, out.stdout, c_out.stdout)
             #print(out.stderr)
             assert out.stdout == c_out.stdout
+
+        sys.stdout = original
 
     @staticmethod
     def runAST(file_name: str):
@@ -48,9 +56,6 @@ class CalculationTests(unittest.TestCase):
         LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
 
         main([0, "--input", file_name, "--target_llvm", file_name[:-2] + "LLVM.ll"], False)
-
-        subprocess.run(f"""clang-14 -S -emit-llvm {file_name} -o {file_name[:-2]}.ll""",
-                       shell=True, capture_output=True)
 
     @staticmethod
     def runC(file_name: str):
