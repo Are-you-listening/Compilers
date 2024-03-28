@@ -1,16 +1,13 @@
 #include <stdio.h>
 
 int main() {
-    int y = 4;
-    int b = 9632;
+    int c = -251454;
 
-    const int* x_ptr = &b;
-    printf("%d", *x_ptr);
+    int* b_ptr = &c;
 
-    *x_ptr = y;
+    int** x_ptr = &b_ptr;
+    x_ptr = &b;
+    printf("%d", **x_ptr);
 
     return 0;
-
-
 }
-

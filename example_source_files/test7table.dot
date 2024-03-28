@@ -1,0 +1,11 @@
+digraph AST {
+  "128571592751280" [label=""];
+  "128571592751280" -> "128571592752720";
+  "128571592752720" [label="b:  INT 
+a:  FLOAT 
+c:  INT 
+d: const CHAR 
+e:  CHAR 
+f:  CHAR 
+main:  INT "];
+}

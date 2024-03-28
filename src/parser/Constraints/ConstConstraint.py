@@ -37,7 +37,8 @@ class ConstConstraint(Constraint):
             data_type, ptrs, const_list = entry.getJsonDataType()
 
             """
-            When a LHS var has too many dereferences, we should throw an error, this error will be thrown by ASTConversion
+            When a LHS var has too many dereferences, we should throw an error, 
+            this error will be thrown by ASTConversion
             And has nothing to do with this check, so If we come across such a thing ignore it here
             """
             if deref_counter >= len(const_list):
@@ -46,8 +47,8 @@ class ConstConstraint(Constraint):
             is_const = const_list[-deref_counter-1]
 
             if is_const:
-                ErrorExporter.constComplaint(node.linenr, ("*"*deref_counter)+assign_child.text, assign_child.text, entry.getTypeObject().getStringType())
-
+                ErrorExporter.constComplaint(node.linenr, ("*"*deref_counter)+assign_child.text, assign_child.text,
+                                             entry.getTypeObject().getStringType())
 
     def checkTerminalNode(self, node: ASTNodeTerminal):
         pass

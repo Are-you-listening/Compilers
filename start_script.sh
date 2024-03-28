@@ -1,1 +1,0 @@
-python3 -m src.main --input input_file.c --render_ast ast_output.dot
