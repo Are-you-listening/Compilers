@@ -1,20 +1,14 @@
-typedef int kaas;
-typedef const kaas beer;
-
-int main(){
-
-    const beer* beer = 3;
-    int appel;
 
 
-    typedef char kaas;
+typedef int bool;
 
-    kaas character = 'c';
+int main() {
+    bool x = 1;
+    bool y = 0;
+    int z = x && y;
 
-    int p = character;
+    bool b = y * z * 57809;
 
-    //beer > 3; // Use the identifier beer,  not the typedef beer!
-    //cry
-    //cry2
-    return 0;
-};
+        return 0;
+
+}

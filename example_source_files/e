@@ -1,14 +1,8 @@
-
-
-typedef int bool;
-
 int main() {
-    bool x = 1;
-    bool y = 0;
-    int z = x && y;
 
-    bool b = y * z * 57809;
+int x = 478;
+int b = -251454;
 
-        return 0;
-
+int** x_ptr = &x;
+x_ptr = &b;
 }
