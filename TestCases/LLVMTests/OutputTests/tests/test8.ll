@@ -20,4 +20,5 @@ define i32 @"main"()
   store float 0xc081a9b940000000, float* %".12", align 4
   ; z = - 565.21547
   ret i32 0
+  ; INT main
 }

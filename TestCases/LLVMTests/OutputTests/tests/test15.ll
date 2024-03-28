@@ -18,4 +18,5 @@ define i32 @"main"()
   store float 0x3fc52535a0000000, float* %".12", align 4
   ; const FLOAT z = f * f * f
   ret i32 0
+  ; INT main
 }

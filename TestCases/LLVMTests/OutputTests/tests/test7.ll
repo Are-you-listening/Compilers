@@ -15,4 +15,5 @@ define i32 @"main"()
   store i8 0, i8* %".9", align 1
   ; CHAR character_null = '\0'
   ret i32 0
+  ; INT main
 }

@@ -24,4 +24,5 @@ define i32 @"main"()
   store float* %".15", float** %".18", align 8
   ; FLOAT * a_ptr = & a
   ret i32 0
+  ; INT main
 }

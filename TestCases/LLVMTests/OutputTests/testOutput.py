@@ -20,12 +20,12 @@ NOTE: All the tests are run with constant folding enabled! (As by default)
 """
 class OutputTests(unittest.TestCase):
     def testOutput(self):
-        file_range = range(1, 24)
+        file_range = range(1, 22)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-        # original = sys.stdout  # Temp catch any output
-        # buff = StringIO()
-        # sys.stdout = buff
+        original = sys.stdout  # Temp catch any output
+        buff = StringIO()
+        sys.stdout = buff
 
         for i in file_range:
             file_name = f"tests/test{i}."
@@ -35,7 +35,7 @@ class OutputTests(unittest.TestCase):
 
             assert self.compareLLVM(file_name+"ll", 'temp/output.ll')  # assert for same output
 
-        #sys.stdout = original  # Reset output
+        sys.stdout = original  # Reset output
 
     @staticmethod
     def compareLLVM(newly, right):

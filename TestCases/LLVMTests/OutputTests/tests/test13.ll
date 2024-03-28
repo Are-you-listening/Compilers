@@ -12,8 +12,8 @@ define i32 @"main"()
   store i32* %".3", i32** %".6", align 8
   ; INT * some_pointer = & x
   %".9" = load i32*, i32** %".6", align 8
-  store i32 53, i32* %".9", align 8
   ; * some_pointer = 53
+  store i32 53, i32* %".9", align 8
   %".12" = alloca i32**, align 8
   store i32** %".6", i32*** %".12", align 8
   ; INT * * another_pointer = & some_pointer
@@ -21,10 +21,11 @@ define i32 @"main"()
   store i32*** %".12", i32**** %".15", align 8
   ; INT * * * triple_pointer = & another_pointer
   %".18" = load i32**, i32*** %".12", align 8
-  %".19" = load i32*, i32** %".18", align 8
-  %".20" = load i32, i32* %".19", align 8
-  %".21" = alloca i32, align 4
-  store i32 %".20", i32* %".21", align 4
   ; INT y = * * * triple_pointer
+  %".20" = load i32*, i32** %".18", align 8
+  %".21" = load i32, i32* %".20", align 8
+  %".22" = alloca i32, align 4
+  store i32 %".21", i32* %".22", align 4
   ret i32 0
+  ; INT main
 }

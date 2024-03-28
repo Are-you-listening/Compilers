@@ -12,10 +12,11 @@ define i32 @"main"()
   store i32 -251454, i32* %".6", align 4
   ; INT b = - 251454
   %".9" = bitcast i32* %".3" to i32**
-  %".10" = alloca i32**, align 8
-  store i32** %".9", i32*** %".10", align 8
   ; INT * * x_ptr = & x
+  %".11" = alloca i32**, align 8
+  store i32** %".9", i32*** %".11", align 8
   %".13" = bitcast i32* %".6" to i32**
-  store i32** %".13", i32*** %".10", align 8
   ; x_ptr = & b
+  store i32** %".13", i32*** %".11", align 8
+  ; INT main
 }
