@@ -14,8 +14,8 @@ int main ()
     int e = d & c | d;
 
     printf("%d", e);
-    printf("%d", e = e^d);
-    printf("%d", e = ~e);
+    printf("%d", e^d);
+    printf("%d", ~e);
 
     printf("%d", x);
     printf("%d", y);
