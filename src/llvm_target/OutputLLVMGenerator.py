@@ -340,7 +340,7 @@ class Conversion:
         conversion_dict = {(ir.IntType, "FLOAT"): lambda x, x_to: block.sitofp(x, x_to),
                            (ir.FloatType, "INT"): lambda x, x_to: block.fptosi(x, x_to),
                            (ir.IntType, "CHAR"): lambda x, x_to: block.trunc(x, x_to),
-                           (ir.FloatType, "CHAR"): lambda x, x_to: block.zext(x, x_to),
+                           (ir.FloatType, "CHAR"): lambda x, x_to: block.fptosi(x, x_to),
                            (ir.IntType, "INT"): lambda x, x_to: block.zext(x, x_to),
                            (ir.IntType, "PTR"): lambda x, x_to: block.inttoptr(x, x_to),
                            (ir.FloatType, "PTR"): lambda x, x_to: block.inttoptr(x, x_to),

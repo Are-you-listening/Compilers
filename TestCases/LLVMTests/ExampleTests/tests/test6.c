@@ -1,8 +1,6 @@
 #include <stdio.h>
 
 int main(){
-    //comment 1
-
     char a = 'a';
     int b = 1;
     float c = 5.6;
@@ -12,7 +10,6 @@ int main(){
     const int e = d;
     printf("%d", e);
     const float f = e;
-    printf("%f", f);
 
 
     char* g = &a;
@@ -20,7 +17,6 @@ int main(){
     int* h = &b;
     printf("%d", *h);
     float* i =&c;
-    printf("%f", *i);
 
     h++;
     printf("%d", *h);
