@@ -97,6 +97,15 @@ class ASTCreator(grammarCVisitor):
         self.parent.addChildren(node)
         self.parent = node
 
+    def visitBlock_code(self, ctx: grammarCParser.Block_codeContext):
+        self.__makeNode(ctx, "Code")
+
+    def visitBlock_line(self, ctx: grammarCParser.Block_lineContext):
+        self.__makeNode(ctx, "Line")
+
+    def visitIf_statement(self, ctx: grammarCParser.If_statementContext):
+        self.__makeNode(ctx, "IF")
+
     def visitTerminal(self, ctx):
         """
         :param ctx:

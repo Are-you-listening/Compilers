@@ -13,6 +13,7 @@ from src.parser.Tables.TableDotVisitor import *
 from src.parser.ASTTableCreator import *
 from src.llvm_target.AST2LLVM import *
 from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
+from src.parser.ASTIfCleaner import ASTIfCleaner
 
 
 def cleanGreen(input_file, symbol_file):
@@ -42,6 +43,9 @@ def cleanGreen(input_file, symbol_file):
     codegetter.visit(ast)
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
+
+    ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
+    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
