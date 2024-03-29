@@ -66,3 +66,5 @@ class ExampleTests(unittest.TestCase):
         out = subprocess.run(f"""gcc -ansi -pedantic {file_name} -o temp && ./temp && rm temp""",
                              shell=True, capture_output=True)
         return out
+
+
