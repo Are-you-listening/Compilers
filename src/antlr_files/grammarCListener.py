@@ -62,12 +62,39 @@ class grammarCListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by grammarCParser#block_line.
+    def enterBlock_line(self, ctx:grammarCParser.Block_lineContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#block_line.
+    def exitBlock_line(self, ctx:grammarCParser.Block_lineContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#block_code.
+    def enterBlock_code(self, ctx:grammarCParser.Block_codeContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#block_code.
+    def exitBlock_code(self, ctx:grammarCParser.Block_codeContext):
+        pass
+
+
     # Enter a parse tree produced by grammarCParser#typedef.
     def enterTypedef(self, ctx:grammarCParser.TypedefContext):
         pass
 
     # Exit a parse tree produced by grammarCParser#typedef.
     def exitTypedef(self, ctx:grammarCParser.TypedefContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#if_statement.
+    def enterIf_statement(self, ctx:grammarCParser.If_statementContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#if_statement.
+    def exitIf_statement(self, ctx:grammarCParser.If_statementContext):
         pass
 
 

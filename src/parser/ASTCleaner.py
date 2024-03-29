@@ -113,7 +113,7 @@ class ASTCleaner(ASTVisitor):
         """
         The node 'Line' is useless
         """
-        if node.text != "Line":
+        if node.text != "Line" and node.text != "Block_line":
             return
 
         line_index = node.parent.findChild(node)

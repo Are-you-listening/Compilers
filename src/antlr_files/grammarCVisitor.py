@@ -39,8 +39,23 @@ class grammarCVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by grammarCParser#block_line.
+    def visitBlock_line(self, ctx:grammarCParser.Block_lineContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#block_code.
+    def visitBlock_code(self, ctx:grammarCParser.Block_codeContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by grammarCParser#typedef.
     def visitTypedef(self, ctx:grammarCParser.TypedefContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#if_statement.
+    def visitIf_statement(self, ctx:grammarCParser.If_statementContext):
         return self.visitChildren(ctx)
 
 
