@@ -1,5 +1,5 @@
 digraph AST {
-  "127805890329520" [label="%'.2' = .2:
+  "132340100281872" [label="%'.2' = .2:
   ; comment 1
   %'.4' = alloca i8, align 1
   store i8 97, i8* %'.4', align 1
