@@ -1,6 +1,5 @@
 from src.parser.CTypes.CFunctionExecuter import *
 import struct
-from src.parser.ErrorExporter import *
 from src.parser.CTypes.InvalidOperatorPtrError import *
 
 
@@ -106,36 +105,6 @@ class _RelationalOperations(BaseRelationalOperations):
     """
     Relation functions equivalent to the functionality of C
     """
-
-    @staticmethod
-    def LessThan(a, b):
-        ErrorExporter.invalidOperatorFloat("<")
-        return -1
-
-    @staticmethod
-    def GreaterThan(a, b):
-        ErrorExporter.invalidOperatorFloat(">")
-        return -1
-
-    @staticmethod
-    def LessThanOrEqualTo(a, b):
-        ErrorExporter.invalidOperatorFloat("<=")
-        return -1
-
-    @staticmethod
-    def GreaterThanOrEqualTo(a, b):
-        ErrorExporter.invalidOperatorFloat(">=")
-        return -1
-
-    @staticmethod
-    def EqualTo(a, b):
-        ErrorExporter.invalidOperatorFloat("==")
-        return -1
-
-    @staticmethod
-    def NotEqualTo(a, b):
-        ErrorExporter.invalidOperatorFloat("!=")
-        return -1
 
 
 class _Conversions:

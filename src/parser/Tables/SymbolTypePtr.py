@@ -18,4 +18,3 @@ class SymbolTypePtr(SymbolType):
             const_str = ""
 
         return f"{self.pts_to.getStringType()}* {const_str} "
-

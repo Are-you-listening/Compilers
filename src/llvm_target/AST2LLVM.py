@@ -48,7 +48,8 @@ class AST2LLVM(ASTVisitor):
                 self.map_table = MapTable(self.map_table)
                 self.handleFunction(currentNode)
 
-            if currentNode.text == "Expr" and currentNode.getChildAmount() == 3 and currentNode.getChild(1).text in ("&&", "||"):
+            if currentNode.text == "Expr" and currentNode.getChildAmount() == 3 and currentNode.getChild(1).text in (
+                    "&&", "||"):
                 if self.eval_scope_node is None:
                     self.eval_scope_node = currentNode
 
@@ -76,7 +77,6 @@ class AST2LLVM(ASTVisitor):
         if node.text == "Function":
             self.map_table = self.map_table.prev
 
-
         if node.text == "Dereference":
             self.handleDereference(node)
 
@@ -96,7 +96,7 @@ class AST2LLVM(ASTVisitor):
             self.handleConversions(node)
 
         if node.text == "Return":
-            self.handleReturn(node)
+            self.handleReturn()
 
         self.addOriginalCodeAsComment(node)
 
@@ -114,7 +114,6 @@ class AST2LLVM(ASTVisitor):
 
         if node.text == "Start" and self.llvm_map.get(node, None) is None:
             self.control_flow_map[node] = ControlFlowGraph()
-
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
@@ -146,8 +145,6 @@ class AST2LLVM(ASTVisitor):
             """
             new_block = LLVMSingleton.getInstance().addBlock()
             LLVMSingleton.getInstance().setCurrentBlock(new_block)
-
-
 
     @staticmethod
     def handleFunction(node: ASTNode):
@@ -231,8 +228,8 @@ class AST2LLVM(ASTVisitor):
         Declaration.addComment(comment_text)
 
     @staticmethod
-    def handleReturn(node: ASTNode):
-        LLVMSingleton.getInstance().getCurrentBlock().ret(ir.Constant(ir.IntType(32),0))
+    def handleReturn():
+        LLVMSingleton.getInstance().getCurrentBlock().ret(ir.Constant(ir.IntType(32), 0))
 
     def handlePrintf(self, node: ASTNode):
         """

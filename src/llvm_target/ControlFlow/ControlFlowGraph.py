@@ -104,7 +104,7 @@ class ControlFlowGraph:
         """
         Start a logical evaluation
         We add 2 vertices: accept, reject
-        (This eval expresses in its basic state an condition if 'a')
+        (This eval expresses in its basic state a condition if 'a')
         """
 
         """
@@ -136,7 +136,7 @@ class ControlFlowGraph:
     def endEval(self):
         """
         When we end a logical evaluation we need to collapse the Accepting and Rejecting state into 1,
-        We need to create the branches and we need to define a 'phi' function
+        We need to create the branches, and we need to define a 'phi' function
         """
 
         """
@@ -205,7 +205,7 @@ class ControlFlowGraph:
                 continue
 
             """
-            store the true and false edges as seperate variables
+            store the true and false edges as separate variables
             """
             if current_vertex.edges[0].on:
                 true_edge = current_vertex.edges[0]
@@ -258,7 +258,8 @@ class ControlFlowGraph:
         """
         return self.__evalFinalVertex(final_vertex)
 
-    def __evalFinalVertex(self, final_vertex):
+    @staticmethod
+    def __evalFinalVertex(final_vertex):
         """
         last block needs a phi
         calculate the phi

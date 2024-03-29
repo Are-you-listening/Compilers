@@ -23,11 +23,11 @@ class TypedefTable(AbstractTable):
         self.typedefs.append(entry)
 
     def remove(self, typedef: TypedefEntry):
-        newlist = []
+        newList = []
         for defi in self.typedefs:
             if defi != typedef:
-                newlist.append(defi)
-        self.typedefs = newlist
+                newList.append(defi)
+        self.typedefs = newList
 
     def getEntry(self, name):
         pass
@@ -44,7 +44,7 @@ class TypedefTable(AbstractTable):
         to_type_mapping = node.getChild(2).text
 
         """
-        before adding the typdef, we will check if the original type exists
+        before adding the typedef, we will check if the original type exists
         """
         self.syntax_check(node.getChild(1))
 
@@ -59,7 +59,7 @@ class TypedefTable(AbstractTable):
         """
         within the same scope 2 typedefs for the same name are not allowed, unless the typedefs do exactly the same
         
-        We will check if it already exists, if so we check if the types are the same, if not thow an error
+        We will check if it already exists, if so we check if the types are the same, if not throw an error
         """
         exists, sub_node = self.existsLocally(to_type_mapping)
         if exists:
@@ -96,8 +96,9 @@ class TypedefTable(AbstractTable):
 
     def getTranslation(self, args):
         """
-        :param identifier: kaas in e.g. typedef int* kaas; (args[0])
-        :param translation: [int, *,]: ASTNoDes (args[1]
+        :param: args
+        identifier: kaas in e.g. typedef int* kaas; (args[0])
+        translation: [int, *,]: ASTNoDes (args[1]
         :return: Returns all type child nodes, e.g. [int,*]
         """
         for defi in self.typedefs:

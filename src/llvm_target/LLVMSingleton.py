@@ -1,6 +1,5 @@
 from llvmlite import ir
-import llvmlite
-from llvmlite import binding as llvm
+
 
 class LLVMSingleton:
     __instance = None
@@ -28,7 +27,7 @@ class LLVMSingleton:
 
     @staticmethod
     def setName(name):
-        LLVMSingleton.getInstance().__module.name=name
+        LLVMSingleton.getInstance().__module.name = name
 
     def getModule(self):
         return self.__module

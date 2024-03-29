@@ -62,7 +62,6 @@ class SymbolEntry(TableEntry):
             const_list.insert(0, d_t.isConst())
             d_t = d_t.deReference()
 
-
         const_list.insert(0, d_t.isConst())
 
         return d_t.getType(), ptr_string, const_list
@@ -152,5 +151,5 @@ class SymbolTable(AbstractTable):
         """
         entry = self.getEntry(identifier)
         if entry is None:
-            return 
+            return
         entry.reference()

@@ -12,9 +12,10 @@ class MapTable:
         self.symbols = {}
         self.symbols_reverse = {}
 
-    def getEntry(self, entry, reverse: bool=False):
+    def getEntry(self, entry, reverse: bool = False):
         """
         Get entry
+        :param reverse:
         :param entry: name of the entry
         :return:
         """
@@ -46,4 +47,3 @@ class MapTable:
 
         out_str = "\n".join(out)
         return out_str
-
