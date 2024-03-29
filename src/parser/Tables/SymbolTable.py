@@ -90,11 +90,11 @@ class SymbolTable(AbstractTable):
         :param entry: the entry we want to add
         :return:
         """
-        # if self.symbols.get(entry.name) is not None:
-        #     ErrorExporter.redefinition(entry.firstDeclared.linenr, entry.getType(),
-        #                                entry.name)  # This allows earlier detection of errors but unsure how we would
-        #     # retrieve the lineNr
-        #     return
+        if self.symbols.get(entry.name) is not None:
+             #ErrorExporter.redefinition(entry.firstDeclared.linenr, entry.getType(),
+                                        #entry.name)  # This allows earlier detection of errors but unsure how we would
+             # retrieve the lineNr
+             return
 
         self.symbols[entry.name] = entry
 
