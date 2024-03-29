@@ -27,16 +27,14 @@ define i32 @"main"()
   %".22" = fadd float %".16", %".21"
   %".23" = alloca float, align 4
   store float %".22", float* %".23", align 4
-  ; calculate the result
-  %".26" = load float, float* %".23", align 4
+  %".25" = load float, float* %".23", align 4
   ; printf " %f " , result
-  %".28" = bitcast [3 x i8]* @".str.f" to i8*
-  %".29" = alloca float
-  store float %".26", float* %".29"
-  %".31" = load float, float* %".29"
-  %".32" = fpext float %".31" to double
-  %".33" = call i32 (i8*, ...) @"printf"(i8* %".28", double %".32")
-  ; show the result
+  %".27" = bitcast [3 x i8]* @".str.f" to i8*
+  %".28" = alloca float
+  store float %".25", float* %".28"
+  %".30" = load float, float* %".28"
+  %".31" = fpext float %".30" to double
+  %".32" = call i32 (i8*, ...) @"printf"(i8* %".27", double %".31")
   ret i32 0
   ; INT main
   ; #include <stdio.h>

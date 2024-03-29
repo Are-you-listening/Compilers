@@ -18,7 +18,7 @@ class TestTypedef(unittest.TestCase):
 
         for index in file_indexes:
             #print(index)
-            file_path = f"tests/tests{index}.json"
+            file_path = f"tests/test{index}.json"
             with open(file_path, "rt") as f:
                 json_data = f.read()
 
@@ -46,7 +46,7 @@ class TestTypedef(unittest.TestCase):
 
                 ASTTableCreator().visit(ast_tree)  # Create the symbol table
 
-                file_path_result = f"tests/tests{index}_result.json"
+                file_path_result = f"tests/test{index}_result.json"
                 with open(file_path_result, "rt") as f:
                     json_data_result = f.read()
 

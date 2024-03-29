@@ -19,7 +19,7 @@ class TestSyntaxError(unittest.TestCase):
 
         for index in file_indexes:
             #print(index)
-            file_path = f"tests/tests{index}.c"
+            file_path = f"tests/test{index}.c"
 
             """
             make print buff

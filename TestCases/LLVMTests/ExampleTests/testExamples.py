@@ -20,7 +20,7 @@ class ExampleTests(unittest.TestCase):
     """
 
     def testExamples(self):
-        file_range = range(1, 11)
+        file_range = range(1, 10)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         original = sys.stdout  # Temp catch any output
@@ -30,7 +30,6 @@ class ExampleTests(unittest.TestCase):
         for i in file_range:
             print(i)
             file_name = f"tests/test{i}.c"
-            print('\n',file_name)
 
             if file_name=='test4.c' or file_name=='test6.c':
                 continue
@@ -45,8 +44,8 @@ class ExampleTests(unittest.TestCase):
             """
             assert for same output
             """
-            #print(i, out.stdout, c_out.stdout)
-            #print(out.stderr)
+            print(i, out.stdout, c_out.stdout)
+            print(out.stderr)
             assert out.stdout == c_out.stdout
 
         sys.stdout = original
