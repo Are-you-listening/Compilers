@@ -33,7 +33,7 @@ class ExampleTests(unittest.TestCase):
             self.runAST(file_name)
             c_out = self.runC(file_name)
 
-            out = subprocess.run(f"""lli {file_name[:-2]}.ll""",
+            out = subprocess.run(f"""lli {file_name[:-2]}LLVM.ll""",
                                  shell=True, capture_output=True)
             #print(out.stderr)
 
