@@ -14,7 +14,7 @@ class UndeclaredConstrained(Constraint):
     def checkTerminalNode(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
             entry = node.symbol_table.getEntry(node.text)
-            if entry is None or entry.firstDeclared.linenr >= node.linenr:
+            if entry is None or entry.firstDeclared.linenr > node.linenr:
                 self.rejected = True
                 self.errorNode = node
                 self.throwException()
