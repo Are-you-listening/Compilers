@@ -28,7 +28,7 @@ class OutputTests(unittest.TestCase):
         sys.stdout = buff
 
         for i in file_range:
-            file_name = f"tests/test{i}."
+            file_name = f"tests/tests{i}."
             print(file_name)
 
             self.runAST(file_name+"c")

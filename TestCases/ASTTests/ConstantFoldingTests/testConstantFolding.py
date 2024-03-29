@@ -18,7 +18,7 @@ class TestConstantFolding(unittest.TestCase):
 
         for index in file_indexes:
             #print(index)
-            file_path = f"tests/test{index}.json"
+            file_path = f"tests/tests{index}.json"
             with open(file_path, "rt") as f:
                 json_data = f.read()
 
@@ -42,7 +42,7 @@ class TestConstantFolding(unittest.TestCase):
                 ast_const = ConstantFoldingVisitor()
                 ast_const.visit(ast_tree)
 
-                file_path_result = f"tests/test{index}_result.json"
+                file_path_result = f"tests/tests{index}_result.json"
                 with open(file_path_result, "rt") as f:
                     json_data_result = f.read()
 
@@ -50,7 +50,7 @@ class TestConstantFolding(unittest.TestCase):
                 assert json_test_result == json_data_result
 
                 """
-                test errors (warnings)
+                tests errors (warnings)
                 """
                 errors = str(buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
@@ -59,7 +59,7 @@ class TestConstantFolding(unittest.TestCase):
 
             except SystemExit as e:
                 """
-                test errors Real errors
+                tests errors Real errors
                 """
                 errors = str(error_buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))

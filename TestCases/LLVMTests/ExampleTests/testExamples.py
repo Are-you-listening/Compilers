@@ -14,13 +14,13 @@ Filename Extension Explanation:
 """
 
 
-class CalculationTests(unittest.TestCase):
+class ExampleTests(unittest.TestCase):
     """
     Test case to run all created llvm output
     """
 
-    def testSimpleCalculations(self):
-        file_range = range(1, 20)
+    def testExamples(self):
+        file_range = range(1, 11)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         original = sys.stdout  # Temp catch any output
@@ -28,12 +28,12 @@ class CalculationTests(unittest.TestCase):
         sys.stdout = buff
 
         for i in file_range:
-            #print(i)
-            file_name = f"tests/tests{i}.c"
+            print(i)
+            file_name = f"tests/test{i}.c"
             self.runAST(file_name)
             c_out = self.runC(file_name)
 
-            out = subprocess.run(f"""lli {file_name[:-2]}LLVM.ll""",
+            out = subprocess.run(f"""lli {file_name[:-2]}.ll""",
                                  shell=True, capture_output=True)
             #print(out.stderr)
 

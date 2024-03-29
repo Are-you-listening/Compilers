@@ -19,7 +19,7 @@ class TestSyntaxError(unittest.TestCase):
 
         for index in file_indexes:
             #print(index)
-            file_path = f"tests/test{index}.c"
+            file_path = f"tests/tests{index}.c"
 
             """
             make print buff
@@ -49,7 +49,7 @@ class TestSyntaxError(unittest.TestCase):
                 parser.start_()
             except SystemExit as e:
                 """
-                test errors Real errors
+                tests errors Real errors
                 """
                 errors = str(error_buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
