@@ -3,7 +3,7 @@
 > > By Emil Lambert, Lucas Vanden Abeele, Tibo Verreycken, Kars van Velzen.
 
 ### Requirements & Dependencies:
-- Install the python packages, ee ``requirements.txt``
+- Install the python packages, see ``requirements.txt``
 - Working gcc compiler on your device
 - For unit tests, a linux Kernel with lli package installed: 
 
