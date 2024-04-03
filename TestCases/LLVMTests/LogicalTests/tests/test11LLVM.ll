@@ -31,7 +31,7 @@ define i32 @"main"()
   %".26" = zext i1 %".25" to i32
   store i32 %".26", i32* %".13", align 4
   %".28" = load i32, i32* %".13", align 4
-  ; printf " %d " , f
+  ; printf "%d" , f
   %".30" = bitcast [3 x i8]* @".str.d" to i8*
   %".31" = alloca i32
   store i32 %".28", i32* %".31"

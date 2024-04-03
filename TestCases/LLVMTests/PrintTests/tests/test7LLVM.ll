@@ -11,25 +11,25 @@ define i32 @"main"()
   %".6" = load float, float* %".4"
   %".7" = fpext float %".6" to double
   %".8" = call i32 (i8*, ...) @"printf"(i8* %".3", double %".7")
-  ; printf " %f " , 5.2
+  ; printf "%f" , 5.2
   %".10" = bitcast [3 x i8]* @".str.x" to i8*
   %".11" = alloca i8
   store i8 97, i8* %".11"
   %".13" = load i8, i8* %".11"
   %".14" = call i32 (i8*, ...) @"printf"(i8* %".10", i8 %".13")
-  ; printf " %x " , 'a'
+  ; printf "%x" , 'a'
   %".16" = bitcast [3 x i8]* @".str.c" to i8*
   %".17" = alloca i8
   store i8 97, i8* %".17"
   %".19" = load i8, i8* %".17"
   %".20" = call i32 (i8*, ...) @"printf"(i8* %".16", i8 %".19")
-  ; printf " %c " , 'a'
+  ; printf "%c" , 'a'
   %".22" = bitcast [3 x i8]* @".str.d" to i8*
   %".23" = alloca i32
   store i32 6, i32* %".23"
   %".25" = load i32, i32* %".23"
   %".26" = call i32 (i8*, ...) @"printf"(i8* %".22", i32 %".25")
-  ; printf " %d " , 6
+  ; printf "%d" , 6
   ret i32 0
   ; INT main
   ; #include <stdio.h>

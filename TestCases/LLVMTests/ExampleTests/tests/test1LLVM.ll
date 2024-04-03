@@ -50,14 +50,14 @@ define i32 @"main"()
   %".45" = alloca i32, align 4
   store i32 %".44", i32* %".45", align 4
   %".47" = load i32, i32* %".3", align 4
-  ; printf " %d " , x
+  ; printf "%d" , x
   %".49" = bitcast [3 x i8]* @".str.d" to i8*
   %".50" = alloca i32
   store i32 %".47", i32* %".50"
   %".52" = load i32, i32* %".50"
   %".53" = call i32 (i8*, ...) @"printf"(i8* %".49", i32 %".52")
   %".54" = load float, float* %".6", align 4
-  ; printf " %f " , y
+  ; printf "%f" , y
   %".56" = bitcast [3 x i8]* @".str.f" to i8*
   %".57" = alloca float
   store float %".54", float* %".57"
@@ -65,35 +65,35 @@ define i32 @"main"()
   %".60" = fpext float %".59" to double
   %".61" = call i32 (i8*, ...) @"printf"(i8* %".56", double %".60")
   %".62" = load i8, i8* %".9", align 1
-  ; printf " %c " , z
+  ; printf "%c" , z
   %".64" = bitcast [3 x i8]* @".str.c" to i8*
   %".65" = alloca i8
   store i8 %".62", i8* %".65"
   %".67" = load i8, i8* %".65"
   %".68" = call i32 (i8*, ...) @"printf"(i8* %".64", i8 %".67")
   %".69" = load i32, i32* %".22", align 4
-  ; printf " %d " , d
+  ; printf "%d" , d
   %".71" = bitcast [3 x i8]* @".str.d" to i8*
   %".72" = alloca i32
   store i32 %".69", i32* %".72"
   %".74" = load i32, i32* %".72"
   %".75" = call i32 (i8*, ...) @"printf"(i8* %".71", i32 %".74")
   %".76" = load i32, i32* %".35", align 4
-  ; printf " %d " , e
+  ; printf "%d" , e
   %".78" = bitcast [3 x i8]* @".str.d" to i8*
   %".79" = alloca i32
   store i32 %".76", i32* %".79"
   %".81" = load i32, i32* %".79"
   %".82" = call i32 (i8*, ...) @"printf"(i8* %".78", i32 %".81")
   %".83" = load i32, i32* %".40", align 4
-  ; printf " %d " , f
+  ; printf "%d" , f
   %".85" = bitcast [3 x i8]* @".str.d" to i8*
   %".86" = alloca i32
   store i32 %".83", i32* %".86"
   %".88" = load i32, i32* %".86"
   %".89" = call i32 (i8*, ...) @"printf"(i8* %".85", i32 %".88")
   %".90" = load i32, i32* %".45", align 4
-  ; printf " %d " , g
+  ; printf "%d" , g
   %".92" = bitcast [3 x i8]* @".str.d" to i8*
   %".93" = alloca i32
   store i32 %".90", i32* %".93"

@@ -33,7 +33,7 @@ define i32 @"main"()
   %".26" = icmp ne i32 %".25", 0
   br label %".27"
 .27:
-  %".31" = phi  i1 [%".26", %".24"], [1, %".21"]
+  %".31" = phi  i1 [1, %".21"], [%".26", %".24"]
   %".32" = icmp ne i1 %".31", 0
   %".33" = xor i1 %".32", 1
   %".34" = zext i1 %".33" to i32
@@ -60,7 +60,7 @@ define i32 @"main"()
   store i32 %".52", i32* %".54"
   %".56" = load i32, i32* %".54"
   %".57" = call i32 (i8*, ...) @"printf"(i8* %".53", i32 %".56")
-  ; printf " %d " , d
+  ; printf "%d" , d
   ret i32 0
   ; INT main
   ; #include <stdio.h>

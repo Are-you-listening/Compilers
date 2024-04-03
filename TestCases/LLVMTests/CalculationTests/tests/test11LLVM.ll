@@ -9,7 +9,7 @@ define i32 @"main"()
   store i8 97, i8* %".3", align 1
   ; CHAR x = 'a'
   %".6" = load i8, i8* %".3", align 1
-  ; printf " %d " , x
+  ; printf "%d" , x
   %".8" = bitcast [3 x i8]* @".str.d" to i8*
   %".9" = alloca i8
   store i8 %".6", i8* %".9"
@@ -27,7 +27,7 @@ define i32 @"main"()
   %".22" = alloca i8, align 1
   store i8 %".21", i8* %".22", align 1
   %".24" = load i8, i8* %".22", align 1
-  ; printf " %d " , another_char
+  ; printf "%d" , another_char
   %".26" = bitcast [3 x i8]* @".str.d" to i8*
   %".27" = alloca i8
   store i8 %".24", i8* %".27"

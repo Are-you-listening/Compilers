@@ -179,12 +179,12 @@ class grammarCListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by grammarCParser#printf.
-    def enterPrintf(self, ctx:grammarCParser.PrintfContext):
+    # Enter a parse tree produced by grammarCParser#printscanf.
+    def enterPrintscanf(self, ctx:grammarCParser.PrintscanfContext):
         pass
 
-    # Exit a parse tree produced by grammarCParser#printf.
-    def exitPrintf(self, ctx:grammarCParser.PrintfContext):
+    # Exit a parse tree produced by grammarCParser#printscanf.
+    def exitPrintscanf(self, ctx:grammarCParser.PrintscanfContext):
         pass
 
 
@@ -203,6 +203,33 @@ class grammarCListener(ParseTreeListener):
 
     # Exit a parse tree produced by grammarCParser#return.
     def exitReturn(self, ctx:grammarCParser.ReturnContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#structunion.
+    def enterStructunion(self, ctx:grammarCParser.StructunionContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#structunion.
+    def exitStructunion(self, ctx:grammarCParser.StructunionContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#function_ptr.
+    def enterFunction_ptr(self, ctx:grammarCParser.Function_ptrContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#function_ptr.
+    def exitFunction_ptr(self, ctx:grammarCParser.Function_ptrContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#function_ptr_2.
+    def enterFunction_ptr_2(self, ctx:grammarCParser.Function_ptr_2Context):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#function_ptr_2.
+    def exitFunction_ptr_2(self, ctx:grammarCParser.Function_ptr_2Context):
         pass
 
 

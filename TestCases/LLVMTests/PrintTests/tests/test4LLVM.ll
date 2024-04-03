@@ -10,7 +10,7 @@ define i32 @"main"()
   store i32 1, i32* %".4"
   %".6" = load i32, i32* %".4"
   %".7" = call i32 (i8*, ...) @"printf"(i8* %".3", i32 %".6")
-  ; printf " %x " , 1
+  ; printf "%x" , 1
   ret i32 0
   ; INT main
   ; #include <stdio.h>

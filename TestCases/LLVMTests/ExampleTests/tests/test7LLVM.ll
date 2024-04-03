@@ -35,7 +35,7 @@ define i32 @"main"()
   %".30" = alloca i8, align 1
   store i8 %".29", i8* %".30", align 1
   %".32" = load i32, i32* %".3", align 4
-  ; printf " %d " , b
+  ; printf "%d" , b
   %".34" = bitcast [3 x i8]* @".str.d" to i8*
   %".35" = alloca i32
   store i32 %".32", i32* %".35"
@@ -47,9 +47,9 @@ define i32 @"main"()
   %".42" = load float, float* %".40"
   %".43" = fpext float %".42" to double
   %".44" = call i32 (i8*, ...) @"printf"(i8* %".39", double %".43")
-  ; printf " %f " , a
+  ; printf "%f" , a
   %".46" = load i32, i32* %".9", align 4
-  ; printf " %d " , c
+  ; printf "%d" , c
   %".48" = bitcast [3 x i8]* @".str.d" to i8*
   %".49" = alloca i32
   store i32 %".46", i32* %".49"
@@ -60,9 +60,9 @@ define i32 @"main"()
   store i8 5, i8* %".54"
   %".56" = load i8, i8* %".54"
   %".57" = call i32 (i8*, ...) @"printf"(i8* %".53", i8 %".56")
-  ; printf " %c " , d
+  ; printf "%c" , d
   %".59" = load i8, i8* %".20", align 1
-  ; printf " %c " , e
+  ; printf "%c" , e
   %".61" = bitcast [3 x i8]* @".str.c" to i8*
   %".62" = alloca i8
   store i8 %".59", i8* %".62"
@@ -80,7 +80,7 @@ define i32 @"main"()
   store i8 %".72", i8* %".74"
   %".76" = load i8, i8* %".74"
   %".77" = call i32 (i8*, ...) @"printf"(i8* %".73", i8 %".76")
-  ; printf " %c " , f
+  ; printf "%c" , f
   ret i32 0
   ; INT main
   ; #include <stdio.h>

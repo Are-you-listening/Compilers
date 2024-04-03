@@ -104,8 +104,8 @@ class grammarCVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by grammarCParser#printf.
-    def visitPrintf(self, ctx:grammarCParser.PrintfContext):
+    # Visit a parse tree produced by grammarCParser#printscanf.
+    def visitPrintscanf(self, ctx:grammarCParser.PrintscanfContext):
         return self.visitChildren(ctx)
 
 
@@ -116,6 +116,21 @@ class grammarCVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by grammarCParser#return.
     def visitReturn(self, ctx:grammarCParser.ReturnContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#structunion.
+    def visitStructunion(self, ctx:grammarCParser.StructunionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#function_ptr.
+    def visitFunction_ptr(self, ctx:grammarCParser.Function_ptrContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#function_ptr_2.
+    def visitFunction_ptr_2(self, ctx:grammarCParser.Function_ptr_2Context):
         return self.visitChildren(ctx)
 
 

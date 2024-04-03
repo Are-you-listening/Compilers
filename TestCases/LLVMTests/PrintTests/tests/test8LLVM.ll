@@ -19,20 +19,20 @@ define i32 @"main"()
   store i8 97, i8* %".13"
   %".15" = load i8, i8* %".13"
   %".16" = call i32 (i8*, ...) @"printf"(i8* %".12", i8 %".15")
-  ; printf " %c " , c
+  ; printf "%c" , c
   %".18" = bitcast [3 x i8]* @".str.f" to i8*
   %".19" = alloca float
   store float 0x4014ccccc0000000, float* %".19"
   %".21" = load float, float* %".19"
   %".22" = fpext float %".21" to double
   %".23" = call i32 (i8*, ...) @"printf"(i8* %".18", double %".22")
-  ; printf " %f " , b
+  ; printf "%f" , b
   %".25" = bitcast [3 x i8]* @".str.d" to i8*
   %".26" = alloca i32
   store i32 0, i32* %".26"
   %".28" = load i32, i32* %".26"
   %".29" = call i32 (i8*, ...) @"printf"(i8* %".25", i32 %".28")
-  ; printf " %d " , a
+  ; printf "%d" , a
   ret i32 0
   ; INT main
   ; #include <stdio.h>

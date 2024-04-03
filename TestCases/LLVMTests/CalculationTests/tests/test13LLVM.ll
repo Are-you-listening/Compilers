@@ -13,14 +13,14 @@ define i32 @"main"()
   store i32 5, i32* %".7"
   %".9" = load i32, i32* %".7"
   %".10" = call i32 (i8*, ...) @"printf"(i8* %".6", i32 %".9")
-  ; printf " %d " , x
+  ; printf "%d" , x
   %".12" = load i32, i32* %".3", align 4
   ; INT z = x + 3
   %".14" = add i32 %".12", 3
   %".15" = alloca i32, align 4
   store i32 %".14", i32* %".15", align 4
   %".17" = load i32, i32* %".15", align 4
-  ; printf " %d " , z
+  ; printf "%d" , z
   %".19" = bitcast [3 x i8]* @".str.d" to i8*
   %".20" = alloca i32
   store i32 %".17", i32* %".20"
@@ -38,7 +38,7 @@ define i32 @"main"()
   %".33" = mul i32 %".29", %".32"
   store i32 %".33", i32* %".3", align 4
   %".35" = load i32, i32* %".3", align 4
-  ; printf " %d " , x
+  ; printf "%d" , x
   %".37" = bitcast [3 x i8]* @".str.d" to i8*
   %".38" = alloca i32
   store i32 %".35", i32* %".38"
@@ -55,13 +55,13 @@ define i32 @"main"()
   store i32 34, i32* %".49"
   %".51" = load i32, i32* %".49"
   %".52" = call i32 (i8*, ...) @"printf"(i8* %".48", i32 %".51")
-  ; printf " %d " , INT f2
+  ; printf "%d" , INT f2
   %".54" = load float, float* %".45", align 4
   ; f2 = f2 + f
   %".56" = load float, float* %".42", align 4
   %".57" = fadd float %".54", %".56"
   store float %".57", float* %".45", align 4
-  ; printf " %d " , INT f2
+  ; printf "%d" , INT f2
   %".60" = load float, float* %".45", align 4
   %".61" = fptosi float %".60" to i32
   %".62" = bitcast [3 x i8]* @".str.d" to i8*
@@ -75,7 +75,7 @@ define i32 @"main"()
   store i8 98, i8* %".67", align 1
   ; c = 'b'
   %".72" = load i8, i8* %".67", align 1
-  ; printf " %c " , c
+  ; printf "%c" , c
   %".74" = bitcast [3 x i8]* @".str.c" to i8*
   %".75" = alloca i8
   store i8 %".72", i8* %".75"

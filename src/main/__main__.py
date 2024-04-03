@@ -45,6 +45,7 @@ def cleanGreen(input_file, symbol_file):
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
+
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     ASTCleaner().visit(ast)  # Do a standard cleaning

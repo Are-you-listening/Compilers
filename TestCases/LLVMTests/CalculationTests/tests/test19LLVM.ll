@@ -18,7 +18,7 @@ define i32 @"main"()
   ; * non_const_f_ptr = 3.1492
   store float 0x4009318fc0000000, float* %".12", align 8
   %".15" = load float*, float** %".9", align 8
-  ; printf " %f " , * non_const_f_ptr
+  ; printf "%f" , * non_const_f_ptr
   %".17" = load float, float* %".15", align 8
   %".18" = bitcast [3 x i8]* @".str.f" to i8*
   %".19" = alloca float
@@ -27,7 +27,7 @@ define i32 @"main"()
   %".22" = fpext float %".21" to double
   %".23" = call i32 (i8*, ...) @"printf"(i8* %".18", double %".22")
   %".24" = load float, float* %".3", align 4
-  ; printf " %f " , f
+  ; printf "%f" , f
   %".26" = bitcast [3 x i8]* @".str.f" to i8*
   %".27" = alloca float
   store float %".24", float* %".27"

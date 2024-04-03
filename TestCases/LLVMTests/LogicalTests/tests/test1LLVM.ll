@@ -56,7 +56,7 @@ define i32 @"main"()
   store i32 %".48", i32* %".50"
   %".52" = load i32, i32* %".50"
   %".53" = call i32 (i8*, ...) @"printf"(i8* %".49", i32 %".52")
-  ; printf " %d " , d
+  ; printf "%d" , d
   ret i32 0
   ; INT main
   ; #include <stdio.h>
