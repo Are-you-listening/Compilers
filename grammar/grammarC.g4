@@ -5,8 +5,10 @@ include: '#include <stdio.h>';
 comment : MULTILINE | SINGLECOMMENT;
 function : type IDENTIFIER '(' ')' '{' block_code (return)? '}'(';')*;
 line: (declaration | expr| assignment| typedef)(';')+;
+
 block_line: (declaration | expr| assignment| typedef | printf )(';')+;
 block_code: (block_line | comment | if_statement)* (';')*;
+
 typedef: 'typedef' type IDENTIFIER;
 if_statement: 'if' '(' expr ')' '{' block_code'}' ('else' ('{' block_code '}' | if_statement))?;
 printf: 'printf' '(' '"' (.)*? ('%s' | '%d' | '%x' | '%f' | '%c') (.)*? '"' ',' (expr) ')';
@@ -15,7 +17,7 @@ declaration: type IDENTIFIER ('=' expr)?;
 assignment: ('*')* IDENTIFIER ('=' expr);
 conversion: '(' type ')' (literal | expr);
 expr : literal
-     | '(' type ')' expr //explicit conversion
+     | conversion
      | '(' expr ')'
      | ('++' | '--' | '&' | '*') expr
      | IDENTIFIER ('++' | '--')
@@ -30,7 +32,7 @@ expr : literal
      | expr '|' expr
      | expr '&&' expr
      | expr '||' expr;
-literal : (INT | FLOAT | CHAR | IDENTIFIER | conversion) ;
+literal : (INT | FLOAT | CHAR | IDENTIFIER) ;
 return: 'return 0'(';')?;
 
 MULTILINE: '/*' (.)*?  '*/' ;
