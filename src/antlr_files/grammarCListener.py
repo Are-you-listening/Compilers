@@ -1,4 +1,4 @@
-# Generated from /home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
+# Generated from /home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
 from antlr4 import *
 if "." in __name__:
     from .grammarCParser import grammarCParser
@@ -23,6 +23,15 @@ class grammarCListener(ParseTreeListener):
 
     # Exit a parse tree produced by grammarCParser#code.
     def exitCode(self, ctx:grammarCParser.CodeContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#include_guard.
+    def enterInclude_guard(self, ctx:grammarCParser.Include_guardContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#include_guard.
+    def exitInclude_guard(self, ctx:grammarCParser.Include_guardContext):
         pass
 
 
@@ -62,6 +71,24 @@ class grammarCListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by grammarCParser#parameter.
+    def enterParameter(self, ctx:grammarCParser.ParameterContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#parameter.
+    def exitParameter(self, ctx:grammarCParser.ParameterContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#function_call.
+    def enterFunction_call(self, ctx:grammarCParser.Function_callContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#function_call.
+    def exitFunction_call(self, ctx:grammarCParser.Function_callContext):
+        pass
+
+
     # Enter a parse tree produced by grammarCParser#block_line.
     def enterBlock_line(self, ctx:grammarCParser.Block_lineContext):
         pass
@@ -89,12 +116,66 @@ class grammarCListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by grammarCParser#if_statement.
-    def enterIf_statement(self, ctx:grammarCParser.If_statementContext):
+    # Enter a parse tree produced by grammarCParser#define.
+    def enterDefine(self, ctx:grammarCParser.DefineContext):
         pass
 
-    # Exit a parse tree produced by grammarCParser#if_statement.
-    def exitIf_statement(self, ctx:grammarCParser.If_statementContext):
+    # Exit a parse tree produced by grammarCParser#define.
+    def exitDefine(self, ctx:grammarCParser.DefineContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#if.
+    def enterIf(self, ctx:grammarCParser.IfContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#if.
+    def exitIf(self, ctx:grammarCParser.IfContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#for.
+    def enterFor(self, ctx:grammarCParser.ForContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#for.
+    def exitFor(self, ctx:grammarCParser.ForContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#while.
+    def enterWhile(self, ctx:grammarCParser.WhileContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#while.
+    def exitWhile(self, ctx:grammarCParser.WhileContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#anonymous_scope.
+    def enterAnonymous_scope(self, ctx:grammarCParser.Anonymous_scopeContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#anonymous_scope.
+    def exitAnonymous_scope(self, ctx:grammarCParser.Anonymous_scopeContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#switch.
+    def enterSwitch(self, ctx:grammarCParser.SwitchContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#switch.
+    def exitSwitch(self, ctx:grammarCParser.SwitchContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#enum.
+    def enterEnum(self, ctx:grammarCParser.EnumContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#enum.
+    def exitEnum(self, ctx:grammarCParser.EnumContext):
         pass
 
 
@@ -113,6 +194,15 @@ class grammarCListener(ParseTreeListener):
 
     # Exit a parse tree produced by grammarCParser#type.
     def exitType(self, ctx:grammarCParser.TypeContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#return.
+    def enterReturn(self, ctx:grammarCParser.ReturnContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#return.
+    def exitReturn(self, ctx:grammarCParser.ReturnContext):
         pass
 
 
@@ -158,15 +248,6 @@ class grammarCListener(ParseTreeListener):
 
     # Exit a parse tree produced by grammarCParser#literal.
     def exitLiteral(self, ctx:grammarCParser.LiteralContext):
-        pass
-
-
-    # Enter a parse tree produced by grammarCParser#return.
-    def enterReturn(self, ctx:grammarCParser.ReturnContext):
-        pass
-
-    # Exit a parse tree produced by grammarCParser#return.
-    def exitReturn(self, ctx:grammarCParser.ReturnContext):
         pass
 
 

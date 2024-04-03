@@ -1,4 +1,4 @@
-# Generated from /home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
+# Generated from /home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
 from antlr4 import *
 if "." in __name__:
     from .grammarCParser import grammarCParser
@@ -16,6 +16,11 @@ class grammarCVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by grammarCParser#code.
     def visitCode(self, ctx:grammarCParser.CodeContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#include_guard.
+    def visitInclude_guard(self, ctx:grammarCParser.Include_guardContext):
         return self.visitChildren(ctx)
 
 
@@ -39,6 +44,16 @@ class grammarCVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by grammarCParser#parameter.
+    def visitParameter(self, ctx:grammarCParser.ParameterContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#function_call.
+    def visitFunction_call(self, ctx:grammarCParser.Function_callContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by grammarCParser#block_line.
     def visitBlock_line(self, ctx:grammarCParser.Block_lineContext):
         return self.visitChildren(ctx)
@@ -54,8 +69,38 @@ class grammarCVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by grammarCParser#if_statement.
-    def visitIf_statement(self, ctx:grammarCParser.If_statementContext):
+    # Visit a parse tree produced by grammarCParser#define.
+    def visitDefine(self, ctx:grammarCParser.DefineContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#if.
+    def visitIf(self, ctx:grammarCParser.IfContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#for.
+    def visitFor(self, ctx:grammarCParser.ForContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#while.
+    def visitWhile(self, ctx:grammarCParser.WhileContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#anonymous_scope.
+    def visitAnonymous_scope(self, ctx:grammarCParser.Anonymous_scopeContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#switch.
+    def visitSwitch(self, ctx:grammarCParser.SwitchContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#enum.
+    def visitEnum(self, ctx:grammarCParser.EnumContext):
         return self.visitChildren(ctx)
 
 
@@ -66,6 +111,11 @@ class grammarCVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by grammarCParser#type.
     def visitType(self, ctx:grammarCParser.TypeContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#return.
+    def visitReturn(self, ctx:grammarCParser.ReturnContext):
         return self.visitChildren(ctx)
 
 
@@ -91,11 +141,6 @@ class grammarCVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by grammarCParser#literal.
     def visitLiteral(self, ctx:grammarCParser.LiteralContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by grammarCParser#return.
-    def visitReturn(self, ctx:grammarCParser.ReturnContext):
         return self.visitChildren(ctx)
 
 

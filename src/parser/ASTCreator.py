@@ -103,7 +103,7 @@ class ASTCreator(grammarCVisitor):
     def visitBlock_line(self, ctx: grammarCParser.Block_lineContext):
         self.__makeNode(ctx, "Line")
 
-    def visitIf_statement(self, ctx: grammarCParser.If_statementContext):
+    def visitIf(self, ctx: grammarCParser.IfContext):
         self.__makeNode(ctx, "IF")
 
     def visitTerminal(self, ctx):
