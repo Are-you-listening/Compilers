@@ -135,12 +135,12 @@ class ASTCleaner(ASTVisitor):
         """
         support printf format stuff %d;lol with ';lol' as operator
         """
-        for i, child in enumerate(node.children[:-1]):
-            self.to_remove.add((child, node))
-            format_child_text += child.text
+        child = node.getChild(1)
 
-        format_child_text = format_child_text[len("printf") + 1:-2]
+        self.to_remove.add((child, node))
+        format_child_text += child.text
 
+        format_child_text = format_child_text[1:-1]
         format_node = ASTNodeTerminal(format_child_text, node, node.getSymbolTable(), -1, node.linenr)
         node.insertChild(0, format_node)
 
