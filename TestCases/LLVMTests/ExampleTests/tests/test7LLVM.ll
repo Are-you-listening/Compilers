@@ -5,84 +5,84 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  ; INT main
-  %".4" = alloca i32, align 4
-  store i32 5, i32* %".4", align 4
+  %".3" = alloca i32, align 4
+  store i32 5, i32* %".3", align 4
   ; INT b = CHAR 5
-  %".7" = alloca float, align 4
-  store float 0x4014000000000000, float* %".7", align 4
+  %".6" = alloca float, align 4
+  store float 0x4014000000000000, float* %".6", align 4
   ; FLOAT a = b
-  %".10" = alloca i32, align 4
-  store i32 5, i32* %".10", align 4
+  %".9" = alloca i32, align 4
+  store i32 5, i32* %".9", align 4
   ; INT c = 5.5
-  %".13" = alloca i8, align 1
-  store i8 5, i8* %".13", align 1
+  %".12" = alloca i8, align 1
+  store i8 5, i8* %".12", align 1
   ; const CHAR d = const CHAR c
-  %".16" = load i32, i32* %".4", align 4
+  %".15" = load i32, i32* %".3", align 4
   ; CHAR e = b + 3.5
-  %".18" = sitofp i32 %".16" to float
-  %".19" = fadd float %".18", 0x400c000000000000
-  %".20" = fptosi float %".19" to i8
-  %".21" = alloca i8, align 1
-  store i8 %".20", i8* %".21", align 1
+  %".17" = sitofp i32 %".15" to float
+  %".18" = fadd float %".17", 0x400c000000000000
+  %".19" = fptosi float %".18" to i8
+  %".20" = alloca i8, align 1
+  store i8 %".19", i8* %".20", align 1
   ; CHAR f = INT e + 'a'
-  %".24" = load i32, i32* %".4", align 4
-  %".25" = sitofp i32 %".24" to float
-  %".26" = fadd float %".25", 0x400c000000000000
-  %".27" = fptosi float %".26" to i8
-  %".28" = zext i8 %".27" to i32
-  %".29" = add i32 %".28", 97
-  %".30" = trunc i32 %".29" to i8
-  %".31" = alloca i8, align 1
-  store i8 %".30", i8* %".31", align 1
-  %".33" = load i32, i32* %".4", align 4
+  %".23" = load i32, i32* %".3", align 4
+  %".24" = sitofp i32 %".23" to float
+  %".25" = fadd float %".24", 0x400c000000000000
+  %".26" = fptosi float %".25" to i8
+  %".27" = zext i8 %".26" to i32
+  %".28" = add i32 %".27", 97
+  %".29" = trunc i32 %".28" to i8
+  %".30" = alloca i8, align 1
+  store i8 %".29", i8* %".30", align 1
+  %".32" = load i32, i32* %".3", align 4
   ; printf "%d" , b
-  %".35" = bitcast [3 x i8]* @".str.d" to i8*
-  %".36" = alloca i32
-  store i32 %".33", i32* %".36"
-  %".38" = load i32, i32* %".36"
-  %".39" = call i32 (i8*, ...) @"printf"(i8* %".35", i32 %".38")
-  %".40" = bitcast [3 x i8]* @".str.f" to i8*
-  %".41" = alloca float
-  store float 0x4014000000000000, float* %".41"
-  %".43" = load float, float* %".41"
-  %".44" = fpext float %".43" to double
-  %".45" = call i32 (i8*, ...) @"printf"(i8* %".40", double %".44")
+  %".34" = bitcast [3 x i8]* @".str.d" to i8*
+  %".35" = alloca i32
+  store i32 %".32", i32* %".35"
+  %".37" = load i32, i32* %".35"
+  %".38" = call i32 (i8*, ...) @"printf"(i8* %".34", i32 %".37")
+  %".39" = bitcast [3 x i8]* @".str.f" to i8*
+  %".40" = alloca float
+  store float 0x4014000000000000, float* %".40"
+  %".42" = load float, float* %".40"
+  %".43" = fpext float %".42" to double
+  %".44" = call i32 (i8*, ...) @"printf"(i8* %".39", double %".43")
   ; printf "%f" , a
-  %".47" = load i32, i32* %".10", align 4
+  %".46" = load i32, i32* %".9", align 4
   ; printf "%d" , c
-  %".49" = bitcast [3 x i8]* @".str.d" to i8*
-  %".50" = alloca i32
-  store i32 %".47", i32* %".50"
-  %".52" = load i32, i32* %".50"
-  %".53" = call i32 (i8*, ...) @"printf"(i8* %".49", i32 %".52")
-  %".54" = bitcast [3 x i8]* @".str.c" to i8*
-  %".55" = alloca i8
-  store i8 5, i8* %".55"
-  %".57" = load i8, i8* %".55"
-  %".58" = call i32 (i8*, ...) @"printf"(i8* %".54", i8 %".57")
+  %".48" = bitcast [3 x i8]* @".str.d" to i8*
+  %".49" = alloca i32
+  store i32 %".46", i32* %".49"
+  %".51" = load i32, i32* %".49"
+  %".52" = call i32 (i8*, ...) @"printf"(i8* %".48", i32 %".51")
+  %".53" = bitcast [3 x i8]* @".str.c" to i8*
+  %".54" = alloca i8
+  store i8 5, i8* %".54"
+  %".56" = load i8, i8* %".54"
+  %".57" = call i32 (i8*, ...) @"printf"(i8* %".53", i8 %".56")
   ; printf "%c" , d
-  %".60" = load i8, i8* %".21", align 1
+  %".59" = load i8, i8* %".20", align 1
   ; printf "%c" , e
-  %".62" = bitcast [3 x i8]* @".str.c" to i8*
-  %".63" = alloca i8
-  store i8 %".60", i8* %".63"
-  %".65" = load i8, i8* %".63"
-  %".66" = call i32 (i8*, ...) @"printf"(i8* %".62", i8 %".65")
-  %".67" = load i32, i32* %".4", align 4
-  %".68" = sitofp i32 %".67" to float
-  %".69" = fadd float %".68", 0x400c000000000000
-  %".70" = fptosi float %".69" to i8
-  %".71" = zext i8 %".70" to i32
-  %".72" = add i32 %".71", 97
-  %".73" = trunc i32 %".72" to i8
-  %".74" = bitcast [3 x i8]* @".str.c" to i8*
-  %".75" = alloca i8
-  store i8 %".73", i8* %".75"
-  %".77" = load i8, i8* %".75"
-  %".78" = call i32 (i8*, ...) @"printf"(i8* %".74", i8 %".77")
+  %".61" = bitcast [3 x i8]* @".str.c" to i8*
+  %".62" = alloca i8
+  store i8 %".59", i8* %".62"
+  %".64" = load i8, i8* %".62"
+  %".65" = call i32 (i8*, ...) @"printf"(i8* %".61", i8 %".64")
+  %".66" = load i32, i32* %".3", align 4
+  %".67" = sitofp i32 %".66" to float
+  %".68" = fadd float %".67", 0x400c000000000000
+  %".69" = fptosi float %".68" to i8
+  %".70" = zext i8 %".69" to i32
+  %".71" = add i32 %".70", 97
+  %".72" = trunc i32 %".71" to i8
+  %".73" = bitcast [3 x i8]* @".str.c" to i8*
+  %".74" = alloca i8
+  store i8 %".72", i8* %".74"
+  %".76" = load i8, i8* %".74"
+  %".77" = call i32 (i8*, ...) @"printf"(i8* %".73", i8 %".76")
   ; printf "%c" , f
   ret i32 0
+  ; INT main
   ; #include <stdio.h>
 }
 

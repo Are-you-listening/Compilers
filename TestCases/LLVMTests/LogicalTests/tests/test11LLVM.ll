@@ -5,40 +5,40 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  ; INT main
+  %".3" = alloca i32, align 4
+  store i32 1, i32* %".3", align 4
+  ; INT a = 1
   %".6" = alloca i32, align 4
   store i32 1, i32* %".6", align 4
-  ; INT a = 1
-  %".9" = alloca i32, align 4
-  store i32 1, i32* %".9", align 4
   ; INT b = 1
-  store i32 1, i32* %".6", align 4
+  store i32 1, i32* %".3", align 4
   ; a = 1
-  store i32 1, i32* %".9", align 4
+  store i32 1, i32* %".6", align 4
   ; b = 1
-  %".16" = alloca i32, align 4
+  %".13" = alloca i32, align 4
   ; INT f
-  %".18" = load i32, i32* %".6", align 4
+  %".15" = load i32, i32* %".3", align 4
   ; f = a || ! b
-  %".20" = icmp ne i32 %".18", 0
-  br i1 %".20", label %".4", label %".3"
-.3:
-  %".22" = load i32, i32* %".9", align 4
-  %".23" = icmp ne i32 %".22", 0
-  %".24" = xor i1 %".23", 1
-  br label %".4"
-.4:
-  %".26" = phi  i1 [1, %".2"], [%".24", %".3"]
-  %".27" = zext i1 %".26" to i32
-  store i32 %".27", i32* %".16", align 4
-  %".29" = load i32, i32* %".16", align 4
+  %".17" = icmp ne i32 %".15", 0
+  br i1 %".17", label %".22", label %".18"
+.18:
+  %".19" = load i32, i32* %".6", align 4
+  %".20" = icmp ne i32 %".19", 0
+  %".21" = xor i1 %".20", 1
+  br label %".22"
+.22:
+  %".23" = phi  i1 [%".21", %".18"], [1, %".2"]
+  %".24" = zext i1 %".23" to i32
+  store i32 %".24", i32* %".13", align 4
+  %".26" = load i32, i32* %".13", align 4
   ; printf "%d" , f
-  %".31" = bitcast [3 x i8]* @".str.d" to i8*
-  %".32" = alloca i32
-  store i32 %".29", i32* %".32"
-  %".34" = load i32, i32* %".32"
-  %".35" = call i32 (i8*, ...) @"printf"(i8* %".31", i32 %".34")
+  %".28" = bitcast [3 x i8]* @".str.d" to i8*
+  %".29" = alloca i32
+  store i32 %".26", i32* %".29"
+  %".31" = load i32, i32* %".29"
+  %".32" = call i32 (i8*, ...) @"printf"(i8* %".28", i32 %".31")
   ret i32 0
+  ; INT main
   ; #include <stdio.h>
 }
 

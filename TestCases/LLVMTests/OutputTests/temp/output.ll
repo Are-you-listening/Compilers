@@ -1,22 +1,24 @@
-; ModuleID = "tests/test1.c"
+; ModuleID = "tests/test21.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
 define i32 @"main"()
 {
 .2:
+  ;  line 1
+  %".4" = alloca i8, align 1
+  store i8 10, i8* %".4", align 1
+  ; CHAR c = '\n'
+  %".7" = alloca float, align 4
+  store float 0x40408cccc0000000, float* %".7", align 4
+  ; FLOAT f = 33.1
+  ;  another line
+  ; ///// some documentation
+  ; ///////////////////////////////////
+  ;  abcdef 123 //////////
+  %".14" = alloca float, align 4
+  store float 0x4040ffdda0000000, float* %".14", align 4
+  ; FLOAT final_line = 33.99895
+  ret i32 0
   ; INT main
-  %".4" = alloca i32, align 4
-  store i32 478, i32* %".4", align 4
-  ; INT x = 478
-  %".7" = alloca i32, align 4
-  store i32 -251454, i32* %".7", align 4
-  ; INT b = - 251454
-  %".10" = bitcast i32* %".4" to i32**
-  ; INT * * x_ptr = & x
-  %".12" = alloca i32**, align 8
-  store i32** %".10", i32*** %".12", align 8
-  %".14" = bitcast i32* %".7" to i32**
-  ; x_ptr = & b
-  store i32** %".14", i32*** %".12", align 8
 }

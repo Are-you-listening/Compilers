@@ -15,16 +15,9 @@ int main(){
     e = 0;
 
 
-    f = (a && !(b || c));
-    printf("%d", f);
-
     b = 1;
-    f = (a && !(b || c));
-    printf("%d", f);
 
     a = 1;
-    f = (a && !(b || c));
-    printf("%d", f);
 
     b = 0;
     f = (a && !(b || c));

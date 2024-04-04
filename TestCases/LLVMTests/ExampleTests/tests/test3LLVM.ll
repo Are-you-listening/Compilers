@@ -5,52 +5,52 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  ; INT main
-  %".4" = alloca i32, align 4
-  store i32 -20, i32* %".4", align 4
+  %".3" = alloca i32, align 4
+  store i32 -20, i32* %".3", align 4
   ; INT x = - 20
-  %".7" = alloca i32, align 4
-  store i32 20, i32* %".7", align 4
+  %".6" = alloca i32, align 4
+  store i32 20, i32* %".6", align 4
   ; INT a = - x
-  %".10" = load i32, i32* %".4", align 4
+  %".9" = load i32, i32* %".3", align 4
   ; INT b = - - x
-  %".12" = sub i32 0, %".10"
-  %".13" = sub i32 0, %".12"
-  %".14" = alloca i32, align 4
-  store i32 %".13", i32* %".14", align 4
-  %".16" = load i32, i32* %".4", align 4
+  %".11" = sub i32 0, %".9"
+  %".12" = sub i32 0, %".11"
+  %".13" = alloca i32, align 4
+  store i32 %".12", i32* %".13", align 4
+  %".15" = load i32, i32* %".3", align 4
   ; INT c = + - x
-  %".18" = sub i32 0, %".16"
-  %".19" = alloca i32, align 4
-  store i32 %".18", i32* %".19", align 4
-  %".21" = load i32, i32* %".4", align 4
+  %".17" = sub i32 0, %".15"
+  %".18" = alloca i32, align 4
+  store i32 %".17", i32* %".18", align 4
+  %".20" = load i32, i32* %".3", align 4
   ; printf "%d" , x
-  %".23" = bitcast [3 x i8]* @".str.d" to i8*
-  %".24" = alloca i32
-  store i32 %".21", i32* %".24"
-  %".26" = load i32, i32* %".24"
-  %".27" = call i32 (i8*, ...) @"printf"(i8* %".23", i32 %".26")
-  %".28" = bitcast [3 x i8]* @".str.d" to i8*
-  %".29" = alloca i32
-  store i32 20, i32* %".29"
-  %".31" = load i32, i32* %".29"
-  %".32" = call i32 (i8*, ...) @"printf"(i8* %".28", i32 %".31")
+  %".22" = bitcast [3 x i8]* @".str.d" to i8*
+  %".23" = alloca i32
+  store i32 %".20", i32* %".23"
+  %".25" = load i32, i32* %".23"
+  %".26" = call i32 (i8*, ...) @"printf"(i8* %".22", i32 %".25")
+  %".27" = bitcast [3 x i8]* @".str.d" to i8*
+  %".28" = alloca i32
+  store i32 20, i32* %".28"
+  %".30" = load i32, i32* %".28"
+  %".31" = call i32 (i8*, ...) @"printf"(i8* %".27", i32 %".30")
   ; printf "%d" , a
-  %".34" = load i32, i32* %".14", align 4
+  %".33" = load i32, i32* %".13", align 4
   ; printf "%d" , b
-  %".36" = bitcast [3 x i8]* @".str.d" to i8*
-  %".37" = alloca i32
-  store i32 %".34", i32* %".37"
-  %".39" = load i32, i32* %".37"
-  %".40" = call i32 (i8*, ...) @"printf"(i8* %".36", i32 %".39")
-  %".41" = load i32, i32* %".19", align 4
+  %".35" = bitcast [3 x i8]* @".str.d" to i8*
+  %".36" = alloca i32
+  store i32 %".33", i32* %".36"
+  %".38" = load i32, i32* %".36"
+  %".39" = call i32 (i8*, ...) @"printf"(i8* %".35", i32 %".38")
+  %".40" = load i32, i32* %".18", align 4
   ; printf "%d" , c
-  %".43" = bitcast [3 x i8]* @".str.d" to i8*
-  %".44" = alloca i32
-  store i32 %".41", i32* %".44"
-  %".46" = load i32, i32* %".44"
-  %".47" = call i32 (i8*, ...) @"printf"(i8* %".43", i32 %".46")
+  %".42" = bitcast [3 x i8]* @".str.d" to i8*
+  %".43" = alloca i32
+  store i32 %".40", i32* %".43"
+  %".45" = load i32, i32* %".43"
+  %".46" = call i32 (i8*, ...) @"printf"(i8* %".42", i32 %".45")
   ret i32 0
+  ; INT main
   ; #include <stdio.h>
 }
 

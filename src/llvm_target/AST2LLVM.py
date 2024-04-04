@@ -19,12 +19,18 @@ class AST2LLVM(ASTVisitor):
         self.root = None
         self.last_vertex = None
 
+        self.branch_needed = []
+
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
         self.llvm_map = {}
+        self.branch_needed = []
 
         self.root = ast.root
         self.postorder(self.root)
+
+        for b in self.branch_needed:
+            b.create_branch()
 
     def postorder(self, root: ASTNode):
         """
@@ -68,8 +74,13 @@ class AST2LLVM(ASTVisitor):
             """
             Changes the block
             """
+
             if self.last_vertex is not None:
-                self.last_vertex.create_branch()
+                self.last_vertex.check_flipped()
+                self.branch_needed.append(self.last_vertex)
+
+            if node.vertex.llvm is None:
+                node.vertex.llvm = LLVMSingleton.getInstance().addBlock()
 
             LLVMSingleton.getInstance().setCurrentBlock(node.vertex.llvm)
             self.last_vertex = node.vertex
@@ -78,6 +89,8 @@ class AST2LLVM(ASTVisitor):
 
                 phi = self.last_vertex.create_phi()
                 self.llvm_map[node.getChild(0)] = phi
+
+            return
 
         if node.text == "Declaration":
             self.handleDeclaration(node)
@@ -321,5 +334,6 @@ class AST2LLVM(ASTVisitor):
         if node.getChildAmount() == 0:
             return
         code = self.codegetter.getLine(node.getChild(0))
+
         if code is not None:
             Declaration.addComment(code)

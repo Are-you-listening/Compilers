@@ -124,7 +124,7 @@ def main(argv):
         cfc = ControlFlowCreator()
         cfc.visit(ast)
 
-        #DotVisitor("output/bla").visit(ast)
+        # DotVisitor("output/blaw").visit(ast)
 
         to_llvm = AST2LLVM(codegetter, llvm_file)  # The codegetter is used to add the original code as comments
         to_llvm.visit(ast)

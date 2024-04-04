@@ -57,6 +57,30 @@ class Vertex:
 
         self.node_link = None
 
+    def check_flipped(self):
+        """
+        Check if we need to place an XOR
+
+        :return:
+        """
+
+        if len(self.edges) != 2:
+            return
+
+        true_edge = self.edges[0]
+        false_edge = self.edges[1]
+
+        if true_edge.to_vertex != false_edge.to_vertex:
+            return
+
+        """
+        The flip value determines if we flip the value we are going to return,
+        So on flip, we add an XOR
+        """
+        if true_edge.flip_eval:
+            last_instruction = self.llvm.block.instructions[-1]
+            self.llvm.xor(last_instruction, ir.Constant(last_instruction.type, 1))
+
     def create_branch(self):
         if len(self.edges) != 2:
             return
@@ -79,13 +103,7 @@ class Vertex:
             In this case both true and false go to this branch
             """
 
-            """
-            The flip value determines if we flip the value we are going to return,
-            So on flip, we add an XOR
-            """
-            if true_edge.flip_eval:
-                last_instruction = self.llvm.block.instructions[-1]
-                self.llvm.xor(last_instruction, ir.Constant(last_instruction.type, 1))
+
 
             """
             make branch statement a boolean
@@ -130,7 +148,7 @@ class Vertex:
 
             if in_true and in_false:
 
-                last_instruction = vertex.llvm.block.instructions[-2]
+                last_instruction = vertex.llvm.block.instructions[-1]
                 """
                 make bool if not a bool type
                 """
@@ -173,18 +191,12 @@ class Edge:
 
 
 class ControlFlowGraph:
-    def __init__(self, new_block=False, start_vertex=None):
+    def __init__(self, start_vertex=None):
         """
         Initialize a new Control Graph
 
         :param new_block: an optional boolean, indicating if we want to create a new LLVM block
         """
-        if new_block:
-            """
-            creates new LLVM block
-            """
-            block = LLVMSingleton.getInstance().addBlock()
-            LLVMSingleton.getInstance().setCurrentBlock(block)
 
         """
         create a basic default root vertex
@@ -221,8 +233,6 @@ class ControlFlowGraph:
         Create a new accepting state
         """
         old_accepting = self.accepting
-        current_block = LLVMSingleton.getInstance().getCurrentBlock()
-        self.accepting.llvm = current_block
 
         """
         create the 2 new states
@@ -252,10 +262,6 @@ class ControlFlowGraph:
         """
         We will make 1 ending llVM block, that will represent the block at the end of the logical evaluation
         """
-        ending_block = LLVMSingleton.getInstance().addBlock()
-        self.accepting.llvm = ending_block
-        self.reject.llvm = ending_block
-        LLVMSingleton.getInstance().setCurrentBlock(ending_block)
 
         for edge in self.reject.reverse_edges:
             """
@@ -343,8 +349,6 @@ class ControlFlowGraph:
         new_graph.accepting = control_flow_2.accepting
         new_graph.reject = control_flow_2.reject
 
-        LLVMSingleton.getInstance().setCurrentBlock(control_flow_2.accepting.reverse_edges[0].from_vertex.llvm)
-
         return new_graph
 
     @staticmethod
@@ -397,8 +401,6 @@ class ControlFlowGraph:
 
         new_graph.reject = control_flow_2.reject
         new_graph.accepting = control_flow_2.accepting
-
-        LLVMSingleton.getInstance().setCurrentBlock(control_flow_2.accepting.reverse_edges[0].from_vertex.llvm)
 
         return new_graph
 

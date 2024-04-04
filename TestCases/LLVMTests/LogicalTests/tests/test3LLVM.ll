@@ -5,64 +5,64 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  ; INT main
-  %".10" = alloca i32, align 4
-  store i32 5, i32* %".10", align 4
+  %".3" = alloca i32, align 4
+  store i32 5, i32* %".3", align 4
   ; INT a = 5
-  %".13" = alloca i32, align 4
-  store i32 9, i32* %".13", align 4
+  %".6" = alloca i32, align 4
+  store i32 9, i32* %".6", align 4
   ; INT b = 9
-  %".16" = alloca i32, align 4
-  store i32 6, i32* %".16", align 4
+  %".9" = alloca i32, align 4
+  store i32 6, i32* %".9", align 4
   ; INT c = 6
-  store i32 5, i32* %".10", align 4
+  store i32 5, i32* %".3", align 4
   ; a = 5
-  store i32 9, i32* %".13", align 4
+  store i32 9, i32* %".6", align 4
   ; b = 9
-  store i32 6, i32* %".16", align 4
+  store i32 6, i32* %".9", align 4
   ; c = 6
-  %".25" = load i32, i32* %".10", align 4
+  %".18" = load i32, i32* %".3", align 4
   ; INT d = ! a && b || c
-  %".27" = icmp ne i32 %".25", 0
-  br i1 %".27", label %".3", label %".4"
-.3:
-  %".29" = load i32, i32* %".13", align 4
-  %".30" = icmp ne i32 %".29", 0
-  br i1 %".30", label %".5", label %".4"
-.4:
-  %".32" = load i32, i32* %".16", align 4
-  %".33" = icmp ne i32 %".32", 0
-  br label %".5"
-.5:
-  %".35" = phi  i1 [1, %".3"], [%".33", %".4"]
-  %".36" = icmp ne i1 %".35", 0
-  %".37" = xor i1 %".36", 1
-  %".38" = zext i1 %".37" to i32
-  %".39" = alloca i32, align 4
-  store i32 %".38", i32* %".39", align 4
-  %".41" = load i32, i32* %".10", align 4
-  %".42" = icmp ne i32 %".41", 0
-  br i1 %".42", label %".6", label %".7"
-.6:
-  %".44" = load i32, i32* %".13", align 4
-  %".45" = icmp ne i32 %".44", 0
-  br i1 %".45", label %".8", label %".7"
-.7:
-  %".47" = load i32, i32* %".16", align 4
-  %".48" = icmp ne i32 %".47", 0
-  br label %".8"
-.8:
-  %".50" = phi  i1 [1, %".6"], [%".48", %".7"]
-  %".51" = icmp ne i1 %".50", 0
-  %".52" = xor i1 %".51", 1
-  %".53" = zext i1 %".52" to i32
-  %".54" = bitcast [3 x i8]* @".str.d" to i8*
-  %".55" = alloca i32
-  store i32 %".53", i32* %".55"
-  %".57" = load i32, i32* %".55"
-  %".58" = call i32 (i8*, ...) @"printf"(i8* %".54", i32 %".57")
+  %".20" = icmp ne i32 %".18", 0
+  br i1 %".20", label %".21", label %".24"
+.21:
+  %".22" = load i32, i32* %".6", align 4
+  %".23" = icmp ne i32 %".22", 0
+  br i1 %".23", label %".27", label %".24"
+.24:
+  %".25" = load i32, i32* %".9", align 4
+  %".26" = icmp ne i32 %".25", 0
+  br label %".27"
+.27:
+  %".28" = phi  i1 [1, %".21"], [%".26", %".24"]
+  %".29" = icmp ne i1 %".28", 0
+  %".30" = xor i1 %".29", 1
+  %".31" = zext i1 %".30" to i32
+  %".32" = alloca i32, align 4
+  store i32 %".31", i32* %".32", align 4
+  %".34" = load i32, i32* %".3", align 4
+  %".35" = icmp ne i32 %".34", 0
+  br i1 %".35", label %".36", label %".39"
+.36:
+  %".37" = load i32, i32* %".6", align 4
+  %".38" = icmp ne i32 %".37", 0
+  br i1 %".38", label %".42", label %".39"
+.39:
+  %".40" = load i32, i32* %".9", align 4
+  %".41" = icmp ne i32 %".40", 0
+  br label %".42"
+.42:
+  %".43" = phi  i1 [%".41", %".39"], [1, %".36"]
+  %".44" = icmp ne i1 %".43", 0
+  %".45" = xor i1 %".44", 1
+  %".46" = zext i1 %".45" to i32
+  %".47" = bitcast [3 x i8]* @".str.d" to i8*
+  %".48" = alloca i32
+  store i32 %".46", i32* %".48"
+  %".50" = load i32, i32* %".48"
+  %".51" = call i32 (i8*, ...) @"printf"(i8* %".47", i32 %".50")
   ; printf "%d" , d
   ret i32 0
+  ; INT main
   ; #include <stdio.h>
 }
 

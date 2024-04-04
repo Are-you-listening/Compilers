@@ -155,8 +155,6 @@ class ControlFlowCreator(ASTVisitor):
             """
             make new block, because right side of a logical expression is in another block
             """
-            new_block = LLVMSingleton.getInstance().addBlock()
-            LLVMSingleton.getInstance().setCurrentBlock(new_block)
 
             cfg = self.control_flow_map.get(node.getSiblingNeighbour(-1), None)
 
@@ -252,7 +250,7 @@ class ControlFlowCreator(ASTVisitor):
         sub_control_graph_right = self.control_flow_map.get(node.getSiblingNeighbour(1), None)
 
         if sub_control_graph_right is None:
-            sub_control_graph_right = ControlFlowGraph(False)
+            sub_control_graph_right = ControlFlowGraph()
 
         if not sub_control_graph_right.isEval():
             sub_control_graph_right.startEval()
