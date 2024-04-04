@@ -89,6 +89,7 @@ class Declaration:
         """
         change the current latest function
         """
+
         function_type = ir.FunctionType(CTypesToLLVM.getIRType(return_type, ptrs), ())
         new_function = ir.Function(LLVMSingleton.getInstance().getModule(), function_type, name=func_name)
         LLVMSingleton.getInstance().setLastFunction(new_function)
@@ -204,7 +205,6 @@ class Calculation:
             if llvm_op is not None:
                 llvm_var = llvm_op(operator, left, right)
                 return llvm_var
-
 
         if left.type.is_pointer and operator in ["+", "-"]:
             if not isinstance(right,

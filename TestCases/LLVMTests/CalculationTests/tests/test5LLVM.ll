@@ -5,40 +5,40 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 4, i32* %".3", align 4
+  ; INT main
+  %".4" = alloca i32, align 4
+  store i32 4, i32* %".4", align 4
   ; INT x = 4
-  store i32 1, i32* %".3", align 4
+  store i32 1, i32* %".4", align 4
   ; x = 1
-  %".8" = alloca i32*, align 8
-  store i32* %".3", i32** %".8", align 8
+  %".9" = alloca i32*, align 8
+  store i32* %".4", i32** %".9", align 8
   ; INT * ptr = & x
-  %".11" = load i32*, i32** %".8", align 8
+  %".12" = load i32*, i32** %".9", align 8
   ; ptr ++
-  %".13" = getelementptr inbounds i32, i32* %".11", i64 1
-  store i32* %".13", i32** %".8", align 8
-  %".15" = load i32*, i32** %".8", align 8
+  %".14" = getelementptr inbounds i32, i32* %".12", i64 1
+  store i32* %".14", i32** %".9", align 8
+  %".16" = load i32*, i32** %".9", align 8
   ; ptr --
-  %".17" = sub i64 0, 1
-  %".18" = getelementptr inbounds i32, i32* %".15", i64 %".17"
-  store i32* %".18", i32** %".8", align 8
-  %".20" = load i32*, i32** %".8", align 8
+  %".18" = sub i64 0, 1
+  %".19" = getelementptr inbounds i32, i32* %".16", i64 %".18"
+  store i32* %".19", i32** %".9", align 8
+  %".21" = load i32*, i32** %".9", align 8
   ; INT is_x = ptr == & x
-  %".22" = icmp eq i32* %".20", %".3"
-  %".23" = zext i1 %".22" to i32
-  %".24" = alloca i32, align 4
-  store i32 %".23", i32* %".24", align 4
-  %".26" = load i32*, i32** %".8", align 8
-  %".27" = icmp eq i32* %".26", %".3"
-  %".28" = zext i1 %".27" to i32
-  %".29" = bitcast [3 x i8]* @".str.d" to i8*
-  %".30" = alloca i32
-  store i32 %".28", i32* %".30"
-  %".32" = load i32, i32* %".30"
-  %".33" = call i32 (i8*, ...) @"printf"(i8* %".29", i32 %".32")
+  %".23" = icmp eq i32* %".21", %".4"
+  %".24" = zext i1 %".23" to i32
+  %".25" = alloca i32, align 4
+  store i32 %".24", i32* %".25", align 4
+  %".27" = load i32*, i32** %".9", align 8
+  %".28" = icmp eq i32* %".27", %".4"
+  %".29" = zext i1 %".28" to i32
+  %".30" = bitcast [3 x i8]* @".str.d" to i8*
+  %".31" = alloca i32
+  store i32 %".29", i32* %".31"
+  %".33" = load i32, i32* %".31"
+  %".34" = call i32 (i8*, ...) @"printf"(i8* %".30", i32 %".33")
   ; printf "%d" , is_x
   ret i32 0
-  ; INT main
   ; #include <stdio.h>
 }
 

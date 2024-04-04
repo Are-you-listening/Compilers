@@ -5,138 +5,138 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 0, i32* %".3", align 4
-  ; INT a = 0
-  %".6" = alloca i32, align 4
-  store i32 0, i32* %".6", align 4
-  ; INT b = 0
-  %".9" = alloca i32, align 4
-  store i32 0, i32* %".9", align 4
-  ; INT c = 0
-  %".12" = alloca i32, align 4
-  store i32 0, i32* %".12", align 4
-  ; INT d = 0
-  %".15" = alloca i32, align 4
-  store i32 0, i32* %".15", align 4
-  ; INT e = 0
-  %".18" = alloca i32, align 4
-  store i32 0, i32* %".18", align 4
-  ; INT f = 0
-  store i32 0, i32* %".3", align 4
-  ; a = 0
-  store i32 0, i32* %".6", align 4
-  ; b = 0
-  store i32 0, i32* %".9", align 4
-  ; c = 0
-  store i32 0, i32* %".12", align 4
-  ; d = 0
-  store i32 0, i32* %".15", align 4
-  ; e = 0
-  %".31" = load i32, i32* %".3", align 4
-  ; f = a && ! b || c
-  %".33" = icmp ne i32 %".31", 0
-  br i1 %".33", label %".34", label %".40"
-.34:
-  %".35" = load i32, i32* %".6", align 4
-  %".36" = icmp ne i32 %".35", 0
-  br i1 %".36", label %".40", label %".37"
-.37:
-  %".38" = load i32, i32* %".9", align 4
-  %".39" = icmp ne i32 %".38", 0
-  %".43" = xor i1 %".39", 1
-  br label %".40"
-.40:
-  %".45" = phi  i1 [0, %".34"], [%".43", %".37"], [0, %".2"]
-  %".46" = zext i1 %".45" to i32
-  store i32 %".46", i32* %".18", align 4
-  %".48" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
-  %".50" = bitcast [3 x i8]* @".str.d" to i8*
-  %".51" = alloca i32
-  store i32 %".48", i32* %".51"
-  %".53" = load i32, i32* %".51"
-  %".54" = call i32 (i8*, ...) @"printf"(i8* %".50", i32 %".53")
-  store i32 1, i32* %".6", align 4
-  ; b = 1
-  %".57" = load i32, i32* %".3", align 4
-  ; f = a && ! b || c
-  %".59" = icmp ne i32 %".57", 0
-  br i1 %".59", label %".60", label %".66"
-.60:
-  %".61" = load i32, i32* %".6", align 4
-  %".62" = icmp ne i32 %".61", 0
-  br i1 %".62", label %".66", label %".63"
-.63:
-  %".64" = load i32, i32* %".9", align 4
-  %".65" = icmp ne i32 %".64", 0
-  %".69" = xor i1 %".65", 1
-  br label %".66"
-.66:
-  %".71" = phi  i1 [0, %".40"], [%".69", %".63"], [0, %".60"]
-  %".72" = zext i1 %".71" to i32
-  store i32 %".72", i32* %".18", align 4
-  %".74" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
-  %".76" = bitcast [3 x i8]* @".str.d" to i8*
-  %".77" = alloca i32
-  store i32 %".74", i32* %".77"
-  %".79" = load i32, i32* %".77"
-  %".80" = call i32 (i8*, ...) @"printf"(i8* %".76", i32 %".79")
-  store i32 1, i32* %".3", align 4
-  ; a = 1
-  %".83" = load i32, i32* %".3", align 4
-  ; f = a && ! b || c
-  %".85" = icmp ne i32 %".83", 0
-  br i1 %".85", label %".86", label %".92"
-.86:
-  %".87" = load i32, i32* %".6", align 4
-  %".88" = icmp ne i32 %".87", 0
-  br i1 %".88", label %".92", label %".89"
-.89:
-  %".90" = load i32, i32* %".9", align 4
-  %".91" = icmp ne i32 %".90", 0
-  %".95" = xor i1 %".91", 1
-  br label %".92"
-.92:
-  %".97" = phi  i1 [0, %".86"], [%".95", %".89"], [0, %".66"]
-  %".98" = zext i1 %".97" to i32
-  store i32 %".98", i32* %".18", align 4
-  %".100" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
-  %".102" = bitcast [3 x i8]* @".str.d" to i8*
-  %".103" = alloca i32
-  store i32 %".100", i32* %".103"
-  %".105" = load i32, i32* %".103"
-  %".106" = call i32 (i8*, ...) @"printf"(i8* %".102", i32 %".105")
-  store i32 0, i32* %".6", align 4
-  ; b = 0
-  %".109" = load i32, i32* %".3", align 4
-  ; f = a && ! b || c
-  %".111" = icmp ne i32 %".109", 0
-  br i1 %".111", label %".112", label %".118"
-.112:
-  %".113" = load i32, i32* %".6", align 4
-  %".114" = icmp ne i32 %".113", 0
-  br i1 %".114", label %".118", label %".115"
-.115:
-  %".116" = load i32, i32* %".9", align 4
-  %".117" = icmp ne i32 %".116", 0
-  %".121" = xor i1 %".117", 1
-  br label %".118"
-.118:
-  %".123" = phi  i1 [0, %".112"], [%".121", %".115"], [0, %".92"]
-  %".124" = zext i1 %".123" to i32
-  store i32 %".124", i32* %".18", align 4
-  %".126" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
-  %".128" = bitcast [3 x i8]* @".str.d" to i8*
-  %".129" = alloca i32
-  store i32 %".126", i32* %".129"
-  %".131" = load i32, i32* %".129"
-  %".132" = call i32 (i8*, ...) @"printf"(i8* %".128", i32 %".131")
-  ret i32 0
   ; INT main
+  %".16" = alloca i32, align 4
+  store i32 0, i32* %".16", align 4
+  ; INT a = 0
+  %".19" = alloca i32, align 4
+  store i32 0, i32* %".19", align 4
+  ; INT b = 0
+  %".22" = alloca i32, align 4
+  store i32 0, i32* %".22", align 4
+  ; INT c = 0
+  %".25" = alloca i32, align 4
+  store i32 0, i32* %".25", align 4
+  ; INT d = 0
+  %".28" = alloca i32, align 4
+  store i32 0, i32* %".28", align 4
+  ; INT e = 0
+  %".31" = alloca i32, align 4
+  store i32 0, i32* %".31", align 4
+  ; INT f = 0
+  store i32 0, i32* %".16", align 4
+  ; a = 0
+  store i32 0, i32* %".19", align 4
+  ; b = 0
+  store i32 0, i32* %".22", align 4
+  ; c = 0
+  store i32 0, i32* %".25", align 4
+  ; d = 0
+  store i32 0, i32* %".28", align 4
+  ; e = 0
+  %".44" = load i32, i32* %".16", align 4
+  ; f = a && ! b || c
+  %".46" = icmp ne i32 %".44", 0
+  br i1 %".46", label %".3", label %".5"
+.3:
+  %".48" = load i32, i32* %".19", align 4
+  %".49" = icmp ne i32 %".48", 0
+  br i1 %".49", label %".5", label %".4"
+.4:
+  %".51" = load i32, i32* %".22", align 4
+  %".52" = icmp ne i32 %".51", 0
+  %".53" = xor i1 %".52", 1
+  br label %".5"
+.5:
+  %".55" = phi  i1 [%".53", %".4"], [0, %".3"], [0, %".2"]
+  %".56" = zext i1 %".55" to i32
+  store i32 %".56", i32* %".31", align 4
+  %".58" = load i32, i32* %".31", align 4
+  ; printf "%d" , f
+  %".60" = bitcast [3 x i8]* @".str.d" to i8*
+  %".61" = alloca i32
+  store i32 %".58", i32* %".61"
+  %".63" = load i32, i32* %".61"
+  %".64" = call i32 (i8*, ...) @"printf"(i8* %".60", i32 %".63")
+  store i32 1, i32* %".19", align 4
+  ; b = 1
+  %".67" = load i32, i32* %".16", align 4
+  ; f = a && ! b || c
+  %".69" = icmp ne i32 %".67", 0
+  br i1 %".69", label %".6", label %".8"
+.6:
+  %".71" = load i32, i32* %".19", align 4
+  %".72" = icmp ne i32 %".71", 0
+  br i1 %".72", label %".8", label %".7"
+.7:
+  %".74" = load i32, i32* %".22", align 4
+  %".75" = icmp ne i32 %".74", 0
+  %".76" = xor i1 %".75", 1
+  br label %".8"
+.8:
+  %".78" = phi  i1 [0, %".5"], [%".76", %".7"], [0, %".6"]
+  %".79" = zext i1 %".78" to i32
+  store i32 %".79", i32* %".31", align 4
+  %".81" = load i32, i32* %".31", align 4
+  ; printf "%d" , f
+  %".83" = bitcast [3 x i8]* @".str.d" to i8*
+  %".84" = alloca i32
+  store i32 %".81", i32* %".84"
+  %".86" = load i32, i32* %".84"
+  %".87" = call i32 (i8*, ...) @"printf"(i8* %".83", i32 %".86")
+  store i32 1, i32* %".16", align 4
+  ; a = 1
+  %".90" = load i32, i32* %".16", align 4
+  ; f = a && ! b || c
+  %".92" = icmp ne i32 %".90", 0
+  br i1 %".92", label %".9", label %".11"
+.9:
+  %".94" = load i32, i32* %".19", align 4
+  %".95" = icmp ne i32 %".94", 0
+  br i1 %".95", label %".11", label %".10"
+.10:
+  %".97" = load i32, i32* %".22", align 4
+  %".98" = icmp ne i32 %".97", 0
+  %".99" = xor i1 %".98", 1
+  br label %".11"
+.11:
+  %".101" = phi  i1 [0, %".9"], [0, %".8"], [%".99", %".10"]
+  %".102" = zext i1 %".101" to i32
+  store i32 %".102", i32* %".31", align 4
+  %".104" = load i32, i32* %".31", align 4
+  ; printf "%d" , f
+  %".106" = bitcast [3 x i8]* @".str.d" to i8*
+  %".107" = alloca i32
+  store i32 %".104", i32* %".107"
+  %".109" = load i32, i32* %".107"
+  %".110" = call i32 (i8*, ...) @"printf"(i8* %".106", i32 %".109")
+  store i32 0, i32* %".19", align 4
+  ; b = 0
+  %".113" = load i32, i32* %".16", align 4
+  ; f = a && ! b || c
+  %".115" = icmp ne i32 %".113", 0
+  br i1 %".115", label %".12", label %".14"
+.12:
+  %".117" = load i32, i32* %".19", align 4
+  %".118" = icmp ne i32 %".117", 0
+  br i1 %".118", label %".14", label %".13"
+.13:
+  %".120" = load i32, i32* %".22", align 4
+  %".121" = icmp ne i32 %".120", 0
+  %".122" = xor i1 %".121", 1
+  br label %".14"
+.14:
+  %".124" = phi  i1 [%".122", %".13"], [0, %".12"], [0, %".11"]
+  %".125" = zext i1 %".124" to i32
+  store i32 %".125", i32* %".31", align 4
+  %".127" = load i32, i32* %".31", align 4
+  ; printf "%d" , f
+  %".129" = bitcast [3 x i8]* @".str.d" to i8*
+  %".130" = alloca i32
+  store i32 %".127", i32* %".130"
+  %".132" = load i32, i32* %".130"
+  %".133" = call i32 (i8*, ...) @"printf"(i8* %".129", i32 %".132")
+  ret i32 0
   ; #include <stdio.h>
 }
 

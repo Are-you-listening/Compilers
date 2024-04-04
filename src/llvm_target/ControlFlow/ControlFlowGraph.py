@@ -12,6 +12,7 @@ class Vertex:
         :param llvm_block: The llvm block that corresponds to this vertex
         """
         self.llvm = llvm_block
+        self.node_link = None
 
         """
         list of directed edges
@@ -19,6 +20,12 @@ class Vertex:
         """
         self.edges = []
         self.reverse_edges = []
+
+        """
+        The Instructions whose node we want for calculating our phi
+        """
+        self.phi_nodes = []
+        self.use_phi = False
 
     def addEdge(self, edge: "Edge"):
         """
@@ -36,6 +43,106 @@ class Vertex:
 
     def accept(self, visitor):
         visitor.visitVertex(self)
+
+    def give_vertex(self, other_vertex):
+        """
+        Give the node link to another vertex
+        :param other_vertex:
+        :return:
+        """
+        if self.node_link is None:
+            return
+        self.node_link.replaceVertex(other_vertex)
+        other_vertex.node_link = self.node_link
+
+        self.node_link = None
+
+    def create_branch(self):
+        if len(self.edges) != 2:
+            return
+
+        """
+        store the true and false edges as separate variables
+        """
+        if self.edges[0].on:
+            true_edge = self.edges[0]
+            false_edge = self.edges[1]
+        else:
+            true_edge = self.edges[1]
+            false_edge = self.edges[0]
+
+        """
+        If both edges go the same block, we can just do a normal branch
+        """
+        if true_edge.to_vertex == false_edge.to_vertex:
+            """
+            In this case both true and false go to this branch
+            """
+
+            """
+            The flip value determines if we flip the value we are going to return,
+            So on flip, we add an XOR
+            """
+            if true_edge.flip_eval:
+                last_instruction = self.llvm.block.instructions[-1]
+                self.llvm.xor(last_instruction, ir.Constant(last_instruction.type, 1))
+
+            """
+            make branch statement a boolean
+            """
+            self.llvm.branch(true_edge.to_vertex.llvm.block)
+
+        else:
+            """
+            when different endpoints for true and false, we make a conditional branch
+            """
+            last_instruction = ControlFlowGraph.makeBool(self.llvm)
+
+            self.llvm.cbranch(last_instruction, true_edge.to_vertex.llvm.block,
+                                        false_edge.to_vertex.llvm.block)
+
+    def create_phi(self):
+        """
+        last block needs a phi
+        calculate the phi
+        """
+
+        edge_true_list = set()
+        edge_false_list = set()
+        for edge in self.reverse_edges:
+            if edge.on ^ edge.flip_eval:
+                edge_true_list.add(edge.from_vertex)
+            else:
+                edge_false_list.add(edge.from_vertex)
+
+        """
+        check the edge vertex lists
+        if only in true -> phi will be true if coming from this branch
+        if only in false -> phi will be false if coming from this branch
+        if both -> phi will take the value at the end of this block
+        """
+        bool_type = ir.IntType(1)
+        phi: ir.PhiInstr = self.llvm.phi(bool_type)
+
+        for vertex in edge_true_list.union(edge_false_list):
+            in_true = vertex in edge_true_list
+            in_false = vertex in edge_false_list
+
+            if in_true and in_false:
+
+                last_instruction = vertex.llvm.block.instructions[-2]
+                """
+                make bool if not a bool type
+                """
+
+                phi.add_incoming(last_instruction, vertex.llvm.block)
+
+            elif in_true:
+                phi.add_incoming(ir.Constant(bool_type, 1), vertex.llvm.block)
+            elif in_false:
+                phi.add_incoming(ir.Constant(bool_type, 0), vertex.llvm.block)
+
+        return phi
 
 
 class Edge:
@@ -66,7 +173,7 @@ class Edge:
 
 
 class ControlFlowGraph:
-    def __init__(self, new_block=False):
+    def __init__(self, new_block=False, start_vertex=None):
         """
         Initialize a new Control Graph
 
@@ -82,7 +189,10 @@ class ControlFlowGraph:
         """
         create a basic default root vertex
         """
-        self.root: Vertex = Vertex(LLVMSingleton.getInstance().getCurrentBlock())
+        self.root: Vertex = Vertex(None)
+
+        if start_vertex is not None:
+            self.root = start_vertex
 
         """
         To easily support Control flow construction for example for logical '&&','||',...
@@ -161,150 +271,14 @@ class ControlFlowGraph:
         """
         create the branches
         """
-        phi = self.__evalSetBranches()
 
         """
         set the Reject to None, because the evaluation has ended
         """
         self.reject = None
 
-        return phi
-
-    def __evalSetBranches(self):
-        """
-        Generate the correct branches
-        :return: phi: the phi LLVM instruction we end with
-        """
-
-        """
-        This function is a Breath First Search starting from the root, when checking its vertex it will
-        Look at its departing edges and will make the correct branch depending to which block they go to
-        """
-
-        to_check = {self.root}
-        checked = set()
-        final_vertex = None
-
-        """
-        do this loop till all the vertices are checked
-        """
-        while len(to_check) != 0:
-
-            """
-            store the vertex that we are checking in current_vertex
-            """
-            current_vertex = to_check.pop()
-            checked.add(current_vertex)
-
-            """
-            We check the amount of edges the branch has,
-            If the amount is not equal to 2, we don't care, because this means this
-            """
-            if len(current_vertex.edges) != 2:
-                final_vertex = current_vertex
-                continue
-
-            """
-            store the true and false edges as separate variables
-            """
-            if current_vertex.edges[0].on:
-                true_edge = current_vertex.edges[0]
-                false_edge = current_vertex.edges[1]
-            else:
-                true_edge = current_vertex.edges[1]
-                false_edge = current_vertex.edges[0]
-
-            """
-            If both edges go the same block, we can just do a normal branch
-            """
-            if true_edge.to_vertex == false_edge.to_vertex:
-                """
-                In this case both true and false go to this branch
-                """
-
-                """
-                The flip value determines if we flip the value we are going to return,
-                So on flip, we add an XOR
-                """
-                if true_edge.flip_eval:
-                    last_instruction = current_vertex.llvm.block.instructions[-1]
-                    current_vertex.llvm.xor(last_instruction, ir.Constant(last_instruction.type, 1))
-
-                """
-                make branch statement a boolean
-                """
-                current_vertex.llvm.branch(true_edge.to_vertex.llvm.block)
-
-            else:
-                """
-                when different endpoints for true and false, we make a conditional branch
-                """
-                last_instruction = self.__makeBool(current_vertex.llvm)
-
-                current_vertex.llvm.cbranch(last_instruction, true_edge.to_vertex.llvm.block,
-                                            false_edge.to_vertex.llvm.block)
-
-            """
-            decide which new vertices we add to the to_check, We don't want to check things again
-            """
-            if true_edge.to_vertex not in checked and true_edge.to_vertex not in to_check:
-                to_check.add(true_edge.to_vertex)
-
-            if false_edge.to_vertex not in checked and false_edge.to_vertex not in to_check:
-                to_check.add(false_edge.to_vertex)
-
-        """
-        do the final part of the end eval
-        """
-        return self.__evalFinalVertex(final_vertex)
-
     @staticmethod
-    def __evalFinalVertex(final_vertex):
-        """
-        last block needs a phi
-        calculate the phi
-        """
-        current_vertex = final_vertex
-
-        edge_true_list = set()
-        edge_false_list = set()
-        for edge in current_vertex.reverse_edges:
-            if edge.on ^ edge.flip_eval:
-                edge_true_list.add(edge.from_vertex)
-            else:
-                edge_false_list.add(edge.from_vertex)
-
-        """
-        check the edge vertex lists
-        if only in true -> phi will be true if coming from this branch
-        if only in false -> phi will be false if coming from this branch
-        if both -> phi will take the value at the end of this block
-        """
-        bool_type = ir.IntType(1)
-        phi: ir.PhiInstr = current_vertex.llvm.phi(bool_type)
-
-        for vertex in edge_true_list.union(edge_false_list):
-            in_true = vertex in edge_true_list
-            in_false = vertex in edge_false_list
-
-            if in_true and in_false:
-
-                last_instruction = vertex.llvm.block.instructions[-2]
-                """
-                make bool if not a bool type
-                """
-
-                phi.add_incoming(last_instruction, vertex.llvm.block)
-
-            elif in_true:
-                phi.add_incoming(ir.Constant(bool_type, 1), vertex.llvm.block)
-            elif in_false:
-                phi.add_incoming(ir.Constant(bool_type, 0), vertex.llvm.block)
-
-        return phi
-
-    @staticmethod
-    def __makeBool(builder):
+    def makeBool(builder):
         """
         convert to LLVM bool type
         :param builder:
@@ -346,10 +320,12 @@ class ControlFlowGraph:
         """
         All edges pointing to control flow 1 accept now point to the root of control flow 2
         """
+
         original_accepting = control_flow_1.accepting
         for e in original_accepting.reverse_edges:
             e.to_vertex = control_flow_2.root
             control_flow_2.root.reverse_edges.append(e)
+        control_flow_1.accepting.give_vertex(control_flow_2.root)
 
         """
         All edges pointing to control flow 1 reject now point to the reject of control flow 2
@@ -358,6 +334,8 @@ class ControlFlowGraph:
         for e in original_reject.reverse_edges:
             e.to_vertex = control_flow_2.reject
             control_flow_2.reject.reverse_edges.append(e)
+
+        control_flow_1.reject.give_vertex(control_flow_2.reject)
 
         """
         set new graph, accepting, rejecting to the real ending accepting and rejecting
@@ -405,6 +383,8 @@ class ControlFlowGraph:
             e.to_vertex = control_flow_2.accepting
             control_flow_2.accepting.reverse_edges.append(e)
 
+        control_flow_1.accepting.give_vertex(control_flow_2.accepting)
+
         """
         All edges pointing to control flow 1 reject now point to the root of control flow 2
         """
@@ -412,6 +392,8 @@ class ControlFlowGraph:
         for e in original_reject.reverse_edges:
             e.to_vertex = control_flow_2.root
             control_flow_2.root.reverse_edges.append(e)
+
+        control_flow_1.reject.give_vertex(control_flow_2.root)
 
         new_graph.reject = control_flow_2.reject
         new_graph.accepting = control_flow_2.accepting
@@ -444,5 +426,19 @@ class ControlFlowGraph:
 
         for edge in control_flow_1.reject.reverse_edges:
             edge.switchFlip()
+
+        return control_flow_1
+
+    def get_endpoints(self):
+        return self.root.llvm, self.accepting.llvm
+
+    @staticmethod
+    def default_merge(control_flow_1: "ControlFlowGraph", control_flow_2: "ControlFlowGraph"):
+        ed = control_flow_2.root.edges
+        for edge in ed:
+            edge.from_vertex = control_flow_1.accepting
+            control_flow_1.accepting.addEdge(edge)
+
+        control_flow_1.accepting = control_flow_2.accepting
 
         return control_flow_1

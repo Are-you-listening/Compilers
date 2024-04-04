@@ -32,6 +32,10 @@ class ControlFlowDotVisitor:
             label = "not yet labeled"
         else:
             label = str(vertex.llvm.block)
+
+            for i in vertex.llvm.block.instructions:
+                label += "\n"+str(i)
+
             label = label.replace("\"", "\'")
         self.outfile.write(f'  "{id(vertex)}" [label="{label}"];\n')
         for edge in vertex.edges:

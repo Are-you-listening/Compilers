@@ -1,8 +1,9 @@
 from src.llvm_target.OutputLLVMGenerator import *
 from src.llvm_target.MapTable.MapTable import *
-from src.llvm_target.ControlFlow.ControlFlowGraph import *
+
 from src.parser.CodeGetter import *
 from llvmlite import ir
+from src.parser.AST import ASTNodeBlock
 
 
 class AST2LLVM(ASTVisitor):
@@ -16,18 +17,14 @@ class AST2LLVM(ASTVisitor):
         self.llvm_map = {}
         self.fileName = fileName
         self.root = None
-        self.control_flow_map = {}
-        self.eval_scope_node = None
+        self.last_vertex = None
 
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
         self.llvm_map = {}
 
-        self.control_flow_map = {}
-
         self.root = ast.root
         self.postorder(self.root)
-        self.eval_scope_node = None
 
     def postorder(self, root: ASTNode):
         """
@@ -46,12 +43,7 @@ class AST2LLVM(ASTVisitor):
             if currentNode.text == "Function" and currentNode not in visited:
                 visited.add(currentNode)
                 self.map_table = MapTable(self.map_table)
-                self.handleFunction(currentNode)
 
-            if currentNode.text == "Expr" and currentNode.getChildAmount() == 3 and currentNode.getChild(1).text in (
-                    "&&", "||"):
-                if self.eval_scope_node is None:
-                    self.eval_scope_node = currentNode
 
             childNotVisited = False
             for child in reversed(currentNode.getChildren()):
@@ -61,8 +53,9 @@ class AST2LLVM(ASTVisitor):
             if not childNotVisited:
                 # print(currentNode.text)  # debug print
                 currentNode.accept(self)
-                visited.add(currentNode)
                 stack.pop()
+
+            visited.add(currentNode)
 
     def visitNode(self, node: ASTNode):
         """
@@ -70,6 +63,21 @@ class AST2LLVM(ASTVisitor):
         :param node:
         :return:
         """
+
+        if isinstance(node, ASTNodeBlock):
+            """
+            Changes the block
+            """
+            if self.last_vertex is not None:
+                self.last_vertex.create_branch()
+
+            LLVMSingleton.getInstance().setCurrentBlock(node.vertex.llvm)
+            self.last_vertex = node.vertex
+
+            if self.last_vertex.use_phi:
+
+                phi = self.last_vertex.create_phi()
+                self.llvm_map[node.getChild(0)] = phi
 
         if node.text == "Declaration":
             self.handleDeclaration(node)
@@ -100,21 +108,6 @@ class AST2LLVM(ASTVisitor):
 
         self.addOriginalCodeAsComment(node)
 
-        for child in node.children:
-            cf = self.control_flow_map.get(child, None)
-            if cf is not None:
-                self.control_flow_map[node] = cf
-                break
-
-        if self.eval_scope_node == node:
-            cf = self.control_flow_map.get(node, None)
-            phi = cf.endEval()
-            self.llvm_map[node] = phi
-            self.eval_scope_node = None
-
-        if node.text == "Start" and self.llvm_map.get(node, None) is None:
-            self.control_flow_map[node] = ControlFlowGraph()
-
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
             entry = self.map_table.getEntry(node.text)
@@ -131,20 +124,6 @@ class AST2LLVM(ASTVisitor):
             llvm_var = Declaration.llvmLiteral(node.text, node.type, "")
             self.llvm_map[node] = llvm_var
 
-        if node.text in ("||", "&&"):
-            """
-            make left side start
-            """
-            if self.control_flow_map.get(node.getSiblingNeighbour(-1), None) is None:
-                left = ControlFlowGraph()
-                self.control_flow_map[node.getSiblingNeighbour(-1)] = left
-                left.startEval()
-
-            """
-            make new block, because right side of a logical expression is in another block
-            """
-            new_block = LLVMSingleton.getInstance().addBlock()
-            LLVMSingleton.getInstance().setCurrentBlock(new_block)
 
     @staticmethod
     def handleFunction(node: ASTNode):
@@ -262,20 +241,6 @@ class AST2LLVM(ASTVisitor):
             child = node.getChild(1)
             post_incr = False
 
-            """
-            when ! is inside a logical expression
-            """
-
-            sub_control_graph_right = self.control_flow_map.get(node.getChild(1), None)
-            if operator == "!" and self.eval_scope_node is not None and sub_control_graph_right is not None:
-                own_sub_control = ControlFlowGraph.mergeLogicalNot(sub_control_graph_right)
-
-                self.control_flow_map[node.getChild(0)] = own_sub_control
-                self.control_flow_map[node.getChild(1)] = own_sub_control
-
-                self.llvm_map[node] = self.llvm_map[node.getChild(1)]
-                return
-
             if child.text in ("++", "--"):
                 operator = child.text
                 child = node.getChild(0)
@@ -295,30 +260,16 @@ class AST2LLVM(ASTVisitor):
 
         if node.getChildAmount() == 3:
 
-            operator = node.getChild(1).text
+            operator_child = node.getChild(1)
+            operator = operator_child.text
 
-            """
-            do special ControlFlow changes for logical operations
-            """
             if operator in ("&&", "||"):
-                """
-                fot logical operations we make new blocks, for the control flow, and we use the control flow graph
-                bottom up to create this correctly
-                """
-                if node.getChild(1).text == "&&":
-                    """
-                    add a logical 'AND' component to the control flow graph
-                    """
-                    self.handleLogicalOperations(node.getChild(1))
+                #TODO: temp
+                left = self.llvm_map.get(node.getChild(0))
+                right = self.llvm_map.get(node.getChild(2))
 
-                if node.getChild(1) is not None and node.getChild(1).text == "||":
-                    """
-                    add a logical 'OR' component to the control flow graph
-                    """
-                    self.handleLogicalOperations(node.getChild(1))
-
-                self.llvm_map[node] = self.llvm_map[node.getChild(2)]
-
+                llvm_var = Calculation.unary(left, "+")
+                self.llvm_map[node] = llvm_var
                 return
 
             left = self.llvm_map.get(node.getChild(0))
@@ -372,38 +323,3 @@ class AST2LLVM(ASTVisitor):
         code = self.codegetter.getLine(node.getChild(0))
         if code is not None:
             Declaration.addComment(code)
-
-    def handleLogicalOperations(self, node):
-        """
-        handle operations part of a logical operation
-        """
-
-        """
-        check if an eval is started, if not start 1, An Eval is just a pending evaluation of the control flow,
-        with its corresponding branches
-        """
-
-        """
-        left subgroup is guaranteed, right is not
-        """
-        sub_control_graph_left = self.control_flow_map.get(node.getSiblingNeighbour(-1), None)
-        sub_control_graph_right = self.control_flow_map.get(node.getSiblingNeighbour(1), None)
-
-        if sub_control_graph_right is None:
-            sub_control_graph_right = ControlFlowGraph(False)
-
-        if not sub_control_graph_right.isEval():
-            sub_control_graph_right.startEval()
-
-        if node.text == "&&":
-            own_sub_control = ControlFlowGraph.mergeLogicalAnd(sub_control_graph_left, sub_control_graph_right)
-
-        if node.text == "||":
-            own_sub_control = ControlFlowGraph.mergeLogicalOr(sub_control_graph_left, sub_control_graph_right)
-
-        self.control_flow_map[node] = own_sub_control
-        self.control_flow_map[node.getSiblingNeighbour(-1)] = own_sub_control
-        self.control_flow_map[node.getSiblingNeighbour(1)] = own_sub_control
-
-    def getControlFlowGraph(self):
-        return self.control_flow_map.get(self.root, None)

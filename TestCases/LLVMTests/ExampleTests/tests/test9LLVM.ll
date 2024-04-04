@@ -5,37 +5,37 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca float, align 4
-  store float 0x3fe93f7ce0000000, float* %".3", align 4
-  ; const FLOAT f = 0.789
-  %".6" = alloca float*, align 8
-  store float* %".3", float** %".6", align 8
-  ; const FLOAT * f_ptr = & f
-  %".9" = alloca float*, align 8
-  store float* %".3", float** %".9", align 8
-  ; FLOAT * non_const_f_ptr = f_ptr
-  %".12" = load float*, float** %".9", align 8
-  ; * non_const_f_ptr = 3.1492
-  store float 0x4009318fc0000000, float* %".12", align 8
-  %".15" = load float, float* %".3", align 4
-  ; printf "%f" , f
-  %".17" = bitcast [3 x i8]* @".str.f" to i8*
-  %".18" = alloca float
-  store float %".15", float* %".18"
-  %".20" = load float, float* %".18"
-  %".21" = fpext float %".20" to double
-  %".22" = call i32 (i8*, ...) @"printf"(i8* %".17", double %".21")
-  %".23" = load float*, float** %".9", align 8
-  ; printf "%f" , * non_const_f_ptr
-  %".25" = load float, float* %".23", align 8
-  %".26" = bitcast [3 x i8]* @".str.f" to i8*
-  %".27" = alloca float
-  store float %".25", float* %".27"
-  %".29" = load float, float* %".27"
-  %".30" = fpext float %".29" to double
-  %".31" = call i32 (i8*, ...) @"printf"(i8* %".26", double %".30")
-  ret i32 0
   ; INT main
+  %".4" = alloca float, align 4
+  store float 0x3fe93f7ce0000000, float* %".4", align 4
+  ; const FLOAT f = 0.789
+  %".7" = alloca float*, align 8
+  store float* %".4", float** %".7", align 8
+  ; const FLOAT * f_ptr = & f
+  %".10" = alloca float*, align 8
+  store float* %".4", float** %".10", align 8
+  ; FLOAT * non_const_f_ptr = f_ptr
+  %".13" = load float*, float** %".10", align 8
+  ; * non_const_f_ptr = 3.1492
+  store float 0x4009318fc0000000, float* %".13", align 8
+  %".16" = load float, float* %".4", align 4
+  ; printf "%f" , f
+  %".18" = bitcast [3 x i8]* @".str.f" to i8*
+  %".19" = alloca float
+  store float %".16", float* %".19"
+  %".21" = load float, float* %".19"
+  %".22" = fpext float %".21" to double
+  %".23" = call i32 (i8*, ...) @"printf"(i8* %".18", double %".22")
+  %".24" = load float*, float** %".10", align 8
+  ; printf "%f" , * non_const_f_ptr
+  %".26" = load float, float* %".24", align 8
+  %".27" = bitcast [3 x i8]* @".str.f" to i8*
+  %".28" = alloca float
+  store float %".26", float* %".28"
+  %".30" = load float, float* %".28"
+  %".31" = fpext float %".30" to double
+  %".32" = call i32 (i8*, ...) @"printf"(i8* %".27", double %".31")
+  ret i32 0
   ; #include <stdio.h>
 }
 

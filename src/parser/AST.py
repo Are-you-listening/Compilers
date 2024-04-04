@@ -21,7 +21,15 @@ class ASTNode:
         self.children.append(child)
 
     def getChild(self, index) -> "ASTNode":
-        return self.children[index]
+        child = self.children[index]
+
+        """
+        SKip AST Node Blocks
+        """
+        while isinstance(child, ASTNodeBlock):
+            child = child.getChild(0)
+
+        return child
 
     def getChildren(self):
         return self.children
@@ -121,6 +129,16 @@ class ASTNodeTerminal(ASTNode):
 
     def accept(self, v: ASTVisitor):
         v.visitNodeTerminal(self)
+
+
+class ASTNodeBlock(ASTNode):
+    def __init__(self, text, parent, symbol_table, linenr, vertex):
+        super().__init__(text, parent, symbol_table, linenr)
+        self.vertex = vertex
+        self.vertex.node_link = self
+
+    def replaceVertex(self, new_vertex):
+        self.vertex = new_vertex
 
 
 class AST:

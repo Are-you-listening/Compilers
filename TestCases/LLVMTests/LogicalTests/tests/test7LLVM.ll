@@ -5,367 +5,367 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 0, i32* %".3", align 4
+  ; INT main
+  %".58" = alloca i32, align 4
+  store i32 0, i32* %".58", align 4
   ; INT a = 0
-  %".6" = alloca i32, align 4
-  store i32 0, i32* %".6", align 4
+  %".61" = alloca i32, align 4
+  store i32 0, i32* %".61", align 4
   ; INT b = 0
-  %".9" = alloca i32, align 4
-  store i32 0, i32* %".9", align 4
+  %".64" = alloca i32, align 4
+  store i32 0, i32* %".64", align 4
   ; INT c = 0
-  %".12" = alloca i32, align 4
-  store i32 0, i32* %".12", align 4
+  %".67" = alloca i32, align 4
+  store i32 0, i32* %".67", align 4
   ; INT d = 0
-  %".15" = alloca i32, align 4
-  store i32 0, i32* %".15", align 4
+  %".70" = alloca i32, align 4
+  store i32 0, i32* %".70", align 4
   ; INT e = 0
-  %".18" = alloca i32, align 4
-  store i32 0, i32* %".18", align 4
+  %".73" = alloca i32, align 4
+  store i32 0, i32* %".73", align 4
   ; INT f = 0
-  store i32 0, i32* %".3", align 4
+  store i32 0, i32* %".58", align 4
   ; a = 0
-  store i32 0, i32* %".6", align 4
+  store i32 0, i32* %".61", align 4
   ; b = 0
-  store i32 0, i32* %".9", align 4
+  store i32 0, i32* %".64", align 4
   ; c = 0
-  store i32 0, i32* %".12", align 4
+  store i32 0, i32* %".67", align 4
   ; d = 0
-  store i32 0, i32* %".15", align 4
+  store i32 0, i32* %".70", align 4
   ; e = 0
-  %".31" = load i32, i32* %".3", align 4
+  %".86" = load i32, i32* %".58", align 4
   ; f = a && b || c || d && c && e
-  %".33" = icmp ne i32 %".31", 0
-  br i1 %".33", label %".34", label %".40"
-.34:
-  %".35" = load i32, i32* %".6", align 4
-  %".36" = icmp ne i32 %".35", 0
-  br i1 %".36", label %".49", label %".37"
-.37:
-  %".38" = load i32, i32* %".9", align 4
-  %".39" = icmp ne i32 %".38", 0
-  br i1 %".39", label %".49", label %".40"
-.40:
-  %".41" = load i32, i32* %".12", align 4
-  %".42" = icmp ne i32 %".41", 0
-  br i1 %".42", label %".43", label %".49"
-.43:
-  %".44" = load i32, i32* %".9", align 4
-  %".45" = icmp ne i32 %".44", 0
-  br i1 %".45", label %".46", label %".49"
-.46:
-  %".47" = load i32, i32* %".15", align 4
-  %".48" = icmp ne i32 %".47", 0
-  br label %".49"
-.49:
-  %".56" = phi  i1 [%".48", %".46"], [1, %".34"], [0, %".40"], [1, %".37"], [0, %".43"]
-  %".57" = zext i1 %".56" to i32
-  store i32 %".57", i32* %".18", align 4
-  %".59" = load i32, i32* %".18", align 4
+  %".88" = icmp ne i32 %".86", 0
+  br i1 %".88", label %".3", label %".5"
+.3:
+  %".90" = load i32, i32* %".61", align 4
+  %".91" = icmp ne i32 %".90", 0
+  br i1 %".91", label %".8", label %".4"
+.4:
+  %".93" = load i32, i32* %".64", align 4
+  %".94" = icmp ne i32 %".93", 0
+  br i1 %".94", label %".8", label %".5"
+.5:
+  %".96" = load i32, i32* %".67", align 4
+  %".97" = icmp ne i32 %".96", 0
+  br i1 %".97", label %".6", label %".8"
+.6:
+  %".99" = load i32, i32* %".64", align 4
+  %".100" = icmp ne i32 %".99", 0
+  br i1 %".100", label %".7", label %".8"
+.7:
+  %".102" = load i32, i32* %".70", align 4
+  %".103" = icmp ne i32 %".102", 0
+  br label %".8"
+.8:
+  %".105" = phi  i1 [1, %".4"], [1, %".3"], [%".103", %".7"], [0, %".5"], [0, %".6"]
+  %".106" = zext i1 %".105" to i32
+  store i32 %".106", i32* %".73", align 4
+  %".108" = load i32, i32* %".73", align 4
   ; printf "%d" , f
-  %".61" = bitcast [3 x i8]* @".str.d" to i8*
-  %".62" = alloca i32
-  store i32 %".59", i32* %".62"
-  %".64" = load i32, i32* %".62"
-  %".65" = call i32 (i8*, ...) @"printf"(i8* %".61", i32 %".64")
-  store i32 1, i32* %".3", align 4
+  %".110" = bitcast [3 x i8]* @".str.d" to i8*
+  %".111" = alloca i32
+  store i32 %".108", i32* %".111"
+  %".113" = load i32, i32* %".111"
+  %".114" = call i32 (i8*, ...) @"printf"(i8* %".110", i32 %".113")
+  store i32 1, i32* %".58", align 4
   ; a = 1
-  %".68" = load i32, i32* %".3", align 4
+  %".117" = load i32, i32* %".58", align 4
   ; f = a && b || c || d && c && e
-  %".70" = icmp ne i32 %".68", 0
-  br i1 %".70", label %".71", label %".77"
-.71:
-  %".72" = load i32, i32* %".6", align 4
-  %".73" = icmp ne i32 %".72", 0
-  br i1 %".73", label %".86", label %".74"
-.74:
-  %".75" = load i32, i32* %".9", align 4
-  %".76" = icmp ne i32 %".75", 0
-  br i1 %".76", label %".86", label %".77"
-.77:
-  %".78" = load i32, i32* %".12", align 4
-  %".79" = icmp ne i32 %".78", 0
-  br i1 %".79", label %".80", label %".86"
-.80:
-  %".81" = load i32, i32* %".9", align 4
-  %".82" = icmp ne i32 %".81", 0
-  br i1 %".82", label %".83", label %".86"
-.83:
-  %".84" = load i32, i32* %".15", align 4
-  %".85" = icmp ne i32 %".84", 0
-  br label %".86"
-.86:
-  %".93" = phi  i1 [1, %".71"], [1, %".74"], [%".85", %".83"], [0, %".77"], [0, %".80"]
-  %".94" = zext i1 %".93" to i32
-  store i32 %".94", i32* %".18", align 4
-  %".96" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
-  %".98" = bitcast [3 x i8]* @".str.d" to i8*
-  %".99" = alloca i32
-  store i32 %".96", i32* %".99"
-  %".101" = load i32, i32* %".99"
-  %".102" = call i32 (i8*, ...) @"printf"(i8* %".98", i32 %".101")
-  store i32 1, i32* %".6", align 4
-  ; b = 1
-  %".105" = load i32, i32* %".3", align 4
-  ; f = a && b || c || d && c && e
-  %".107" = icmp ne i32 %".105", 0
-  br i1 %".107", label %".108", label %".114"
-.108:
-  %".109" = load i32, i32* %".6", align 4
-  %".110" = icmp ne i32 %".109", 0
-  br i1 %".110", label %".123", label %".111"
-.111:
-  %".112" = load i32, i32* %".9", align 4
-  %".113" = icmp ne i32 %".112", 0
-  br i1 %".113", label %".123", label %".114"
-.114:
-  %".115" = load i32, i32* %".12", align 4
-  %".116" = icmp ne i32 %".115", 0
-  br i1 %".116", label %".117", label %".123"
-.117:
-  %".118" = load i32, i32* %".9", align 4
-  %".119" = icmp ne i32 %".118", 0
-  br i1 %".119", label %".120", label %".123"
-.120:
-  %".121" = load i32, i32* %".15", align 4
+  %".119" = icmp ne i32 %".117", 0
+  br i1 %".119", label %".9", label %".11"
+.9:
+  %".121" = load i32, i32* %".61", align 4
   %".122" = icmp ne i32 %".121", 0
-  br label %".123"
-.123:
-  %".130" = phi  i1 [1, %".111"], [%".122", %".120"], [0, %".117"], [0, %".114"], [1, %".108"]
-  %".131" = zext i1 %".130" to i32
-  store i32 %".131", i32* %".18", align 4
-  %".133" = load i32, i32* %".18", align 4
+  br i1 %".122", label %".14", label %".10"
+.10:
+  %".124" = load i32, i32* %".64", align 4
+  %".125" = icmp ne i32 %".124", 0
+  br i1 %".125", label %".14", label %".11"
+.11:
+  %".127" = load i32, i32* %".67", align 4
+  %".128" = icmp ne i32 %".127", 0
+  br i1 %".128", label %".12", label %".14"
+.12:
+  %".130" = load i32, i32* %".64", align 4
+  %".131" = icmp ne i32 %".130", 0
+  br i1 %".131", label %".13", label %".14"
+.13:
+  %".133" = load i32, i32* %".70", align 4
+  %".134" = icmp ne i32 %".133", 0
+  br label %".14"
+.14:
+  %".136" = phi  i1 [1, %".10"], [0, %".11"], [%".134", %".13"], [0, %".12"], [1, %".9"]
+  %".137" = zext i1 %".136" to i32
+  store i32 %".137", i32* %".73", align 4
+  %".139" = load i32, i32* %".73", align 4
   ; printf "%d" , f
-  %".135" = bitcast [3 x i8]* @".str.d" to i8*
-  %".136" = alloca i32
-  store i32 %".133", i32* %".136"
-  %".138" = load i32, i32* %".136"
-  %".139" = call i32 (i8*, ...) @"printf"(i8* %".135", i32 %".138")
-  store i32 1, i32* %".9", align 4
-  ; c = 1
-  %".142" = load i32, i32* %".3", align 4
+  %".141" = bitcast [3 x i8]* @".str.d" to i8*
+  %".142" = alloca i32
+  store i32 %".139", i32* %".142"
+  %".144" = load i32, i32* %".142"
+  %".145" = call i32 (i8*, ...) @"printf"(i8* %".141", i32 %".144")
+  store i32 1, i32* %".61", align 4
+  ; b = 1
+  %".148" = load i32, i32* %".58", align 4
   ; f = a && b || c || d && c && e
-  %".144" = icmp ne i32 %".142", 0
-  br i1 %".144", label %".145", label %".151"
-.145:
-  %".146" = load i32, i32* %".6", align 4
-  %".147" = icmp ne i32 %".146", 0
-  br i1 %".147", label %".160", label %".148"
-.148:
-  %".149" = load i32, i32* %".9", align 4
-  %".150" = icmp ne i32 %".149", 0
-  br i1 %".150", label %".160", label %".151"
-.151:
-  %".152" = load i32, i32* %".12", align 4
+  %".150" = icmp ne i32 %".148", 0
+  br i1 %".150", label %".15", label %".17"
+.15:
+  %".152" = load i32, i32* %".61", align 4
   %".153" = icmp ne i32 %".152", 0
-  br i1 %".153", label %".154", label %".160"
-.154:
-  %".155" = load i32, i32* %".9", align 4
+  br i1 %".153", label %".20", label %".16"
+.16:
+  %".155" = load i32, i32* %".64", align 4
   %".156" = icmp ne i32 %".155", 0
-  br i1 %".156", label %".157", label %".160"
-.157:
-  %".158" = load i32, i32* %".15", align 4
+  br i1 %".156", label %".20", label %".17"
+.17:
+  %".158" = load i32, i32* %".67", align 4
   %".159" = icmp ne i32 %".158", 0
-  br label %".160"
-.160:
-  %".167" = phi  i1 [0, %".151"], [1, %".148"], [1, %".145"], [0, %".154"], [%".159", %".157"]
+  br i1 %".159", label %".18", label %".20"
+.18:
+  %".161" = load i32, i32* %".64", align 4
+  %".162" = icmp ne i32 %".161", 0
+  br i1 %".162", label %".19", label %".20"
+.19:
+  %".164" = load i32, i32* %".70", align 4
+  %".165" = icmp ne i32 %".164", 0
+  br label %".20"
+.20:
+  %".167" = phi  i1 [1, %".15"], [%".165", %".19"], [0, %".17"], [1, %".16"], [0, %".18"]
   %".168" = zext i1 %".167" to i32
-  store i32 %".168", i32* %".18", align 4
-  %".170" = load i32, i32* %".18", align 4
+  store i32 %".168", i32* %".73", align 4
+  %".170" = load i32, i32* %".73", align 4
   ; printf "%d" , f
   %".172" = bitcast [3 x i8]* @".str.d" to i8*
   %".173" = alloca i32
   store i32 %".170", i32* %".173"
   %".175" = load i32, i32* %".173"
   %".176" = call i32 (i8*, ...) @"printf"(i8* %".172", i32 %".175")
-  store i32 1, i32* %".12", align 4
-  ; d = 1
-  %".179" = load i32, i32* %".3", align 4
+  store i32 1, i32* %".64", align 4
+  ; c = 1
+  %".179" = load i32, i32* %".58", align 4
   ; f = a && b || c || d && c && e
   %".181" = icmp ne i32 %".179", 0
-  br i1 %".181", label %".182", label %".188"
-.182:
-  %".183" = load i32, i32* %".6", align 4
+  br i1 %".181", label %".21", label %".23"
+.21:
+  %".183" = load i32, i32* %".61", align 4
   %".184" = icmp ne i32 %".183", 0
-  br i1 %".184", label %".197", label %".185"
-.185:
-  %".186" = load i32, i32* %".9", align 4
+  br i1 %".184", label %".26", label %".22"
+.22:
+  %".186" = load i32, i32* %".64", align 4
   %".187" = icmp ne i32 %".186", 0
-  br i1 %".187", label %".197", label %".188"
-.188:
-  %".189" = load i32, i32* %".12", align 4
+  br i1 %".187", label %".26", label %".23"
+.23:
+  %".189" = load i32, i32* %".67", align 4
   %".190" = icmp ne i32 %".189", 0
-  br i1 %".190", label %".191", label %".197"
-.191:
-  %".192" = load i32, i32* %".9", align 4
+  br i1 %".190", label %".24", label %".26"
+.24:
+  %".192" = load i32, i32* %".64", align 4
   %".193" = icmp ne i32 %".192", 0
-  br i1 %".193", label %".194", label %".197"
-.194:
-  %".195" = load i32, i32* %".15", align 4
+  br i1 %".193", label %".25", label %".26"
+.25:
+  %".195" = load i32, i32* %".70", align 4
   %".196" = icmp ne i32 %".195", 0
-  br label %".197"
-.197:
-  %".204" = phi  i1 [0, %".191"], [1, %".185"], [0, %".188"], [%".196", %".194"], [1, %".182"]
-  %".205" = zext i1 %".204" to i32
-  store i32 %".205", i32* %".18", align 4
-  %".207" = load i32, i32* %".18", align 4
+  br label %".26"
+.26:
+  %".198" = phi  i1 [0, %".24"], [%".196", %".25"], [1, %".22"], [1, %".21"], [0, %".23"]
+  %".199" = zext i1 %".198" to i32
+  store i32 %".199", i32* %".73", align 4
+  %".201" = load i32, i32* %".73", align 4
   ; printf "%d" , f
-  %".209" = bitcast [3 x i8]* @".str.d" to i8*
-  %".210" = alloca i32
-  store i32 %".207", i32* %".210"
-  %".212" = load i32, i32* %".210"
-  %".213" = call i32 (i8*, ...) @"printf"(i8* %".209", i32 %".212")
-  store i32 1, i32* %".15", align 4
-  ; e = 1
-  %".216" = load i32, i32* %".3", align 4
+  %".203" = bitcast [3 x i8]* @".str.d" to i8*
+  %".204" = alloca i32
+  store i32 %".201", i32* %".204"
+  %".206" = load i32, i32* %".204"
+  %".207" = call i32 (i8*, ...) @"printf"(i8* %".203", i32 %".206")
+  store i32 1, i32* %".67", align 4
+  ; d = 1
+  %".210" = load i32, i32* %".58", align 4
   ; f = a && b || c || d && c && e
-  %".218" = icmp ne i32 %".216", 0
-  br i1 %".218", label %".219", label %".225"
-.219:
-  %".220" = load i32, i32* %".6", align 4
+  %".212" = icmp ne i32 %".210", 0
+  br i1 %".212", label %".27", label %".29"
+.27:
+  %".214" = load i32, i32* %".61", align 4
+  %".215" = icmp ne i32 %".214", 0
+  br i1 %".215", label %".32", label %".28"
+.28:
+  %".217" = load i32, i32* %".64", align 4
+  %".218" = icmp ne i32 %".217", 0
+  br i1 %".218", label %".32", label %".29"
+.29:
+  %".220" = load i32, i32* %".67", align 4
   %".221" = icmp ne i32 %".220", 0
-  br i1 %".221", label %".234", label %".222"
-.222:
-  %".223" = load i32, i32* %".9", align 4
+  br i1 %".221", label %".30", label %".32"
+.30:
+  %".223" = load i32, i32* %".64", align 4
   %".224" = icmp ne i32 %".223", 0
-  br i1 %".224", label %".234", label %".225"
-.225:
-  %".226" = load i32, i32* %".12", align 4
+  br i1 %".224", label %".31", label %".32"
+.31:
+  %".226" = load i32, i32* %".70", align 4
   %".227" = icmp ne i32 %".226", 0
-  br i1 %".227", label %".228", label %".234"
-.228:
-  %".229" = load i32, i32* %".9", align 4
-  %".230" = icmp ne i32 %".229", 0
-  br i1 %".230", label %".231", label %".234"
-.231:
-  %".232" = load i32, i32* %".15", align 4
-  %".233" = icmp ne i32 %".232", 0
-  br label %".234"
-.234:
-  %".241" = phi  i1 [0, %".225"], [%".233", %".231"], [1, %".222"], [0, %".228"], [1, %".219"]
-  %".242" = zext i1 %".241" to i32
-  store i32 %".242", i32* %".18", align 4
-  %".244" = load i32, i32* %".18", align 4
+  br label %".32"
+.32:
+  %".229" = phi  i1 [0, %".30"], [1, %".28"], [0, %".29"], [%".227", %".31"], [1, %".27"]
+  %".230" = zext i1 %".229" to i32
+  store i32 %".230", i32* %".73", align 4
+  %".232" = load i32, i32* %".73", align 4
   ; printf "%d" , f
-  %".246" = bitcast [3 x i8]* @".str.d" to i8*
-  %".247" = alloca i32
-  store i32 %".244", i32* %".247"
-  %".249" = load i32, i32* %".247"
-  %".250" = call i32 (i8*, ...) @"printf"(i8* %".246", i32 %".249")
-  store i32 0, i32* %".6", align 4
-  ; b = 0
-  %".253" = load i32, i32* %".3", align 4
+  %".234" = bitcast [3 x i8]* @".str.d" to i8*
+  %".235" = alloca i32
+  store i32 %".232", i32* %".235"
+  %".237" = load i32, i32* %".235"
+  %".238" = call i32 (i8*, ...) @"printf"(i8* %".234", i32 %".237")
+  store i32 1, i32* %".70", align 4
+  ; e = 1
+  %".241" = load i32, i32* %".58", align 4
   ; f = a && b || c || d && c && e
-  %".255" = icmp ne i32 %".253", 0
-  br i1 %".255", label %".256", label %".262"
-.256:
-  %".257" = load i32, i32* %".6", align 4
+  %".243" = icmp ne i32 %".241", 0
+  br i1 %".243", label %".33", label %".35"
+.33:
+  %".245" = load i32, i32* %".61", align 4
+  %".246" = icmp ne i32 %".245", 0
+  br i1 %".246", label %".38", label %".34"
+.34:
+  %".248" = load i32, i32* %".64", align 4
+  %".249" = icmp ne i32 %".248", 0
+  br i1 %".249", label %".38", label %".35"
+.35:
+  %".251" = load i32, i32* %".67", align 4
+  %".252" = icmp ne i32 %".251", 0
+  br i1 %".252", label %".36", label %".38"
+.36:
+  %".254" = load i32, i32* %".64", align 4
+  %".255" = icmp ne i32 %".254", 0
+  br i1 %".255", label %".37", label %".38"
+.37:
+  %".257" = load i32, i32* %".70", align 4
   %".258" = icmp ne i32 %".257", 0
-  br i1 %".258", label %".271", label %".259"
-.259:
-  %".260" = load i32, i32* %".9", align 4
-  %".261" = icmp ne i32 %".260", 0
-  br i1 %".261", label %".271", label %".262"
-.262:
-  %".263" = load i32, i32* %".12", align 4
-  %".264" = icmp ne i32 %".263", 0
-  br i1 %".264", label %".265", label %".271"
-.265:
-  %".266" = load i32, i32* %".9", align 4
-  %".267" = icmp ne i32 %".266", 0
-  br i1 %".267", label %".268", label %".271"
-.268:
-  %".269" = load i32, i32* %".15", align 4
-  %".270" = icmp ne i32 %".269", 0
-  br label %".271"
-.271:
-  %".278" = phi  i1 [1, %".259"], [1, %".256"], [0, %".262"], [0, %".265"], [%".270", %".268"]
-  %".279" = zext i1 %".278" to i32
-  store i32 %".279", i32* %".18", align 4
-  %".281" = load i32, i32* %".18", align 4
+  br label %".38"
+.38:
+  %".260" = phi  i1 [0, %".36"], [0, %".35"], [%".258", %".37"], [1, %".33"], [1, %".34"]
+  %".261" = zext i1 %".260" to i32
+  store i32 %".261", i32* %".73", align 4
+  %".263" = load i32, i32* %".73", align 4
   ; printf "%d" , f
-  %".283" = bitcast [3 x i8]* @".str.d" to i8*
-  %".284" = alloca i32
-  store i32 %".281", i32* %".284"
-  %".286" = load i32, i32* %".284"
-  %".287" = call i32 (i8*, ...) @"printf"(i8* %".283", i32 %".286")
-  store i32 0, i32* %".9", align 4
+  %".265" = bitcast [3 x i8]* @".str.d" to i8*
+  %".266" = alloca i32
+  store i32 %".263", i32* %".266"
+  %".268" = load i32, i32* %".266"
+  %".269" = call i32 (i8*, ...) @"printf"(i8* %".265", i32 %".268")
+  store i32 0, i32* %".61", align 4
+  ; b = 0
+  %".272" = load i32, i32* %".58", align 4
+  ; f = a && b || c || d && c && e
+  %".274" = icmp ne i32 %".272", 0
+  br i1 %".274", label %".39", label %".41"
+.39:
+  %".276" = load i32, i32* %".61", align 4
+  %".277" = icmp ne i32 %".276", 0
+  br i1 %".277", label %".44", label %".40"
+.40:
+  %".279" = load i32, i32* %".64", align 4
+  %".280" = icmp ne i32 %".279", 0
+  br i1 %".280", label %".44", label %".41"
+.41:
+  %".282" = load i32, i32* %".67", align 4
+  %".283" = icmp ne i32 %".282", 0
+  br i1 %".283", label %".42", label %".44"
+.42:
+  %".285" = load i32, i32* %".64", align 4
+  %".286" = icmp ne i32 %".285", 0
+  br i1 %".286", label %".43", label %".44"
+.43:
+  %".288" = load i32, i32* %".70", align 4
+  %".289" = icmp ne i32 %".288", 0
+  br label %".44"
+.44:
+  %".291" = phi  i1 [%".289", %".43"], [0, %".41"], [1, %".40"], [0, %".42"], [1, %".39"]
+  %".292" = zext i1 %".291" to i32
+  store i32 %".292", i32* %".73", align 4
+  %".294" = load i32, i32* %".73", align 4
+  ; printf "%d" , f
+  %".296" = bitcast [3 x i8]* @".str.d" to i8*
+  %".297" = alloca i32
+  store i32 %".294", i32* %".297"
+  %".299" = load i32, i32* %".297"
+  %".300" = call i32 (i8*, ...) @"printf"(i8* %".296", i32 %".299")
+  store i32 0, i32* %".64", align 4
   ; c = 0
-  %".290" = load i32, i32* %".3", align 4
+  %".303" = load i32, i32* %".58", align 4
   ; f = a && b || c || d && c && e
-  %".292" = icmp ne i32 %".290", 0
-  br i1 %".292", label %".293", label %".299"
-.293:
-  %".294" = load i32, i32* %".6", align 4
-  %".295" = icmp ne i32 %".294", 0
-  br i1 %".295", label %".308", label %".296"
-.296:
-  %".297" = load i32, i32* %".9", align 4
-  %".298" = icmp ne i32 %".297", 0
-  br i1 %".298", label %".308", label %".299"
-.299:
-  %".300" = load i32, i32* %".12", align 4
-  %".301" = icmp ne i32 %".300", 0
-  br i1 %".301", label %".302", label %".308"
-.302:
-  %".303" = load i32, i32* %".9", align 4
-  %".304" = icmp ne i32 %".303", 0
-  br i1 %".304", label %".305", label %".308"
-.305:
-  %".306" = load i32, i32* %".15", align 4
-  %".307" = icmp ne i32 %".306", 0
-  br label %".308"
-.308:
-  %".315" = phi  i1 [1, %".293"], [%".307", %".305"], [0, %".299"], [1, %".296"], [0, %".302"]
-  %".316" = zext i1 %".315" to i32
-  store i32 %".316", i32* %".18", align 4
-  %".318" = load i32, i32* %".18", align 4
+  %".305" = icmp ne i32 %".303", 0
+  br i1 %".305", label %".45", label %".47"
+.45:
+  %".307" = load i32, i32* %".61", align 4
+  %".308" = icmp ne i32 %".307", 0
+  br i1 %".308", label %".50", label %".46"
+.46:
+  %".310" = load i32, i32* %".64", align 4
+  %".311" = icmp ne i32 %".310", 0
+  br i1 %".311", label %".50", label %".47"
+.47:
+  %".313" = load i32, i32* %".67", align 4
+  %".314" = icmp ne i32 %".313", 0
+  br i1 %".314", label %".48", label %".50"
+.48:
+  %".316" = load i32, i32* %".64", align 4
+  %".317" = icmp ne i32 %".316", 0
+  br i1 %".317", label %".49", label %".50"
+.49:
+  %".319" = load i32, i32* %".70", align 4
+  %".320" = icmp ne i32 %".319", 0
+  br label %".50"
+.50:
+  %".322" = phi  i1 [1, %".46"], [1, %".45"], [0, %".48"], [0, %".47"], [%".320", %".49"]
+  %".323" = zext i1 %".322" to i32
+  store i32 %".323", i32* %".73", align 4
+  %".325" = load i32, i32* %".73", align 4
   ; printf "%d" , f
-  %".320" = bitcast [3 x i8]* @".str.d" to i8*
-  %".321" = alloca i32
-  store i32 %".318", i32* %".321"
-  %".323" = load i32, i32* %".321"
-  %".324" = call i32 (i8*, ...) @"printf"(i8* %".320", i32 %".323")
-  store i32 0, i32* %".12", align 4
+  %".327" = bitcast [3 x i8]* @".str.d" to i8*
+  %".328" = alloca i32
+  store i32 %".325", i32* %".328"
+  %".330" = load i32, i32* %".328"
+  %".331" = call i32 (i8*, ...) @"printf"(i8* %".327", i32 %".330")
+  store i32 0, i32* %".67", align 4
   ; d = 0
-  %".327" = load i32, i32* %".3", align 4
+  %".334" = load i32, i32* %".58", align 4
   ; f = a && b || c || d && c && e
-  %".329" = icmp ne i32 %".327", 0
-  br i1 %".329", label %".330", label %".336"
-.330:
-  %".331" = load i32, i32* %".6", align 4
-  %".332" = icmp ne i32 %".331", 0
-  br i1 %".332", label %".345", label %".333"
-.333:
-  %".334" = load i32, i32* %".9", align 4
-  %".335" = icmp ne i32 %".334", 0
-  br i1 %".335", label %".345", label %".336"
-.336:
-  %".337" = load i32, i32* %".12", align 4
-  %".338" = icmp ne i32 %".337", 0
-  br i1 %".338", label %".339", label %".345"
-.339:
-  %".340" = load i32, i32* %".9", align 4
-  %".341" = icmp ne i32 %".340", 0
-  br i1 %".341", label %".342", label %".345"
-.342:
-  %".343" = load i32, i32* %".15", align 4
-  %".344" = icmp ne i32 %".343", 0
-  br label %".345"
-.345:
-  %".352" = phi  i1 [0, %".339"], [1, %".333"], [%".344", %".342"], [1, %".330"], [0, %".336"]
-  %".353" = zext i1 %".352" to i32
-  store i32 %".353", i32* %".18", align 4
-  %".355" = load i32, i32* %".18", align 4
+  %".336" = icmp ne i32 %".334", 0
+  br i1 %".336", label %".51", label %".53"
+.51:
+  %".338" = load i32, i32* %".61", align 4
+  %".339" = icmp ne i32 %".338", 0
+  br i1 %".339", label %".56", label %".52"
+.52:
+  %".341" = load i32, i32* %".64", align 4
+  %".342" = icmp ne i32 %".341", 0
+  br i1 %".342", label %".56", label %".53"
+.53:
+  %".344" = load i32, i32* %".67", align 4
+  %".345" = icmp ne i32 %".344", 0
+  br i1 %".345", label %".54", label %".56"
+.54:
+  %".347" = load i32, i32* %".64", align 4
+  %".348" = icmp ne i32 %".347", 0
+  br i1 %".348", label %".55", label %".56"
+.55:
+  %".350" = load i32, i32* %".70", align 4
+  %".351" = icmp ne i32 %".350", 0
+  br label %".56"
+.56:
+  %".353" = phi  i1 [%".351", %".55"], [0, %".54"], [0, %".53"], [1, %".52"], [1, %".51"]
+  %".354" = zext i1 %".353" to i32
+  store i32 %".354", i32* %".73", align 4
+  %".356" = load i32, i32* %".73", align 4
   ; printf "%d" , f
-  %".357" = bitcast [3 x i8]* @".str.d" to i8*
-  %".358" = alloca i32
-  store i32 %".355", i32* %".358"
-  %".360" = load i32, i32* %".358"
-  %".361" = call i32 (i8*, ...) @"printf"(i8* %".357", i32 %".360")
+  %".358" = bitcast [3 x i8]* @".str.d" to i8*
+  %".359" = alloca i32
+  store i32 %".356", i32* %".359"
+  %".361" = load i32, i32* %".359"
+  %".362" = call i32 (i8*, ...) @"printf"(i8* %".358", i32 %".361")
   ret i32 0
-  ; INT main
   ; #include <stdio.h>
 }
 

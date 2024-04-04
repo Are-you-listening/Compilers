@@ -40,8 +40,8 @@ class CalculationTests(unittest.TestCase):
             """
             assert for same output
             """
-            #print(i, out.stdout, c_out.stdout)
-            #print(out.stderr)
+            print(i, out.stdout, c_out.stdout)
+            print(out.stderr)
             assert out.stdout == c_out.stdout
 
         sys.stdout = original

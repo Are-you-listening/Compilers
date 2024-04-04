@@ -14,7 +14,7 @@ from src.parser.ASTTableCreator import *
 from src.llvm_target.AST2LLVM import *
 from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
 from src.parser.ASTIfCleaner import ASTIfCleaner
-
+from src.llvm_target.ControlFlowCreator import *
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -120,12 +120,18 @@ def main(argv):
 
     if llvm_file is not None:
         LLVMSingleton.setName(input_file)
+
+        cfc = ControlFlowCreator()
+        cfc.visit(ast)
+
+        #DotVisitor("output/bla").visit(ast)
+
         to_llvm = AST2LLVM(codegetter, llvm_file)  # The codegetter is used to add the original code as comments
         to_llvm.visit(ast)
 
         if control_flow_file is not None:
             control_dot = ControlFlowDotVisitor(control_flow_file)  # Create a CFG
-            control_dot.visit(to_llvm.getControlFlowGraph().root)
+            control_dot.visit(cfc.getControlFlowGraph().root)
 
 
 if __name__ == '__main__':

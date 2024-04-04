@@ -28,6 +28,7 @@ class LogicTests(unittest.TestCase):
         sys.stdout = buff
 
         for i in file_range:
+            print(i)
             file_name = f"tests/test{i}.c"
             self.runAST(file_name)
             c_out = self.runC(file_name)
@@ -38,8 +39,8 @@ class LogicTests(unittest.TestCase):
             """
             assert for same output
             """
-            # print(i, out.stdout, c_out.stdout)
-            # print(out.stderr)
+            print(i, out.stdout, c_out.stdout)
+            print(out.stderr)
             assert out.stdout == c_out.stdout
 
         sys.stdout = original
