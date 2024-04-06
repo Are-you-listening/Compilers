@@ -1,14 +1,12 @@
-#include <stdio.h>
-
 int main(){
-    int a = 0;
-    int b = 1;
-    int c = 6;
-    a = 0;
-    b = 1;
-    c = 6;
-    int d = (a && b || c);
-    printf("%d", d);
-    return 0;
+    if (1){
+        int a = 4;
+    }else if (2){
+        int b = 5;
+    }else{
+        int c = 6;
+    }
 
+    if (5){
+    }
 }
