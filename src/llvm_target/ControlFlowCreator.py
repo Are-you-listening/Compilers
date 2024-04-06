@@ -31,6 +31,9 @@ class ControlFlowCreator(ASTVisitor):
         self.postorder(self.root)
 
         for ast_block, function_node in self.add_block:
+            """
+            All the blocks we needed to add will be add here, after the hole tree is visited
+            """
             ast_block.move(function_node.getChild(1))
 
         for t in self.to_remove:
@@ -59,6 +62,9 @@ class ControlFlowCreator(ASTVisitor):
             currentNode = stack[current_index]  # get top of stack without popping it
 
             if currentNode.text == "Function" and currentNode not in visited:
+                """
+                Creates a simple function
+                """
                 self.handleFunction(currentNode)
                 self.function_node = currentNode
 
@@ -95,6 +101,7 @@ class ControlFlowCreator(ASTVisitor):
         if node.text == "Function":
             """
             Add a block for start function
+            This will create the general start block of the function
             """
 
             cf = self.control_flow_map.get(node.getChild(1), None)
@@ -102,20 +109,27 @@ class ControlFlowCreator(ASTVisitor):
                 cf = ControlFlowGraph()
             self.control_flow_map[node.getChild(1)] = cf
 
+            """
+            Create a block with the entire code base being a child
+            """
             ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.root)
             self.last_vertex = cf.root
             node.getChild(1).addNodeChildEmerge(ast_block)
 
+        """
+        Merge the control flow graphs of multiple control flows
+        That occur after each other
+        """
         merge_list = []
         for child in node.children:
             cf = self.control_flow_map.get(child, None)
             if cf is not None and cf not in merge_list:
                 merge_list.append(cf)
 
-        if len(merge_list) == 1:
-            cf = merge_list[0]
-            self.control_flow_map[node] = cf
-        elif len(merge_list) >= 2:
+        if len(merge_list) > 0:
+            """
+            Do default merges when a control flow graph exists
+            """
             cf = merge_list[0]
             for i, cfg in enumerate(merge_list):
                 if i == 0 or cf.isEval():
@@ -132,11 +146,7 @@ class ControlFlowCreator(ASTVisitor):
             cf.endEval()
 
             """
-            Add a block after the other block
-            """
-
-            """
-            Search for most recent block
+            Search for most recent parent Code/Block
             """
             target_node = node
             while target_node.parent.text not in ("Code", "Block"):
@@ -145,22 +155,33 @@ class ControlFlowCreator(ASTVisitor):
 
             code_node = target_node.parent
 
+            """
+            Add a new block for everything that comes after the logical expression (because we cannot continue in the block before the expression)
+            """
             ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr,
                                      cf.accepting)
 
-            node.parent.removeChild(node)
-
+            """
+            Replace the subtree, that contained the actual expression and replace it by a "PHI" node, 
+            indicating a PHI instruction (The PHI instruction will refer to the result calculated in the removed subtree)
+            The subtree will still exist in another block, because it will be inserted in de code again
+            """
             phi_node = ASTNodeBlock("PHI", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.accepting)
 
-            node.parent.addChildren(phi_node)
+            node.parent.replaceChild(node, phi_node)
 
+            """
+            Insert subtree in code again, at the position just before the place that uses the PHI
+            """
             code_node.children.insert(code_node.findChild(target_node), node)
             node.parent = code_node
 
             self.last_vertex = cf.accepting
-
             cf.accepting.use_phi = True
 
+            """
+            Put the part after an expression into a new BLOCK
+            """
             target_node.parent.addNodeChildEmerge(ast_block, target_node)
 
             self.add_block.append((ast_block, self.function_node))
