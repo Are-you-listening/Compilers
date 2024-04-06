@@ -102,8 +102,6 @@ class Vertex:
             In this case both true and false go to this branch
             """
 
-
-
             """
             make branch statement a boolean
             """
@@ -189,6 +187,9 @@ class Edge:
         :return:
         """
         self.flip_eval = not self.flip_eval
+
+    def __eq__(self, other):
+        return self.from_vertex == other.from_vertex and self.to_vertex == other.to_vertex and self.on == other.on and self.flip_eval == other.flip_eval
 
 
 class ControlFlowGraph:
@@ -456,9 +457,22 @@ class ControlFlowGraph:
             raise Exception("Did invalid vertex remove")
 
         target_vertex = vertex.edges[0].to_vertex
+        for e in target_vertex.reverse_edges:
+            assert e.to_vertex == target_vertex
 
+        r_edges = []
         for r_edge in vertex.reverse_edges:
             r_edge.to_vertex = target_vertex
+            r_edges.append(r_edge)
+
+        for e in target_vertex.reverse_edges:
+            assert e.to_vertex == target_vertex
+
+        for edge in target_vertex.reverse_edges:
+            if edge.from_vertex != vertex:
+                r_edges.append(edge)
+
+        target_vertex.reverse_edges = r_edges
 
     @staticmethod
     def default_merge(control_flow_1: "ControlFlowGraph", control_flow_2: "ControlFlowGraph"):
@@ -508,3 +522,29 @@ class ControlFlowGraph:
         if_cfg.root = new_root
         if_cfg.accepting = new_accepting
         return if_cfg
+
+    def verify_integrity(self):
+        """
+        Check if the edges and reverse edges match
+
+        :return:
+        """
+
+        stack = [self.root]
+        visited = set()
+
+        while len(stack) > 0:
+            vertex = stack.pop()
+            visited.add(vertex)
+
+            for e in vertex.edges:
+                if e.to_vertex not in visited:
+                    stack.append(e.to_vertex)
+
+                assert e.from_vertex == vertex
+
+                for re in e.to_vertex.reverse_edges:
+                    assert re.to_vertex == e.to_vertex
+                    assert re in re.from_vertex.edges
+
+                assert e in e.to_vertex.reverse_edges

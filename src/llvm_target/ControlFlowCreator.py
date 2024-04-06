@@ -15,14 +15,14 @@ class ControlFlowCreator(ASTVisitor):
         self.eval_scope_node = None
         self.root = None
         self.last_vertex = None
-        self.to_remove = []
+        self.to_remove = set()
 
     def visit(self, ast: AST):
         self.control_flow_map = {}
         self.eval_scope_node = None
 
         self.last_vertex = None
-        self.to_remove = []
+        self.to_remove = set()
 
         self.root = ast.root
         self.postorder(self.root)
@@ -59,13 +59,11 @@ class ControlFlowCreator(ASTVisitor):
                 Creates a simple function
                 """
                 self.handleFunction(currentNode)
-                self.function_node = currentNode
 
             if currentNode.text == "Expr" and currentNode.getChildAmount() == 3 and currentNode.getChild(1).text in (
                     "&&", "||"):
                 if self.eval_scope_node is None:
                     self.eval_scope_node = currentNode
-                    self.eval_first = True
 
             do_visit = True
             for child in reversed(currentNode.getChildren()):
@@ -135,13 +133,14 @@ class ControlFlowCreator(ASTVisitor):
                 node.getChild(2).addNodeParent(ast_block)
 
             final_cfg = ControlFlowGraph.if_statement(if_cfg, else_cfg)
+            final_cfg.verify_integrity()
 
             self.last_vertex = final_cfg.accepting
 
             """
             the 'IF' node is not needed anymore
             """
-            self.to_remove.append(node)
+            self.to_remove.add(node)
 
             """
             Search for most recent parent Code/Block
@@ -166,14 +165,18 @@ class ControlFlowCreator(ASTVisitor):
                 When this loop occurs, It means a block will be changed by another block, so we will
                 Remove its block from the control flow graph and from our code
                 """
-                while isinstance(after, ASTNodeBlock):
-                    final_cfg.remove_vertex(after.vertex)
+                while isinstance(after, ASTNodeBlock) and after.getChildAmount() > 0:
+                    final_cfg.verify_integrity()
+                    if after.vertex is not None:
+                        final_cfg.remove_vertex(after.vertex)
+                        after.vertex = None
+
+                    final_cfg.verify_integrity()
 
                     code_node = after
+                    self.to_remove.add(after)
 
-                    self.to_remove.append(after)
-
-                    after = after.getChild(0)
+                    after = after.getChild(0, False)
 
                 code_node.addNodeChildEmerge(ast_block, after)
             else:
@@ -263,8 +266,8 @@ class ControlFlowCreator(ASTVisitor):
             When this node is removed an 'Expr' with 1 child remains, which is just useless and not clean
             So this node will also be removed
             """
-            self.to_remove.append(node)
-            self.to_remove.append(node.parent)
+            self.to_remove.add(node)
+            self.to_remove.add(node.parent)
 
     @staticmethod
     def handleFunction(node: ASTNode):
@@ -295,8 +298,8 @@ class ControlFlowCreator(ASTVisitor):
             sub_control_graph_right = self.control_flow_map.get(node.getChild(1), None)
             if operator == "!" and self.eval_scope_node is not None and sub_control_graph_right is not None:
                 own_sub_control = ControlFlowGraph.mergeLogicalNot(sub_control_graph_right)
-                self.to_remove.append(operator_child)
-                self.to_remove.append(node)
+                self.to_remove.add(operator_child)
+                self.to_remove.add(node)
 
                 self.control_flow_map[node.getChild(0)] = own_sub_control
                 self.control_flow_map[node.getChild(1)] = own_sub_control
@@ -424,8 +427,8 @@ class ControlFlowCreator(ASTVisitor):
 
     def move_blocks(self):
         """
-                Do preorder traverse BFS to move blocks
-                """
+        Do preorder traverse BFS to move blocks
+        """
 
         stack = [self.root]
         visited = set()
@@ -442,8 +445,11 @@ class ControlFlowCreator(ASTVisitor):
                 function_node = currentNode
 
             if isinstance(currentNode, ASTNodeBlock) and currentNode.text == "Block":
+                """
+                If a block has no children, it means that the block does nothing, so in these cases we will
+                just skip this block
+                """
                 to_move.append((currentNode, function_node))
-            # reverse the order of the children because the later the node in the list the sooner it will be visited
 
             visited.add(currentNode)
 
