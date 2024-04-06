@@ -34,8 +34,8 @@ class AST2LLVM(ASTVisitor):
         Their latest instruction will decide the branch, for a conditional branch.
         In case of an unconditional, it will just create a branch
         """
-        for b in self.branch_needed:
-            b.create_branch()
+        for b, constant in self.branch_needed:
+            b.create_branch(constant)
 
     def postorder(self, root: ASTNode):
         """
@@ -57,10 +57,6 @@ class AST2LLVM(ASTVisitor):
 
             if isinstance(currentNode, ASTNodeBlock) and currentNode.text == "Block" and currentNode not in visited:
                 node = currentNode
-
-                if self.last_vertex is not None:
-                    self.last_vertex.check_flipped()
-                    self.branch_needed.append(self.last_vertex)
 
                 if node.vertex.llvm is None:
                     node.vertex.llvm = LLVMSingleton.getInstance().addBlock()
@@ -88,6 +84,29 @@ class AST2LLVM(ASTVisitor):
         """
 
         if isinstance(node, ASTNodeBlock) and node.text == "Block":
+            if self.last_vertex is not None:
+                self.last_vertex.check_flipped()
+
+                """
+                When we have instructions for our statement, their is no problem, but IR constants are not considered
+                an instruction, so in those cases we need to pass it to the create branch, in case it needs to create 
+                a conditional branch
+                """
+
+                """
+                search condition node by going to the rightmost side
+                """
+                condition_node = node
+                while (isinstance(condition_node, ASTNodeBlock) or condition_node.text == "Code") and condition_node.getChildAmount() > 0:
+                    condition_node = condition_node.getChild(condition_node.getChildAmount()-1)
+
+                constant = self.llvm_map.get(condition_node)
+
+                if isinstance(constant, ir.Instruction):
+                    constant = None
+
+                self.branch_needed.append((self.last_vertex, constant))
+
             return
 
         if isinstance(node, ASTNodeBlock) and node.text == "PHI":
@@ -142,7 +161,7 @@ class AST2LLVM(ASTVisitor):
 
             self.llvm_map[node] = entry.llvm
 
-        if node.type in ("INT", "FLOAT", "CHAR"):
+        if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
             llvm_var = Declaration.llvmLiteral(node.text, node.type, "")
             self.llvm_map[node] = llvm_var
 

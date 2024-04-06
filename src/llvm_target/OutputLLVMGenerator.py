@@ -62,12 +62,12 @@ class CTypesToLLVM:
         if len(ptrs) >= 1:
             return 8
 
-        convert_map = {"INT": 4, "CHAR": 1, "FLOAT": 4}
+        convert_map = {"INT": 4, "CHAR": 1, "FLOAT": 4, "BOOL": 1}
         return convert_map.get(data_type, "TYPE ISSUE")
 
     @staticmethod
     def getIRType(data_type: str, ptrs: str):
-        convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType()}
+        convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType(), "BOOL": ir.IntType(1)}
         llvm_type = convert_map.get(data_type)
         for i in range(len(ptrs)):
             llvm_type = ir.PointerType(llvm_type)

@@ -26,14 +26,16 @@ class ASTNode:
     def addChildren(self, child):
         self.children.append(child)
 
-    def getChild(self, index) -> "ASTNode":
+    def getChild(self, index, block_ignore=True) -> "ASTNode":
         child = self.children[index]
 
         """
         SKip AST Node Blocks
         """
-        while isinstance(child, ASTNodeBlock) and child.text == "Block":
-            child = child.getChild(0)
+
+        if block_ignore:
+            while isinstance(child, ASTNodeBlock) and child.text == "Block":
+                child = child.getChild(0)
 
         return child
 
@@ -82,7 +84,7 @@ class ASTNode:
         index += direction
         if 0 > index or index >= self.parent.getChildAmount():
             return None
-        return self.parent.getChild(index)
+        return self.parent.getChild(index, False)
 
     def addNodeParent(self, node):
         """

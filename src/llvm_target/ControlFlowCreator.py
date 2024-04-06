@@ -14,27 +14,20 @@ class ControlFlowCreator(ASTVisitor):
         self.control_flow_map = {}
         self.eval_scope_node = None
         self.root = None
-        self.to_move = []
         self.last_vertex = None
         self.to_remove = []
-        self.function_node = None
 
     def visit(self, ast: AST):
         self.control_flow_map = {}
         self.eval_scope_node = None
-        self.to_move = []
+
         self.last_vertex = None
         self.to_remove = []
-        self.function_node = None
 
         self.root = ast.root
         self.postorder(self.root)
 
-        for ast_block, function_node in self.to_move:
-            """
-            All the blocks we needed to add will be add here, after the hole tree is visited
-            """
-            ast_block.move(function_node.getChild(1))
+        self.move_blocks()
 
         for t in self.to_remove:
             t_children = t.children
@@ -127,8 +120,8 @@ class ControlFlowCreator(ASTVisitor):
             Create block for if statement
             """
             ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, if_cfg.root)
+
             node.getChild(1).addNodeParent(ast_block)
-            #self.to_move.append((ast_block, self.function_node))
 
             else_cfg = None
             if node.getChildAmount() == 3:
@@ -137,19 +130,60 @@ class ControlFlowCreator(ASTVisitor):
                 """
                 Create block for else statement
                 """
-                ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, if_cfg.root)
+                ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, else_cfg.root)
+
                 node.getChild(2).addNodeParent(ast_block)
-                #self.to_move.append((ast_block, self.function_node))
 
             final_cfg = ControlFlowGraph.if_statement(if_cfg, else_cfg)
-            self.control_flow_map[node] = final_cfg
 
             self.last_vertex = final_cfg.accepting
 
             """
             the 'IF' node is not needed anymore
             """
-            #self.to_remove.append(node)
+            self.to_remove.append(node)
+
+            """
+            Search for most recent parent Code/Block
+            """
+            target_node = node
+            while target_node.parent.text not in ("Code", "Block"):
+                target_node = target_node.parent
+
+            code_node = target_node.parent
+
+            """
+            Put the code coming after this statement in a seperate block
+            """
+            after = target_node.getSiblingNeighbour(1)
+
+            ast_block = ASTNodeBlock("Block", code_node, code_node.getSymbolTable(), code_node.linenr,
+                                     final_cfg.accepting)
+
+            if after is not None:
+
+                """
+                When this loop occurs, It means a block will be changed by another block, so we will
+                Remove its block from the control flow graph and from our code
+                """
+                while isinstance(after, ASTNodeBlock):
+                    final_cfg.remove_vertex(after.vertex)
+
+                    code_node = after
+
+                    self.to_remove.append(after)
+
+                    after = after.getChild(0)
+
+                code_node.addNodeChildEmerge(ast_block, after)
+            else:
+                """
+                Put block at the end
+                """
+
+                code_node.addChildren(ast_block)
+
+            self.control_flow_map[node] = final_cfg
 
 
         """
@@ -223,8 +257,6 @@ class ControlFlowCreator(ASTVisitor):
             Add the block NODE as parent of the subexpression
             """
             node.parent.addNodeChildEmerge(ast_block, node.getSiblingNeighbour(1))
-
-            self.to_move.append((ast_block, self.function_node))
 
             """
             The node '&&' or '||' has no use anymore so it can be removed,
@@ -375,8 +407,6 @@ class ControlFlowCreator(ASTVisitor):
         """
         target_node.parent.addNodeChildEmerge(ast_block, target_node)
 
-        self.to_move.append((ast_block, self.function_node))
-
         self.eval_scope_node = None
 
     def get_make_cfg(self, node):
@@ -392,3 +422,39 @@ class ControlFlowCreator(ASTVisitor):
             cf = ControlFlowGraph()
 
         return cf
+
+    def move_blocks(self):
+        """
+                Do preorder traverse BFS to move blocks
+                """
+
+        stack = [self.root]
+        visited = set()
+
+        to_move = []
+        function_node = None
+
+        while len(stack) > 0:
+            # pop() takes the last element of the list
+            # just keep in mind that the end of the list is the top of the stack
+            currentNode = stack.pop()
+
+            if currentNode.text == "Function":
+                function_node = currentNode
+
+            if isinstance(currentNode, ASTNodeBlock) and currentNode.text == "Block":
+                to_move.append((currentNode, function_node))
+            # reverse the order of the children because the later the node in the list the sooner it will be visited
+
+            visited.add(currentNode)
+
+            for child in reversed(currentNode.getChildren()):
+                if child not in visited and child not in stack:
+                    stack.append(child)
+
+        for ast_block, function_node in to_move:
+            """
+            All the blocks we needed to add will be add here, after the hole tree is visited
+            """
+
+            ast_block.move(function_node.getChild(1))

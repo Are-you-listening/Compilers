@@ -1,4 +1,5 @@
 from src.parser.ASTVisitor import *
+from src.parser.ASTConversion import *
 
 
 class ASTIfCleaner(ASTVisitor):
@@ -40,6 +41,11 @@ class ASTIfCleaner(ASTVisitor):
         removes terminal containing 'if'
         """
         self.to_remove.add(node.getChild(0))
+
+        """
+        Let the condition have a conversion to BOOl
+        """
+        ASTConversion.addConversion(node.getChild(1), ("BOOL", ""))
 
         """
         in case we have an 'Else' statement the 'else' terminal can be removed

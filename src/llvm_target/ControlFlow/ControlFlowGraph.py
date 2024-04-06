@@ -81,7 +81,7 @@ class Vertex:
             last_instruction = self.llvm.block.instructions[-1]
             self.llvm.xor(last_instruction, ir.Constant(last_instruction.type, 1))
 
-    def create_branch(self):
+    def create_branch(self, constant=None):
         if len(self.edges) != 2:
             return
 
@@ -114,7 +114,7 @@ class Vertex:
             """
             when different endpoints for true and false, we make a conditional branch
             """
-            last_instruction = ControlFlowGraph.makeBool(self.llvm)
+            last_instruction = ControlFlowGraph.makeBool(self.llvm, constant)
             self.llvm.cbranch(last_instruction, true_edge.to_vertex.llvm.block,
                                         false_edge.to_vertex.llvm.block)
 
@@ -288,13 +288,17 @@ class ControlFlowGraph:
 
 
     @staticmethod
-    def makeBool(builder):
+    def makeBool(builder, constant=None):
         """
         convert to LLVM bool type
         :param builder:
         :return:
         """
-        instruction = builder.block.instructions[-1]
+        if isinstance(constant, ir.Constant):
+            instruction = constant
+        else:
+            instruction = builder.block.instructions[-1]
+
         if instruction.type != ir.IntType(1):
             instruction = builder.icmp_signed("!=", instruction, ir.Constant(instruction.type, 0))
 
@@ -439,6 +443,23 @@ class ControlFlowGraph:
 
     def get_endpoints(self):
         return self.root.llvm, self.accepting.llvm
+
+    def remove_vertex(self, vertex: Vertex):
+        """
+        Remove this vertex from the graph
+        This can only remove redundant blocks
+
+        :param vertex:
+        :return:
+        """
+
+        if self.root == vertex or self.accepting == vertex:
+            raise Exception("Did invalid vertex remove")
+
+        target_vertex = vertex.edges[0].to_vertex
+
+        for r_edge in vertex.reverse_edges:
+            r_edge.to_vertex = target_vertex
 
     @staticmethod
     def default_merge(control_flow_1: "ControlFlowGraph", control_flow_2: "ControlFlowGraph"):
