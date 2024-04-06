@@ -72,7 +72,7 @@ def Processing(ast, dot_file, fold):
 
     ValueAdderVisitor().visit(ast)
 
-    DotVisitor("output/before").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/before").visit(ast)  # Export AST in Dot
 
     cfc = ControlFlowCreator()
     cfc.visit(ast)

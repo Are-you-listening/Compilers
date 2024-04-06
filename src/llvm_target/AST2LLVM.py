@@ -30,7 +30,6 @@ class AST2LLVM(ASTVisitor):
         self.postorder(self.root)
 
         for b in self.branch_needed:
-            continue
             b.create_branch()
 
     def postorder(self, root: ASTNode):

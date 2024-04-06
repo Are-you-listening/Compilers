@@ -27,14 +27,11 @@ class ControlFlowCreator(ASTVisitor):
         self.to_remove = []
         self.function_node = None
 
-        self.first_e = True
-
         self.root = ast.root
         self.postorder(self.root)
 
         for ast_block, function_node in self.add_block:
-            print("moves", ast_block.parent.text)
-            #ast_block.move(function_node.getChild(1))
+            ast_block.move(function_node.getChild(1))
 
         for t in self.to_remove:
             t_children = t.children
@@ -130,20 +127,24 @@ class ControlFlowCreator(ASTVisitor):
             self.control_flow_map[node] = cf
 
         if self.eval_scope_node == node:
+            """
+            Action when the evaluation of an logical expression ends
+            """
             cf = self.control_flow_map.get(node, None)
             cf.endEval()
 
             """
-            Add a block before the next node starts
+            Add a block after the other block
             """
 
-            if not self.first_e:
-                return
-            #self.first_e = False
-
+            """
+            Search for most recent block
+            """
             target_node = node
             while target_node.parent.text not in ("Code", "Block"):
+
                 target_node = target_node.parent
+            print(target_node.parent.text)
 
             code_node = target_node.parent
 
@@ -156,7 +157,6 @@ class ControlFlowCreator(ASTVisitor):
 
             node.parent.addChildren(phi_node)
 
-            print("index", code_node.findChild(target_node))
             code_node.children.insert(code_node.findChild(target_node), node)
             node.parent = code_node
 
@@ -164,15 +164,9 @@ class ControlFlowCreator(ASTVisitor):
 
             cf.accepting.use_phi = True
 
-            print("hey2")
-
             target_node.parent.addNodeChildEmerge(ast_block, target_node)
 
-            print(target_node, target_node.parent.children)
-            print(ast_block)
-
-            ast_block.move(self.function_node.getChild(1))
-            #self.add_block.append((ast_block, self.function_node))
+            self.add_block.append((ast_block, self.function_node))
 
             self.eval_scope_node = None
             self.eval_first = False
@@ -210,11 +204,10 @@ class ControlFlowCreator(ASTVisitor):
 
             ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, block)
             self.last_vertex = block
-            print("hey1")
             node.parent.addNodeChildEmerge(ast_block, node.getSiblingNeighbour(1))
 
-            ast_block.move(self.function_node.getChild(1))
-            #self.add_block.append((ast_block, self.function_node))
+            #ast_block.move(self.function_node.getChild(1))
+            self.add_block.append((ast_block, self.function_node))
 
             self.to_remove.append(node)
             self.to_remove.append(node.parent)

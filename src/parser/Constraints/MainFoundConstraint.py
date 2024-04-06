@@ -17,5 +17,4 @@ class MainFoundConstraint(Constraint):
             self.accepted = True
 
     def throwException(self):
-        print("heo")
         ErrorExporter.mainNotFound()
