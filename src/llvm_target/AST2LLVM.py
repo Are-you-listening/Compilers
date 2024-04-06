@@ -56,6 +56,7 @@ class AST2LLVM(ASTVisitor):
                 self.map_table = MapTable(self.map_table)
 
             if isinstance(currentNode, ASTNodeBlock) and currentNode.text == "Block" and currentNode not in visited:
+
                 node = currentNode
 
                 if node.vertex.llvm is None:
@@ -99,14 +100,12 @@ class AST2LLVM(ASTVisitor):
                 condition_node = node
                 while (isinstance(condition_node, ASTNodeBlock) or condition_node.text == "Code") and condition_node.getChildAmount() > 0:
                     condition_node = condition_node.getChild(condition_node.getChildAmount()-1)
-
                 constant = self.llvm_map.get(condition_node)
 
                 if isinstance(constant, ir.Instruction):
                     constant = None
 
                 self.branch_needed.append((self.last_vertex, constant))
-
             return
 
         if isinstance(node, ASTNodeBlock) and node.text == "PHI":
@@ -114,9 +113,9 @@ class AST2LLVM(ASTVisitor):
             When coming across a PHI, node, we know that we need the LLVM phi
             instruction to continue, so we generate the phi of the last (current) vertex
             """
-            if self.last_vertex.use_phi:
-                phi = self.last_vertex.create_phi()
-                self.llvm_map[node] = phi
+            phi = self.last_vertex.create_phi()
+            self.llvm_map[node] = phi
+
 
             return
 

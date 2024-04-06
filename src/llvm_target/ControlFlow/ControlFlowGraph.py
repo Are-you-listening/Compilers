@@ -25,7 +25,6 @@ class Vertex:
         The Instructions whose node we want for calculating our phi
         """
         self.phi_nodes = []
-        self.use_phi = False
 
     def addEdge(self, edge: "Edge"):
         """

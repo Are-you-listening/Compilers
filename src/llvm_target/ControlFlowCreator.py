@@ -400,7 +400,6 @@ class ControlFlowCreator(ASTVisitor):
         node.parent = code_node
 
         self.last_vertex = cf.accepting
-        cf.accepting.use_phi = True
 
         """
         Put the part after an expression into a new BLOCK
