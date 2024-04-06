@@ -50,8 +50,6 @@ class ControlFlowCreator(ASTVisitor):
         store function on last function position
         """
 
-
-
         stack = [root]
         visited = set()
 
@@ -144,7 +142,6 @@ class ControlFlowCreator(ASTVisitor):
             while target_node.parent.text not in ("Code", "Block"):
 
                 target_node = target_node.parent
-            print(target_node.parent.text)
 
             code_node = target_node.parent
 
@@ -169,7 +166,6 @@ class ControlFlowCreator(ASTVisitor):
             self.add_block.append((ast_block, self.function_node))
 
             self.eval_scope_node = None
-            self.eval_first = False
 
         if node.text == "Start" and self.control_flow_map.get(node, None) is None:
             self.control_flow_map[node] = ControlFlowGraph()
