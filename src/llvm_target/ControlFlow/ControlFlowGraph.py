@@ -450,5 +450,41 @@ class ControlFlowGraph:
 
         control_flow_1.accepting = control_flow_2.accepting
 
-
         return control_flow_1
+
+    @staticmethod
+    def if_statement(if_cfg: "ControlFlowGraph", else_cfg: "ControlFlowGraph" = None):
+        """
+        CFG creation when an IF statement is used
+
+        :param else_cfg: control flow that we will change
+        :param if_cfg: control flow that we will change
+        :return:
+        """
+
+        """
+        For IF statements without else We need to do the follwoing actions:
+        - Add a new root vertex, that connects to the old root when  True,
+        - When False/after original end (accepting) go to the new end (accepting)
+        """
+
+        new_root = Vertex(None)
+        new_accepting = Vertex(None)
+
+        old_root = if_cfg.root
+        old_accepting = if_cfg.accepting
+
+        new_root.addEdge(Edge(new_root, old_root, True))
+        old_accepting.addEdge(Edge(old_accepting, new_accepting, True))
+        old_accepting.addEdge(Edge(old_accepting, new_accepting, False))
+        if else_cfg is None:
+            new_root.addEdge(Edge(new_root, new_accepting, False))
+        else:
+
+            new_root.addEdge(Edge(new_root, else_cfg.root, False))
+            else_cfg.accepting.addEdge(Edge(else_cfg.accepting, new_accepting, True))
+            else_cfg.accepting.addEdge(Edge(else_cfg.accepting, new_accepting, False))
+
+        if_cfg.root = new_root
+        if_cfg.accepting = new_accepting
+        return if_cfg

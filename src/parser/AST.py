@@ -100,8 +100,9 @@ class ASTNode:
         """
 
         if from_child is None:
-            from_child = self.children[0]
-        from_index = self.findChild(from_child)
+            from_index = 0
+        else:
+            from_index = self.findChild(from_child)
 
         if to_child is None:
             to_index = len(self.children)

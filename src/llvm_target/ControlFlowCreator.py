@@ -104,9 +104,8 @@ class ControlFlowCreator(ASTVisitor):
             This will create the general start block of the function
             """
 
-            cf = self.control_flow_map.get(node.getChild(1), None)
-            if cf is None:
-                cf = ControlFlowGraph()
+            cf = self.get_make_cfg(node.getChild(1))
+
             self.control_flow_map[node.getChild(1)] = cf
 
             """
@@ -117,76 +116,69 @@ class ControlFlowCreator(ASTVisitor):
             node.getChild(1).addNodeChildEmerge(ast_block)
 
         """
+        With an IF statement 2 situations occur:
+        - Single IF statement
+        - If Else Statement
+        """
+        if node.text == "IF":
+            if_cfg = self.get_make_cfg(node.getChild(1))
+
+            """
+            Create block for if statement
+            """
+            ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, if_cfg.root)
+            node.getChild(1).addNodeParent(ast_block)
+            #self.to_move.append((ast_block, self.function_node))
+
+            else_cfg = None
+            if node.getChildAmount() == 3:
+                else_cfg = self.get_make_cfg(node.getChild(2))
+
+                """
+                Create block for else statement
+                """
+                ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, if_cfg.root)
+                node.getChild(2).addNodeParent(ast_block)
+                #self.to_move.append((ast_block, self.function_node))
+
+            final_cfg = ControlFlowGraph.if_statement(if_cfg, else_cfg)
+            self.control_flow_map[node] = final_cfg
+
+            self.last_vertex = final_cfg.accepting
+
+            """
+            the 'IF' node is not needed anymore
+            """
+            #self.to_remove.append(node)
+
+
+        """
         Merge the control flow graphs of multiple control flows
         That occur after each other
         """
-        merge_list = []
-        for child in node.children:
-            cf = self.control_flow_map.get(child, None)
-            if cf is not None and cf not in merge_list:
-                merge_list.append(cf)
+        if self.control_flow_map.get(node, None) is None:
 
-        if len(merge_list) > 0:
-            """
-            Do default merges when a control flow graph exists
-            """
-            cf = merge_list[0]
-            for i, cfg in enumerate(merge_list):
-                if i == 0 or cf.isEval():
-                    continue
-                cf = ControlFlowGraph.default_merge(cf, cfg)
+            merge_list = []
+            for child in node.children:
+                cf = self.control_flow_map.get(child, None)
+                if cf is not None and cf not in merge_list:
+                    merge_list.append(cf)
 
-            self.control_flow_map[node] = cf
+            if len(merge_list) > 0:
+                """
+                Do default merges when a control flow graph exists
+                """
+                cf = merge_list[0]
+                for i, cfg in enumerate(merge_list):
+                    if i == 0 or cf.isEval():
+                        continue
+                    cf = ControlFlowGraph.default_merge(cf, cfg)
+
+                self.control_flow_map[node] = cf
 
         if self.eval_scope_node == node:
-            """
-            Action when the evaluation of an logical expression ends
-            """
-            cf = self.control_flow_map.get(node, None)
-            cf.endEval()
+            self.handle_eval_scope_end(node)
 
-            """
-            Search for most recent parent Code/Block
-            """
-            target_node = node
-            while target_node.parent.text not in ("Code", "Block"):
-
-                target_node = target_node.parent
-
-            code_node = target_node.parent
-
-            """
-            Add a new block for everything that comes after the logical expression (because we cannot continue in the block before the expression)
-            """
-            ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr,
-                                     cf.accepting)
-
-            """
-            Replace the subtree, that contained the actual expression and replace it by a "PHI" node, 
-            indicating a PHI instruction (The PHI instruction will refer to the result calculated in the removed subtree)
-            The subtree will still exist in another block, because it will be inserted in de code again
-            """
-            phi_node = ASTNodeBlock("PHI", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.accepting)
-
-            node.parent.replaceChild(node, phi_node)
-
-            """
-            Insert subtree in code again, at the position just before the place that uses the PHI
-            """
-            code_node.children.insert(code_node.findChild(target_node), node)
-            node.parent = code_node
-
-            self.last_vertex = cf.accepting
-            cf.accepting.use_phi = True
-
-            """
-            Put the part after an expression into a new BLOCK
-            """
-            target_node.parent.addNodeChildEmerge(ast_block, target_node)
-
-            self.to_move.append((ast_block, self.function_node))
-
-            self.eval_scope_node = None
 
         if node.text == "Start" and self.control_flow_map.get(node, None) is None:
             self.control_flow_map[node] = ControlFlowGraph()
@@ -337,3 +329,66 @@ class ControlFlowCreator(ASTVisitor):
 
     def getControlFlowGraph(self):
         return self.control_flow_map.get(self.root, None)
+
+    def handle_eval_scope_end(self, node: ASTNode):
+        """
+        Action when the evaluation of an logical expression ends
+        """
+        cf = self.control_flow_map.get(node, None)
+        cf.endEval()
+
+        """
+        Search for most recent parent Code/Block
+        """
+        target_node = node
+        while target_node.parent.text not in ("Code", "Block"):
+            target_node = target_node.parent
+
+        code_node = target_node.parent
+
+        """
+        Add a new block for everything that comes after the logical expression (because we cannot continue in the block before the expression)
+        """
+        ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr,
+                                 cf.accepting)
+
+        """
+        Replace the subtree, that contained the actual expression and replace it by a "PHI" node, 
+        indicating a PHI instruction (The PHI instruction will refer to the result calculated in the removed subtree)
+        The subtree will still exist in another block, because it will be inserted in de code again
+        """
+        phi_node = ASTNodeBlock("PHI", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.accepting)
+
+        node.parent.replaceChild(node, phi_node)
+
+        """
+        Insert subtree in code again, at the position just before the place that uses the PHI
+        """
+        code_node.children.insert(code_node.findChild(target_node), node)
+        node.parent = code_node
+
+        self.last_vertex = cf.accepting
+        cf.accepting.use_phi = True
+
+        """
+        Put the part after an expression into a new BLOCK
+        """
+        target_node.parent.addNodeChildEmerge(ast_block, target_node)
+
+        self.to_move.append((ast_block, self.function_node))
+
+        self.eval_scope_node = None
+
+    def get_make_cfg(self, node):
+        """
+        Get the control flow graph of the node, if the node does not have a CFg, create one
+
+        :param node:
+        :return:
+        """
+
+        cf = self.control_flow_map.get(node, None)
+        if cf is None:
+            cf = ControlFlowGraph()
+
+        return cf
