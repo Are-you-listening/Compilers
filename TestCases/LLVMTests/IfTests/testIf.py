@@ -20,7 +20,7 @@ class IfTests(unittest.TestCase):
     """
 
     def testSimpleIf(self):
-        file_range = range(1, 11)
+        file_range = range(1, 15)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         original = sys.stdout  # Temp catch any output
