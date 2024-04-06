@@ -106,6 +106,12 @@ class ASTCreator(grammarCVisitor):
     def visitIf(self, ctx: grammarCParser.IfContext):
         self.__makeNode(ctx, "IF")
 
+    def visitFor(self, ctx: grammarCParser.ForContext):
+        self.__makeNode(ctx, "FOR")
+
+    def visitWhile(self, ctx: grammarCParser.WhileContext):
+        self.__makeNode(ctx, "WHILE")
+
     def visitTerminal(self, ctx):
         """
         :param ctx:
