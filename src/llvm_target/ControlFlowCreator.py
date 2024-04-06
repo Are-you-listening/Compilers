@@ -29,6 +29,10 @@ class ControlFlowCreator(ASTVisitor):
 
         self.move_blocks()
 
+        """
+        Remove the nodes itself, but keep their children, and make the children
+        part of the children of the parent of the node we remove
+        """
         for t in self.to_remove:
             t_children = t.children
 
@@ -112,82 +116,7 @@ class ControlFlowCreator(ASTVisitor):
         - If Else Statement
         """
         if node.text == "IF":
-            if_cfg = self.get_make_cfg(node.getChild(1))
-
-            """
-            Create block for if statement
-            """
-            ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, if_cfg.root)
-
-            node.getChild(1).addNodeParent(ast_block)
-
-            else_cfg = None
-            if node.getChildAmount() == 3:
-                else_cfg = self.get_make_cfg(node.getChild(2))
-
-                """
-                Create block for else statement
-                """
-                ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, else_cfg.root)
-
-                node.getChild(2).addNodeParent(ast_block)
-
-            final_cfg = ControlFlowGraph.if_statement(if_cfg, else_cfg)
-            final_cfg.verify_integrity()
-
-            self.last_vertex = final_cfg.accepting
-
-            """
-            the 'IF' node is not needed anymore
-            """
-            self.to_remove.add(node)
-
-            """
-            Search for most recent parent Code/Block
-            """
-            target_node = node
-            while target_node.parent.text not in ("Code", "Block"):
-                target_node = target_node.parent
-
-            code_node = target_node.parent
-
-            """
-            Put the code coming after this statement in a seperate block
-            """
-            after = target_node.getSiblingNeighbour(1)
-
-            ast_block = ASTNodeBlock("Block", code_node, code_node.getSymbolTable(), code_node.linenr,
-                                     final_cfg.accepting)
-
-            if after is not None:
-
-                """
-                When this loop occurs, It means a block will be changed by another block, so we will
-                Remove its block from the control flow graph and from our code
-                """
-                while isinstance(after, ASTNodeBlock) and after.getChildAmount() > 0:
-                    final_cfg.verify_integrity()
-                    if after.vertex is not None:
-                        final_cfg.remove_vertex(after.vertex)
-                        after.vertex = None
-
-                    final_cfg.verify_integrity()
-
-                    code_node = after
-                    self.to_remove.add(after)
-
-                    after = after.getChild(0, False)
-
-                code_node.addNodeChildEmerge(ast_block, after)
-            else:
-                """
-                Put block at the end
-                """
-
-                code_node.addChildren(ast_block)
-
-            self.control_flow_map[node] = final_cfg
-
+            self.handleIf(node)
 
         """
         Merge the control flow graphs of multiple control flows
@@ -215,7 +144,6 @@ class ControlFlowCreator(ASTVisitor):
 
         if self.eval_scope_node == node:
             self.handle_eval_scope_end(node)
-
 
         if node.text == "Start" and self.control_flow_map.get(node, None) is None:
             self.control_flow_map[node] = ControlFlowGraph()
@@ -427,7 +355,7 @@ class ControlFlowCreator(ASTVisitor):
 
     def move_blocks(self):
         """
-        Do preorder traverse BFS to move blocks
+        Do preorder traverse BFS to move 'Block' under the 'Code' node of the function it belongs to
         """
 
         stack = [self.root]
@@ -463,3 +391,87 @@ class ControlFlowCreator(ASTVisitor):
             """
 
             ast_block.move(function_node.getChild(1))
+
+    def handleIf(self, node: ASTNode):
+        """
+        Handle if statement node
+        :return:
+        """
+
+        if_cfg = self.get_make_cfg(node.getChild(1))
+
+        """
+        Create block for if statement
+        """
+        ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, if_cfg.root)
+        node.getChild(1).addNodeParent(ast_block)
+        else_cfg = None
+
+        """
+        In case we also have an 'Else' part  
+        """
+        if node.getChildAmount() == 3:
+            else_cfg = self.get_make_cfg(node.getChild(2))
+
+            """
+            Create block for else statement
+            """
+            ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, else_cfg.root)
+            node.getChild(2).addNodeParent(ast_block)
+
+        final_cfg = ControlFlowGraph.if_statement(if_cfg, else_cfg)
+        final_cfg.verify_integrity()
+
+        self.last_vertex = final_cfg.accepting
+
+        """
+        the 'IF' node is not needed anymore
+        """
+        self.to_remove.add(node)
+
+        """
+        Search for most recent parent Code/Block, To determine which nodes
+        will be checked after the if statement is done. This is in another block, so we need to add a Block node
+        After our if statement
+        """
+        target_node = node
+        while target_node.parent.text not in ("Code", "Block"):
+            target_node = target_node.parent
+
+        code_node = target_node.parent
+
+        """
+        Put the code coming after this statement in a seperate block
+        """
+        after = target_node.getSiblingNeighbour(1)
+
+        ast_block = ASTNodeBlock("Block", code_node, code_node.getSymbolTable(), code_node.linenr,
+                                 final_cfg.accepting)
+
+        if after is not None:
+
+            """
+            When this loop occurs, It means a block will be changed by another block, so we will
+            Remove its block from the control flow graph and from our code
+            """
+            while isinstance(after, ASTNodeBlock) and after.getChildAmount() > 0:
+                final_cfg.verify_integrity()
+                if after.vertex is not None:
+                    final_cfg.remove_vertex(after.vertex)
+                    after.vertex = None
+
+                final_cfg.verify_integrity()
+
+                code_node = after
+                self.to_remove.add(after)
+
+                after = after.getChild(0, False)
+
+            code_node.addNodeChildEmerge(ast_block, after)
+        else:
+            """
+            Put block at the end
+            """
+            code_node.addChildren(ast_block)
+
+        self.control_flow_map[node] = final_cfg
