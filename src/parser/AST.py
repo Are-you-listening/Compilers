@@ -17,6 +17,12 @@ class ASTNode:
         self.symbol_table = symbol_table
         self.linenr = linenr
 
+    def __hash__(self):
+        return id(self)
+
+    def __eq__(self, other):
+        return id(self) == id(other)
+
     def addChildren(self, child):
         self.children.append(child)
 
@@ -26,7 +32,7 @@ class ASTNode:
         """
         SKip AST Node Blocks
         """
-        while isinstance(child, ASTNodeBlock):
+        while isinstance(child, ASTNodeBlock) and child.text == "Block":
             child = child.getChild(0)
 
         return child
@@ -87,6 +93,35 @@ class ASTNode:
         self.parent = node
         node.addChildren(self)
 
+    def addNodeChildEmerge(self, node, from_child=None, to_child=None):
+        """
+        adds a new node as child having all its children
+        :return:
+        """
+
+        if from_child is None:
+            from_child = self.children[0]
+        from_index = self.findChild(from_child)
+
+        if to_child is None:
+            to_index = len(self.children)
+        else:
+            to_index = self.findChild(to_child)
+
+        for i, c in enumerate(self.children):
+            if i < from_index or i >= to_index:
+                continue
+
+            node.addChildren(c)
+            c.parent = node
+
+        temp_list = self.children[:from_index]
+        temp_list.append(node)
+        temp_list.extend(self.children[to_index:])
+
+        self.children = temp_list
+        node.parent = self
+
     def removeChild(self, child):
         self.children.remove(child)
 
@@ -115,6 +150,13 @@ class ASTNode:
                 newKid = copy.deepcopy(kid)
                 self.children.insert(index + 1, newKid)
                 newKid.parent = self
+
+    def move(self, to_parent):
+        self.parent.removeChild(self)
+
+        to_parent.addChildren(self)
+
+        self.parent = to_parent
 
 
 class ASTNodeTerminal(ASTNode):

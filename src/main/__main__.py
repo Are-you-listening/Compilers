@@ -72,10 +72,14 @@ def Processing(ast, dot_file, fold):
 
     ValueAdderVisitor().visit(ast)
 
+    DotVisitor("output/before").visit(ast)  # Export AST in Dot
+
+    cfc = ControlFlowCreator()
+    cfc.visit(ast)
+
     if dot_file is not None:
         DotVisitor(dot_file).visit(ast)  # Export AST in Dot
-
-    return ast
+    return ast, cfc.getControlFlowGraph()
 
 
 def main(argv):
@@ -116,22 +120,18 @@ def main(argv):
         ErrorExporter.StupidUser()
 
     ast, codegetter = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
-    Processing(ast, dot_file, fold)  # Check for Errors , Apply Folding Techniques , ...
+    ast, cfg = Processing(ast, dot_file, fold)  # Check for Errors , Apply Folding Techniques , ...
 
     if llvm_file is not None:
         LLVMSingleton.setName(input_file)
 
-        cfc = ControlFlowCreator()
-        cfc.visit(ast)
-
-        # DotVisitor("output/blaw").visit(ast)
 
         to_llvm = AST2LLVM(codegetter, llvm_file)  # The codegetter is used to add the original code as comments
         to_llvm.visit(ast)
 
         if control_flow_file is not None:
             control_dot = ControlFlowDotVisitor(control_flow_file)  # Create a CFG
-            control_dot.visit(cfc.getControlFlowGraph().root)
+            control_dot.visit(cfg.root)
 
 
 if __name__ == '__main__':

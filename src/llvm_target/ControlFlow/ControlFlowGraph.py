@@ -115,7 +115,6 @@ class Vertex:
             when different endpoints for true and false, we make a conditional branch
             """
             last_instruction = ControlFlowGraph.makeBool(self.llvm)
-
             self.llvm.cbranch(last_instruction, true_edge.to_vertex.llvm.block,
                                         false_edge.to_vertex.llvm.block)
 
@@ -263,6 +262,7 @@ class ControlFlowGraph:
         We will make 1 ending llVM block, that will represent the block at the end of the logical evaluation
         """
 
+
         for edge in self.reject.reverse_edges:
             """
             every edge to reject needs to be redirected to accepting
@@ -282,6 +282,7 @@ class ControlFlowGraph:
         set the Reject to None, because the evaluation has ended
         """
         self.reject = None
+
 
     @staticmethod
     def makeBool(builder):
@@ -349,6 +350,7 @@ class ControlFlowGraph:
         new_graph.accepting = control_flow_2.accepting
         new_graph.reject = control_flow_2.reject
 
+
         return new_graph
 
     @staticmethod
@@ -402,6 +404,7 @@ class ControlFlowGraph:
         new_graph.reject = control_flow_2.reject
         new_graph.accepting = control_flow_2.accepting
 
+
         return new_graph
 
     @staticmethod
@@ -436,11 +439,13 @@ class ControlFlowGraph:
 
     @staticmethod
     def default_merge(control_flow_1: "ControlFlowGraph", control_flow_2: "ControlFlowGraph"):
+
         ed = control_flow_2.root.edges
         for edge in ed:
             edge.from_vertex = control_flow_1.accepting
             control_flow_1.accepting.addEdge(edge)
 
         control_flow_1.accepting = control_flow_2.accepting
+
 
         return control_flow_1
