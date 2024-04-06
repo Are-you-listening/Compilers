@@ -20,7 +20,7 @@ class IfTests(unittest.TestCase):
     """
 
     def testSimpleIf(self):
-        file_range = range(1, 3)
+        file_range = range(1, 7)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         original = sys.stdout  # Temp catch any output
@@ -39,8 +39,8 @@ class IfTests(unittest.TestCase):
             """
             assert for same output
             """
-            print(i, out.stdout, c_out.stdout)
-            print(out.stderr)
+            #print(i, out.stdout, c_out.stdout)
+            #print(out.stderr)
             assert out.stdout == c_out.stdout
 
         sys.stdout = original
