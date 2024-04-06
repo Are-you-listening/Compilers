@@ -141,7 +141,7 @@ class Vertex:
         bool_type = ir.IntType(1)
         phi: ir.PhiInstr = self.llvm.phi(bool_type)
 
-        for vertex in edge_true_list.union(edge_false_list):
+        for vertex in sorted(list(edge_true_list.union(edge_false_list)), key=lambda x: x.llvm.block.name):
             in_true = vertex in edge_true_list
             in_false = vertex in edge_false_list
 

@@ -14,7 +14,7 @@ class ControlFlowCreator(ASTVisitor):
         self.control_flow_map = {}
         self.eval_scope_node = None
         self.root = None
-        self.add_block = []
+        self.to_move = []
         self.last_vertex = None
         self.to_remove = []
         self.function_node = None
@@ -22,7 +22,7 @@ class ControlFlowCreator(ASTVisitor):
     def visit(self, ast: AST):
         self.control_flow_map = {}
         self.eval_scope_node = None
-        self.add_block = []
+        self.to_move = []
         self.last_vertex = None
         self.to_remove = []
         self.function_node = None
@@ -30,7 +30,7 @@ class ControlFlowCreator(ASTVisitor):
         self.root = ast.root
         self.postorder(self.root)
 
-        for ast_block, function_node in self.add_block:
+        for ast_block, function_node in self.to_move:
             """
             All the blocks we needed to add will be add here, after the hole tree is visited
             """
@@ -184,7 +184,7 @@ class ControlFlowCreator(ASTVisitor):
             """
             target_node.parent.addNodeChildEmerge(ast_block, target_node)
 
-            self.add_block.append((ast_block, self.function_node))
+            self.to_move.append((ast_block, self.function_node))
 
             self.eval_scope_node = None
 
@@ -219,13 +219,26 @@ class ControlFlowCreator(ASTVisitor):
             else:
                 block = cfg.reject
 
+            """
+            Give the sub expression a new block, and add it to the to move list, to indicate only want to move the block 
+            after the traverse (Because the function block is only created at the end) and we don't want to break the 
+            traverse structure
+            """
             ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, block)
             self.last_vertex = block
+
+            """
+            Add the block NODE as parent of the subexpression
+            """
             node.parent.addNodeChildEmerge(ast_block, node.getSiblingNeighbour(1))
 
-            #ast_block.move(self.function_node.getChild(1))
-            self.add_block.append((ast_block, self.function_node))
+            self.to_move.append((ast_block, self.function_node))
 
+            """
+            The node '&&' or '||' has no use anymore so it can be removed,
+            When this node is removed an 'Expr' with 1 child remains, which is just useless and not clean
+            So this node will also be removed
+            """
             self.to_remove.append(node)
             self.to_remove.append(node.parent)
 

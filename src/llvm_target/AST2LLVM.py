@@ -29,6 +29,11 @@ class AST2LLVM(ASTVisitor):
         self.root = ast.root
         self.postorder(self.root)
 
+        """
+        All the blocks that need a branch will be put in branch_needed
+        Their latest instruction will decide the branch, for a conditional branch.
+        In case of an unconditional, it will just create a branch
+        """
         for b in self.branch_needed:
             b.create_branch()
 
@@ -63,9 +68,6 @@ class AST2LLVM(ASTVisitor):
                 LLVMSingleton.getInstance().setCurrentBlock(node.vertex.llvm)
                 self.last_vertex = node.vertex
 
-
-
-
             childNotVisited = False
             for child in reversed(currentNode.getChildren()):
                 if child not in visited:
@@ -86,14 +88,13 @@ class AST2LLVM(ASTVisitor):
         """
 
         if isinstance(node, ASTNodeBlock) and node.text == "Block":
-            """
-            Changes the block
-            """
-
             return
 
         if isinstance(node, ASTNodeBlock) and node.text == "PHI":
-
+            """
+            When coming across a PHI, node, we know that we need the LLVM phi
+            instruction to continue, so we generate the phi of the last (current) vertex
+            """
             if self.last_vertex.use_phi:
                 phi = self.last_vertex.create_phi()
                 self.llvm_map[node] = phi
