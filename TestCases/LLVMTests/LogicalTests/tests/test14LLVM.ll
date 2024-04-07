@@ -69,7 +69,7 @@ define i32 @"main"()
   %".57" = zext i1 %".56" to i32
   store i32 %".57", i32* %".18", align 4
   %".59" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
+  ; printf "%d" f
   %".61" = bitcast [3 x i8]* @".str.d" to i8*
   %".62" = alloca i32
   store i32 %".59", i32* %".62"
@@ -95,7 +95,7 @@ define i32 @"main"()
   %".80" = zext i1 %".79" to i32
   store i32 %".80", i32* %".18", align 4
   %".82" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
+  ; printf "%d" f
   %".84" = bitcast [3 x i8]* @".str.d" to i8*
   %".85" = alloca i32
   store i32 %".82", i32* %".85"
@@ -128,7 +128,7 @@ define i32 @"main"()
   %".108" = zext i1 %".107" to i32
   store i32 %".108", i32* %".18", align 4
   %".110" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
+  ; printf "%d" f
   %".112" = bitcast [3 x i8]* @".str.d" to i8*
   %".113" = alloca i32
   store i32 %".110", i32* %".113"
@@ -165,7 +165,7 @@ define i32 @"main"()
   %".140" = zext i1 %".139" to i32
   store i32 %".140", i32* %".18", align 4
   %".142" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
+  ; printf "%d" f
   %".144" = bitcast [3 x i8]* @".str.d" to i8*
   %".145" = alloca i32
   store i32 %".142", i32* %".145"
@@ -202,7 +202,7 @@ define i32 @"main"()
   %".172" = zext i1 %".171" to i32
   store i32 %".172", i32* %".18", align 4
   %".174" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
+  ; printf "%d" f
   %".176" = bitcast [3 x i8]* @".str.d" to i8*
   %".177" = alloca i32
   store i32 %".174", i32* %".177"
@@ -241,7 +241,7 @@ define i32 @"main"()
   %".206" = zext i1 %".205" to i32
   store i32 %".206", i32* %".18", align 4
   %".208" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
+  ; printf "%d" f
   %".210" = bitcast [3 x i8]* @".str.d" to i8*
   %".211" = alloca i32
   store i32 %".208", i32* %".211"
@@ -280,7 +280,7 @@ define i32 @"main"()
   %".240" = zext i1 %".239" to i32
   store i32 %".240", i32* %".18", align 4
   %".242" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
+  ; printf "%d" f
   %".244" = bitcast [3 x i8]* @".str.d" to i8*
   %".245" = alloca i32
   store i32 %".242", i32* %".245"
@@ -319,7 +319,7 @@ define i32 @"main"()
   %".274" = zext i1 %".273" to i32
   store i32 %".274", i32* %".18", align 4
   %".276" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
+  ; printf "%d" f
   %".278" = bitcast [3 x i8]* @".str.d" to i8*
   %".279" = alloca i32
   store i32 %".276", i32* %".279"
@@ -358,7 +358,7 @@ define i32 @"main"()
   %".308" = zext i1 %".307" to i32
   store i32 %".308", i32* %".18", align 4
   %".310" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
+  ; printf "%d" f
   %".312" = bitcast [3 x i8]* @".str.d" to i8*
   %".313" = alloca i32
   store i32 %".310", i32* %".313"

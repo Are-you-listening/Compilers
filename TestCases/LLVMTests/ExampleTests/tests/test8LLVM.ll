@@ -28,7 +28,7 @@ define i32 @"main"()
   %".23" = alloca float, align 4
   store float %".22", float* %".23", align 4
   %".25" = load float, float* %".23", align 4
-  ; printf "%f" , result
+  ; printf "%f" result
   %".27" = bitcast [3 x i8]* @".str.f" to i8*
   %".28" = alloca float
   store float %".25", float* %".28"

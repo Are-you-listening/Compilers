@@ -9,7 +9,7 @@ define i32 @"main"()
   store i32 98362, i32* %".3", align 4
   ; INT x = 98362
   %".6" = load i32, i32* %".3", align 4
-  ; printf "%d" , x
+  ; printf "%d" x
   %".8" = bitcast [3 x i8]* @".str.d" to i8*
   %".9" = alloca i32
   store i32 %".6", i32* %".9"
@@ -22,7 +22,7 @@ define i32 @"main"()
   store i32** %".13", i32*** %".16", align 8
   ; INT * * p = & x_ptr
   %".19" = load i32*, i32** %".13", align 8
-  ; printf "%d" , * p == x_ptr
+  ; printf "%d" * p == x_ptr
   %".21" = load i32*, i32** %".13", align 8
   %".22" = icmp eq i32* %".19", %".21"
   %".23" = bitcast [3 x i8]* @".str.d" to i8*
@@ -34,7 +34,7 @@ define i32 @"main"()
   store i32* %".3", i32** %".28", align 8
   ; INT * z = & x
   %".31" = load i32, i32* %".3", align 4
-  ; printf "%d" , * z == x
+  ; printf "%d" * z == x
   %".33" = load i32, i32* %".3", align 4
   %".34" = icmp eq i32 %".31", %".33"
   %".35" = bitcast [3 x i8]* @".str.d" to i8*
@@ -48,7 +48,7 @@ define i32 @"main"()
   %".43" = alloca float*, align 8
   store float* %".40", float** %".43", align 8
   ; FLOAT * a_ptr = & a
-  ; printf "%d" , INT * a_ptr == a
+  ; printf "%d" INT * a_ptr == a
   %".47" = load float, float* %".40", align 4
   %".48" = load float, float* %".40", align 4
   %".49" = fcmp oeq float %".47", %".48"

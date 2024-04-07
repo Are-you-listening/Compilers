@@ -137,6 +137,11 @@ class ASTCleaner(ASTVisitor):
         """
         child = node.getChild(1)
 
+        """
+        remove 'printf' node
+        """
+        self.to_remove.add((node.getChild(0), node))
+
         self.to_remove.add((child, node))
         format_child_text += child.text
 

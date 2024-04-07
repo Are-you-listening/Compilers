@@ -3,7 +3,7 @@ from src.antlr_files.grammarCParser import *
 from src.parser.Tables.SymbolTable import *
 from src.parser.Tables.TypedefTable import *
 
-black_list = ['(', ')', ';', '{', '}']
+black_list = ['(', ')', ';', '{', '}', ',']
 
 
 class ASTCreator(grammarCVisitor):

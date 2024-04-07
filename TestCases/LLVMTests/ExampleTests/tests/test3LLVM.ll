@@ -23,7 +23,7 @@ define i32 @"main"()
   %".18" = alloca i32, align 4
   store i32 %".17", i32* %".18", align 4
   %".20" = load i32, i32* %".3", align 4
-  ; printf "%d" , x
+  ; printf "%d" x
   %".22" = bitcast [3 x i8]* @".str.d" to i8*
   %".23" = alloca i32
   store i32 %".20", i32* %".23"
@@ -34,16 +34,16 @@ define i32 @"main"()
   store i32 20, i32* %".28"
   %".30" = load i32, i32* %".28"
   %".31" = call i32 (i8*, ...) @"printf"(i8* %".27", i32 %".30")
-  ; printf "%d" , a
+  ; printf "%d" a
   %".33" = load i32, i32* %".13", align 4
-  ; printf "%d" , b
+  ; printf "%d" b
   %".35" = bitcast [3 x i8]* @".str.d" to i8*
   %".36" = alloca i32
   store i32 %".33", i32* %".36"
   %".38" = load i32, i32* %".36"
   %".39" = call i32 (i8*, ...) @"printf"(i8* %".35", i32 %".38")
   %".40" = load i32, i32* %".18", align 4
-  ; printf "%d" , c
+  ; printf "%d" c
   %".42" = bitcast [3 x i8]* @".str.d" to i8*
   %".43" = alloca i32
   store i32 %".40", i32* %".43"

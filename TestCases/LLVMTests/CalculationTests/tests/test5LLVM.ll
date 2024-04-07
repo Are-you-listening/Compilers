@@ -36,7 +36,7 @@ define i32 @"main"()
   store i32 %".28", i32* %".30"
   %".32" = load i32, i32* %".30"
   %".33" = call i32 (i8*, ...) @"printf"(i8* %".29", i32 %".32")
-  ; printf "%d" , is_x
+  ; printf "%d" is_x
   ret i32 0
   ; INT main
   ; #include <stdio.h>

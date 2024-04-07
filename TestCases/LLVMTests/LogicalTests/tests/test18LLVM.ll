@@ -32,7 +32,7 @@ define i32 @"main"()
   store i32 1, i32* %".18", align 4
   ; f = ! a || e && d && 5 < 6
   %".29" = load i32, i32* %".18", align 4
-  ; printf "%d" , f
+  ; printf "%d" f
   %".31" = bitcast [3 x i8]* @".str.d" to i8*
   %".32" = alloca i32
   store i32 %".29", i32* %".32"
@@ -52,7 +52,7 @@ define i32 @"main"()
   %".45" = zext i1 %".44" to i32
   store i32 %".45", i32* %".21", align 4
   %".47" = load i32, i32* %".21", align 4
-  ; printf "%d" , g
+  ; printf "%d" g
   %".49" = bitcast [3 x i8]* @".str.d" to i8*
   %".50" = alloca i32
   store i32 %".47", i32* %".50"
@@ -77,7 +77,7 @@ define i32 @"main"()
   %".68" = zext i1 %".67" to i32
   store i32 %".68", i32* %".24", align 4
   %".70" = load i32, i32* %".24", align 4
-  ; printf "%d" , h
+  ; printf "%d" h
   %".72" = bitcast [3 x i8]* @".str.d" to i8*
   %".73" = alloca i32
   store i32 %".70", i32* %".73"

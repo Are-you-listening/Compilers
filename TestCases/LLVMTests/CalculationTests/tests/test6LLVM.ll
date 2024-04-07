@@ -40,7 +40,7 @@ define i32 @"main"()
   store i32 %".32", i32* %".34"
   %".36" = load i32, i32* %".34"
   %".37" = call i32 (i8*, ...) @"printf"(i8* %".33", i32 %".36")
-  ; printf "%d" , is_x
+  ; printf "%d" is_x
   %".39" = load i32*, i32** %".12", align 8
   ; INT is_y = ptr == & y
   %".41" = icmp eq i32* %".39", %".6"
@@ -55,14 +55,14 @@ define i32 @"main"()
   store i32 %".47", i32* %".49"
   %".51" = load i32, i32* %".49"
   %".52" = call i32 (i8*, ...) @"printf"(i8* %".48", i32 %".51")
-  ; printf "%d" , is_y
+  ; printf "%d" is_y
   %".54" = load i32*, i32** %".12", align 8
   ; is_y = & x != ptr
   %".56" = icmp ne i32* %".3", %".54"
   %".57" = zext i1 %".56" to i32
   store i32 %".57", i32* %".43", align 4
   %".59" = load i32, i32* %".43", align 4
-  ; printf "%d" , is_y
+  ; printf "%d" is_y
   %".61" = bitcast [3 x i8]* @".str.d" to i8*
   %".62" = alloca i32
   store i32 %".59", i32* %".62"
@@ -78,7 +78,7 @@ define i32 @"main"()
   store float* %".70", float** %".72"
   %".74" = load float*, float** %".72"
   %".75" = call i32 (i8*, ...) @"printf"(i8* %".71", float* %".74")
-  ; printf "%d" , ptr2
+  ; printf "%d" ptr2
   ret i32 0
   ; INT main
   ; #include <stdio.h>

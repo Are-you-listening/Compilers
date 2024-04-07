@@ -11,7 +11,7 @@ define i32 @"main"()
   %".6" = load float, float* %".4"
   %".7" = fpext float %".6" to double
   %".8" = call i32 (i8*, ...) @"printf"(i8* %".3", double %".7")
-  ; printf "%f" , 5.2
+  ; printf "%f" 5.2
   ret i32 0
   ; INT main
   ; #include <stdio.h>

@@ -9,7 +9,7 @@ define i32 @"main"()
   store i32 -6250, i32* %".3", align 4
   ; const INT b = - 6250
   %".6" = load i32, i32* %".3", align 4
-  ; printf "%d" , b
+  ; printf "%d" b
   %".8" = bitcast [3 x i8]* @".str.d" to i8*
   %".9" = alloca i32
   store i32 %".6", i32* %".9"
@@ -19,7 +19,7 @@ define i32 @"main"()
   store i32 5, i32* %".13", align 4
   ; const INT x = 5
   %".16" = load i32, i32* %".13", align 4
-  ; printf "%d" , x
+  ; printf "%d" x
   %".18" = bitcast [3 x i8]* @".str.d" to i8*
   %".19" = alloca i32
   store i32 %".16", i32* %".19"
@@ -32,7 +32,7 @@ define i32 @"main"()
   ; * non_const_pointer = 36941
   store i32 36941, i32* %".26", align 8
   %".29" = load i32*, i32** %".23", align 8
-  ; printf "%d" , * non_const_pointer
+  ; printf "%d" * non_const_pointer
   %".31" = load i32, i32* %".29", align 8
   %".32" = bitcast [3 x i8]* @".str.d" to i8*
   %".33" = alloca i32
@@ -42,7 +42,7 @@ define i32 @"main"()
   store i32* %".3", i32** %".23", align 8
   ; non_const_pointer = & b
   %".39" = load i32*, i32** %".23", align 8
-  ; printf "%d" , * non_const_pointer
+  ; printf "%d" * non_const_pointer
   %".41" = load i32, i32* %".39", align 8
   %".42" = bitcast [3 x i8]* @".str.d" to i8*
   %".43" = alloca i32
@@ -53,7 +53,7 @@ define i32 @"main"()
   store i8 120, i8* %".47", align 1
   ; CHAR c = 'x'
   %".50" = load i8, i8* %".47", align 1
-  ; printf "%c" , c
+  ; printf "%c" c
   %".52" = bitcast [3 x i8]* @".str.c" to i8*
   %".53" = alloca i8
   store i8 %".50", i8* %".53"
@@ -63,7 +63,7 @@ define i32 @"main"()
   store i8 10, i8* %".57", align 1
   ; CHAR nl = '\n'
   %".60" = load i8, i8* %".57", align 1
-  ; printf "%c" , nl
+  ; printf "%c" nl
   %".62" = bitcast [3 x i8]* @".str.c" to i8*
   %".63" = alloca i8
   store i8 %".60", i8* %".63"
@@ -73,7 +73,7 @@ define i32 @"main"()
   store i8* %".47", i8** %".67", align 8
   ; CHAR * char_ptr = & c
   %".70" = load i8, i8* %".47", align 1
-  ; printf "%c" , * char_ptr
+  ; printf "%c" * char_ptr
   %".72" = bitcast [3 x i8]* @".str.c" to i8*
   %".73" = alloca i8
   store i8 %".70", i8* %".73"
@@ -83,7 +83,7 @@ define i32 @"main"()
   ; * char_ptr = '\t'
   store i8 9, i8* %".77", align 8
   %".80" = load i8*, i8** %".67", align 8
-  ; printf "%c" , * char_ptr
+  ; printf "%c" * char_ptr
   %".82" = load i8, i8* %".80", align 8
   %".83" = bitcast [3 x i8]* @".str.c" to i8*
   %".84" = alloca i8
@@ -93,7 +93,7 @@ define i32 @"main"()
   store i8* %".57", i8** %".67", align 8
   ; char_ptr = & nl
   %".90" = load i8*, i8** %".67", align 8
-  ; printf "%c" , * char_ptr
+  ; printf "%c" * char_ptr
   %".92" = load i8, i8* %".90", align 8
   %".93" = bitcast [3 x i8]* @".str.c" to i8*
   %".94" = alloca i8

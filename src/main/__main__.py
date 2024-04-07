@@ -15,6 +15,7 @@ from src.llvm_target.AST2LLVM import *
 from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
 from src.parser.ASTIfCleaner import ASTIfCleaner
 from src.llvm_target.ControlFlowCreator import *
+from src.parser.ASTLoopCleaner import *
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -45,8 +46,7 @@ def cleanGreen(input_file, symbol_file):
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
-
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+    ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
