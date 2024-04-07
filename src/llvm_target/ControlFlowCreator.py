@@ -451,21 +451,24 @@ class ControlFlowCreator(ASTVisitor):
         condition_node.addNodeParent(ast_block)
 
         """
-        Create block for inside the while loop (if it did not yet had a block)
+        Create block for inside the while loop
         """
-        if is_new:
-            print("he")
-            ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr,
-                                     original_root)
+        ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr,
+                                original_root)
 
-            loop_node = node.getChild(1)
-            loop_node.addNodeParent(ast_block)
+        loop_node = node.getChild(1)
+        loop_node.addNodeParent(ast_block)
 
         """
         Create a block for after the loop
         """
 
         self.add_after(node, final_cfg)
+
+        """
+        remove the node with the name "WHILE"
+        """
+        self.to_remove.add(node)
 
         self.control_flow_map[node] = final_cfg
 
