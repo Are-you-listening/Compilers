@@ -34,8 +34,8 @@ class AST2LLVM(ASTVisitor):
         Their latest instruction will decide the branch, for a conditional branch.
         In case of an unconditional, it will just create a branch
         """
-        for b, constant in self.branch_needed:
-            b.create_branch(constant)
+        for b in self.branch_needed:
+            b.create_branch()
 
     def postorder(self, root: ASTNode):
         """
@@ -93,18 +93,7 @@ class AST2LLVM(ASTVisitor):
                 a conditional branch
                 """
 
-                """
-                search condition node by going to the rightmost side
-                """
-                condition_node = node
-                while (isinstance(condition_node, ASTNodeBlock) or condition_node.text == "Code") and condition_node.getChildAmount() > 0:
-                    condition_node = condition_node.getChild(condition_node.getChildAmount()-1)
-                constant = self.llvm_map.get(condition_node)
-
-                if isinstance(constant, ir.Instruction):
-                    constant = None
-
-                self.branch_needed.append((self.last_vertex, constant))
+                self.branch_needed.append(self.last_vertex)
             return
 
         if isinstance(node, ASTNodeBlock) and node.text == "PHI":

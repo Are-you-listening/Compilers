@@ -80,7 +80,7 @@ class Vertex:
             last_instruction = self.llvm.block.instructions[-1]
             self.llvm.xor(last_instruction, ir.Constant(last_instruction.type, 1))
 
-    def create_branch(self, constant=None):
+    def create_branch(self):
         if len(self.edges) != 2:
             return
 
@@ -111,7 +111,7 @@ class Vertex:
             """
             when different endpoints for true and false, we make a conditional branch
             """
-            last_instruction = ControlFlowGraph.makeBool(self.llvm, constant)
+            last_instruction = ControlFlowGraph.makeBool(self.llvm)
             self.llvm.cbranch(last_instruction, true_edge.to_vertex.llvm.block,
                                         false_edge.to_vertex.llvm.block)
 
