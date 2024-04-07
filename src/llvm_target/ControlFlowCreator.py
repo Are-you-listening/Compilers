@@ -14,14 +14,12 @@ class ControlFlowCreator(ASTVisitor):
         self.control_flow_map = {}
         self.eval_scope_node = None
         self.root = None
-        self.last_vertex = None
         self.to_remove = set()
 
     def visit(self, ast: AST):
         self.control_flow_map = {}
         self.eval_scope_node = None
 
-        self.last_vertex = None
         self.to_remove = set()
 
         self.root = ast.root
@@ -99,7 +97,8 @@ class ControlFlowCreator(ASTVisitor):
             This will create the general start block of the function
             """
 
-            cf = self.get_make_cfg(node.getChild(1))
+            cf, is_new = self.get_make_cfg(node.getChild(1))
+
 
             self.control_flow_map[node.getChild(1)] = cf
 
@@ -107,7 +106,6 @@ class ControlFlowCreator(ASTVisitor):
             Create a block with the entire code base being a child
             """
             ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.root)
-            self.last_vertex = cf.root
             node.getChild(1).addNodeChildEmerge(ast_block)
 
         """
@@ -117,6 +115,9 @@ class ControlFlowCreator(ASTVisitor):
         """
         if node.text == "IF":
             self.handleIf(node)
+
+        if node.text == "WHILE":
+            self.handleWhile(node)
 
         """
         Merge the control flow graphs of multiple control flows
@@ -182,7 +183,6 @@ class ControlFlowCreator(ASTVisitor):
             traverse structure
             """
             ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, block)
-            self.last_vertex = block
 
             """
             Add the block NODE as parent of the subexpression
@@ -330,8 +330,6 @@ class ControlFlowCreator(ASTVisitor):
         code_node.children.insert(code_node.findChild(target_node), node)
         node.parent = code_node
 
-        self.last_vertex = cf.accepting
-
         """
         Put the part after an expression into a new BLOCK
         """
@@ -348,10 +346,14 @@ class ControlFlowCreator(ASTVisitor):
         """
 
         cf = self.control_flow_map.get(node, None)
+
+        is_new = False
+
         if cf is None:
             cf = ControlFlowGraph()
+            is_new = True
 
-        return cf
+        return cf, is_new
 
     def move_blocks(self):
         """
@@ -398,7 +400,7 @@ class ControlFlowCreator(ASTVisitor):
         :return:
         """
 
-        if_cfg = self.get_make_cfg(node.getChild(1))
+        if_cfg, is_new = self.get_make_cfg(node.getChild(1))
 
         """
         Create block for if statement
@@ -411,7 +413,7 @@ class ControlFlowCreator(ASTVisitor):
         In case we also have an 'Else' part  
         """
         if node.getChildAmount() == 3:
-            else_cfg = self.get_make_cfg(node.getChild(2))
+            else_cfg, is_new = self.get_make_cfg(node.getChild(2))
 
             """
             Create block for else statement
@@ -420,9 +422,6 @@ class ControlFlowCreator(ASTVisitor):
             node.getChild(2).addNodeParent(ast_block)
 
         final_cfg = ControlFlowGraph.if_statement(if_cfg, else_cfg)
-        final_cfg.verify_integrity()
-
-        self.last_vertex = final_cfg.accepting
 
         """
         the 'IF' node is not needed anymore
@@ -430,10 +429,53 @@ class ControlFlowCreator(ASTVisitor):
         self.to_remove.add(node)
 
         """
-        Search for most recent parent Code/Block, To determine which nodes
-        will be checked after the if statement is done. This is in another block, so we need to add a Block node
-        After our if statement
+        Add block for after the if statement
         """
+        self.add_after(node, final_cfg)
+
+        self.control_flow_map[node] = final_cfg
+
+    def handleWhile(self, node: ASTNode):
+        loop_cfg, is_new = self.get_make_cfg(node.getChild(1))
+        original_root = loop_cfg.root
+
+        final_cfg, condition_vertex = ControlFlowGraph.while_statement(loop_cfg)
+
+        """
+        Create block for condition
+        """
+        ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr,
+                                 condition_vertex)
+
+        condition_node = node.getChild(0)
+        condition_node.addNodeParent(ast_block)
+
+        """
+        Create block for inside the while loop (if it did not yet had a block)
+        """
+        if is_new:
+            print("he")
+            ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr,
+                                     original_root)
+
+            loop_node = node.getChild(1)
+            loop_node.addNodeParent(ast_block)
+
+        """
+        Create a block for after the loop
+        """
+
+        self.add_after(node, final_cfg)
+
+        self.control_flow_map[node] = final_cfg
+
+    def add_after(self, node: ASTNode, final_cfg: ControlFlowGraph):
+        """
+                Search for most recent parent Code/Block, To determine which nodes
+                will be checked after the if statement is done. This is in another block, so we need to add a Block node
+                After our if statement
+                """
+
         target_node = node
         while target_node.parent.text not in ("Code", "Block"):
             target_node = target_node.parent
@@ -455,12 +497,9 @@ class ControlFlowCreator(ASTVisitor):
             Remove its block from the control flow graph and from our code
             """
             while isinstance(after, ASTNodeBlock) and after.getChildAmount() > 0:
-                final_cfg.verify_integrity()
                 if after.vertex is not None:
                     final_cfg.remove_vertex(after.vertex)
                     after.vertex = None
-
-                final_cfg.verify_integrity()
 
                 code_node = after
                 self.to_remove.add(after)
@@ -473,5 +512,3 @@ class ControlFlowCreator(ASTVisitor):
             Put block at the end
             """
             code_node.addChildren(ast_block)
-
-        self.control_flow_map[node] = final_cfg

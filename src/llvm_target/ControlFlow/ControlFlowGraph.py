@@ -546,5 +546,50 @@ class ControlFlowGraph:
                 for re in e.to_vertex.reverse_edges:
                     assert re.to_vertex == e.to_vertex
                     assert re in re.from_vertex.edges
-
                 assert e in e.to_vertex.reverse_edges
+
+    @staticmethod
+    def while_statement(in_cfg: "ControlFlowGraph"):
+        """
+        CFG creation when an WHILE statement is used
+
+        :param in_cfg: the cfg of the code inside the while loop
+        :return:
+        """
+
+        """
+        Creating the CFG for a while loop will do the following changes
+        
+        Add a new root (indicating the vertex/block before entering the loop)
+        This will have edges to the .root condition check block (when False, goes to new_accepting, when True go to 'in_cfg' block)
+        
+        After having done the loop, we will reroute to the check condition block
+        """
+
+        new_root = Vertex(None)
+        check_condition = Vertex(None)
+        new_accepting = Vertex(None)
+
+        """
+        new root to check condition
+        """
+
+        new_root.addEdge(Edge(new_root, check_condition, True))
+        new_root.addEdge(Edge(new_root, check_condition, False))
+
+        """
+        check condition will go to the in WHILE block if condition is True, else go to new_accepting
+        """
+        check_condition.addEdge(Edge(check_condition, in_cfg.root, True))
+        check_condition.addEdge(Edge(check_condition, new_accepting, False))
+
+        """
+        When the block inside the while loop is checked once, go back to the check condition block
+        """
+        in_cfg.accepting.addEdge(Edge(in_cfg.accepting, check_condition, True))
+        in_cfg.accepting.addEdge(Edge(in_cfg.accepting, check_condition, False))
+
+        in_cfg.root = new_root
+        in_cfg.accepting = new_accepting
+
+        return in_cfg, check_condition

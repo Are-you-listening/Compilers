@@ -56,7 +56,6 @@ class AST2LLVM(ASTVisitor):
                 self.map_table = MapTable(self.map_table)
 
             if isinstance(currentNode, ASTNodeBlock) and currentNode.text == "Block" and currentNode not in visited:
-
                 node = currentNode
 
                 if node.vertex.llvm is None:

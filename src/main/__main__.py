@@ -123,7 +123,6 @@ def main(argv):
     if llvm_file is not None:
         LLVMSingleton.setName(input_file)
 
-
         to_llvm = AST2LLVM(codegetter, llvm_file)  # The codegetter is used to add the original code as comments
         to_llvm.visit(ast)
 
