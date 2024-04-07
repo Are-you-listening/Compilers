@@ -16,6 +16,8 @@ from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
 from src.parser.ASTIfCleaner import ASTIfCleaner
 from src.llvm_target.ControlFlowCreator import *
 from src.parser.ASTLoopCleaner import *
+from src.parser.ConstantStatementFolding import *
+
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -71,6 +73,8 @@ def Processing(ast, dot_file, fold):
     ASTConversion().visit(ast)
 
     ValueAdderVisitor().visit(ast)
+
+    ConstantStatementFolding().visit(ast)
 
     cfc = ControlFlowCreator()
     cfc.visit(ast)
