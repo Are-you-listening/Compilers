@@ -1,22 +1,18 @@
 #include <stdio.h>
 
 int main(){
-
-    while(1){
-        int a = 0;
-        if (a % 2 == 1){
-            continue;
-        }
-
-        printf("%d", a);
-        if (a > 10){
-            break;
-        }
-
+    int a = 0;
+    while(a < 5){
         a++;
+        continue;
+        int c = 0;
+        if (a > 4){
+            int q = 0;
+        }
+
+
 
     }
-    printf("%d", 1);
 
 	return 0;
 }

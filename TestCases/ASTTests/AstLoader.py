@@ -1,7 +1,7 @@
 import json
 from src.parser.Tables.SymbolTable import *
 from typing import List
-
+from src.llvm_target.ControlFlow.ControlFlowGraph import Vertex
 
 class AstLoader:
     """
@@ -68,6 +68,9 @@ class AstLoader:
             ast_node = ASTNodeTerminal(text, parent, ast_node_entry["symbol_table_nr"], ast_node_entry["type"],
                                        ast_node_entry["operation_type"])
 
+        elif "is_block" in ast_node_entry and ast_node_entry["is_block"]:
+            ast_node = ASTNodeBlock(text, parent, ast_node_entry["symbol_table_nr"], 0, Vertex(None))
+
         else:
             ast_node = ASTNode(text, parent, ast_node_entry["symbol_table_nr"], 0)
 
@@ -125,6 +128,9 @@ class AstLoader:
         if isinstance(ast_node, ASTNodeTerminal):
             ast_dict["type"] = ast_node.type
             ast_dict["operation_type"] = ast_node.operation_type
+
+        if isinstance(ast_node, ASTNodeBlock):
+            ast_dict["is_block"] = True
 
         ast_node_list.append(ast_dict)
 
