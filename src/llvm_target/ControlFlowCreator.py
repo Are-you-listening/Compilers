@@ -202,6 +202,12 @@ class ControlFlowCreator(ASTVisitor):
 
             self.control_flow_map[node] = new_cfg
 
+        if node.text == "continue":
+            new_cfg = ControlFlowGraph()
+            new_cfg.add_abnormal_terminator("CONTINUE", new_cfg.root)
+
+            self.control_flow_map[node] = new_cfg
+
 
     @staticmethod
     def handleFunction(node: ASTNode):

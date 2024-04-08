@@ -21,6 +21,8 @@ class Vertex:
         self.edges = []
         self.reverse_edges = []
 
+        self.abnormally_ended = False
+
     def addEdge(self, edge: "Edge"):
         """
         add an edge to the vertex
@@ -602,16 +604,45 @@ class ControlFlowGraph:
         in_cfg.accepting = new_accepting
 
         """
-        In case their are braks inside the while loops we need to handle it, to change the control flow of the
+        In case their are breaks inside the while loops we need to handle it, to change the control flow of the
         breaks to the accepting state
         """
         breaks = in_cfg.abnormal_terminator_nodes["BREAK"]
         for break_vertex in breaks:
+
+            if break_vertex.abnormally_ended:
+                continue
+
+            break_vertex.abnormally_ended = True
+
             for e in copy.copy(break_vertex.edges):
                 break_vertex.removeEdge(e)
 
             break_vertex.addEdge(Edge(break_vertex, in_cfg.accepting, True))
             break_vertex.addEdge(Edge(break_vertex, in_cfg.accepting, False))
+
+        in_cfg.abnormal_terminator_nodes["BREAK"] = []
+
+        """
+        In case their are continues inside the while loops we need to handle it, to change the control flow of the
+        breaks to the accepting state
+        """
+        continues = in_cfg.abnormal_terminator_nodes["CONTINUE"]
+
+        for continue_vertex in continues:
+
+            if continue_vertex.abnormally_ended:
+                continue
+
+            continue_vertex.abnormally_ended = True
+
+            for e in copy.copy(continue_vertex.edges):
+                continue_vertex.removeEdge(e)
+
+            continue_vertex.addEdge(Edge(continue_vertex, check_condition, True))
+            continue_vertex.addEdge(Edge(continue_vertex, check_condition, False))
+
+        in_cfg.abnormal_terminator_nodes["CONTINUE"] = []
 
         return in_cfg, check_condition
 
