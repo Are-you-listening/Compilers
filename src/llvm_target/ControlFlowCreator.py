@@ -99,7 +99,6 @@ class ControlFlowCreator(ASTVisitor):
 
             cf, is_new = self.get_make_cfg(node.getChild(1))
 
-
             self.control_flow_map[node.getChild(1)] = cf
 
             """
@@ -196,6 +195,13 @@ class ControlFlowCreator(ASTVisitor):
             """
             self.to_remove.add(node)
             self.to_remove.add(node.parent)
+
+        if node.text == "break":
+            new_cfg = ControlFlowGraph()
+            new_cfg.add_abnormal_terminator("BREAK", new_cfg.root)
+
+            self.control_flow_map[node] = new_cfg
+
 
     @staticmethod
     def handleFunction(node: ASTNode):
@@ -439,7 +445,7 @@ class ControlFlowCreator(ASTVisitor):
         loop_cfg, is_new = self.get_make_cfg(node.getChild(1))
         original_root = loop_cfg.root
 
-        final_cfg, condition_vertex = ControlFlowGraph.while_statement(loop_cfg)
+        final_cfg, condition_vertex = ControlFlowGraph.while_statement(loop_cfg, node.getChild(0).text == "1")
 
         """
         Create block for condition

@@ -34,6 +34,13 @@ class ConstantStatementFolding(ASTVisitor):
                 t.parent.insertChild(index + i, child)
 
     def visitNode(self, node: ASTNode):
+        self.__check_if(node)
+        self.__check_while(node)
+
+    def visitNodeTerminal(self, node: ASTNodeTerminal):
+        pass
+
+    def __check_if(self, node: ASTNode):
         if node.text != "IF":
             return
 
@@ -69,9 +76,16 @@ class ConstantStatementFolding(ASTVisitor):
             else:
                 node.parent.removeChild(node)
 
+    def __check_while(self, node: ASTNode):
+        if node.text != "WHILE":
+            return
 
+        condition = node.getChild(0)
 
+        if not isinstance(condition, ASTNodeTerminal):
+            return
 
-    def visitNodeTerminal(self, node: ASTNodeTerminal):
-        pass
+        assert condition.type == "BOOL"
 
+        if int(condition.text) == 0:
+            node.parent.removeChild(node)

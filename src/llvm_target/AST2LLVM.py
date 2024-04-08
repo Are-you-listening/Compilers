@@ -104,7 +104,6 @@ class AST2LLVM(ASTVisitor):
             phi = self.last_vertex.create_phi()
             self.llvm_map[node] = phi
 
-
             return
 
         if node.text == "Declaration":
@@ -348,6 +347,10 @@ class AST2LLVM(ASTVisitor):
         """
         if node.getChildAmount() == 0:
             return
+
+        if isinstance(node.getChild(0, False), ASTNodeBlock):
+            return
+
         code = self.codegetter.getLine(node.getChild(0))
 
         if code is not None:

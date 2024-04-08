@@ -44,7 +44,8 @@ class ASTLoopCleaner(ASTVisitor):
         """
         self.to_remove.add(node.getChild(0))
 
-        if node.text != "FOR":
+        if node.text == "WHILE":
+            ASTConversion.addConversion(node.getChild(1), ("BOOL", ""))
             return
 
         """
@@ -86,9 +87,7 @@ class ASTLoopCleaner(ASTVisitor):
         loop_code_block.addChildren(suffix_child)
         suffix_child.parent = loop_code_block
 
-
-
-
+        ASTConversion.addConversion(node.getChild(1), ("BOOL", ""))
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass

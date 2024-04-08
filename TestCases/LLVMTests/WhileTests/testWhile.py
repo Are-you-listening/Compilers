@@ -20,7 +20,7 @@ class WhileTests(unittest.TestCase):
     """
 
     def testSimpleWhile(self):
-        file_range = range(1, 5)
+        file_range = range(1, 8)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         original = sys.stdout  # Temp catch any output
@@ -28,7 +28,7 @@ class WhileTests(unittest.TestCase):
         sys.stdout = buff
 
         for i in file_range:
-            #print(i)
+            print(i)
             file_name = f"tests/test{i}.c"
             self.runAST(file_name)
             c_out = self.runC(file_name)

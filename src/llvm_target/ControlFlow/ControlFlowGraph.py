@@ -1,6 +1,6 @@
 from src.llvm_target.LLVMSingleton import LLVMSingleton
 from llvmlite import ir
-
+import copy
 
 class Vertex:
     """
@@ -21,11 +21,6 @@ class Vertex:
         self.edges = []
         self.reverse_edges = []
 
-        """
-        The Instructions whose node we want for calculating our phi
-        """
-        self.phi_nodes = []
-
     def addEdge(self, edge: "Edge"):
         """
         add an edge to the vertex
@@ -39,6 +34,10 @@ class Vertex:
         so we can traverse the vertices backwards
         """
         edge.to_vertex.reverse_edges.append(edge)
+
+    def removeEdge(self, edge: "Edge"):
+        self.edges.remove(edge)
+        edge.to_vertex.reverse_edges.remove(edge)
 
     def accept(self, visitor):
         visitor.visitVertex(self)
@@ -97,6 +96,7 @@ class Vertex:
         """
         If both edges go the same block, we can just do a normal branch
         """
+
         if true_edge.to_vertex == false_edge.to_vertex:
             """
             In this case both true and false go to this branch
@@ -216,6 +216,8 @@ class ControlFlowGraph:
         self.accepting: Vertex = self.root
         self.reject: Vertex = None
         self.flip_eval = False
+
+        self.abnormal_terminator_nodes = {"BREAK": [], "CONTINUE": [], "RETURN": []}
 
     def isEval(self):
         """
@@ -411,7 +413,6 @@ class ControlFlowGraph:
         new_graph.reject = control_flow_2.reject
         new_graph.accepting = control_flow_2.accepting
 
-
         return new_graph
 
     @staticmethod
@@ -483,7 +484,7 @@ class ControlFlowGraph:
             control_flow_1.accepting.addEdge(edge)
 
         control_flow_1.accepting = control_flow_2.accepting
-
+        control_flow_1.abnormal_terminator_nodes = ControlFlowGraph.merge_abnormal_terminators(control_flow_1, control_flow_2)
         return control_flow_1
 
     @staticmethod
@@ -521,6 +522,9 @@ class ControlFlowGraph:
 
         if_cfg.root = new_root
         if_cfg.accepting = new_accepting
+
+        if else_cfg is not None:
+            if_cfg.abnormal_terminator_nodes = ControlFlowGraph.merge_abnormal_terminators(if_cfg, else_cfg)
         return if_cfg
 
     def verify_integrity(self):
@@ -549,10 +553,11 @@ class ControlFlowGraph:
                 assert e in e.to_vertex.reverse_edges
 
     @staticmethod
-    def while_statement(in_cfg: "ControlFlowGraph"):
+    def while_statement(in_cfg: "ControlFlowGraph", always_true=False):
         """
         CFG creation when an WHILE statement is used
 
+        :param always_true: Stores when a while loop is WHILE TRUE
         :param in_cfg: the cfg of the code inside the while loop
         :return:
         """
@@ -581,7 +586,11 @@ class ControlFlowGraph:
         check condition will go to the in WHILE block if condition is True, else go to new_accepting
         """
         check_condition.addEdge(Edge(check_condition, in_cfg.root, True))
-        check_condition.addEdge(Edge(check_condition, new_accepting, False))
+
+        if always_true:
+            check_condition.addEdge(Edge(check_condition, in_cfg.root, False))
+        else:
+            check_condition.addEdge(Edge(check_condition, new_accepting, False))
 
         """
         When the block inside the while loop is checked once, go back to the check condition block
@@ -592,4 +601,35 @@ class ControlFlowGraph:
         in_cfg.root = new_root
         in_cfg.accepting = new_accepting
 
+        """
+        In case their are braks inside the while loops we need to handle it, to change the control flow of the
+        breaks to the accepting state
+        """
+        breaks = in_cfg.abnormal_terminator_nodes["BREAK"]
+        for break_vertex in breaks:
+            for e in copy.copy(break_vertex.edges):
+                break_vertex.removeEdge(e)
+
+            break_vertex.addEdge(Edge(break_vertex, in_cfg.accepting, True))
+            break_vertex.addEdge(Edge(break_vertex, in_cfg.accepting, False))
+
         return in_cfg, check_condition
+
+    def add_abnormal_terminator(self, category: str, node):
+        """
+        Store the abnormal terminators that do not yet serve their purpose
+
+        :param category:
+        :param node:
+        :return:
+        """
+        self.abnormal_terminator_nodes[category].append(node)
+
+    @staticmethod
+    def merge_abnormal_terminators(cfg_1: "ControlFlowGraph", cfg_2: "ControlFlowGraph"):
+        result_abnormal = {}
+        for k, v in cfg_1.abnormal_terminator_nodes.items():
+            v.extend(cfg_2.abnormal_terminator_nodes[k])
+            result_abnormal[k] = v
+
+        return result_abnormal
