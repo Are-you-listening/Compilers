@@ -100,6 +100,7 @@ class ControlFlowCreator(ASTVisitor):
             cf, is_new = self.get_make_cfg(node.getChild(1))
 
             self.control_flow_map[node.getChild(1)] = cf
+            ControlFlowGraph.check_return_statement(cf)
 
             """
             Create a block with the entire code base being a child
@@ -117,6 +118,12 @@ class ControlFlowCreator(ASTVisitor):
 
         if node.text == "WHILE":
             self.handleWhile(node)
+
+        if node.text == "Return":
+            new_cfg = ControlFlowGraph()
+            new_cfg.add_abnormal_terminator("RETURN", new_cfg.root)
+
+            self.control_flow_map[node] = new_cfg
 
         """
         Merge the control flow graphs of multiple control flows

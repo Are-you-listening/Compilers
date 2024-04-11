@@ -14,7 +14,7 @@ from src.llvm_target.ControlFlowCreator import *
 
 class TestDeadCodeRemover(unittest.TestCase):
     def testDeadCodeRemover(self):
-        file_indexes = range(1, 7)
+        file_indexes = range(1, 8)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

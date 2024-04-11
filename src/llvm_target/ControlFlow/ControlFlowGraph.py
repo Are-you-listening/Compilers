@@ -711,3 +711,25 @@ class ControlFlowGraph:
             result_abnormal[k] = v
 
         return result_abnormal
+
+    @staticmethod
+    def check_return_statement(cfg: "ControlFlowGraph"):
+        """
+        In case of a return statement our edges of the vertex will be removed
+
+        :param cfg:
+        :return:
+        """
+        returns = cfg.abnormal_terminator_nodes["RETURN"]
+        for return_vertex in returns:
+
+            if return_vertex.abnormally_ended:
+                continue
+
+            return_vertex.abnormally_ended = True
+
+            for e in copy.copy(return_vertex.edges):
+                return_vertex.removeEdge(e)
+
+        cfg.abnormal_terminator_nodes["RETURN"] = []
+

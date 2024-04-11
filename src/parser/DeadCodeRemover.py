@@ -62,7 +62,12 @@ class DeadCodeRemover(ASTVisitor):
                 node.vertex.remove_edges()
                 self.to_remove.add(node)
 
+        self.check_dead_code(node)
+
     def visitNodeTerminal(self, node: ASTNodeTerminal):
+        self.check_dead_code(node)
+
+    def check_dead_code(self, node: ASTNode):
         """
         Remove deadcode that is unreachable because of a return, continue or break statement
 
@@ -74,15 +79,19 @@ class DeadCodeRemover(ASTVisitor):
         the node/ parent node containing
         the terminator
         """
+        if isinstance(node, ASTNodeTerminal):
+            if node.text not in ("continue", "break"):
+                return
 
-        if node.text not in ("return", "continue", "break"):
+        elif node.text != "Return":
             return
 
         pre_delete_node = node
+
         while not (isinstance(pre_delete_node, ASTNodeBlock) and pre_delete_node.text == "Block"):
             pre_parent = pre_delete_node.parent
             pre_delete_index = pre_parent.findChild(pre_delete_node)
-            for c in pre_parent.children[pre_delete_index+1:]:
+            for c in pre_parent.children[pre_delete_index + 1:]:
                 self.to_remove.add(c)
 
             pre_delete_node = pre_parent
