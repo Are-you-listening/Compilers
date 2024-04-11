@@ -63,9 +63,6 @@ ValueAdderVisitor().visit(ast)
 
 ConstantStatementFolding().visit(ast)
 
-cfc = ControlFlowCreator()
-cfc.visit(ast)
-
 
 """
 add needed stuff above
@@ -76,13 +73,16 @@ with open("file_read_json.json", "wt") as f:
     f.write(json)
 
 
-d = DotVisitor("read_file_before")  # Export AST in Dot
-d.visit(ast)
-
-
 """
 add check stuff
 """
+
+cfc = ControlFlowCreator()
+cfc.visit(ast)
+
+d = DotVisitor("read_file_before")  # Export AST in Dot
+d.visit(ast)
+
 
 DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
 

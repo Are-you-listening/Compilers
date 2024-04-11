@@ -29,7 +29,8 @@ class ControlFlowDotVisitor:
 
     def visitVertex(self, vertex: Vertex):
         if vertex.llvm is None:
-            label = "not yet labeled"
+            label = f"not yet labeled {vertex.abnormally_ended}"
+
         else:
             label = str(vertex.llvm.block)
 

@@ -2,6 +2,7 @@ from src.llvm_target.LLVMSingleton import LLVMSingleton
 from llvmlite import ir
 import copy
 
+
 class Vertex:
     """
     This class represent a Vertex of the control flow graph
@@ -39,6 +40,7 @@ class Vertex:
 
     def removeEdge(self, edge: "Edge"):
         self.edges.remove(edge)
+
         edge.to_vertex.reverse_edges.remove(edge)
 
     def accept(self, visitor):
@@ -163,6 +165,17 @@ class Vertex:
 
         return phi
 
+    def remove_edges(self):
+        """
+        Remove all edges arriving/ departing from this vertex
+        """
+
+        for e in copy.copy(self.reverse_edges):
+            e.from_vertex.removeEdge(e)
+
+        for e in copy.copy(self.edges):
+            self.removeEdge(e)
+
 
 class Edge:
     def __init__(self, from_vertex: Vertex, to_vertex: Vertex, on: bool):
@@ -268,7 +281,6 @@ class ControlFlowGraph:
         """
         We will make 1 ending llVM block, that will represent the block at the end of the logical evaluation
         """
-
 
         for edge in self.reject.reverse_edges:
             """
@@ -482,11 +494,41 @@ class ControlFlowGraph:
 
         ed = control_flow_2.root.edges
         for edge in ed:
+            edge.to_vertex.reverse_edges.remove(edge)
+
             edge.from_vertex = control_flow_1.accepting
             control_flow_1.accepting.addEdge(edge)
 
+        original_accepting_1 = control_flow_1.accepting
         control_flow_1.accepting = control_flow_2.accepting
         control_flow_1.abnormal_terminator_nodes = ControlFlowGraph.merge_abnormal_terminators(control_flow_1, control_flow_2)
+
+        """
+        List of all abnormal ending vertices
+        """
+        total_list = []
+        for v in control_flow_1.abnormal_terminator_nodes.values():
+            for u in v:
+                total_list.append(u)
+
+        """
+        In case control_flow_2.root, ahd an abnormal node, we need to change its corresponding node
+        
+        In case of 
+        continue;
+        break;
+        we need to take the continue and ignore the break
+        """
+        for k, v in control_flow_1.abnormal_terminator_nodes.items():
+            if control_flow_2.root not in v:
+                continue
+
+            if original_accepting_1 in total_list:
+                v.remove(control_flow_2.root)
+                continue
+
+            replace_index = v.index(control_flow_2.root)
+            v[replace_index] = original_accepting_1
         return control_flow_1
 
     @staticmethod
@@ -654,6 +696,11 @@ class ControlFlowGraph:
         :param node:
         :return:
         """
+
+        """
+        Check node doesn't already exist
+        """
+
         self.abnormal_terminator_nodes[category].append(node)
 
     @staticmethod
