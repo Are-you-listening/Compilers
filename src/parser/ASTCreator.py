@@ -134,8 +134,7 @@ class ASTCreator(grammarCVisitor):
         """
         text = ctx.getText()
 
-
-        if text in ["int", "float", "char"]:
+        if text in ["int", "float", "char", "void"]:
             text = text.upper()
 
         node = ASTNodeTerminal(text, self.parent, self.table, self.translateLexerID(ctx.getSymbol().type),

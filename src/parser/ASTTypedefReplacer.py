@@ -1,6 +1,6 @@
 from src.parser.ASTVisitor import *
 
-BaseTypes = ["INT", "FLOAT", "CHAR"]
+BaseTypes = ["INT", "FLOAT", "CHAR", "VOID"]
 
 
 class TypedefTable:  # Prevent circular inclusion
@@ -114,7 +114,10 @@ class ASTTypedefReplacer(ASTVisitor):
     @staticmethod
     def containsNonBaseType(children: list):
         for child in children:
-            if child.text != '*' and child.text != "const" and not ASTTypedefReplacer.isBaseType(child):
+            child_text_copy = child.text
+            child_text_copy = child_text_copy.replace("*", "")
+            child_text_copy = child_text_copy.replace("const", "")
+            if not ASTTypedefReplacer.isBaseType(child):
                 return True
         return False
 
