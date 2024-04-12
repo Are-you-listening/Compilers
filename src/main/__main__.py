@@ -54,7 +54,7 @@ def cleanGreen(input_file, symbol_file):
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
-    DotVisitor("output/debug9").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug9").visit(ast)  # Export AST in Dot
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
