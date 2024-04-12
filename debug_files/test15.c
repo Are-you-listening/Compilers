@@ -1,12 +1,10 @@
 
 int main() {
-{
-int a = 0;
-
+    int x = 5;
+    return 0;
 }
-int a = 5;
 
-int y;
-
+void function() {
+    int y = 0;
 }
 

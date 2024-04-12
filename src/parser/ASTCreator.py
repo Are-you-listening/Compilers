@@ -47,7 +47,7 @@ class ASTCreator(grammarCVisitor):
         self.AST = AST(self.parent)
 
     def visitStart_(self, ctx: grammarCParser.Start_Context):
-        self.parent = ASTNode("Start", None, self.table, ctx.start.line)
+        self.parent = ASTNode("Start", None, self.table, ctx.start.line, ctx.start.line)
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx: grammarCParser.FunctionContext):
@@ -93,7 +93,7 @@ class ASTCreator(grammarCVisitor):
         self.__makeNode(ctx, "Comment")
 
     def visitReturn(self, ctx: grammarCParser.ReturnContext):
-        node = ASTNode("Return", self.parent, self.table, ctx.start.line)  # Also attaches the current table/scope
+        node = ASTNode("Return", self.parent, self.table, ctx.start.line, ctx.start.line)  # Also attaches the current table/scope
         self.parent.addChildren(node)
         self.parent = node
 
@@ -126,6 +126,12 @@ class ASTCreator(grammarCVisitor):
 
     def visitDefault(self, ctx:grammarCParser.DefaultContext):
         self.__makeNode(ctx, "DEFAULT")
+
+    def visitParameter(self, ctx:grammarCParser.ParameterContext):
+        self.__makeNode(ctx, "Parameter")
+
+    def visitParameters(self, ctx: grammarCParser.ParametersContext):
+        self.__makeNode(ctx, "Parameters")
 
     def visitEnum(self, ctx: grammarCParser.EnumContext):  # We will handle Enums similar to typedefs
         line = ctx.start.line
@@ -177,14 +183,13 @@ class ASTCreator(grammarCVisitor):
         :param ctx:
         :return:
         """
-
         text = ctx.getText()
 
-        if text in ["int", "float", "char"]:
+        if text in ["int", "float", "char", "void"]:
             text = text.upper()
 
         node = ASTNodeTerminal(text, self.parent, self.table, self.translateLexerID(ctx.getSymbol().type),
-                               ctx.getSymbol().line)
+                               ctx.getSymbol().line, "")
 
         self.parent.addChildren(node)
 

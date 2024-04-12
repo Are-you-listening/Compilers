@@ -66,17 +66,15 @@ class AstLoader:
 
         if "type" in ast_node_entry:
             ast_node = ASTNodeTerminal(text, parent, ast_node_entry["symbol_table_nr"], ast_node_entry["type"],
-                                       ast_node_entry["operation_type"])
+                                       ast_node_entry["linenr"])
 
         elif "is_block" in ast_node_entry and ast_node_entry["is_block"]:
-            ast_node = ASTNodeBlock(text, parent, ast_node_entry["symbol_table_nr"], 0, Vertex(None))
+            ast_node = ASTNodeBlock(text, parent, ast_node_entry["symbol_table_nr"], ast_node_entry["linenr"], Vertex(None))
 
         else:
-            ast_node = ASTNode(text, parent, ast_node_entry["symbol_table_nr"], 0)
+            ast_node = ASTNode(text, parent, ast_node_entry["symbol_table_nr"], ast_node_entry["linenr"])
 
         map_id_to_node[ast_tree["id"]] = ast_node
-
-        ast_node.linenr = ast_node_entry["linenr"]
 
         for child in ast_tree["children"]:
             child_entry = AstLoader.__loadAst(child, ast_node_list, ast_node, map_id_to_node)
@@ -127,7 +125,6 @@ class AstLoader:
 
         if isinstance(ast_node, ASTNodeTerminal):
             ast_dict["type"] = ast_node.type
-            ast_dict["operation_type"] = ast_node.operation_type
 
         if isinstance(ast_node, ASTNodeBlock):
             ast_dict["is_block"] = True

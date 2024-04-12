@@ -22,11 +22,11 @@ class ASTCleaner(ASTVisitor):
         self.cleanPrintf(node)
         self.cleanOvershootConst(node)
         self.cleanDereferenceAssignments(node)
-        self.cleanSwitch(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.cleanEqualSign(node)
         self.cleanEOF(node)
+        self.cleanSwitch(node)
 
     def cleanOvershootConst(self, node: ASTNode):
         """
@@ -96,7 +96,7 @@ class ASTCleaner(ASTVisitor):
         else:
             resulting_comment = resulting_comment[2:len(resulting_comment) - 2]
         node.clearChildren()
-        comment_node = ASTNodeTerminal(resulting_comment, node, node.getSymbolTable(), "COMMENT", node.linenr)
+        comment_node = ASTNodeTerminal(resulting_comment, node, node.getSymbolTable(), "COMMENT", node.linenr, node.virtuallinenr)
         node.addChildren(comment_node)
 
     @staticmethod
@@ -147,7 +147,7 @@ class ASTCleaner(ASTVisitor):
         format_child_text += child.text
 
         format_child_text = format_child_text[1:-1]
-        format_node = ASTNodeTerminal(format_child_text, node, node.getSymbolTable(), -1, node.linenr)
+        format_node = ASTNodeTerminal(format_child_text, node, node.getSymbolTable(), -1, node.linenr, node.virtuallinenr)
         node.insertChild(0, format_node)
 
     def cleanDereferenceAssignments(self, node: ASTNode):
@@ -184,20 +184,20 @@ class ASTCleaner(ASTVisitor):
 
         for i, ln in enumerate(dereference_counter):
             id_parent = identifier_node.parent
-            parent_expr = ASTNode("Expr", id_parent, id_parent.getSymbolTable(), id_parent.linenr)
-            parent_expr.addChildren(ASTNodeTerminal("*", parent_expr, parent_expr.getSymbolTable(), ln, ""))
+            parent_expr = ASTNode("Expr", id_parent, id_parent.getSymbolTable(), id_parent.linenr, id_parent.virtuallinenr)
+            parent_expr.addChildren(ASTNodeTerminal("*", parent_expr, parent_expr.getSymbolTable(), ln, "", ""))
 
             identifier_node.addNodeParent(parent_expr)
 
     def cleanSwitch(self, node: ASTNode):
         """
-        Remove terminal 'Switch' text
+        Remove terminal 'Switch' text (also 'case' and 'default')
 
         :param node:
         :return:
         """
 
-        if node.text != "SWITCH":
+        if node.text not in ("switch", "case", "default"):
             return
 
-        self.to_remove.add(node.getChild(0))
+        self.to_remove.add(node)

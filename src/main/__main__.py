@@ -21,6 +21,7 @@ from src.parser.DeadCodeRemover import *
 from src.parser.BlacklistVisitor import *
 from src.parser.SwitchConverter import *
 from src.parser.EnumTypeMerger import *
+from src.parser.VirtualLineNrVisitor import *
 
 
 def cleanGreen(input_file, symbol_file):
@@ -45,6 +46,9 @@ def cleanGreen(input_file, symbol_file):
     toAST = ASTCreator(lexer)  # Create Actual AST
     toAST.visit(tree)
     ast = toAST.getAST()
+
+    virtualline = VirtualLineVisitor()
+    virtualline.visit(ast)
 
     black_list_visitor = BlacklistVisitor()
     black_list_visitor.visit(ast)

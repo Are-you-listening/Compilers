@@ -5,7 +5,7 @@ int main() {
         {
             int z = 30;
         }
-        z = 20;
+        int z = 20;
     }
     return 0;
 }

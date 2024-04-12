@@ -6,6 +6,8 @@ int main(){
     switch(a){
         case 1:
             b = 1;
+        case 6:
+            b = 6;
         case 2:
             b = 2;
             break;
