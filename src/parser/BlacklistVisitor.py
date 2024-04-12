@@ -7,7 +7,7 @@ class BlacklistVisitor(ASTVisitor):
 
     """
     def __init__(self):
-        self.blacklist = ['(', ')', ';', '{', '}', ',']
+        self.blacklist = ['(', ')', ';', '{', '}', ',', ':']
         self.toRemove = set()
 
     def visitNode(self, node: ASTNode):
