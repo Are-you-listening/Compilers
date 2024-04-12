@@ -91,10 +91,10 @@ class SymbolTable(AbstractTable):
         :return:
         """
         if self.symbols.get(entry.name) is not None:
-             #ErrorExporter.redefinition(entry.firstDeclared.linenr, entry.getType(),
-                                        #entry.name)  # This allows earlier detection of errors but unsure how we would
-             # retrieve the lineNr
-             return
+            # ErrorExporter.redefinition(entry.firstDeclared.linenr, entry.getType(),
+            # entry.name)  # This allows earlier detection of errors but unsure how we would
+            # retrieve the lineNr
+            return
 
         self.symbols[entry.name] = entry
 
@@ -153,3 +153,6 @@ class SymbolTable(AbstractTable):
         if entry is None:
             return
         entry.reference()
+
+    def isRoot(self):
+        return self.prev is None
