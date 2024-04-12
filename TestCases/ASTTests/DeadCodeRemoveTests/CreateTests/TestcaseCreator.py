@@ -18,6 +18,9 @@ from src.parser.ASTIfCleaner import *
 from src.parser.ConstantStatementFolding import *
 from src.parser.DeadCodeRemover import *
 from src.llvm_target.ControlFlowCreator import *
+from src.parser.VirtualLineNrVisitor import *
+from src.parser.BlacklistVisitor import *
+
 
 input_file = "read_file"
 
@@ -36,6 +39,12 @@ tree = parser.start_()
 toAST = ASTCreator(lexer)  # Create Actual AST
 toAST.visit(tree)
 ast = toAST.getAST()
+
+virtualline = VirtualLineVisitor()
+virtualline.visit(ast)
+
+black_list_visitor = BlacklistVisitor()
+black_list_visitor.visit(ast)
 
 codegetter = CodeGetter()  # Link each line of code to a line number
 codegetter.visit(ast)

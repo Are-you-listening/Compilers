@@ -7,6 +7,8 @@ from src.parser.ASTCleaner import *
 from src.parser.CodeGetter import *
 from TestCases.ASTTests.AstLoader import AstLoader
 from src.parser.ASTTableCreator import *
+from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
+from src.parser.BlacklistVisitor import BlacklistVisitor
 
 input_file = "read_file"
 
@@ -25,6 +27,12 @@ tree = parser.start_()
 toAST = ASTCreator(lexer)  # Create Actual AST
 toAST.visit(tree)
 ast = toAST.getAST()
+
+virtualline = VirtualLineVisitor()
+virtualline.visit(ast)
+
+black_list_visitor = BlacklistVisitor()
+black_list_visitor.visit(ast)
 
 """
 below add needed stuff

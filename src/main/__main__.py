@@ -58,8 +58,6 @@ def cleanGreen(input_file, symbol_file):
 
     EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
 
-    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
@@ -82,7 +80,7 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold):
-    DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 

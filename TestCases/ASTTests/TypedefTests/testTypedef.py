@@ -59,6 +59,7 @@ class TestTypedef(unittest.TestCase):
                 errors = str(buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
                 print("buff", buff.getvalue().splitlines(), index)
+                print(errors, expected_errors)
                 assert errors == expected_errors
 
             except SystemExit as e:

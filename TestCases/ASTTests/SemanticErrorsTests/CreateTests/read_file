@@ -1,11 +1,8 @@
-int main() {
-    int x = 10;
+int main(){
     {
-        int y = 20;
-        {
-            int z = 30;
-        }
-        z = 20;
+        int x = 1;
     }
-    return 0;
+    {
+        int x = 2;
+    }
 }

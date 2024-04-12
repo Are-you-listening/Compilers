@@ -13,6 +13,9 @@ from src.parser.Tables.TableDotVisitor import *
 from src.parser.CodeGetter import *
 from TestCases.ASTTests.AstLoader import AstLoader
 from src.parser.ASTTableCreator import ASTTableCreator
+from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
+from src.parser.BlacklistVisitor import BlacklistVisitor
+
 input_file = "read_file"
 
 input_stream = FileStream(input_file)  # Declare some variables
@@ -31,6 +34,12 @@ ast = toAST.getAST()
 """
 below add needed stuff
 """
+
+virtualline = VirtualLineVisitor()
+virtualline.visit(ast)
+
+black_list_visitor = BlacklistVisitor()
+black_list_visitor.visit(ast)
 
 codegetter = CodeGetter()
 codegetter.visit(ast)

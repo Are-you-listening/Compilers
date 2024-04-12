@@ -36,7 +36,6 @@ class ValueAdderVisitor(ASTVisitor):
         before here was deprecated code and checks, the code was always True/False so we removed it
         because these situation cannot occur
         """
-
         # replace all the identifiers in the RHS with their symbol table value
         replacer = IdentifierReplacerVisitor()
         replacer.preorder(val)

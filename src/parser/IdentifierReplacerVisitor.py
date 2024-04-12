@@ -2,6 +2,7 @@ import copy
 from src.parser.ASTVisitor import *
 from src.parser.ErrorExporter import *
 from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
+from src.parser.SwitchConverter import SwitchConverter
 
 class IdentifierReplacerVisitor(ASTVisitor):
     def __init__(self):
@@ -33,8 +34,7 @@ class IdentifierReplacerVisitor(ASTVisitor):
 
             # get the symbolTable entry of the identifier we are going to replace
             entry = node.getSymbolTable().getEntry(toReplace)
-
-            if not entry.isConst() and entry.firstUsed is not None or entry.is_referenced() or \
+            if (not entry.isConst() and entry.firstUsed is not None) or entry.is_referenced() or \
                     isinstance(entry.getTypeObject(), FunctionSymbolType):
                 return
 
@@ -61,7 +61,8 @@ class IdentifierReplacerVisitor(ASTVisitor):
                 """
                 This breaks things, the children all need to have a changed symbol table
                 """
-                temp = copy.deepcopy(entry.value)
+
+                temp = SwitchConverter.createCopy(entry.value)
                 temp.parent = node.parent
                 temp.symbol_table = node.symbol_table
                 node = temp

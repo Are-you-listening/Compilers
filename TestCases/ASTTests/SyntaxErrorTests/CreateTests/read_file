@@ -1,8 +1,12 @@
-#include <stdio.h>
+int main() {
 
-int a = 0;
-printf("%d", a);
+int x = 54;
 
-int main(){
+int z = -33;
 
+int* p = &z;
+
+x = *p;
+
+p* = 5;
 }

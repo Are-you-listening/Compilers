@@ -109,7 +109,7 @@ class SwitchConverter(ASTVisitor):
 
     @staticmethod
     def createEqualCheckNode(node_1: ASTNodeTerminal, node_2: ASTNodeTerminal):
-        check_node = ASTNode("Expr", None, node_1.getSymbolTable(), node_1.linenr)
+        check_node = ASTNode("Expr", None, node_1.getSymbolTable(), node_1.linenr, node_1.virtuallinenr)
         check_node.addChildren(ASTNodeTerminal(node_1.text, check_node, node_1.getSymbolTable(),
                                                node_1.type, node_1.linenr, node_1.virtuallinenr))
 
@@ -126,11 +126,11 @@ class SwitchConverter(ASTVisitor):
         """
         Make an or between 2 nodes
         """
-        check_node = ASTNode("Expr", None, node_1.getSymbolTable(), node_1.linenr)
+        check_node = ASTNode("Expr", None, node_1.getSymbolTable(), node_1.linenr, node_1.virtuallinenr)
         check_node.addChildren(node_1)
         node_1.parent = check_node
 
-        or_node = ASTNodeTerminal("||", check_node, node_1.getSymbolTable(), -1, node_1.linenr)
+        or_node = ASTNodeTerminal("||", check_node, node_1.getSymbolTable(), -1, node_1.linenr, node_1.virtuallinenr)
         check_node.addChildren(or_node)
 
         check_node.addChildren(node_2)
@@ -144,7 +144,7 @@ class SwitchConverter(ASTVisitor):
         Construction for If statement
         """
 
-        check_node = ASTNode("IF", None, execute_block.getSymbolTable(), execute_block.linenr)
+        check_node = ASTNode("IF", None, execute_block.getSymbolTable(), execute_block.linenr, execute_block.virtuallinenr)
         check_node.addChildren(condition)
         condition.parent = check_node
 
@@ -155,7 +155,7 @@ class SwitchConverter(ASTVisitor):
         Give check node a 'code' parent
         """
 
-        temp = ASTNode("Code", None, check_node.getSymbolTable(), check_node.linenr)
+        temp = ASTNode("Code", None, check_node.getSymbolTable(), check_node.linenr, check_node.virtuallinenr)
         check_node.parent = temp
         temp.addChildren(check_node)
         check_node = temp
@@ -169,9 +169,9 @@ class SwitchConverter(ASTVisitor):
         """
 
         if not isinstance(node, ASTNodeTerminal):
-            new_node = ASTNode(node.text, node.parent, node.getSymbolTable(), node.linenr)
+            new_node = ASTNode(node.text, node.parent, node.getSymbolTable(), node.linenr, node.virtuallinenr)
         else:
-            new_node = ASTNodeTerminal(node.text, node.parent, node.getSymbolTable(), node.type, node.linenr)
+            new_node = ASTNodeTerminal(node.text, node.parent, node.getSymbolTable(), node.type, node.linenr, node.virtuallinenr)
 
         for child in node.children:
             copy_child = SwitchConverter.createCopy(child)
