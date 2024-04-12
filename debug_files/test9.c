@@ -1,0 +1,1 @@
+ int main() {  int x = 5;  x = 1;  if(x < 5){     printf("azazazaz%2c%c", 'a', 'a'); }  }
