@@ -215,7 +215,6 @@ class ControlFlowCreator(ASTVisitor):
 
             self.control_flow_map[node] = new_cfg
 
-
     @staticmethod
     def handleFunction(node: ASTNode):
         """
