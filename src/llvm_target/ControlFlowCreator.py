@@ -105,7 +105,7 @@ class ControlFlowCreator(ASTVisitor):
             """
             Create a block with the entire code base being a child
             """
-            ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.root)
+            ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.root, node.parent.virtuallinenr)
             node.getChild(1).addNodeChildEmerge(ast_block)
 
         """
@@ -188,7 +188,7 @@ class ControlFlowCreator(ASTVisitor):
             after the traverse (Because the function block is only created at the end) and we don't want to break the 
             traverse structure
             """
-            ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, block)
+            ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, block, node.parent.virtuallinenr)
 
             """
             Add the block NODE as parent of the subexpression
@@ -332,14 +332,14 @@ class ControlFlowCreator(ASTVisitor):
         Add a new block for everything that comes after the logical expression (because we cannot continue in the block before the expression)
         """
         ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr,
-                                 cf.accepting)
+                                 cf.accepting, node.parent.virtuallinenr)
 
         """
         Replace the subtree, that contained the actual expression and replace it by a "PHI" node, 
         indicating a PHI instruction (The PHI instruction will refer to the result calculated in the removed subtree)
         The subtree will still exist in another block, because it will be inserted in de code again
         """
-        phi_node = ASTNodeBlock("PHI", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.accepting)
+        phi_node = ASTNodeBlock("PHI", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.accepting, node.parent.virtuallinenr)
 
         node.parent.replaceChild(node, phi_node)
 
@@ -424,7 +424,7 @@ class ControlFlowCreator(ASTVisitor):
         """
         Create block for if statement
         """
-        ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, if_cfg.root)
+        ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, if_cfg.root, node.virtuallinenr)
         node.getChild(1).addNodeParent(ast_block)
         else_cfg = None
 
@@ -437,7 +437,7 @@ class ControlFlowCreator(ASTVisitor):
             """
             Create block for else statement
             """
-            ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, else_cfg.root)
+            ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, else_cfg.root, node.virtuallinenr)
             node.getChild(2).addNodeParent(ast_block)
 
         final_cfg = ControlFlowGraph.if_statement(if_cfg, else_cfg)
@@ -464,7 +464,7 @@ class ControlFlowCreator(ASTVisitor):
         Create block for condition
         """
         ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr,
-                                 condition_vertex)
+                                 condition_vertex, node.virtuallinenr)
 
         condition_node = node.getChild(0)
         condition_node.addNodeParent(ast_block)
@@ -473,7 +473,7 @@ class ControlFlowCreator(ASTVisitor):
         Create block for inside the while loop
         """
         ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr,
-                                original_root)
+                                original_root, node.virtuallinenr)
 
         loop_node = node.getChild(1)
         loop_node.addNodeParent(ast_block)
@@ -510,7 +510,7 @@ class ControlFlowCreator(ASTVisitor):
         after = target_node.getSiblingNeighbour(1)
 
         ast_block = ASTNodeBlock("Block", code_node, code_node.getSymbolTable(), code_node.linenr,
-                                 final_cfg.accepting)
+                                 final_cfg.accepting, code_node.virtuallinenr)
 
         if after is not None:
 
