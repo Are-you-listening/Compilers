@@ -105,7 +105,7 @@ class ControlFlowCreator(ASTVisitor):
             """
             Create a block with the entire code base being a child
             """
-            ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.root)
+            ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.root, node.parent.virtuallinenr)
             node.getChild(2).addNodeChildEmerge(ast_block)
 
         """
