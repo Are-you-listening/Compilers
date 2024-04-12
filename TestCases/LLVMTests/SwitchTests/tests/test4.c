@@ -4,7 +4,7 @@ int main(){
 
     int a = 0;
     int b = 0;
-    a = 1;
+    a = 6;
     switch(a){
         case 1:
             b = 1;

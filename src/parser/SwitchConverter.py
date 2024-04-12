@@ -15,6 +15,7 @@ class SwitchConverter(ASTVisitor):
     def __init__(self):
         self.break_map = {}
         self.to_add = []
+        self.to_add_parent = []
         self.to_remove = set()
 
     def visit(self, ast: AST):
@@ -26,6 +27,7 @@ class SwitchConverter(ASTVisitor):
 
         self.break_map = {}
         self.to_add = []
+        self.to_add_parent = []
         self.to_remove = set()
 
         self.postorder(ast.root)
@@ -33,6 +35,13 @@ class SwitchConverter(ASTVisitor):
         for switch, added in self.to_add:
             target = switch.parent
             target.children.insert(target.findChild(switch), added)
+            added.parent = target
+
+        for node, added in self.to_add_parent:
+
+            target = node.parent
+
+            target.addChildren(added)
             added.parent = target
 
         for r in self.to_remove:
@@ -79,17 +88,20 @@ class SwitchConverter(ASTVisitor):
         Make a special construction to convert an switch statement to an IF statement
         """
         equal_nodes = []
-        for child in node.children[1:]:
+        for i, child in enumerate(node.children[1:]):
             has_break = self.break_map.get(child, None) is not None
+            """
+            Remove the breaks form inside a switch
+            """
+            self.to_remove.add(self.break_map.get(child, None))
 
             if child.text == "CASE":
                 equal_node = self.createEqualCheckNode(switch_identifier, child.getChild(0))
                 equal_nodes.append((equal_node, child.getChild(1)))
-
                 self.to_remove.add(child)
 
             if child.text == "DEFAULT":
-                current = all_case_values[0]
+                current = self.createEqualCheckNode(switch_identifier, all_case_values[0], True)
 
                 for b in all_case_values[1:]:
                     not_equal_node = self.createEqualCheckNode(switch_identifier, b, True)
@@ -99,7 +111,7 @@ class SwitchConverter(ASTVisitor):
 
                 self.to_remove.add(child)
 
-            if has_break:
+            if has_break or i == node.getChildAmount()-2:
                 if len(equal_nodes) == 0:
                     continue
 
@@ -109,8 +121,8 @@ class SwitchConverter(ASTVisitor):
                     new_condition = self.createOrStatement(connect_node[0], equal_node[0])
 
                     sub_condition = self.createIfStatement(self.createCopy(connect_node[0]), connect_node[1])
-                    sub_condition.addChildren(equal_node[1])
-                    equal_node[1].parent = sub_condition
+
+                    self.to_add_parent.append((sub_condition, equal_node[1]))
 
                     connect_node = (new_condition, sub_condition)
 
