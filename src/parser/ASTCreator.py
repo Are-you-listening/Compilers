@@ -51,7 +51,19 @@ class ASTCreator(grammarCVisitor):
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx: grammarCParser.FunctionContext):
-         self.__makeNode(ctx, "Function")
+
+
+        node = self.__makeNode(ctx, "Function", False)
+        tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
+        prevTable = self.table
+        self.table.nextTable(tempTable)
+        self.table = tempTable
+        old_parent = self.parent
+        self.parent = node
+        self.visitChildren(ctx)
+        self.parent = old_parent
+        self.table = prevTable
+
 
     def visitCode(self, ctx: grammarCParser.CodeContext):
         tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
@@ -244,7 +256,7 @@ class ASTCreator(grammarCVisitor):
         node_typedef_part2 = ASTNodeTerminal(replaceType, parent, self.table, "IDENTIFIER", line, None)  # Add second part of typedef
         parent.addChildren(node_typedef_part2)
 
-    def __makeNode(self, ctx, terminal_type: str):
+    def __makeNode(self, ctx, terminal_type: str, dovisitChildren: bool = True):
         """
         Function to create our own ASTNode based on the given parse tree Node
         :param ctx: context
@@ -262,9 +274,12 @@ class ASTCreator(grammarCVisitor):
         """
         Recursively check it's children
         """
-        self.visitChildren(ctx)
+        if dovisitChildren:
+            self.visitChildren(ctx)
 
         self.parent = old_parent
+
+        return node
 
     def getAST(self):
         """

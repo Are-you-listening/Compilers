@@ -1,5 +1,7 @@
 from src.parser.ErrorExporter import *
 from src.parser.Tables.SymbolTypePtr import *
+from src.parser.Tables.FunctionSymbolType import *
+
 from src.parser.AST import *
 from src.parser.ASTTypedefReplacer import *
 from typing import Dict
@@ -7,8 +9,7 @@ from src.parser.Tables.AbstractTable import *
 
 
 class SymbolEntry(TableEntry):
-    def __init__(self, fitype: str, datatype: SymbolType, name: str, value, first_declared, first_used):
-        self.fitype = fitype
+    def __init__(self,datatype: SymbolType, name: str, value, first_declared, first_used):
         self.typeObject = datatype
         self.name = name
         self.value = value
@@ -17,8 +18,7 @@ class SymbolEntry(TableEntry):
         self.referenced = False
 
     def __str__(self):
-        return f"""fi type: {self.fitype} 
-                   type: {self.typeObject} 
+        return f"""type: {self.typeObject} 
                    name: {self.name}
                    const: {self.isConst()}
                    value: {self.value}

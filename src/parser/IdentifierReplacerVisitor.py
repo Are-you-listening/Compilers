@@ -1,7 +1,7 @@
 import copy
 from src.parser.ASTVisitor import *
 from src.parser.ErrorExporter import *
-
+from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 
 class IdentifierReplacerVisitor(ASTVisitor):
     def __init__(self):
@@ -34,7 +34,8 @@ class IdentifierReplacerVisitor(ASTVisitor):
             # get the symbolTable entry of the identifier we are going to replace
             entry = node.getSymbolTable().getEntry(toReplace)
 
-            if not entry.isConst() and entry.firstUsed is not None or entry.is_referenced():
+            if not entry.isConst() and entry.firstUsed is not None or entry.is_referenced() or \
+                    isinstance(entry.getTypeObject(), FunctionSymbolType):
                 return
 
             # the variable is const, so we can replace it with its value

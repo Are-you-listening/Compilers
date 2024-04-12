@@ -45,7 +45,7 @@ class AstLoader:
                     const_list = const_list[1:]
                     symbol_type = SymbolTypePtr(symbol_type, const_list[0])
 
-                symbol_table_entry = SymbolEntry(entry["fitype"], symbol_type, entry["name"], map_id_to_node.get(entry["value"], None), map_id_to_node.get(entry["firstDeclared"]), map_id_to_node.get(entry["firstUsed"]))
+                symbol_table_entry = SymbolEntry(symbol_type, entry["name"], map_id_to_node.get(entry["value"], None), map_id_to_node.get(entry["firstDeclared"]), map_id_to_node.get(entry["firstUsed"]))
                 symbol_table_real.add(symbol_table_entry)
 
                 ref = entry.get("reference")
@@ -66,13 +66,13 @@ class AstLoader:
 
         if "type" in ast_node_entry:
             ast_node = ASTNodeTerminal(text, parent, ast_node_entry["symbol_table_nr"], ast_node_entry["type"],
-                                       ast_node_entry["linenr"])
+                                       ast_node_entry["linenr"], ast_node_entry["virtuallinenr"])
 
         elif "is_block" in ast_node_entry and ast_node_entry["is_block"]:
-            ast_node = ASTNodeBlock(text, parent, ast_node_entry["symbol_table_nr"], ast_node_entry["linenr"], Vertex(None))
+            ast_node = ASTNodeBlock(text, parent, ast_node_entry["symbol_table_nr"], ast_node_entry["linenr"], Vertex(None), ast_node_entry["virtuallinenr"])
 
         else:
-            ast_node = ASTNode(text, parent, ast_node_entry["symbol_table_nr"], ast_node_entry["linenr"])
+            ast_node = ASTNode(text, parent, ast_node_entry["symbol_table_nr"], ast_node_entry["linenr"], ast_node_entry["virtuallinenr"])
 
         map_id_to_node[ast_tree["id"]] = ast_node
 
@@ -108,7 +108,7 @@ class AstLoader:
     @staticmethod
     def __make_dict(ast_node: ASTNode, ast_node_list: list, ast_tree: dict, symbol_tables: list, ast_to_id_map):
 
-        ast_dict = {"text": ast_node.text, "linenr": ast_node.linenr}
+        ast_dict = {"text": ast_node.text, "linenr": ast_node.linenr, "virtuallinenr": ast_node.virtuallinenr}
 
         symbol_table = ast_node.getSymbolTable()
 

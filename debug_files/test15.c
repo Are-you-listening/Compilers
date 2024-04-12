@@ -1,10 +1,14 @@
+int func(const int x, float y) {
+    y = 5;
+    int z = 5;
+    return x;
+}
 
 int main() {
     int x = 5;
-    return 0;
+    int y = 10;
+    x = func(x,y);
 }
 
-void function() {
-    int y = 0;
-}
+
 
