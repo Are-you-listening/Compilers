@@ -54,8 +54,6 @@ def cleanGreen(input_file, symbol_file):
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
-    #DotVisitor("output/debug9").visit(ast)  # Export AST in Dot
-
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
     ASTTableCreator().visit(ast)  # Create the symbol table
@@ -71,6 +69,8 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold):
+    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 
     if fold:

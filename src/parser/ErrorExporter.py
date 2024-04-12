@@ -185,3 +185,13 @@ class ErrorExporter:
         print(f"[ Error ] No input file specified",
               file=sys.stderr)
         exit()
+
+    @staticmethod
+    def GlobalsNonImplicitDeclaration(line_nr: str):
+        print(f"[ Error ] line {line_nr} Only implicit declarations are allowed for globals")
+        exit()
+
+    @staticmethod
+    def GlobalsInvalidDeclaration(line_nr: str):
+        print(f"[ Error ] line {line_nr} You can't initialise a global variable with a global variable")
+        exit()
