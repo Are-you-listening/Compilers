@@ -118,4 +118,5 @@ class ASTTypedefReplacer(ASTVisitor):
                 return True
         return False
 
+
 from src.parser.Tables.TypedefTable import TypedefTable

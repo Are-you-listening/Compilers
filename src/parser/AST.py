@@ -168,10 +168,9 @@ class ASTNodeTerminal(ASTNode):
     A node inside the AST that contains a terminal
     """
 
-    def __init__(self, text, parent, symbol_table, terminal_type, linenr, operation_type=None):
+    def __init__(self, text, parent, symbol_table, terminal_type, linenr):
         super(ASTNodeTerminal, self).__init__(text, parent, symbol_table, linenr)
         self.type = terminal_type
-        self.operation_type = operation_type
 
     def accept(self, v: ASTVisitor):
         v.visitNodeTerminal(self)
