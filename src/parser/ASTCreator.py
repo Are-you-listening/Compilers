@@ -98,7 +98,13 @@ class ASTCreator(grammarCVisitor):
         self.parent = node
 
     def visitBlock_code(self, ctx: grammarCParser.Block_codeContext):
+        tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
+        prevTable = self.table
+        self.table.nextTable(tempTable)
+        self.table = tempTable
+
         self.__makeNode(ctx, "Code")
+        self.table = prevTable
 
     def visitBlock_line(self, ctx: grammarCParser.Block_lineContext):
         self.__makeNode(ctx, "Line")

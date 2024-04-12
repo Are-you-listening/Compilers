@@ -22,7 +22,6 @@ class SwitchConverter(ASTVisitor):
         """
         self.preorder(ast.root)
 
-
     def visitNode(self, node: ASTNode):
         if node.text != "SWITCH":
             return

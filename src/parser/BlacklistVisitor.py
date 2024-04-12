@@ -8,16 +8,16 @@ class BlacklistVisitor(ASTVisitor):
     """
     def __init__(self):
         self.blacklist = ['(', ')', ';', '{', '}', ',', ':']
-        self.toRemove = set()
+        self.to_remove = set()
 
     def visitNode(self, node: ASTNode):
         pass
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.text in self.blacklist:
-            self.toRemove.add(node)
+            self.to_remove.add(node)
 
     def visit(self, ast: AST):
         self.preorder(ast.root)
-        for node in self.toRemove:
+        for node in self.to_remove:
             node.parent.removeChild(node)
