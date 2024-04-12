@@ -22,11 +22,11 @@ class ASTCleaner(ASTVisitor):
         self.cleanPrintf(node)
         self.cleanOvershootConst(node)
         self.cleanDereferenceAssignments(node)
-        self.cleanSwitch(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.cleanEqualSign(node)
         self.cleanEOF(node)
+        self.cleanSwitch(node)
 
     def cleanOvershootConst(self, node: ASTNode):
         """
@@ -191,13 +191,13 @@ class ASTCleaner(ASTVisitor):
 
     def cleanSwitch(self, node: ASTNode):
         """
-        Remove terminal 'Switch' text
+        Remove terminal 'Switch' text (also 'case' and 'default')
 
         :param node:
         :return:
         """
 
-        if node.text != "SWITCH":
+        if node.text not in ("switch", "case", "default"):
             return
 
-        self.to_remove.add(node.getChild(0))
+        self.to_remove.add(node)
