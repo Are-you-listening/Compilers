@@ -10,7 +10,7 @@ class ASTNode:
     A node inside the AST
     """
 
-    def __init__(self, text, parent, symbol_table, linenr):
+    def __init__(self, text, parent, symbol_table, linenr: int):
         self.children = []
         self.text = text
         self.parent = parent

@@ -20,6 +20,7 @@ from src.parser.ConstantStatementFolding import *
 from src.parser.DeadCodeRemover import *
 from src.parser.BlacklistVisitor import *
 from src.parser.SwitchConverter import *
+from src.parser.EnumTypeMerger import *
 
 
 def cleanGreen(input_file, symbol_file):
@@ -51,6 +52,8 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
+    EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
+
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
@@ -59,8 +62,6 @@ def cleanGreen(input_file, symbol_file):
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
-
-    DotVisitor("output/debug9").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 
@@ -75,8 +76,6 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold):
-    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-
     ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 
     if fold:
