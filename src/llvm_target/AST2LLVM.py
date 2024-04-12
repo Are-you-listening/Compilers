@@ -7,10 +7,6 @@ from src.parser.AST import ASTNodeBlock
 
 
 class AST2LLVM(ASTVisitor):
-    """
-    Visitor to visualize the AST tree using dot
-    """
-
     def __init__(self, codegetter: CodeGetter, fileName):
         self.map_table = MapTable(None)
         self.codegetter = codegetter
@@ -35,7 +31,6 @@ class AST2LLVM(ASTVisitor):
         In case of an unconditional, it will just create a branch
         """
         for b in self.branch_needed:
-
             b.create_branch()
 
     def postorder(self, root: ASTNode):
@@ -71,7 +66,6 @@ class AST2LLVM(ASTVisitor):
                     stack.append(child)
                     childNotVisited = True
             if not childNotVisited:
-                # print(currentNode.text)  # debug print
                 currentNode.accept(self)
                 stack.pop()
 
@@ -170,10 +164,25 @@ class AST2LLVM(ASTVisitor):
         """
         var_child: ASTNode = node.getChild(0)
         data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
-        """
-        all children of type_child are terminals
-        """
-        llvm_var = Declaration.declare(data_type, ptrs)
+
+        if var_child.symbol_table.isRoot():  # Globals; extra stuff needs to be done
+            llvm_var = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), CTypesToLLVM.getIRType(data_type, ptrs), var_child.text)  # Declare a global variable
+            value = var_child.symbol_table.getEntry(var_child.text).value  # Get the value
+            if value is None:
+                value = 0
+            else:
+                value = value.text
+
+            # Preset some values
+            llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(data_type, ptrs), value)
+            llvm_var.linkage = 'dso_local'
+            llvm_var.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
+
+        else:
+            """
+            all children of type_child are terminals
+            """
+            llvm_var = Declaration.declare(data_type, ptrs)
         """
         store var in llvm map
         """
@@ -191,7 +200,7 @@ class AST2LLVM(ASTVisitor):
             self.handleAssignment(node)
 
     def __del__(self):
-        # print(LLVMSingleton.getInstance().getModule())
+        #print(LLVMSingleton.getInstance().getModule())
         with open(self.fileName, 'w') as f:
             f.write(str(LLVMSingleton.getInstance().getModule()))
 
@@ -225,7 +234,6 @@ class AST2LLVM(ASTVisitor):
         """
         get the var register
         """
-
         llvm_var = Load.identifier(llvm_data)
         self.llvm_map[node] = llvm_var
 

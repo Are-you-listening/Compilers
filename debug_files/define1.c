@@ -9,7 +9,9 @@
 
 int x = 1;
 int y = 2 + 5;
-int z = x + y;
+int z;
+float h = CIRCLE_AREA;
+//int z = x + y;
 
 int main()
 {
@@ -24,6 +26,9 @@ int main()
     area = CIRCLE_AREA;
     printf("Area of Circle of radius %d: %d \n", radius,
            area);
+
+    printf("%f", CIRCLE_AREA);
+    printf("%f", h);
 
     return 0;
 }

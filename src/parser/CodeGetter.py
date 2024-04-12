@@ -17,7 +17,7 @@ class CodeGetter(ASTVisitor):
         if node.type in {"MULTILINE", "SINGLECOMMENT"}:
             return
         if node.linenr in self.codeLines:
-            self.codeLines[node.linenr] += " " + node.text
+            self.codeLines[node.linenr] += " " + str(node.text)
         else:
             self.codeLines[node.linenr] = node.text
         pass
