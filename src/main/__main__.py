@@ -46,6 +46,7 @@ def cleanGreen(input_file, symbol_file):
     toAST = ASTCreator(lexer)  # Create Actual AST
     toAST.visit(tree)
     ast = toAST.getAST()
+    DotVisitor("output/file").visit(ast)  # Export AST in Dot
 
     virtualline = VirtualLineVisitor()
     virtualline.visit(ast)

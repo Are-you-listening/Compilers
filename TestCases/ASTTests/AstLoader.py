@@ -45,7 +45,7 @@ class AstLoader:
                     const_list = const_list[1:]
                     symbol_type = SymbolTypePtr(symbol_type, const_list[0])
 
-                symbol_table_entry = SymbolEntry(entry["fitype"], symbol_type, entry["name"], map_id_to_node.get(entry["value"], None), map_id_to_node.get(entry["firstDeclared"]), map_id_to_node.get(entry["firstUsed"]))
+                symbol_table_entry = SymbolEntry(symbol_type, entry["name"], map_id_to_node.get(entry["value"], None), map_id_to_node.get(entry["firstDeclared"]), map_id_to_node.get(entry["firstUsed"]))
                 symbol_table_real.add(symbol_table_entry)
 
                 ref = entry.get("reference")
