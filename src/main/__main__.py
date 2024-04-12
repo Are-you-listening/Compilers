@@ -18,6 +18,9 @@ from src.llvm_target.ControlFlowCreator import *
 from src.parser.ASTLoopCleaner import *
 from src.parser.ConstantStatementFolding import *
 from src.parser.DeadCodeRemover import *
+from src.parser.BlacklistVisitor import *
+from src.parser.SwitchConverter import *
+
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -42,6 +45,9 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
+    black_list_visitor = BlacklistVisitor()
+    black_list_visitor.visit(ast)
+
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
@@ -51,6 +57,10 @@ def cleanGreen(input_file, symbol_file):
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
+
+    SwitchConverter().visit(ast)  # convert switch statement to if else
+
+    #DotVisitor("output/debug9").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 

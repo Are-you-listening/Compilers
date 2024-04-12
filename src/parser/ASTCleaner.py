@@ -12,8 +12,8 @@ class ASTCleaner(ASTVisitor):
         self.to_remove = set()
         self.postorder(ast.root)
 
-        for c, p in self.to_remove:
-            p.removeChild(c)
+        for c in self.to_remove:
+            c.parent.removeChild(c)
 
     def visitNode(self, node: ASTNode):
         self.cleanUseless(node)
@@ -22,6 +22,7 @@ class ASTCleaner(ASTVisitor):
         self.cleanPrintf(node)
         self.cleanOvershootConst(node)
         self.cleanDereferenceAssignments(node)
+        self.cleanSwitch(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.cleanEqualSign(node)
@@ -40,7 +41,7 @@ class ASTCleaner(ASTVisitor):
 
         for child in node.children:
             if child.text == "const":
-                constNodes.append((child, node))
+                constNodes.append(child)
 
             """
             else ptr cannot be const when value itself is cont
@@ -75,7 +76,7 @@ class ASTCleaner(ASTVisitor):
         By a declaration or an assignment the '=' is not needed anymore.
         """
         if node.text == "=":
-            self.to_remove.add((node, node.parent))
+            self.to_remove.add(node)
 
     @staticmethod
     def cleanComments(node: ASTNode):
@@ -140,9 +141,9 @@ class ASTCleaner(ASTVisitor):
         """
         remove 'printf' node
         """
-        self.to_remove.add((node.getChild(0), node))
+        self.to_remove.add(node.getChild(0))
 
-        self.to_remove.add((child, node))
+        self.to_remove.add(child)
         format_child_text += child.text
 
         format_child_text = format_child_text[1:-1]
@@ -173,7 +174,7 @@ class ASTCleaner(ASTVisitor):
             """
             if child.text == "*":
                 dereference_counter.append(child.linenr)
-                self.to_remove.add((child, child.parent))
+                self.to_remove.add(child)
 
             """
             stores variable we want to assign to
@@ -187,3 +188,16 @@ class ASTCleaner(ASTVisitor):
             parent_expr.addChildren(ASTNodeTerminal("*", parent_expr, parent_expr.getSymbolTable(), ln, ""))
 
             identifier_node.addNodeParent(parent_expr)
+
+    def cleanSwitch(self, node: ASTNode):
+        """
+        Remove terminal 'Switch' text
+
+        :param node:
+        :return:
+        """
+
+        if node.text != "SWITCH":
+            return
+
+        self.to_remove.add(node.getChild(0))

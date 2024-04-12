@@ -16,7 +16,10 @@ if: 'if' '(' expr ')' '{' block_code'}' ('else' ('{' block_code '}' | if))?;
 for: 'for' '(' block_line? ';' block_line? ';' block_line? ')' '{' block_code '}' ;
 while: 'while' '(' block_line ')' '{' block_code '}';
 anonymous_scope: '{' block_code '}';
-switch: 'switch' '(' IDENTIFIER ')' '{' ('case' (literal | IDENTIFIER) ':' block_code )* '}';
+switch: 'switch' '(' IDENTIFIER ')' '{' (case | default)* '}';
+case: 'case' (literal | IDENTIFIER) ':' block_code;
+default: 'default' ':' block_code;
+
 enum: 'enum' IDENTIFIER '{' (IDENTIFIER',')* IDENTIFIER? '}';
 printscanf: ('printf' | 'scanf') '(' STRING (',' expr)* ')';
 type: ('const')? ('int' | 'char' | 'float' | (('struct' | 'enum' |'union') IDENTIFIER) | IDENTIFIER) ('*' ('const')?)*;

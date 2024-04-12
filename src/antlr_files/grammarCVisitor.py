@@ -99,6 +99,16 @@ class grammarCVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by grammarCParser#case.
+    def visitCase(self, ctx:grammarCParser.CaseContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#default.
+    def visitDefault(self, ctx:grammarCParser.DefaultContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by grammarCParser#enum.
     def visitEnum(self, ctx:grammarCParser.EnumContext):
         return self.visitChildren(ctx)
