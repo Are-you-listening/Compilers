@@ -64,10 +64,8 @@ class ASTTableCreator(ASTVisitor):
                     latest_datatype = SymbolTypePtr(latest_datatype, is_const)
                 else:
                     if not ASTTypedefReplacer.isBaseType(grandchild):
-                        print(param_types)
                         latest_datatype = FunctionSymbolType(grandchild.text, is_const, param_types)  # Keep the typedef name
                     else:
-                        print(param_types)
                         latest_datatype = FunctionSymbolType(grandchild.text.upper(), is_const, param_types)
 
             """

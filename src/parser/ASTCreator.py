@@ -51,8 +51,6 @@ class ASTCreator(grammarCVisitor):
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx: grammarCParser.FunctionContext):
-
-
         node = self.__makeNode(ctx, "Function", False)
         tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
         prevTable = self.table
@@ -179,7 +177,6 @@ class ASTCreator(grammarCVisitor):
                 baseTypes.append(text)
             self.__make_manual_typedef(line, baseTypes, ctx.children[1].symbol.text)
 
-
     def visitTerminal(self, ctx):
         """
         :param ctx:
@@ -224,16 +221,16 @@ class ASTCreator(grammarCVisitor):
         expr.addChildren(literal)
 
         terminalType = ""
-        if "FLOAT" in BaseTypes:
+        if "FLOAT" in types:
             terminalType = "FLOAT"
-        elif "INT" in BaseTypes:
+        elif "INT" in types:
             terminalType = "INT"
-        elif "STRING" in BaseTypes:
+        elif "STRING" in types:
             terminalType = "STRING"
-        elif "CHAR" in BaseTypes:
+        elif "CHAR" in types:
             terminalType = "CHAR"
 
-        valueNode = ASTNodeTerminal(value, literal, self.table, terminalType, line, None)
+        valueNode = ASTNodeTerminal(str(value), literal, self.table, terminalType, line, None)
         literal.addChildren(valueNode)
 
     def __make_manual_typedef(self, line: str, baseTypes: list, replaceType: str):

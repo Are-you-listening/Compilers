@@ -8,6 +8,11 @@
 #define appel int**
 
 int** x;
+int y = 1;
+
+enum week{Mon, Tue, Wed, Thur, Fri, Sat, Sun};
+
+typedef int enumweek;
 
 int main()
 {
@@ -23,6 +28,9 @@ int main()
     printf("Area of Circle of radius %d: %d \n", radius,
            area);
 
+        enum week day;
+    day = Wed;
+    printf("%d",day);
 
     return 0;
 }

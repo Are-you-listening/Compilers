@@ -46,7 +46,7 @@ def cleanGreen(input_file, symbol_file):
     toAST = ASTCreator(lexer)  # Create Actual AST
     toAST.visit(tree)
     ast = toAST.getAST()
-    DotVisitor("output/file").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/file").visit(ast)  # Export AST in Dot
 
     virtualline = VirtualLineVisitor()
     virtualline.visit(ast)
@@ -57,7 +57,7 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
-    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
 
@@ -83,7 +83,7 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold):
-    DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 
