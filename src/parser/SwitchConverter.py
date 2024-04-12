@@ -88,13 +88,16 @@ class SwitchConverter(ASTVisitor):
         Make a special construction to convert an switch statement to an IF statement
         """
         equal_nodes = []
-        for child in node.children[1:]:
+        for i, child in enumerate(node.children[1:]):
             has_break = self.break_map.get(child, None) is not None
+            """
+            Remove the breaks form inside a switch
+            """
+            self.to_remove.add(self.break_map.get(child, None))
 
             if child.text == "CASE":
                 equal_node = self.createEqualCheckNode(switch_identifier, child.getChild(0))
                 equal_nodes.append((equal_node, child.getChild(1)))
-
                 self.to_remove.add(child)
 
             if child.text == "DEFAULT":
@@ -108,7 +111,7 @@ class SwitchConverter(ASTVisitor):
 
                 self.to_remove.add(child)
 
-            if has_break:
+            if has_break or i == node.getChildAmount()-2:
                 if len(equal_nodes) == 0:
                     continue
 
@@ -120,8 +123,6 @@ class SwitchConverter(ASTVisitor):
                     sub_condition = self.createIfStatement(self.createCopy(connect_node[0]), connect_node[1])
 
                     self.to_add_parent.append((sub_condition, equal_node[1]))
-                    #sub_condition.addChildren(equal_node[1])
-                    #equal_node[1].parent = sub_condition
 
                     connect_node = (new_condition, sub_condition)
 
@@ -139,7 +140,6 @@ class SwitchConverter(ASTVisitor):
             return
 
         self.break_map[node] = node
-        self.to_remove.add(node)
 
     @staticmethod
     def createEqualCheckNode(node_1: ASTNodeTerminal, node_2: ASTNodeTerminal, flip_condition=False):
