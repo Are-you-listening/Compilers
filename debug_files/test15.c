@@ -7,7 +7,7 @@ int func(const int x, float y) {
 int main() {
     int x = 5;
     int y = 10;
-    func(x,y);
+    x = func(x,y);
 }
 
 
