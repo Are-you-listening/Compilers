@@ -146,7 +146,7 @@ class AstLoader:
         for symbol_table in symbol_tables:
             symbol_entries = []
             for keys, symbol_entry in symbol_table.symbols.items():
-                symbol_entry_dict = {"fitype": symbol_entry.fitype, "type": symbol_entry.getJsonDataType(),
+                symbol_entry_dict = {"type": symbol_entry.getJsonDataType(),
                                      "name": symbol_entry.name,
                                      "value": ast_to_id_map.get(symbol_entry.value, None),
                                      "firstDeclared": ast_to_id_map.get(symbol_entry.firstDeclared),

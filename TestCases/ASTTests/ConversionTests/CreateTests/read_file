@@ -1,15 +1,15 @@
 int main() {
-int x = 5;
-float f = 33989.586265;
+    int a = 5;
+    int* b = &a;
 
-int z = (int) f;
-float z2 = (float) x;
+    int** c = &b;
 
-int a = (int) (f + z2 * 2);
+    float** d = c;
 
-float f2 = (float) f;
+    char** e = c;
 
-f2 = (float) (a + z2 / (3*65232));
-    return 0;
+    int** f = c;
+
+    int*** g = c;
 
 }

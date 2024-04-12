@@ -12,6 +12,13 @@ from src.parser.Tables.TableDotVisitor import *
 from src.parser.CodeGetter import *
 from TestCases.ASTTests.AstLoader import AstLoader
 from src.parser.ASTTableCreator import ASTTableCreator
+from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
+from src.parser.BlacklistVisitor import BlacklistVisitor
+from src.parser.EnumTypeMerger import EnumTypeMerger
+from src.parser.ASTIfCleaner import ASTIfCleaner
+from src.parser.ASTLoopCleaner import ASTLoopCleaner
+
+
 input_file = "read_file"
 
 input_stream = FileStream(input_file)  # Declare some variables
@@ -31,21 +38,32 @@ ast = toAST.getAST()
 below add needed stuff
 """
 
-codegetter = CodeGetter()
+virtualline = VirtualLineVisitor()
+virtualline.visit(ast)
+
+black_list_visitor = BlacklistVisitor()
+black_list_visitor.visit(ast)
+
+codegetter = CodeGetter()  # Link each line of code to a line number
 codegetter.visit(ast)
+
+EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
-astcleaner = ASTCleaner()  # Do a standard cleaning
-astcleaner.visit(ast)
+ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
+ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
+
+ASTCleaner().visit(ast)  # Do a standard cleaning
+
 
 ASTTableCreator().visit(ast)  # Create the symbol table
 
-astcleanerafter = ASTCleanerAfter()  # Do a standard cleaning
-astcleanerafter.visit(ast)
+ASTCleanerAfter().visit(ast)  # Clean even more :)
 
-ast_deref = ASTDereferencer()  # Correct the use of references & pointers into our format
-ast_deref.visit(ast)
+ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
+
+ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 
 constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
 constraint_checker.visit(ast)

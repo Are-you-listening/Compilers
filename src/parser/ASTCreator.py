@@ -147,18 +147,18 @@ class ASTCreator(grammarCVisitor):
 
     def visitEnum(self, ctx: grammarCParser.EnumContext):  # We will handle Enums similar to typedefs
         line = ctx.start.line
-        enum_parent = ASTNode("Typedef", self.parent, self.table, line)
+        enum_parent = ASTNode("Typedef", self.parent, self.table, line, None)
         self.parent.addChildren(enum_parent)
 
-        node_typedef = ASTNodeTerminal("typedef", enum_parent, self.table, -1, line)
+        node_typedef = ASTNodeTerminal("typedef", enum_parent, self.table, -1, line, None)
         enum_parent.addChildren(node_typedef)
 
-        node_Type = ASTNode("Type", enum_parent, self.table, line)  # Add the type translations
+        node_Type = ASTNode("Type", enum_parent, self.table, line, None)  # Add the type translations
         enum_parent.addChildren(node_Type)
-        node_INT = ASTNodeTerminal("INT", node_Type, self.table, -1, line)
+        node_INT = ASTNodeTerminal("INT", node_Type, self.table, -1, line, None)
         node_Type.addChildren(node_INT)
 
-        node_typedef_part2 = ASTNodeTerminal("enum "+str(ctx.children[1]), enum_parent, self.table, "IDENTIFIER", line)  # Add second part of typedef
+        node_typedef_part2 = ASTNodeTerminal("enum "+str(ctx.children[1]), enum_parent, self.table, "IDENTIFIER", line, None)  # Add second part of typedef
         enum_parent.addChildren(node_typedef_part2)
 
         # Add all other enums 'identifiers/variables' as "const int" variables to the current scope
@@ -167,25 +167,25 @@ class ASTCreator(grammarCVisitor):
         for i in range(3, len(ctx.children)-1):
             name = ctx.children[i].symbol.text
             if name != ",":  # For each enum, recreate the Declaration structure so the rest of the program will take care of it!
-                declaration = ASTNode("Declaration", parent, self.table, line)  # Add declaration node
+                declaration = ASTNode("Declaration", parent, self.table, line, None)  # Add declaration node
                 parent.addChildren(declaration)
 
-                type = ASTNode("Type", declaration, self.table, line)  # Add type nodes
+                type = ASTNode("Type", declaration, self.table, line, None)  # Add type nodes
                 declaration.addChildren(type)
-                const = ASTNodeTerminal("const", type, self.table, -1, line)
-                INT = ASTNodeTerminal("INT", type, self.table, -1, line)
+                const = ASTNodeTerminal("const", type, self.table, -1, line, None)
+                INT = ASTNodeTerminal("INT", type, self.table, -1, line, None)
                 type.addChildren(const)
                 type.addChildren(INT)
 
-                enum = ASTNodeTerminal(name, declaration, self.table, "IDENTIFIER", line)  # Add enum variable
+                enum = ASTNodeTerminal(name, declaration, self.table, "IDENTIFIER", line, None)  # Add enum variable
                 declaration.addChildren(enum)
-                equalSign = ASTNodeTerminal("=", declaration, self.table, -1, line)  # Add '='
+                equalSign = ASTNodeTerminal("=", declaration, self.table, -1, line, None)  # Add '='
                 declaration.addChildren(equalSign)
-                expr = ASTNode("Expr", declaration, self.table, line)  # Add value nodes
+                expr = ASTNode("Expr", declaration, self.table, line, None)  # Add value nodes
                 declaration.addChildren(expr)
-                literal = ASTNode("Literal", expr, self.table, line)
+                literal = ASTNode("Literal", expr, self.table, line, None)
                 expr.addChildren(literal)
-                value = ASTNodeTerminal(str(index), literal, self.table, "INT", line)
+                value = ASTNodeTerminal(str(index), literal, self.table, "INT", line, None)
                 literal.addChildren(value)
 
                 index += 1  # Incr value for enum

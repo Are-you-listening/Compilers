@@ -9,7 +9,7 @@ from src.parser.Tables.AbstractTable import *
 
 
 class SymbolEntry(TableEntry):
-    def __init__(self,datatype: SymbolType, name: str, value, first_declared, first_used):
+    def __init__(self, datatype: SymbolType, name: str, value, first_declared, first_used):
         self.typeObject = datatype
         self.name = name
         self.value = value
