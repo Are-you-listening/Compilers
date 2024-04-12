@@ -114,10 +114,7 @@ class ASTTypedefReplacer(ASTVisitor):
     @staticmethod
     def containsNonBaseType(children: list):
         for child in children:
-            child_text_copy = child.text
-            child_text_copy = child_text_copy.replace("*", "")
-            child_text_copy = child_text_copy.replace("const", "")
-            if not ASTTypedefReplacer.isBaseType(child):
+            if child.text != '*' and child.text != "const" and not ASTTypedefReplacer.isBaseType(child):
                 return True
         return False
 

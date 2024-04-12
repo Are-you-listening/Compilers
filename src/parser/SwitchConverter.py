@@ -58,8 +58,18 @@ class SwitchConverter(ASTVisitor):
 
         self.break_map[node] = node
 
-    def createEqualCheckNode(self, node_1: ASTNode, node_2: ASTNode):
+    def createEqualCheckNode(self, node_1: ASTNodeTerminal, node_2: ASTNodeTerminal):
 
         check_node = ASTNode("Expr", None, node_1.getSymbolTable(), node_1.linenr)
+        check_node.addChildren(ASTNodeTerminal(node_1.text, check_node, node_1.getSymbolTable(),
+                                               node_1.type, node_1.linenr))
+
+        equal = ASTNodeTerminal("==", check_node, node_1.getSymbolTable(), -1, node_1.linenr)
+        check_node.addChildren(equal)
+
+        check_node.addChildren(ASTNodeTerminal(node_2.text, check_node, node_2.getSymbolTable(),
+                                               node_2.type, node_2.linenr))
+
+
 
         pass
