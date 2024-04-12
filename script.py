@@ -3,7 +3,7 @@ from src.llvm_target.LLVMSingleton import *
 
 
 def script():
-    for i in range(1, 13):
+    for i in range(1, 14):
         file_name = f"example_source_files/test{i}"
         LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
 
