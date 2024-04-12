@@ -23,7 +23,7 @@ class EnumTypeMerger(ASTVisitor):
         line = typeNode.children[0].linenr
         table = typeNode.children[0].symbol_table
         newname = "enum " + typeNode.children[1].text
-        typeNode.children = [ASTNodeTerminal(newname, typeNode, table, "IDENTIFIER", line, typeNode.children[0].virtuallinenr)]
+        typeNode.children = [ASTNodeTerminal(newname, typeNode, table, "IDENTIFIER", line, None)]
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass
