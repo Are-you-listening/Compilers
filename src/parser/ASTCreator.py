@@ -154,7 +154,6 @@ class ASTCreator(grammarCVisitor):
         makes new Object and makes sure this will be a child of it's parent
         """
         node = ASTNode(terminal_type, self.parent, self.table, ctx.start.line)  # Also attaches the current table/scope
-        node.linenr = ctx.start.line
         self.parent.addChildren(node)
         old_parent = self.parent
         self.parent = node

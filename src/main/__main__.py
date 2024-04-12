@@ -75,7 +75,7 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold):
-    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 
