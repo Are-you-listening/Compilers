@@ -198,7 +198,7 @@ class Edge:
 
     def switchFlip(self):
         """
-        Switch the return type flip
+        SwitchTests the return type flip
         :return:
         """
         self.flip_eval = not self.flip_eval

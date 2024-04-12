@@ -191,7 +191,7 @@ class ASTCleaner(ASTVisitor):
 
     def cleanSwitch(self, node: ASTNode):
         """
-        Remove terminal 'Switch' text (also 'case' and 'default')
+        Remove terminal 'SwitchTests' text (also 'case' and 'default')
 
         :param node:
         :return:
