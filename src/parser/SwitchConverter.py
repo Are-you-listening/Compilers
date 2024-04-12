@@ -15,6 +15,7 @@ class SwitchConverter(ASTVisitor):
     def __init__(self):
         self.break_map = {}
         self.to_add = []
+        self.to_add_parent = []
         self.to_remove = set()
 
     def visit(self, ast: AST):
@@ -26,6 +27,7 @@ class SwitchConverter(ASTVisitor):
 
         self.break_map = {}
         self.to_add = []
+        self.to_add_parent = []
         self.to_remove = set()
 
         self.postorder(ast.root)
@@ -33,6 +35,13 @@ class SwitchConverter(ASTVisitor):
         for switch, added in self.to_add:
             target = switch.parent
             target.children.insert(target.findChild(switch), added)
+            added.parent = target
+
+        for node, added in self.to_add_parent:
+
+            target = node.parent
+
+            target.addChildren(added)
             added.parent = target
 
         for r in self.to_remove:
@@ -89,7 +98,7 @@ class SwitchConverter(ASTVisitor):
                 self.to_remove.add(child)
 
             if child.text == "DEFAULT":
-                current = all_case_values[0]
+                current = self.createEqualCheckNode(switch_identifier, all_case_values[0], True)
 
                 for b in all_case_values[1:]:
                     not_equal_node = self.createEqualCheckNode(switch_identifier, b, True)
@@ -109,8 +118,10 @@ class SwitchConverter(ASTVisitor):
                     new_condition = self.createOrStatement(connect_node[0], equal_node[0])
 
                     sub_condition = self.createIfStatement(self.createCopy(connect_node[0]), connect_node[1])
-                    sub_condition.addChildren(equal_node[1])
-                    equal_node[1].parent = sub_condition
+
+                    self.to_add_parent.append((sub_condition, equal_node[1]))
+                    #sub_condition.addChildren(equal_node[1])
+                    #equal_node[1].parent = sub_condition
 
                     connect_node = (new_condition, sub_condition)
 
@@ -128,6 +139,7 @@ class SwitchConverter(ASTVisitor):
             return
 
         self.break_map[node] = node
+        self.to_remove.add(node)
 
     @staticmethod
     def createEqualCheckNode(node_1: ASTNodeTerminal, node_2: ASTNodeTerminal, flip_condition=False):

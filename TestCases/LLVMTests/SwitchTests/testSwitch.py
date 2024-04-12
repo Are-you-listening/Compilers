@@ -17,7 +17,7 @@ class SwitchTests(unittest.TestCase):
     Test case to run all created llvm output
     """
     def testSimpleSwitch(self):
-        file_range = range(1, 2)
+        file_range = range(1, 6)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         for i in file_range:
@@ -33,6 +33,7 @@ class SwitchTests(unittest.TestCase):
             assert for same output
             """
             #print(out.stdout, c_out.stdout)
+            #print(out.stderr, c_out.stderr)
             assert out.stdout == c_out.stdout
 
             """
@@ -49,8 +50,7 @@ class SwitchTests(unittest.TestCase):
         """
         LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
 
-        main([0, "--input", file_name, "--render_ast", file_name[:-2] + "ASTVisual", "--render_symb",
-              file_name[:-2] + "SymbolTable",
+        main([0, "--input", file_name,
               "--target_llvm", file_name[:-2] + "LLVM.ll"])
 
         subprocess.run(f"""clang-14 -S -emit-llvm {file_name} -o {file_name[:-2]}.ll""",

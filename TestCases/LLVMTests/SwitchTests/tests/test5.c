@@ -4,14 +4,16 @@ int main(){
 
     int a = 0;
     int b = 0;
-    a = 1;
+    a = 2;
     switch(a){
         case 1:
             b = 1;
             printf("%d", 1);
+            break;
         case 6:
             b = 6;
             printf("%d", 6);
+            break;
         case 2:
             b = 2;
             printf("%d", 2);
