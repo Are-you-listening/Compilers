@@ -64,7 +64,7 @@ def cleanGreen(input_file, symbol_file):
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
-    #DotVisitor("output/debug9").visit(ast)  # Export AST in Dot
+    DotVisitor("output/debug9").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 

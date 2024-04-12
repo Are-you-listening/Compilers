@@ -127,6 +127,12 @@ class ASTCreator(grammarCVisitor):
     def visitDefault(self, ctx:grammarCParser.DefaultContext):
         self.__makeNode(ctx, "DEFAULT")
 
+    def visitParameter(self, ctx:grammarCParser.ParameterContext):
+        self.__makeNode(ctx, "Parameter")
+
+    def visitParameters(self, ctx: grammarCParser.ParametersContext):
+        self.__makeNode(ctx, "Parameters")
+
     def visitTerminal(self, ctx):
         """
         :param ctx:

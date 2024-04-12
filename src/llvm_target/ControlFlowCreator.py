@@ -106,7 +106,7 @@ class ControlFlowCreator(ASTVisitor):
             Create a block with the entire code base being a child
             """
             ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.root)
-            node.getChild(1).addNodeChildEmerge(ast_block)
+            node.getChild(2).addNodeChildEmerge(ast_block)
 
         """
         With an IF statement 2 situations occur:

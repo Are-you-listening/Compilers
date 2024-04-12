@@ -1,4 +1,4 @@
-# Generated from C:/Users/Lucas/PycharmProjects/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
+# Generated from /home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
 from antlr4 import *
 if "." in __name__:
     from .grammarCParser import grammarCParser
@@ -68,6 +68,15 @@ class grammarCListener(ParseTreeListener):
 
     # Exit a parse tree produced by grammarCParser#line.
     def exitLine(self, ctx:grammarCParser.LineContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#parameters.
+    def enterParameters(self, ctx:grammarCParser.ParametersContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#parameters.
+    def exitParameters(self, ctx:grammarCParser.ParametersContext):
         pass
 
 

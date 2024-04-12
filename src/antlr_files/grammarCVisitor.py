@@ -1,4 +1,4 @@
-# Generated from C:/Users/Lucas/PycharmProjects/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
+# Generated from /home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
 from antlr4 import *
 if "." in __name__:
     from .grammarCParser import grammarCParser
@@ -41,6 +41,11 @@ class grammarCVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by grammarCParser#line.
     def visitLine(self, ctx:grammarCParser.LineContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#parameters.
+    def visitParameters(self, ctx:grammarCParser.ParametersContext):
         return self.visitChildren(ctx)
 
 
