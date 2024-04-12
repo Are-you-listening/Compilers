@@ -70,6 +70,4 @@ class SwitchConverter(ASTVisitor):
         check_node.addChildren(ASTNodeTerminal(node_2.text, check_node, node_2.getSymbolTable(),
                                                node_2.type, node_2.linenr))
 
-
-
         pass
