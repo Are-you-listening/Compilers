@@ -21,5 +21,7 @@
  "22": ["[ Error ] line 3:  indirection requires pointer operand ('FLOAT' invalid)"],
  "23": ["[ Error ] line 7:  indirection requires pointer operand ('FLOAT' invalid)"],
  "24": ["[ Error ] line 7: Manipulation of variable '*x_ptr' is not allowed, because 'x_ptr' has type 'const INT *  '"],
- "25": ["[ Error ] line 10: Manipulation of variable '*ptr_to_int' is not allowed, because 'ptr_to_int' has type 'const INT *  '"]
+ "25": ["[ Error ] line 10: Manipulation of variable '*ptr_to_int' is not allowed, because 'ptr_to_int' has type 'const INT *  '"],
+ "27": ["[ Error ] line 8: use of undeclared variable z"]
+
 }

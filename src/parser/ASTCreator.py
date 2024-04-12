@@ -132,8 +132,8 @@ class ASTCreator(grammarCVisitor):
         :param ctx:
         :return:
         """
-
         text = ctx.getText()
+
 
         if text in ["int", "float", "char"]:
             text = text.upper()
