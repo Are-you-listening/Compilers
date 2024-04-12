@@ -20,7 +20,7 @@ class GlobalsConstrained(Constraint):
         if node.text == "Declaration":  # Global declarations neither allow assigment of other globals
             if node.getChildAmount() > 1:
                 table = node.getChild(1).symbol_table
-                if table.isRoot() and table.EntryExists():
+                if table.isRoot() and table.entryExists(node.getChild(0).text):
                     ErrorExporter.GlobalsInvalidDeclaration(node.getChild(0).linenr)
                 if GlobalsConstrained.containsIdentifier(node.getChild(1)):
                     ErrorExporter.GlobalsInvalidDeclaration(node.getChild(1).linenr)

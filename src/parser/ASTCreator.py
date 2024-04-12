@@ -18,12 +18,12 @@ class ASTCreator(grammarCVisitor):
         self.lexer = lexer
         self.parent = None
         self.AST = None
-        self.table = SymbolTable(None)
+        self.table = None
 
     def __setup(self):
         self.parent = None
         self.AST = None
-        self.table = SymbolTable(None)
+        self.table = None
 
     def visit(self, tree):
         """
@@ -62,15 +62,19 @@ class ASTCreator(grammarCVisitor):
         self.parent = old_parent
         self.table = prevTable
 
-
     def visitCode(self, ctx: grammarCParser.CodeContext):
-        tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
-        prevTable = self.table
-        self.table.nextTable(tempTable)
-        self.table = tempTable
+        if self.table is None:
+            self.table = SymbolTable(None)
+            self.parent.symbol_table = self.table
+            self.__makeNode(ctx, "Code")
+        else:
+            tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
+            prevTable = self.table
+            self.table.nextTable(tempTable)
+            self.table = tempTable
 
-        self.__makeNode(ctx, "Code")
-        self.table = prevTable
+            self.__makeNode(ctx, "Code")
+            self.table = prevTable
 
     def visitTypedef(self, ctx: grammarCParser.TypedefContext):
         self.__makeNode(ctx, "Typedef")
