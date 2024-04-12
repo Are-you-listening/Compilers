@@ -2,10 +2,10 @@ from src.parser.ASTVisitor import *
 from src.parser.ASTConversion import *
 
 
-class SwitchCleaner(ASTVisitor):
+class SwitchConverter(ASTVisitor):
     """
-    This visitor makes sure that the switch statement will get a good format
-    The final format after this visitor will be an SWITCH node with the following children in order:
+    This visitor makes sure that the switch statement will be converted to a if else statement
+    The receiving format for this visitor will be an SWITCH node with the following children in order:
     node 0: switched value
     all other nodes: ASTnode with name Case or Default
     Case Node: First child: case condition, Second child: code block
@@ -13,11 +13,7 @@ class SwitchCleaner(ASTVisitor):
 
     """
 
-    def __init__(self):
-        self.to_remove = set()
-
     def visit(self, ast: AST):
-        self.to_remove = set()
         """
         override the visit so we can remove after the traverse the nodes we don't need anymore
 
@@ -26,11 +22,13 @@ class SwitchCleaner(ASTVisitor):
         """
         self.preorder(ast.root)
 
-        for node in self.to_remove:
-            node.parent.removeChild(node)
-
     def visitNode(self, node: ASTNode):
-        pass
+        if node.text != "SWITCH":
+            return
+
+        """
+        Remove the 'Switch' keyword child
+        """
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass

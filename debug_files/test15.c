@@ -1,9 +1,12 @@
 
 int main() {
+{
+int a = 0;
 
-int x = 5;
+}
+int a = 5;
 
-int x;
+int y;
 
 }
 

@@ -170,6 +170,24 @@ class grammarCListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by grammarCParser#case.
+    def enterCase(self, ctx:grammarCParser.CaseContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#case.
+    def exitCase(self, ctx:grammarCParser.CaseContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#default.
+    def enterDefault(self, ctx:grammarCParser.DefaultContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#default.
+    def exitDefault(self, ctx:grammarCParser.DefaultContext):
+        pass
+
+
     # Enter a parse tree produced by grammarCParser#enum.
     def enterEnum(self, ctx:grammarCParser.EnumContext):
         pass

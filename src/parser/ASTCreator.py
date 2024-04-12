@@ -51,14 +51,16 @@ class ASTCreator(grammarCVisitor):
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx: grammarCParser.FunctionContext):
+         self.__makeNode(ctx, "Function")
+
+    def visitCode(self, ctx: grammarCParser.CodeContext):
         tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
+        prevTable = self.table
         self.table.nextTable(tempTable)
         self.table = tempTable
 
-        self.__makeNode(ctx, "Function")
-
-    def visitCode(self, ctx: grammarCParser.CodeContext):
         self.__makeNode(ctx, "Code")
+        self.table = prevTable
 
     def visitTypedef(self, ctx: grammarCParser.TypedefContext):
         self.__makeNode(ctx, "Typedef")
@@ -96,7 +98,13 @@ class ASTCreator(grammarCVisitor):
         self.parent = node
 
     def visitBlock_code(self, ctx: grammarCParser.Block_codeContext):
+        tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
+        prevTable = self.table
+        self.table.nextTable(tempTable)
+        self.table = tempTable
+
         self.__makeNode(ctx, "Code")
+        self.table = prevTable
 
     def visitBlock_line(self, ctx: grammarCParser.Block_lineContext):
         self.__makeNode(ctx, "Line")
@@ -109,6 +117,15 @@ class ASTCreator(grammarCVisitor):
 
     def visitWhile(self, ctx: grammarCParser.WhileContext):
         self.__makeNode(ctx, "WHILE")
+
+    def visitSwitch(self, ctx: grammarCParser.SwitchContext):
+        self.__makeNode(ctx, "SWITCH")
+
+    def visitCase(self, ctx:grammarCParser.CaseContext):
+        self.__makeNode(ctx, "CASE")
+
+    def visitDefault(self, ctx:grammarCParser.DefaultContext):
+        self.__makeNode(ctx, "DEFAULT")
 
     def visitTerminal(self, ctx):
         """
