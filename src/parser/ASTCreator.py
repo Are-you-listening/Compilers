@@ -110,6 +110,15 @@ class ASTCreator(grammarCVisitor):
     def visitWhile(self, ctx: grammarCParser.WhileContext):
         self.__makeNode(ctx, "WHILE")
 
+    def visitSwitch(self, ctx: grammarCParser.SwitchContext):
+        self.__makeNode(ctx, "SWITCH")
+
+    def visitCase(self, ctx:grammarCParser.CaseContext):
+        self.__makeNode(ctx, "CASE")
+
+    def visitDefault(self, ctx:grammarCParser.DefaultContext):
+        self.__makeNode(ctx, "DEFAULT")
+
     def visitTerminal(self, ctx):
         """
         :param ctx:

@@ -19,6 +19,8 @@ from src.parser.ASTLoopCleaner import *
 from src.parser.ConstantStatementFolding import *
 from src.parser.DeadCodeRemover import *
 from src.parser.BlacklistVisitor import *
+from src.parser.SwitchConverter import *
+
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -54,9 +56,11 @@ def cleanGreen(input_file, symbol_file):
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
-    #DotVisitor("output/debug9").visit(ast)  # Export AST in Dot
-
     ASTCleaner().visit(ast)  # Do a standard cleaning
+
+    SwitchConverter().visit(ast)  # convert switch statement to if else
+
+    #DotVisitor("output/debug9").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 
