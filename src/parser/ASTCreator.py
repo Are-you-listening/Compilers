@@ -75,6 +75,9 @@ class ASTCreator(grammarCVisitor):
     def visitTypedef(self, ctx: grammarCParser.TypedefContext):
         self.__makeNode(ctx, "Typedef")
 
+    def visitFunction_call(self, ctx: grammarCParser.Function_callContext):
+        self.__makeNode(ctx, "FunctionCall")
+
     def visitPrintscanf(self, ctx: grammarCParser.PrintscanfContext):
         self.__makeNode(ctx, "printf")
 

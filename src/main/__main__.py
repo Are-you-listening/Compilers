@@ -57,7 +57,7 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
 
