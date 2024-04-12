@@ -22,7 +22,7 @@ class GlobalsConstrained(Constraint):
                 table = node.getChild(1).symbol_table
                 if table.isRoot() and table.entryExists(node.getChild(0).text):
                     ErrorExporter.GlobalsInvalidDeclaration(node.getChild(0).linenr)
-                if GlobalsConstrained.containsIdentifier(node.getChild(1)):
+                if table.isRoot() and GlobalsConstrained.containsIdentifier(node.getChild(1)):
                     ErrorExporter.GlobalsInvalidDeclaration(node.getChild(1).linenr)
 
     @staticmethod
