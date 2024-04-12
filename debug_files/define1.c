@@ -28,9 +28,5 @@ int main()
     printf("Area of Circle of radius %d: %d \n", radius,
            area);
 
-        enum week day;
-    day = Wed;
-    printf("%d",day);
-
     return 0;
 }
