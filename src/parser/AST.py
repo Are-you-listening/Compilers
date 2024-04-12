@@ -16,6 +16,7 @@ class ASTNode:
         self.parent = parent
         self.symbol_table = symbol_table
         self.linenr = linenr
+        self.virtuallinenr = linenr
 
     def __hash__(self):
         return id(self)
