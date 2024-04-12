@@ -13,9 +13,11 @@ int z;
 float h = CIRCLE_AREA;
 //int z = x + y;
 
+//int main = 5;
+
 int main()
 {
-
+    int main = 3;
     int radius = 21;
     int side = 5;
     int area;
