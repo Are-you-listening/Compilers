@@ -13,6 +13,9 @@ from src.parser.Tables.TableDotVisitor import *
 from src.parser.CodeGetter import *
 from TestCases.ASTTests.AstLoader import AstLoader
 from src.parser.ASTTableCreator import ASTTableCreator
+from src.parser.EnumTypeMerger import *
+
+
 input_file = "read_file"
 
 input_stream = FileStream(input_file)  # Declare some variables
@@ -34,6 +37,8 @@ below add needed stuff
 
 codegetter = CodeGetter()
 codegetter.visit(ast)
+
+EnumTypeMerger().visit(ast)
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
