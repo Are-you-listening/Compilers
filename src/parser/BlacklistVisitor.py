@@ -2,8 +2,12 @@ from src.parser.ASTVisitor import *
 
 
 class BlacklistVisitor(ASTVisitor):
+    """
+    This visitor removes blacklist nodes
+
+    """
     def __init__(self):
-        self.blacklist = ['(', ')', ';', '{', '}', ',']
+        self.blacklist = ['(', ')', ';', '{', '}', ',', ':']
 
     def visitNode(self, node: ASTNode):
         pass

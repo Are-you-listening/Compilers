@@ -43,8 +43,8 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    blacklistVisitor = BlacklistVisitor()
-    blacklistVisitor.visit(ast)
+    black_list_visitor = BlacklistVisitor()
+    black_list_visitor.visit(ast)
 
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
@@ -53,6 +53,8 @@ def cleanGreen(input_file, symbol_file):
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
+
+    DotVisitor("output/debug9").visit(ast)  # Export AST in Dot
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
