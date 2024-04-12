@@ -149,49 +149,39 @@ class ASTCreator(grammarCVisitor):
         self.__makeNode(ctx, "Parameters")
 
     def visitEnum(self, ctx: grammarCParser.EnumContext):  # We will handle Enums similar to typedefs
-        line = ctx.start.line
-        enum_parent = ASTNode("Typedef", self.parent, self.table, line)
-        self.parent.addChildren(enum_parent)
+        """
+        Translate enums to typedefs and declarations in our format
+        :param ctx:
+        :return:
+        """
+        line = ctx.start.line  # Line nr
+        index = 0  # Value for each enum
+        parent = self.parent
 
-        node_typedef = ASTNodeTerminal("typedef", enum_parent, self.table, -1, line)
-        enum_parent.addChildren(node_typedef)
-
-        node_Type = ASTNode("Type", enum_parent, self.table, line)  # Add the type translations
-        enum_parent.addChildren(node_Type)
-        node_INT = ASTNodeTerminal("INT", node_Type, self.table, -1, line)
-        node_Type.addChildren(node_INT)
-
-        node_typedef_part2 = ASTNodeTerminal("enum "+str(ctx.children[1]), enum_parent, self.table, "IDENTIFIER", line)  # Add second part of typedef
-        enum_parent.addChildren(node_typedef_part2)
+        self.__make_manual_typedef(line, ["INT"], "enum "+str(ctx.children[1]))  # Make a typedef for this enum type
 
         # Add all other enums 'identifiers/variables' as "const int" variables to the current scope
-        index = 0
-        parent = self.parent
         for i in range(3, len(ctx.children)-1):
             name = ctx.children[i].symbol.text
             if name != ",":  # For each enum, recreate the Declaration structure so the rest of the program will take care of it!
-                declaration = ASTNode("Declaration", parent, self.table, line)  # Add declaration node
-                parent.addChildren(declaration)
-
-                type = ASTNode("Type", declaration, self.table, line)  # Add type nodes
-                declaration.addChildren(type)
-                const = ASTNodeTerminal("const", type, self.table, -1, line)
-                INT = ASTNodeTerminal("INT", type, self.table, -1, line)
-                type.addChildren(const)
-                type.addChildren(INT)
-
-                enum = ASTNodeTerminal(name, declaration, self.table, "IDENTIFIER", line)  # Add enum variable
-                declaration.addChildren(enum)
-                equalSign = ASTNodeTerminal("=", declaration, self.table, -1, line)  # Add '='
-                declaration.addChildren(equalSign)
-                expr = ASTNode("Expr", declaration, self.table, line)  # Add value nodes
-                declaration.addChildren(expr)
-                literal = ASTNode("Literal", expr, self.table, line)
-                expr.addChildren(literal)
-                value = ASTNodeTerminal(str(index), literal, self.table, "INT", line)
-                literal.addChildren(value)
-
+                self.__make_manual_declaration(parent, line, name, ["const", "INT"], index)
                 index += 1  # Incr value for enum
+
+    def visitDefine(self, ctx: grammarCParser.DefineContext):
+        line = ctx.start.line
+        toReplaceWith = ctx.children[len(ctx.children) - 1]  # Part of the #define we will replace with
+
+        if isinstance(toReplaceWith, grammarCParser.LiteralContext):  # It's an actual value; convert to const <type> value
+            self.__make_manual_declaration(self.parent, line, ctx.children[1].symbol.text, [str(self.translateLexerID(toReplaceWith.start.type))], toReplaceWith.children[0].symbol.text)
+        elif isinstance(toReplaceWith, grammarCParser.TypeContext):  # It's a type define; convert to typedef
+            baseTypes = []
+            for child in toReplaceWith.children:
+                text = child.symbol.text
+                if text != "const":
+                    text = text.upper()
+                baseTypes.append(text)
+            self.__make_manual_typedef(line, baseTypes, ctx.children[1].symbol.text)
+
 
     def visitTerminal(self, ctx):
         """
@@ -207,6 +197,67 @@ class ASTCreator(grammarCVisitor):
                                ctx.getSymbol().line, "")
 
         self.parent.addChildren(node)
+
+    def __make_manual_declaration(self, parent: ASTNode, line: str, name: str, types: list, value):
+        """
+        Helper function to create some (const) declarations manually without a real ctx for AST manipulation
+        :param parent: To this node, any new nodes will be added as children
+        :param line: Line nr
+        :param name: Name of the variable
+        :param types: Type of the variable
+        :param value: Value of the variable
+        :return:
+        """
+        declaration = ASTNode("Declaration", parent, self.table, line, None)  # Add declaration node
+        parent.addChildren(declaration)
+
+        typeNode = ASTNode("Type", declaration, self.table, line, None)  # Add type nodes
+        declaration.addChildren(typeNode)
+        for type in types:
+            typePartNode = ASTNodeTerminal(type, typeNode, self.table, -1, line, None)  # Add the actual types
+            typeNode.addChildren(typePartNode)
+
+        var = ASTNodeTerminal(name, declaration, self.table, "IDENTIFIER", line, None)  # Add enum variable
+        declaration.addChildren(var)
+        equalSign = ASTNodeTerminal("=", declaration, self.table, -1, line, None)  # Add '='
+        declaration.addChildren(equalSign)
+        expr = ASTNode("Expr", declaration, self.table, line, None)  # Add value nodes
+        declaration.addChildren(expr)
+        literal = ASTNode("Literal", expr, self.table, line, None)
+        expr.addChildren(literal)
+
+        terminalType = ""
+        if "FLOAT" in BaseTypes:
+            terminalType = "FLOAT"
+        elif "INT" in BaseTypes:
+            terminalType = "INT"
+        elif "STRING" in BaseTypes:
+            terminalType = "STRING"
+        elif "CHAR" in BaseTypes:
+            terminalType = "CHAR"
+
+        valueNode = ASTNodeTerminal(value, literal, self.table, terminalType, line, None)
+        literal.addChildren(valueNode)
+
+    def __make_manual_typedef(self, line: str, baseTypes: list, replaceType: str):
+        """
+        Create a manual typedef without relying on ctx for AST manipulation
+        :return:
+        """
+        parent = ASTNode("Typedef", self.parent, self.table, line, None)
+        self.parent.addChildren(parent)
+
+        node_typedef = ASTNodeTerminal("typedef", parent, self.table, -1, line, None)
+        parent.addChildren(node_typedef)
+
+        node_Type = ASTNode("Type", parent, self.table, line, None)  # Add the type translations
+        parent.addChildren(node_Type)
+        for type in baseTypes:  # Add base types
+            node_baseType = ASTNodeTerminal(type, node_Type, self.table, -1, line, None)
+            node_Type.addChildren(node_baseType)
+
+        node_typedef_part2 = ASTNodeTerminal(replaceType, parent, self.table, "IDENTIFIER", line, None)  # Add second part of typedef
+        parent.addChildren(node_typedef_part2)
 
     def __makeNode(self, ctx, terminal_type: str, dovisitChildren: bool = True):
         """
