@@ -3,8 +3,6 @@ from src.antlr_files.grammarCParser import *
 from src.parser.Tables.SymbolTable import *
 from src.parser.Tables.TypedefTable import *
 
-black_list = ['(', ')', ';', '{', '}', ',']
-
 
 class ASTCreator(grammarCVisitor):
     """
@@ -117,8 +115,6 @@ class ASTCreator(grammarCVisitor):
         :param ctx:
         :return:
         """
-        if ctx.getText() in black_list:
-            return
 
         text = ctx.getText()
 

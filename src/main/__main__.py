@@ -18,6 +18,7 @@ from src.llvm_target.ControlFlowCreator import *
 from src.parser.ASTLoopCleaner import *
 from src.parser.ConstantStatementFolding import *
 from src.parser.DeadCodeRemover import *
+from src.parser.BlacklistVisitor import *
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -41,6 +42,9 @@ def cleanGreen(input_file, symbol_file):
     toAST = ASTCreator(lexer)  # Create Actual AST
     toAST.visit(tree)
     ast = toAST.getAST()
+
+    blacklistVisitor = BlacklistVisitor()
+    blacklistVisitor.visit(ast)
 
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
