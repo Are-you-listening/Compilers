@@ -53,14 +53,16 @@ class ASTCreator(grammarCVisitor):
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx: grammarCParser.FunctionContext):
+         self.__makeNode(ctx, "Function")
+
+    def visitCode(self, ctx: grammarCParser.CodeContext):
         tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
+        prevTable = self.table
         self.table.nextTable(tempTable)
         self.table = tempTable
 
-        self.__makeNode(ctx, "Function")
-
-    def visitCode(self, ctx: grammarCParser.CodeContext):
         self.__makeNode(ctx, "Code")
+        self.table = prevTable
 
     def visitTypedef(self, ctx: grammarCParser.TypedefContext):
         self.__makeNode(ctx, "Typedef")
