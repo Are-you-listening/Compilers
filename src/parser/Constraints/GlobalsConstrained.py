@@ -2,9 +2,9 @@ from src.parser.Constraints.Constraint import *
 from src.parser.ErrorExporter import *
 
 
-class UndeclaredConstrained(Constraint):
+class GlobalsConstrained(Constraint):
     """
-    Checks for undeclared variables
+    Checks for specific incompatible syntax for Global Variables
     """
 
     def __init__(self):
