@@ -3,6 +3,7 @@ from src.antlr_files.grammarCParser import *
 from src.parser.Tables.SymbolTable import *
 from src.parser.Tables.TypedefTable import *
 
+definelist = []
 
 class ASTCreator(grammarCVisitor):
     """
@@ -172,15 +173,17 @@ class ASTCreator(grammarCVisitor):
         toReplaceWith = ctx.children[len(ctx.children) - 1]  # Part of the #define we will replace with
 
         if isinstance(toReplaceWith, grammarCParser.LiteralContext):  # It's an actual value; convert to const <type> value
-            self.__make_manual_declaration(self.parent, line, ctx.children[1].symbol.text, [str(self.translateLexerID(toReplaceWith.start.type))], toReplaceWith.children[0].symbol.text)
+            temp = self.__make_manual_declaration(self.parent, line, ctx.children[1].symbol.text, [str(self.translateLexerID(toReplaceWith.start.type))], toReplaceWith.children[0].symbol.text)
+            definelist.append(temp)  # Keep track of the defines, since they may be used in delcarations in the Global Space (See GlobalConstrained)
         elif isinstance(toReplaceWith, grammarCParser.TypeContext):  # It's a type define; convert to typedef
-            baseTypes = []
+            baseTypes = ["const"]
             for child in toReplaceWith.children:
                 text = child.symbol.text
                 if text != "const":
                     text = text.upper()
                 baseTypes.append(text)
             self.__make_manual_typedef(line, baseTypes, ctx.children[1].symbol.text)
+
 
     def visitTerminal(self, ctx):
         """
@@ -228,15 +231,16 @@ class ASTCreator(grammarCVisitor):
         terminalType = ""
         if "FLOAT" in types:
             terminalType = "FLOAT"
+            value = float(value)
         elif "INT" in types:
             terminalType = "INT"
-        elif "STRING" in types:
-            terminalType = "STRING"
+            value = int(value)
         elif "CHAR" in types:
             terminalType = "CHAR"
 
-        valueNode = ASTNodeTerminal(str(value), literal, self.table, terminalType, line, None)
+        valueNode = ASTNodeTerminal(value, literal, self.table, terminalType, line, None)
         literal.addChildren(valueNode)
+        return name
 
     def __make_manual_typedef(self, line: str, baseTypes: list, replaceType: str):
         """

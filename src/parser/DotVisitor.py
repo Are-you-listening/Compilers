@@ -18,7 +18,7 @@ class DotVisitor(ASTVisitor):
             self.outfile.write(f'  "{id(node)}" -> "{id(child)}";\n')
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        label = node.text
+        label = str(node.text)
         label = label.replace('\"', "")
 
         if node.text == "'\x00'":

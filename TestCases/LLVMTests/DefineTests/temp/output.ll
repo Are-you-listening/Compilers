@@ -37,6 +37,9 @@ define i32 @"main"()
   ; #include <stdio.h>
 }
 
+@"CIRCLE_AREA" = dso_local global float 0x40091eb860000000, align 4
+@"True" = dso_local global i32 1, align 4
+@"False" = dso_local global i32 0, align 4
 declare i32 @"printf"(i8* %".1", ...)
 
 @".str.d" = internal constant [35 x i8] c"Area of Circle of radius %d: %d \5cn\00"
