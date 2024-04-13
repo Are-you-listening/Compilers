@@ -5,19 +5,20 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  ; enum week day
-  store i32 2, i32* %".3", align 4
+  ;  INT main
+  %".4" = alloca i32, align 4
+  ;  enum week day
+  store i32 2, i32* %".4", align 4
   ; day = Wed
-  %".7" = load i32, i32* %".3", align 4
+  %".8" = load i32, i32* %".4", align 4
   ; printf "%d" day
-  %".9" = bitcast [3 x i8]* @".str.d" to i8*
-  %".10" = alloca i32
-  store i32 %".7", i32* %".10"
-  %".12" = load i32, i32* %".10"
-  %".13" = call i32 (i8*, ...) @"printf"(i8* %".9", i32 %".12")
+  %".10" = bitcast [3 x i8]* @".str.d" to i8*
+  %".11" = alloca i32
+  store i32 %".8", i32* %".11"
+  %".13" = load i32, i32* %".11"
+  %".14" = call i32 (i8*, ...) @"printf"(i8* %".10", i32 %".13")
   ret i32 0
-  ; INT main
+  ; return 0
 }
 
 @"x" = dso_local global i32 1, align 4
