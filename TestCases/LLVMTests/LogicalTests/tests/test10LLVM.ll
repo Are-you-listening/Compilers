@@ -5,42 +5,42 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 1, i32* %".3", align 4
+  ;  #include <stdio.h>  INT main
+  %".4" = alloca i32, align 4
+  store i32 1, i32* %".4", align 4
   ; INT a = 1
-  %".6" = alloca i32, align 4
-  store i32 1, i32* %".6", align 4
+  %".7" = alloca i32, align 4
+  store i32 1, i32* %".7", align 4
   ; INT b = 1
-  store i32 1, i32* %".3", align 4
+  store i32 1, i32* %".4", align 4
   ; a = 1
-  store i32 1, i32* %".6", align 4
+  store i32 1, i32* %".7", align 4
   ; b = 1
-  %".13" = alloca i32, align 4
-  ; INT f
-  %".15" = load i32, i32* %".3", align 4
+  %".14" = alloca i32, align 4
+  ;  INT f
   ; f = ! a || b
-  %".17" = icmp ne i32 %".15", 0
-  br i1 %".17", label %".21", label %".18"
-.18:
-  %".19" = load i32, i32* %".6", align 4
-  %".20" = icmp ne i32 %".19", 0
-  br label %".21"
-.21:
-  %".22" = phi  i1 [%".20", %".18"], [1, %".2"]
-  %".23" = icmp ne i1 %".22", 0
-  %".24" = xor i1 %".23", 1
-  %".25" = zext i1 %".24" to i32
-  store i32 %".25", i32* %".13", align 4
-  %".27" = load i32, i32* %".13", align 4
+  %".17" = load i32, i32* %".4", align 4
+  %".18" = icmp ne i32 %".17", 0
+  br i1 %".18", label %".22", label %".19"
+.19:
+  %".20" = load i32, i32* %".7", align 4
+  %".21" = icmp ne i32 %".20", 0
+  br label %".22"
+.22:
+  %".23" = phi  i1 [%".21", %".19"], [1, %".2"]
+  %".24" = icmp ne i1 %".23", 0
+  %".25" = xor i1 %".24", 1
+  %".26" = zext i1 %".25" to i32
+  store i32 %".26", i32* %".14", align 4
+  %".28" = load i32, i32* %".14", align 4
   ; printf "%d" f
-  %".29" = bitcast [3 x i8]* @".str.d" to i8*
-  %".30" = alloca i32
-  store i32 %".27", i32* %".30"
-  %".32" = load i32, i32* %".30"
-  %".33" = call i32 (i8*, ...) @"printf"(i8* %".29", i32 %".32")
+  %".30" = bitcast [3 x i8]* @".str.d" to i8*
+  %".31" = alloca i32
+  store i32 %".28", i32* %".31"
+  %".33" = load i32, i32* %".31"
+  %".34" = call i32 (i8*, ...) @"printf"(i8* %".30", i32 %".33")
   ret i32 0
-  ; INT main
-  ; #include <stdio.h>
+  ;  return 0
 }
 
 declare i32 @"printf"(i8* %".1", ...)

@@ -110,9 +110,7 @@ class ASTCreator(grammarCVisitor):
         self.__makeNode(ctx, "Comment")
 
     def visitReturn(self, ctx: grammarCParser.ReturnContext):
-        node = ASTNode("Return", self.parent, self.table, ctx.start.line, ctx.start.line)  # Also attaches the current table/scope
-        self.parent.addChildren(node)
-        self.parent = node
+        self.__makeNode(ctx, "Return")
 
     def visitBlock_code(self, ctx: grammarCParser.Block_codeContext):
         tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node

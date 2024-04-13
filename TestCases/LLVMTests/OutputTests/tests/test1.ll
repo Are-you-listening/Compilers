@@ -5,18 +5,18 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 478, i32* %".3", align 4
-  ; INT x = 478
-  %".6" = alloca i32, align 4
-  store i32 -251454, i32* %".6", align 4
+  ;  INT main
+  %".4" = alloca i32, align 4
+  store i32 478, i32* %".4", align 4
+  ;  INT x = 478
+  %".7" = alloca i32, align 4
+  store i32 -251454, i32* %".7", align 4
   ; INT b = - 251454
-  %".9" = bitcast i32* %".3" to i32**
-  ; INT * * x_ptr = & x
-  %".11" = alloca i32**, align 8
-  store i32** %".9", i32*** %".11", align 8
-  %".13" = bitcast i32* %".6" to i32**
+  ;  INT * * x_ptr = & x
+  %".11" = bitcast i32* %".4" to i32**
+  %".12" = alloca i32**, align 8
+  store i32** %".11", i32*** %".12", align 8
   ; x_ptr = & b
-  store i32** %".13", i32*** %".11", align 8
-  ; INT main
+  %".15" = bitcast i32* %".7" to i32**
+  store i32** %".15", i32*** %".12", align 8
 }

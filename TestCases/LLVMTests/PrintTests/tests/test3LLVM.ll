@@ -5,15 +5,15 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = bitcast [3 x i8]* @".str.c" to i8*
-  %".4" = alloca i8
-  store i8 97, i8* %".4"
-  %".6" = load i8, i8* %".4"
-  %".7" = call i32 (i8*, ...) @"printf"(i8* %".3", i8 %".6")
+  ;  #include <stdio.h>  INT main
+  %".4" = bitcast [3 x i8]* @".str.c" to i8*
+  %".5" = alloca i8
+  store i8 97, i8* %".5"
+  %".7" = load i8, i8* %".5"
+  %".8" = call i32 (i8*, ...) @"printf"(i8* %".4", i8 %".7")
   ; printf "%c" 'a'
   ret i32 0
-  ; INT main
-  ; #include <stdio.h>
+  ; return 0
 }
 
 declare i32 @"printf"(i8* %".1", ...)

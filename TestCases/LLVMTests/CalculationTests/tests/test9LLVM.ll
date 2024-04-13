@@ -5,54 +5,54 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i8, align 1
-  store i8 120, i8* %".3", align 1
-  ; CHAR x = 'x'
-  %".6" = bitcast [3 x i8]* @".str.c" to i8*
-  %".7" = alloca i8
-  store i8 120, i8* %".7"
-  %".9" = load i8, i8* %".7"
-  %".10" = call i32 (i8*, ...) @"printf"(i8* %".6", i8 %".9")
+  ;  #include <stdio.h>   INT main
+  %".4" = alloca i8, align 1
+  store i8 120, i8* %".4", align 1
+  ;  CHAR x = 'x'
+  %".7" = bitcast [3 x i8]* @".str.c" to i8*
+  %".8" = alloca i8
+  store i8 120, i8* %".8"
+  %".10" = load i8, i8* %".8"
+  %".11" = call i32 (i8*, ...) @"printf"(i8* %".7", i8 %".10")
   ; printf "%c" x
-  %".12" = alloca i8, align 1
-  store i8 46, i8* %".12", align 1
-  ; CHAR dot = '.'
-  %".15" = bitcast [3 x i8]* @".str.c" to i8*
-  %".16" = alloca i8
-  store i8 46, i8* %".16"
-  %".18" = load i8, i8* %".16"
-  %".19" = call i32 (i8*, ...) @"printf"(i8* %".15", i8 %".18")
+  %".13" = alloca i8, align 1
+  store i8 46, i8* %".13", align 1
+  ;   CHAR dot = '.'
+  %".16" = bitcast [3 x i8]* @".str.c" to i8*
+  %".17" = alloca i8
+  store i8 46, i8* %".17"
+  %".19" = load i8, i8* %".17"
+  %".20" = call i32 (i8*, ...) @"printf"(i8* %".16", i8 %".19")
   ; printf "%c" dot
-  %".21" = alloca i8, align 1
-  store i8 10, i8* %".21", align 1
-  ; CHAR nl = '\n'
-  %".24" = bitcast [3 x i8]* @".str.c" to i8*
-  %".25" = alloca i8
-  store i8 10, i8* %".25"
-  %".27" = load i8, i8* %".25"
-  %".28" = call i32 (i8*, ...) @"printf"(i8* %".24", i8 %".27")
+  %".22" = alloca i8, align 1
+  store i8 10, i8* %".22", align 1
+  ;  CHAR nl = '\n'
+  %".25" = bitcast [3 x i8]* @".str.c" to i8*
+  %".26" = alloca i8
+  store i8 10, i8* %".26"
+  %".28" = load i8, i8* %".26"
+  %".29" = call i32 (i8*, ...) @"printf"(i8* %".25", i8 %".28")
   ; printf "%c" nl
-  %".30" = alloca i8, align 1
-  store i8 9, i8* %".30", align 1
+  %".31" = alloca i8, align 1
+  store i8 9, i8* %".31", align 1
   ; CHAR tab = '\t'
-  %".33" = bitcast [3 x i8]* @".str.c" to i8*
-  %".34" = alloca i8
-  store i8 9, i8* %".34"
-  %".36" = load i8, i8* %".34"
-  %".37" = call i32 (i8*, ...) @"printf"(i8* %".33", i8 %".36")
+  %".34" = bitcast [3 x i8]* @".str.c" to i8*
+  %".35" = alloca i8
+  store i8 9, i8* %".35"
+  %".37" = load i8, i8* %".35"
+  %".38" = call i32 (i8*, ...) @"printf"(i8* %".34", i8 %".37")
   ; printf "%c" tab
-  %".39" = alloca i8, align 1
-  store i8 0, i8* %".39", align 1
+  %".40" = alloca i8, align 1
+  store i8 0, i8* %".40", align 1
   ; CHAR character_null = '\0'
-  %".42" = bitcast [3 x i8]* @".str.c" to i8*
-  %".43" = alloca i8
-  store i8 0, i8* %".43"
-  %".45" = load i8, i8* %".43"
-  %".46" = call i32 (i8*, ...) @"printf"(i8* %".42", i8 %".45")
+  %".43" = bitcast [3 x i8]* @".str.c" to i8*
+  %".44" = alloca i8
+  store i8 0, i8* %".44"
+  %".46" = load i8, i8* %".44"
+  %".47" = call i32 (i8*, ...) @"printf"(i8* %".43", i8 %".46")
   ; printf "%c" character_null
   ret i32 0
-  ; INT main
-  ; #include <stdio.h>
+  ;  return 0
 }
 
 declare i32 @"printf"(i8* %".1", ...)

@@ -5,71 +5,72 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 4, i32* %".3", align 4
+  ;  INT main
+  %".4" = alloca i32, align 4
+  store i32 4, i32* %".4", align 4
   ; INT x = 4
-  %".6" = alloca i32, align 4
-  store i32 5, i32* %".6", align 4
+  %".7" = alloca i32, align 4
+  store i32 5, i32* %".7", align 4
   ; INT y = 5
-  %".9" = alloca i32*, align 8
-  store i32* %".3", i32** %".9", align 8
-  ; INT * ptr = & x
-  %".12" = load i32*, i32** %".9", align 8
+  %".10" = alloca i32*, align 8
+  store i32* %".4", i32** %".10", align 8
+  ;  INT * ptr = & x
+  %".13" = load i32*, i32** %".10", align 8
   ; ptr ++
-  %".14" = getelementptr inbounds i32, i32* %".12", i64 1
-  store i32* %".14", i32** %".9", align 8
+  %".15" = getelementptr inbounds i32, i32* %".13", i64 1
+  store i32* %".15", i32** %".10", align 8
   ;  now points to y
-  %".17" = load i32*, i32** %".9", align 8
+  %".18" = load i32*, i32** %".10", align 8
   ; ptr --
-  %".19" = sub i64 0, 1
-  %".20" = getelementptr inbounds i32, i32* %".17", i64 %".19"
-  store i32* %".20", i32** %".9", align 8
+  %".20" = sub i64 0, 1
+  %".21" = getelementptr inbounds i32, i32* %".18", i64 %".20"
+  store i32* %".21", i32** %".10", align 8
   ;  now points to x
-  %".23" = load i32*, i32** %".9", align 8
-  ; INT is_x = ptr == & x
-  %".25" = icmp eq i32* %".23", %".3"
-  %".26" = zext i1 %".25" to i32
-  %".27" = alloca i32, align 4
-  store i32 %".26", i32* %".27", align 4
-  %".29" = load i32*, i32** %".9", align 8
+  ;  INT is_x = ptr == & x
+  %".25" = load i32*, i32** %".10", align 8
+  %".26" = icmp eq i32* %".25", %".4"
+  %".27" = zext i1 %".26" to i32
+  %".28" = alloca i32, align 4
+  store i32 %".27", i32* %".28", align 4
   ; INT is_y = ptr == & y
-  %".31" = icmp eq i32* %".29", %".6"
-  %".32" = zext i1 %".31" to i32
-  %".33" = alloca i32, align 4
-  store i32 %".32", i32* %".33", align 4
-  %".35" = load i32*, i32** %".9", align 8
+  %".31" = load i32*, i32** %".10", align 8
+  %".32" = icmp eq i32* %".31", %".7"
+  %".33" = zext i1 %".32" to i32
+  %".34" = alloca i32, align 4
+  store i32 %".33", i32* %".34", align 4
   ; is_y = & x != ptr
-  %".37" = icmp ne i32* %".3", %".35"
-  %".38" = zext i1 %".37" to i32
-  store i32 %".38", i32* %".33", align 4
-  %".40" = inttoptr i32 0 to float*
-  ; FLOAT * ptr2 = 0
-  %".42" = alloca float*, align 8
-  store float* %".40", float** %".42", align 8
-  %".44" = load float*, float** %".42", align 8
-  ; ptr2 >= ptr
-  %".46" = load i32*, i32** %".9", align 8
-  %".47" = bitcast i32* %".46" to float*
-  %".48" = icmp sge float* %".44", %".47"
-  %".49" = load float*, float** %".42", align 8
+  %".37" = load i32*, i32** %".10", align 8
+  %".38" = icmp ne i32* %".4", %".37"
+  %".39" = zext i1 %".38" to i32
+  store i32 %".39", i32* %".34", align 4
+  ;  FLOAT * ptr2 = 0
+  %".42" = inttoptr i32 0 to float*
+  %".43" = alloca float*, align 8
+  store float* %".42", float** %".43", align 8
+  %".45" = load float*, float** %".43", align 8
+  ;  ptr2 >= ptr
+  %".47" = load i32*, i32** %".10", align 8
+  %".48" = bitcast i32* %".47" to float*
+  %".49" = icmp sge float* %".45", %".48"
+  %".50" = load float*, float** %".43", align 8
   ; ptr2 <= ptr
-  %".51" = load i32*, i32** %".9", align 8
-  %".52" = bitcast i32* %".51" to float*
-  %".53" = icmp sle float* %".49", %".52"
-  %".54" = load i32*, i32** %".9", align 8
+  %".52" = load i32*, i32** %".10", align 8
+  %".53" = bitcast i32* %".52" to float*
+  %".54" = icmp sle float* %".50", %".53"
+  %".55" = load i32*, i32** %".10", align 8
   ; ptr > & x
-  %".56" = icmp sgt i32* %".54", %".3"
-  %".57" = load i32*, i32** %".9", align 8
+  %".57" = icmp sgt i32* %".55", %".4"
+  %".58" = load i32*, i32** %".10", align 8
   ; ptr < 32
-  %".59" = inttoptr i32 32 to i32*
-  %".60" = icmp slt i32* %".57", %".59"
-  %".61" = alloca i32, align 4
-  store i32 4, i32* %".61", align 4
-  ; INT num_skip_elements = 4
-  %".64" = load i32*, i32** %".9", align 8
-  ; ptr = ptr + 4 * num_skip_elements
-  %".66" = getelementptr inbounds i32, i32* %".64", i32 16
-  store i32* %".66", i32** %".9", align 8
+  %".60" = inttoptr i32 32 to i32*
+  %".61" = icmp slt i32* %".58", %".60"
+  %".62" = alloca i32, align 4
+  store i32 4, i32* %".62", align 4
+  ;  INT num_skip_elements = 4
+  %".65" = load i32*, i32** %".10", align 8
+  ;  ptr = ptr + 4 * num_skip_elements
+  %".67" = getelementptr inbounds i32, i32* %".65", i32 16
+  store i32* %".67", i32** %".10", align 8
   ret i32 0
-  ; INT main
+  ; return 0
 }

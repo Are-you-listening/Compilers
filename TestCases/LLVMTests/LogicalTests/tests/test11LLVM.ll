@@ -5,41 +5,41 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 1, i32* %".3", align 4
+  ;  #include <stdio.h>  INT main
+  %".4" = alloca i32, align 4
+  store i32 1, i32* %".4", align 4
   ; INT a = 1
-  %".6" = alloca i32, align 4
-  store i32 1, i32* %".6", align 4
+  %".7" = alloca i32, align 4
+  store i32 1, i32* %".7", align 4
   ; INT b = 1
-  store i32 1, i32* %".3", align 4
+  store i32 1, i32* %".4", align 4
   ; a = 1
-  store i32 1, i32* %".6", align 4
+  store i32 1, i32* %".7", align 4
   ; b = 1
-  %".13" = alloca i32, align 4
-  ; INT f
-  %".15" = load i32, i32* %".3", align 4
+  %".14" = alloca i32, align 4
+  ;  INT f
   ; f = a || ! b
-  %".17" = icmp ne i32 %".15", 0
-  br i1 %".17", label %".22", label %".18"
-.18:
-  %".19" = load i32, i32* %".6", align 4
-  %".20" = icmp ne i32 %".19", 0
-  %".21" = xor i1 %".20", 1
-  br label %".22"
-.22:
-  %".23" = phi  i1 [%".21", %".18"], [1, %".2"]
-  %".24" = zext i1 %".23" to i32
-  store i32 %".24", i32* %".13", align 4
-  %".26" = load i32, i32* %".13", align 4
+  %".17" = load i32, i32* %".4", align 4
+  %".18" = icmp ne i32 %".17", 0
+  br i1 %".18", label %".23", label %".19"
+.19:
+  %".20" = load i32, i32* %".7", align 4
+  %".21" = icmp ne i32 %".20", 0
+  %".22" = xor i1 %".21", 1
+  br label %".23"
+.23:
+  %".24" = phi  i1 [%".22", %".19"], [1, %".2"]
+  %".25" = zext i1 %".24" to i32
+  store i32 %".25", i32* %".14", align 4
+  %".27" = load i32, i32* %".14", align 4
   ; printf "%d" f
-  %".28" = bitcast [3 x i8]* @".str.d" to i8*
-  %".29" = alloca i32
-  store i32 %".26", i32* %".29"
-  %".31" = load i32, i32* %".29"
-  %".32" = call i32 (i8*, ...) @"printf"(i8* %".28", i32 %".31")
+  %".29" = bitcast [3 x i8]* @".str.d" to i8*
+  %".30" = alloca i32
+  store i32 %".27", i32* %".30"
+  %".32" = load i32, i32* %".30"
+  %".33" = call i32 (i8*, ...) @"printf"(i8* %".29", i32 %".32")
   ret i32 0
-  ; INT main
-  ; #include <stdio.h>
+  ;  return 0
 }
 
 declare i32 @"printf"(i8* %".1", ...)

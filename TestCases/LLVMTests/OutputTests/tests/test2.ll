@@ -5,22 +5,24 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
+  ;  INT main
   ; Incompatible Types?
-  %".4" = alloca i32, align 4
-  store i32 478, i32* %".4", align 4
+  ;
+  %".6" = alloca i32, align 4
+  store i32 478, i32* %".6", align 4
   ; INT x = 478
-  %".7" = alloca i32, align 4
-  store i32 -251454, i32* %".7", align 4
+  %".9" = alloca i32, align 4
+  store i32 -251454, i32* %".9", align 4
   ; INT b = - 251454
-  %".10" = alloca i32*, align 8
-  store i32* %".7", i32** %".10", align 8
-  ; INT * b_ptr = & b
-  %".13" = alloca i32**, align 8
-  store i32** %".10", i32*** %".13", align 8
-  ; INT * * x_ptr = & b_ptr
-  %".16" = bitcast i32* %".7" to i32**
+  %".12" = alloca i32*, align 8
+  store i32* %".9", i32** %".12", align 8
+  ;  INT * b_ptr = & b
+  %".15" = alloca i32**, align 8
+  store i32** %".12", i32*** %".15", align 8
+  ;  INT * * x_ptr = & b_ptr
   ; x_ptr = & b
-  store i32** %".16", i32*** %".13", align 8
+  %".19" = bitcast i32* %".9" to i32**
+  store i32** %".19", i32*** %".15", align 8
   ret i32 0
-  ; INT main
+  ;  return 0
 }

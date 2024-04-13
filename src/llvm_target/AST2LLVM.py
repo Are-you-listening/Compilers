@@ -35,7 +35,6 @@ class AST2LLVM(ASTVisitor):
         In case of an unconditional, it will just create a branch
         """
         for b in self.branch_needed:
-
             b.create_branch()
 
     def postorder(self, root: ASTNode):
@@ -64,6 +63,7 @@ class AST2LLVM(ASTVisitor):
 
                 LLVMSingleton.getInstance().setCurrentBlock(node.vertex.llvm)
                 self.last_vertex = node.vertex
+                self.addOriginalCodeAsComment(currentNode)
 
             childNotVisited = False
             for child in reversed(currentNode.getChildren()):
@@ -346,13 +346,8 @@ class AST2LLVM(ASTVisitor):
         :param node: the node in the AST that we are currently handling
         :return:
         """
-        if node.getChildAmount() == 0:
-            return
 
-        if isinstance(node.getChild(0, False), ASTNodeBlock):
-            return
-
-        code = self.codegetter.getLine(node.getChild(0))
+        code = self.codegetter.getLine(node)
 
         if code is not None:
             Declaration.addComment(code)

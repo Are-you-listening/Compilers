@@ -4,10 +4,9 @@ int main(){
 
     int a = 0;
     int b = 0;
-    a = 0;
+    a = 2;
     switch(a){
 
-        case 0:
         case 1:
             b = 1;
             printf("%d", 1);

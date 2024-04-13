@@ -32,11 +32,19 @@ class SwitchConverter(ASTVisitor):
 
         self.postorder(ast.root)
 
+        """
+        Add the to add nodes on the provided spot (The switch is the node who we want to 'replace', 
+        by inserting right before this)
+        """
         for switch, added in self.to_add:
             target = switch.parent
             target.children.insert(target.findChild(switch), added)
             added.parent = target
 
+        """
+        Add this 'added' node to the parent of the provided node 
+        (at the time this tuple is added to this list, this parent is not yet known)
+        """
         for node, added in self.to_add_parent:
 
             target = node.parent
@@ -50,12 +58,12 @@ class SwitchConverter(ASTVisitor):
     def visitNode(self, node: ASTNode):
 
         """
-        Update the break map (indicating if the subtree has a break)
+        Update the break map (indicating if the subtree has a break),
+        This will do a tickle up of the break information
         """
-
         for c in node.children:
             if c in self.break_map:
-                self.break_map[node] = c
+                self.break_map[node] = self.break_map[c]
                 break
 
         if node.text != "SWITCH":
@@ -68,11 +76,44 @@ class SwitchConverter(ASTVisitor):
 
         """
         Identifier we will use to verify our cases in our switch statement
+        
+        in switch(a), our switch identifier contains the 'a'
         """
         switch_identifier = node.getChild(0)
 
         if not isinstance(switch_identifier, ASTNodeTerminal):
             raise Exception("Switch uses invalid identifier")
+
+        """
+        Convert the switch statement to if else, to support all orders of breaks, cases, defaults, we do the
+        following constructions:
+        
+        assume we have a couple cases: (with switch identifier 'a')
+        case 1:
+        do something A
+        case 2: 
+        do something B        
+        break;
+        
+        This will be translated to ->
+        if (a == 1 || a == 2){
+            if (a == 1){
+                do something A
+            }
+            do something B
+        }
+        (This can be bigger depending on how many cases pass before a break)
+        First we have an if statement that accepts all cases before the break,
+        After we will have if statements do distinguish the unique parts (do something A)
+        
+        because 'Default' can be anywhere, we rewrite our default as an IF statement, 
+        (for previous example our default would be)
+        
+        if (a != 1 && a != 2){
+            do default
+        }
+        (Accepting everything not accepted by a case)
+        """
 
         """
         Make a list of all the case values we want to check
@@ -85,32 +126,53 @@ class SwitchConverter(ASTVisitor):
             all_case_values.append(child.getChild(0))
 
         """
-        Make a special construction to convert an switch statement to an IF statement
+        Make a special construction to convert a switch statement to IF statements
+        """
+
+        """
+        equal_nodes, stores all the cases, that exist before, our current case (without a break present) 
         """
         equal_nodes = []
         for i, child in enumerate(node.children[1:]):
             has_break = self.break_map.get(child, None) is not None
             """
-            Remove the breaks form inside a switch
+            Remove the 'breaks' form inside a switch
             """
-            self.to_remove.add(self.break_map.get(child, None))
+            if has_break:
+                self.to_remove.add(self.break_map.get(child))
 
+            """
+            In case of a 'Case' statement create the check (a == case_value),
+            and store the code block we will execute if the condition true
+            """
             if child.text == "CASE":
                 equal_node = self.createEqualCheckNode(switch_identifier, child.getChild(0))
+
                 equal_nodes.append((equal_node, child.getChild(1)))
+
                 self.to_remove.add(child)
 
+            """
+            In case of our default, we will execute the code the condition
+            a != case_1 condition && ... is true, all_case_values is a list of those case condition values
+            We will construct this boolean expression, and add this expression to equals nodes
+            """
             if child.text == "DEFAULT":
                 current = self.createEqualCheckNode(switch_identifier, all_case_values[0], True)
+                self.to_remove.add(child)
 
+                """
+                Create boolean a != 1 && a != @ && ... expression
+                """
                 for b in all_case_values[1:]:
                     not_equal_node = self.createEqualCheckNode(switch_identifier, b, True)
                     current = self.createOrStatement(current, not_equal_node, True)
 
                 equal_nodes.append((current, child.getChild(0)))
 
-                self.to_remove.add(child)
-
+            """
+            When A break occurs, we know 
+            """
             if has_break or i == node.getChildAmount()-2:
                 if len(equal_nodes) == 0:
                     continue
@@ -129,7 +191,6 @@ class SwitchConverter(ASTVisitor):
                 equal_nodes.clear()
 
                 if_node = self.createIfStatement(connect_node[0], connect_node[1])
-
                 self.to_add.append((node, if_node))
 
         self.to_remove.add(node)

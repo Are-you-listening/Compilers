@@ -5,36 +5,36 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 0, i32* %".3", align 4
-  ; INT a = 0
-  %".6" = bitcast [3 x i8]* @".str.d" to i8*
-  %".7" = alloca i32
-  store i32 0, i32* %".7"
-  %".9" = load i32, i32* %".7"
-  %".10" = call i32 (i8*, ...) @"printf"(i8* %".6", i32 %".9")
+  ;  #include <stdio.h>  INT main
+  %".4" = alloca i32, align 4
+  store i32 0, i32* %".4", align 4
+  ;  if 1 INT a = 0
+  %".7" = bitcast [3 x i8]* @".str.d" to i8*
+  %".8" = alloca i32
+  store i32 0, i32* %".8"
+  %".10" = load i32, i32* %".8"
+  %".11" = call i32 (i8*, ...) @"printf"(i8* %".7", i32 %".10")
   ; printf "%d" a
-  %".12" = alloca i32, align 4
-  store i32 0, i32* %".12", align 4
-  ; INT c = 0
-  %".15" = bitcast [3 x i8]* @".str.d" to i8*
-  %".16" = alloca i32
-  store i32 0, i32* %".16"
-  %".18" = load i32, i32* %".16"
-  %".19" = call i32 (i8*, ...) @"printf"(i8* %".15", i32 %".18")
+  %".13" = alloca i32, align 4
+  store i32 0, i32* %".13", align 4
+  ; if 6 INT c = 0
+  %".16" = bitcast [3 x i8]* @".str.d" to i8*
+  %".17" = alloca i32
+  store i32 0, i32* %".17"
+  %".19" = load i32, i32* %".17"
+  %".20" = call i32 (i8*, ...) @"printf"(i8* %".16", i32 %".19")
   ; printf "%d" c
-  %".21" = alloca i32, align 4
-  store i32 0, i32* %".21", align 4
-  ; INT q = 0
-  %".24" = bitcast [3 x i8]* @".str.d" to i8*
-  %".25" = alloca i32
-  store i32 0, i32* %".25"
-  %".27" = load i32, i32* %".25"
-  %".28" = call i32 (i8*, ...) @"printf"(i8* %".24", i32 %".27")
+  %".22" = alloca i32, align 4
+  store i32 0, i32* %".22", align 4
+  ;  INT q = 0
+  %".25" = bitcast [3 x i8]* @".str.d" to i8*
+  %".26" = alloca i32
+  store i32 0, i32* %".26"
+  %".28" = load i32, i32* %".26"
+  %".29" = call i32 (i8*, ...) @"printf"(i8* %".25", i32 %".28")
   ; printf "%d" q
   ret i32 0
-  ; INT main
-  ; #include <stdio.h>
+  ;   return 0
 }
 
 declare i32 @"printf"(i8* %".1", ...)

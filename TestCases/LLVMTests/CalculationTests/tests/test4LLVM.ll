@@ -5,30 +5,30 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 4, i32* %".3", align 4
+  ;  #include <stdio.h>   INT main
+  %".4" = alloca i32, align 4
+  store i32 4, i32* %".4", align 4
   ; INT x = 4
-  store i32 1, i32* %".3", align 4
+  store i32 1, i32* %".4", align 4
   ; x = 1
-  %".8" = alloca i32*, align 8
-  store i32* %".3", i32** %".8", align 8
+  %".9" = alloca i32*, align 8
+  store i32* %".4", i32** %".9", align 8
   ; INT * ptr = & x
-  %".11" = icmp eq i32* %".3", %".3"
-  ; INT is_x = ptr == & x
-  %".13" = zext i1 %".11" to i32
-  %".14" = alloca i32, align 4
-  store i32 %".13", i32* %".14", align 4
-  %".16" = icmp eq i32* %".3", %".3"
-  %".17" = zext i1 %".16" to i32
-  %".18" = bitcast [3 x i8]* @".str.d" to i8*
-  %".19" = alloca i32
-  store i32 %".17", i32* %".19"
-  %".21" = load i32, i32* %".19"
-  %".22" = call i32 (i8*, ...) @"printf"(i8* %".18", i32 %".21")
-  ; printf "%d" is_x
+  ;   INT is_x = ptr == & x
+  %".13" = icmp eq i32* %".4", %".4"
+  %".14" = zext i1 %".13" to i32
+  %".15" = alloca i32, align 4
+  store i32 %".14", i32* %".15", align 4
+  %".17" = icmp eq i32* %".4", %".4"
+  %".18" = zext i1 %".17" to i32
+  %".19" = bitcast [3 x i8]* @".str.d" to i8*
+  %".20" = alloca i32
+  store i32 %".18", i32* %".20"
+  %".22" = load i32, i32* %".20"
+  %".23" = call i32 (i8*, ...) @"printf"(i8* %".19", i32 %".22")
+  ;  printf "%d" is_x
   ret i32 0
-  ; INT main
-  ; #include <stdio.h>
+  ; return 0
 }
 
 declare i32 @"printf"(i8* %".1", ...)

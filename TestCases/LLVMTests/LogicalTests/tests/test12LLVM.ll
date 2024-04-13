@@ -5,50 +5,50 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 1, i32* %".3", align 4
+  ;  #include <stdio.h>  INT main
+  %".4" = alloca i32, align 4
+  store i32 1, i32* %".4", align 4
   ; INT a = 1
-  %".6" = alloca i32, align 4
-  store i32 1, i32* %".6", align 4
+  %".7" = alloca i32, align 4
+  store i32 1, i32* %".7", align 4
   ; INT b = 1
-  %".9" = alloca i32, align 4
-  store i32 0, i32* %".9", align 4
+  %".10" = alloca i32, align 4
+  store i32 0, i32* %".10", align 4
   ; INT c = 0
-  store i32 1, i32* %".3", align 4
+  store i32 1, i32* %".4", align 4
   ; a = 1
-  store i32 1, i32* %".6", align 4
+  store i32 1, i32* %".7", align 4
   ; b = 1
-  store i32 0, i32* %".9", align 4
+  store i32 0, i32* %".10", align 4
   ; c = 0
-  %".18" = alloca i32, align 4
-  ; INT f
-  %".20" = load i32, i32* %".3", align 4
+  %".19" = alloca i32, align 4
+  ;  INT f
   ; f = a && ! b || c
-  %".22" = icmp ne i32 %".20", 0
-  br i1 %".22", label %".23", label %".30"
-.23:
-  %".24" = load i32, i32* %".6", align 4
-  %".25" = icmp ne i32 %".24", 0
-  br i1 %".25", label %".30", label %".26"
-.26:
-  %".27" = load i32, i32* %".9", align 4
-  %".28" = icmp ne i32 %".27", 0
-  %".29" = xor i1 %".28", 1
-  br label %".30"
-.30:
-  %".31" = phi  i1 [0, %".2"], [0, %".23"], [%".29", %".26"]
-  %".32" = zext i1 %".31" to i32
-  store i32 %".32", i32* %".18", align 4
-  %".34" = load i32, i32* %".18", align 4
+  %".22" = load i32, i32* %".4", align 4
+  %".23" = icmp ne i32 %".22", 0
+  br i1 %".23", label %".24", label %".31"
+.24:
+  %".25" = load i32, i32* %".7", align 4
+  %".26" = icmp ne i32 %".25", 0
+  br i1 %".26", label %".31", label %".27"
+.27:
+  %".28" = load i32, i32* %".10", align 4
+  %".29" = icmp ne i32 %".28", 0
+  %".30" = xor i1 %".29", 1
+  br label %".31"
+.31:
+  %".32" = phi  i1 [0, %".2"], [0, %".24"], [%".30", %".27"]
+  %".33" = zext i1 %".32" to i32
+  store i32 %".33", i32* %".19", align 4
+  %".35" = load i32, i32* %".19", align 4
   ; printf "%d" f
-  %".36" = bitcast [3 x i8]* @".str.d" to i8*
-  %".37" = alloca i32
-  store i32 %".34", i32* %".37"
-  %".39" = load i32, i32* %".37"
-  %".40" = call i32 (i8*, ...) @"printf"(i8* %".36", i32 %".39")
+  %".37" = bitcast [3 x i8]* @".str.d" to i8*
+  %".38" = alloca i32
+  store i32 %".35", i32* %".38"
+  %".40" = load i32, i32* %".38"
+  %".41" = call i32 (i8*, ...) @"printf"(i8* %".37", i32 %".40")
   ret i32 0
-  ; INT main
-  ; #include <stdio.h>
+  ;  return 0
 }
 
 declare i32 @"printf"(i8* %".1", ...)

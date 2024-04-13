@@ -5,31 +5,31 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  ; INT a
-  store i32 0, i32* %".3", align 4
+  ;  #include <stdio.h>  INT main
+  %".4" = alloca i32, align 4
+  ;  INT a
+  store i32 0, i32* %".4", align 4
   ; for a = 0 a < 10 a ++
-  br label %".7"
-.7:
-  %".8" = load i32, i32* %".3", align 4
-  %".9" = icmp slt i32 %".8", 10
-  br i1 %".9", label %".10", label %".21"
-.10:
-  %".11" = load i32, i32* %".3", align 4
+  br label %".8"
+.8:
+  %".9" = load i32, i32* %".4", align 4
+  %".10" = icmp slt i32 %".9", 10
+  br i1 %".10", label %".11", label %".22"
+.11:
+  %".12" = load i32, i32* %".4", align 4
   ; printf "%d" a
-  %".13" = bitcast [3 x i8]* @".str.d" to i8*
-  %".14" = alloca i32
-  store i32 %".11", i32* %".14"
-  %".16" = load i32, i32* %".14"
-  %".17" = call i32 (i8*, ...) @"printf"(i8* %".13", i32 %".16")
-  %".18" = load i32, i32* %".3", align 4
-  %".19" = add i32 %".18", 1
-  store i32 %".19", i32* %".3", align 4
-  br label %".7"
-.21:
+  %".14" = bitcast [3 x i8]* @".str.d" to i8*
+  %".15" = alloca i32
+  store i32 %".12", i32* %".15"
+  %".17" = load i32, i32* %".15"
+  %".18" = call i32 (i8*, ...) @"printf"(i8* %".14", i32 %".17")
+  %".19" = load i32, i32* %".4", align 4
+  %".20" = add i32 %".19", 1
+  store i32 %".20", i32* %".4", align 4
+  br label %".8"
+.22:
   ret i32 0
-  ; INT main
-  ; #include <stdio.h>
+  ;  return 0
 }
 
 declare i32 @"printf"(i8* %".1", ...)

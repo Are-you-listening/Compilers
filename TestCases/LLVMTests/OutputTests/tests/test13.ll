@@ -5,27 +5,28 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 -60, i32* %".3", align 4
-  ; INT x = - 60
-  %".6" = alloca i32*, align 8
-  store i32* %".3", i32** %".6", align 8
+  ;  INT main
+  %".4" = alloca i32, align 4
+  store i32 -60, i32* %".4", align 4
+  ;  INT x = - 60
+  %".7" = alloca i32*, align 8
+  store i32* %".4", i32** %".7", align 8
   ; INT * some_pointer = & x
-  %".9" = load i32*, i32** %".6", align 8
+  %".10" = load i32*, i32** %".7", align 8
   ; * some_pointer = 53
-  store i32 53, i32* %".9", align 8
-  %".12" = alloca i32**, align 8
-  store i32** %".6", i32*** %".12", align 8
+  store i32 53, i32* %".10", align 8
+  %".13" = alloca i32**, align 8
+  store i32** %".7", i32*** %".13", align 8
   ; INT * * another_pointer = & some_pointer
-  %".15" = alloca i32***, align 8
-  store i32*** %".12", i32**** %".15", align 8
+  %".16" = alloca i32***, align 8
+  store i32*** %".13", i32**** %".16", align 8
   ; INT * * * triple_pointer = & another_pointer
-  %".18" = load i32**, i32*** %".12", align 8
+  %".19" = load i32**, i32*** %".13", align 8
   ; INT y = * * * triple_pointer
-  %".20" = load i32*, i32** %".18", align 8
-  %".21" = load i32, i32* %".20", align 8
-  %".22" = alloca i32, align 4
-  store i32 %".21", i32* %".22", align 4
+  %".21" = load i32*, i32** %".19", align 8
+  %".22" = load i32, i32* %".21", align 8
+  %".23" = alloca i32, align 4
+  store i32 %".22", i32* %".23", align 4
   ret i32 0
-  ; INT main
+  ;  return 0
 }

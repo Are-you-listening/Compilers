@@ -105,7 +105,8 @@ class ControlFlowCreator(ASTVisitor):
             """
             Create a block with the entire code base being a child
             """
-            ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.root, node.parent.virtuallinenr)
+            ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, cf.root,
+                                     node.virtuallinenr)
             node.getChild(2).addNodeChildEmerge(ast_block)
 
         """
@@ -417,7 +418,6 @@ class ControlFlowCreator(ASTVisitor):
         Handle if statement node
         :return:
         """
-
         if_cfg, is_new = self.get_make_cfg(node.getChild(1))
 
         """

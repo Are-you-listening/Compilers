@@ -8,7 +8,7 @@ class CodeGetter(ASTVisitor):
 
     def __init__(self):
         self.codeLines = {}
-        self.lineNrsChecked = []
+        self.highest_line_nr = -1
 
     def visitNode(self, node: ASTNode):
         pass
@@ -16,6 +16,7 @@ class CodeGetter(ASTVisitor):
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type in {"MULTILINE", "SINGLECOMMENT"}:
             return
+
         if node.linenr in self.codeLines:
             self.codeLines[node.linenr] += " " + node.text
         else:
@@ -24,9 +25,15 @@ class CodeGetter(ASTVisitor):
 
     def getLine(self, node: ASTNode):
         lineNR = node.linenr
-        if lineNR in self.lineNrsChecked:
+        if lineNR is None or lineNR <= self.highest_line_nr:
             return
-        self.lineNrsChecked.append(lineNR)
 
-        if lineNR in self.codeLines:
-            return self.codeLines[lineNR]
+        output_text = ""
+        for line_nr in range(self.highest_line_nr+1, lineNR+1):
+            output_text += f"{self.codeLines.get(line_nr, '')} "
+        self.highest_line_nr = lineNR
+
+        """
+        Remove last output message next line
+        """
+        return output_text

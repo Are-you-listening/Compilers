@@ -5,70 +5,70 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 0, i32* %".3", align 4
-  ; INT a = 0
-  %".6" = alloca i32, align 4
-  store i32 0, i32* %".6", align 4
+  ;  #include <stdio.h>  INT main
+  %".4" = alloca i32, align 4
+  store i32 0, i32* %".4", align 4
+  ;  INT a = 0
+  %".7" = alloca i32, align 4
+  store i32 0, i32* %".7", align 4
   ; INT b = 0
-  br label %".9"
-.9:
-  %".10" = load i32, i32* %".3", align 4
-  ; while a < 30
-  %".12" = icmp slt i32 %".10", 30
-  br i1 %".12", label %".13", label %".54"
-.13:
-  %".14" = load i32, i32* %".3", align 4
+  br label %".10"
+.10:
+  ;  while a < 30
+  %".12" = load i32, i32* %".4", align 4
+  %".13" = icmp slt i32 %".12", 30
+  br i1 %".13", label %".14", label %".55"
+.14:
+  %".15" = load i32, i32* %".4", align 4
   ; if a % 2 == 0
-  %".16" = srem i32 %".14", 2
-  %".17" = icmp eq i32 %".16", 0
-  br i1 %".17", label %".18", label %".25"
-.18:
-  %".19" = bitcast [3 x i8]* @".str.d" to i8*
-  %".20" = alloca i32
-  store i32 1, i32* %".20"
-  %".22" = load i32, i32* %".20"
-  %".23" = call i32 (i8*, ...) @"printf"(i8* %".19", i32 %".22")
+  %".17" = srem i32 %".15", 2
+  %".18" = icmp eq i32 %".17", 0
+  br i1 %".18", label %".19", label %".26"
+.19:
+  %".20" = bitcast [3 x i8]* @".str.d" to i8*
+  %".21" = alloca i32
+  store i32 1, i32* %".21"
+  %".23" = load i32, i32* %".21"
+  %".24" = call i32 (i8*, ...) @"printf"(i8* %".20", i32 %".23")
   ; printf "%d" 1
-  br label %".49"
-.25:
-  %".26" = bitcast [3 x i8]* @".str.d" to i8*
-  %".27" = alloca i32
-  store i32 2, i32* %".27"
-  %".29" = load i32, i32* %".27"
-  %".30" = call i32 (i8*, ...) @"printf"(i8* %".26", i32 %".29")
-  ; printf "%d" 2
-  br label %".32"
-.32:
-  %".33" = load i32, i32* %".6", align 4
+  br label %".50"
+.26:
+  %".27" = bitcast [3 x i8]* @".str.d" to i8*
+  %".28" = alloca i32
+  store i32 2, i32* %".28"
+  %".30" = load i32, i32* %".28"
+  %".31" = call i32 (i8*, ...) @"printf"(i8* %".27", i32 %".30")
+  ; else printf "%d" 2
+  br label %".33"
+.33:
   ; while b < 5
-  %".35" = icmp slt i32 %".33", 5
-  br i1 %".35", label %".36", label %".48"
-.36:
-  %".37" = load i32, i32* %".6", align 4
+  %".35" = load i32, i32* %".7", align 4
+  %".36" = icmp slt i32 %".35", 5
+  br i1 %".36", label %".37", label %".49"
+.37:
+  %".38" = load i32, i32* %".7", align 4
   ; printf "%d" b
-  %".39" = bitcast [3 x i8]* @".str.d" to i8*
-  %".40" = alloca i32
-  store i32 %".37", i32* %".40"
-  %".42" = load i32, i32* %".40"
-  %".43" = call i32 (i8*, ...) @"printf"(i8* %".39", i32 %".42")
-  %".44" = load i32, i32* %".6", align 4
+  %".40" = bitcast [3 x i8]* @".str.d" to i8*
+  %".41" = alloca i32
+  store i32 %".38", i32* %".41"
+  %".43" = load i32, i32* %".41"
+  %".44" = call i32 (i8*, ...) @"printf"(i8* %".40", i32 %".43")
+  %".45" = load i32, i32* %".7", align 4
   ; b ++
-  %".46" = add i32 %".44", 1
-  store i32 %".46", i32* %".6", align 4
-  br label %".32"
-.48:
-  br label %".49"
+  %".47" = add i32 %".45", 1
+  store i32 %".47", i32* %".7", align 4
+  br label %".33"
 .49:
-  %".50" = load i32, i32* %".3", align 4
-  ; a ++
-  %".52" = add i32 %".50", 1
-  store i32 %".52", i32* %".3", align 4
-  br label %".9"
-.54:
+  br label %".50"
+.50:
+  %".51" = load i32, i32* %".4", align 4
+  ;    a ++
+  %".53" = add i32 %".51", 1
+  store i32 %".53", i32* %".4", align 4
+  br label %".10"
+.55:
   ret i32 0
-  ; INT main
-  ; #include <stdio.h>
+  ;   return 0
 }
 
 declare i32 @"printf"(i8* %".1", ...)

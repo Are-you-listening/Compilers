@@ -313,7 +313,12 @@ class ControlFlowGraph:
         if isinstance(constant, ir.Constant):
             instruction = constant
         else:
-            instruction = builder.block.instructions[-1]
+            last_index = -1
+            while True:
+                instruction = builder.block.instructions[last_index]
+                if not isinstance(instruction, ir.instructions.Comment):
+                    break
+                last_index -= 1
 
         if instruction.type != ir.IntType(1):
             instruction = builder.icmp_signed("!=", instruction, ir.Constant(instruction.type, 0))
