@@ -187,6 +187,7 @@ class AST2LLVM(ASTVisitor):
         store var in llvm map
         """
         self.llvm_map[node] = llvm_var
+        self.llvm_map[node.getChild(0)] = llvm_var
 
         """
         add value to map to map var to address register
@@ -212,7 +213,6 @@ class AST2LLVM(ASTVisitor):
         """
         left_child = node.getChild(0)
         store_reg = self.llvm_map.get(left_child, None)
-
         if store_reg is None:
             store_reg = self.map_table.getEntry(left_child.text).llvm
 
