@@ -2,5 +2,6 @@
 "11":  ["[ Error ] line 4: typedef cannot be done for a type that does not exist ('vector')"],
 "12":  ["[ Error ] line 6: unknown type name '( peer )'"],
   "13": ["[ Error ] line 2: typedef redefinition with different types ('INT' vs 'CHAR')"],
-  "22": ["[ Error ] line 7: typedef cannot be assigned to keyword ('main')"]
+  "22": ["[ Error ] line 7: typedef cannot be assigned to keyword ('main')"],
+  "26": ["[ Error ] line 3: typedef cannot be assigned to keyword ('main')"]
 }

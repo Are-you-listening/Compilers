@@ -22,6 +22,7 @@ from src.parser.BlacklistVisitor import *
 from src.parser.SwitchConverter import *
 from src.parser.EnumTypeMerger import *
 from src.parser.VirtualLineNrVisitor import *
+from src.parser.ArrayCleaner import ArrayCleaner
 from src.parser.DefineConverter import *
 from src.parser.EnumConverter import *
 
@@ -74,6 +75,10 @@ def cleanGreen(input_file, symbol_file):
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
+    #DotVisitor("output/i9").visit(ast)  # Export AST in Dot
+
+    ArrayCleaner().visit(ast)
+    #DotVisitor("output/u8").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 
@@ -88,6 +93,8 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold):
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+
     ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 
     if fold:

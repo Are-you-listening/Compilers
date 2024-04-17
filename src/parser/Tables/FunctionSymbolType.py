@@ -1,5 +1,6 @@
 from src.parser.Tables.SymbolType import SymbolType
 
+
 class FunctionSymbolType(SymbolType):
     def __init__(self, return_type: str, return_const: bool, param_types: list[str]):
         self.return_type = return_type

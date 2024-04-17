@@ -1,9 +1,9 @@
 
 
-typedef int main;
+typedef int IF;
 
 int main() {
-    main x = 1;
+    IF x = 1;
 
     return 0;
 
