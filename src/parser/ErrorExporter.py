@@ -188,10 +188,10 @@ class ErrorExporter:
 
     @staticmethod
     def GlobalsNonImplicitDeclaration(line_nr: str):
-        print(f"[ Error ] line {line_nr} Only implicit declarations are allowed for globals")
+        print(f"[ Error ] line {line_nr} Only implicit declarations are allowed for globals", file=sys.stderr)
         exit()
 
     @staticmethod
     def GlobalsInvalidDeclaration(line_nr: str):
-        print(f"[ Error ] line {line_nr} You can't initialise a global variable with a global variable")
+        print(f"[ Error ] line {line_nr} You can't initialise a global variable with a global variable", file=sys.stderr)
         exit()

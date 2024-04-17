@@ -21,9 +21,9 @@ NOTE: All the tests are run with constant folding enabled! (As by default)
 """
 
 
-class DefineTests(unittest.TestCase):
-    def testDefine(self):
-        file_range = range(1, 3)
+class GlobalTests(unittest.TestCase):
+    def testGlobal(self):
+        file_range = range(1, 4)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         original = sys.stdout  # Temp catch any output

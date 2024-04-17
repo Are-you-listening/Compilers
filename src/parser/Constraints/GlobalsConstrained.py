@@ -24,10 +24,8 @@ class GlobalsConstrained(Constraint):
                 if table.isRoot() and table.entryExists(node.getChild(1).text):
                     ErrorExporter.GlobalsInvalidDeclaration(node.getChild(0).linenr)
                 if table.isRoot() and GlobalsConstrained.containsIdentifier(node.getChild(1)) and not GlobalsConstrained.containsDefine(node.getChild(1)):
-                    print(node)
                     if node.getChild(1).text in definelist:
                         return
-                    print(node.getChild(1).children[0].text)
                     ErrorExporter.GlobalsInvalidDeclaration(node.getChild(1).linenr)
 
 

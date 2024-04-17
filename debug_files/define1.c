@@ -1,15 +1,18 @@
-#include <stdio.h>
+//Enum Semantic Error
 
-int True = 1;
+#include<stdio.h>
+
+int x = 1;
+
+
 
 int main()
 {
-    int True = -20;
-    int success = True;
+    enum week day;
+    day = Wed;
+    printf("%d",day);
 
-    printf("%d", success);
-
-    printf("%d", True);
-
+    enum week{Mon, Tue, Wed, Thur, Fri, Sat, Sun};
+    printf("%d",Tue);
     return 0;
 }

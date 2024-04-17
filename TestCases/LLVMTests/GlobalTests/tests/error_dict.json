@@ -1,2 +1,2 @@
-{"3": ["[ Error ] line 11: unknown type name '( enum week )'"]
+{"3": ["[ Error ] line 4 You can't initialise a global variable with a global variable"]
 }
