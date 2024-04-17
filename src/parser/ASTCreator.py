@@ -5,6 +5,7 @@ from src.parser.Tables.TypedefTable import *
 
 definelist = []
 
+
 class ASTCreator(grammarCVisitor):
     """
     This class converts the Parse tree created from antlr4 file into our explicit defined AST
@@ -172,7 +173,7 @@ class ASTCreator(grammarCVisitor):
         line = ctx.start.line
         toReplaceWith = ctx.children[len(ctx.children) - 1]  # Part of the #define we will replace with
 
-        if isinstance(toReplaceWith, grammarCParser.LiteralContext):  # It's an actual value; convert to const <type> value
+        if isinstance(toReplaceWith, grammarCParser.LiteralfContext):  # It's an actual value; convert to const <type> value
             temp = self.__make_manual_declaration(self.parent, line, ctx.children[1].symbol.text, [str(self.translateLexerID(toReplaceWith.start.type))], toReplaceWith.children[0].symbol.text)
             definelist.append(temp)  # Keep track of the defines, since they may be used in delcarations in the Global Space (See GlobalConstrained)
         elif isinstance(toReplaceWith, grammarCParser.TypeContext):  # It's a type define; convert to typedef
@@ -183,7 +184,6 @@ class ASTCreator(grammarCVisitor):
                     text = text.upper()
                 baseTypes.append(text)
             self.__make_manual_typedef(line, baseTypes, ctx.children[1].symbol.text)
-
 
     def visitTerminal(self, ctx):
         """

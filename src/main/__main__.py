@@ -22,7 +22,7 @@ from src.parser.BlacklistVisitor import *
 from src.parser.SwitchConverter import *
 from src.parser.EnumTypeMerger import *
 from src.parser.VirtualLineNrVisitor import *
-
+from src.parser.ArrayCleaner import ArrayCleaner
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -67,6 +67,9 @@ def cleanGreen(input_file, symbol_file):
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
     #DotVisitor("output/i9").visit(ast)  # Export AST in Dot
+
+    #DotVisitor("output/u8").visit(ast)  # Export AST in Dot
+    ArrayCleaner().visit(ast)
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 
