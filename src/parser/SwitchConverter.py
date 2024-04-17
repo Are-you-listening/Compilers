@@ -59,8 +59,13 @@ class SwitchConverter(ASTVisitor):
 
         """
         Update the break map (indicating if the subtree has a break),
-        This will do a tickle up of the break information
+        This will do a tickle up of the break information, but if the break is inside a while/for loop,
+        we don't want to pass it up
         """
+
+        if node.text in ("WHILE", "FOR"):
+            return
+
         for c in node.children:
             if c in self.break_map:
                 self.break_map[node] = self.break_map[c]

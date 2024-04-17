@@ -12,16 +12,25 @@ int main(){
 
     switch(a){
 
+        case 0:
         case 1:
             b = 1;
             printf("%d", 1);
-            if (b == 2){
+            if (b == 1){
                 break;
             }
 
         case 6:
             b = 6;
             printf("%d", 6);
+            break;
+        case 2:
+            b = 2;
+            printf("%d", 2);
+            break;
+        default:
+            b = 3;
+            printf("%d", 3);
             break;
 
     }
