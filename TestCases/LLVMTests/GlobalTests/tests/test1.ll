@@ -5,43 +5,31 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  ; #define appel INT * *  INT main
+  ;  INT main
   %".4" = alloca i32, align 4
-  store i32 21, i32* %".4", align 4
-  ;   INT radius = 21
+  store i32 -20, i32* %".4", align 4
+  ;  INT True = - 20
   %".7" = alloca i32, align 4
-  store i32 5, i32* %".7", align 4
-  ; INT side = 5
-  %".10" = alloca i32, align 4
-  ; INT area
-  %".12" = alloca i32, align 4
-  store i32 1, i32* %".12", align 4
-  ; bool success = True
-  ;  Using macros to calculate areas by
-  ;
-  ;  passing argument
-  ;
-  store i32 3, i32* %".10", align 4
-  ; area = CIRCLE_AREA
-  %".21" = load i32, i32* %".4", align 4
-  ; printf "Area of Circle of radius %d: %d \n" radius
-  %".23" = load i32, i32* %".10", align 4
-  ; area
-  %".25" = bitcast [35 x i8]* @".str.d" to i8*
-  %".26" = alloca i32
-  %".27" = alloca i32
-  store i32 %".21", i32* %".26"
-  store i32 %".23", i32* %".27"
-  %".30" = load i32, i32* %".26"
-  %".31" = load i32, i32* %".27"
-  %".32" = call i32 (i8*, ...) @"printf"(i8* %".25", i32 %".30", i32 %".31")
+  store i32 -20, i32* %".7", align 4
+  ; INT success = True
+  %".10" = bitcast [3 x i8]* @".str.d" to i8*
+  %".11" = alloca i32
+  store i32 -20, i32* %".11"
+  %".13" = load i32, i32* %".11"
+  %".14" = call i32 (i8*, ...) @"printf"(i8* %".10", i32 %".13")
+  ;  printf "%d" success
+  %".16" = load i32, i32* %".4", align 4
+  ;  printf "%d" True
+  %".18" = bitcast [3 x i8]* @".str.d" to i8*
+  %".19" = alloca i32
+  store i32 %".16", i32* %".19"
+  %".21" = load i32, i32* %".19"
+  %".22" = call i32 (i8*, ...) @"printf"(i8* %".18", i32 %".21")
   ret i32 0
   ;  return 0
 }
 
-@"CIRCLE_AREA" = global float 0x40091eb860000000, align 4
 @"True" = global i32 1, align 4
-@"False" = global i32 0, align 4
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.d" = internal constant [35 x i8] c"Area of Circle of radius %d: %d \5cn\00"
+@".str.d" = internal constant [3 x i8] c"%d\00"
