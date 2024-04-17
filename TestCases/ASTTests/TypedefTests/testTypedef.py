@@ -9,7 +9,7 @@ from src.parser.ASTCleaner import *
 
 class TestTypedef(unittest.TestCase):
     def testTypedefErrors(self):
-        file_indexes = range(1, 25)
+        file_indexes = range(1, 27)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

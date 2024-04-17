@@ -1,4 +1,5 @@
 from src.parser.Tables.SymbolTable import *
+from src.parser.Tables.SymbolTypeArray import *
 
 
 class ASTTableCreator(ASTVisitor):
@@ -31,12 +32,26 @@ class ASTTableCreator(ASTVisitor):
         pass
 
     @staticmethod
-    def __make_ptr_type(latest_datatype: SymbolType, is_const: bool):
-        datatype = SymbolTypePtr(latest_datatype, is_const)
+    def __make_ptr_type(latest_datatype: SymbolType, is_const: bool, terminal_type: str):
+        """
+        We have 2 types of ptrs, normal ptrs and array ptrs (They do mostly the same, but are different for checks),
+        whether a ptr is an array depends on the type, ARRAY_size is an ARRAY
+        """
+        if terminal_type.startswith("ARRAY_"):
+            datatype = SymbolTypeArray(latest_datatype, is_const, int(terminal_type[6:]))
+        else:
+            datatype = SymbolTypePtr(latest_datatype, is_const)
         return datatype
 
     @staticmethod
-    def __make_entry(node, child, symbol_type):
+    def __make_entry(node, child: ASTNodeTerminal, symbol_type):
+        """
+        Make symbol table entry
+        :param node:
+        :param child:
+        :param symbol_type:
+        :return:
+        """
 
         is_const = False
         latest_datatype = None
@@ -53,7 +68,7 @@ class ASTTableCreator(ASTVisitor):
                 is_const = True
             elif grandchild.text == "*":
                 is_const = False
-                latest_datatype = ASTTableCreator.__make_ptr_type(latest_datatype, is_const)
+                latest_datatype = ASTTableCreator.__make_ptr_type(latest_datatype, is_const, grandchild.type)
             else:
                 if not ASTTypedefReplacer.isBaseType(grandchild):
                     latest_datatype = symbol_type(grandchild.text, is_const)  # Keep the typedef name
