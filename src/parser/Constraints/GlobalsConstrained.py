@@ -1,6 +1,6 @@
 from src.parser.Constraints.Constraint import *
 from src.parser.ErrorExporter import *
-from src.parser.ASTCreator import definelist
+from src.parser.DefineConverter import definelist
 
 
 class GlobalsConstrained(Constraint):

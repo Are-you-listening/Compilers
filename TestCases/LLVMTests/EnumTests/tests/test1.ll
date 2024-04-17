@@ -21,14 +21,14 @@ define i32 @"main"()
   ; return 0
 }
 
-@"x" = dso_local global i32 1, align 4
-@"Sun" = dso_local global i32 6, align 4
-@"Sat" = dso_local global i32 5, align 4
-@"Fri" = dso_local global i32 4, align 4
-@"Thur" = dso_local global i32 3, align 4
-@"Wed" = dso_local global i32 2, align 4
-@"Tue" = dso_local global i32 1, align 4
-@"Mon" = dso_local global i32 0, align 4
+@"x" = global i32 1, align 4
+@"Sun" = global i32 6, align 4
+@"Sat" = global i32 5, align 4
+@"Fri" = global i32 4, align 4
+@"Thur" = global i32 3, align 4
+@"Wed" = global i32 2, align 4
+@"Tue" = global i32 1, align 4
+@"Mon" = global i32 0, align 4
 declare i32 @"printf"(i8* %".1", ...)
 
 @".str.d" = internal constant [3 x i8] c"%d\00"

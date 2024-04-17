@@ -2,9 +2,10 @@
 
 #include<stdio.h>
 
-int x = 1;
-int y = 2 + 5;
-int z = x + y;
+//int x = 1;
+//int y = 2 + 5;
+//int z = x + y;
+
 
 
 int main()

@@ -22,7 +22,8 @@ from src.parser.BlacklistVisitor import *
 from src.parser.SwitchConverter import *
 from src.parser.EnumTypeMerger import *
 from src.parser.VirtualLineNrVisitor import *
-
+from src.parser.DefineConverter import *
+from src.parser.EnumConverter import *
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -56,6 +57,9 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
+    DefineConverter().visit(ast)  # Convert simple defines to typedefs & const values
+
+    EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
@@ -66,7 +70,6 @@ def cleanGreen(input_file, symbol_file):
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
-    #DotVisitor("output/i9").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 
@@ -81,8 +84,6 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold):
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
-
     ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 
     if fold:

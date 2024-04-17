@@ -176,7 +176,6 @@ class AST2LLVM(ASTVisitor):
 
             # Preset some values
             llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(data_type, ptrs), value)
-            llvm_var.linkage = 'dso_local'
             llvm_var.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
 
         else:

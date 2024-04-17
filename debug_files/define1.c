@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+typedef int kappa;
+
 // Defining parameterized macros with expression
 #define CIRCLE_AREA 3.14
 #define bool const int
