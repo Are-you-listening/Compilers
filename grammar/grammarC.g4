@@ -12,7 +12,7 @@ function_call: ( '(' '*' (function_call | IDENTIFIER) ')' | IDENTIFIER) ('(' ((e
 block_line: (line | printscanf | 'break' | 'continue' | return);
 block_code: (block_line ';'+ | comment | if | for | while | anonymous_scope | switch | include | define)* ';'*;
 typedef: 'typedef' type IDENTIFIER;
-define: '#define' IDENTIFIER ( literal | type );  // Remember, we can't allow Expressions here! (See project5.pdf)
+define: '#define' IDENTIFIER ( ('-'? literal) | type );  // Remember, we can't allow Expressions here! (See project5.pdf)
 if: 'if' '(' expr ')' '{' block_code'}' ('else' ('{' block_code '}' | if))?;
 for: 'for' '(' block_line? ';' block_line? ';' block_line? ')' '{' block_code '}' ;
 while: 'while' '(' block_line ')' '{' block_code '}';

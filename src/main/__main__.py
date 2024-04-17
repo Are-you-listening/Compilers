@@ -57,10 +57,14 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
+    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     DefineConverter().visit(ast)  # Convert simple defines to typedefs & const values
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
+
+    DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 

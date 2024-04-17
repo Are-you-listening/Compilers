@@ -10,8 +10,6 @@
 int main()
 {
 
-    #define True -20
-
     int radius = 21;
     int side = 5;
     int area;
@@ -20,12 +18,8 @@ int main()
     // Using macros to calculate areas by
     // passing argument
     area = CIRCLE_AREA;
-//    printf("Area of Circle of radius %d: %d \n", radius,
-//           area);
-    printf("succes: %d", success);
+    printf("Area of Circle of radius %d: %d \n", radius,
+           area);
 
-    side = 7;
-
-    printf("True: %d", True);
     return 0;
 }

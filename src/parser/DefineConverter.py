@@ -26,6 +26,9 @@ class DefineConverter(ASTVisitor):
         self.toDelete.append(node)
         parent = node.parent
         valuePart = node.children[2]  # The node in which the RHS of a define is stored
+        if valuePart.text == '-':
+            valuePart = node.children[3]
+            valuePart.children[0].text = '-' + valuePart.children[0].text
         identPart = node.children[1]  # The nod ein which the LHS of a define is stored
 
         if valuePart.text == 'Literal':  # It's an actual value; convert to const <type> value
