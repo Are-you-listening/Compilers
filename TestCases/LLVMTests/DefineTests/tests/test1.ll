@@ -24,10 +24,10 @@ define i32 @"main"()
   store i32 3, i32* %".10", align 4
   ; area = CIRCLE_AREA
   %".21" = load i32, i32* %".4", align 4
-  ; printf "Area of Circle of radius %d: %d \n" radius
+  ; printf "%d%d" radius
   %".23" = load i32, i32* %".10", align 4
   ; area
-  %".25" = bitcast [35 x i8]* @".str.d" to i8*
+  %".25" = bitcast [5 x i8]* @".str.d" to i8*
   %".26" = alloca i32
   %".27" = alloca i32
   store i32 %".21", i32* %".26"
@@ -44,4 +44,4 @@ define i32 @"main"()
 @"False" = global i32 0, align 4
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.d" = internal constant [35 x i8] c"Area of Circle of radius %d: %d \5cn\00"
+@".str.d" = internal constant [5 x i8] c"%d%d\00"

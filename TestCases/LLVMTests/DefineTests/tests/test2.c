@@ -22,10 +22,10 @@ int main()
     area = CIRCLE_AREA;
 //    printf("Area of Circle of radius %d: %d \n", radius,
 //           area);
-    printf("succes: %d", success);
+    printf("%d", success);
 
     side = 7;
 
-    printf("True: %d", True);
+    printf("%d", True);
     return 0;
 }
