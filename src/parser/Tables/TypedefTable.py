@@ -6,7 +6,7 @@ from typing import Dict
 from src.parser.Tables.AbstractTable import *
 from src.parser.ASTTypedefReplacer import ASTTypedefReplacer
 
-keywords = ["main", "for", "while", "if", "else", "else if", "switch", "break", "continue", "return", "default"]
+keywords = ["for", "while", "if", "else", "else if", "switch", "break", "continue", "return", "default", "main"]
 
 
 class TypedefEntry(TableEntry):
@@ -50,9 +50,10 @@ class TypedefTable(AbstractTable):
 
         """
         if the typename already exists, we need to throw an semantic error, because we are not allowed to override it
-        We can only override this when the typedef is in a different scope
+        We can only override this when the typedef is in a different scope,
+        side note: 'IF' is valid, 'if' not (like gcc reference), so keep that in mind
         """
-        if to_type_mapping.lower() in keywords:
+        if to_type_mapping in keywords:
             ErrorExporter.TypeDefKeyword(node.linenr, to_type_mapping)
             return True
 

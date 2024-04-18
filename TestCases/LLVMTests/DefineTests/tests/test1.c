@@ -18,7 +18,7 @@ int main()
     // Using macros to calculate areas by
     // passing argument
     area = CIRCLE_AREA;
-    printf("Area of Circle of radius %d: %d \n", radius,
+    printf("%d%d", radius,
            area);
 
     return 0;

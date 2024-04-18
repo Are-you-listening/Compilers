@@ -8,7 +8,7 @@ int x = 1;
 
 int main()
 {
-    enum week day;
+    enum week day; // Not yet declared
     day = Wed;
     printf("%d",day);
 

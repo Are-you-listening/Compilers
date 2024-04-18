@@ -1,45 +1,57 @@
-; ModuleID = "tests/test1.c"
+; ModuleID = "tests/test2.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 21, i32* %".3", align 4
-  ; INT radius = 21
-  %".6" = alloca i32, align 4
-  store i32 5, i32* %".6", align 4
+  ; #define appel INT * *  INT main
+  %".4" = alloca i32, align 4
+  store i32 -20, i32* %".4", align 4
+  ;   #define True - 20
+  %".7" = alloca i32, align 4
+  store i32 21, i32* %".7", align 4
+  ;  INT radius = 21
+  %".10" = alloca i32, align 4
+  store i32 5, i32* %".10", align 4
   ; INT side = 5
-  %".9" = alloca i32, align 4
+  %".13" = alloca i32, align 4
   ; INT area
-  %".11" = alloca i32, align 4
-  store i32 1, i32* %".11", align 4
+  %".15" = alloca i32, align 4
+  store i32 -20, i32* %".15", align 4
   ; bool success = True
   ;  Using macros to calculate areas by
+  ;
   ;  passing argument
-  store i32 3, i32* %".9", align 4
+  ;
+  store i32 3, i32* %".13", align 4
   ; area = CIRCLE_AREA
-  %".18" = load i32, i32* %".3", align 4
-  ; printf "Area of Circle of radius %d: %d \n" radius
-  %".20" = load i32, i32* %".9", align 4
-  ; area
-  %".22" = bitcast [35 x i8]* @".str.d" to i8*
-  %".23" = alloca i32
-  %".24" = alloca i32
-  store i32 %".18", i32* %".23"
-  store i32 %".20", i32* %".24"
-  %".27" = load i32, i32* %".23"
-  %".28" = load i32, i32* %".24"
-  %".29" = call i32 (i8*, ...) @"printf"(i8* %".22", i32 %".27", i32 %".28")
+  ;     printf("Area of Circle of radius %d: %d \n", radius,
+  ;
+  ;            area);
+  ;
+  %".28" = bitcast [3 x i8]* @".str.d" to i8*
+  %".29" = alloca i32
+  store i32 -20, i32* %".29"
+  %".31" = load i32, i32* %".29"
+  %".32" = call i32 (i8*, ...) @"printf"(i8* %".28", i32 %".31")
+  ; printf "%d" success
+  store i32 7, i32* %".10", align 4
+  ;  side = 7
+  %".36" = load i32, i32* %".4", align 4
+  ;  printf "%d" True
+  %".38" = bitcast [3 x i8]* @".str.d" to i8*
+  %".39" = alloca i32
+  store i32 %".36", i32* %".39"
+  %".41" = load i32, i32* %".39"
+  %".42" = call i32 (i8*, ...) @"printf"(i8* %".38", i32 %".41")
   ret i32 0
-  ; INT main
-  ; #include <stdio.h>
+  ; return 0
 }
 
-@"CIRCLE_AREA" = dso_local global float 0x40091eb860000000, align 4
-@"True" = dso_local global i32 1, align 4
-@"False" = dso_local global i32 0, align 4
+@"CIRCLE_AREA" = global float 0x40091eb860000000, align 4
+@"True" = global i32 1, align 4
+@"False" = global i32 0, align 4
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.d" = internal constant [35 x i8] c"Area of Circle of radius %d: %d \5cn\00"
+@".str.d" = internal constant [3 x i8] c"%d\00"

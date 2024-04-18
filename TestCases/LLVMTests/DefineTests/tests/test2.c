@@ -1,19 +1,31 @@
+#include <stdio.h>
 
-// Proof enums don't conflict with typedefs
-#include<stdio.h>
-
-int x = 1;
-
-enum week{Mon, Tue, Wed, Thur, Fri, Sat, Sun};
-
-typedef int enumweek;
+// Defining parameterized macros with expression
+#define CIRCLE_AREA 3.14
+#define bool const int
+#define True 1
+#define False 0
+#define appel int**
 
 int main()
 {
-    enum week day;
-    enumweek z = 1;
-    day = Wed;
-    printf("%d",day);
+
+    #define True -20
+
+    int radius = 21;
+    int side = 5;
+    int area;
+    bool success = True;
+
+    // Using macros to calculate areas by
+    // passing argument
+    area = CIRCLE_AREA;
+//    printf("Area of Circle of radius %d: %d \n", radius,
+//           area);
+    printf("%d", success);
+
+    side = 7;
+
+    printf("%d", True);
     return 0;
 }
-

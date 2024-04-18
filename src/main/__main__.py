@@ -22,6 +22,10 @@ from src.parser.BlacklistVisitor import *
 from src.parser.SwitchConverter import *
 from src.parser.EnumTypeMerger import *
 from src.parser.VirtualLineNrVisitor import *
+from src.parser.ArrayCleaner import ArrayCleaner
+from src.parser.DefineConverter import *
+from src.parser.EnumConverter import *
+from src.parser.Preproccesing.InputStreamProcessor import InputStreamProcessor
 
 
 def cleanGreen(input_file, symbol_file):
@@ -32,7 +36,10 @@ def cleanGreen(input_file, symbol_file):
     :return:
     """
     input_stream = FileStream(input_file)  # Declare some variables
-    lexer = grammarCLexer(input_stream)
+
+    i = InputStreamProcessor(input_file)
+
+    lexer = grammarCLexer(i)
     stream = CommonTokenStream(lexer)
     parser = grammarCParser(stream)
 
@@ -56,7 +63,14 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
+    DefineConverter().visit(ast)  # Convert simple defines to typedefs & const values
+
+    EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
+
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
@@ -68,14 +82,20 @@ def cleanGreen(input_file, symbol_file):
     SwitchConverter().visit(ast)  # convert switch statement to if else
     #DotVisitor("output/i9").visit(ast)  # Export AST in Dot
 
+    ArrayCleaner().visit(ast)
+    #DotVisitor("output/u8").visit(ast)  # Export AST in Dot
+
     ASTTableCreator().visit(ast)  # Create the symbol table
+    #DotVisitor("output/vss").visit(ast)  # Export AST in Dot
+
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
+
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
-        s.visit(ast.root.getSymbolTable(), False)
+        s.visit(ast.root.getSymbolTable(), True)
 
     return ast, codegetter
 
