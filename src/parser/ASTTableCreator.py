@@ -49,6 +49,7 @@ class ASTTableCreator(ASTVisitor):
                     param_types.append(param.children[0].children[0].text)
                 else:
                     param_types.append(param.children[0].children[1].text)
+
             for grandchild in child.children:
                 if grandchild.text == "const":
 

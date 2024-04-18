@@ -46,6 +46,8 @@ class ConstantFoldingVisitor(ASTVisitor):
                     to_type = child.text  # This scares me a little :( - Kars
 
             from_type = node.getChild(1).type
+            if from_type == "IDENTIFIER":
+                return
             c_type = c_type_executors[from_type]()
             data1 = c_type.fromString(node.getChild(1).text)
             # print(node.text, parent.text, "somehow to_type is not initialised, BOOL issue? - Kars")
