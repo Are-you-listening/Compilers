@@ -129,6 +129,9 @@ class ASTCreator(grammarCVisitor):
     def visitDefine(self, ctx: grammarCParser.DefineContext):
         self.__makeNode(ctx, "Define")
 
+    def visitParameter_call(self, ctx: grammarCParser.Parameter_callContext):
+        self.__makeNode(ctx, "ParameterCall")
+
     def visitTerminal(self, ctx):
         """
         :param ctx:
