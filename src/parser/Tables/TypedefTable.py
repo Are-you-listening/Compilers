@@ -6,7 +6,7 @@ from typing import Dict
 from src.parser.Tables.AbstractTable import *
 from src.parser.ASTTypedefReplacer import ASTTypedefReplacer
 
-keywords = ["for", "while", "if", "else", "else if", "switch", "break", "continue", "return", "default"]
+keywords = ["for", "while", "if", "else", "else if", "switch", "break", "continue", "return", "default", "main"]
 
 
 class TypedefEntry(TableEntry):
