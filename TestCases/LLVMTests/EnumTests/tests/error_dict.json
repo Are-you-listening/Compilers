@@ -1,2 +1,4 @@
-{"3": ["[ Error ] line 11: unknown type name '( enum week )'"]
+{"3": ["[ Error ] line 11: unknown type name '( enum week )'"],
+  "4": ["[ Error ] line 11: redefinition or redeclaration of INT RED"],
+  "5": ["[ Error ] line 1: redefinition or redeclaration of INT NORTH"]
 }
