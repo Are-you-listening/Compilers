@@ -52,7 +52,7 @@ class ASTTypedefReplacer(ASTVisitor):
             self.typedefTable = self.typedef_table_map[currentNode]
 
     def visitNode(self, node: ASTNode):
-        if node.text == "Function":
+        if node.text in ("Code", "Function"):
             """
             creates new typedef (scope specific)
             """
