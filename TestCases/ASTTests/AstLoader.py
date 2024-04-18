@@ -85,7 +85,9 @@ class AstLoader:
     @staticmethod
     def __setupSymbolTablesRight(symbol_table, ast_node: ASTNode):
         index = ast_node.getSymbolTable()
-        ast_node.symbol_table = symbol_table[index]
+        if index is not None:
+            ast_node.symbol_table = symbol_table[index]
+
         for child in ast_node.children:
             AstLoader.__setupSymbolTablesRight(symbol_table, child)
 
@@ -111,17 +113,19 @@ class AstLoader:
         ast_dict = {"text": ast_node.text, "linenr": ast_node.linenr, "virtuallinenr": ast_node.virtuallinenr}
 
         symbol_table = ast_node.getSymbolTable()
+        if symbol_table is not None:
+            if symbol_table.prev not in symbol_tables and symbol_table.prev is not None:
+                symbol_tables.append(symbol_table.prev)
 
-        if symbol_table.prev not in symbol_tables and symbol_table.prev is not None:
-            symbol_tables.append(symbol_table.prev)
+            if symbol_table in symbol_tables:
+                index = symbol_tables.index(symbol_table)
+            else:
+                symbol_tables.append(symbol_table)
+                index = len(symbol_tables)-1
 
-        if symbol_table in symbol_tables:
-            index = symbol_tables.index(symbol_table)
+            ast_dict["symbol_table_nr"] = index
         else:
-            symbol_tables.append(symbol_table)
-            index = len(symbol_tables)-1
-
-        ast_dict["symbol_table_nr"] = index
+            ast_dict["symbol_table_nr"] = None
 
         if isinstance(ast_node, ASTNodeTerminal):
             ast_dict["type"] = ast_node.type

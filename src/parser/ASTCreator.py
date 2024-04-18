@@ -3,6 +3,7 @@ from src.antlr_files.grammarCParser import *
 from src.parser.Tables.SymbolTable import *
 from src.parser.Tables.TypedefTable import *
 
+
 class ASTCreator(grammarCVisitor):
     """
     This class converts the Parse tree created from antlr4 file into our explicit defined AST
@@ -17,12 +18,10 @@ class ASTCreator(grammarCVisitor):
         self.lexer = lexer
         self.parent = None
         self.AST = None
-        self.table = None
 
     def __setup(self):
         self.parent = None
         self.AST = None
-        self.table = None
 
     def visit(self, tree):
         """
@@ -46,34 +45,14 @@ class ASTCreator(grammarCVisitor):
         self.AST = AST(self.parent)
 
     def visitStart_(self, ctx: grammarCParser.Start_Context):
-        self.parent = ASTNode("Start", None, self.table, ctx.start.line, ctx.start.line)
+        self.parent = ASTNode("Start", None, None, ctx.start.line, ctx.start.line)
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx: grammarCParser.FunctionContext):
-        node = self.__makeNode(ctx, "Function", False)
-        tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
-        prevTable = self.table
-        self.table.nextTable(tempTable)
-        self.table = tempTable
-        old_parent = self.parent
-        self.parent = node
-        self.visitChildren(ctx)
-        self.parent = old_parent
-        self.table = prevTable
+        node = self.__makeNode(ctx, "Function")
 
     def visitCode(self, ctx: grammarCParser.CodeContext):
-        if self.table is None:
-            self.table = SymbolTable(None)
-            self.parent.symbol_table = self.table
-            self.__makeNode(ctx, "Code")
-        else:
-            tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
-            prevTable = self.table
-            self.table.nextTable(tempTable)
-            self.table = tempTable
-
-            self.__makeNode(ctx, "Code")
-            self.table = prevTable
+        self.__makeNode(ctx, "Code")
 
     def visitTypedef(self, ctx: grammarCParser.TypedefContext):
         self.__makeNode(ctx, "Typedef")
@@ -112,13 +91,7 @@ class ASTCreator(grammarCVisitor):
         self.__makeNode(ctx, "Return")
 
     def visitBlock_code(self, ctx: grammarCParser.Block_codeContext):
-        tempTable = SymbolTable(self.table)  # Create a new symbolTable / Scope after this node
-        prevTable = self.table
-        self.table.nextTable(tempTable)
-        self.table = tempTable
-
         self.__makeNode(ctx, "Code")
-        self.table = prevTable
 
     def visitBlock_line(self, ctx: grammarCParser.Block_lineContext):
         self.__makeNode(ctx, "Line")
@@ -163,7 +136,7 @@ class ASTCreator(grammarCVisitor):
         if text in ["int", "float", "char", "void"]:
             text = text.upper()
 
-        node = ASTNodeTerminal(text, self.parent, self.table, self.translateLexerID(ctx.getSymbol().type),
+        node = ASTNodeTerminal(text, self.parent, None, self.translateLexerID(ctx.getSymbol().type),
                                ctx.getSymbol().line, "")
 
         self.parent.addChildren(node)
@@ -180,7 +153,7 @@ class ASTCreator(grammarCVisitor):
         """
         makes new Object and makes sure this will be a child of it's parent
         """
-        node = ASTNode(terminal_type, self.parent, self.table, ctx.start.line, None)  # Also attaches the current table/scope
+        node = ASTNode(terminal_type, self.parent, None, ctx.start.line, None)  # Also attaches the current table/scope
         self.parent.addChildren(node)
         old_parent = self.parent
         self.parent = node

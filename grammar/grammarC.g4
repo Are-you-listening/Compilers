@@ -23,7 +23,7 @@ default: 'default' ':' block_code;
 
 enum: 'enum' IDENTIFIER '{' (IDENTIFIER',')* IDENTIFIER? '}';
 printscanf: ('printf' | 'scanf') '(' STRING (',' expr)* ')';
-type: ('const')? ('int' | 'char' | 'float' | 'void' | (('struct' | 'enum' |'union') IDENTIFIER) | IDENTIFIER) ('*' ('const')?)*;
+type: ('const')? ('int' | 'char' | 'float' | 'void' | (('struct' | 'enum' |'union') IDENTIFIER) | IDENTIFIER) ('*' | 'const')*;
 return: 'return' expr?;
 structunion: ('struct' | 'union') IDENTIFIER '{' declaration* ';'+ '}';
 function_ptr: (type) function_ptr_2 ;

@@ -1,5 +1,8 @@
-int main()
-{
-    int main = 3; // This shouldn't return an error!
-    return 0;
+int main(){
+    {
+        int x = 1;
+    }
+    {
+        int x = 2;
+    }
 }

@@ -34,6 +34,7 @@ def cleanGreen(input_file, symbol_file):
     :return:
     """
     input_stream = FileStream(input_file)  # Declare some variables
+
     lexer = grammarCLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = grammarCParser(stream)
@@ -81,13 +82,16 @@ def cleanGreen(input_file, symbol_file):
     #DotVisitor("output/u8").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
+    #DotVisitor("output/vss").visit(ast)  # Export AST in Dot
+
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
+
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
-        s.visit(ast.root.getSymbolTable(), False)
+        s.visit(ast.root.getSymbolTable(), True)
 
     return ast, codegetter
 

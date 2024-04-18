@@ -6,15 +6,68 @@ class ASTTableCreator(ASTVisitor):
     """
     Traverses through the three and creates the symbol table
     """
+    def __init__(self):
+        self.table = None
+
     def visit(self, ast: AST):
+        self.table = None
         self.postorder(ast.root)
 
+    def postorder(self, root: ASTNode):
+        """for child in root.children:
+            self.postorder(child)
+        root.accept(self)"""
+
+        stack = [root]
+        visited = set()
+
+        while len(stack) > 0:
+
+            current_index = len(stack) - 1
+            currentNode = stack[current_index]  # get top of stack without popping it
+
+            if currentNode not in visited and currentNode.text in ("Function", "Code"):
+                """
+                Create a new scope for the children
+                """
+                temp = SymbolTable(self.table)
+                if self.table is not None:
+                    self.table.nextTable(temp)
+                self.table = temp
+
+            do_visit = True
+            for child in reversed(currentNode.getChildren()):
+
+                if child not in visited and child not in stack:
+                    stack.append(child)
+                    do_visit = False
+
+            if do_visit:
+                currentNode.accept(self)
+                stack.pop(current_index)
+
+            visited.add(currentNode)
+
     def visitNode(self, node: ASTNode):
+        """
+        Assign the symbol table to the node
+        """
+        node.symbol_table = self.table
+
         if node.text == "Declaration" or node.text == "Parameter":
             child = node.findType("Type")
             symbol_type = SymbolType
 
             self.__make_entry(node, child, symbol_type)
+
+        if node.text in ("Function", "Code"):
+            """
+            Go 1 scope back, and make sure the node its scope is recalibrated
+            Because function definition needs to be in a global scope
+            """
+            if self.table.prev is not None:
+                self.table = self.table.prev
+                node.symbol_table = self.table
 
         if node.text == "Function":
             child = node.findType("Type")
@@ -29,7 +82,7 @@ class ASTTableCreator(ASTVisitor):
             self.__make_entry(node, child, lambda d, c: FunctionSymbolType(d, c, param_types))
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        pass
+        node.symbol_table = self.table
 
     @staticmethod
     def __make_ptr_type(latest_datatype: SymbolType, is_const: bool, terminal_type: str):

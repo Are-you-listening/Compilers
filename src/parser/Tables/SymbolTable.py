@@ -119,6 +119,7 @@ class SymbolTable(AbstractTable):
         for entry in self.symbols.values():
             rep_string += f"{str(entry)}\n"
         rep_string += f"self.symbols"
+        return rep_string
 
     def exists(self, entry_name: str):
         """

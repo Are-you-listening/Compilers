@@ -26,12 +26,11 @@ class DefineTests(unittest.TestCase):
         file_range = range(1, 14)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-
-
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 
         for i in file_range:
+            #print(i)
             original = sys.stdout  # Temp catch any output
             buff = StringIO()
             sys.stdout = buff
@@ -41,7 +40,6 @@ class DefineTests(unittest.TestCase):
             sys.stderr = error_buff
 
             file_name = f"tests/test{i}."
-            print(file_name)
 
             try:
                 self.runAST(file_name+"c")
