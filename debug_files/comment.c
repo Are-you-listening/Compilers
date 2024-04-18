@@ -6,7 +6,6 @@ enum Direction {
     NORTH // Error: Redeclaration of enumerator 'NORTH' -> //TODO Our grammar does'nt support these comments?!
 };
 
-
 int main()
 { //Comment
     return 0;
