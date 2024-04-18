@@ -1,4 +1,5 @@
 from antlr4 import FileStream
+import re
 
 
 class InputStreamProcessor(FileStream):
@@ -11,8 +12,13 @@ class InputStreamProcessor(FileStream):
         """
         Find start and end index of a provided word (end index char not included in the retrieve string)
         """
-        index = self.strdata.find(retrieve_string)
-        return index, index+len(retrieve_string)
+        temp_retrieve = retrieve_string.replace(" ", " *")
+        process_regex = re.compile(temp_retrieve)
+
+        re_result = process_regex.search(self.strdata)
+        if re_result is None:
+            return -1, -1
+        return re_result.start(), re_result.end()
 
     def retrieve(self, retrieve_string: str):
         """
