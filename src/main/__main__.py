@@ -25,6 +25,7 @@ from src.parser.VirtualLineNrVisitor import *
 from src.parser.ArrayCleaner import ArrayCleaner
 from src.parser.DefineConverter import *
 from src.parser.EnumConverter import *
+from src.parser.Preproccesing.InputStreamProcessor import InputStreamProcessor
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -35,7 +36,9 @@ def cleanGreen(input_file, symbol_file):
     """
     input_stream = FileStream(input_file)  # Declare some variables
 
-    lexer = grammarCLexer(input_stream)
+    i = InputStreamProcessor(input_file)
+
+    lexer = grammarCLexer(i)
     stream = CommonTokenStream(lexer)
     parser = grammarCParser(stream)
 

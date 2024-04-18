@@ -1,18 +1,9 @@
 
-//Regular enum
-
-#include <stdio.h>
-
-int x = 1;
-
-enum week{Mon, Tue, Wed, Thur, Fri, Sat, Sun};
-
-//typedef int enumweek;
+#define PHi 3.14
 
 int main()
 {
-    enum week day;
-    day = Wed;
-    printf("%d",day);
-    return 0;
+    int a = PHI;
+    #define PHi 3
+    int b = PHI;
 }

@@ -1,29 +1,29 @@
 digraph AST {
-  "137958368062304" [label="main: type: INT False  
+  "134618847393296" [label="main: type: INT False  
                    name: main
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7d78ef790850>
+                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7a6f64ade230>
                    first used: None)"];
-  "137958368062304" -> "137958368056448";
-  "137958368056448" [label=""];
-  "137958368056448" -> "137958368054528";
-  "137958368054528" [label="a: type: INT False  
+  "134618847393296" -> "134618847394784";
+  "134618847394784" [label=""];
+  "134618847394784" -> "134618847387008";
+  "134618847387008" [label="a: type: INT False  
                    name: a
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7d78ef791cc0>
+                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7a6f64adfe20>
                    first used: None)
 b: type: FLOAT False  
                    name: b
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7d78ef790df0>
+                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7a6f64adfb20>
                    first used: None)
 c: type: CHAR False  
                    name: c
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7d78ef791180>
+                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7a6f64add840>
                    first used: None)"];
 }
