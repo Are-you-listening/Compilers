@@ -4,13 +4,7 @@
 //#define BUFFER_SIZE 2048 // Error: Redefinition of 'BUFFER_SIZE'
 //#define for 5; // Error: reserved keyword
 //#define while 5; // Error: reserved keyword
-//#define if 5; // Error: reserved keyword
-//#define else 5; // Error: reserved keyword
-//#define else if 5; // Error: reserved keyword
-//#define switch 5; // Error: reserved keyword
-//#define break 5; // Error: reserved keyword
-//#define continue 5; // Error: reserved keyword
-#define return 5; // Error: reserved keyword
+#define if 5; // Error: reserved keyword
 
 
 // keywords = ["for", "while", "if", "else", "else if", "switch", "break", "continue", "return", "default"]

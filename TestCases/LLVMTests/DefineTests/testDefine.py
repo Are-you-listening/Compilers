@@ -23,21 +23,23 @@ NOTE: All the tests are run with constant folding enabled! (As by default)
 
 class DefineTests(unittest.TestCase):
     def testDefine(self):
-        file_range = range(1, 3)
+        file_range = range(1, 14)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-        original = sys.stdout  # Temp catch any output
-        buff = StringIO()
-        sys.stdout = buff
 
-        original_error = sys.stderr # Temp catch any errors
-        error_buff = StringIO()
-        sys.stderr = error_buff
 
         with open("tests/error_dict.json", "rt") as f:
             error_dict = json.loads(f.read())
 
         for i in file_range:
+            original = sys.stdout  # Temp catch any output
+            buff = StringIO()
+            sys.stdout = buff
+
+            original_error = sys.stderr  # Temp catch any errors
+            error_buff = StringIO()
+            sys.stderr = error_buff
+
             file_name = f"tests/test{i}."
             print(file_name)
 
@@ -54,8 +56,8 @@ class DefineTests(unittest.TestCase):
                 print("error", error_buff.getvalue().splitlines(), i)
                 assert errors == expected_errors
 
-        sys.stdout = original  # Reset output
-        sys.stderr = original_error
+            sys.stdout = original  # Reset output
+            sys.stderr = original_error
 
     @staticmethod
     def compareLLVM(newly, right):

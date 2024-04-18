@@ -8,9 +8,7 @@
 //#define else 5; // Error: reserved keyword
 //#define else if 5; // Error: reserved keyword
 //#define switch 5; // Error: reserved keyword
-//#define break 5; // Error: reserved keyword
-//#define continue 5; // Error: reserved keyword
-#define return 5; // Error: reserved keyword
+#define break 5; // Error: reserved keyword
 
 
 // keywords = ["for", "while", "if", "else", "else if", "switch", "break", "continue", "return", "default"]
