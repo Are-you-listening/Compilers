@@ -27,6 +27,7 @@ from src.parser.DefineConverter import *
 from src.parser.EnumConverter import *
 from src.parser.Preproccesing.InputStreamProcessor import InputStreamProcessor
 
+
 def cleanGreen(input_file, symbol_file):
     """
     Standard function to generate parseTree & Export it to Dot
