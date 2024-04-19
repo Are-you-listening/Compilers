@@ -5,7 +5,7 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  ;  #include <stdio.h>  INT main
+  ;    INT main
   ret i32 0
   ;  while 0 INT a = 0 printf "%d" 1 break   return 0
 }

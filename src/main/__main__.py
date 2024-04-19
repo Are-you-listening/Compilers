@@ -23,12 +23,9 @@ from src.parser.SwitchConverter import *
 from src.parser.EnumTypeMerger import *
 from src.parser.VirtualLineNrVisitor import *
 from src.parser.ArrayCleaner import ArrayCleaner
-from src.parser.DefineConverter import *
 from src.parser.EnumConverter import *
-from src.parser.Preproccesing.InputStreamProcessor import InputStreamProcessor
 from src.parser.Preproccesing.preProcessor import *
 
-from src.parser.Preproccesing.Preprocessor import PreProcessor
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -37,13 +34,13 @@ def cleanGreen(input_file, symbol_file):
     :param symbol_file:
     :return:
     """
-    input_stream = FileStream(input_file)  # Declare some variables
-
+    input_stream = FileStream(input_file)  # Create input stream
     lexer = grammarCLexer(input_stream)
+    stream = CommonTokenStream(lexer)  # Extract tokens
 
-    stream = CommonTokenStream(lexer)
+    includeStdio, stream = PreProcessor(stream, lexer, input_file).preProcess()  # Apply preprocessing
 
-    parser = grammarCParser(stream)
+    parser = grammarCParser(stream)  # Do actual parse
 
     lexer.removeErrorListeners()
     lexer.addErrorListener(EListener())
@@ -56,32 +53,22 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    virtualline = VirtualLineVisitor()
-    virtualline.visit(ast)
+    virtualLine = VirtualLineVisitor()
+    virtualLine.visit(ast)
 
     black_list_visitor = BlacklistVisitor()
     black_list_visitor.visit(ast)
 
-    #DotVisitor("output/tr").visit(ast)  # Export AST in Dot
-
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-
-    DefineConverter().visit(ast)  # Convert simple defines to typedefs & const values
-
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
-
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
-
-    #DotVisitor("output/tr2").visit(ast)  # Export AST in Dot
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
@@ -107,12 +94,13 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold):
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+
     ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 
     if fold:
         ConstantFoldingVisitor().visit(ast)
 
-    #DotVisitor("output/upda").visit(ast)  # Export AST in Dotfix functions
     ASTConversion().visit(ast)
 
     ValueAdderVisitor().visit(ast)

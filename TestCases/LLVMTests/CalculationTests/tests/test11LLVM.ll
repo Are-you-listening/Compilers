@@ -5,7 +5,7 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  ;  #include <stdio.h>  INT main
+  ;    INT main
   %".4" = alloca i8, align 1
   store i8 97, i8* %".4", align 1
   ;  CHAR x = 'a'

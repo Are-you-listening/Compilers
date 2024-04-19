@@ -16,7 +16,7 @@ class InputStreamTests(unittest.TestCase):
 
         for i in file_range:
             isp = InputStreamProcessor(f"tests/test{i}.c")
-            print(isp)
+            #print(isp)
 
     @staticmethod
     def compareOut(newly, right):

@@ -5,7 +5,7 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  ;  #include <stdio.h>  INT main
+  ;    INT main
   %".4" = bitcast [3 x i8]* @".str.d" to i8*
   %".5" = alloca i32
   store i32 5, i32* %".5"

@@ -18,7 +18,7 @@ class TestConstraints(unittest.TestCase):
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
-            print(index)
+            #print(index)
             file_path = f"tests/test{index}.json"
             with open(file_path, "rt") as f:
                 json_data = f.read()

@@ -1,4 +1,4 @@
-; ModuleID = "tests/test2.c"
+; ModuleID = "tests/test3.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
@@ -7,26 +7,30 @@ define i32 @"main"()
 .2:
   ;  INT main
   %".4" = alloca i32, align 4
-  store i32 1, i32* %".4", align 4
-  ;  INT success = True
-  %".7" = bitcast [3 x i8]* @".str.d" to i8*
-  %".8" = alloca i32
-  store i32 1, i32* %".8"
-  %".10" = load i32, i32* %".8"
-  %".11" = call i32 (i8*, ...) @"printf"(i8* %".7", i32 %".10")
+  store i32 -20, i32* %".4", align 4
+  ;  INT True = - 20
+  %".7" = alloca i32, align 4
+  store i32 -20, i32* %".7", align 4
+  ; INT success = True
+  %".10" = bitcast [3 x i8]* @".str.d" to i8*
+  %".11" = alloca i32
+  store i32 -20, i32* %".11"
+  %".13" = load i32, i32* %".11"
+  %".14" = call i32 (i8*, ...) @"printf"(i8* %".10", i32 %".13")
   ;  printf "%d" success
-  %".13" = load i32, i32* @"True", align 4
+  %".16" = load i32, i32* %".4", align 4
   ;  printf "%d" True
-  %".15" = bitcast [3 x i8]* @".str.d" to i8*
-  %".16" = alloca i32
-  store i32 %".13", i32* %".16"
-  %".18" = load i32, i32* %".16"
-  %".19" = call i32 (i8*, ...) @"printf"(i8* %".15", i32 %".18")
+  %".18" = bitcast [3 x i8]* @".str.d" to i8*
+  %".19" = alloca i32
+  store i32 %".16", i32* %".19"
+  %".21" = load i32, i32* %".19"
+  %".22" = call i32 (i8*, ...) @"printf"(i8* %".18", i32 %".21")
   ret i32 0
   ;  return 0
 }
 
-@"True" = global i32 1, align 4
+@"a" = global i32 3, align 4
+@"True" = global i32 4, align 4
 declare i32 @"printf"(i8* %".1", ...)
 
 @".str.d" = internal constant [3 x i8] c"%d\00"

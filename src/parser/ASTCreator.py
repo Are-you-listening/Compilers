@@ -126,9 +126,6 @@ class ASTCreator(grammarCVisitor):
     def visitEnum(self, ctx: grammarCParser.EnumContext):
         self.__makeNode(ctx, "Enum")
 
-    def visitDefine(self, ctx: grammarCParser.DefineContext):
-        self.__makeNode(ctx, "Define")
-
     def visitParameter_call(self, ctx: grammarCParser.Parameter_callContext):
         self.__makeNode(ctx, "ParameterCall")
 

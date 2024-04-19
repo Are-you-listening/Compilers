@@ -49,7 +49,7 @@ class ErrorExporter:
 
     @staticmethod
     def uninitializedVariable(identifier: str, linenr: str):
-        print(f"[ Warning] line {linenr}: use of uninitialized variable {identifier}", file=sys.stderr)
+        print(f"[ Warning] line {linenr}: use of uninitialized variable {identifier}")
 
     @staticmethod
     def undeclaredVariable(identifier: str, linenr: str):
@@ -200,12 +200,14 @@ class ErrorExporter:
         print(f"[ Error ] line {line_nr} invalid statement in the global scope", file=sys.stderr)
         exit()
 
+    @staticmethod
     def tooFewFunctionArguments(line_nr: str, expected: int, got: int, function: str):
-        print(f"[ Error ] line {line_nr}: too few arguments to function '{function}': expected {expected}, got {got}")
+        print(f"[ Error ] line {line_nr}: too few arguments to function '{function}': expected {expected}, got {got}", file=sys.stderr)
         exit()
 
+    @staticmethod
     def tooManyFunctionArguments(line_nr: str, expected: int, got: int, function: str):
-        print(f"[ Error ] line {line_nr}: too many arguments to function '{function}': expected {expected}, got {got}")
+        print(f"[ Error ] line {line_nr}: too many arguments to function '{function}': expected {expected}, got {got}", file=sys.stderr)
         exit()
 
     @staticmethod
