@@ -107,6 +107,7 @@ def Processing(ast, dot_file, fold):
     if fold:
         ConstantFoldingVisitor().visit(ast)
 
+    #DotVisitor("output/upda").visit(ast)  # Export AST in Dotfix functions
     ASTConversion().visit(ast)
 
     ValueAdderVisitor().visit(ast)
