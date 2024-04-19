@@ -1,12 +1,12 @@
 digraph AST {
-  "126580329803840" [label="main: type: INT False  
+  "134094403416464" [label="main: type: INT False  
                    name: main
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x731fc76d9a50>
+                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x79f548e551e0>
                    first used: None)"];
-  "126580329803840" -> "126580327027696";
-  "126580327027696" [label=""];
-  "126580327027696" -> "126580327033744";
-  "126580327033744" [label=""];
+  "134094403416464" -> "134094403416608";
+  "134094403416608" [label=""];
+  "134094403416608" -> "134094396938448";
+  "134094396938448" [label=""];
 }

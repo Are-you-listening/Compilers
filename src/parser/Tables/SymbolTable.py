@@ -1,5 +1,6 @@
 from src.parser.ErrorExporter import *
 from src.parser.Tables.SymbolTypePtr import *
+from src.parser.Tables.SymbolTypeArray import SymbolTypeArray
 from src.parser.Tables.FunctionSymbolType import *
 
 from src.parser.AST import *
@@ -45,7 +46,10 @@ class SymbolEntry(TableEntry):
         ptr_string = ""
         d_t = self.typeObject
         while isinstance(d_t, SymbolTypePtr):
-            ptr_string += "*"
+            if isinstance(d_t, SymbolTypeArray):
+                ptr_string += str(d_t.size)
+            else:
+                ptr_string += "*"
             d_t = d_t.deReference()
 
         return d_t.getType(), ptr_string

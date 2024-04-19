@@ -1,12 +1,5 @@
-int main() {
+int x = 3;
 
-int x = 54;
-
-int z = -33;
-
-int* p = &z;
-
-x = *p;
-
-p* = 5;
+int main(){
+    return 0;
 }
