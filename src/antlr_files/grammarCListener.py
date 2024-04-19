@@ -98,6 +98,15 @@ class grammarCListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by grammarCParser#parameter_call.
+    def enterParameter_call(self, ctx:grammarCParser.Parameter_callContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#parameter_call.
+    def exitParameter_call(self, ctx:grammarCParser.Parameter_callContext):
+        pass
+
+
     # Enter a parse tree produced by grammarCParser#block_line.
     def enterBlock_line(self, ctx:grammarCParser.Block_lineContext):
         pass

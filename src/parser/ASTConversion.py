@@ -65,8 +65,8 @@ class ASTConversion(ASTVisitor):
 
             self.type_mapping[node] = (data_type, ptrs)
             return
+        if node.text not in ("Literal", "Expr", "Declaration", "Assignment", "ParameterCall", "FunctionCall"):
 
-        if node.text not in ("Literal", "Expr", "Declaration", "Assignment"):
             """
             For our conversion we are only interested in Nodes that have a type,
              things like comments are useless to check
@@ -138,7 +138,7 @@ class ASTConversion(ASTVisitor):
         """for declaration and assignment the type is the type of the value that is declared/assigned (and not the 
         necessarily the poorest type)"""
 
-        if node.text in ("Declaration", "Assignment"):
+        if node.text in ("Declaration", "Assignment", "FunctionCall"):
             assign_node = node.getChild(0)
             assign_type = self.type_mapping[assign_node]
 
@@ -151,7 +151,32 @@ class ASTConversion(ASTVisitor):
             make sure assignment doesn't convert to a ptr less
             """
             self.type_mapping[assign_node] = to_type
+        if  node.text == "ParameterCall":
+            functionNode = node.parent.children[0]
+            while functionNode.text == "Dereference":
+                functionNode = functionNode.children[0]
+            parameterTypes = node.parent.getSymbolTable().getEntry(functionNode.text).getTypeObject().getParameterTypes()
+            """
+            check if has the right amount of arguments
+            """
+            if len(node.parent.children) - 1 < len(parameterTypes):
+                ErrorExporter.tooFewFunctionArguments(node.linenr,len(parameterTypes),len(node.children), functionNode.text)
+            if len(node.parent.children) - 1 > len(parameterTypes):
+                ErrorExporter.tooManyFunctionArguments(node.linenr,len(parameterTypes),len(node.children), functionNode.text)
 
+
+            """
+            be default 1 ptr is added, so remove it again, because assignment
+            """
+
+            """
+            TODO: support for ptrs in function calls (string zijn sterretjes)
+            """
+            to_type = (parameterTypes[node.parent.findChild(node) - 1], "")
+
+            """
+            make sure assignment doesn't convert to a ptr less
+            """
         if operator in ("&&", "||"):
             """
             logical operators expect booleans so we convert the given entry into a boolean
@@ -182,8 +207,10 @@ class ASTConversion(ASTVisitor):
                 make sure that pointers and floats are not combined in invalid ways
                 int* v = 0.0; or float v = (ptr)              
                 """
+
                 if not self.compatible_2(type_tup, to_type, operator):
                     if operator is None:
+
                         """
                         when no operator, it is an assignment
                         """
@@ -230,6 +257,9 @@ class ASTConversion(ASTVisitor):
             self.type_mapping[node] = ("BOOL", "")
         else:
             self.type_mapping[node] = to_type
+
+
+
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":

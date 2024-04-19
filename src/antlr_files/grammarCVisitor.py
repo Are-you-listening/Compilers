@@ -59,6 +59,11 @@ class grammarCVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by grammarCParser#parameter_call.
+    def visitParameter_call(self, ctx:grammarCParser.Parameter_callContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by grammarCParser#block_line.
     def visitBlock_line(self, ctx:grammarCParser.Block_lineContext):
         return self.visitChildren(ctx)

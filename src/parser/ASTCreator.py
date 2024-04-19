@@ -60,6 +60,9 @@ class ASTCreator(grammarCVisitor):
     def visitFunction_call(self, ctx: grammarCParser.Function_callContext):
         self.__makeNode(ctx, "FunctionCall")
 
+    def visitParameter_call(self, ctx: grammarCParser.Parameter_callContext):
+        self.__makeNode(ctx, "ParameterCall")
+
     def visitPrintscanf(self, ctx: grammarCParser.PrintscanfContext):
         self.__makeNode(ctx, "printf")
 
@@ -125,6 +128,9 @@ class ASTCreator(grammarCVisitor):
 
     def visitDefine(self, ctx: grammarCParser.DefineContext):
         self.__makeNode(ctx, "Define")
+
+    def visitParameter_call(self, ctx: grammarCParser.Parameter_callContext):
+        self.__makeNode(ctx, "ParameterCall")
 
     def visitTerminal(self, ctx):
         """

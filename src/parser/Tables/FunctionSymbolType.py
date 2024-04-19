@@ -21,3 +21,6 @@ class FunctionSymbolType(SymbolType):
         if not self.return_const:
             const_str = ""
         return f"{const_str} {self.return_type} "
+
+    def getParameterTypes(self):
+        return self.param_types;
