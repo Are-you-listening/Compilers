@@ -1,7 +1,8 @@
-#include <stdio.h>
+// for loop is not allowed in global scope
+for (int i = 0; i < 5; i++) {
+    printf("%d", i);
+}
 
-printf("%d", 1);    // also stopped by the grammar
-
-int main(){
+int main() {
     return 0;
 }

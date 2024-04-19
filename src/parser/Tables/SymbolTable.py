@@ -1,5 +1,6 @@
 from src.parser.ErrorExporter import *
 from src.parser.Tables.SymbolTypePtr import *
+from src.parser.Tables.SymbolTypeArray import SymbolTypeArray
 from src.parser.Tables.FunctionSymbolType import *
 
 from src.parser.AST import *
@@ -16,6 +17,7 @@ class SymbolEntry(TableEntry):
         self.firstDeclared = first_declared  # The node this Entry is first declared
         self.firstUsed = first_used  # The node this Entry is first used
         self.referenced = False
+        self.function_is_defined = False # function only
 
     def __str__(self):
         return f"""type: {self.typeObject} 
@@ -44,7 +46,10 @@ class SymbolEntry(TableEntry):
         ptr_string = ""
         d_t = self.typeObject
         while isinstance(d_t, SymbolTypePtr):
-            ptr_string += "*"
+            if isinstance(d_t, SymbolTypeArray):
+                ptr_string += str(d_t.size)
+            else:
+                ptr_string += "*"
             d_t = d_t.deReference()
 
         return d_t.getType(), ptr_string
@@ -71,6 +76,12 @@ class SymbolEntry(TableEntry):
 
     def is_referenced(self):
         return self.referenced
+
+    def is_function_defined(self):
+        return self.function_is_defined
+
+    def set_function_defined(self, value):
+        self.function_is_defined = value
 
 
 class SymbolTable(AbstractTable):

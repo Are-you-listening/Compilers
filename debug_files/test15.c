@@ -1,7 +1,5 @@
-float func(float* x, int y) {
-     int z = 5;
-    return z;
-}
+float func( float* x, int y);
+
 
 
 
@@ -13,3 +11,10 @@ int main() {
     c = func (  ptr , y);
     return y;
 }
+
+float func( int* x, int y) {
+    int z = 5;
+    return z;
+}
+
+

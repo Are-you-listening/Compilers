@@ -209,3 +209,7 @@ class ErrorExporter:
         print(f"[ Error ] line {line_nr}: too many arguments to function '{function}': expected {expected}, got {got}")
         exit()
 
+    @staticmethod
+    def functionRedefenition(line_nr: str, func_name: str):
+        print(f"[ Error ] line {line_nr}: redefinition of {func_name}", file=sys.stderr)
+        exit()
