@@ -3,14 +3,14 @@ from io import StringIO
 import json
 import os
 from antlr4 import *
-from src.antlr_files.grammarCLexer import grammarCLexer
-from src.antlr_files.grammarCParser import grammarCParser
+from src.parser.Constraints.ConstraintChecker import *
 from src.parser.ASTTableCreator import *
+from TestCases.ASTTests.AstLoader import AstLoader
 
 
-class TestSyntaxError(unittest.TestCase):
-    def testSyntaxErrors(self):
-        file_indexes = range(1, 36)
+class TestConstraints(unittest.TestCase):
+    def testConstraints(self):
+        file_indexes = range(1, 5)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -18,8 +18,12 @@ class TestSyntaxError(unittest.TestCase):
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
-            #print(index)
-            file_path = f"tests/test{index}.c"
+            print(index)
+            file_path = f"tests/test{index}.json"
+            with open(file_path, "rt") as f:
+                json_data = f.read()
+
+            ast_tree = AstLoader.load(json_data)
 
             """
             make print buff
@@ -36,17 +40,12 @@ class TestSyntaxError(unittest.TestCase):
             conversion
             """
             try:
-                input_stream = FileStream(file_path)  # Declare some variables
-                lexer = grammarCLexer(input_stream)
-                stream = CommonTokenStream(lexer)
-                parser = grammarCParser(stream)
-
-                lexer.removeErrorListeners()
-                lexer.addErrorListener(EListener())
-
-                parser.removeErrorListeners()  # Add our own error Listener
-                parser.addErrorListener(EListener())
-                parser.start_()
+                ConstraintChecker().visit(ast_tree)
+                errors = str(error_buff.getvalue().splitlines())
+                expected_errors = str(error_dict.get(str(index), []))
+                print("error", error_buff.getvalue().splitlines(), index)
+                print(errors, expected_errors)
+                assert errors == expected_errors
             except SystemExit as e:
                 """
                 tests errors Real errors
@@ -54,7 +53,7 @@ class TestSyntaxError(unittest.TestCase):
                 errors = str(error_buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
                 print("error", error_buff.getvalue().splitlines(), index)
-                #print(errors, expected_errors)
+                print(errors, expected_errors)
                 assert errors == expected_errors
 
             sys.stdout = original

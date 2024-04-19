@@ -1,4 +1,4 @@
-int x = 3;
+3+4;    // not allowed
 
 int main(){
     return 0;

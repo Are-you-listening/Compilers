@@ -196,6 +196,11 @@ class ErrorExporter:
         print(f"[ Error ] line {line_nr} You can't initialise a global variable with a global variable", file=sys.stderr)
         exit()
 
+    @staticmethod
+    def InvalidGlobalExpression(line_nr: str):
+        print(f"[ Error ] line {line_nr} invalid statement in the global scope", file=sys.stderr)
+        exit()
+
     def tooFewFunctionArguments(line_nr: str, expected: int, got: int, function: str):
         print(f"[ Error ] line {line_nr}: too few arguments to function '{function}': expected {expected}, got {got}")
         exit()

@@ -11,6 +11,18 @@ from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
 from src.parser.BlacklistVisitor import BlacklistVisitor
 from src.parser.Constraints.ConstraintChecker import *
 from src.parser.ASTCleanerAfter import *
+from src.parser.DefineConverter import *
+from src.parser.EnumConverter import *
+from src.parser.EnumTypeMerger import *
+from src.parser.ASTTypedefReplacer import *
+from src.parser.ASTIfCleaner import *
+from src.parser.ASTLoopCleaner import *
+from src.parser.ASTCleaner import *
+from src.parser.ASTCleanerAfter import *
+from src.parser.SwitchConverter import *
+from src.parser.ArrayCleaner import *
+from src.parser.ASTTableCreator import *
+from src.parser.ASTDereferencer import *
 
 input_file = "read_file"
 
@@ -40,8 +52,20 @@ black_list_visitor.visit(ast)
 below add needed stuff
 """
 
-codegetter = CodeGetter()
-codegetter.visit(ast)
+CodeGetter().visit(ast)
+DefineConverter().visit(ast)
+EnumConverter().visit(ast)
+EnumTypeMerger().visit(ast)
+ASTTypedefReplacer().visit(ast)
+ASTIfCleaner().visit(ast)
+ASTLoopCleaner().visit(ast)
+ASTCleaner().visit(ast)
+SwitchConverter().visit(ast)
+ArrayCleaner().visit(ast)
+ASTTableCreator().visit(ast)
+ASTCleanerAfter().visit(ast)
+ASTDereferencer().visit(ast)
+
 
 """
 add needed stuff above
@@ -54,15 +78,12 @@ with open("file_read_json.json", "wt") as f:
 d = DotVisitor("read_file_before")  # Export AST in Dot
 d.visit(ast)
 
+
 """
 add check stuff
 """
 
-ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
-
-ASTCleaner().visit(ast)  # Do a standard cleaning
-
-ASTTableCreator().visit(ast)  # Create the symbol table
+ConstraintChecker().visit(ast)
 
 """
 add check stuff above
