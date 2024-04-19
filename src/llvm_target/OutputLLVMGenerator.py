@@ -69,8 +69,17 @@ class CTypesToLLVM:
     def getIRType(data_type: str, ptrs: str):
         convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType(), "BOOL": ir.IntType(1)}
         llvm_type = convert_map.get(data_type)
-        for i in range(len(ptrs)):
-            llvm_type = ir.PointerType(llvm_type)
+        for p in ptrs:
+            if p == "*":
+                """
+                In case a '*' is in the ptr, we have a ptr element
+                """
+                llvm_type = ir.PointerType(llvm_type)
+            else:
+                """
+                When we have an integer, we have an array
+                """
+                llvm_type = ir.ArrayType(llvm_type, int(p))
 
         return llvm_type
 
@@ -206,7 +215,8 @@ class Calculation:
                 llvm_var = llvm_op(operator, left, right)
                 return llvm_var
 
-        if left.type.is_pointer and operator in ["+", "-"]:
+        print(left.type, right.type)
+        if isinstance(left.type, ir.types.PointerType) and operator in ["+", "-"]:
             if not isinstance(right,
                               ir.Constant):  # If it is not a constant, LLVM requires a sign extend to match the size
                 right = block.sext(right, ir.IntType(64))

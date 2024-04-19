@@ -55,6 +55,14 @@ class ASTLoopCleaner(ASTVisitor):
         """
         change the node from 'FOR' to 'WHILE'
         """
+
+        """
+        In Case we have the following situation: for (int i), out i needs to be inside the for loop scope but 
+        not outside. We enforce this by adding a 'Code' node, which will cause a new scope
+        """
+
+        node.addNodeParent(ASTNode("Scope", node.parent, None, node.linenr, node.virtuallinenr))
+
         node.text = "WHILE"
 
         """
@@ -86,6 +94,14 @@ class ASTLoopCleaner(ASTVisitor):
         node.removeChild(suffix_child)
         loop_code_block.addChildren(suffix_child)
         suffix_child.parent = loop_code_block
+
+        """
+        In case no Condition is provided, the condition node is None, but we will replace it by a True
+        """
+
+        if node.getChild(1).text is None:
+            true_node = ASTNodeTerminal("1", node, node.getSymbolTable(), "INT", node.linenr, node.virtuallinenr)
+            node.replaceChild(node.getChild(1), true_node)
 
         ASTConversion.addConversion(node.getChild(1), ("BOOL", ""))
 

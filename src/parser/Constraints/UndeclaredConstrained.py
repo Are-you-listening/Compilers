@@ -20,7 +20,6 @@ class UndeclaredConstrained(Constraint):
             if entry is None or entry.firstDeclared.linenr > node.linenr:
                 self.rejected = True
                 self.errorNode = node
-                print("b", entry, node.symbol_table)
                 self.throwException()
 
     def checkNode(self, node: ASTNode):
@@ -31,7 +30,6 @@ class UndeclaredConstrained(Constraint):
                 if not self.viableDeclaration(node.children[0].text, [node.children[1]]):
                     self.errorNode = node.children[0]
                     self.rejected = True
-                    print("a")
                     self.throwException()
 
     def throwException(self):

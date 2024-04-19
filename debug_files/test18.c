@@ -1,9 +1,17 @@
+#include <stdio.h>
 
-// #define PHi 3.14
+int True = 1;
 
 int main()
 {
-    int a = PHI;
-    #define PHi 3
-    int b = PHI;
+    int k = 0;
+    for (;;){
+        printf("%d", k);
+        k++;
+        if (k > 10){
+            break;
+        }
+    }
+
+    return 0;
 }

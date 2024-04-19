@@ -39,16 +39,9 @@ def cleanGreen(input_file, symbol_file):
     """
     input_stream = FileStream(input_file)  # Declare some variables
 
-    i = InputStreamProcessor(input_file)
-
     lexer = grammarCLexer(input_stream)
 
     stream = CommonTokenStream(lexer)
-
-    p = PreProcessor(stream, lexer)
-    p.preprocess()
-
-    exit()
 
     parser = grammarCParser(stream)
 
@@ -69,6 +62,8 @@ def cleanGreen(input_file, symbol_file):
     black_list_visitor = BlacklistVisitor()
     black_list_visitor.visit(ast)
 
+    #DotVisitor("output/tr").visit(ast)  # Export AST in Dot
+
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
@@ -85,6 +80,8 @@ def cleanGreen(input_file, symbol_file):
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
+
+    #DotVisitor("output/tr2").visit(ast)  # Export AST in Dot
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
@@ -110,13 +107,12 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold):
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
-
     ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 
     if fold:
         ConstantFoldingVisitor().visit(ast)
 
+    #DotVisitor("output/upda").visit(ast)  # Export AST in Dotfix functions
     ASTConversion().visit(ast)
 
     ValueAdderVisitor().visit(ast)

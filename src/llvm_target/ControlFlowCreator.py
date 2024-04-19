@@ -96,10 +96,11 @@ class ControlFlowCreator(ASTVisitor):
             Add a block for start function
             This will create the general start block of the function
             """
+            if node.getChildAmount() < 3:
+                return
+            cf, is_new = self.get_make_cfg(node.getChild(2))
 
-            cf, is_new = self.get_make_cfg(node.getChild(1))
-
-            self.control_flow_map[node.getChild(1)] = cf
+            self.control_flow_map[node.getChild(2)] = cf
             ControlFlowGraph.check_return_statement(cf)
 
             """
@@ -226,7 +227,6 @@ class ControlFlowCreator(ASTVisitor):
         """
         var_child: ASTNode = node.getChild(0)
         data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
-
         Declaration.function(var_child.text, data_type, ptrs)
 
     def handleOperations(self, node: ASTNode):
@@ -411,7 +411,7 @@ class ControlFlowCreator(ASTVisitor):
             All the blocks we needed to add will be add here, after the hole tree is visited
             """
 
-            ast_block.move(function_node.getChild(1))
+            ast_block.move(function_node.getChild(2))
 
     def handleIf(self, node: ASTNode):
         """

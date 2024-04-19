@@ -9,6 +9,8 @@ from TestCases.ASTTests.AstLoader import AstLoader
 from src.parser.ASTTableCreator import *
 from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
 from src.parser.BlacklistVisitor import BlacklistVisitor
+from src.parser.Constraints.ConstraintChecker import *
+from src.parser.ASTCleanerAfter import *
 
 input_file = "read_file"
 

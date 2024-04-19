@@ -59,6 +59,7 @@ class AST2LLVM(ASTVisitor):
 
                 LLVMSingleton.getInstance().setCurrentBlock(node.vertex.llvm)
                 self.last_vertex = node.vertex
+
                 self.addOriginalCodeAsComment(currentNode)
 
             childNotVisited = False
@@ -129,7 +130,8 @@ class AST2LLVM(ASTVisitor):
         if node.text == "Return":
             self.handleReturn()
 
-        self.addOriginalCodeAsComment(node)
+        if node.text not in ("Parameters"):
+            self.addOriginalCodeAsComment(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
@@ -146,18 +148,6 @@ class AST2LLVM(ASTVisitor):
         if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
             llvm_var = Declaration.llvmLiteral(node.text, node.type, "")
             self.llvm_map[node] = llvm_var
-
-
-    @staticmethod
-    def handleFunction(node: ASTNode):
-        var_child: ASTNode = node.getChild(0)
-        data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
-
-        Declaration.function(var_child.text, data_type, ptrs)
-
-        """
-        add value to map to map var to address register
-        """
 
     def handleDeclaration(self, node):
         """
@@ -356,6 +346,5 @@ class AST2LLVM(ASTVisitor):
         """
 
         code = self.codegetter.getLine(node)
-
         if code is not None:
             Declaration.addComment(code)

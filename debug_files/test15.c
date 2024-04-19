@@ -1,14 +1,20 @@
-int func(const int x, float y) {
-    y = 5;
-    int z = 5;
-    return x;
-}
+float func( float* x, int y);
+
+
+
 
 int main() {
-    int x = 5;
     int y = 10;
-    x = func(x,y);
+    float u = 0;
+    float* ptr = &u;
+    int c;
+    c = func (  ptr , y);
+    return y;
 }
 
+float func( int* x, int y) {
+    int z = 5;
+    return z;
+}
 
 

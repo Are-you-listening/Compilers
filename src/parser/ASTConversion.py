@@ -137,8 +137,17 @@ class ASTConversion(ASTVisitor):
 
         """for declaration and assignment the type is the type of the value that is declared/assigned (and not the 
         necessarily the poorest type)"""
+        if node.text == "FunctionCall":
+            functionNode = node.children[0]
+            while functionNode.text == "Dereference":
+                functionNode = functionNode.children[0]
 
-        if node.text in ("Declaration", "Assignment", "FunctionCall"):
+            return_type = node.parent.getSymbolTable().getEntry(functionNode.text).getPtrTuple()
+
+            self.type_mapping[node] = return_type
+            return
+
+        if node.text in ("Declaration", "Assignment"):
             assign_node = node.getChild(0)
             assign_type = self.type_mapping[assign_node]
 
@@ -146,12 +155,12 @@ class ASTConversion(ASTVisitor):
             be default 1 ptr is added, so remove it again, because assignment
             """
             to_type = (assign_type[0], assign_type[1][:-1])
-
             """
             make sure assignment doesn't convert to a ptr less
             """
             self.type_mapping[assign_node] = to_type
-        if  node.text == "ParameterCall":
+
+        if node.text == "ParameterCall":
             functionNode = node.parent.children[0]
             while functionNode.text == "Dereference":
                 functionNode = functionNode.children[0]
@@ -163,8 +172,6 @@ class ASTConversion(ASTVisitor):
                 ErrorExporter.tooFewFunctionArguments(node.linenr,len(parameterTypes),len(node.children), functionNode.text)
             if len(node.parent.children) - 1 > len(parameterTypes):
                 ErrorExporter.tooManyFunctionArguments(node.linenr,len(parameterTypes),len(node.children), functionNode.text)
-
-
             """
             be default 1 ptr is added, so remove it again, because assignment
             """
@@ -172,8 +179,7 @@ class ASTConversion(ASTVisitor):
             """
             TODO: support for ptrs in function calls (string zijn sterretjes)
             """
-            to_type = (parameterTypes[node.parent.findChild(node) - 1], "")
-
+            to_type = parameterTypes[node.parent.findChild(node) - 1]
             """
             make sure assignment doesn't convert to a ptr less
             """
