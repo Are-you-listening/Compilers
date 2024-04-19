@@ -162,6 +162,14 @@ class ASTNode:
 
         self.parent = to_parent
 
+    def inWhileLoop(self):
+        current_node = self
+        while current_node.text != "Start":
+            if current_node.text == "WHILE":
+                return True
+            current_node = current_node.parent
+        return False
+
 
 class ASTNodeTerminal(ASTNode):
     """
