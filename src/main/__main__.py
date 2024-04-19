@@ -38,15 +38,9 @@ def cleanGreen(input_file, symbol_file):
     input_stream = FileStream(input_file)  # Declare some variables
 
     i = InputStreamProcessor(input_file)
-
     lexer = grammarCLexer(input_stream)
 
     stream = CommonTokenStream(lexer)
-
-    p = PreProcessor(stream, lexer)
-    p.preprocess()
-
-    exit()
 
     parser = grammarCParser(stream)
 
@@ -108,7 +102,7 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold):
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+
 
     ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 
@@ -121,8 +115,12 @@ def Processing(ast, dot_file, fold):
 
     ConstantStatementFolding().visit(ast)
 
+    DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+
     cfc = ControlFlowCreator()
     cfc.visit(ast)
+
+    DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
 
     DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
 
