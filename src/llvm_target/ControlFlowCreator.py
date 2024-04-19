@@ -411,7 +411,7 @@ class ControlFlowCreator(ASTVisitor):
             All the blocks we needed to add will be add here, after the hole tree is visited
             """
 
-            ast_block.move(function_node.getChild(1))
+            ast_block.move(function_node.getChild(2))
 
     def handleIf(self, node: ASTNode):
         """

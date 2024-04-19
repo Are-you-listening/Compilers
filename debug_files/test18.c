@@ -1,9 +1,9 @@
 
-# define PHi 3.14
+// #define PHi 3.14
 
 int main()
 {
-    int a = PHI;
-    # define PHi 3
-    int b = PHI;
+    for (int i = 0; i<5; i++){
+        int a = 1;
+    }
 }
