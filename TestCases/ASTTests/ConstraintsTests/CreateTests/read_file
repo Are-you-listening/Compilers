@@ -1,7 +1,7 @@
+#include <stdio.h>
+
+printf("%d", 1);    // also stopped by the grammar
+
 int main(){
-    // nested functions are stopped by the grammar
-    int foo(){
-        return 0;
-    }
     return 0;
 }

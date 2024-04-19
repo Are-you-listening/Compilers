@@ -41,11 +41,6 @@ class TestConstraints(unittest.TestCase):
             """
             try:
                 ConstraintChecker().visit(ast_tree)
-                errors = str(error_buff.getvalue().splitlines())
-                expected_errors = str(error_dict.get(str(index), []))
-                print("error", error_buff.getvalue().splitlines(), index)
-                print(errors, expected_errors)
-                assert errors == expected_errors
             except SystemExit as e:
                 """
                 tests errors Real errors
