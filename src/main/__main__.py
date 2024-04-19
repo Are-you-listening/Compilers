@@ -28,6 +28,7 @@ from src.parser.EnumConverter import *
 from src.parser.Preproccesing.InputStreamProcessor import InputStreamProcessor
 from src.parser.Preproccesing.preProcessor import *
 
+from src.parser.Preproccesing.Preprocessor import PreProcessor
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -36,15 +37,19 @@ def cleanGreen(input_file, symbol_file):
     :param symbol_file:
     :return:
     """
-    #input_stream = FileStream(input_file)  # Declare some variables
-
-    input_stream = PreProccessor(input_file).process()  # Apply preproccessing to the stream
-
+    input_stream = FileStream(input_file)  # Declare some variables
 
     i = InputStreamProcessor(input_file)
 
-    lexer = grammarCLexer(i)
+    lexer = grammarCLexer(input_stream)
+
     stream = CommonTokenStream(lexer)
+
+    p = PreProcessor(stream, lexer)
+    p.preprocess()
+
+    exit()
+
     parser = grammarCParser(stream)
 
     lexer.removeErrorListeners()
@@ -67,7 +72,7 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
-    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     DefineConverter().visit(ast)  # Convert simple defines to typedefs & const values
 
@@ -105,7 +110,7 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold):
-    DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 
