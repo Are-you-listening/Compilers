@@ -72,14 +72,24 @@ class ASTTableCreator(ASTVisitor):
         if node.text == "Function":
             child = node.findType("Type")
             param_types = []
-
+            param_strings = []
             for param in node.children[2].children:
+                param_is_const = False
+                pointer_string = ""
                 if param.children[0].children[0].text != "const":
                     param_types.append(param.children[0].children[0].text)
                 else:
                     param_types.append(param.children[0].children[1].text)
-
-            self.__make_entry(node, child, lambda d, c: FunctionSymbolType(d, c, param_types))
+                    param_is_const = True
+                if param_is_const:
+                    for i in range(param.children[0].getChildAmount() - 2):
+                        pointer_string += "*"
+                else:
+                    for i in range(param.children[0].getChildAmount() - 1):
+                        pointer_string += "*"
+                param_strings.append(pointer_string)
+            param_types_and_ptrs = [(x, y) for x, y in zip(param_types, param_strings)]
+            self.__make_entry(node, child, lambda d, c: FunctionSymbolType(d, c, param_types_and_ptrs))
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         node.symbol_table = self.table

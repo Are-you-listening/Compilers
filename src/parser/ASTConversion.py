@@ -172,8 +172,8 @@ class ASTConversion(ASTVisitor):
             """
             TODO: support for ptrs in function calls (string zijn sterretjes)
             """
-            to_type = (parameterTypes[node.parent.findChild(node) - 1], "")
-
+            to_type = parameterTypes[node.parent.findChild(node) - 1]
+            print(to_type)
             """
             make sure assignment doesn't convert to a ptr less
             """

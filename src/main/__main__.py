@@ -108,6 +108,7 @@ def Processing(ast, dot_file, fold):
     if fold:
         ConstantFoldingVisitor().visit(ast)
 
+    DotVisitor("output/beforeConversions").visit(ast)  # Export AST in Dot
     ASTConversion().visit(ast)
 
     ValueAdderVisitor().visit(ast)
