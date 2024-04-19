@@ -61,7 +61,7 @@ class ASTLoopCleaner(ASTVisitor):
         not outside. We enforce this by adding a 'Code' node, which will cause a new scope
         """
 
-        node.addNodeParent(ASTNode("Code", node.parent, None, node.linenr, node.virtuallinenr))
+        node.addNodeParent(ASTNode("Scope", node.parent, None, node.linenr, node.virtuallinenr))
 
         node.text = "WHILE"
 

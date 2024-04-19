@@ -1,9 +1,15 @@
+#include <stdio.h>
 
-// #define PHi 3.14
+int True = 1;
 
 int main()
 {
-    for (int i = 0; i<5; i++){
-        int a = 1;
-    }
+    int True = -20;
+    int success = True;
+
+    printf("%d", success);
+
+    printf("%d", True);
+
+    return 0;
 }

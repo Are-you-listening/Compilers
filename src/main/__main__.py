@@ -102,26 +102,19 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold):
-
-
     ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
 
     if fold:
         ConstantFoldingVisitor().visit(ast)
 
-    DotVisitor("output/beforeConversions").visit(ast)  # Export AST in Dot
     ASTConversion().visit(ast)
 
     ValueAdderVisitor().visit(ast)
 
     ConstantStatementFolding().visit(ast)
 
-    DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
-
     cfc = ControlFlowCreator()
     cfc.visit(ast)
-
-    DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
 
     DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
 

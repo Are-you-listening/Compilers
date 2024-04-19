@@ -226,7 +226,6 @@ class ControlFlowCreator(ASTVisitor):
         """
         var_child: ASTNode = node.getChild(0)
         data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
-
         Declaration.function(var_child.text, data_type, ptrs)
 
     def handleOperations(self, node: ASTNode):

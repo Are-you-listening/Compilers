@@ -60,7 +60,7 @@ class ASTTableCreator(ASTVisitor):
 
             self.__make_entry(node, child, symbol_type)
 
-        if node.text in ("Function", "Code"):
+        if node.text in ("Function", "Code", "Scope"):
             """
             Go 1 scope back, and make sure the node its scope is recalibrated
             Because function definition needs to be in a global scope
