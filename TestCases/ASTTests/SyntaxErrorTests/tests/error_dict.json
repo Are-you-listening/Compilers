@@ -27,5 +27,10 @@
   "27": ["[ Syntax Error ] line 4:3 invalid symbol: '='"],
   "28": ["[ Syntax Error ] line 4:8 invalid symbol: '='"],
   "29": ["[ Syntax Error ] line 6:0 invalid symbol: '// Missing semicolon here'"],
-  "30": ["[ Syntax Error ] line 3:10 invalid symbol: '='"]
+  "30": ["[ Syntax Error ] line 3:10 invalid symbol: '='"],
+  "31": ["[ Syntax Error ] line 3:11 invalid symbol: '('"],
+  "32": ["[ Syntax Error ] line 1:0 invalid symbol: 'printf'"],
+  "33": ["[ Syntax Error ] line 1:0 invalid symbol: 'return'"],
+  "34": ["[ Syntax Error ] line 2:0 invalid symbol: 'for'"],
+  "35": ["[ Syntax Error ] line 1:0 invalid symbol: 'if'"]
 }
