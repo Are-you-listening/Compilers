@@ -16,6 +16,7 @@ class ASTCleaner(ASTVisitor):
             c.parent.removeChild(c)
 
     def visitNode(self, node: ASTNode):
+        self.cleanNone(node)
         self.cleanUseless(node)
         self.cleanComments(node)
         self.cleanLine(node)
@@ -198,6 +199,12 @@ class ASTCleaner(ASTVisitor):
         """
 
         if node.text not in ("switch", "case", "default"):
+            return
+
+        self.to_remove.add(node)
+
+    def cleanNone(self, node):
+        if node.text is not None:
             return
 
         self.to_remove.add(node)

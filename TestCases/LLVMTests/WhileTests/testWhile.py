@@ -20,7 +20,7 @@ class WhileTests(unittest.TestCase):
     """
 
     def testSimpleWhile(self):
-        file_range = range(1, 12)
+        file_range = range(1, 13)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         original = sys.stdout  # Temp catch any output

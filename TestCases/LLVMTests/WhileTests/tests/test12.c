@@ -5,6 +5,7 @@ int True = 1;
 int main()
 {
     int k = 0;
+    k = 0;
     for (;;){
         printf("%d", k);
         k++;
