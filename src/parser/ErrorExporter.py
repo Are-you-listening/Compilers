@@ -49,8 +49,7 @@ class ErrorExporter:
 
     @staticmethod
     def uninitializedVariable(identifier: str, linenr: str):
-        print(f"[ Error ] line {linenr}: use of uninitialized variable {identifier}", file=sys.stderr)
-        exit()
+        print(f"[ Warning] line {linenr}: use of uninitialized variable {identifier}", file=sys.stderr)
 
     @staticmethod
     def undeclaredVariable(identifier: str, linenr: str):
