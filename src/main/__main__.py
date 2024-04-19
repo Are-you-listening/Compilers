@@ -26,7 +26,7 @@ from src.parser.ArrayCleaner import ArrayCleaner
 from src.parser.DefineConverter import *
 from src.parser.EnumConverter import *
 from src.parser.Preproccesing.InputStreamProcessor import InputStreamProcessor
-
+from src.parser.Preproccesing.Preprocessor import PreProcessor
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -39,8 +39,15 @@ def cleanGreen(input_file, symbol_file):
 
     i = InputStreamProcessor(input_file)
 
-    lexer = grammarCLexer(i)
+    lexer = grammarCLexer(input_stream)
+
     stream = CommonTokenStream(lexer)
+
+    p = PreProcessor(stream, lexer)
+    p.preprocess()
+
+    exit()
+
     parser = grammarCParser(stream)
 
     lexer.removeErrorListeners()
