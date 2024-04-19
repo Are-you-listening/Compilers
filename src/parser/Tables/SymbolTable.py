@@ -16,6 +16,7 @@ class SymbolEntry(TableEntry):
         self.firstDeclared = first_declared  # The node this Entry is first declared
         self.firstUsed = first_used  # The node this Entry is first used
         self.referenced = False
+        self.function_is_defined = False # function only
 
     def __str__(self):
         return f"""type: {self.typeObject} 
@@ -71,6 +72,12 @@ class SymbolEntry(TableEntry):
 
     def is_referenced(self):
         return self.referenced
+
+    def is_function_defined(self):
+        return self.function_is_defined
+
+    def set_function_defined(self, value):
+        self.function_is_defined = value
 
 
 class SymbolTable(AbstractTable):

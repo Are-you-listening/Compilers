@@ -47,7 +47,19 @@ class ASTTableCreator(ASTVisitor):
                 stack.pop(current_index)
 
             visited.add(currentNode)
-
+    @staticmethod
+    def __check_function_declarations(self, node: ASTNode):
+        function_node = node.children[1]
+        if function_node.symbol_table.exists(function_node.text):
+            if node.getChildAmount() == 2:
+                return
+            else:
+                if (node.symbol_table.getEntry(function_node.text).is_function_defined()):
+                    ErrorExporter.functionRedefenition(function_node.linenr, function_node.text)
+                else:
+                    node.symbol_table.getEntry(function_node.text).set_function_defined(True)
+        else:
+            return
     def visitNode(self, node: ASTNode):
         """
         Assign the symbol table to the node
@@ -70,6 +82,7 @@ class ASTTableCreator(ASTVisitor):
                 node.symbol_table = self.table
 
         if node.text == "Function":
+            self.__check_function_declarations(self, node)
             child = node.findType("Type")
             param_types = []
             param_strings = []
@@ -91,6 +104,7 @@ class ASTTableCreator(ASTVisitor):
             param_types_and_ptrs = [(x, y) for x, y in zip(param_types, param_strings)]
             self.__make_entry(node, child, lambda d, c: FunctionSymbolType(d, c, param_types_and_ptrs))
 
+
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         node.symbol_table = self.table
 
@@ -105,6 +119,7 @@ class ASTTableCreator(ASTVisitor):
         else:
             datatype = SymbolTypePtr(latest_datatype, is_const)
         return datatype
+
 
     @staticmethod
     def __make_entry(node, child: ASTNodeTerminal, symbol_type):
@@ -143,3 +158,4 @@ class ASTTableCreator(ASTVisitor):
         """
         symbol_entry = SymbolEntry(latest_datatype, node.children[1].text, None, node.children[1], None)
         node.symbol_table.add(symbol_entry)
+

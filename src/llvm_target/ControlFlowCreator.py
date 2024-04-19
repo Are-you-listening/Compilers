@@ -96,10 +96,11 @@ class ControlFlowCreator(ASTVisitor):
             Add a block for start function
             This will create the general start block of the function
             """
+            if node.getChildAmount() < 3:
+                return
+            cf, is_new = self.get_make_cfg(node.getChild(2))
 
-            cf, is_new = self.get_make_cfg(node.getChild(1))
-
-            self.control_flow_map[node.getChild(1)] = cf
+            self.control_flow_map[node.getChild(2)] = cf
             ControlFlowGraph.check_return_statement(cf)
 
             """
