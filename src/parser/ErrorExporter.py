@@ -225,7 +225,7 @@ class ErrorExporter:
 
     @staticmethod
     def fileNotFound(line_nr, file):
-        print(f"[ Error ] line: {line_nr} File {file} not found!", file=sys.stderr)
+        print(f"[ Error ] line: {line_nr} '{file}' File not found!", file=sys.stderr)
         exit()
 
     @staticmethod

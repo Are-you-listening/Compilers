@@ -1,5 +1,3 @@
-//TODO type already exists
-
 #define a int
 
 typedef float a;

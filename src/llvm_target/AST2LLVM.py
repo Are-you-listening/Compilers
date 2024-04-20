@@ -290,7 +290,6 @@ class AST2LLVM(ASTVisitor):
             operator = operator_child.text
 
             if operator in ("&&", "||"):
-                #TODO: temp
                 left = self.llvm_map.get(node.getChild(0))
                 right = self.llvm_map.get(node.getChild(2))
 

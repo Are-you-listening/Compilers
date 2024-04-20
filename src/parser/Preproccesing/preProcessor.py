@@ -30,9 +30,7 @@ class PreProcessor:
         :return:
         """
         if len(self.ifndef) == 0:  # If no '#ifndef' is used, we shouldn't check this
-            print(identifier,'False')
             return False
-        print(identifier, identifier in self.defined or identifier in self.files)
         return identifier in self.defined or identifier in self.files
 
     def __getValuePart(self, i: int):
@@ -64,13 +62,6 @@ class PreProcessor:
         self.stream.fill()
         i = 0  # Iterator index we are at right now in the token stream
 
-        tokenstring = ""
-        for token in self.stream.tokens:  # For debug
-            tokenstring += token.text + " "
-        print(tokenstring)
-
-        # TODO Need a try and catch for wrongly made #directives! -> Otherwise compiler crash
-
         while i < len(self.stream.tokens) - 1:
             token = self.stream.tokens[i]
             token.HIDDEN_CHANNEL = -1  # We use indices to keep track of the file we worked in
@@ -101,7 +92,11 @@ class PreProcessor:
 
                     if identifier != "<stdio.h>" and not self.__isDefined(
                             file):  # 'not self.ifndef[-1]' is important, so we make sure that we don't double define or have circular includes
-                        input_stream = FileStream(file)  # File are relative, so any path associated needs to be added
+                        try:
+                            input_stream = FileStream(file)  # Verify the file exists
+                        except:
+                            ErrorExporter.fileNotFound(token.line, file)
+
                         lexer = grammarCLexer(input_stream)  # Create a new input stream
                         stream = CommonTokenStream(lexer)
                         stream.fill()
@@ -154,9 +149,9 @@ class PreProcessor:
 
             i += 1  # Go further
 
-            tokenstring = ""
-            for token in self.stream.tokens:  # For debug
-                tokenstring += token.text+" "
-            print(tokenstring)
+            # tokenstring = ""
+            # for token in self.stream.tokens:  # For debug
+            #     tokenstring += token.text+" "
+            # print(tokenstring)
 
         return self.stdio, self.stream
