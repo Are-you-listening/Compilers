@@ -42,7 +42,7 @@ def cleanGreen(input_file, symbol_file):
 
     stream = CommonTokenStream(lexer)  # Extract tokens
 
-    includeStdio, stream = PreProcessor(stream, lexer, input_file).preProcess()  # Apply preprocessing
+    includeSTDIO, stream = PreProcessor(stream, lexer, input_file).preProcess()  # Apply preprocessing
 
     parser = grammarCParser(stream)  # Do actual parse
     parser.removeErrorListeners()  # Add our own error Listener
@@ -90,13 +90,13 @@ def cleanGreen(input_file, symbol_file):
         s = TableDotVisitor(symbol_file)
         s.visit(ast.root.getSymbolTable(), True)
 
-    return ast, codegetter
+    return ast, codegetter, includeSTDIO
 
 
-def Processing(ast, dot_file, fold):
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+def Processing(ast, dot_file, fold, includeSTDIO):
+    DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
-    ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
+    ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     if fold:
         ConstantFoldingVisitor().visit(ast)
@@ -155,8 +155,8 @@ def main(argv):
     if input_file is None:
         ErrorExporter.StupidUser()
 
-    ast, codegetter = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
-    ast, cfg = Processing(ast, dot_file, fold)  # Check for Errors , Apply Folding Techniques , ...
+    ast, codegetter, includeSTDIO = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
+    ast, cfg = Processing(ast, dot_file, fold, includeSTDIO)  # Check for Errors , Apply Folding Techniques , ...
 
     if llvm_file is not None:
         LLVMSingleton.setName(input_file)

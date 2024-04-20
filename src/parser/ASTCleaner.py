@@ -129,7 +129,7 @@ class ASTCleaner(ASTVisitor):
         """
         Make the printf child nodes cleaner
         """
-        if node.text != "printf":
+        if node.text not in ["printf", "scanf"]:
             return
 
         format_child_text = ""

@@ -55,8 +55,8 @@ class ErrorExporter:
         print(f"[ Warning] line {linenr}: use of uninitialized variable {identifier}")
 
     @staticmethod
-    def undeclaredVariable(identifier: str, linenr: str):
-        print(f"[ Error ] line {linenr}: use of undeclared variable {identifier}", file=sys.stderr)
+    def undeclaredVariable(identifier: str, linenr: str, type="variable"):
+        print(f"[ Error ] line {linenr}: use of undeclared {type} {identifier}", file=sys.stderr)
         exit()
 
     @staticmethod
@@ -232,3 +232,5 @@ class ErrorExporter:
     def nonIdentifierDefine(line_nr):
         print(f"[ Error ] line: {line_nr} Macro names must be identifiers", file=sys.stderr)
         exit()
+
+

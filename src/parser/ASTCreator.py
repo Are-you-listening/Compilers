@@ -64,7 +64,10 @@ class ASTCreator(grammarCVisitor):
         self.__makeNode(ctx, "ParameterCall")
 
     def visitPrintscanf(self, ctx: grammarCParser.PrintscanfContext):
-        self.__makeNode(ctx, "printf")
+        if ctx.children[0].symbol.text == "scanf":
+            self.__makeNode(ctx, "scanf")
+        else:
+            self.__makeNode(ctx, "printf")
 
     def visitLine(self, ctx: grammarCParser.LineContext):
         self.__makeNode(ctx, "Line")
