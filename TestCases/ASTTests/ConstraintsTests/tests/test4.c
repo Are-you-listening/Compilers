@@ -1,5 +1,9 @@
-printf("%d", 1);    // also stopped by the grammar
-
 int main(){
+    return 0;
+}
+
+3+4;    // test between functions
+
+int foo(){
     return 0;
 }

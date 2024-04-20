@@ -10,7 +10,7 @@ from TestCases.ASTTests.AstLoader import AstLoader
 
 class TestConstraints(unittest.TestCase):
     def testConstraints(self):
-        file_indexes = range(1, 5)
+        file_indexes = range(1, 8)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

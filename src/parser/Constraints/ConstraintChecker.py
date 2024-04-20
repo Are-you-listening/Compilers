@@ -13,8 +13,8 @@ class ConstraintChecker(ASTVisitor):
     """
 
     def __init__(self):
-        self.constraints = [MainFoundConstraint(), RedefinitionConstraint(), UndeclaredConstrained(), ConstConstraint(),
-                            AmpersandConstraint(), PrintfConstraint(), UndeclaredConstrained(), GlobalsConstrained(), CleanGlobalScope()]
+        self.constraints = [CleanGlobalScope(), MainFoundConstraint(), RedefinitionConstraint(), UndeclaredConstrained(), ConstConstraint(),
+                            AmpersandConstraint(), PrintfConstraint(), UndeclaredConstrained(), GlobalsConstrained()]
 
     def visitNode(self, node: ASTNode):
         for c in self.constraints:

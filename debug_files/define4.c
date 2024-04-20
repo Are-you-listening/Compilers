@@ -1,4 +1,7 @@
-int main() {
-
-char invalid = '';
+int main(){
+    return 0;
 }
+
+
+appel;
+

@@ -73,7 +73,7 @@ def cleanGreen(input_file, symbol_file):
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
-    #DotVisitor("output/i9").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     ArrayCleaner().visit(ast)
     #DotVisitor("output/u8").visit(ast)  # Export AST in Dot

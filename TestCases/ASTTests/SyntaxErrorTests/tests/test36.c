@@ -2,9 +2,9 @@ int main(){
     return 0;
 }
 
+appel(){}; // Invalid function declaration
 
-
-appel(); //Function calls are not allowed
+//appel();
 
 
 

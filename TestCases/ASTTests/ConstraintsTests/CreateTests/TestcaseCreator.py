@@ -11,7 +11,6 @@ from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
 from src.parser.BlacklistVisitor import BlacklistVisitor
 from src.parser.Constraints.ConstraintChecker import *
 from src.parser.ASTCleanerAfter import *
-from src.parser.DefineConverter import *
 from src.parser.EnumConverter import *
 from src.parser.EnumTypeMerger import *
 from src.parser.ASTTypedefReplacer import *
@@ -53,7 +52,6 @@ below add needed stuff
 """
 
 CodeGetter().visit(ast)
-DefineConverter().visit(ast)
 EnumConverter().visit(ast)
 EnumTypeMerger().visit(ast)
 ASTTypedefReplacer().visit(ast)
