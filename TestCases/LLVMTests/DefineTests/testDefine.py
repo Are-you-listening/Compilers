@@ -31,7 +31,7 @@ class DefineTests(unittest.TestCase):
             error_dict = json.loads(f.read())
 
         for i in file_range:
-            print(i)
+            #print(i)
             original = sys.stdout  # Temp catch any output
             buff = StringIO()
             sys.stdout = buff
