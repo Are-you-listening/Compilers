@@ -30,7 +30,9 @@ class PreProcessor:
         :return:
         """
         if len(self.ifndef) == 0:  # If no '#ifndef' is used, we shouldn't check this
+            print(identifier,'False')
             return False
+        print(identifier, identifier in self.defined or identifier in self.files)
         return identifier in self.defined or identifier in self.files
 
     def __getValuePart(self, i: int):
@@ -60,7 +62,14 @@ class PreProcessor:
         :return: bool: True if it contains "#include <stdio.h>"
         """
         self.stream.fill()
-        i = 0
+        i = 0  # Iterator index we are at right now in the token stream
+
+        tokenstring = ""
+        for token in self.stream.tokens:  # For debug
+            tokenstring += token.text + " "
+        print(tokenstring)
+
+        # TODO Need a try and catch for wrongly made #directives! -> Otherwise compiler crash
 
         while i < len(self.stream.tokens) - 1:
             token = self.stream.tokens[i]
@@ -70,14 +79,19 @@ class PreProcessor:
 
             if '#' in text and (type not in ["SINGLECOMMENT", "MULTILINE"]):  # We came across a preprocessor directive
                 if "define" in text:
-                    identifier = self.stream.tokens[i + 1].text
+                    identifier = self.stream.tokens[i + 1]
+                    if "IDENTIFIER" != self.lexer.ruleNames[identifier.type - 1]:  # Can only use identifiers as macro names!
+                        ErrorExporter.nonIdentifierDefine(identifier.line)
+                    else:
+                        identifier = identifier.text
                     value, j = self.__getValuePart(i)
 
                     if not self.__isDefined(identifier):  # Make use of any include guards
                         self.defined[identifier] = value  # Add to defined map
 
                     del self.stream.tokens[i:j]  # Delete the define statement from the list
-                    i -= 1 + (j - 3)  # Adjust index so we don't go to far
+
+                    i = j - len(value) - 3  # Adjust index so we don't go to far
 
                 elif "include" in text:
                     identifier = self.stream.tokens[i + 1].text
@@ -116,7 +130,7 @@ class PreProcessor:
 
                 elif "endif" in text:
                     if len(self.ifndef) == 0:
-                        ErrorExporter.unMatchedEndIf()
+                        ErrorExporter.unMatchedEndIf(token.line)
                     self.ifndef.pop()
                     del self.stream.tokens[i:i + 1]  # Remove the '#endif' directive
                     i -= 1  # Adjust index so we don't go to far
@@ -139,5 +153,10 @@ class PreProcessor:
                 token.HIDDEN_CHANNEL = 0
 
             i += 1  # Go further
+
+            tokenstring = ""
+            for token in self.stream.tokens:  # For debug
+                tokenstring += token.text+" "
+            print(tokenstring)
 
         return self.stdio, self.stream

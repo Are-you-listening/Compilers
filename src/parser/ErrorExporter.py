@@ -7,7 +7,10 @@ class EListener(ErrorListener):
         if offendingSymbol is not None:
             text = offendingSymbol.text
         else:
-            text = 'None'
+            if "token recognition error at:" in msg:
+                text = msg[29:len(msg)-1]
+            else:
+                text = 'None'
 
         print(f"[ Syntax Error ] line {line}:{column} invalid symbol: '{text}'", file=sys.stderr)
         exit()
@@ -213,4 +216,19 @@ class ErrorExporter:
     @staticmethod
     def functionRedefenition(line_nr: str, func_name: str):
         print(f"[ Error ] line {line_nr}: redefinition of {func_name}", file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def unMatchedEndIf(line_nr):
+        print(f"[ Syntax Error ] line: {line_nr} Unmatched conditional directive: '#endif' ", file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def fileNotFound(line_nr, file):
+        print(f"[ Error ] line: {line_nr} File {file} not found!", file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def nonIdentifierDefine(line_nr):
+        print(f"[ Error ] line: {line_nr} Macro names must be identifiers", file=sys.stderr)
         exit()

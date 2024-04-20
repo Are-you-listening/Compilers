@@ -1,24 +1,17 @@
-#include<stdio.h>
-
-#define BUFFER_SIZE 1024
-//#define BUFFER_SIZE 2048 // Error: Redefinition of 'BUFFER_SIZE'
-//#define for 5; // Error: reserved keyword
-//#define while 5; // Error: reserved keyword
-//#define if 5; // Error: reserved keyword
-//#define else 5; // Error: reserved keyword
-//#define else if 5; // Error: reserved keyword
-//#define switch 5; // Error: reserved keyword
-#define break 5; // Error: reserved keyword
+#include <stdio.h>
 
 
-// keywords = ["for", "while", "if", "else", "else if", "switch", "break", "continue", "return", "default"]
+int peer = 8;
+
+#define BUFFER_SIZE = peer // syntax error; BUFFER_SIZE will be replaced with '=peer'
 
 int x = 1;
 
-
+#include "define2.c" // Test usual include
 
 int main()
 {
+    printf("%d",y);
     printf("%d",BUFFER_SIZE);
     return 0;
 }

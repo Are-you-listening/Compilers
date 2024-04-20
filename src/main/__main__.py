@@ -36,15 +36,15 @@ def cleanGreen(input_file, symbol_file):
     """
     input_stream = FileStream(input_file)  # Create input stream
     lexer = grammarCLexer(input_stream)
+
+    lexer.removeErrorListeners()  # Add our own error listener
+    lexer.addErrorListener(EListener())
+
     stream = CommonTokenStream(lexer)  # Extract tokens
 
     includeStdio, stream = PreProcessor(stream, lexer, input_file).preProcess()  # Apply preprocessing
 
     parser = grammarCParser(stream)  # Do actual parse
-
-    lexer.removeErrorListeners()
-    lexer.addErrorListener(EListener())
-
     parser.removeErrorListeners()  # Add our own error Listener
     parser.addErrorListener(EListener())
     tree = parser.start_()
@@ -121,6 +121,7 @@ def main(argv):
     """
     Main function to start program
     :param argv: Argument list as defined in the project description
+    PRECONDITION: Given files should exist and be reachable from the compilers directory
     :return:
     """
 

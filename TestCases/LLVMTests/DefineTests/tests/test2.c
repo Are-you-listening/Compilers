@@ -10,6 +10,8 @@
 int main()
 {
 
+    printf("%d", True);
+
     #define True -20
 
     int radius = 21;

@@ -1,14 +1,10 @@
-#include<stdio.h>
+#include <stdio.h>
 
-#define BUFFER_SIZE 1024
-#define BUFFER_SIZE 2048 // Error: Redefinition of 'BUFFER_SIZE'
-
-int x = 1;
-
+#include "../includes/define3.c" // Test different include path
 
 
 int main()
 {
-    printf("%d",BUFFER_SIZE);
+    peer(); // TODO Test Function includes
     return 0;
 }

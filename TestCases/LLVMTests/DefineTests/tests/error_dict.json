@@ -1,12 +1,3 @@
-{"3": ["[ Syntax Error ] line 14:8 invalid symbol: 'default'"],
-  "4": ["[ Syntax Error ] line 13:8 invalid symbol: 'return'"],
-  "5": ["[ Syntax Error ] line 12:8 invalid symbol: 'continue'"],
-  "6": ["[ Syntax Error ] line 11:8 invalid symbol: 'break'"],
-  "7": ["[ Syntax Error ] line 10:8 invalid symbol: 'switch'"],
-  "8": ["[ Syntax Error ] line 9:8 invalid symbol: 'else'"],
-  "9": ["[ Syntax Error ] line 8:8 invalid symbol: 'else'"],
-  "10": ["[ Syntax Error ] line 7:8 invalid symbol: 'if'"],
-  "11": ["[ Syntax Error ] line 6:8 invalid symbol: 'while'"],
-    "12": ["[ Syntax Error ] line 5:8 invalid symbol: 'for'"],
-  "13": ["[ Error ] line 4: redefinition or redeclaration of INT BUFFER_SIZE"]
+{"4": ["[ Error ] line: 13 Macro names must be identifiers"],
+  "6": ["[ Syntax Error ] line 15:20 invalid symbol: '='"]
 }
