@@ -40,7 +40,7 @@ class TestConstraints(unittest.TestCase):
             conversion
             """
             try:
-                ConstraintChecker().visit(ast_tree)
+                ConstraintChecker(True).visit(ast_tree)
                 errors = str(error_buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
                 print("error", error_buff.getvalue().splitlines(), index)

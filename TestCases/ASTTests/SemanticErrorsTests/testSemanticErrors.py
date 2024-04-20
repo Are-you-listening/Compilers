@@ -44,7 +44,7 @@ class TestSemanticErrors(unittest.TestCase):
             try:
                 ASTDereferencer().visit(ast_tree)  # Correct the use of references & pointers into our format
 
-                ConstraintChecker().visit(ast_tree)  # Checkup Semantic & Syntax Errors
+                ConstraintChecker(True).visit(ast_tree)  # Checkup Semantic & Syntax Errors
 
                 ConstantFoldingVisitor().visit(ast_tree)
 
