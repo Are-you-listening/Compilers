@@ -47,6 +47,7 @@ sudo apt install llvm
 ### Optional Functionality: 
 - [X] Const Casting
 - [X] ControlFlow and visualization
+- [X] Else If Statements
 
 ### Technical Functionality: 
 - [X] README
