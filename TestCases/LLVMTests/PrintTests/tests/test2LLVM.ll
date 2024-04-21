@@ -6,7 +6,7 @@ define i32 @"main"()
 {
 .2:
   ;    INT main
-  %".4" = bitcast [3 x i8]* @".str.f" to i8*
+  %".4" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".5" = alloca float
   store float 0x4014ccccc0000000, float* %".5"
   %".7" = load float, float* %".5"
@@ -19,4 +19,4 @@ define i32 @"main"()
 
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.f" = internal constant [3 x i8] c"%f\00"
+@".str.PS0" = internal constant [3 x i8] c"%f\00"

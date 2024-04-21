@@ -13,7 +13,7 @@ define i32 @"main"()
   ; a = 33 + 69789 * 69421 / 51213 + 2231 - 654
   %".9" = load i32, i32* %".4", align 4
   ; printf "%d" a
-  %".11" = bitcast [3 x i8]* @".str.d" to i8*
+  %".11" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".12" = alloca i32
   store i32 %".9", i32* %".12"
   %".14" = load i32, i32* %".12"
@@ -22,7 +22,7 @@ define i32 @"main"()
   ;  a = 1326549 + 215492154
   %".18" = load i32, i32* %".4", align 4
   ; printf "%d" a
-  %".20" = bitcast [3 x i8]* @".str.d" to i8*
+  %".20" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".21" = alloca i32
   store i32 %".18", i32* %".21"
   %".23" = load i32, i32* %".21"
@@ -31,7 +31,7 @@ define i32 @"main"()
   ; a = 548416
   %".27" = load i32, i32* %".4", align 4
   ; printf "%d" a
-  %".29" = bitcast [3 x i8]* @".str.d" to i8*
+  %".29" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".30" = alloca i32
   store i32 %".27", i32* %".30"
   %".32" = load i32, i32* %".30"
@@ -40,7 +40,7 @@ define i32 @"main"()
   ; a = 3 - 6
   %".36" = load i32, i32* %".4", align 4
   ; printf "%d" a
-  %".38" = bitcast [3 x i8]* @".str.d" to i8*
+  %".38" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".39" = alloca i32
   store i32 %".36", i32* %".39"
   %".41" = load i32, i32* %".39"
@@ -49,7 +49,7 @@ define i32 @"main"()
   ; a = - 9899563254
   %".45" = load i32, i32* %".4", align 4
   ; printf "%d" a
-  %".47" = bitcast [3 x i8]* @".str.d" to i8*
+  %".47" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".48" = alloca i32
   store i32 %".45", i32* %".48"
   %".50" = load i32, i32* %".48"
@@ -58,7 +58,7 @@ define i32 @"main"()
   ; a = + 998315
   %".54" = load i32, i32* %".4", align 4
   ; printf "%d" a
-  %".56" = bitcast [3 x i8]* @".str.d" to i8*
+  %".56" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".57" = alloca i32
   store i32 %".54", i32* %".57"
   %".59" = load i32, i32* %".57"
@@ -69,4 +69,4 @@ define i32 @"main"()
 
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.d" = internal constant [3 x i8] c"%d\00"
+@".str.PS0" = internal constant [3 x i8] c"%d\00"

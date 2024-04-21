@@ -9,7 +9,7 @@ define i32 @"main"()
   %".4" = alloca i32, align 4
   store i32 5, i32* %".4", align 4
   ; INT x = 5
-  %".7" = bitcast [3 x i8]* @".str.d" to i8*
+  %".7" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".8" = alloca i32
   store i32 5, i32* %".8"
   %".10" = load i32, i32* %".8"
@@ -22,7 +22,7 @@ define i32 @"main"()
   store i32 %".15", i32* %".16", align 4
   %".18" = load i32, i32* %".16", align 4
   ; printf "%d" z
-  %".20" = bitcast [3 x i8]* @".str.d" to i8*
+  %".20" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".21" = alloca i32
   store i32 %".18", i32* %".21"
   %".23" = load i32, i32* %".21"
@@ -40,7 +40,7 @@ define i32 @"main"()
   store i32 %".34", i32* %".4", align 4
   %".36" = load i32, i32* %".4", align 4
   ; printf "%d" x
-  %".38" = bitcast [3 x i8]* @".str.d" to i8*
+  %".38" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".39" = alloca i32
   store i32 %".36", i32* %".39"
   %".41" = load i32, i32* %".39"
@@ -51,7 +51,7 @@ define i32 @"main"()
   %".46" = alloca float, align 4
   store float 0x4041462ea0000000, float* %".46", align 4
   ; FLOAT f2 = f * 33.0 + 2.0
-  %".49" = bitcast [3 x i8]* @".str.d" to i8*
+  %".49" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".50" = alloca i32
   store i32 34, i32* %".50"
   %".52" = load i32, i32* %".50"
@@ -65,7 +65,7 @@ define i32 @"main"()
   ; printf "%d" INT f2
   %".61" = load float, float* %".46", align 4
   %".62" = fptosi float %".61" to i32
-  %".63" = bitcast [3 x i8]* @".str.d" to i8*
+  %".63" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".64" = alloca i32
   store i32 %".62", i32* %".64"
   %".66" = load i32, i32* %".64"
@@ -77,7 +77,7 @@ define i32 @"main"()
   ; c = 'b'
   %".73" = load i8, i8* %".68", align 1
   ; printf "%c" c
-  %".75" = bitcast [3 x i8]* @".str.c" to i8*
+  %".75" = bitcast [3 x i8]* @".str.PS1" to i8*
   %".76" = alloca i8
   store i8 %".73", i8* %".76"
   %".78" = load i8, i8* %".76"
@@ -88,5 +88,5 @@ define i32 @"main"()
 
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.d" = internal constant [3 x i8] c"%d\00"
-@".str.c" = internal constant [3 x i8] c"%c\00"
+@".str.PS0" = internal constant [3 x i8] c"%d\00"
+@".str.PS1" = internal constant [3 x i8] c"%c\00"

@@ -64,14 +64,17 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
-    EnumConverter().visit(ast)  # Convert enum to typedef & const bools
+    #DotVisitor("output/debug-1").visit(ast)  # Export AST in Dot
 
+    EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
+
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
@@ -87,6 +90,8 @@ def cleanGreen(input_file, symbol_file):
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
     if symbol_file is not None:
@@ -97,7 +102,7 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold, includeSTDIO):
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
 
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 

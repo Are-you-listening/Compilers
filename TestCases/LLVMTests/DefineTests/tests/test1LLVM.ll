@@ -27,7 +27,7 @@ define i32 @"main"()
   ; printf "%d%d%d" radius
   %".23" = load i32, i32* %".10", align 4
   ; area success
-  %".25" = bitcast [7 x i8]* @".str.d" to i8*
+  %".25" = bitcast [7 x i8]* @".str.PS0" to i8*
   %".26" = alloca i32
   %".27" = alloca i32
   %".28" = alloca i32
@@ -44,4 +44,4 @@ define i32 @"main"()
 
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.d" = internal constant [7 x i8] c"%d%d%d\00"
+@".str.PS0" = internal constant [7 x i8] c"%d%d%d\00"

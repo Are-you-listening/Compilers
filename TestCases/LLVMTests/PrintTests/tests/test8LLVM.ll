@@ -15,20 +15,20 @@ define i32 @"main"()
   %".10" = alloca i8, align 1
   store i8 97, i8* %".10", align 1
   ; CHAR c = 'a'
-  %".13" = bitcast [3 x i8]* @".str.c" to i8*
+  %".13" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".14" = alloca i8
   store i8 97, i8* %".14"
   %".16" = load i8, i8* %".14"
   %".17" = call i32 (i8*, ...) @"printf"(i8* %".13", i8 %".16")
   ;  printf "%c" c
-  %".19" = bitcast [3 x i8]* @".str.f" to i8*
+  %".19" = bitcast [3 x i8]* @".str.PS1" to i8*
   %".20" = alloca float
   store float 0x4014ccccc0000000, float* %".20"
   %".22" = load float, float* %".20"
   %".23" = fpext float %".22" to double
   %".24" = call i32 (i8*, ...) @"printf"(i8* %".19", double %".23")
   ; printf "%f" b
-  %".26" = bitcast [3 x i8]* @".str.d" to i8*
+  %".26" = bitcast [3 x i8]* @".str.PS2" to i8*
   %".27" = alloca i32
   store i32 0, i32* %".27"
   %".29" = load i32, i32* %".27"
@@ -40,6 +40,6 @@ define i32 @"main"()
 
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.c" = internal constant [3 x i8] c"%c\00"
-@".str.f" = internal constant [3 x i8] c"%f\00"
-@".str.d" = internal constant [3 x i8] c"%d\00"
+@".str.PS0" = internal constant [3 x i8] c"%c\00"
+@".str.PS1" = internal constant [3 x i8] c"%f\00"
+@".str.PS2" = internal constant [3 x i8] c"%d\00"
