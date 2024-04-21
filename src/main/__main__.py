@@ -75,7 +75,9 @@ def cleanGreen(input_file, symbol_file):
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
+
     ArrayCleaner().visit(ast)
+    #DotVisitor("output/qu").visit(ast)
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 

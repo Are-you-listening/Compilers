@@ -1,0 +1,6 @@
+{
+  "6": ["[ Error ] line 5: the initializer list its size for array x is not the right size"],
+  "7": ["[ Error ] line 5: the initializer list its size for array x is not the right size"],
+  "8": ["[ Error ] line 5: the initializer list its size for array x is not the right format"],
+  "9": ["[ Syntax Error ] line 7:5 invalid symbol: '[5.'"]
+}

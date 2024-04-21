@@ -32,10 +32,11 @@ function_ptr_2: '(' '*' (function_ptr_2 | IDENTIFIER) ')' '(' parameters ')';
 declaration: type IDENTIFIER ARRAY? ('=' expr)?;
 assignment: ('*')* IDENTIFIER ARRAY? ('=' expr);
 conversion: '(' type ')' (literal | expr);
+initialize_list: ((expr ',')* expr)?;
 expr : literal
      | conversion
      | function_call
-     | '{' ((expr',')* expr)? '}'
+     | '{' initialize_list '}'
      | '(' expr ')'
      | ('++' | '--' | '&' | '*') expr
      | IDENTIFIER ('++' | '--')

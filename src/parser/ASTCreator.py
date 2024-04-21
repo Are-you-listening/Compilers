@@ -129,8 +129,8 @@ class ASTCreator(grammarCVisitor):
     def visitEnum(self, ctx: grammarCParser.EnumContext):
         self.__makeNode(ctx, "Enum")
 
-    def visitParameter_call(self, ctx: grammarCParser.Parameter_callContext):
-        self.__makeNode(ctx, "ParameterCall")
+    def visitInitialize_list(self, ctx: grammarCParser.Initialize_listContext):
+        self.__makeNode(ctx, "InitList")
 
     def visitTerminal(self, ctx):
         """

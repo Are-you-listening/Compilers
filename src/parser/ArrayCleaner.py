@@ -13,7 +13,17 @@ class ArrayCleaner(ASTVisitor):
     def __init__(self):
         self.to_remove = set()
 
+        """
+        Map to keep into account which declarations and assignments use an array, to use this information
+        for the initialization list. The keys of these mappings are declaration nodes and the values arrays of 
+        the indexes
+        """
+        self.array_map = {}
+
     def visit(self, ast: AST):
+        self.to_remove = set()
+        self.array_map = {}
+
         self.preorder(ast.root)
         for n in self.to_remove:
             n.parent.removeChild(n)
@@ -21,15 +31,16 @@ class ArrayCleaner(ASTVisitor):
     def visitNode(self, node: ASTNode):
         self.__check_declaration(node)
         self.__check_access(node)
+        self.__check_init_list(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass
 
     def __check_declaration(self, node: ASTNode):
         """
-                When we come across a declaration, we want to change the [5] to a * on the type
-                If an array part exist, it will be found on child index 2
-                """
+        When we come across a declaration, we want to change the [5] to a * on the type
+        If an array part exist, it will be found on child index 2
+        """
 
         """
         Check if node is a declaration
@@ -52,6 +63,8 @@ class ArrayCleaner(ASTVisitor):
         type_node = node.getChild(0)
 
         array_sizes = self.array_size(node.getChild(2).text)
+
+        self.array_map[node] = array_sizes
 
         for new_ptr_val in array_sizes:
             new_ptr = ASTNodeTerminal("*", type_node.parent, type_node.getSymbolTable(), f"ARRAY_{new_ptr_val}",
@@ -122,3 +135,110 @@ class ArrayCleaner(ASTVisitor):
         array_sizes[-1] = array_sizes[-1][:-1]
 
         return array_sizes
+
+    def __check_init_list(self, node: ASTNode):
+        if node.text != "InitList":
+            return
+
+        """
+        We check if the initialize list is a valid list. This means that this list only exists for declarations
+        of arrays.
+        """
+        print("hey")
+
+        if node.parent not in self.array_map:
+            print("error Array Cleaner init list")
+            return
+
+        array_sizes = self.array_map.get(node.parent)
+        print(array_sizes)
+
+        """
+        Check if the size and format of the initialization list matches the size of the array.
+        During this loop we will also map a virtual grid (same size as the array) to each of the initial value node
+        """
+        current_check_nodes = [("", node)]
+
+        """
+        In this list all the values of the init list will be put using a tuple indicating its position
+        """
+        value_list = []
+
+        declared_variable = node.parent.getChild(1).text
+
+        for i, array_size in enumerate(array_sizes):
+            last_dimension = i == len(array_sizes)-1
+            new_current_nodes = []
+            """
+            Convert size in string to int
+            """
+            size = int(array_size)
+            for current_node_tup in current_check_nodes:
+                node_index, current_node = current_node_tup
+                if size != current_node.getChildAmount():
+                    ErrorExporter.wrongInitializationListSize(node.linenr, declared_variable)
+
+                """
+                Add the children to the next current node check
+                """
+                if last_dimension:
+                    """
+                    When we have the last dimension, we will constantly be checking the values,
+                    so we store these values in a list for better access later on
+                    """
+                    for j, c in enumerate(current_node.children):
+                        value_list.append((f"{node_index}[{j}]", c))
+                else:
+                    for j, c in enumerate(current_node.children):
+                        if c.text != "InitList":
+                            ErrorExporter.wrongInitializationListFormat(node.linenr, declared_variable)
+
+                        new_current_nodes.append((f"{node_index}[{j}]", c))
+
+            current_check_nodes = new_current_nodes
+
+        """
+        We will convert the data from our initialization list into assignments
+        """
+
+        code_node: ASTNode = node.parent.parent
+
+        """
+        for each value we will create an assignment to its corresponding position on the array,
+        each value in value_list is a tuple starting with the assignment index part followed by the corresponding node
+        """
+
+        for indexing, v in value_list:
+            assignment_node = ASTNode("Assignment", code_node, node.parent.getSymbolTable(), node.parent.linenr,
+                                      node.parent.virtuallinenr)
+
+            var_node = ASTNodeTerminal(declared_variable, assignment_node, assignment_node.getSymbolTable(),
+                                       "IDENTIFIER", assignment_node.linenr, assignment_node.virtuallinenr)
+
+            assignment_node.addChildren(var_node)
+
+            index_node = ASTNodeTerminal(indexing, assignment_node, assignment_node.getSymbolTable(),
+                                         "ARRAY", assignment_node.linenr, assignment_node.virtuallinenr)
+
+            assignment_node.addChildren(index_node)
+
+            """
+            Add value sub tree as assignment
+            """
+            assignment_node.addChildren(v)
+            v.parent = assignment_node
+
+            """
+            Add the assignment as a line of code right after the declaration
+            """
+            code_node.insertChild(code_node.findChild(node.parent) + 1, assignment_node)
+
+            """
+            Do the cleanup of this visitor for assignments
+            """
+            self.visitNode(assignment_node)
+
+        """
+        remove the initialization list from the tree
+        """
+        self.to_remove.add(node)

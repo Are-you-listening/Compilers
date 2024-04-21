@@ -283,3 +283,16 @@ class ErrorExporter:
                 out_type += f"[{v}]"
 
         return out_type
+
+    @staticmethod
+    def wrongInitializationListSize(line_nr: int, variable: str):
+        print(f"[ Error ] line {line_nr}: the initializer list its size for array {variable} is not the right size",
+              file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def wrongInitializationListFormat(line_nr: int, variable: str):
+        print(f"[ Error ] line {line_nr}: the initializer list its size for array {variable} is not the right format",
+              file=sys.stderr)
+        exit()
+

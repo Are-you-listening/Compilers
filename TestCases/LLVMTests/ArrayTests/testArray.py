@@ -5,7 +5,7 @@ import sys
 from io import StringIO
 from src.main.__main__ import main
 from src.llvm_target.LLVMSingleton import *
-
+import json
 """
 Filename Extension Explanation:
 - LLVM.ll | Currently generated output
@@ -20,28 +20,46 @@ class ArrayTests(unittest.TestCase):
     """
 
     def testArray(self):
-        file_range = range(1, 5)
+        file_range = range(1, 11)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         original = sys.stdout  # Temp catch any output
         buff = StringIO()
         sys.stdout = buff
 
+        with open("tests/error_dict.json", "rt") as f:
+            error_dict = json.loads(f.read())
+
         for i in file_range:
-            print(i)
+            #print(i)
             file_name = f"tests/test{i}.c"
-            self.runAST(file_name)
-            c_out = self.runC(file_name)
 
-            out = subprocess.run(f"""lli {file_name[:-2]}LLVM.ll""",
-                                 shell=True, capture_output=True)
+            original_error = sys.stderr  # Temp catch any errors
+            error_buff = StringIO()
+            sys.stderr = error_buff
 
-            """
-            assert for same output
-            """
-            print(i, out.stdout, c_out.stdout)
-            print(out.stderr, c_out.stderr)
-            assert out.stdout == c_out.stdout
+            try:
+                self.runAST(file_name)
+                c_out = self.runC(file_name)
+
+                out = subprocess.run(f"""lli {file_name[:-2]}LLVM.ll""",
+                                     shell=True, capture_output=True)
+
+                """
+                assert for same output
+                """
+                #print(i, out.stdout, c_out.stdout)
+                print(out.stderr, c_out.stderr)
+                assert out.stdout == c_out.stdout
+            except SystemExit as e:
+                """
+                tests errors Real errors
+                """
+                errors = str(error_buff.getvalue().splitlines())
+                expected_errors = str(error_dict.get(str(i), []))
+                assert errors == expected_errors
+
+            sys.stderr = original_error
 
         sys.stdout = original
 
