@@ -20,7 +20,7 @@ class ArrayCleaner(ASTVisitor):
 
     def visitNode(self, node: ASTNode):
         self.__check_declaration(node)
-        self.__check_assignment(node)
+        self.__check_access(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass
@@ -60,10 +60,13 @@ class ArrayCleaner(ASTVisitor):
 
         self.to_remove.add(node.getChild(2))
 
-    def __check_assignment(self, node: ASTNode):
-        if node.text not in ("Assignment", "Literal"):
-            return
+    def __check_access(self, node: ASTNode):
+        """
+        This function will check if we have array access
 
+        The original array format would be node 1: 'x', node 2: '[1][3],...'
+        We will change it to an operation overloading
+        """
         if node.getChildAmount() < 2:
             return
 
