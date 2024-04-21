@@ -24,7 +24,7 @@ NOTE: All the tests are run with constant folding enabled! (As by default)
 
 class GlobalTests(unittest.TestCase):
     def testGlobal(self):
-        file_range = range(1, 4)
+        file_range = range(1, 6)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         with open("tests/error_dict.json", "rt") as f:
