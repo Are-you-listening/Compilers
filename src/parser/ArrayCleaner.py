@@ -65,7 +65,7 @@ class ArrayCleaner(ASTVisitor):
         This function will check if we have array access
 
         The original array format would be node 1: 'x', node 2: '[1][3],...'
-        We will change it to an operation overloading
+        We will change it to an operation with operator '[]'
         """
         if node.getChildAmount() < 2:
             return
