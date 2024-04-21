@@ -63,6 +63,7 @@ def cleanGreen(input_file, symbol_file):
     codegetter.visit(ast)
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
+
     EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
