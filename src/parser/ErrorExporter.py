@@ -233,4 +233,9 @@ class ErrorExporter:
         print(f"[ Error ] line: {line_nr} Macro names must be identifiers", file=sys.stderr)
         exit()
 
+    @staticmethod
+    def switchDeclaration(line_nr: int, variable_name: str):
+        print(f"[ Error ] line: {line_nr} variable '{variable_name}' is not allowed to be declared inside a switch statement without an additional scope", file=sys.stderr)
+        exit()
+
 

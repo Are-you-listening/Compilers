@@ -215,7 +215,6 @@ class Calculation:
                 llvm_var = llvm_op(operator, left, right)
                 return llvm_var
 
-        #print(left.type, right.type)
         if isinstance(left.type, ir.types.PointerType) and operator in ["+", "-"]:
             if not isinstance(right,
                               ir.Constant):  # If it is not a constant, LLVM requires a sign extend to match the size

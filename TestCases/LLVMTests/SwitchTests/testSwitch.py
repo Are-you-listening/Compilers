@@ -17,7 +17,7 @@ class SwitchTests(unittest.TestCase):
     Test case to run all created llvm output
     """
     def testSimpleSwitch(self):
-        file_range = range(1, 12)
+        file_range = range(1, 18)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         for i in file_range:
