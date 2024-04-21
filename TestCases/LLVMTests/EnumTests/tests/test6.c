@@ -1,5 +1,4 @@
 
-/*Proof enums don't conflict with typedefs*/
 #include<stdio.h>
 
 int x = 1;
@@ -14,6 +13,12 @@ int main()
     enumweek z = 1;
     day = Wed;
     printf("%d",day);
+    printf("%d",Mon);
+    printf("%d",Tue);
+    printf("%d",Thur);
+    printf("%d",Fri);
+    printf("%d",Sat);
+    printf("%d",Sun);
     return 0;
 }
 

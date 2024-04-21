@@ -1,24 +1,18 @@
+
+//Regular enum
+
 #include <stdio.h>
 
-int main(){
+int x = 1;
 
-    int a = 0;
-    int b = 0;
-    a = 2;
-    switch(a){
-        case 1:
-            int c = 0;
-            break;
-        case 6:
-            int d = 0;
-            break;
-        default:
-            int e = 0;
-            break;
+enum week{Mon, Tue, Wed, Thur, Fri, Sat, Sun};
 
-    }
+//typedef int enumweek;
 
-    printf("%d", 4);
-
+int main()
+{
+    enum week day;
+    day = Wed;
+    printf("%d",day);
     return 0;
 }

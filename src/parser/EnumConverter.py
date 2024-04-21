@@ -134,11 +134,14 @@ class EnumConverter(ASTVisitor):
         node_typedef = ASTNodeTerminal("typedef", parent, table, -1, line, None)
         parent.addChildren(node_typedef)
 
-        node_Type = ASTNode("Type", parent, table, line, None)  # Add the type translations
-        parent.addChildren(node_Type)
-        for type in base_types:  # Add base types
-            node_baseType = ASTNodeTerminal(type, node_Type, table, -1, line, None)
-            node_Type.addChildren(node_baseType)
+        """
+        Store the type under a 'Type node'
+        """
+        node_type = ASTNode("Type", parent, table, line, None)  # Add the type translations
+        parent.addChildren(node_type)
+        for type_element in base_types:  # Add base types
+            node_base_type = ASTNodeTerminal(type_element, node_type, table, -1, line, None)
+            node_type.addChildren(node_base_type)
 
         node_typedef_part2 = ASTNodeTerminal(replace_type, parent, table, "IDENTIFIER", line, None)  # Add second part of typedef
         parent.addChildren(node_typedef_part2)
