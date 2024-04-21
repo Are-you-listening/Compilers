@@ -3,7 +3,7 @@
 int main() {
     int x[2];
 
-    int* b = x+8;
+    x[1] = 0;
 
 
 }

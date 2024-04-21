@@ -19,10 +19,16 @@ class ArrayCleaner(ASTVisitor):
             n.parent.removeChild(n)
 
     def visitNode(self, node: ASTNode):
+        self.__check_declaration(node)
+
+    def visitNodeTerminal(self, node: ASTNodeTerminal):
+        pass
+
+    def __check_declaration(self, node: ASTNode):
         """
-        When we come across a declaration, we want to change the [5] to a * on the type
-        If an array part exist, it will be found on child index 2
-        """
+                When we come across a declaration, we want to change the [5] to a * on the type
+                If an array part exist, it will be found on child index 2
+                """
 
         """
         Check if node is a declaration
@@ -60,6 +66,3 @@ class ArrayCleaner(ASTVisitor):
             type_node.addChildren(new_ptr)
 
         self.to_remove.add(node.getChild(2))
-
-    def visitNodeTerminal(self, node: ASTNodeTerminal):
-        pass

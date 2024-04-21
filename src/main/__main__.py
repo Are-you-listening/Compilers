@@ -53,6 +53,8 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
+    #DotVisitor("output/u10").visit(ast)  # Export AST in Dot
+
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)
 
@@ -75,9 +77,9 @@ def cleanGreen(input_file, symbol_file):
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
-
-    ArrayCleaner().visit(ast)
     #DotVisitor("output/u8").visit(ast)  # Export AST in Dot
+    ArrayCleaner().visit(ast)
+    #DotVisitor("output/u9").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
     #DotVisitor("output/vss").visit(ast)  # Export AST in Dot

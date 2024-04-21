@@ -3,8 +3,8 @@
 
 int main(){
 
-    a = 5;
-
+    printf("%s,f%x","s",5);
+    "\"";
     return 0;
 }
 int a = 3;
