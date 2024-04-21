@@ -6,39 +6,54 @@ class EnumConverter(ASTVisitor):
     Translate enums to typedefs and declarations in our format
     """
     def __init__(self):
-        self.toDelete = []
+        self.to_remove = set()
 
     def visit(self, ast: AST):
+        """
+        Keep into account, when this visitor would be converted to a postorder, we will need to add a self.to_add
+        instead of directly adding children. Currently, it is a preorder which is fine for everything it currently
+        needs to do.
+        """
         self.preorder(ast.root)
 
-        for node in self.toDelete:  # Delete the older nodes
+        for node in self.to_remove:  # Delete the older nodes
             node.parent.removeChild(node)
 
     def visitNode(self, node: ASTNode):
+        """
+        This visitor will make sure to only take into account 'Enum nodes'
+        """
         if node.text != "Enum":
             return
 
+        """
+        Retrieve the relevant information about the enum node and add this enum node tot the to remove
+        """
         line = node.linenr  # Line nr
         index = 0  # Value for each enum
         parent = node.parent
-        self.toDelete.append(node)
+        self.to_remove.add(node)
 
-        self.make_manual_typedef(line, ["INT"], "enum "+node.children[1].text, node.symbol_table, node.parent, parent.findChild(node))  # Make a typedef for this enum type
+        self.__make_manual_typedef(line, ["INT"], "enum " + node.children[1].text, node.symbol_table, node.parent, parent.findChild(node))  # Make a typedef for this enum type
 
         # Add all other enums 'identifiers/variables' as "const int" variables to the current scope
         for i in range(2, len(node.children)):
             name = node.children[i].text
             # For each enum, recreate the Declaration structure so the rest of the program will take care of it!
-            self.make_manual_declaration(parent, line, name, ["const", "INT"], index, node.symbol_table, parent.findChild(node))
+            self.__make_manual_declaration(parent, line, name, ["const", "INT"], index, node.symbol_table, parent.findChild(node))
             index += 1  # Incr value for enum
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass
 
     @staticmethod
-    def make_manual_declaration(parent: ASTNode, line: str, name: str, types: list, value, table, insertIndex: int):
+    def __make_manual_declaration(parent: ASTNode, line: str, name: str, types: list, value, table, insert_index: int):
         """
-        Helper function to create some (const) declarations manually without a real ctx for AST manipulation
+        Helper function to create some (const) declarations manually for AST manipulation
+
+        Enum for a Thursday with value 0 -> const int Thursday = 0;
+
+        :param insert_index: de index of the parent where our value needs to be inserted
         :param table:
         :param parent: To this node, any new nodes will be added as children
         :param line: Line nr
@@ -47,55 +62,83 @@ class EnumConverter(ASTVisitor):
         :param value: Value of the variable
         :return:
         """
-        declaration = ASTNode("Declaration", parent, table, line, None)  # Add declaration node
-        parent.insertChild(insertIndex, declaration)
 
-        typeNode = ASTNode("Type", declaration, table, line, None)  # Add type nodes
-        declaration.addChildren(typeNode)
-        for type in types:
-            typePartNode = ASTNodeTerminal(type, typeNode, table, -1, line, None)  # Add the actual types
-            typeNode.addChildren(typePartNode)
+        """
+        Add the const declaration node
+        """
+        declaration = ASTNode("Declaration", parent, table, line, None)
+        """
+        Insert the parent on the right spot of the parent
+        """
+        parent.insertChild(insert_index, declaration)
 
+        """
+        Create the node containing the type of the declaration value
+        """
+        type_node = ASTNode("Type", declaration, table, line, None)
+        declaration.addChildren(type_node)
+
+        """
+        types is a list of type related parts that are used to construct the type ex: ["const", "INT"]
+        """
+        for type_element in types:
+            type_part_node = ASTNodeTerminal(type_element, type_node, table, -1, line, None)  # Add the actual types
+            type_node.addChildren(type_part_node)
+
+        """
+        We will also add the identifier itself, being the enum value
+        """
         var = ASTNodeTerminal(name, declaration, table, "IDENTIFIER", line, None)  # Add enum variable
         declaration.addChildren(var)
-        equalSign = ASTNodeTerminal("=", declaration, table, -1, line, None)  # Add '='
-        declaration.addChildren(equalSign)
+
+        """
+        At this point the compiler sequence, we haven't removed the '=' sign so we still need to add it
+        """
+        equal_sign = ASTNodeTerminal("=", declaration, table, -1, line, None)  # Add '='
+        declaration.addChildren(equal_sign)
+
+        """
+        On the right hand side of our declaration we have the literal
+        We will construct the subtree Expr -> Literal -> Value
+        """
         expr = ASTNode("Expr", declaration, table, line, None)  # Add value nodes
         declaration.addChildren(expr)
         literal = ASTNode("Literal", expr, table, line, None)
         expr.addChildren(literal)
 
-        terminalType = ""
-        if "FLOAT" in types:
-            terminalType = "FLOAT"
-            value = float(value)
-        elif "INT" in types:
-            terminalType = "INT"
-            value = int(value)
-        elif "CHAR" in types:
-            terminalType = "CHAR"
+        """
+        Determine the type of the terminal
+        """
+        terminal_type = ""
+        for potential_type in ["FLOAT", "INT", "CHAR"]:
+            if potential_type in types:
+                terminal_type = potential_type
+                break
 
-        valueNode = ASTNodeTerminal(value, literal, table, terminalType, line, None)
-        literal.addChildren(valueNode)
+        """
+        Create the node containing the value corresponding to the ENUM identifier
+        """
+        value_node = ASTNodeTerminal(value, literal, table, terminal_type, line, None)
+        literal.addChildren(value_node)
         return name
 
     @staticmethod
-    def make_manual_typedef(line: str, baseTypes: list, replaceType: str, table, grandparent, insertIndex: int):
+    def __make_manual_typedef(line: str, base_types: list, replace_type: str, table, grandparent, insert_index: int):
         """
         Create a manual typedef without relying on ctx for AST manipulation
         :return:
         """
         parent = ASTNode("Typedef", grandparent, table, line, None)
-        grandparent.insertChild(insertIndex, parent)
+        grandparent.insertChild(insert_index, parent)
 
         node_typedef = ASTNodeTerminal("typedef", parent, table, -1, line, None)
         parent.addChildren(node_typedef)
 
         node_Type = ASTNode("Type", parent, table, line, None)  # Add the type translations
         parent.addChildren(node_Type)
-        for type in baseTypes:  # Add base types
+        for type in base_types:  # Add base types
             node_baseType = ASTNodeTerminal(type, node_Type, table, -1, line, None)
             node_Type.addChildren(node_baseType)
 
-        node_typedef_part2 = ASTNodeTerminal(replaceType, parent, table, "IDENTIFIER", line, None)  # Add second part of typedef
+        node_typedef_part2 = ASTNodeTerminal(replace_type, parent, table, "IDENTIFIER", line, None)  # Add second part of typedef
         parent.addChildren(node_typedef_part2)
