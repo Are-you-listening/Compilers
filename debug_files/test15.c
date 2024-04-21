@@ -12,9 +12,10 @@ int main() {
     return y;
 }
 
-float func( int* x, int y) {
-    int z = 5;
-    return z;
+
+float func( float* x, int y) {
+    *x = 10;
+    return y;
 }
 
 
