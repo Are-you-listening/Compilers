@@ -58,7 +58,7 @@ class UnaryWrapper:
 
 class CTypesToLLVM:
     @staticmethod
-    def getBytesUse(data_type: str, ptrs: str):
+    def getBytesUse(data_type: str, ptrs: list):
         if len(ptrs) >= 1:
             return 8
 
@@ -66,7 +66,7 @@ class CTypesToLLVM:
         return convert_map.get(data_type, "TYPE ISSUE")
 
     @staticmethod
-    def getIRType(data_type: str, ptrs: str):
+    def getIRType(data_type: str, ptrs: list):
         convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType(), "BOOL": ir.IntType(1)}
         llvm_type = convert_map.get(data_type)
         for p in ptrs:
@@ -86,7 +86,7 @@ class CTypesToLLVM:
 
 class Declaration:
     @staticmethod
-    def declare(data_type: str, ptrs: str):
+    def declare(data_type: str, ptrs: list):
         block = LLVMSingleton.getInstance().getCurrentBlock()
         llvm_val = block.alloca(CTypesToLLVM.getIRType(data_type, ptrs))
         llvm_val.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
@@ -94,7 +94,7 @@ class Declaration:
         return llvm_val
 
     @staticmethod
-    def function(func_name: str, return_type: str, ptrs: str):
+    def function(func_name: str, return_type: str, ptrs: list):
         """
         change the current latest function
         """
@@ -123,7 +123,7 @@ class Declaration:
         return llvm_val
 
     @staticmethod
-    def llvmLiteral(value: str, data_type: str, ptrs: str):
+    def llvmLiteral(value: str, data_type: str, ptrs: list):
         if CTypesToLLVM.getIRType(data_type, ptrs) == ir.FloatType():
             value = float(value)
         elif CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(32):
@@ -161,7 +161,7 @@ class Load:
         if not isinstance(load_llvm, ir.GEPInstr):
             llvm_var.align = load_llvm.align
         else:
-            llvm_var.align = CTypesToLLVM.getBytesUse("INT", "")
+            llvm_var.align = CTypesToLLVM.getBytesUse("INT", [])
 
         return llvm_var
 

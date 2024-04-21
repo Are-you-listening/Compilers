@@ -75,18 +75,14 @@ def cleanGreen(input_file, symbol_file):
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
-    #DotVisitor("output/u8").visit(ast)  # Export AST in Dot
     ArrayCleaner().visit(ast)
-    #DotVisitor("output/u9").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
-    #DotVisitor("output/vss").visit(ast)  # Export AST in Dot
 
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
-    #DotVisitor("output/u10").visit(ast)  # Export AST in Dot
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
@@ -96,16 +92,15 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold, includeSTDIO):
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
-
-
+    """
+    It is vital that AST conversion occurs before constant folding
+    """
+    ASTConversion().visit(ast)
     if fold:
         ConstantFoldingVisitor().visit(ast)
-
-    ASTConversion().visit(ast)
 
     ValueAdderVisitor().visit(ast)
 

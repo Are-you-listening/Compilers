@@ -146,7 +146,7 @@ class AST2LLVM(ASTVisitor):
             self.llvm_map[node] = entry.llvm
 
         if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
-            llvm_var = Declaration.llvmLiteral(node.text, node.type, "")
+            llvm_var = Declaration.llvmLiteral(node.text, node.type, [])
             self.llvm_map[node] = llvm_var
 
     def handleDeclaration(self, node):

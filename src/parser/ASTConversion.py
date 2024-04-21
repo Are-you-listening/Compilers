@@ -187,7 +187,7 @@ class ASTConversion(ASTVisitor):
             """
             logical operators expect booleans so we convert the given entry into a boolean
             """
-            to_type = ("BOOL", "")
+            to_type = ("BOOL", [])
 
         """
         add implicit conversions as explicit
@@ -198,11 +198,11 @@ class ASTConversion(ASTVisitor):
                 continue
 
             if type_tup != to_type:
-                if to_type == ("BOOL", ""):
+                if to_type == ("BOOL", []):
                     """
                     logical operators expect booleans so we convert the given entry into a boolean
                     """
-                    self.addConversion(child, ("BOOL", ""))
+                    self.addConversion(child, ("BOOL", []))
 
                     """
                     use continue so we don't throw warnings/errors for booleans
@@ -257,12 +257,9 @@ class ASTConversion(ASTVisitor):
         equality operators give an integer back
         """
         if operator in ("==", "!=", "<=", ">=", "<", ">", "&&", "||", "!"):
-            self.type_mapping[node] = ("BOOL", "")
+            self.type_mapping[node] = ("BOOL", [])
         else:
             self.type_mapping[node] = to_type
-
-
-
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
@@ -272,12 +269,12 @@ class ASTConversion(ASTVisitor):
             """
             Use LLVM ptr format
             """
-            ptrs += "*"
+            ptrs.append("*")
 
             self.type_mapping[node] = (data_type, ptrs)
 
         elif node.type in types:
-            self.type_mapping[node] = (node.type, '')
+            self.type_mapping[node] = (node.type, [])
 
     @staticmethod
     def calculateType(node: ASTNode):
@@ -291,13 +288,13 @@ class ASTConversion(ASTVisitor):
             raise Exception("wrong node type")
 
         data_type = ""
-        ptrs = ""
+        ptrs = []
         for child in node.children:
             if child.text.upper() in types:
                 data_type = child.text.upper()
 
             if child.text == "*":
-                ptrs += "*"
+                ptrs.append("*")
 
         return data_type, ptrs
 
@@ -360,7 +357,7 @@ class ASTConversion(ASTVisitor):
 
     @staticmethod
     def to_string_type(type_tup):
-        if type_tup[1] == "":
+        if len(type_tup[1]) == 0:
             return type_tup[0]
 
         return "PTR"
@@ -405,7 +402,6 @@ class ASTConversion(ASTVisitor):
             """
             when comparison operator is given -> other error message
             """
-
             ErrorExporter.IncompatiblePtrTypesWarning(line_nr, to_type, type_tup2)
 
             return
@@ -452,7 +448,7 @@ class ASTConversion(ASTVisitor):
             ASTNodeTerminal(to_type[0], type_node, type_node.getSymbolTable(), "Not Used",
                             None, None))
 
-        for t_child in to_type[1].split():
+        for t_child in to_type[1]:
             type_node.addChildren(
                 ASTNodeTerminal(t_child, type_node, type_node.getSymbolTable(), "Not Used",
                                 None, None))

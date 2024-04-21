@@ -62,7 +62,7 @@ ASTCleanerAfter().visit(ast)  # Clean even more :)
 
 ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
-ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
+ConstraintChecker(True).visit(ast)  # Checkup Semantic & Syntax Errors
 
 ConstantFoldingVisitor().visit(ast)
 

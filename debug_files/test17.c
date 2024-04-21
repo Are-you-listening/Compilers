@@ -1,10 +1,14 @@
 #include <stdio.h>
 
-int main() {
-int q = 5;
-    int x[2][3];
+int main(){
+    int a = 0;
+    float b = 5.2;
+    char  c = 'a';
 
-    x[1][2] = 1;
-    printf("%d", x[1][2]);
+    printf("%c", c);
+    printf("%f", b);
+    printf("%d", a);
+
     return 0;
+
 }

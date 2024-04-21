@@ -108,7 +108,11 @@ class ErrorExporter:
         :param from_type:
         :return:
         """
-        print(f"[ Warning ] line {line_nr}: Narrowing type from '{''.join(from_type)}' to '{''.join(to_type)}' ")
+
+        to_type = ErrorExporter.__to_output_type(to_type)
+        from_type = ErrorExporter.__to_output_type(from_type)
+
+        print(f"[ Warning ] line {line_nr}: Narrowing type from '{from_type}' to '{to_type}' ")
 
     @staticmethod
     def IncompatibleComparison(line_nr: int, type1: tuple, type2: tuple):
@@ -119,7 +123,11 @@ class ErrorExporter:
         :param type2:
         :return:
         """
-        print(f"[ Warning ] line {line_nr}: comparison of different types ('{''.join(type1)}' and '{''.join(type2)}') ")
+
+        type1 = ErrorExporter.__to_output_type(type1)
+        type2 = ErrorExporter.__to_output_type(type2)
+
+        print(f"[ Warning ] line {line_nr}: comparison of different types ('{type1}' and '{type2}') ")
 
     @staticmethod
     def invalidAssignment(line_nr: int, type1: tuple, type2: tuple):
@@ -144,8 +152,11 @@ class ErrorExporter:
         :param type1:
         :return:
         """
+
+        type1 = ErrorExporter.__to_output_type(type1)
+
         print(
-            f"[ Error ] line {line_nr}:  indirection requires pointer operand ('{''.join(type1)}' invalid)",
+            f"[ Error ] line {line_nr}:  indirection requires pointer operand ('{type1}' invalid)",
             file=sys.stderr)
         exit()
 

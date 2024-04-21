@@ -43,45 +43,46 @@ define i32 @"main"()
   ; else printf "%d" 3
   br label %".35"
 .35:
-  %".36" = load i32, i32* %".4", align 4
   ;  if x == 5 && 1
-  %".38" = icmp eq i32 %".36", 5
-  br i1 %".38", label %".39", label %".58"
-.39:
-  %".40" = load i32, i32* %".4", align 4
+  %".37" = load i32, i32* %".4", align 4
+  %".38" = icmp eq i32 %".37", 5
+  %".39" = icmp ne i1 %".38", 0
+  br i1 %".39", label %".40", label %".59"
+.40:
+  %".41" = load i32, i32* %".4", align 4
   ; if x != 4
-  %".42" = icmp ne i32 %".40", 4
-  br i1 %".42", label %".43", label %".50"
-.43:
-  %".44" = bitcast [3 x i8]* @".str.d" to i8*
-  %".45" = alloca i32
-  store i32 4, i32* %".45"
-  %".47" = load i32, i32* %".45"
-  %".48" = call i32 (i8*, ...) @"printf"(i8* %".44", i32 %".47")
+  %".43" = icmp ne i32 %".41", 4
+  br i1 %".43", label %".44", label %".51"
+.44:
+  %".45" = bitcast [3 x i8]* @".str.d" to i8*
+  %".46" = alloca i32
+  store i32 4, i32* %".46"
+  %".48" = load i32, i32* %".46"
+  %".49" = call i32 (i8*, ...) @"printf"(i8* %".45", i32 %".48")
   ; printf "%d" 4
-  br label %".57"
-.50:
-  %".51" = bitcast [3 x i8]* @".str.d" to i8*
-  %".52" = alloca i32
-  store i32 5, i32* %".52"
-  %".54" = load i32, i32* %".52"
-  %".55" = call i32 (i8*, ...) @"printf"(i8* %".51", i32 %".54")
+  br label %".58"
+.51:
+  %".52" = bitcast [3 x i8]* @".str.d" to i8*
+  %".53" = alloca i32
+  store i32 5, i32* %".53"
+  %".55" = load i32, i32* %".53"
+  %".56" = call i32 (i8*, ...) @"printf"(i8* %".52", i32 %".55")
   ; else if 1 printf "%d" 5
-  br label %".57"
-.57:
   br label %".58"
 .58:
-  %".59" = load i32, i32* %".4", align 4
+  br label %".59"
+.59:
+  %".60" = load i32, i32* %".4", align 4
   ;   if x < 5
-  %".61" = icmp slt i32 %".59", 5
-  br i1 %".61", label %".62", label %".64"
-.62:
+  %".62" = icmp slt i32 %".60", 5
+  br i1 %".62", label %".63", label %".65"
+.63:
   ; else
-  br label %".66"
-.64:
+  br label %".67"
+.65:
   ;
-  br label %".66"
-.66:
+  br label %".67"
+.67:
   ret i32 0
   ; return 0
 }

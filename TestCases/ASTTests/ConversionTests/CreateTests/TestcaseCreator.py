@@ -58,7 +58,7 @@ astcleanerafter.visit(ast)
 ast_deref = ASTDereferencer()  # Correct the use of references & pointers into our format
 ast_deref.visit(ast)
 
-constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
+constraint_checker = ConstraintChecker(True)  # Checkup Semantic & Syntax Errors
 constraint_checker.visit(ast)
 
 cfv = ConstantFoldingVisitor()
