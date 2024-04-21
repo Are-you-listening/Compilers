@@ -100,6 +100,8 @@ def Processing(ast, dot_file, fold, includeSTDIO):
 
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
+
+
     if fold:
         ConstantFoldingVisitor().visit(ast)
 

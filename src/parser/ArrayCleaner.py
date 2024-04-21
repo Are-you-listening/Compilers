@@ -61,10 +61,10 @@ class ArrayCleaner(ASTVisitor):
         self.to_remove.add(node.getChild(2))
 
     def __check_assignment(self, node: ASTNode):
-        if node.text != "Assignment":
+        if node.text not in ("Assignment", "Literal"):
             return
 
-        if node.getChildAmount() < 3:
+        if node.getChildAmount() < 2:
             return
 
         if not isinstance(node.getChild(1), ASTNodeTerminal) or node.getChild(1).type != "ARRAY":

@@ -26,6 +26,13 @@ class ASTDereferencer(ASTVisitor):
         if node.text != "Expr":
             return
 
+        """
+        in case we user x[1][2], we still need to dereference this entire subtree
+        """
+        if node.getChildAmount() == 3 and node.getChild(1).text == "[]":
+            self.addDereference(node)
+            return
+
         if node.getChildAmount() != 2:
             return
 

@@ -224,7 +224,6 @@ class Calculation:
             operator '[]' is for access of arrays. We can access an array using a GetElementPointer
             """
 
-            print("right", right.type)
             if not isinstance(right,
                               ir.Constant):  # If it is not a constant, LLVM requires a sign extend to match the size
                 right = block.sext(right, ir.IntType(64))
