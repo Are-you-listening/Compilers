@@ -48,10 +48,12 @@ class ASTTableCreator(ASTVisitor):
 
             visited.add(currentNode)
     @staticmethod
-    def __check_function_declarations(self, node: ASTNode):
+    def __check_function_declarations(self, node: ASTNode, param_types_and_ptrs: list):
         function_node = node.children[1]
         if function_node.symbol_table.exists(function_node.text):
-            if node.getChildAmount() == 2:
+            if param_types_and_ptrs != node.symbol_table.getEntry(function_node.text).getTypeObject().getParameterTypes():
+                ErrorExporter.conflictingFunctionTypes(function_node.linenr, function_node.text)
+            if node.getChildAmount() == 3:
                 return
             else:
                 if (node.symbol_table.getEntry(function_node.text).is_function_defined()):
@@ -82,7 +84,6 @@ class ASTTableCreator(ASTVisitor):
                 node.symbol_table = self.table
 
         if node.text == "Function":
-            self.__check_function_declarations(self, node)
             child = node.findType("Type")
             param_types = []
             param_strings = []
@@ -102,6 +103,7 @@ class ASTTableCreator(ASTVisitor):
                         pointer_string += "*"
                 param_strings.append(pointer_string)
             param_types_and_ptrs = [(x, y) for x, y in zip(param_types, param_strings)]
+            self.__check_function_declarations(self, node, param_types_and_ptrs)
             self.__make_entry(node, child, lambda d, c: FunctionSymbolType(d, c, param_types_and_ptrs))
 
 

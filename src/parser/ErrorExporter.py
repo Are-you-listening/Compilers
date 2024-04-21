@@ -238,4 +238,12 @@ class ErrorExporter:
         print(f"[ Error ] line: {line_nr} variable '{variable_name}' is not allowed to be declared inside a switch statement without an additional scope", file=sys.stderr)
         exit()
 
+    @staticmethod
+    def conflictingFunctionTypes(line_nr: str, func_name: str):
+        print(f"[ Error ] line {line_nr}: conflicting types for {func_name}", file=sys.stderr)
+        exit()
 
+    @staticmethod
+    def undefinedFunctionReference(line_nr: str, func_name: str):
+        print(f"[ Error ] line {line_nr}: undefined reference to {func_name}", file=sys.stderr)
+        exit()
