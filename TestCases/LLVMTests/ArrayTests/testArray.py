@@ -20,7 +20,7 @@ class ArrayTests(unittest.TestCase):
     """
 
     def testArray(self):
-        file_range = range(1, 4)
+        file_range = range(1, 5)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         original = sys.stdout  # Temp catch any output
