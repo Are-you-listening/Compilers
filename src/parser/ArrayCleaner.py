@@ -20,6 +20,7 @@ class ArrayCleaner(ASTVisitor):
 
     def visitNode(self, node: ASTNode):
         self.__check_declaration(node)
+        self.__check_assignment(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass
@@ -49,7 +50,64 @@ class ArrayCleaner(ASTVisitor):
             return
 
         type_node = node.getChild(0)
-        array_sizes = node.getChild(2).text.split("][")
+
+        array_sizes = self.array_size(node.getChild(2).text)
+
+        for new_ptr_val in array_sizes:
+            new_ptr = ASTNodeTerminal("*", type_node.parent, type_node.getSymbolTable(), f"ARRAY_{new_ptr_val}",
+                                      type_node.linenr, type_node.virtuallinenr)
+            type_node.addChildren(new_ptr)
+
+        self.to_remove.add(node.getChild(2))
+
+    def __check_assignment(self, node: ASTNode):
+        if node.text != "Assignment":
+            return
+
+        if node.getChildAmount() < 3:
+            return
+
+        if not isinstance(node.getChild(1), ASTNodeTerminal) or node.getChild(1).type != "ARRAY":
+            return
+
+        array_sizes = self.array_size(node.getChild(1).text)
+
+        """
+        In case the assignment is an array access, we need to do the following
+        
+        assume we have x[1] = 5;
+        
+        we will translate the left hand side so the resulting expression is *(x+1) = 5
+        """
+
+        left_child = node.getChild(0)
+        left_child.parent.removeChild(left_child)
+        left_child.parent = None
+
+        for new_ptr_val in array_sizes:
+            """
+            Create a new parent: 'Expr', with children left hand side the identifier and right hand side the + index
+            """
+            access_expr_node = ASTNode("Expr", None, node.getSymbolTable(), node.linenr, node.virtuallinenr)
+
+            access_expr_node.addChildren(left_child)
+            left_child.parent = access_expr_node
+
+            access_expr_node.addChildren(ASTNodeTerminal("[]", access_expr_node, node.getSymbolTable(), "",
+                                                      node.linenr, node.virtuallinenr))
+
+            access_expr_node.addChildren(ASTNodeTerminal(new_ptr_val, access_expr_node, node.getSymbolTable(), "INT",
+                                                         node.linenr, node.virtuallinenr))
+
+            left_child = access_expr_node
+
+        node.insertChild(0, left_child)
+
+        self.to_remove.add(node.getChild(1))
+
+    @staticmethod
+    def array_size(array_text):
+        array_sizes = array_text.split("][")
 
         """
         remove first '['
@@ -60,9 +118,4 @@ class ArrayCleaner(ASTVisitor):
         """
         array_sizes[-1] = array_sizes[-1][:-1]
 
-        for new_ptr_val in array_sizes:
-            new_ptr = ASTNodeTerminal("*", type_node.parent, type_node.getSymbolTable(), f"ARRAY_{new_ptr_val}",
-                                      type_node.linenr, type_node.virtuallinenr)
-            type_node.addChildren(new_ptr)
-
-        self.to_remove.add(node.getChild(2))
+        return array_sizes

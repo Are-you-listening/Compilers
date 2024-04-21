@@ -53,8 +53,6 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    #DotVisitor("output/u10").visit(ast)  # Export AST in Dot
-
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)
 
@@ -88,6 +86,7 @@ def cleanGreen(input_file, symbol_file):
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
+    #DotVisitor("output/u10").visit(ast)  # Export AST in Dot
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)

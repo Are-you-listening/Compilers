@@ -36,8 +36,12 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def invalidOperation(linenr: str, operator: str, type: str, type2: str):
-        print(f"[ Error ] line {linenr}: invalid operation {operator} on type(s): {type}  {type2}", file=sys.stderr)
+    def invalidOperation(linenr: str, operator: str, type1: tuple, type2: tuple):
+
+        type1 = ErrorExporter.__to_output_type(type1)
+        type2 = ErrorExporter.__to_output_type(type2)
+
+        print(f"[ Error ] line {linenr}: invalid operation {operator} on type(s): {type1}  {type2}", file=sys.stderr)
         exit()
 
     @staticmethod
@@ -84,7 +88,11 @@ class ErrorExporter:
         :param type2:
         :return:
         """
-        print(f"[ Warning ] line {line_nr}: incompatible pointer types initializing '{''.join(type1)}' with an expression of type '{''.join(type2)}' ")
+
+        type1 = ErrorExporter.__to_output_type(type1)
+        type2 = ErrorExporter.__to_output_type(type2)
+
+        print(f"[ Warning ] line {line_nr}: incompatible pointer types initializing '{type1}' with an expression of type '{type2}' ")
 
     @staticmethod
     def divideByZero(line_nr: int, numerator):
@@ -122,7 +130,10 @@ class ErrorExporter:
         :param type2:
         :return:
         """
-        print(f"[ Error ] line {line_nr}: assignment of incompatible types ('{''.join(type1)}' and '{''.join(type2)}') ", file=sys.stderr)
+        type1 = ErrorExporter.__to_output_type(type1)
+        type2 = ErrorExporter.__to_output_type(type2)
+
+        print(f"[ Error ] line {line_nr}: assignment of incompatible types ('{type1}' and '{type2}') ", file=sys.stderr)
         exit()
 
     @staticmethod
@@ -247,3 +258,17 @@ class ErrorExporter:
     def undefinedFunctionReference(line_nr: str, func_name: str):
         print(f"[ Error ] line {line_nr}: undefined reference to {func_name}", file=sys.stderr)
         exit()
+
+    @staticmethod
+    def __to_output_type(in_type: tuple):
+        """
+        Convert the data to an output type
+        """
+        out_type = in_type[0]
+        for v in reversed(in_type[1]):
+            if v == "*":
+                out_type += "*"
+            else:
+                out_type += f"[{v}]"
+
+        return out_type

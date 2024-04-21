@@ -30,7 +30,8 @@ class ASTConversion(ASTVisitor):
         :return:
         """
 
-        if node.text == "Dereference":
+        if node.text == "Dereference" or (node.text == "Expr" and node.getChildAmount() == 3 and
+                                          node.getChild(1).text == "[]"):
             """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was 
             before"""
             child = node.getChild(0)
@@ -114,8 +115,7 @@ class ASTConversion(ASTVisitor):
                         """
                         when the op is invalid for ptrs
                         """
-                        ErrorExporter.invalidOperation(node.linenr, operator, self.to_string_type(to_type),
-                                                       self.to_string_type(check_type))
+                        ErrorExporter.invalidOperation(node.linenr, operator, to_type, check_type)
 
                 """
                 for the non-first type, we will take the richest type
@@ -220,11 +220,9 @@ class ASTConversion(ASTVisitor):
                         """
                         when no operator, it is an assignment
                         """
-                        ErrorExporter.invalidAssignment(child.linenr, self.to_string_type(to_type),
-                                                        self.to_string_type(type_tup))
+                        ErrorExporter.invalidAssignment(child.linenr, to_type, type_tup)
                     else:
-                        ErrorExporter.invalidOperation(child.linenr, operator, self.to_string_type(to_type),
-                                                       self.to_string_type(type_tup))
+                        ErrorExporter.invalidOperation(child.linenr, operator, to_type, type_tup)
                     continue
 
                 if operator is not None:
@@ -232,8 +230,7 @@ class ASTConversion(ASTVisitor):
                         """
                         in case we have incompatible type
                         """
-                        ErrorExporter.invalidOperation(child.linenr, operator, self.to_string_type(to_type),
-                                                       self.to_string_type(type_tup))
+                        ErrorExporter.invalidOperation(child.linenr, operator, to_type, type_tup)
                         continue
 
                     if operator in ("==", "!=", "<=", ">=", "<", ">"):
