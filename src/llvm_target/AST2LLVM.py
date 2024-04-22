@@ -149,7 +149,7 @@ class AST2LLVM(ASTVisitor):
             self.llvm_map[node] = entry.llvm
 
         if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
-            llvm_var = Declaration.llvmLiteral(node.text, node.type, "")
+            llvm_var = Declaration.llvmLiteral(node.text, node.type, [])
             self.llvm_map[node] = llvm_var
 
     def handleDeclaration(self, node):
@@ -211,7 +211,13 @@ class AST2LLVM(ASTVisitor):
 
         right_child = node.getChild(1)
         to_store_reg = self.llvm_map.get(right_child, None)
-        llvm_var = Declaration.assignment(store_reg, to_store_reg, store_reg.align)
+
+        if not isinstance(store_reg, ir.GEPInstr):
+            alignment = store_reg.align
+        else:
+            alignment = 4
+
+        llvm_var = Declaration.assignment(store_reg, to_store_reg, alignment)
 
         self.llvm_map[node] = llvm_var
 

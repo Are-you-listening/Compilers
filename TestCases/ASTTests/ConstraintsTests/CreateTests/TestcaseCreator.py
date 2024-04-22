@@ -81,7 +81,7 @@ d.visit(ast)
 add check stuff
 """
 
-ConstraintChecker().visit(ast)
+ConstraintChecker(True).visit(ast)
 
 """
 add check stuff above

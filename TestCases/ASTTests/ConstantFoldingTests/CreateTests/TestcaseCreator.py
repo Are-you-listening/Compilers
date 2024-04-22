@@ -63,9 +63,7 @@ ASTCleanerAfter().visit(ast)  # Clean even more :)
 
 ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
-ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
-
-constraint_checker = ConstraintChecker()  # Checkup Semantic & Syntax Errors
+constraint_checker = ConstraintChecker(True)  # Checkup Semantic & Syntax Errors
 constraint_checker.visit(ast)
 
 """

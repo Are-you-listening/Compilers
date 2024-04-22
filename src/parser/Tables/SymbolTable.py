@@ -43,16 +43,16 @@ class SymbolEntry(TableEntry):
         """
         returns a tuple: (type, amount of * depending on how many ptrs there are in the chain)
         """
-        ptr_string = ""
+        ptr_list = []
         d_t = self.typeObject
         while isinstance(d_t, SymbolTypePtr):
             if isinstance(d_t, SymbolTypeArray):
-                ptr_string += str(d_t.size)
+                ptr_list.append(str(d_t.size))
             else:
-                ptr_string += "*"
+                ptr_list.append("*")
             d_t = d_t.deReference()
 
-        return d_t.getType(), ptr_string
+        return d_t.getType(), ptr_list
 
     def getJsonDataType(self):
         """

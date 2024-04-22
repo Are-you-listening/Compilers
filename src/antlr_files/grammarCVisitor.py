@@ -169,6 +169,11 @@ class grammarCVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by grammarCParser#initialize_list.
+    def visitInitialize_list(self, ctx:grammarCParser.Initialize_listContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by grammarCParser#expr.
     def visitExpr(self, ctx:grammarCParser.ExprContext):
         return self.visitChildren(ctx)

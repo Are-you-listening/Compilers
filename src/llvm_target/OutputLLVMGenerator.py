@@ -59,7 +59,7 @@ class UnaryWrapper:
 
 class CTypesToLLVM:
     @staticmethod
-    def getBytesUse(data_type: str, ptrs: str):
+    def getBytesUse(data_type: str, ptrs: list):
         if len(ptrs) >= 1:
             return 8
 
@@ -67,7 +67,7 @@ class CTypesToLLVM:
         return convert_map.get(data_type, "TYPE ISSUE")
 
     @staticmethod
-    def getIRType(data_type: str, ptrs: str):
+    def getIRType(data_type: str, ptrs: list):
         convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType(), "BOOL": ir.IntType(1)}
         llvm_type = convert_map.get(data_type)
         for p in ptrs:
@@ -87,7 +87,7 @@ class CTypesToLLVM:
 
 class Declaration:
     @staticmethod
-    def declare(data_type: str, ptrs: str):
+    def declare(data_type: str, ptrs: list):
         block = LLVMSingleton.getInstance().getCurrentBlock()
         llvm_val = block.alloca(CTypesToLLVM.getIRType(data_type, ptrs))
         llvm_val.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
@@ -95,7 +95,7 @@ class Declaration:
         return llvm_val
 
     @staticmethod
-    def function(func_name: str, return_type: str, ptrs: str):
+    def function(func_name: str, return_type: str, ptrs: list):
         """
         change the current latest function
         """
@@ -108,7 +108,6 @@ class Declaration:
 
     @staticmethod
     def assignment(store_register: int, value: int, align: int):
-
         """
         assignment
         :param store_register:
@@ -118,13 +117,14 @@ class Declaration:
         """
 
         block = LLVMSingleton.getInstance().getCurrentBlock()
+
         llvm_val = block.store(value, store_register)
 
         llvm_val.align = align
         return llvm_val
 
     @staticmethod
-    def llvmLiteral(value: str, data_type: str, ptrs: str):
+    def llvmLiteral(value: str, data_type: str, ptrs: list):
         if CTypesToLLVM.getIRType(data_type, ptrs) == ir.FloatType():
             value = float(value)
         elif CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(32):
@@ -156,9 +156,14 @@ class Load:
     @staticmethod
     def identifier(load_llvm):
         block = LLVMSingleton.getInstance().getCurrentBlock()
+
         llvm_var = block.load(load_llvm)
 
-        llvm_var.align = load_llvm.align
+        if not isinstance(load_llvm, ir.GEPInstr):
+            llvm_var.align = load_llvm.align
+        else:
+            llvm_var.align = CTypesToLLVM.getBytesUse("INT", [])
+
         return llvm_var
 
 
@@ -215,8 +220,11 @@ class Calculation:
             if llvm_op is not None:
                 llvm_var = llvm_op(operator, left, right)
                 return llvm_var
+        if isinstance(left.type, ir.types.PointerType) and operator in ["+", "-", "[]"]:
+            """
+            operator '[]' is for access of arrays. We can access an array using a GetElementPointer
+            """
 
-        if isinstance(left.type, ir.types.PointerType) and operator in ["+", "-"]:
             if not isinstance(right,
                               ir.Constant):  # If it is not a constant, LLVM requires a sign extend to match the size
                 right = block.sext(right, ir.IntType(64))
@@ -224,8 +232,15 @@ class Calculation:
             if operator == "-":  # Add subtract
                 right = Calculation.unary(right, "-")
 
-            new_value = block.gep(left, [right], True)  # Create the gep instruction
+            index_list = [right]
 
+            """
+            When we come across an array we need to define a value 0 followed by the index we want to access
+            """
+            if isinstance(left.type.pointee, ir.ArrayType):
+                index_list.insert(0, ir.Constant(ir.types.IntType(64), 0))
+
+            new_value = block.gep(left, index_list, True)  # Create the gep instruction
             return new_value
 
         """
@@ -267,7 +282,6 @@ class Calculation:
         # elif llvm_val.type
         else:
             llvm_op = op_translate.get(op, None)
-
         llvm_var = llvm_op(llvm_val)
         return llvm_var
 

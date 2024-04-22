@@ -2,7 +2,7 @@ from src.parser.Tables.SymbolType import SymbolType
 
 
 class FunctionSymbolType(SymbolType):
-    def __init__(self, return_type: str, return_const: bool, param_types: list[(str, str)]):
+    def __init__(self, return_type: str, return_const: bool, param_types: list[(str, list)]):
         self.return_type = return_type
         self.return_const = return_const
         self.param_types = param_types
@@ -23,4 +23,4 @@ class FunctionSymbolType(SymbolType):
         return f"{const_str} {self.return_type} "
 
     def getParameterTypes(self):
-        return self.param_types;
+        return self.param_types

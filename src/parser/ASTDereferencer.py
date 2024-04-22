@@ -6,8 +6,15 @@ class ASTDereferencer(ASTVisitor):
     Make sure identifiers are dereferenced if needed
     """
 
+    def __init__(self):
+        self.to_remove = set()
+
     def visit(self, ast: AST):
+        self.to_remove = set()
         self.postorder(ast.root)
+
+        for d in self.to_remove:
+            d.parent.removeChild(d)
 
     def visitNode(self, node: ASTNode):
         if node.text in ("Declaration", "Function", "Assignment"):
@@ -17,6 +24,13 @@ class ASTDereferencer(ASTVisitor):
                 node.replaceChild(left_child, super_child)
 
         if node.text != "Expr":
+            return
+
+        """
+        in case we user x[1][2], we still need to dereference this entire subtree
+        """
+        if node.getChildAmount() == 3 and node.getChild(1).text == "[]":
+            self.addDereference(node)
             return
 
         if node.getChildAmount() != 2:
@@ -83,6 +97,9 @@ class ASTDereferencer(ASTVisitor):
 
     @staticmethod
     def addDereference(node):
+        if node.getSiblingNeighbour(1) is not None and node.getSiblingNeighbour(1).text == "[]":
+            return
+
         new_node = ASTNode("Dereference", None, node.symbol_table, node.linenr, node.virtuallinenr)
         node.addNodeParent(new_node)
         return new_node

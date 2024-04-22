@@ -33,7 +33,14 @@ class ConstConstraint(Constraint):
                 assign_child = assign_child.getChild(0)
                 deref_counter += 1
 
+            """
+            Kinda hacky way to currently do this constraint
+            """
+            while assign_child.getChildAmount() > 0:
+                assign_child = assign_child.getChild(0)
+
             entry = node.symbol_table.getEntry(assign_child.text)
+
             data_type, ptrs, const_list = entry.getJsonDataType()
 
             """

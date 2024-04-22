@@ -127,8 +127,6 @@ class SwitchConverter(ASTVisitor):
             declared_line = declaration_node.getChild(1).linenr
             declared_variable = declaration_node.getChild(1).text
             ErrorExporter.switchDeclaration(declared_line, declared_variable)
-            print()
-            print("he")
 
         """
         Translate all the children to IF Else
