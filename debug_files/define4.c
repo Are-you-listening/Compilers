@@ -1,14 +1,5 @@
-#include <stdio.h>
+printf("%d", 1);    // also stopped by the grammar
 
 int main(){
-    char s[10] = "string he";
-
-    s[0] = 'a';
-    s[1] = 101;
-
-    char* v;
-    *v = 'y';
-
-    printf("%s", s);
-	return 0;
+    return 0;
 }
