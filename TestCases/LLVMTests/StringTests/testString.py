@@ -18,7 +18,7 @@ class StringTests(unittest.TestCase):
     Test case to run all created llvm output
     """
     def testString(self):
-        file_range = range(1, 5)
+        file_range = range(1, 7)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         with open("tests/error_dict.json", "rt") as f:
