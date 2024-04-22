@@ -3,6 +3,6 @@
 int main(){
     char* s = "string\nhe";
 
-    printf("%s", s);
+    printf("%s \n Hi", s);
 	return 0;
 }

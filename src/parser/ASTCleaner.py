@@ -132,24 +132,10 @@ class ASTCleaner(ASTVisitor):
         if node.text not in ["printf", "scanf"]:
             return
 
-        format_child_text = ""
-
-        """
-        support printf format stuff %d;lol with ';lol' as operator
-        """
-        child = node.getChild(1)
-
         """
         remove 'printf' node
         """
         self.to_remove.add(node.getChild(0))
-
-        self.to_remove.add(child)
-        format_child_text += child.text
-
-        format_child_text = format_child_text[1:-1]
-        format_node = ASTNodeTerminal(format_child_text, node, node.getSymbolTable(), -1, node.linenr, node.virtuallinenr)
-        node.insertChild(0, format_node)
 
     def cleanDereferenceAssignments(self, node: ASTNode):
         """

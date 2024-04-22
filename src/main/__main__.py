@@ -25,7 +25,7 @@ from src.parser.VirtualLineNrVisitor import *
 from src.parser.ArrayCleaner import ArrayCleaner
 from src.parser.EnumConverter import *
 from src.parser.Preproccesing.preProcessor import *
-
+from src.parser.StringToArray import *
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -53,6 +53,8 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
+    #DotVisitor("output/u10").visit(ast)  # Export AST in Dot
+
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)
 
@@ -74,6 +76,8 @@ def cleanGreen(input_file, symbol_file):
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
+    StringToArray().visit(ast)
+    #DotVisitor("output/qu1").visit(ast)
     ArrayCleaner().visit(ast)
 
     ASTTableCreator().visit(ast)  # Create the symbol table

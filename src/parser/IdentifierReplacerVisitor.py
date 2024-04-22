@@ -57,28 +57,15 @@ class IdentifierReplacerVisitor(ASTVisitor):
             if entry.value.text in ("Expr", "Dereference"):
                 return
 
-            if entry.value.text == "Conversion":
-                """
-                This breaks things, the children all need to have a changed symbol table
-                """
+            """
+            changes IDENTIFIER -> its type,
+            We make an exact copy of the subtree its values
+            """
+            temp = SwitchConverter.createCopy(entry.value)
+            temp.parent = node.parent
+            temp.symbol_table = node.symbol_table
+            node = temp
 
-                temp = SwitchConverter.createCopy(entry.value)
-                temp.parent = node.parent
-                temp.symbol_table = node.symbol_table
-                node = temp
-            else:
-                """
-                changes IDENTIFIER -> its type
-                """
-                node.text = entry.value.text
-                if entry.getType() == "INT":
-                    node.type = "INT"
-
-                elif entry.getType() == "CHAR":
-                    node.type = "CHAR"
-
-                elif entry.getType() == "FLOAT":
-                    node.type = "FLOAT"
 
             # replaces a dereference -> identifier pair with the value of that identifier
 
