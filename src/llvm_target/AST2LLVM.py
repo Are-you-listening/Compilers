@@ -152,6 +152,10 @@ class AST2LLVM(ASTVisitor):
             llvm_var = Declaration.llvmLiteral(node.text, node.type, [])
             self.llvm_map[node] = llvm_var
 
+        if node.type == "STRING":
+            llvm_var = Declaration.string(node.text)
+            self.llvm_map[node] = llvm_var
+
     def handleDeclaration(self, node):
         """
         ask the var type, and search its value in the symbol table
@@ -253,21 +257,22 @@ class AST2LLVM(ASTVisitor):
         :param printf: If true do make printf
         :return:
         """
-        formatSpecifier = node.children[0].text
+        format_specifier_node = node.children[0]
+        format_specifier = self.llvm_map[format_specifier_node]
         args = []
 
         """
         load part of printf statement we want to print
         """
-        for child in node.children:
+        for child in node.children[1:]:
             llvm_var = self.llvm_map.get(child, None)
             if llvm_var is not None:
                 args.append(llvm_var)
 
         if printf:
-            Printf.printf(formatSpecifier, *args)
+            Printf.printf(format_specifier, *args)
         else:
-            Scanf.scanf(formatSpecifier, *args)
+            Scanf.scanf(format_specifier, *args)
 
     def handleOperations(self, node: ASTNode):
         """

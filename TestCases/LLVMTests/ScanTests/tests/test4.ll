@@ -11,13 +11,13 @@ define i32 @"main"()
   ; FLOAT k = 0
   %".7" = load float, float* %".4", align 4
   ; printf "%f" k
-  %".9" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".9" = bitcast [3 x i8]* @".str.0" to i8*
   %".10" = alloca float
   store float %".7", float* %".10"
   %".12" = load float, float* %".10"
   %".13" = fpext float %".12" to double
   %".14" = call i32 (i8*, ...) @"printf"(i8* %".9", double %".13")
-  %".15" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".15" = bitcast [3 x i8]* @".str.0" to i8*
   %".16" = alloca float*
   store float* %".4", float** %".16"
   %".18" = load float*, float** %".16"
@@ -25,7 +25,7 @@ define i32 @"main"()
   ; scanf "%f" & k
   %".21" = load float, float* %".4", align 4
   ; printf "%f" k
-  %".23" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".23" = bitcast [3 x i8]* @".str.0" to i8*
   %".24" = alloca float
   store float %".21", float* %".24"
   %".26" = load float, float* %".24"
@@ -35,7 +35,7 @@ define i32 @"main"()
   ; return 0
 }
 
+@".str.0" = internal constant [3 x i8] c"%f\00"
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.PS0" = internal constant [3 x i8] c"%f\00"
 declare i32 @"scanf"(i8* %".1", ...)

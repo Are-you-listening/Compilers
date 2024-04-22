@@ -29,6 +29,13 @@ class StringToArray(ASTVisitor):
         if node.type != "STRING":
             return
 
+        """
+        remove '"' at start and end of string
+        """
+        node.text = node.text[1:-1]
+
+        self.__add_last_byte(node)
+
         if node.parent.text == "Declaration":
             """
             In case of a declaration we will check if we have a ptr or an array
@@ -43,18 +50,11 @@ class StringToArray(ASTVisitor):
                         is_pointer = True
                     break
 
-            if is_pointer:
-                pass
-            else:
+            if not is_pointer:
                 self.__make_init_list(node)
-
-        else:
-            self.__make_init_list(node)
 
     @staticmethod
     def __make_init_list(node):
-        string = node.text[1:-1]
-
         splitted_string = []
         backslash = False
 
@@ -94,3 +94,6 @@ class StringToArray(ASTVisitor):
             char_node = ASTNodeTerminal(f"'{char}'", init_list, node.getSymbolTable(), "CHAR", node.linenr,
                                         node.virtuallinenr)
             init_list.addChildren(char_node)
+
+    def __add_last_byte(self, node):
+        node.text = node.text+"\00"

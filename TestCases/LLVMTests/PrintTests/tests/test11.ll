@@ -16,7 +16,7 @@ define i32 @"main"()
   ;
   %".12" = load float, float* %".4", align 4
   ;  printf "%f %f %d " 3.14 p 7
-  %".14" = bitcast [10 x i8]* @".str.PS0" to i8*
+  %".14" = bitcast [10 x i8]* @".str.0" to i8*
   %".15" = alloca float
   %".16" = alloca float
   %".17" = alloca i32
@@ -32,7 +32,7 @@ define i32 @"main"()
   %".27" = load float, float* %".4", align 4
   ;  printf "%% %c %f %x %f  kappa kappa" 'a' p 12 p
   %".29" = load float, float* %".4", align 4
-  %".30" = bitcast [28 x i8]* @".str.PS1" to i8*
+  %".30" = bitcast [28 x i8]* @".str.1" to i8*
   %".31" = alloca i8
   %".32" = alloca float
   %".33" = alloca i32
@@ -62,7 +62,7 @@ define i32 @"main"()
   ;
   %".58" = load float, float* %".4", align 4
   ;  printf "%f" p
-  %".60" = bitcast [3 x i8]* @".str.PS2" to i8*
+  %".60" = bitcast [3 x i8]* @".str.2" to i8*
   %".61" = alloca float
   store float %".58", float* %".61"
   %".63" = load float, float* %".61"
@@ -72,8 +72,8 @@ define i32 @"main"()
   ;   return 0
 }
 
+@".str.0" = internal constant [10 x i8] c"%f %f %d \00"
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.PS0" = internal constant [10 x i8] c"%f %f %d \00"
-@".str.PS1" = internal constant [28 x i8] c"%% %c %f %x %f  kappa kappa\00"
-@".str.PS2" = internal constant [3 x i8] c"%f\00"
+@".str.1" = internal constant [28 x i8] c"%% %c %f %x %f  kappa kappa\00"
+@".str.2" = internal constant [3 x i8] c"%f\00"

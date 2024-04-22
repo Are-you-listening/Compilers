@@ -36,7 +36,7 @@ define i32 @"main"()
   ; printf "%d" x 0 0
   %".32" = getelementptr inbounds [3 x i32], [3 x i32]* %".30", i64 0, i32 0
   %".33" = load i32, i32* %".32", align 4
-  %".34" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".34" = bitcast [3 x i8]* @".str.0" to i8*
   %".35" = alloca i32
   store i32 %".33", i32* %".35"
   %".37" = load i32, i32* %".35"
@@ -45,7 +45,7 @@ define i32 @"main"()
   ; printf "%d" x 0 1
   %".41" = getelementptr inbounds [3 x i32], [3 x i32]* %".39", i64 0, i32 1
   %".42" = load i32, i32* %".41", align 4
-  %".43" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".43" = bitcast [3 x i8]* @".str.0" to i8*
   %".44" = alloca i32
   store i32 %".42", i32* %".44"
   %".46" = load i32, i32* %".44"
@@ -54,7 +54,7 @@ define i32 @"main"()
   ; printf "%d" x 0 2
   %".50" = getelementptr inbounds [3 x i32], [3 x i32]* %".48", i64 0, i32 2
   %".51" = load i32, i32* %".50", align 4
-  %".52" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".52" = bitcast [3 x i8]* @".str.0" to i8*
   %".53" = alloca i32
   store i32 %".51", i32* %".53"
   %".55" = load i32, i32* %".53"
@@ -63,7 +63,7 @@ define i32 @"main"()
   ; printf "%d" x 1 0
   %".59" = getelementptr inbounds [3 x i32], [3 x i32]* %".57", i64 0, i32 0
   %".60" = load i32, i32* %".59", align 4
-  %".61" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".61" = bitcast [3 x i8]* @".str.0" to i8*
   %".62" = alloca i32
   store i32 %".60", i32* %".62"
   %".64" = load i32, i32* %".62"
@@ -72,7 +72,7 @@ define i32 @"main"()
   ; printf "%d" x 1 1
   %".68" = getelementptr inbounds [3 x i32], [3 x i32]* %".66", i64 0, i32 1
   %".69" = load i32, i32* %".68", align 4
-  %".70" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".70" = bitcast [3 x i8]* @".str.0" to i8*
   %".71" = alloca i32
   store i32 %".69", i32* %".71"
   %".73" = load i32, i32* %".71"
@@ -81,7 +81,7 @@ define i32 @"main"()
   ; printf "%d" x 1 2
   %".77" = getelementptr inbounds [3 x i32], [3 x i32]* %".75", i64 0, i32 2
   %".78" = load i32, i32* %".77", align 4
-  %".79" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".79" = bitcast [3 x i8]* @".str.0" to i8*
   %".80" = alloca i32
   store i32 %".78", i32* %".80"
   %".82" = load i32, i32* %".80"
@@ -101,7 +101,7 @@ define i32 @"main"()
   ;  printf "%d" x 0 2
   %".97" = getelementptr inbounds [3 x i32], [3 x i32]* %".95", i64 0, i32 2
   %".98" = load i32, i32* %".97", align 4
-  %".99" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".99" = bitcast [3 x i8]* @".str.0" to i8*
   %".100" = alloca i32
   store i32 %".98", i32* %".100"
   %".102" = load i32, i32* %".100"
@@ -110,7 +110,7 @@ define i32 @"main"()
   ; printf "%d" x 1 2
   %".106" = getelementptr inbounds [3 x i32], [3 x i32]* %".104", i64 0, i32 2
   %".107" = load i32, i32* %".106", align 4
-  %".108" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".108" = bitcast [3 x i8]* @".str.0" to i8*
   %".109" = alloca i32
   store i32 %".107", i32* %".109"
   %".111" = load i32, i32* %".109"
@@ -119,7 +119,7 @@ define i32 @"main"()
   ; printf "%d" x 1 0
   %".115" = getelementptr inbounds [3 x i32], [3 x i32]* %".113", i64 0, i32 0
   %".116" = load i32, i32* %".115", align 4
-  %".117" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".117" = bitcast [3 x i8]* @".str.0" to i8*
   %".118" = alloca i32
   store i32 %".116", i32* %".118"
   %".120" = load i32, i32* %".118"
@@ -128,6 +128,5 @@ define i32 @"main"()
   ; return 0
 }
 
+@".str.0" = internal constant [3 x i8] c"%d\00"
 declare i32 @"printf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [3 x i8] c"%d\00"

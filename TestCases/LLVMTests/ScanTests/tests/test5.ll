@@ -9,7 +9,7 @@ define i32 @"main"()
   %".4" = alloca i32, align 4
   store i32 0, i32* %".4", align 4
   ; INT k = 0
-  %".7" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".7" = bitcast [3 x i8]* @".str.0" to i8*
   %".8" = alloca i32*
   store i32* %".4", i32** %".8"
   %".10" = load i32*, i32** %".8"
@@ -17,7 +17,7 @@ define i32 @"main"()
   ; scanf "%x" & k
   %".13" = load i32, i32* %".4", align 4
   ; printf "%x" k
-  %".15" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".15" = bitcast [3 x i8]* @".str.0" to i8*
   %".16" = alloca i32
   store i32 %".13", i32* %".16"
   %".18" = load i32, i32* %".16"
@@ -26,7 +26,7 @@ define i32 @"main"()
   ; return 0
 }
 
+@".str.0" = internal constant [3 x i8] c"%x\00"
 declare i32 @"scanf"(i8* %".1", ...)
 
-@".str.PS0" = internal constant [3 x i8] c"%x\00"
 declare i32 @"printf"(i8* %".1", ...)

@@ -58,7 +58,7 @@ define i32 @"main"()
   %".47" = icmp ne i1 %".46", 0
   %".48" = xor i1 %".47", 1
   %".49" = zext i1 %".48" to i32
-  %".50" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".50" = bitcast [3 x i8]* @".str.0" to i8*
   %".51" = alloca i32
   store i32 %".49", i32* %".51"
   %".53" = load i32, i32* %".51"
@@ -68,6 +68,5 @@ define i32 @"main"()
   ; return 0
 }
 
+@".str.0" = internal constant [3 x i8] c"%d\00"
 declare i32 @"printf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [3 x i8] c"%d\00"

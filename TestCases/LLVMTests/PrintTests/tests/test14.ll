@@ -16,7 +16,7 @@ define i32 @"main"()
   ;
   %".12" = load float, float* %".4", align 4
   ;  printf "%f %f %d " 3.14 p 7
-  %".14" = bitcast [10 x i8]* @".str.PS0" to i8*
+  %".14" = bitcast [10 x i8]* @".str.0" to i8*
   %".15" = alloca float
   %".16" = alloca float
   %".17" = alloca i32
@@ -32,7 +32,7 @@ define i32 @"main"()
   %".27" = load float, float* %".4", align 4
   ;  printf "%% %c %f %x %f  kappa kappa" 'a' p 12 p
   %".29" = load float, float* %".4", align 4
-  %".30" = bitcast [28 x i8]* @".str.PS1" to i8*
+  %".30" = bitcast [28 x i8]* @".str.1" to i8*
   %".31" = alloca i8
   %".32" = alloca float
   %".33" = alloca i32
@@ -48,7 +48,7 @@ define i32 @"main"()
   %".43" = load float, float* %".34"
   %".44" = fpext float %".43" to double
   %".45" = call i32 (i8*, ...) @"printf"(i8* %".30", i8 %".39", double %".41", i32 %".42", double %".44")
-  %".46" = bitcast [5 x i8]* @".str.PS2" to i8*
+  %".46" = bitcast [5 x i8]* @".str.2" to i8*
   %".47" = alloca i32
   store i32 5, i32* %".47"
   %".49" = load i32, i32* %".47"
@@ -58,7 +58,7 @@ define i32 @"main"()
   ;
   %".54" = load float, float* %".4", align 4
   ; printf "%f '\n'" p
-  %".56" = bitcast [8 x i8]* @".str.PS3" to i8*
+  %".56" = bitcast [8 x i8]* @".str.3" to i8*
   %".57" = alloca float
   store float %".54", float* %".57"
   %".59" = load float, float* %".57"
@@ -66,7 +66,7 @@ define i32 @"main"()
   %".61" = call i32 (i8*, ...) @"printf"(i8* %".56", double %".60")
   %".62" = load float, float* %".4", align 4
   ; printf "%f '\n'" p
-  %".64" = bitcast [8 x i8]* @".str.PS3" to i8*
+  %".64" = bitcast [8 x i8]* @".str.3" to i8*
   %".65" = alloca float
   store float %".62", float* %".65"
   %".67" = load float, float* %".65"
@@ -74,7 +74,7 @@ define i32 @"main"()
   %".69" = call i32 (i8*, ...) @"printf"(i8* %".64", double %".68")
   %".70" = load float, float* %".4", align 4
   ; printf "a%fa '\n'" p
-  %".72" = bitcast [10 x i8]* @".str.PS4" to i8*
+  %".72" = bitcast [10 x i8]* @".str.4" to i8*
   %".73" = alloca float
   store float %".70", float* %".73"
   %".75" = load float, float* %".73"
@@ -84,25 +84,29 @@ define i32 @"main"()
   ;
   %".80" = load float, float* %".4", align 4
   ;  printf "%f" p
-  %".82" = bitcast [3 x i8]* @".str.PS5" to i8*
+  %".82" = bitcast [3 x i8]* @".str.5" to i8*
   %".83" = alloca float
   store float %".80", float* %".83"
   %".85" = load float, float* %".83"
   %".86" = fpext float %".85" to double
   %".87" = call i32 (i8*, ...) @"printf"(i8* %".82", double %".86")
+  %".88" = bitcast [3 x i8]* @".str.6" to i8*
+  %".89" = alloca [28 x i8]*
+  store [28 x i8]* @".str.7", [28 x i8]** %".89"
+  %".91" = load [28 x i8]*, [28 x i8]** %".89"
+  %".92" = call i32 (i8*, ...) @"printf"(i8* %".88", [28 x i8]* %".91")
   ;  printf "%s" "This is a beautifull string"
-  %".89" = bitcast [3 x i8]* @".str.PS6" to i8*
-  %".90" = call i32 (i8*, ...) @"printf"(i8* %".89")
   ret i32 0
   ;   return 0
 }
 
+@".str.0" = internal constant [10 x i8] c"%f %f %d \00"
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.PS0" = internal constant [10 x i8] c"%f %f %d \00"
-@".str.PS1" = internal constant [28 x i8] c"%% %c %f %x %f  kappa kappa\00"
-@".str.PS2" = internal constant [5 x i8] c"%x,f\00"
-@".str.PS3" = internal constant [8 x i8] c"%f '\5cn'\00"
-@".str.PS4" = internal constant [10 x i8] c"a%fa '\5cn'\00"
-@".str.PS5" = internal constant [3 x i8] c"%f\00"
-@".str.PS6" = internal constant [3 x i8] c"%s\00"
+@".str.1" = internal constant [28 x i8] c"%% %c %f %x %f  kappa kappa\00"
+@".str.2" = internal constant [5 x i8] c"%x,f\00"
+@".str.3" = internal constant [8 x i8] c"%f '\5cn'\00"
+@".str.4" = internal constant [10 x i8] c"a%fa '\5cn'\00"
+@".str.5" = internal constant [3 x i8] c"%f\00"
+@".str.6" = internal constant [3 x i8] c"%s\00"
+@".str.7" = internal constant [28 x i8] c"This is a beautifull string\00"

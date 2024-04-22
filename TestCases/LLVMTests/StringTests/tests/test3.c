@@ -7,7 +7,7 @@ int main(){
     s[1] = 101;
 
     char* v;
-    *v = 'y'
+    *v = 'y';
 
     printf("%s", s);
 	return 0;

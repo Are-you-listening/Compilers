@@ -19,7 +19,7 @@ define i32 @"main"()
   ; printf "%d" x 10 19
   %".15" = getelementptr inbounds [20 x i32], [20 x i32]* %".13", i64 0, i32 19
   %".16" = load i32, i32* %".15", align 4
-  %".17" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".17" = bitcast [3 x i8]* @".str.0" to i8*
   %".18" = alloca i32
   store i32 %".16", i32* %".18"
   %".20" = load i32, i32* %".18"
@@ -28,6 +28,5 @@ define i32 @"main"()
   ; return 0
 }
 
+@".str.0" = internal constant [3 x i8] c"%d\00"
 declare i32 @"printf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [3 x i8] c"%d\00"

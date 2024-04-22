@@ -13,7 +13,7 @@ define i32 @"main"()
   ; integer = integer || 6
   %".9" = load i32, i32* %".4", align 4
   ; printf "%d" integer
-  %".11" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".11" = bitcast [3 x i8]* @".str.0" to i8*
   %".12" = alloca i32
   store i32 %".9", i32* %".12"
   %".14" = load i32, i32* %".12"
@@ -24,7 +24,7 @@ define i32 @"main"()
   %".19" = load i32*, i32** %".16", align 8
   ; printf "%d" * int_ptr
   %".21" = load i32, i32* %".19", align 8
-  %".22" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".22" = bitcast [3 x i8]* @".str.0" to i8*
   %".23" = alloca i32
   store i32 %".21", i32* %".23"
   %".25" = load i32, i32* %".23"
@@ -35,7 +35,7 @@ define i32 @"main"()
   %".30" = load i32*, i32** %".16", align 8
   ; printf "%d" * * ptr_ptr
   %".32" = load i32, i32* %".30", align 8
-  %".33" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".33" = bitcast [3 x i8]* @".str.0" to i8*
   %".34" = alloca i32
   store i32 %".32", i32* %".34"
   %".36" = load i32, i32* %".34"
@@ -48,7 +48,7 @@ define i32 @"main"()
   ; printf "%d" * * another_pointer
   %".44" = load i32*, i32** %".42", align 8
   %".45" = load i32, i32* %".44", align 8
-  %".46" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".46" = bitcast [3 x i8]* @".str.0" to i8*
   %".47" = alloca i32
   store i32 %".45", i32* %".47"
   %".49" = load i32, i32* %".47"
@@ -60,7 +60,7 @@ define i32 @"main"()
   store i32 %".53", i32* %".54", align 4
   %".56" = load i32, i32* %".54", align 4
   ; printf "%d" z
-  %".58" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".58" = bitcast [3 x i8]* @".str.0" to i8*
   %".59" = alloca i32
   store i32 %".56", i32* %".59"
   %".61" = load i32, i32* %".59"
@@ -70,7 +70,7 @@ define i32 @"main"()
   %".65" = load i32*, i32** %".16", align 8
   ; printf "%d" * int_ptr
   %".67" = load i32, i32* %".65", align 8
-  %".68" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".68" = bitcast [3 x i8]* @".str.0" to i8*
   %".69" = alloca i32
   store i32 %".67", i32* %".69"
   %".71" = load i32, i32* %".69"
@@ -80,7 +80,7 @@ define i32 @"main"()
   ; INT * pointer = & z
   %".76" = load i32, i32* %".54", align 4
   ; printf "%d" * pointer
-  %".78" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".78" = bitcast [3 x i8]* @".str.0" to i8*
   %".79" = alloca i32
   store i32 %".76", i32* %".79"
   %".81" = load i32, i32* %".79"
@@ -92,7 +92,7 @@ define i32 @"main"()
   store i32 %".85", i32* %".86", align 4
   %".88" = load i32, i32* %".86", align 4
   ; printf "%d" x
-  %".90" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".90" = bitcast [3 x i8]* @".str.0" to i8*
   %".91" = alloca i32
   store i32 %".88", i32* %".91"
   %".93" = load i32, i32* %".91"
@@ -111,7 +111,7 @@ define i32 @"main"()
   %".106" = load i32*, i32** %".16", align 8
   ; printf "%d" * * x_ptr
   %".108" = load i32, i32* %".106", align 8
-  %".109" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".109" = bitcast [3 x i8]* @".str.0" to i8*
   %".110" = alloca i32
   store i32 %".108", i32* %".110"
   %".112" = load i32, i32* %".110"
@@ -120,6 +120,5 @@ define i32 @"main"()
   ;  return 0
 }
 
+@".str.0" = internal constant [3 x i8] c"%d\00"
 declare i32 @"printf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [3 x i8] c"%d\00"

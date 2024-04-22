@@ -14,7 +14,7 @@ define i32 @"main"()
   ; FLOAT * q = & p
   %".10" = load float, float* %".4", align 4
   ;  printf "%f %x %d " 3.14 p 7
-  %".12" = bitcast [10 x i8]* @".str.PS0" to i8*
+  %".12" = bitcast [10 x i8]* @".str.0" to i8*
   %".13" = alloca float
   %".14" = alloca float
   %".15" = alloca i32
@@ -27,14 +27,14 @@ define i32 @"main"()
   %".22" = fpext float %".21" to double
   %".23" = load i32, i32* %".15"
   %".24" = call i32 (i8*, ...) @"printf"(i8* %".12", double %".20", double %".22", i32 %".23")
-  %".25" = bitcast [12 x i8]* @".str.PS1" to i8*
+  %".25" = bitcast [12 x i8]* @".str.1" to i8*
   %".26" = call i32 (i8*, ...) @"printf"(i8* %".25")
   ; printf "True %d \n "
   ret i32 0
   ;     return 0
 }
 
+@".str.0" = internal constant [10 x i8] c"%f %x %d \00"
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.PS0" = internal constant [10 x i8] c"%f %x %d \00"
-@".str.PS1" = internal constant [12 x i8] c"True %d \5cn \00"
+@".str.1" = internal constant [12 x i8] c"True %d \5cn \00"

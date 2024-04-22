@@ -36,7 +36,7 @@ define i32 @"main"()
   %".31" = load i32*, i32** %".13", align 8
   %".32" = icmp eq i32* %".31", %".4"
   %".33" = zext i1 %".32" to i32
-  %".34" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".34" = bitcast [3 x i8]* @".str.0" to i8*
   %".35" = alloca i32
   store i32 %".33", i32* %".35"
   %".37" = load i32, i32* %".35"
@@ -51,7 +51,7 @@ define i32 @"main"()
   %".46" = load i32*, i32** %".13", align 8
   %".47" = icmp eq i32* %".46", %".7"
   %".48" = zext i1 %".47" to i32
-  %".49" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".49" = bitcast [3 x i8]* @".str.0" to i8*
   %".50" = alloca i32
   store i32 %".48", i32* %".50"
   %".52" = load i32, i32* %".50"
@@ -64,7 +64,7 @@ define i32 @"main"()
   store i32 %".58", i32* %".44", align 4
   %".60" = load i32, i32* %".44", align 4
   ; printf "%d" is_y
-  %".62" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".62" = bitcast [3 x i8]* @".str.0" to i8*
   %".63" = alloca i32
   store i32 %".60", i32* %".63"
   %".65" = load i32, i32* %".63"
@@ -74,7 +74,7 @@ define i32 @"main"()
   %".69" = alloca float*, align 8
   store float* %".68", float** %".69", align 8
   %".71" = inttoptr i32 0 to float*
-  %".72" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".72" = bitcast [3 x i8]* @".str.0" to i8*
   %".73" = alloca float*
   store float* %".71", float** %".73"
   %".75" = load float*, float** %".73"
@@ -84,6 +84,5 @@ define i32 @"main"()
   ; return 0
 }
 
+@".str.0" = internal constant [3 x i8] c"%d\00"
 declare i32 @"printf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [3 x i8] c"%d\00"

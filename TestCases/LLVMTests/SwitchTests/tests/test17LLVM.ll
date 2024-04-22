@@ -32,7 +32,7 @@ define i32 @"main"()
   br i1 %".23", label %".24", label %".32"
 .24:
   store i32 1, i32* %".7", align 4
-  %".26" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".26" = bitcast [3 x i8]* @".str.0" to i8*
   %".27" = alloca i32
   store i32 1, i32* %".27"
   %".29" = load i32, i32* %".27"
@@ -40,7 +40,7 @@ define i32 @"main"()
   ; printf "%d" 1
   br label %".32"
 .32:
-  %".33" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".33" = bitcast [3 x i8]* @".str.0" to i8*
   %".34" = alloca i32
   store i32 6, i32* %".34"
   %".36" = load i32, i32* %".34"
@@ -61,7 +61,7 @@ define i32 @"main"()
   br i1 %".47", label %".48", label %".56"
 .48:
   store i32 3, i32* %".7", align 4
-  %".50" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".50" = bitcast [3 x i8]* @".str.0" to i8*
   %".51" = alloca i32
   store i32 3, i32* %".51"
   %".53" = load i32, i32* %".51"
@@ -69,7 +69,7 @@ define i32 @"main"()
   ; printf "%d" 3
   br label %".56"
 .56:
-  %".57" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".57" = bitcast [3 x i8]* @".str.0" to i8*
   %".58" = alloca i32
   store i32 4, i32* %".58"
   %".60" = load i32, i32* %".58"
@@ -79,6 +79,5 @@ define i32 @"main"()
   ;  return 0
 }
 
+@".str.0" = internal constant [3 x i8] c"%d\00"
 declare i32 @"printf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [3 x i8] c"%d\00"

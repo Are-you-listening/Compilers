@@ -15,12 +15,12 @@ define i32 @"main"()
   ; day = Wed
   %".11" = load i32, i32* %".4", align 4
   ; printf "%d" day
-  %".13" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".13" = bitcast [3 x i8]* @".str.0" to i8*
   %".14" = alloca i32
   store i32 %".11", i32* %".14"
   %".16" = load i32, i32* %".14"
   %".17" = call i32 (i8*, ...) @"printf"(i8* %".13", i32 %".16")
-  %".18" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".18" = bitcast [3 x i8]* @".str.0" to i8*
   %".19" = alloca i32
   store i32 0, i32* %".19"
   %".21" = load i32, i32* %".19"
@@ -29,37 +29,37 @@ define i32 @"main"()
   %".24" = alloca i32, align 4
   store i32 3, i32* %".24", align 4
   ; INT q = Thur - Mon * Tue
-  %".27" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".27" = bitcast [3 x i8]* @".str.0" to i8*
   %".28" = alloca i32
   store i32 1, i32* %".28"
   %".30" = load i32, i32* %".28"
   %".31" = call i32 (i8*, ...) @"printf"(i8* %".27", i32 %".30")
   ; printf "%d" Tue
-  %".33" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".33" = bitcast [3 x i8]* @".str.0" to i8*
   %".34" = alloca i32
   store i32 3, i32* %".34"
   %".36" = load i32, i32* %".34"
   %".37" = call i32 (i8*, ...) @"printf"(i8* %".33", i32 %".36")
   ; printf "%d" Thur
-  %".39" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".39" = bitcast [3 x i8]* @".str.0" to i8*
   %".40" = alloca i32
   store i32 4, i32* %".40"
   %".42" = load i32, i32* %".40"
   %".43" = call i32 (i8*, ...) @"printf"(i8* %".39", i32 %".42")
   ; printf "%d" Fri
-  %".45" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".45" = bitcast [3 x i8]* @".str.0" to i8*
   %".46" = alloca i32
   store i32 5, i32* %".46"
   %".48" = load i32, i32* %".46"
   %".49" = call i32 (i8*, ...) @"printf"(i8* %".45", i32 %".48")
   ; printf "%d" Sat
-  %".51" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".51" = bitcast [3 x i8]* @".str.0" to i8*
   %".52" = alloca i32
   store i32 3, i32* %".52"
   %".54" = load i32, i32* %".52"
   %".55" = call i32 (i8*, ...) @"printf"(i8* %".51", i32 %".54")
   ; printf "%d" q
-  %".57" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".57" = bitcast [3 x i8]* @".str.0" to i8*
   %".58" = alloca i32
   store i32 6, i32* %".58"
   %".60" = load i32, i32* %".58"
@@ -69,7 +69,7 @@ define i32 @"main"()
   ; q = Sun
   %".65" = load i32, i32* %".24", align 4
   ; printf "%d" q
-  %".67" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".67" = bitcast [3 x i8]* @".str.0" to i8*
   %".68" = alloca i32
   store i32 %".65", i32* %".68"
   %".70" = load i32, i32* %".68"
@@ -86,6 +86,5 @@ define i32 @"main"()
 @"Wed" = global i32 2, align 4
 @"Tue" = global i32 1, align 4
 @"Mon" = global i32 0, align 4
+@".str.0" = internal constant [3 x i8] c"%d\00"
 declare i32 @"printf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [3 x i8] c"%d\00"

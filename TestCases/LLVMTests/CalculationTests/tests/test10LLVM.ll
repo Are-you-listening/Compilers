@@ -11,7 +11,7 @@ define i32 @"main"()
   ; INT x = 98362
   %".7" = load i32, i32* %".4", align 4
   ; printf "%d" x
-  %".9" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".9" = bitcast [3 x i8]* @".str.0" to i8*
   %".10" = alloca i32
   store i32 %".7", i32* %".10"
   %".12" = load i32, i32* %".10"
@@ -26,7 +26,7 @@ define i32 @"main"()
   ; printf "%d" * p == x_ptr
   %".22" = load i32*, i32** %".14", align 8
   %".23" = icmp eq i32* %".20", %".22"
-  %".24" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".24" = bitcast [3 x i8]* @".str.0" to i8*
   %".25" = alloca i1
   store i1 %".23", i1* %".25"
   %".27" = load i1, i1* %".25"
@@ -38,7 +38,7 @@ define i32 @"main"()
   ; printf "%d" * z == x
   %".34" = load i32, i32* %".4", align 4
   %".35" = icmp eq i32 %".32", %".34"
-  %".36" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".36" = bitcast [3 x i8]* @".str.0" to i8*
   %".37" = alloca i1
   store i1 %".35", i1* %".37"
   %".39" = load i1, i1* %".37"
@@ -54,7 +54,7 @@ define i32 @"main"()
   %".49" = load float, float* %".41", align 4
   %".50" = fcmp oeq float %".48", %".49"
   %".51" = zext i1 %".50" to i32
-  %".52" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".52" = bitcast [3 x i8]* @".str.0" to i8*
   %".53" = alloca i32
   store i32 %".51", i32* %".53"
   %".55" = load i32, i32* %".53"
@@ -63,6 +63,5 @@ define i32 @"main"()
   ;  return 0
 }
 
+@".str.0" = internal constant [3 x i8] c"%d\00"
 declare i32 @"printf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [3 x i8] c"%d\00"

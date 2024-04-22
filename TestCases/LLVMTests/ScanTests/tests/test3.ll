@@ -6,7 +6,7 @@ define i32 @"main"()
 {
 .2:
   ;    INT main
-  %".4" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".4" = bitcast [3 x i8]* @".str.0" to i8*
   %".5" = alloca float
   store float 0x40091eb860000000, float* %".5"
   %".7" = load float, float* %".5"
@@ -17,6 +17,5 @@ define i32 @"main"()
   ; return 0
 }
 
+@".str.0" = internal constant [3 x i8] c"%c\00"
 declare i32 @"scanf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [3 x i8] c"%c\00"

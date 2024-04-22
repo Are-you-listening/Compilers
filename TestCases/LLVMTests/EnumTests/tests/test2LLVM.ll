@@ -15,7 +15,7 @@ define i32 @"main"()
   ; day = Wed
   %".11" = load i32, i32* %".4", align 4
   ; printf "%d" day
-  %".13" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".13" = bitcast [3 x i8]* @".str.0" to i8*
   %".14" = alloca i32
   store i32 %".11", i32* %".14"
   %".16" = load i32, i32* %".14"
@@ -32,6 +32,5 @@ define i32 @"main"()
 @"Wed" = global i32 2, align 4
 @"Tue" = global i32 1, align 4
 @"Mon" = global i32 0, align 4
+@".str.0" = internal constant [3 x i8] c"%d\00"
 declare i32 @"printf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [3 x i8] c"%d\00"

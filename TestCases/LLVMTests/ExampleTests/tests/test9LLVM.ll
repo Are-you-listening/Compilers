@@ -20,7 +20,7 @@ define i32 @"main"()
   store float 0x4009318fc0000000, float* %".13", align 8
   %".16" = load float, float* %".4", align 4
   ; printf "%f" f
-  %".18" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".18" = bitcast [3 x i8]* @".str.0" to i8*
   %".19" = alloca float
   store float %".16", float* %".19"
   %".21" = load float, float* %".19"
@@ -29,7 +29,7 @@ define i32 @"main"()
   %".24" = load float*, float** %".10", align 8
   ; printf "%f" * non_const_f_ptr
   %".26" = load float, float* %".24", align 8
-  %".27" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".27" = bitcast [3 x i8]* @".str.0" to i8*
   %".28" = alloca float
   store float %".26", float* %".28"
   %".30" = load float, float* %".28"
@@ -39,6 +39,5 @@ define i32 @"main"()
   ;  return 0
 }
 
+@".str.0" = internal constant [3 x i8] c"%f\00"
 declare i32 @"printf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [3 x i8] c"%f\00"

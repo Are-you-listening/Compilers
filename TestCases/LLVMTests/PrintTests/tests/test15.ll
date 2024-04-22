@@ -19,7 +19,7 @@ define i32 @"main"()
   ;   printf "%% %d %x %f  kappa kappa" p p q
   %".15" = load i32, i32* %".4", align 4
   %".16" = bitcast i32* %".4" to float*
-  %".17" = bitcast [25 x i8]* @".str.PS0" to i8*
+  %".17" = bitcast [25 x i8]* @".str.0" to i8*
   %".18" = alloca i32
   %".19" = alloca i32
   %".20" = alloca float*
@@ -34,6 +34,5 @@ define i32 @"main"()
   ;      return 0
 }
 
+@".str.0" = internal constant [25 x i8] c"%% %d %x %f  kappa kappa\00"
 declare i32 @"printf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [25 x i8] c"%% %d %x %f  kappa kappa\00"

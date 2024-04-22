@@ -20,7 +20,7 @@ define i32 @"main"()
   %".15" = load i32, i32* %".7", align 4
   %".16" = load i32, i32* %".7", align 4
   %".17" = load float, float* %".10", align 4
-  %".18" = bitcast [12 x i8]* @".str.PS0" to i8*
+  %".18" = bitcast [12 x i8]* @".str.0" to i8*
   %".19" = alloca i8
   %".20" = alloca i32
   %".21" = alloca i32
@@ -35,7 +35,7 @@ define i32 @"main"()
   %".30" = load float, float* %".22"
   %".31" = fpext float %".30" to double
   %".32" = call i32 (i8*, ...) @"printf"(i8* %".18", i8 %".27", i32 %".28", i32 %".29", double %".31")
-  %".33" = bitcast [12 x i8]* @".str.PS0" to i8*
+  %".33" = bitcast [12 x i8]* @".str.0" to i8*
   %".34" = alloca i8*
   %".35" = alloca i32*
   %".36" = alloca i32*
@@ -55,7 +55,7 @@ define i32 @"main"()
   %".50" = load i32, i32* %".7", align 4
   %".51" = load i32, i32* %".7", align 4
   %".52" = load float, float* %".10", align 4
-  %".53" = bitcast [12 x i8]* @".str.PS0" to i8*
+  %".53" = bitcast [12 x i8]* @".str.0" to i8*
   %".54" = alloca i8
   %".55" = alloca i32
   %".56" = alloca i32
@@ -74,7 +74,7 @@ define i32 @"main"()
   ; return 0
 }
 
+@".str.0" = internal constant [12 x i8] c"%c %d %x %f\00"
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.PS0" = internal constant [12 x i8] c"%c %d %x %f\00"
 declare i32 @"scanf"(i8* %".1", ...)

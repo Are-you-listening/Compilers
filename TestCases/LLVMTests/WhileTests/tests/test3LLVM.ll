@@ -22,7 +22,7 @@ define i32 @"main"()
   %".15" = icmp eq i32 %".14", 0
   br i1 %".15", label %".16", label %".23"
 .16:
-  %".17" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".17" = bitcast [3 x i8]* @".str.0" to i8*
   %".18" = alloca i32
   store i32 1, i32* %".18"
   %".20" = load i32, i32* %".18"
@@ -30,7 +30,7 @@ define i32 @"main"()
   ; printf "%d" 1
   br label %".30"
 .23:
-  %".24" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".24" = bitcast [3 x i8]* @".str.0" to i8*
   %".25" = alloca i32
   store i32 2, i32* %".25"
   %".27" = load i32, i32* %".25"
@@ -48,6 +48,5 @@ define i32 @"main"()
   ;   return 0
 }
 
+@".str.0" = internal constant [3 x i8] c"%d\00"
 declare i32 @"printf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [3 x i8] c"%d\00"

@@ -15,42 +15,42 @@ define i32 @"main"()
   ; day = Wed
   %".11" = load i32, i32* %".4", align 4
   ; printf "%d" day
-  %".13" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".13" = bitcast [3 x i8]* @".str.0" to i8*
   %".14" = alloca i32
   store i32 %".11", i32* %".14"
   %".16" = load i32, i32* %".14"
   %".17" = call i32 (i8*, ...) @"printf"(i8* %".13", i32 %".16")
-  %".18" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".18" = bitcast [3 x i8]* @".str.0" to i8*
   %".19" = alloca i32
   store i32 0, i32* %".19"
   %".21" = load i32, i32* %".19"
   %".22" = call i32 (i8*, ...) @"printf"(i8* %".18", i32 %".21")
   ; printf "%d" Mon
-  %".24" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".24" = bitcast [3 x i8]* @".str.0" to i8*
   %".25" = alloca i32
   store i32 1, i32* %".25"
   %".27" = load i32, i32* %".25"
   %".28" = call i32 (i8*, ...) @"printf"(i8* %".24", i32 %".27")
   ; printf "%d" Tue
-  %".30" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".30" = bitcast [3 x i8]* @".str.0" to i8*
   %".31" = alloca i32
   store i32 3, i32* %".31"
   %".33" = load i32, i32* %".31"
   %".34" = call i32 (i8*, ...) @"printf"(i8* %".30", i32 %".33")
   ; printf "%d" Thur
-  %".36" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".36" = bitcast [3 x i8]* @".str.0" to i8*
   %".37" = alloca i32
   store i32 4, i32* %".37"
   %".39" = load i32, i32* %".37"
   %".40" = call i32 (i8*, ...) @"printf"(i8* %".36", i32 %".39")
   ; printf "%d" Fri
-  %".42" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".42" = bitcast [3 x i8]* @".str.0" to i8*
   %".43" = alloca i32
   store i32 5, i32* %".43"
   %".45" = load i32, i32* %".43"
   %".46" = call i32 (i8*, ...) @"printf"(i8* %".42", i32 %".45")
   ; printf "%d" Sat
-  %".48" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".48" = bitcast [3 x i8]* @".str.0" to i8*
   %".49" = alloca i32
   store i32 6, i32* %".49"
   %".51" = load i32, i32* %".49"
@@ -68,6 +68,5 @@ define i32 @"main"()
 @"Wed" = global i32 2, align 4
 @"Tue" = global i32 1, align 4
 @"Mon" = global i32 0, align 4
+@".str.0" = internal constant [3 x i8] c"%d\00"
 declare i32 @"printf"(i8* %".1", ...)
-
-@".str.PS0" = internal constant [3 x i8] c"%d\00"

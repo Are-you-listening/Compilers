@@ -107,7 +107,7 @@ class Declaration:
         return new_function
 
     @staticmethod
-    def assignment(store_register: int, value: int, align: int):
+    def assignment(store_register: ir.Instruction, value: ir.Instruction, align: int):
         """
         assignment
         :param store_register:
@@ -117,6 +117,14 @@ class Declaration:
         """
 
         block = LLVMSingleton.getInstance().getCurrentBlock()
+
+        """
+        In case we have an array of a string and we use its pointer, we want to add another bitcase
+        """
+        if store_register.type.is_pointer and value.type.is_pointer and \
+                isinstance(value.type.pointee, ir.types.ArrayType):
+            value = block.bitcast(value, ir.IntType(8).as_pointer())
+
         llvm_val = block.store(value, store_register)
 
         llvm_val.align = align
@@ -149,6 +157,22 @@ class Declaration:
         block = LLVMSingleton.getInstance().getCurrentBlock()
         text = text.replace("\n","")  # Comments in LLVM cannot contain new lines
         block.comment(text)
+
+    @staticmethod
+    def string(text: str):
+        index = LLVMSingleton.getInstance().getStringIndex(text)
+        builder = LLVMSingleton.getInstance().getCurrentBlock()
+        format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(text)),
+                                       bytearray(text.encode("utf8")))
+        format_str_global = builder.module.globals.get(f".str.{index}")
+
+        if not format_str_global:
+            format_str_global = ir.GlobalVariable(builder.module, format_str_const.type, f".str.{index}")
+            format_str_global.linkage = "internal"
+            format_str_global.global_constant = True
+            format_str_global.initializer = format_str_const
+
+        return format_str_global
 
 
 class Load:
@@ -294,7 +318,7 @@ class Calculation:
 
 class Printf:
     @staticmethod
-    def printf(format_specifier: str, *args):
+    def printf(format_specifier: ir.Constant, *args):
         """
         :param format_specifier:
         :param args:
@@ -329,20 +353,10 @@ class Printf:
         return llvm_var
 
     @staticmethod
-    def makeArguments(format_specifier: str, args):
-        index = LLVMSingleton.getInstance().getStringIndex(format_specifier)
-        format_specifier += '\00'
+    def makeArguments(format_specifier: ir.Constant, args):
         builder = LLVMSingleton.getInstance().getCurrentBlock()
-        format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(format_specifier)),
-                                       bytearray(format_specifier.encode("utf8")))
-        format_str_global = builder.module.globals.get(f".str.PS{index}")
 
-        if not format_str_global:
-            format_str_global = ir.GlobalVariable(builder.module, format_str_const.type, f".str.PS{index}")
-            format_str_global.linkage = "internal"
-            format_str_global.global_constant = True
-            format_str_global.initializer = format_str_const
-        format_str_ptr = builder.bitcast(format_str_global, ir.IntType(8).as_pointer())
+        format_str_ptr = builder.bitcast(format_specifier, ir.IntType(8).as_pointer())
 
         """
         Create an alloca instruction for each argument
@@ -353,7 +367,7 @@ class Printf:
         Store the arguments in their respective alloca instructions
         """
         for arg_alloca, arg_value in zip(args_alloca, args):
-            builder.store(arg_value, arg_alloca)
+            s = builder.store(arg_value, arg_alloca)
 
         """ 
         Load the arguments from their respective alloca instructions 
