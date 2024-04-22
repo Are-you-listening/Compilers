@@ -10,13 +10,13 @@ define i32 @"main"()
   store i32 5, i32* %".4", align 4
   ; INT q = 5
   %".7" = alloca [11 x [20 x i32]], align 8
-  ; INT x [11][20]
+  ; INT x 11 20
   %".9" = getelementptr inbounds [11 x [20 x i32]], [11 x [20 x i32]]* %".7", i64 0, i32 10
-  ;  x [10][19] = 1
+  ;  x 10 19 = 1
   %".11" = getelementptr inbounds [20 x i32], [20 x i32]* %".9", i64 0, i32 19
   store i32 1, i32* %".11", align 4
   %".13" = getelementptr inbounds [11 x [20 x i32]], [11 x [20 x i32]]* %".7", i64 0, i32 10
-  ; printf "%d" x [10][19]
+  ; printf "%d" x 10 19
   %".15" = getelementptr inbounds [20 x i32], [20 x i32]* %".13", i64 0, i32 19
   %".16" = load i32, i32* %".15", align 4
   %".17" = bitcast [3 x i8]* @".str.PS0" to i8*

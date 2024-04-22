@@ -58,7 +58,8 @@ def cleanGreen(input_file, symbol_file):
 
     BlacklistVisitor().visit(ast)
 
-    codegetter = CodeGetter().visit(ast)  # Link each line of code to a line number
+    codegetter = CodeGetter()  # Link each line of code to a line number
+    codegetter.visit(ast)
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
 

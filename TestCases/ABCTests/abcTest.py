@@ -8,7 +8,14 @@ from src.parser.AST import *
 from TestCases.ABCTests.AstLoader import AstLoader
 
 
-class ASTTest(unittest.TestCase, ABC):
+class ASTTest(ABC):
+    """
+    Abstract Test Class to verify tests using the AST JSON format
+
+    PRECONDITION: Test files should have the name "test"+<index>"+".c". Any other .c file in the directory will disrupt the process!
+
+    Test may not necessarily be done on index order, as this depends on the os file system.
+    """
 
     @abstractmethod
     def execute(self, abstract_syntax_tree: AST):
@@ -19,8 +26,8 @@ class ASTTest(unittest.TestCase, ABC):
         # <Include any visitors here>
         pass
 
-    def test(self):
-        directory = os.path.dirname(os.path.abspath(__file__))  # Get directory file is in
+    def ASTtest(self, abspath):
+        directory = os.path.dirname(abspath)  # Get directory file is in
         os.chdir(directory)  # Change the dir to only focus on this test
         directory += "/tests"  # Walk through the testfiles
 
@@ -31,7 +38,8 @@ class ASTTest(unittest.TestCase, ABC):
             if not file.endswith(".c"):  # We only run c files
                 continue
 
-            index = int(file[-3:-2])  # The index is used to refer to the files & other data belonging to this testfile
+            index = int(file[4:-2])  # The index is used to refer to the files & other data belonging to this testfile
+            #print(index)
 
             """
             Load the AST from the JSON file
@@ -70,6 +78,7 @@ class ASTTest(unittest.TestCase, ABC):
                 """
                 errors = str(buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
+                print("buff", buff.getvalue().splitlines(), index) # Disable/Enable for Debug
                 assert errors == expected_errors
             except SystemExit:  # Upon crash
                 """
@@ -77,6 +86,7 @@ class ASTTest(unittest.TestCase, ABC):
                 """
                 errors = str(error_buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
+                print("error", error_buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
                 assert errors == expected_errors
 
             """

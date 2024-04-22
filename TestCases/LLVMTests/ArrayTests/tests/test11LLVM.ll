@@ -1,4 +1,4 @@
-; ModuleID = "tests/test10.c"
+; ModuleID = "tests/test11.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
@@ -8,13 +8,13 @@ define i32 @"main"()
   ;    INT main
   %".4" = alloca [2 x [2 x i8]], align 8
   ;  CHAR x 2 2
-  %".6" = getelementptr inbounds [2 x [2 x i8]], [2 x [2 x i8]]* %".4", i64 0, i32 1
-  ;  x 1 1 = 110
-  %".8" = getelementptr inbounds [2 x i8], [2 x i8]* %".6", i64 0, i32 1
+  %".6" = getelementptr inbounds [2 x [2 x i8]], [2 x [2 x i8]]* %".4", i32 0, i32 0
+  ;  * * x = 110
+  %".8" = getelementptr inbounds [2 x i8], [2 x i8]* %".6", i32 0, i32 0
   store i8 110, i8* %".8", align 4
-  %".10" = getelementptr inbounds [2 x [2 x i8]], [2 x [2 x i8]]* %".4", i64 0, i32 1
-  ; printf "%c" x 1 1
-  %".12" = getelementptr inbounds [2 x i8], [2 x i8]* %".10", i64 0, i32 1
+  %".10" = getelementptr inbounds [2 x [2 x i8]], [2 x [2 x i8]]* %".4", i64 0, i32 0
+  ; printf "%c" x 0 0
+  %".12" = getelementptr inbounds [2 x i8], [2 x i8]* %".10", i64 0, i32 0
   %".13" = load i8, i8* %".12", align 4
   %".14" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".15" = alloca i8

@@ -7,9 +7,9 @@ define i32 @"main"()
 .2:
   ;    INT main
   %".4" = alloca [1 x [1 x [1 x [1 x [1 x [1 x [1 x [1 x i32]]]]]]]], align 8
-  ; INT x [1][1][1][1][1][1][1][1]
+  ; INT x 1 1 1 1 1 1 1 1
   %".6" = getelementptr inbounds [1 x [1 x [1 x [1 x [1 x [1 x [1 x [1 x i32]]]]]]]], [1 x [1 x [1 x [1 x [1 x [1 x [1 x [1 x i32]]]]]]]]* %".4", i64 0, i32 0
-  ;  x [0][0][0][0][0][0][0][0] = 0
+  ;  x 0 0 0 0 0 0 0 0 = 0
   %".8" = getelementptr inbounds [1 x [1 x [1 x [1 x [1 x [1 x [1 x i32]]]]]]], [1 x [1 x [1 x [1 x [1 x [1 x [1 x i32]]]]]]]* %".6", i64 0, i32 0
   %".9" = getelementptr inbounds [1 x [1 x [1 x [1 x [1 x [1 x i32]]]]]], [1 x [1 x [1 x [1 x [1 x [1 x i32]]]]]]* %".8", i64 0, i32 0
   %".10" = getelementptr inbounds [1 x [1 x [1 x [1 x [1 x i32]]]]], [1 x [1 x [1 x [1 x [1 x i32]]]]]* %".9", i64 0, i32 0
@@ -19,7 +19,7 @@ define i32 @"main"()
   %".14" = getelementptr inbounds [1 x i32], [1 x i32]* %".13", i64 0, i32 0
   store i32 0, i32* %".14", align 4
   %".16" = getelementptr inbounds [1 x [1 x [1 x [1 x [1 x [1 x [1 x [1 x i32]]]]]]]], [1 x [1 x [1 x [1 x [1 x [1 x [1 x [1 x i32]]]]]]]]* %".4", i64 0, i32 0
-  ; printf "%d" x [0][0][0][0][0][0][0][0]
+  ; printf "%d" x 0 0 0 0 0 0 0 0
   %".18" = getelementptr inbounds [1 x [1 x [1 x [1 x [1 x [1 x [1 x i32]]]]]]], [1 x [1 x [1 x [1 x [1 x [1 x [1 x i32]]]]]]]* %".16", i64 0, i32 0
   %".19" = getelementptr inbounds [1 x [1 x [1 x [1 x [1 x [1 x i32]]]]]], [1 x [1 x [1 x [1 x [1 x [1 x i32]]]]]]* %".18", i64 0, i32 0
   %".20" = getelementptr inbounds [1 x [1 x [1 x [1 x [1 x i32]]]]], [1 x [1 x [1 x [1 x [1 x i32]]]]]* %".19", i64 0, i32 0

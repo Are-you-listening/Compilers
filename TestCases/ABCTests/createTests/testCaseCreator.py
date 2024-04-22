@@ -6,7 +6,6 @@ from src.parser.ValueAdderVisitor import *
 from src.parser.ASTDereferencer import *
 from src.parser.ASTCleaner import *
 from src.parser.ASTCleanerAfter import *
-from src.parser.Tables.TableDotVisitor import *
 from src.parser.ASTTableCreator import *
 from src.llvm_target.AST2LLVM import *
 from src.parser.ASTIfCleaner import ASTIfCleaner
@@ -21,6 +20,8 @@ from src.parser.VirtualLineNrVisitor import *
 from src.parser.ArrayCleaner import ArrayCleaner
 from src.parser.EnumConverter import *
 from src.parser.Preproccesing.preProcessor import *
+from TestCases.ABCTests.AstLoader import AstLoader
+
 
 """
 This is a file used to created AST.JSON testdata with, which we can use to create ASTTests. We create a JSON before and after applying certain visitors we want to test. 
@@ -53,77 +54,120 @@ toAST = ASTCreator(lexer)
 toAST.visit(tree)
 ast = toAST.getAST()
 
-virtualLine = VirtualLineVisitor()
-virtualLine.visit(ast)
+VirtualLineVisitor().visit(ast)
 
-black_list_visitor = BlacklistVisitor()
-black_list_visitor.visit(ast)
+BlacklistVisitor().visit(ast)
 
 CodeGetter().visit(ast)
 
-EnumConverter().visit(ast)  # Convert enum to typedef & const bools
+EnumConverter().visit(ast)
 
-EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
+EnumTypeMerger().visit(ast)
 
-ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
+ASTTypedefReplacer().visit(ast)
 
-ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
+ASTIfCleaner().visit(ast)
 
-ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
+ASTLoopCleaner().visit(ast)
 
-ASTCleaner().visit(ast)  # Do a standard cleaning
+ASTCleaner().visit(ast)
 
-SwitchConverter().visit(ast)  # convert switch statement to if else
+SwitchConverter().visit(ast)
 
 ArrayCleaner().visit(ast)
 
-ASTTableCreator().visit(ast)  # Create the symbol table
+ASTTableCreator().visit(ast)
 
-ASTCleanerAfter().visit(ast)  # Clean even more :)
+ASTCleanerAfter().visit(ast)
 
 ASTDereferencer().visit(ast)
 
-ConstraintChecker(includeSTDIO).visit(ast)
-
-ASTConversion().visit(ast)
-
-ConstantFoldingVisitor().visit(ast)
-
-ValueAdderVisitor().visit(ast)
-
-ConstantStatementFolding().visit(ast)
-
-ControlFlowCreator().visit(ast)
-
-DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
+# ConstraintChecker(includeSTDIO).visit(ast)
+#
+# ASTConversion().visit(ast)
+#
+# ConstantFoldingVisitor().visit(ast)
+#
+# ValueAdderVisitor().visit(ast)
+#
+# ConstantStatementFolding().visit(ast)
+#
+# ControlFlowCreator().visit(ast)
+#
+# DeadCodeRemover().visit(ast)
 
 
 """
 add needed stuff above ^
 """
 
+"""
+Store the start AST into JSON
+"""
 json = AstLoader.store(ast)
 with open("file_read_json.json", "wt") as f:
     f.write(json)
-d = DotVisitor("read_file_before")  # Export AST in Dot
-d.visit(ast)
 
+d = DotVisitor("read_file_before")  # Export AST in Dot to verify it was as expected
+d.visit(ast)
 
 """
 add check stuff below:
 """
 
-cfv = ConstantFoldingVisitor()
-cfv.visit(ast)
+# VirtualLineVisitor().visit(ast)
+#
+# BlacklistVisitor().visit(ast)
+#
+# CodeGetter().visit(ast)
+#
+# EnumConverter().visit(ast)
+#
+# EnumTypeMerger().visit(ast)
+#
+# ASTTypedefReplacer().visit(ast)
+#
+# ASTIfCleaner().visit(ast)
+#
+# ASTLoopCleaner().visit(ast)
+#
+# ASTCleaner().visit(ast)
+#
+# SwitchConverter().visit(ast)
+#
+# ArrayCleaner().visit(ast)
+#
+# ASTTableCreator().visit(ast)
+#
+# ASTCleanerAfter().visit(ast)
+#
+# ASTDereferencer().visit(ast)
+#
+ConstraintChecker(includeSTDIO).visit(ast)
+#
+# ASTConversion().visit(ast)
+#
+# ConstantFoldingVisitor().visit(ast)
+#
+# ValueAdderVisitor().visit(ast)
+#
+# ConstantStatementFolding().visit(ast)
+#
+# ControlFlowCreator().visit(ast)
+#
+# DeadCodeRemover().visit(ast)
 
 """
 add check stuff above ^ 
 """
 
+"""
+Store the result into a JSON
+"""
 json = AstLoader.store(ast)
 with open("file_read_json_result.json", "wt") as f:
     f.write(json)
 ast_tree = AstLoader.load(json)
 
-d = DotVisitor("read_file_after")  # Export AST in Dot
+d = DotVisitor("read_file_after")  # Export AST in Dot to check the expected result once by hand
 d.visit(ast_tree)

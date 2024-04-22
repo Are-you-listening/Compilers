@@ -1,27 +1,33 @@
 #include <stdio.h>
 
-int main()
-{
-    // Verify scanf consistency for const variables
+int main(){
+    int a = 0;
+    while(a < 5){
+        a++;
+        int c = 0;
 
-    const float p = 3.14;
-    float* q = &p;
-    const float* s = q;
+        if (a > 4){
+            int q = 0;
 
-    scanf("%f", s);
-    printf("%f", &s);
-    printf("%f", p);
+            if (a > 5){
+                int z = 0;
+            }
+        }
 
+        break;
+        if (a < 3){
+            if (a == 3){
+                while(a < 5){
+                    break;
+                    int w = 0;
+                }
 
-    scanf("%f", q);
-    printf("%f", &q);
-    printf("%f", p);
+            }
 
-    scanf("%f", &p);
-    printf("%f", p);
+        }
 
-    return 0;
+    }
+
+	return 0;
+	int o = 6;
 }
-
-
-
