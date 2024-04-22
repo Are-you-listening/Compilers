@@ -1,21 +1,22 @@
-float func( float* x, int y);
+int func(int a, int b);
+
 
 
 
 
 int main() {
     int y = 10;
-    float u = 0;
+    int u = 10;
     float* ptr = &u;
     int c;
-    c = func (  ptr , y);
+    c = func(y, u);
     return y;
 }
 
 
-float func( float* x, int y) {
-    *x = 10;
-    return y;
+
+
+
+int func(int a, int b) {
+    return a + b;
 }
-
-

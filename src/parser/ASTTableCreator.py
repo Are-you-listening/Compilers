@@ -62,6 +62,8 @@ class ASTTableCreator(ASTVisitor):
                     node.symbol_table.getEntry(function_node.text).set_function_defined(True)
         else:
             return
+
+
     def visitNode(self, node: ASTNode):
         """
         Assign the symbol table to the node
@@ -105,6 +107,9 @@ class ASTTableCreator(ASTVisitor):
             param_types_and_ptrs = [(x, y) for x, y in zip(param_types, param_strings)]
             self.__check_function_declarations(self, node, param_types_and_ptrs)
             self.__make_entry(node, child, lambda d, c: FunctionSymbolType(d, c, param_types_and_ptrs))
+            function_node = node.children[1]
+            if node.getChildAmount() == 4:
+                node.symbol_table.getEntry(function_node.text).set_function_defined(True)
 
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
