@@ -11,4 +11,4 @@ class TestSwitchConversions(ASTTest, unittest.TestCase):
         SwitchConverter().visit(abstract_syntax_tree)  # convert switch statement to if else
 
     def test(self):
-        ASTTest.ASTtest(self, os.path.abspath(__file__))  # Call the baseClass function
+        ASTTest.AST_test(self, os.path.abspath(__file__))  # Call the baseClass function

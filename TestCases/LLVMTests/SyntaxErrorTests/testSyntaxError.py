@@ -18,7 +18,7 @@ class TestSyntaxError(unittest.TestCase):
             error_dict = json.loads(f.read())
 
         for index in file_indexes:
-            #print(index)
+            print(index)
             file_path = f"tests/test{index}.c"
 
             """

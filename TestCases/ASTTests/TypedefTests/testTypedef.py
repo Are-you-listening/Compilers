@@ -14,4 +14,4 @@ class TestTypedef(ASTTest, unittest.TestCase):
         ASTTableCreator().visit(abstract_syntax_tree)  # Create the symbol table
 
     def test(self):
-        ASTTest.ASTtest(self, os.path.abspath(__file__))  # Call the baseClass function
+        ASTTest.AST_test(self, os.path.abspath(__file__))  # Call the baseClass function

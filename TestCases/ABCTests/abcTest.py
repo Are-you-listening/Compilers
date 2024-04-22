@@ -2,9 +2,12 @@ import os
 import sys
 import json
 import unittest
+import subprocess
 from abc import ABC
 from io import StringIO
 from src.parser.AST import *
+from src.main.__main__ import main
+from src.llvm_target.LLVMSingleton import *
 from TestCases.ABCTests.AstLoader import AstLoader
 
 
@@ -26,7 +29,11 @@ class ASTTest(ABC):
         # <Include any visitors here>
         pass
 
-    def ASTtest(self, abspath):
+    def AST_test(self, abspath):
+        """
+        Base Method to run all tests
+        :param abspath: Absolute Path to run from
+        """
         directory = os.path.dirname(abspath)  # Get directory file is in
         os.chdir(directory)  # Change the dir to only focus on this test
         directory += "/tests"  # Walk through the testfiles
@@ -35,11 +42,11 @@ class ASTTest(ABC):
             error_dict = json.loads(f.read())
 
         for file in os.listdir(directory):  # Loop through all files
-            if not file.endswith(".c"):  # We only run c files
+            if not os.path.splitext(file)[-1] == '.c':  # We only run c files
                 continue
 
             index = int(file[4:-2])  # The index is used to refer to the files & other data belonging to this testfile
-            #print(index)
+            # print(index, file)  # Toggle for debug
 
             """
             Load the AST from the JSON file
@@ -78,7 +85,7 @@ class ASTTest(ABC):
                 """
                 errors = str(buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
-                print("buff", buff.getvalue().splitlines(), index) # Disable/Enable for Debug
+                print("buff", buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
                 assert errors == expected_errors
             except SystemExit:  # Upon crash
                 """
@@ -97,10 +104,94 @@ class ASTTest(ABC):
 
 
 class LLVMTest(unittest.TestCase, ABC):
-    @abstractmethod
-    def runAST(self):
-        pass
+    """
+    Test to execute LLVM and compare the output with a run of a compiled .c file using gcc
+    """
 
-    @abstractmethod
-    def runC(self):
-        pass
+    def LLVM_test(self, abspath, useSTDIN=False):
+        """
+        Base function
+        :param abspath: Absolute Path to run from
+        :param useSTDIN: Specifies if an input value should be used
+        """
+        directory = os.path.dirname(abspath)  # Get directory file is in
+        os.chdir(directory)  # Change the dir to only focus on this test
+        directory += "/tests"  # Walk through the testfiles
+
+        with open("tests/error_dict.json", "rt") as f:
+            error_dict = json.loads(f.read())
+
+        if useSTDIN:
+            with open("tests/input_dict.json", "rt") as f:
+                input_dict = json.loads(f.read())
+
+        for file in os.listdir(directory):  # Loop through all files
+            if not os.path.splitext(file)[-1] == '.c':  # We only run c files
+                continue
+
+            index = int(file[4:-2])  # The index is used to refer to the files & other data belonging to this testfile
+            file_name = f"tests/test{index}.c"
+            print(index, file_name)  # Toggle for debug
+
+            """
+            If input will be read, it needs to be retrieved
+            """
+            if useSTDIN:
+                input = (input_dict.get(str(index), []))
+            else:
+                input = ""
+
+            """
+            Redirect error & output buffs
+            """
+            original = sys.stdout
+            buff = StringIO()
+            sys.stdout = buff
+
+            original_error = sys.stderr
+            error_buff = StringIO()
+            sys.stderr = error_buff
+
+            try:
+                LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
+
+                main([0, "--input", file_name, "--target_llvm", "temp/temp.ll"])  # Run our compiler
+
+                # Run c file using gcc
+                c_out = subprocess.run(f"""gcc -ansi -pedantic {file_name} -o temp/temp""",
+                                       shell=True, capture_output=True)
+                if c_out.returncode != 0:  # Compilation failed, warn client!
+                    raise Exception("Compilation Failed"+c_out.stderr)
+
+                # Run the compiled code
+                c_out = subprocess.run(f" temp/./temp ; rm temp/temp", shell=True, capture_output=True, text=True,input=input)
+
+                # Run our llvm
+                out = subprocess.run(f"""lli temp/temp.ll""", shell=True, capture_output=True, input=input, text=True)
+
+                """
+                assert for same output
+                """
+                assert out.stdout == c_out.stdout
+
+                """
+                asser for no error
+                """
+                assert out.stderr == c_out.stderr
+
+                """
+                Remove generated llvm file again
+                """
+                subprocess.run(f"rm temp/temp.ll", shell=True, capture_output=True)
+
+            except SystemExit:
+                """
+                In case of a failure, verify expected errors
+                """
+                errors = str(error_buff.getvalue().splitlines())
+                expected_errors = str(error_dict.get(str(index), []))
+                # print("error", error_buff.getvalue().splitlines(), index)  # Print any errors we didn't expect
+                assert errors == expected_errors
+
+            sys.stdout = original
+            sys.stderr = original_error

@@ -6,12 +6,7 @@ from io import StringIO
 from src.main.__main__ import main
 from src.llvm_target.LLVMSingleton import *
 
-"""
-Filename Extension Explanation:
-- LLVM.ll | Currently generated output
-- LLVMtoCompare.ll | File that is right from our perspective ('File we can compare with')
-- .ll | The clang generated LLVM file
-"""
+
 
 
 class CalculationTests(unittest.TestCase):

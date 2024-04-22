@@ -14,4 +14,4 @@ class TestDeadCodeRemover(ASTTest, unittest.TestCase):
         DeadCodeRemover().visit(abstract_syntax_tree)  # removes dead code inside a block coming after a return/continue or break
 
     def test(self):
-        ASTTest.ASTtest(self, os.path.abspath(__file__))  # Call the baseClass function
+        ASTTest.AST_test(self, os.path.abspath(__file__))  # Call the baseClass function

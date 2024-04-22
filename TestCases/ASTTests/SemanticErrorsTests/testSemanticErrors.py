@@ -17,4 +17,4 @@ class TestSemanticErrors(ASTTest, unittest.TestCase):
         ASTConversion().visit(abstract_syntax_tree)
 
     def test(self):
-        ASTTest.ASTtest(self, os.path.abspath(__file__))  # Call the baseClass function
+        ASTTest.AST_test(self, os.path.abspath(__file__))  # Call the baseClass function
