@@ -1,11 +1,16 @@
-#include <stdio.h>
-// TODO
 
-int main(){
-    int* k;
-    int result = printf("%d", 1);
-    printf("%d", result);
-    printf( "%d", scanf("%d", k) );
-    printf("%d", &k);
+
+int main()
+{
+    float p = 3.14;
+    float* q = &p;
+
+    scanf("%f", &q); // Sdtio not included
+
+
+
     return 0;
 }
+
+
+

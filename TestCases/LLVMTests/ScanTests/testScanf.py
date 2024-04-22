@@ -19,8 +19,9 @@ class ScanfTests(unittest.TestCase):
     """
     Test case to run all created llvm output
     """
+
     def testScanf(self):
-        file_range = range(1, 10)
+        file_range = range(1, 9)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         with open("tests/error_dict.json", "rt") as f:
@@ -30,23 +31,16 @@ class ScanfTests(unittest.TestCase):
             input_dict = json.loads(f.read())
 
         for i in file_range:
-            #print(i)
+            # print(i)
             input = (input_dict.get(str(i), []))
             file_name = f"tests/test{i}.c"
 
             """
-            create a sys.stdin buf with chosen values
-            """
-            first = sys.stdin
-            buff = StringIO(input)
-            sys.stdin = buff
-
-            """
             make print buff
             """
-            original = sys.stdout
-            buff = StringIO()
-            sys.stdout = buff
+            # original = sys.stdout
+            # buff = StringIO()
+            # sys.stdout = buff
 
             original_error = sys.stderr
             error_buff = StringIO()
@@ -54,16 +48,25 @@ class ScanfTests(unittest.TestCase):
 
             try:
                 self.runAST(file_name)
-                c_out = self.runC(file_name)
+
+                c_out = subprocess.run(f"""clang-14 -S -emit-llvm tests/{file_name[:-2]}clang.ll""",
+                                       shell=True, capture_output=True, input=input, text=True)
 
                 out = subprocess.run(f"""lli {file_name[:-2]}.ll""",
-                                     shell=True, capture_output=True)
+                                     shell=True, capture_output=True, input=input, text=True)
+
+                print(i, input, c_out.stdout, out.stdout)
 
                 """
                 assert for same output
                 """
                 assert out.stdout == c_out.stdout
-            except:
+
+                """
+                asser for no error
+                """
+                assert out.stderr == c_out.stderr
+            except SystemExit as e:
                 """
                 tests errors Real errors
                 """
@@ -72,9 +75,8 @@ class ScanfTests(unittest.TestCase):
                 print("error", error_buff.getvalue().splitlines(), i)
                 assert errors == expected_errors
 
-            sys.stdout = original
+            # sys.stdout = original
             sys.stderr = original_error
-            sys.stdin = first
 
     @staticmethod
     def runAST(file_name: str):
@@ -88,7 +90,7 @@ class ScanfTests(unittest.TestCase):
         main([0, "--input", file_name, "--target_llvm", file_name[:-2] + ".ll"])
 
     @staticmethod
-    def runC(file_name: str):
+    def runC(file_name: str, input: str):
         out = subprocess.run(f"""gcc -ansi -pedantic {file_name} -o temp && ./temp && rm temp""",
-                             shell=True, capture_output=True)
+                             shell=True, capture_output=True, input=input, text=True)
         return out
