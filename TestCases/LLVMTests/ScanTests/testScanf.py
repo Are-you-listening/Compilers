@@ -31,7 +31,7 @@ class ScanfTests(unittest.TestCase):
             input_dict = json.loads(f.read())
 
         for i in file_range:
-            print(i)
+            #print(i)
             input = (input_dict.get(str(i), []))
             file_name = f"tests/test{i}.c"
 
@@ -53,7 +53,8 @@ class ScanfTests(unittest.TestCase):
                 c_out = subprocess.run(f"""gcc -ansi -pedantic {file_name} -o tests/temp""",
                                shell=True, capture_output=True)
                 if c_out.returncode != 0:
-                    raise Exception("COmpilation Failed")
+                    print(c_out.stderr)
+                    raise Exception("Compilation Failed")
 
                 c_out = subprocess.run(f" tests/./temp ; rm tests/temp", shell=True, capture_output=True, text=True, input=input)
 
@@ -82,7 +83,7 @@ class ScanfTests(unittest.TestCase):
                 print("error", error_buff.getvalue().splitlines(), i)
                 assert errors == expected_errors
 
-            # sys.stdout = original
+            sys.stdout = original
             sys.stderr = original_error
 
     @staticmethod

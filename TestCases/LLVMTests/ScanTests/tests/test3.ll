@@ -13,7 +13,6 @@ define i32 @"main"()
   %".8" = fpext float %".7" to double
   %".9" = call i32 (i8*, ...) @"scanf"(i8* %".4", double %".8")
   ; scanf "%c" 3.14
-  ;  Can't read to a value
   ret i32 0
   ; return 0
 }

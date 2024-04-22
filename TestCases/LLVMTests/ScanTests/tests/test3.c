@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int main(){
-    scanf("%c", 3.14); // Can't read to a value
+    scanf("%c", 3.14);
     return 0;
 
 }
