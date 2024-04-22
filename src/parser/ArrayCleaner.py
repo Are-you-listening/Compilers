@@ -57,12 +57,12 @@ class ArrayCleaner(ASTVisitor):
         """
         check if the child index 2 is a terminal with type array
         """
-        if not isinstance(node.getChild(2), ASTNodeTerminal) or node.getChild(2).type != "ARRAY":
+        if node.getChild(2).text != "ARRAY":
             return
 
         type_node = node.getChild(0)
 
-        array_sizes = self.array_size(node.getChild(2).text)
+        array_sizes = self.array_size(node.getChild(2), True)
 
         self.array_map[node] = array_sizes
 
@@ -83,11 +83,10 @@ class ArrayCleaner(ASTVisitor):
         if node.getChildAmount() < 2:
             return
 
-        if not isinstance(node.getChild(1), ASTNodeTerminal) or node.getChild(1).type != "ARRAY":
+        if node.getChild(1).text != "ARRAY":
             return
 
-        array_sizes = self.array_size(node.getChild(1).text)
-
+        array_node = node.getChild(1)
         """
         In case the assignment is an array access, we need to do the following
         
@@ -100,7 +99,7 @@ class ArrayCleaner(ASTVisitor):
         left_child.parent.removeChild(left_child)
         left_child.parent = None
 
-        for new_ptr_val in array_sizes:
+        for new_ptr_val in array_node.children:
             """
             Create a new parent: 'Expr', with children left hand side the identifier and right hand side the + index
             """
@@ -112,8 +111,8 @@ class ArrayCleaner(ASTVisitor):
             access_expr_node.addChildren(ASTNodeTerminal("[]", access_expr_node, node.getSymbolTable(), "",
                                                       node.linenr, node.virtuallinenr))
 
-            access_expr_node.addChildren(ASTNodeTerminal(new_ptr_val, access_expr_node, node.getSymbolTable(), "INT",
-                                                         node.linenr, node.virtuallinenr))
+            access_expr_node.addChildren(new_ptr_val)
+            new_ptr_val.parent = access_expr_node
 
             left_child = access_expr_node
 
@@ -122,17 +121,19 @@ class ArrayCleaner(ASTVisitor):
         self.to_remove.add(node.getChild(1))
 
     @staticmethod
-    def array_size(array_text):
-        array_sizes = array_text.split("][")
+    def array_size(array_node: ASTNode, check_int: bool = False):
+        array_sizes = []
+        for child in array_node.children:
 
-        """
-        remove first '['
-        """
-        array_sizes[0] = array_sizes[0][1:]
-        """
-        remove last ']'
-        """
-        array_sizes[-1] = array_sizes[-1][:-1]
+            if check_int:
+                if not isinstance(child, ASTNodeTerminal):
+                    ErrorExporter.invalidArraySize(array_node.linenr, array_node.parent.getChild(1).text,
+                                                   ("Expression", []))
+                if child.type != "INT":
+                    ErrorExporter.invalidArraySize(array_node.linenr, array_node.parent.getChild(1).text,
+                                                   (child.type, []))
+
+            array_sizes.append(child.text)
 
         return array_sizes
 
@@ -140,24 +141,25 @@ class ArrayCleaner(ASTVisitor):
         if node.text != "InitList":
             return
 
+        if node.parent.text == "InitList":
+            return
+
         """
         We check if the initialize list is a valid list. This means that this list only exists for declarations
         of arrays.
         """
-        print("hey")
 
         if node.parent not in self.array_map:
             print("error Array Cleaner init list")
             return
 
         array_sizes = self.array_map.get(node.parent)
-        print(array_sizes)
 
         """
         Check if the size and format of the initialization list matches the size of the array.
         During this loop we will also map a virtual grid (same size as the array) to each of the initial value node
         """
-        current_check_nodes = [("", node)]
+        current_check_nodes = [([], node)]
 
         """
         In this list all the values of the init list will be put using a tuple indicating its position
@@ -187,13 +189,13 @@ class ArrayCleaner(ASTVisitor):
                     so we store these values in a list for better access later on
                     """
                     for j, c in enumerate(current_node.children):
-                        value_list.append((f"{node_index}[{j}]", c))
+                        value_list.append((node_index+[j], c))
                 else:
                     for j, c in enumerate(current_node.children):
                         if c.text != "InitList":
                             ErrorExporter.wrongInitializationListFormat(node.linenr, declared_variable)
 
-                        new_current_nodes.append((f"{node_index}[{j}]", c))
+                        new_current_nodes.append((node_index+[j], c))
 
             current_check_nodes = new_current_nodes
 
@@ -217,10 +219,19 @@ class ArrayCleaner(ASTVisitor):
 
             assignment_node.addChildren(var_node)
 
-            index_node = ASTNodeTerminal(indexing, assignment_node, assignment_node.getSymbolTable(),
-                                         "ARRAY", assignment_node.linenr, assignment_node.virtuallinenr)
+            array_node = ASTNode("ARRAY", assignment_node, assignment_node.getSymbolTable(),
+                                 assignment_node.linenr, assignment_node.virtuallinenr)
 
-            assignment_node.addChildren(index_node)
+            assignment_node.addChildren(array_node)
+
+            """
+            Add each array index entry to the ARRAY subtree
+            """
+            for index in indexing:
+                index_node = ASTNodeTerminal(index, array_node, assignment_node.getSymbolTable(),
+                                             "INT", assignment_node.linenr, assignment_node.virtuallinenr)
+
+                array_node.addChildren(index_node)
 
             """
             Add value sub tree as assignment

@@ -29,14 +29,26 @@ class ASTConversion(ASTVisitor):
         :param node: the node we are currently checking
         :return:
         """
-
-        if node.text == "Dereference" or (node.text == "Expr" and node.getChildAmount() == 3 and
-                                          node.getChild(1).text == "[]"):
+        is_array = (node.text == "Expr" and node.getChildAmount() == 3 and node.getChild(1).text == "[]")
+        if node.text == "Dereference" or is_array:
             """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was 
             before"""
             child = node.getChild(0)
             data_type, ptrs = self.type_mapping[child]
 
+            """
+            We we do a [] access, we need to check that the value provided is an integer
+            """
+            if is_array:
+                data_type2, ptrs2 = self.type_mapping[node.getChild(2)]
+                if data_type2 != "INT" or len(ptrs2) > 0:
+                    ErrorExporter.invalidArrayIndex(node.linenr, (data_type2, ptrs2))
+
+                """
+                The array has by default 1 ptr, but it it is the only 1, the array is not really an array
+                """
+                if len(ptrs) <= 1:
+                    ErrorExporter.invalidDereferenceNotPtr(node.linenr, (data_type, ptrs[:-1]), True)
             """
             when trying to dereference a non-ptr, throw an error
             """

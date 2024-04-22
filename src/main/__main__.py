@@ -75,9 +75,8 @@ def cleanGreen(input_file, symbol_file):
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
-
+    #DotVisitor("output/qu1").visit(ast)
     ArrayCleaner().visit(ast)
-    #DotVisitor("output/qu").visit(ast)
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 
@@ -100,6 +99,7 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     """
     It is vital that AST conversion occurs before constant folding
     """
+    #DotVisitor("output/qu").visit(ast)
     ASTConversion().visit(ast)
     if fold:
         ConstantFoldingVisitor().visit(ast)

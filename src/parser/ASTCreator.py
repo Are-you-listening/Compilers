@@ -132,6 +132,9 @@ class ASTCreator(grammarCVisitor):
     def visitInitialize_list(self, ctx: grammarCParser.Initialize_listContext):
         self.__makeNode(ctx, "InitList")
 
+    def visitArray(self, ctx: grammarCParser.ArrayContext):
+        self.__makeNode(ctx, "ARRAY")
+
     def visitTerminal(self, ctx):
         """
         :param ctx:

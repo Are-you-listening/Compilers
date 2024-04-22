@@ -20,7 +20,7 @@ class ArrayTests(unittest.TestCase):
     """
 
     def testArray(self):
-        file_range = range(1, 13)
+        file_range = range(1, 19)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         original = sys.stdout  # Temp catch any output
@@ -57,6 +57,7 @@ class ArrayTests(unittest.TestCase):
                 """
                 errors = str(error_buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(i), []))
+                print(errors, expected_errors)
                 assert errors == expected_errors
 
             sys.stderr = original_error

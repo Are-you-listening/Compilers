@@ -116,7 +116,6 @@ class Declaration:
         """
 
         block = LLVMSingleton.getInstance().getCurrentBlock()
-
         llvm_val = block.store(value, store_register)
 
         llvm_val.align = align

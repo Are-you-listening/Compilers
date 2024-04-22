@@ -20,7 +20,7 @@ class CalculationTests(unittest.TestCase):
     """
 
     def testSimpleCalculations(self):
-        file_range = range(1, 20)
+        file_range = range(1, 21)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         original = sys.stdout  # Temp catch any output

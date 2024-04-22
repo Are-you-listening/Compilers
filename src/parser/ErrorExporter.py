@@ -145,9 +145,10 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def invalidDereferenceNotPtr(line_nr: int, type1: tuple):
+    def invalidDereferenceNotPtr(line_nr: int, type1: tuple, is_array: bool = False):
         """
         an assignment between invalid types
+        :param is_array: optional boolean indicating whether the value is an array or not
         :param line_nr:
         :param type1:
         :return:
@@ -155,8 +156,12 @@ class ErrorExporter:
 
         type1 = ErrorExporter.__to_output_type(type1)
 
+        required = "pointer"
+        if is_array:
+            required = "array"
+
         print(
-            f"[ Error ] line {line_nr}:  indirection requires pointer operand ('{type1}' invalid)",
+            f"[ Error ] line {line_nr}:  indirection requires {required} operand ('{type1}' invalid)",
             file=sys.stderr)
         exit()
 
@@ -296,3 +301,17 @@ class ErrorExporter:
               file=sys.stderr)
         exit()
 
+    @staticmethod
+    def invalidArraySize(line_nr: int, variable: str, index_type: tuple):
+        index_type = ErrorExporter.__to_output_type(index_type)
+        print(f"[ Error ] line {line_nr}: the array size definition of {variable} should be an integer instead of "
+              f"'{index_type}'",
+              file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def invalidArrayIndex(line_nr: int, index_type: tuple):
+        index_type = ErrorExporter.__to_output_type(index_type)
+        print(f"[ Error ] line {line_nr}: the array index is of type {index_type} which is not allowed",
+              file=sys.stderr)
+        exit()

@@ -29,8 +29,8 @@ return: 'return' expr?;
 structunion: ('struct' | 'union') IDENTIFIER '{' declaration* ';'+ '}';
 function_ptr: (type) function_ptr_2 ;
 function_ptr_2: '(' '*' (function_ptr_2 | IDENTIFIER) ')' '(' parameters ')';
-declaration: type IDENTIFIER ARRAY? ('=' expr)?;
-assignment: ('*')* IDENTIFIER ARRAY? ('=' expr);
+declaration: type IDENTIFIER array? ('=' expr)?;
+assignment: ('*')* IDENTIFIER array? ('=' expr);
 conversion: '(' type ')' (literal | expr);
 initialize_list: ((expr ',')* expr)?;
 expr : literal
@@ -51,7 +51,8 @@ expr : literal
      | expr '|' expr
      | expr '&&' expr
      | expr '||' expr;
-literal : (INT | FLOAT | CHAR | STRING | (IDENTIFIER ARRAY?)) ;
+array: ('[' expr ']')+ ;
+literal : (INT | FLOAT | CHAR | STRING | (IDENTIFIER array?)) ;
 
 MULTILINE: '/*' (.)*?  '*/' ;
 SINGLECOMMENT: '//' (~[\n])*;
@@ -59,6 +60,5 @@ IDENTIFIER: ([a-z]|[A-Z]|'_')([a-z]|[A-Z]|'_'|[0-9])*;
 INT : ([1-9][0-9]*) | [0-9] ;
 FLOAT:  INT | (INT*'.' (INT|'0')* );
 CHAR: '\''  ('\\')??.    '\'';
-ARRAY: ('[' INT ']')+ ;
 STRING: '"' (~('"' | '\n') | '\\"')* '"';
 WS : [ \t\n\r]+ -> skip ;

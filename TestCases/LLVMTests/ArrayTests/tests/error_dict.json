@@ -2,5 +2,9 @@
   "6": ["[ Error ] line 5: the initializer list its size for array x is not the right size"],
   "7": ["[ Error ] line 5: the initializer list its size for array x is not the right size"],
   "8": ["[ Error ] line 5: the initializer list its size for array x is not the right format"],
-  "9": ["[ Syntax Error ] line 7:5 invalid symbol: '[5.'"]
+  "9": ["[ Error ] line 7: the array index is of type FLOAT which is not allowed"],
+  "13": ["[ Error ] line 4: the array size definition of x should be an integer instead of 'FLOAT'"],
+  "16": ["[ Error ] line 8: the array size definition of x should be an integer instead of 'IDENTIFIER'"],
+  "17": ["[ Error ] line 3: the array index is of type FLOAT which is not allowed"],
+  "18": ["[ Error ] line 3:  indirection requires array operand ('INT' invalid)"]
 }
