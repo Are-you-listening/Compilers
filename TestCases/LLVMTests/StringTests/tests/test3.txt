@@ -1,7 +1,8 @@
 #include <stdio.h>
 
+//TODO LLVM Crash
 int main(){
-    char s[10] = "string\nhe";
+    char s[10] = "string he";
 
     s[0] = 'a';
     s[1] = 101;

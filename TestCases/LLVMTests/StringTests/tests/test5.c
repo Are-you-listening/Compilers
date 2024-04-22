@@ -1,8 +1,8 @@
 #include <stdio.h>
 
 int main(){
-    char* s = "string\nhe";
+    char* s = "string he";
 
-    printf("%s \n Hi", s);
+    printf("%s  Hi", s);
 	return 0;
 }

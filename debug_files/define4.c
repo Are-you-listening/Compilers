@@ -1,15 +1,14 @@
+#include <stdio.h>
+
 int main(){
-1;
-1.1;
-0.1;
-1.00;
-0.01;
-1.;
+    char s[10] = "string he";
 
-.10;
-.1;
+    s[0] = 'a';
+    s[1] = 101;
 
-10.;
+    char* v;
+    *v = 'y';
 
-0.001;
+    printf("%s", s);
+	return 0;
 }

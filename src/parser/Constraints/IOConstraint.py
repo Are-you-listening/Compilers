@@ -17,12 +17,6 @@ class IOConstraint(Constraint):
             if not self.includeSTDIO:  # Check if stdio is included
                 ErrorExporter.undeclaredVariable(node.text, node.linenr, "function")
 
-            # width may not be used when no paramaters we're given!
-            if node.getChildAmount() > 1:
-                pass
-
-            # TODO verify paramater type consistency towards the format string
-
     def checkTerminalNode(self, node: ASTNodeTerminal):
         pass
 
