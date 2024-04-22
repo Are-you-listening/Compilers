@@ -1,5 +1,5 @@
 import unittest
-from TestCases.ASTTests.AstLoader import AstLoader
+from TestCases.ABCTests.AstLoader import AstLoader
 from io import StringIO
 import json
 import os

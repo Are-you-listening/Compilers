@@ -1,5 +1,5 @@
 import unittest
-from TestCases.ASTTests.AstLoader import AstLoader
+from TestCases.ABCTests.AstLoader import AstLoader
 import json
 from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
 import sys

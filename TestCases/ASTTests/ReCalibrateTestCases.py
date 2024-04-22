@@ -24,7 +24,7 @@ for subdir in dir_list:
         os.chdir("..")
         os.chdir("CreateTests")
 
-        out = subprocess.run(["python3", "TestcaseCreator.py"])
+        out = subprocess.run(["python3", "testCaseCreator.py"])
         os.chdir("..")
 
         test_files2 = [x for x in next(os.walk('./CreateTests'))[2]]

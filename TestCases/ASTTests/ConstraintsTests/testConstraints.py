@@ -2,10 +2,9 @@ import unittest
 from io import StringIO
 import json
 import os
-from antlr4 import *
 from src.parser.Constraints.ConstraintChecker import *
 from src.parser.ASTTableCreator import *
-from TestCases.ASTTests.AstLoader import AstLoader
+from TestCases.ABCTests.AstLoader import AstLoader
 
 
 class TestConstraints(unittest.TestCase):

@@ -5,7 +5,7 @@ from src.parser.ASTCreator import ASTCreator
 from src.parser.DotVisitor import *
 from src.parser.ASTCleaner import *
 from src.parser.CodeGetter import *
-from TestCases.ASTTests.AstLoader import AstLoader
+from TestCases.ABCTests.AstLoader import AstLoader
 from src.parser.ASTTableCreator import *
 from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
 from src.parser.BlacklistVisitor import BlacklistVisitor

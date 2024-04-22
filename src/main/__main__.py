@@ -53,18 +53,12 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    #DotVisitor("output/u10").visit(ast)  # Export AST in Dot
-
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)
 
-    black_list_visitor = BlacklistVisitor()
-    black_list_visitor.visit(ast)
+    BlacklistVisitor().visit(ast)
 
-    codegetter = CodeGetter()  # Link each line of code to a line number
-    codegetter.visit(ast)
-
-    #DotVisitor("output/debug-1").visit(ast)  # Export AST in Dot
+    codegetter = CodeGetter().visit(ast)  # Link each line of code to a line number
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
 
@@ -75,21 +69,15 @@ def cleanGreen(input_file, symbol_file):
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
-    #DotVisitor("output/qu1").visit(ast)
     ArrayCleaner().visit(ast)
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 
-
     ASTCleanerAfter().visit(ast)  # Clean even more :)
-
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
@@ -101,15 +89,13 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold, includeSTDIO):
-    #DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
-
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     """
     It is vital that AST conversion occurs before constant folding
     """
-    #DotVisitor("output/qu").visit(ast)
     ASTConversion().visit(ast)
+
     if fold:
         ConstantFoldingVisitor().visit(ast)
 
@@ -124,6 +110,7 @@ def Processing(ast, dot_file, fold, includeSTDIO):
 
     if dot_file is not None:
         DotVisitor(dot_file).visit(ast)  # Export AST in Dot
+
     return ast, cfc.getControlFlowGraph()
 
 

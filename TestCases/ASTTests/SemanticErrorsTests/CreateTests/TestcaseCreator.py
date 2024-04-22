@@ -11,7 +11,7 @@ from src.parser.ASTCleaner import *
 from src.parser.ASTCleanerAfter import *
 from src.parser.Tables.TableDotVisitor import *
 from src.parser.CodeGetter import *
-from TestCases.ASTTests.AstLoader import AstLoader
+from TestCases.ABCTests.AstLoader import AstLoader
 from src.parser.ASTTableCreator import ASTTableCreator
 from src.parser.EnumTypeMerger import *
 from src.parser.VirtualLineNrVisitor import VirtualLineVisitor

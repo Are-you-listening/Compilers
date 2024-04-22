@@ -1,5 +1,5 @@
 import unittest
-from TestCases.ASTTests.AstLoader import AstLoader
+from TestCases.ABCTests.AstLoader import AstLoader
 from src.parser.ValueAdderVisitor import *
 import sys
 from io import StringIO

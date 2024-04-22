@@ -1,13 +1,8 @@
 import unittest
-from TestCases.ASTTests.AstLoader import AstLoader
-from src.parser.ASTConversion import ASTConversion
-from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
-import sys
+from TestCases.ABCTests.AstLoader import AstLoader
 from io import StringIO
 import json
-from src.parser.Constraints.ConstraintChecker import ConstraintChecker
 import os
-from src.parser.ASTDereferencer import ASTDereferencer
 from src.parser.DeadCodeRemover import *
 from src.llvm_target.ControlFlowCreator import *
 
