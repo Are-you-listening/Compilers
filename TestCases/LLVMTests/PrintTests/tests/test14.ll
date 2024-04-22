@@ -90,9 +90,9 @@ define i32 @"main"()
   %".85" = load float, float* %".83"
   %".86" = fpext float %".85" to double
   %".87" = call i32 (i8*, ...) @"printf"(i8* %".82", double %".86")
-  %".88" = bitcast [3 x i8]* @".str.PS6" to i8*
-  %".89" = call i32 (i8*, ...) @"printf"(i8* %".88")
   ;  printf "%s" "This is a beautifull string"
+  %".89" = bitcast [3 x i8]* @".str.PS6" to i8*
+  %".90" = call i32 (i8*, ...) @"printf"(i8* %".89")
   ret i32 0
   ;   return 0
 }
