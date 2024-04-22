@@ -119,7 +119,10 @@ class AST2LLVM(ASTVisitor):
             self.handleComment(node)
 
         if node.text == "printf":
-            self.handlePrintf(node)
+            self.handlePrintScanf(node, True)
+
+        if node.text == "scanf":
+            self.handlePrintScanf(node, False)
 
         if node.text == "Expr":
             self.handleOperations(node)
@@ -242,10 +245,11 @@ class AST2LLVM(ASTVisitor):
     def handleReturn():
         LLVMSingleton.getInstance().getCurrentBlock().ret(ir.Constant(ir.IntType(32), 0))
 
-    def handlePrintf(self, node: ASTNode):
+    def handlePrintScanf(self, node: ASTNode, printf):
         """
-        Handle printf function
+        Handle printf or scanf function
         :param node:
+        :param printf: If true do make printf
         :return:
         """
         formatSpecifier = node.children[0].text
@@ -259,7 +263,10 @@ class AST2LLVM(ASTVisitor):
             if llvm_var is not None:
                 args.append(llvm_var)
 
-        Printf.printf(formatSpecifier, *args)
+        if printf:
+            Printf.printf(formatSpecifier, *args)
+        else:
+            Scanf.scanf(formatSpecifier, *args)
 
     def handleOperations(self, node: ASTNode):
         """

@@ -2,13 +2,24 @@
 
 int main()
 {
-    float p = 3.14;
-    //TODO printf("%f%x%d",3.14,p,7);
+    // Verify scanf consistency for const variables
 
-    //printf("%s";"5"); // TODO For some weird reason, a ';' is allowed here??
-    printf("%s%x,f", "5",5,3, p);
+    const float p = 3.14;
+    float* q = &p;
+    const float* s = q;
 
-    scanf("%f", p);
+    scanf("%f", s);
+    printf("%f", &s);
+    printf("%f", p);
+
+
+    scanf("%f", q);
+    printf("%f", &q);
+    printf("%f", p);
+
+    scanf("%f", &p);
+    printf("%f", p);
+
     return 0;
 }
 

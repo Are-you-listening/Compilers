@@ -31,7 +31,7 @@ define i32 @"main"()
   %".26" = icmp ne i32 %".25", 0
   br i1 %".26", label %".27", label %".59"
 .27:
-  %".28" = bitcast [3 x i8]* @".str.d" to i8*
+  %".28" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".29" = alloca i32
   store i32 1, i32* %".29"
   %".31" = load i32, i32* %".29"
@@ -43,7 +43,7 @@ define i32 @"main"()
   %".37" = icmp slt i32 %".34", %".36"
   br i1 %".37", label %".38", label %".45"
 .38:
-  %".39" = bitcast [3 x i8]* @".str.d" to i8*
+  %".39" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".40" = alloca i32
   store i32 2, i32* %".40"
   %".42" = load i32, i32* %".40"
@@ -57,7 +57,7 @@ define i32 @"main"()
   %".49" = icmp sgt i32 %".46", %".48"
   br i1 %".49", label %".50", label %".58"
 .50:
-  %".51" = bitcast [3 x i8]* @".str.d" to i8*
+  %".51" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".52" = alloca i32
   store i32 3, i32* %".52"
   %".54" = load i32, i32* %".52"
@@ -74,7 +74,7 @@ define i32 @"main"()
   %".62" = icmp ne i32 %".61", 0
   br i1 %".62", label %".63", label %".94"
 .63:
-  %".64" = bitcast [3 x i8]* @".str.d" to i8*
+  %".64" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".65" = alloca i32
   store i32 4, i32* %".65"
   %".67" = load i32, i32* %".65"
@@ -86,7 +86,7 @@ define i32 @"main"()
   %".73" = xor i1 %".72", 1
   br i1 %".73", label %".74", label %".81"
 .74:
-  %".75" = bitcast [3 x i8]* @".str.d" to i8*
+  %".75" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".76" = alloca i32
   store i32 5, i32* %".76"
   %".78" = load i32, i32* %".76"
@@ -102,7 +102,7 @@ define i32 @"main"()
   ;
   br label %".87"
 .87:
-  %".88" = bitcast [3 x i8]* @".str.d" to i8*
+  %".88" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".89" = alloca i32
   store i32 6, i32* %".89"
   %".91" = load i32, i32* %".89"
@@ -121,7 +121,7 @@ define i32 @"main"()
   %".102" = icmp slt i32 %".99", %".101"
   br i1 %".102", label %".103", label %".110"
 .103:
-  %".104" = bitcast [3 x i8]* @".str.d" to i8*
+  %".104" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".105" = alloca i32
   store i32 7, i32* %".105"
   %".107" = load i32, i32* %".105"
@@ -139,7 +139,7 @@ define i32 @"main"()
   %".116" = icmp ne i32 %".115", 0
   br i1 %".116", label %".117", label %".135"
 .117:
-  %".118" = bitcast [3 x i8]* @".str.d" to i8*
+  %".118" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".119" = alloca i32
   store i32 8, i32* %".119"
   %".121" = load i32, i32* %".119"
@@ -150,7 +150,7 @@ define i32 @"main"()
   %".126" = icmp ne i32 %".125", 0
   br i1 %".126", label %".127", label %".134"
 .127:
-  %".128" = bitcast [3 x i8]* @".str.d" to i8*
+  %".128" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".129" = alloca i32
   store i32 9, i32* %".129"
   %".131" = load i32, i32* %".129"
@@ -160,7 +160,7 @@ define i32 @"main"()
 .134:
   br label %".135"
 .135:
-  %".136" = bitcast [3 x i8]* @".str.d" to i8*
+  %".136" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".137" = alloca i32
   store i32 10, i32* %".137"
   %".139" = load i32, i32* %".137"
@@ -179,7 +179,7 @@ define i32 @"main"()
   %".152" = icmp ne i32 %".151", 0
   br i1 %".152", label %".153", label %".185"
 .153:
-  %".154" = bitcast [3 x i8]* @".str.d" to i8*
+  %".154" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".155" = alloca i32
   store i32 1, i32* %".155"
   %".157" = load i32, i32* %".155"
@@ -191,7 +191,7 @@ define i32 @"main"()
   %".163" = icmp slt i32 %".160", %".162"
   br i1 %".163", label %".164", label %".171"
 .164:
-  %".165" = bitcast [3 x i8]* @".str.d" to i8*
+  %".165" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".166" = alloca i32
   store i32 2, i32* %".166"
   %".168" = load i32, i32* %".166"
@@ -205,7 +205,7 @@ define i32 @"main"()
   %".175" = icmp sgt i32 %".172", %".174"
   br i1 %".175", label %".176", label %".184"
 .176:
-  %".177" = bitcast [3 x i8]* @".str.d" to i8*
+  %".177" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".178" = alloca i32
   store i32 3, i32* %".178"
   %".180" = load i32, i32* %".178"
@@ -222,7 +222,7 @@ define i32 @"main"()
   %".188" = icmp ne i32 %".187", 0
   br i1 %".188", label %".189", label %".220"
 .189:
-  %".190" = bitcast [3 x i8]* @".str.d" to i8*
+  %".190" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".191" = alloca i32
   store i32 4, i32* %".191"
   %".193" = load i32, i32* %".191"
@@ -234,7 +234,7 @@ define i32 @"main"()
   %".199" = xor i1 %".198", 1
   br i1 %".199", label %".200", label %".207"
 .200:
-  %".201" = bitcast [3 x i8]* @".str.d" to i8*
+  %".201" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".202" = alloca i32
   store i32 5, i32* %".202"
   %".204" = load i32, i32* %".202"
@@ -250,7 +250,7 @@ define i32 @"main"()
   ;
   br label %".213"
 .213:
-  %".214" = bitcast [3 x i8]* @".str.d" to i8*
+  %".214" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".215" = alloca i32
   store i32 6, i32* %".215"
   %".217" = load i32, i32* %".215"
@@ -269,7 +269,7 @@ define i32 @"main"()
   %".228" = icmp slt i32 %".225", %".227"
   br i1 %".228", label %".229", label %".236"
 .229:
-  %".230" = bitcast [3 x i8]* @".str.d" to i8*
+  %".230" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".231" = alloca i32
   store i32 7, i32* %".231"
   %".233" = load i32, i32* %".231"
@@ -287,7 +287,7 @@ define i32 @"main"()
   %".242" = icmp ne i32 %".241", 0
   br i1 %".242", label %".243", label %".261"
 .243:
-  %".244" = bitcast [3 x i8]* @".str.d" to i8*
+  %".244" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".245" = alloca i32
   store i32 8, i32* %".245"
   %".247" = load i32, i32* %".245"
@@ -298,7 +298,7 @@ define i32 @"main"()
   %".252" = icmp ne i32 %".251", 0
   br i1 %".252", label %".253", label %".260"
 .253:
-  %".254" = bitcast [3 x i8]* @".str.d" to i8*
+  %".254" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".255" = alloca i32
   store i32 9, i32* %".255"
   %".257" = load i32, i32* %".255"
@@ -308,7 +308,7 @@ define i32 @"main"()
 .260:
   br label %".261"
 .261:
-  %".262" = bitcast [3 x i8]* @".str.d" to i8*
+  %".262" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".263" = alloca i32
   store i32 10, i32* %".263"
   %".265" = load i32, i32* %".263"
@@ -327,7 +327,7 @@ define i32 @"main"()
   %".278" = icmp ne i32 %".277", 0
   br i1 %".278", label %".279", label %".311"
 .279:
-  %".280" = bitcast [3 x i8]* @".str.d" to i8*
+  %".280" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".281" = alloca i32
   store i32 1, i32* %".281"
   %".283" = load i32, i32* %".281"
@@ -339,7 +339,7 @@ define i32 @"main"()
   %".289" = icmp slt i32 %".286", %".288"
   br i1 %".289", label %".290", label %".297"
 .290:
-  %".291" = bitcast [3 x i8]* @".str.d" to i8*
+  %".291" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".292" = alloca i32
   store i32 2, i32* %".292"
   %".294" = load i32, i32* %".292"
@@ -353,7 +353,7 @@ define i32 @"main"()
   %".301" = icmp sgt i32 %".298", %".300"
   br i1 %".301", label %".302", label %".310"
 .302:
-  %".303" = bitcast [3 x i8]* @".str.d" to i8*
+  %".303" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".304" = alloca i32
   store i32 3, i32* %".304"
   %".306" = load i32, i32* %".304"
@@ -370,7 +370,7 @@ define i32 @"main"()
   %".314" = icmp ne i32 %".313", 0
   br i1 %".314", label %".315", label %".346"
 .315:
-  %".316" = bitcast [3 x i8]* @".str.d" to i8*
+  %".316" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".317" = alloca i32
   store i32 4, i32* %".317"
   %".319" = load i32, i32* %".317"
@@ -382,7 +382,7 @@ define i32 @"main"()
   %".325" = xor i1 %".324", 1
   br i1 %".325", label %".326", label %".333"
 .326:
-  %".327" = bitcast [3 x i8]* @".str.d" to i8*
+  %".327" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".328" = alloca i32
   store i32 5, i32* %".328"
   %".330" = load i32, i32* %".328"
@@ -398,7 +398,7 @@ define i32 @"main"()
   ;
   br label %".339"
 .339:
-  %".340" = bitcast [3 x i8]* @".str.d" to i8*
+  %".340" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".341" = alloca i32
   store i32 6, i32* %".341"
   %".343" = load i32, i32* %".341"
@@ -417,7 +417,7 @@ define i32 @"main"()
   %".354" = icmp slt i32 %".351", %".353"
   br i1 %".354", label %".355", label %".362"
 .355:
-  %".356" = bitcast [3 x i8]* @".str.d" to i8*
+  %".356" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".357" = alloca i32
   store i32 7, i32* %".357"
   %".359" = load i32, i32* %".357"
@@ -435,7 +435,7 @@ define i32 @"main"()
   %".368" = icmp ne i32 %".367", 0
   br i1 %".368", label %".369", label %".387"
 .369:
-  %".370" = bitcast [3 x i8]* @".str.d" to i8*
+  %".370" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".371" = alloca i32
   store i32 8, i32* %".371"
   %".373" = load i32, i32* %".371"
@@ -446,7 +446,7 @@ define i32 @"main"()
   %".378" = icmp ne i32 %".377", 0
   br i1 %".378", label %".379", label %".386"
 .379:
-  %".380" = bitcast [3 x i8]* @".str.d" to i8*
+  %".380" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".381" = alloca i32
   store i32 9, i32* %".381"
   %".383" = load i32, i32* %".381"
@@ -456,7 +456,7 @@ define i32 @"main"()
 .386:
   br label %".387"
 .387:
-  %".388" = bitcast [3 x i8]* @".str.d" to i8*
+  %".388" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".389" = alloca i32
   store i32 10, i32* %".389"
   %".391" = load i32, i32* %".389"
@@ -475,7 +475,7 @@ define i32 @"main"()
   %".404" = icmp ne i32 %".403", 0
   br i1 %".404", label %".405", label %".437"
 .405:
-  %".406" = bitcast [3 x i8]* @".str.d" to i8*
+  %".406" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".407" = alloca i32
   store i32 1, i32* %".407"
   %".409" = load i32, i32* %".407"
@@ -487,7 +487,7 @@ define i32 @"main"()
   %".415" = icmp slt i32 %".412", %".414"
   br i1 %".415", label %".416", label %".423"
 .416:
-  %".417" = bitcast [3 x i8]* @".str.d" to i8*
+  %".417" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".418" = alloca i32
   store i32 2, i32* %".418"
   %".420" = load i32, i32* %".418"
@@ -501,7 +501,7 @@ define i32 @"main"()
   %".427" = icmp sgt i32 %".424", %".426"
   br i1 %".427", label %".428", label %".436"
 .428:
-  %".429" = bitcast [3 x i8]* @".str.d" to i8*
+  %".429" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".430" = alloca i32
   store i32 3, i32* %".430"
   %".432" = load i32, i32* %".430"
@@ -518,7 +518,7 @@ define i32 @"main"()
   %".440" = icmp ne i32 %".439", 0
   br i1 %".440", label %".441", label %".472"
 .441:
-  %".442" = bitcast [3 x i8]* @".str.d" to i8*
+  %".442" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".443" = alloca i32
   store i32 4, i32* %".443"
   %".445" = load i32, i32* %".443"
@@ -530,7 +530,7 @@ define i32 @"main"()
   %".451" = xor i1 %".450", 1
   br i1 %".451", label %".452", label %".459"
 .452:
-  %".453" = bitcast [3 x i8]* @".str.d" to i8*
+  %".453" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".454" = alloca i32
   store i32 5, i32* %".454"
   %".456" = load i32, i32* %".454"
@@ -546,7 +546,7 @@ define i32 @"main"()
   ;
   br label %".465"
 .465:
-  %".466" = bitcast [3 x i8]* @".str.d" to i8*
+  %".466" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".467" = alloca i32
   store i32 6, i32* %".467"
   %".469" = load i32, i32* %".467"
@@ -565,7 +565,7 @@ define i32 @"main"()
   %".480" = icmp slt i32 %".477", %".479"
   br i1 %".480", label %".481", label %".488"
 .481:
-  %".482" = bitcast [3 x i8]* @".str.d" to i8*
+  %".482" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".483" = alloca i32
   store i32 7, i32* %".483"
   %".485" = load i32, i32* %".483"
@@ -583,7 +583,7 @@ define i32 @"main"()
   %".494" = icmp ne i32 %".493", 0
   br i1 %".494", label %".495", label %".513"
 .495:
-  %".496" = bitcast [3 x i8]* @".str.d" to i8*
+  %".496" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".497" = alloca i32
   store i32 8, i32* %".497"
   %".499" = load i32, i32* %".497"
@@ -594,7 +594,7 @@ define i32 @"main"()
   %".504" = icmp ne i32 %".503", 0
   br i1 %".504", label %".505", label %".512"
 .505:
-  %".506" = bitcast [3 x i8]* @".str.d" to i8*
+  %".506" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".507" = alloca i32
   store i32 9, i32* %".507"
   %".509" = load i32, i32* %".507"
@@ -604,7 +604,7 @@ define i32 @"main"()
 .512:
   br label %".513"
 .513:
-  %".514" = bitcast [3 x i8]* @".str.d" to i8*
+  %".514" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".515" = alloca i32
   store i32 10, i32* %".515"
   %".517" = load i32, i32* %".515"
@@ -623,7 +623,7 @@ define i32 @"main"()
   %".530" = icmp ne i32 %".529", 0
   br i1 %".530", label %".531", label %".563"
 .531:
-  %".532" = bitcast [3 x i8]* @".str.d" to i8*
+  %".532" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".533" = alloca i32
   store i32 1, i32* %".533"
   %".535" = load i32, i32* %".533"
@@ -635,7 +635,7 @@ define i32 @"main"()
   %".541" = icmp slt i32 %".538", %".540"
   br i1 %".541", label %".542", label %".549"
 .542:
-  %".543" = bitcast [3 x i8]* @".str.d" to i8*
+  %".543" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".544" = alloca i32
   store i32 2, i32* %".544"
   %".546" = load i32, i32* %".544"
@@ -649,7 +649,7 @@ define i32 @"main"()
   %".553" = icmp sgt i32 %".550", %".552"
   br i1 %".553", label %".554", label %".562"
 .554:
-  %".555" = bitcast [3 x i8]* @".str.d" to i8*
+  %".555" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".556" = alloca i32
   store i32 3, i32* %".556"
   %".558" = load i32, i32* %".556"
@@ -666,7 +666,7 @@ define i32 @"main"()
   %".566" = icmp ne i32 %".565", 0
   br i1 %".566", label %".567", label %".598"
 .567:
-  %".568" = bitcast [3 x i8]* @".str.d" to i8*
+  %".568" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".569" = alloca i32
   store i32 4, i32* %".569"
   %".571" = load i32, i32* %".569"
@@ -678,7 +678,7 @@ define i32 @"main"()
   %".577" = xor i1 %".576", 1
   br i1 %".577", label %".578", label %".585"
 .578:
-  %".579" = bitcast [3 x i8]* @".str.d" to i8*
+  %".579" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".580" = alloca i32
   store i32 5, i32* %".580"
   %".582" = load i32, i32* %".580"
@@ -694,7 +694,7 @@ define i32 @"main"()
   ;
   br label %".591"
 .591:
-  %".592" = bitcast [3 x i8]* @".str.d" to i8*
+  %".592" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".593" = alloca i32
   store i32 6, i32* %".593"
   %".595" = load i32, i32* %".593"
@@ -713,7 +713,7 @@ define i32 @"main"()
   %".606" = icmp slt i32 %".603", %".605"
   br i1 %".606", label %".607", label %".614"
 .607:
-  %".608" = bitcast [3 x i8]* @".str.d" to i8*
+  %".608" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".609" = alloca i32
   store i32 7, i32* %".609"
   %".611" = load i32, i32* %".609"
@@ -731,7 +731,7 @@ define i32 @"main"()
   %".620" = icmp ne i32 %".619", 0
   br i1 %".620", label %".621", label %".639"
 .621:
-  %".622" = bitcast [3 x i8]* @".str.d" to i8*
+  %".622" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".623" = alloca i32
   store i32 8, i32* %".623"
   %".625" = load i32, i32* %".623"
@@ -742,7 +742,7 @@ define i32 @"main"()
   %".630" = icmp ne i32 %".629", 0
   br i1 %".630", label %".631", label %".638"
 .631:
-  %".632" = bitcast [3 x i8]* @".str.d" to i8*
+  %".632" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".633" = alloca i32
   store i32 9, i32* %".633"
   %".635" = load i32, i32* %".633"
@@ -752,7 +752,7 @@ define i32 @"main"()
 .638:
   br label %".639"
 .639:
-  %".640" = bitcast [3 x i8]* @".str.d" to i8*
+  %".640" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".641" = alloca i32
   store i32 10, i32* %".641"
   %".643" = load i32, i32* %".641"
@@ -764,4 +764,4 @@ define i32 @"main"()
 
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.d" = internal constant [3 x i8] c"%d\00"
+@".str.PS0" = internal constant [3 x i8] c"%d\00"

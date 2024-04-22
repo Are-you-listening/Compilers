@@ -1,4 +1,4 @@
-# Generated from /home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
+# Generated from /home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -10,7 +10,7 @@ else:
 
 def serializedATN():
     return [
-        4,1,65,477,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
+        4,1,65,480,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
         6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,
         2,14,7,14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,
         7,20,2,21,7,21,2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,
@@ -44,59 +44,59 @@ def serializedATN():
         29,1,29,3,29,379,8,29,1,30,5,30,382,8,30,10,30,12,30,385,9,30,1,
         30,1,30,3,30,389,8,30,1,30,1,30,1,30,1,31,1,31,1,31,1,31,1,31,3,
         31,399,8,31,1,32,1,32,1,32,5,32,404,8,32,10,32,12,32,407,9,32,1,
-        32,3,32,410,8,32,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,
-        33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,3,33,430,8,33,1,33,1,
-        33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,
-        33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,
-        33,1,33,1,33,5,33,462,8,33,10,33,12,33,465,9,33,1,34,1,34,1,34,1,
-        34,1,34,1,34,3,34,473,8,34,3,34,475,8,34,1,34,0,1,66,35,0,2,4,6,
-        8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,
-        52,54,56,58,60,62,64,66,68,0,14,2,0,5,5,64,64,1,0,57,58,1,0,26,27,
-        2,0,25,25,33,34,2,0,11,11,28,28,1,0,33,34,2,0,11,11,37,39,1,0,37,
-        38,2,0,16,16,40,42,2,0,11,11,43,44,2,0,16,16,40,40,1,0,45,46,1,0,
-        47,50,1,0,51,52,532,0,70,1,0,0,0,2,86,1,0,0,0,4,95,1,0,0,0,6,100,
-        1,0,0,0,8,103,1,0,0,0,10,105,1,0,0,0,12,129,1,0,0,0,14,140,1,0,0,
-        0,16,142,1,0,0,0,18,153,1,0,0,0,20,172,1,0,0,0,22,179,1,0,0,0,24,
-        197,1,0,0,0,26,206,1,0,0,0,28,210,1,0,0,0,30,219,1,0,0,0,32,236,
-        1,0,0,0,34,254,1,0,0,0,36,262,1,0,0,0,38,266,1,0,0,0,40,280,1,0,
-        0,0,42,288,1,0,0,0,44,292,1,0,0,0,46,307,1,0,0,0,48,320,1,0,0,0,
-        50,337,1,0,0,0,52,341,1,0,0,0,54,357,1,0,0,0,56,360,1,0,0,0,58,371,
-        1,0,0,0,60,383,1,0,0,0,62,393,1,0,0,0,64,409,1,0,0,0,66,429,1,0,
-        0,0,68,474,1,0,0,0,70,71,3,2,1,0,71,72,5,0,0,1,72,1,1,0,0,0,73,85,
-        3,10,5,0,74,76,3,12,6,0,75,77,5,1,0,0,76,75,1,0,0,0,77,78,1,0,0,
-        0,78,76,1,0,0,0,78,79,1,0,0,0,79,85,1,0,0,0,80,85,3,8,4,0,81,85,
-        3,6,3,0,82,85,3,28,14,0,83,85,3,4,2,0,84,73,1,0,0,0,84,74,1,0,0,
-        0,84,80,1,0,0,0,84,81,1,0,0,0,84,82,1,0,0,0,84,83,1,0,0,0,85,88,
-        1,0,0,0,86,84,1,0,0,0,86,87,1,0,0,0,87,92,1,0,0,0,88,86,1,0,0,0,
-        89,91,5,1,0,0,90,89,1,0,0,0,91,94,1,0,0,0,92,90,1,0,0,0,92,93,1,
-        0,0,0,93,3,1,0,0,0,94,92,1,0,0,0,95,96,5,2,0,0,96,97,5,59,0,0,97,
-        98,3,2,1,0,98,99,5,3,0,0,99,5,1,0,0,0,100,101,5,4,0,0,101,102,7,
-        0,0,0,102,7,1,0,0,0,103,104,7,1,0,0,104,9,1,0,0,0,105,106,3,48,24,
-        0,106,107,5,59,0,0,107,108,5,6,0,0,108,109,3,14,7,0,109,114,5,7,
-        0,0,110,111,5,8,0,0,111,112,3,24,12,0,112,113,5,9,0,0,113,115,1,
-        0,0,0,114,110,1,0,0,0,114,115,1,0,0,0,115,119,1,0,0,0,116,118,5,
-        1,0,0,117,116,1,0,0,0,118,121,1,0,0,0,119,117,1,0,0,0,119,120,1,
-        0,0,0,120,11,1,0,0,0,121,119,1,0,0,0,122,130,3,58,29,0,123,130,3,
-        66,33,0,124,130,3,60,30,0,125,130,3,26,13,0,126,130,3,44,22,0,127,
-        130,3,52,26,0,128,130,3,54,27,0,129,122,1,0,0,0,129,123,1,0,0,0,
-        129,124,1,0,0,0,129,125,1,0,0,0,129,126,1,0,0,0,129,127,1,0,0,0,
-        129,128,1,0,0,0,130,13,1,0,0,0,131,132,3,16,8,0,132,133,5,10,0,0,
-        133,135,1,0,0,0,134,131,1,0,0,0,135,138,1,0,0,0,136,134,1,0,0,0,
-        136,137,1,0,0,0,137,139,1,0,0,0,138,136,1,0,0,0,139,141,3,16,8,0,
-        140,136,1,0,0,0,140,141,1,0,0,0,141,15,1,0,0,0,142,143,3,48,24,0,
-        143,144,5,59,0,0,144,17,1,0,0,0,145,146,5,6,0,0,146,149,5,11,0,0,
-        147,150,3,18,9,0,148,150,5,59,0,0,149,147,1,0,0,0,149,148,1,0,0,
-        0,150,151,1,0,0,0,151,154,5,7,0,0,152,154,5,59,0,0,153,145,1,0,0,
-        0,153,152,1,0,0,0,154,168,1,0,0,0,155,165,5,6,0,0,156,157,3,20,10,
-        0,157,158,5,10,0,0,158,160,1,0,0,0,159,156,1,0,0,0,160,163,1,0,0,
-        0,161,159,1,0,0,0,161,162,1,0,0,0,162,164,1,0,0,0,163,161,1,0,0,
-        0,164,166,3,20,10,0,165,161,1,0,0,0,165,166,1,0,0,0,166,167,1,0,
-        0,0,167,169,5,7,0,0,168,155,1,0,0,0,169,170,1,0,0,0,170,168,1,0,
-        0,0,170,171,1,0,0,0,171,19,1,0,0,0,172,173,3,66,33,0,173,21,1,0,
-        0,0,174,180,3,12,6,0,175,180,3,46,23,0,176,180,5,12,0,0,177,180,
-        5,13,0,0,178,180,3,50,25,0,179,174,1,0,0,0,179,175,1,0,0,0,179,176,
-        1,0,0,0,179,177,1,0,0,0,179,178,1,0,0,0,180,23,1,0,0,0,181,183,3,
-        22,11,0,182,184,5,1,0,0,183,182,1,0,0,0,184,185,1,0,0,0,185,183,
+        32,3,32,410,8,32,1,33,1,33,1,33,1,33,1,33,3,33,417,8,33,1,33,1,33,
+        1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,3,33,
+        433,8,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,
+        1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,
+        1,33,1,33,1,33,1,33,1,33,1,33,5,33,465,8,33,10,33,12,33,468,9,33,
+        1,34,1,34,1,34,1,34,1,34,1,34,3,34,476,8,34,3,34,478,8,34,1,34,0,
+        1,66,35,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,
+        42,44,46,48,50,52,54,56,58,60,62,64,66,68,0,14,2,0,5,5,64,64,1,0,
+        57,58,1,0,26,27,2,0,25,25,33,34,2,0,11,11,28,28,1,0,33,34,2,0,11,
+        11,37,39,1,0,37,38,2,0,16,16,40,42,2,0,11,11,43,44,2,0,16,16,40,
+        40,1,0,45,46,1,0,47,50,1,0,51,52,536,0,70,1,0,0,0,2,86,1,0,0,0,4,
+        95,1,0,0,0,6,100,1,0,0,0,8,103,1,0,0,0,10,105,1,0,0,0,12,129,1,0,
+        0,0,14,140,1,0,0,0,16,142,1,0,0,0,18,153,1,0,0,0,20,172,1,0,0,0,
+        22,179,1,0,0,0,24,197,1,0,0,0,26,206,1,0,0,0,28,210,1,0,0,0,30,219,
+        1,0,0,0,32,236,1,0,0,0,34,254,1,0,0,0,36,262,1,0,0,0,38,266,1,0,
+        0,0,40,280,1,0,0,0,42,288,1,0,0,0,44,292,1,0,0,0,46,307,1,0,0,0,
+        48,320,1,0,0,0,50,337,1,0,0,0,52,341,1,0,0,0,54,357,1,0,0,0,56,360,
+        1,0,0,0,58,371,1,0,0,0,60,383,1,0,0,0,62,393,1,0,0,0,64,409,1,0,
+        0,0,66,432,1,0,0,0,68,477,1,0,0,0,70,71,3,2,1,0,71,72,5,0,0,1,72,
+        1,1,0,0,0,73,85,3,10,5,0,74,76,3,12,6,0,75,77,5,1,0,0,76,75,1,0,
+        0,0,77,78,1,0,0,0,78,76,1,0,0,0,78,79,1,0,0,0,79,85,1,0,0,0,80,85,
+        3,8,4,0,81,85,3,6,3,0,82,85,3,28,14,0,83,85,3,4,2,0,84,73,1,0,0,
+        0,84,74,1,0,0,0,84,80,1,0,0,0,84,81,1,0,0,0,84,82,1,0,0,0,84,83,
+        1,0,0,0,85,88,1,0,0,0,86,84,1,0,0,0,86,87,1,0,0,0,87,92,1,0,0,0,
+        88,86,1,0,0,0,89,91,5,1,0,0,90,89,1,0,0,0,91,94,1,0,0,0,92,90,1,
+        0,0,0,92,93,1,0,0,0,93,3,1,0,0,0,94,92,1,0,0,0,95,96,5,2,0,0,96,
+        97,5,59,0,0,97,98,3,2,1,0,98,99,5,3,0,0,99,5,1,0,0,0,100,101,5,4,
+        0,0,101,102,7,0,0,0,102,7,1,0,0,0,103,104,7,1,0,0,104,9,1,0,0,0,
+        105,106,3,48,24,0,106,107,5,59,0,0,107,108,5,6,0,0,108,109,3,14,
+        7,0,109,114,5,7,0,0,110,111,5,8,0,0,111,112,3,24,12,0,112,113,5,
+        9,0,0,113,115,1,0,0,0,114,110,1,0,0,0,114,115,1,0,0,0,115,119,1,
+        0,0,0,116,118,5,1,0,0,117,116,1,0,0,0,118,121,1,0,0,0,119,117,1,
+        0,0,0,119,120,1,0,0,0,120,11,1,0,0,0,121,119,1,0,0,0,122,130,3,58,
+        29,0,123,130,3,66,33,0,124,130,3,60,30,0,125,130,3,26,13,0,126,130,
+        3,44,22,0,127,130,3,52,26,0,128,130,3,54,27,0,129,122,1,0,0,0,129,
+        123,1,0,0,0,129,124,1,0,0,0,129,125,1,0,0,0,129,126,1,0,0,0,129,
+        127,1,0,0,0,129,128,1,0,0,0,130,13,1,0,0,0,131,132,3,16,8,0,132,
+        133,5,10,0,0,133,135,1,0,0,0,134,131,1,0,0,0,135,138,1,0,0,0,136,
+        134,1,0,0,0,136,137,1,0,0,0,137,139,1,0,0,0,138,136,1,0,0,0,139,
+        141,3,16,8,0,140,136,1,0,0,0,140,141,1,0,0,0,141,15,1,0,0,0,142,
+        143,3,48,24,0,143,144,5,59,0,0,144,17,1,0,0,0,145,146,5,6,0,0,146,
+        149,5,11,0,0,147,150,3,18,9,0,148,150,5,59,0,0,149,147,1,0,0,0,149,
+        148,1,0,0,0,150,151,1,0,0,0,151,154,5,7,0,0,152,154,5,59,0,0,153,
+        145,1,0,0,0,153,152,1,0,0,0,154,168,1,0,0,0,155,165,5,6,0,0,156,
+        157,3,20,10,0,157,158,5,10,0,0,158,160,1,0,0,0,159,156,1,0,0,0,160,
+        163,1,0,0,0,161,159,1,0,0,0,161,162,1,0,0,0,162,164,1,0,0,0,163,
+        161,1,0,0,0,164,166,3,20,10,0,165,161,1,0,0,0,165,166,1,0,0,0,166,
+        167,1,0,0,0,167,169,5,7,0,0,168,155,1,0,0,0,169,170,1,0,0,0,170,
+        168,1,0,0,0,170,171,1,0,0,0,171,19,1,0,0,0,172,173,3,66,33,0,173,
+        21,1,0,0,0,174,180,3,12,6,0,175,180,3,46,23,0,176,180,5,12,0,0,177,
+        180,5,13,0,0,178,180,3,50,25,0,179,174,1,0,0,0,179,175,1,0,0,0,179,
+        176,1,0,0,0,179,177,1,0,0,0,179,178,1,0,0,0,180,23,1,0,0,0,181,183,
+        3,22,11,0,182,184,5,1,0,0,183,182,1,0,0,0,184,185,1,0,0,0,185,183,
         1,0,0,0,185,186,1,0,0,0,186,196,1,0,0,0,187,196,3,8,4,0,188,196,
         3,30,15,0,189,196,3,32,16,0,190,196,3,34,17,0,191,196,3,36,18,0,
         192,196,3,38,19,0,193,196,3,6,3,0,194,196,3,28,14,0,195,181,1,0,
@@ -164,32 +164,33 @@ def serializedATN():
         401,3,66,33,0,401,402,5,10,0,0,402,404,1,0,0,0,403,400,1,0,0,0,404,
         407,1,0,0,0,405,403,1,0,0,0,405,406,1,0,0,0,406,408,1,0,0,0,407,
         405,1,0,0,0,408,410,3,66,33,0,409,405,1,0,0,0,409,410,1,0,0,0,410,
-        65,1,0,0,0,411,412,6,33,-1,0,412,430,3,68,34,0,413,430,3,62,31,0,
-        414,430,3,18,9,0,415,416,5,8,0,0,416,417,3,64,32,0,417,418,5,9,0,
-        0,418,430,1,0,0,0,419,420,5,6,0,0,420,421,3,66,33,0,421,422,5,7,
-        0,0,422,430,1,0,0,0,423,424,7,6,0,0,424,430,3,66,33,13,425,426,5,
-        59,0,0,426,430,7,7,0,0,427,428,7,8,0,0,428,430,3,66,33,11,429,411,
-        1,0,0,0,429,413,1,0,0,0,429,414,1,0,0,0,429,415,1,0,0,0,429,419,
-        1,0,0,0,429,423,1,0,0,0,429,425,1,0,0,0,429,427,1,0,0,0,430,463,
-        1,0,0,0,431,432,10,10,0,0,432,433,7,9,0,0,433,462,3,66,33,11,434,
-        435,10,9,0,0,435,436,7,10,0,0,436,462,3,66,33,10,437,438,10,8,0,
-        0,438,439,7,11,0,0,439,462,3,66,33,9,440,441,10,7,0,0,441,442,7,
-        12,0,0,442,462,3,66,33,8,443,444,10,6,0,0,444,445,7,13,0,0,445,462,
-        3,66,33,7,446,447,10,5,0,0,447,448,5,39,0,0,448,462,3,66,33,6,449,
-        450,10,4,0,0,450,451,5,53,0,0,451,462,3,66,33,5,452,453,10,3,0,0,
-        453,454,5,54,0,0,454,462,3,66,33,4,455,456,10,2,0,0,456,457,5,55,
-        0,0,457,462,3,66,33,3,458,459,10,1,0,0,459,460,5,56,0,0,460,462,
-        3,66,33,2,461,431,1,0,0,0,461,434,1,0,0,0,461,437,1,0,0,0,461,440,
-        1,0,0,0,461,443,1,0,0,0,461,446,1,0,0,0,461,449,1,0,0,0,461,452,
-        1,0,0,0,461,455,1,0,0,0,461,458,1,0,0,0,462,465,1,0,0,0,463,461,
-        1,0,0,0,463,464,1,0,0,0,464,67,1,0,0,0,465,463,1,0,0,0,466,475,5,
-        60,0,0,467,475,5,61,0,0,468,475,5,62,0,0,469,475,5,64,0,0,470,472,
-        5,59,0,0,471,473,5,63,0,0,472,471,1,0,0,0,472,473,1,0,0,0,473,475,
-        1,0,0,0,474,466,1,0,0,0,474,467,1,0,0,0,474,468,1,0,0,0,474,469,
-        1,0,0,0,474,470,1,0,0,0,475,69,1,0,0,0,51,78,84,86,92,114,119,129,
-        136,140,149,153,161,165,170,179,185,195,197,203,213,217,232,234,
-        239,243,247,273,275,283,299,303,314,320,329,334,339,347,353,364,
-        374,378,383,388,398,405,409,429,461,463,472,474
+        65,1,0,0,0,411,412,6,33,-1,0,412,433,3,68,34,0,413,433,3,62,31,0,
+        414,417,3,18,9,0,415,417,3,46,23,0,416,414,1,0,0,0,416,415,1,0,0,
+        0,417,433,1,0,0,0,418,419,5,8,0,0,419,420,3,64,32,0,420,421,5,9,
+        0,0,421,433,1,0,0,0,422,423,5,6,0,0,423,424,3,66,33,0,424,425,5,
+        7,0,0,425,433,1,0,0,0,426,427,7,6,0,0,427,433,3,66,33,13,428,429,
+        5,59,0,0,429,433,7,7,0,0,430,431,7,8,0,0,431,433,3,66,33,11,432,
+        411,1,0,0,0,432,413,1,0,0,0,432,416,1,0,0,0,432,418,1,0,0,0,432,
+        422,1,0,0,0,432,426,1,0,0,0,432,428,1,0,0,0,432,430,1,0,0,0,433,
+        466,1,0,0,0,434,435,10,10,0,0,435,436,7,9,0,0,436,465,3,66,33,11,
+        437,438,10,9,0,0,438,439,7,10,0,0,439,465,3,66,33,10,440,441,10,
+        8,0,0,441,442,7,11,0,0,442,465,3,66,33,9,443,444,10,7,0,0,444,445,
+        7,12,0,0,445,465,3,66,33,8,446,447,10,6,0,0,447,448,7,13,0,0,448,
+        465,3,66,33,7,449,450,10,5,0,0,450,451,5,39,0,0,451,465,3,66,33,
+        6,452,453,10,4,0,0,453,454,5,53,0,0,454,465,3,66,33,5,455,456,10,
+        3,0,0,456,457,5,54,0,0,457,465,3,66,33,4,458,459,10,2,0,0,459,460,
+        5,55,0,0,460,465,3,66,33,3,461,462,10,1,0,0,462,463,5,56,0,0,463,
+        465,3,66,33,2,464,434,1,0,0,0,464,437,1,0,0,0,464,440,1,0,0,0,464,
+        443,1,0,0,0,464,446,1,0,0,0,464,449,1,0,0,0,464,452,1,0,0,0,464,
+        455,1,0,0,0,464,458,1,0,0,0,464,461,1,0,0,0,465,468,1,0,0,0,466,
+        464,1,0,0,0,466,467,1,0,0,0,467,67,1,0,0,0,468,466,1,0,0,0,469,478,
+        5,60,0,0,470,478,5,61,0,0,471,478,5,62,0,0,472,478,5,64,0,0,473,
+        475,5,59,0,0,474,476,5,63,0,0,475,474,1,0,0,0,475,476,1,0,0,0,476,
+        478,1,0,0,0,477,469,1,0,0,0,477,470,1,0,0,0,477,471,1,0,0,0,477,
+        472,1,0,0,0,477,473,1,0,0,0,478,69,1,0,0,0,52,78,84,86,92,114,119,
+        129,136,140,149,153,161,165,170,179,185,195,197,203,213,217,232,
+        234,239,243,247,273,275,283,299,303,314,320,329,334,339,347,353,
+        364,374,378,383,388,398,405,409,416,432,464,466,475,477
     ]
 
 class grammarCParser ( Parser ):
@@ -483,7 +484,7 @@ class grammarCParser ( Parser ):
             self.state = 86
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while ((((_la - 2)) & ~0x3f) == 0 and ((1 << (_la - 2)) & 6881502403816878677) != 0):
+            while ((((_la - 2)) & ~0x3f) == 0 and ((1 << (_la - 2)) & 6881502403867210325) != 0):
                 self.state = 84
                 self._errHandler.sync(self)
                 la_ = self._interp.adaptivePredict(self._input,1,self._ctx)
@@ -1136,7 +1137,7 @@ class grammarCParser ( Parser ):
                     self.state = 165
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 423338500264297509) != 0):
+                    if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 423338500267443237) != 0):
                         self.state = 161
                         self._errHandler.sync(self)
                         _alt = self._interp.adaptivePredict(self._input,11,self._ctx)
@@ -1267,29 +1268,32 @@ class grammarCParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 179
             self._errHandler.sync(self)
-            token = self._input.LA(1)
-            if token in [6, 8, 11, 14, 16, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 59, 60, 61, 62, 64]:
+            la_ = self._interp.adaptivePredict(self._input,14,self._ctx)
+            if la_ == 1:
                 self.state = 174
                 self.line()
                 pass
-            elif token in [26, 27]:
+
+            elif la_ == 2:
                 self.state = 175
                 self.printscanf()
                 pass
-            elif token in [12]:
+
+            elif la_ == 3:
                 self.state = 176
                 self.match(grammarCParser.T__11)
                 pass
-            elif token in [13]:
+
+            elif la_ == 4:
                 self.state = 177
                 self.match(grammarCParser.T__12)
                 pass
-            elif token in [35]:
+
+            elif la_ == 5:
                 self.state = 178
                 self.return_()
                 pass
-            else:
-                raise NoViableAltException(self)
+
 
         except RecognitionException as re:
             localctx.exception = re
@@ -2455,7 +2459,7 @@ class grammarCParser ( Parser ):
             self.state = 339
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 423338500264297509) != 0):
+            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 423338500267443237) != 0):
                 self.state = 338
                 self.expr(0)
 
@@ -2964,7 +2968,7 @@ class grammarCParser ( Parser ):
             self.state = 409
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 423338500264297509) != 0):
+            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 423338500267443237) != 0):
                 self.state = 405
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,44,self._ctx)
@@ -3010,6 +3014,10 @@ class grammarCParser ( Parser ):
             return self.getTypedRuleContext(grammarCParser.Function_callContext,0)
 
 
+        def printscanf(self):
+            return self.getTypedRuleContext(grammarCParser.PrintscanfContext,0)
+
+
         def initialize_list(self):
             return self.getTypedRuleContext(grammarCParser.Initialize_listContext,0)
 
@@ -3053,9 +3061,9 @@ class grammarCParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 429
+            self.state = 432
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,46,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,47,self._ctx)
             if la_ == 1:
                 self.state = 412
                 self.literal()
@@ -3067,44 +3075,56 @@ class grammarCParser ( Parser ):
                 pass
 
             elif la_ == 3:
-                self.state = 414
-                self.function_call()
+                self.state = 416
+                self._errHandler.sync(self)
+                token = self._input.LA(1)
+                if token in [6, 59]:
+                    self.state = 414
+                    self.function_call()
+                    pass
+                elif token in [26, 27]:
+                    self.state = 415
+                    self.printscanf()
+                    pass
+                else:
+                    raise NoViableAltException(self)
+
                 pass
 
             elif la_ == 4:
-                self.state = 415
+                self.state = 418
                 self.match(grammarCParser.T__7)
-                self.state = 416
+                self.state = 419
                 self.initialize_list()
-                self.state = 417
+                self.state = 420
                 self.match(grammarCParser.T__8)
                 pass
 
             elif la_ == 5:
-                self.state = 419
+                self.state = 422
                 self.match(grammarCParser.T__5)
-                self.state = 420
+                self.state = 423
                 self.expr(0)
-                self.state = 421
+                self.state = 424
                 self.match(grammarCParser.T__6)
                 pass
 
             elif la_ == 6:
-                self.state = 423
+                self.state = 426
                 _la = self._input.LA(1)
                 if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 962072676352) != 0)):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
                     self.consume()
-                self.state = 424
+                self.state = 427
                 self.expr(13)
                 pass
 
             elif la_ == 7:
-                self.state = 425
+                self.state = 428
                 self.match(grammarCParser.IDENTIFIER)
-                self.state = 426
+                self.state = 429
                 _la = self._input.LA(1)
                 if not(_la==37 or _la==38):
                     self._errHandler.recoverInline(self)
@@ -3114,189 +3134,189 @@ class grammarCParser ( Parser ):
                 pass
 
             elif la_ == 8:
-                self.state = 427
+                self.state = 430
                 _la = self._input.LA(1)
                 if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 7696581459968) != 0)):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
                     self.consume()
-                self.state = 428
+                self.state = 431
                 self.expr(11)
                 pass
 
 
             self._ctx.stop = self._input.LT(-1)
-            self.state = 463
+            self.state = 466
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,48,self._ctx)
+            _alt = self._interp.adaptivePredict(self._input,49,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1:
                     if self._parseListeners is not None:
                         self.triggerExitRuleEvent()
                     _prevctx = localctx
-                    self.state = 461
+                    self.state = 464
                     self._errHandler.sync(self)
-                    la_ = self._interp.adaptivePredict(self._input,47,self._ctx)
+                    la_ = self._interp.adaptivePredict(self._input,48,self._ctx)
                     if la_ == 1:
                         localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 431
+                        self.state = 434
                         if not self.precpred(self._ctx, 10):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 10)")
-                        self.state = 432
+                        self.state = 435
                         _la = self._input.LA(1)
                         if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 26388279068672) != 0)):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 433
+                        self.state = 436
                         self.expr(11)
                         pass
 
                     elif la_ == 2:
                         localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 434
+                        self.state = 437
                         if not self.precpred(self._ctx, 9):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 9)")
-                        self.state = 435
+                        self.state = 438
                         _la = self._input.LA(1)
                         if not(_la==16 or _la==40):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 436
+                        self.state = 439
                         self.expr(10)
                         pass
 
                     elif la_ == 3:
                         localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 437
+                        self.state = 440
                         if not self.precpred(self._ctx, 8):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 8)")
-                        self.state = 438
+                        self.state = 441
                         _la = self._input.LA(1)
                         if not(_la==45 or _la==46):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 439
+                        self.state = 442
                         self.expr(9)
                         pass
 
                     elif la_ == 4:
                         localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 440
+                        self.state = 443
                         if not self.precpred(self._ctx, 7):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 7)")
-                        self.state = 441
+                        self.state = 444
                         _la = self._input.LA(1)
                         if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 2111062325329920) != 0)):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 442
+                        self.state = 445
                         self.expr(8)
                         pass
 
                     elif la_ == 5:
                         localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 443
+                        self.state = 446
                         if not self.precpred(self._ctx, 6):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 6)")
-                        self.state = 444
+                        self.state = 447
                         _la = self._input.LA(1)
                         if not(_la==51 or _la==52):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 445
+                        self.state = 448
                         self.expr(7)
                         pass
 
                     elif la_ == 6:
                         localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 446
+                        self.state = 449
                         if not self.precpred(self._ctx, 5):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 5)")
-                        self.state = 447
+                        self.state = 450
                         self.match(grammarCParser.T__38)
-                        self.state = 448
+                        self.state = 451
                         self.expr(6)
                         pass
 
                     elif la_ == 7:
                         localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 449
+                        self.state = 452
                         if not self.precpred(self._ctx, 4):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 4)")
-                        self.state = 450
+                        self.state = 453
                         self.match(grammarCParser.T__52)
-                        self.state = 451
+                        self.state = 454
                         self.expr(5)
                         pass
 
                     elif la_ == 8:
                         localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 452
+                        self.state = 455
                         if not self.precpred(self._ctx, 3):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 3)")
-                        self.state = 453
+                        self.state = 456
                         self.match(grammarCParser.T__53)
-                        self.state = 454
+                        self.state = 457
                         self.expr(4)
                         pass
 
                     elif la_ == 9:
                         localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 455
+                        self.state = 458
                         if not self.precpred(self._ctx, 2):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 2)")
-                        self.state = 456
+                        self.state = 459
                         self.match(grammarCParser.T__54)
-                        self.state = 457
+                        self.state = 460
                         self.expr(3)
                         pass
 
                     elif la_ == 10:
                         localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 458
+                        self.state = 461
                         if not self.precpred(self._ctx, 1):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 1)")
-                        self.state = 459
+                        self.state = 462
                         self.match(grammarCParser.T__55)
-                        self.state = 460
+                        self.state = 463
                         self.expr(2)
                         pass
 
              
-                self.state = 465
+                self.state = 468
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,48,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,49,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -3358,33 +3378,33 @@ class grammarCParser ( Parser ):
         self.enterRule(localctx, 68, self.RULE_literal)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 474
+            self.state = 477
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [60]:
-                self.state = 466
+                self.state = 469
                 self.match(grammarCParser.INT)
                 pass
             elif token in [61]:
-                self.state = 467
+                self.state = 470
                 self.match(grammarCParser.FLOAT)
                 pass
             elif token in [62]:
-                self.state = 468
+                self.state = 471
                 self.match(grammarCParser.CHAR)
                 pass
             elif token in [64]:
-                self.state = 469
+                self.state = 472
                 self.match(grammarCParser.STRING)
                 pass
             elif token in [59]:
-                self.state = 470
+                self.state = 473
                 self.match(grammarCParser.IDENTIFIER)
-                self.state = 472
+                self.state = 475
                 self._errHandler.sync(self)
-                la_ = self._interp.adaptivePredict(self._input,49,self._ctx)
+                la_ = self._interp.adaptivePredict(self._input,50,self._ctx)
                 if la_ == 1:
-                    self.state = 471
+                    self.state = 474
                     self.match(grammarCParser.ARRAY)
 
 

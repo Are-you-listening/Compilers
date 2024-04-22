@@ -34,7 +34,7 @@ define i32 @"main"()
   ;  f = ! a || e && d && 5 < 6
   %".30" = load i32, i32* %".19", align 4
   ; printf "%d" f
-  %".32" = bitcast [3 x i8]* @".str.d" to i8*
+  %".32" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".33" = alloca i32
   store i32 %".30", i32* %".33"
   %".35" = load i32, i32* %".33"
@@ -54,7 +54,7 @@ define i32 @"main"()
   store i32 %".46", i32* %".22", align 4
   %".48" = load i32, i32* %".22", align 4
   ; printf "%d" g
-  %".50" = bitcast [3 x i8]* @".str.d" to i8*
+  %".50" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".51" = alloca i32
   store i32 %".48", i32* %".51"
   %".53" = load i32, i32* %".51"
@@ -79,7 +79,7 @@ define i32 @"main"()
   store i32 %".69", i32* %".25", align 4
   %".71" = load i32, i32* %".25", align 4
   ; printf "%d" h
-  %".73" = bitcast [3 x i8]* @".str.d" to i8*
+  %".73" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".74" = alloca i32
   store i32 %".71", i32* %".74"
   %".76" = load i32, i32* %".74"
@@ -90,4 +90,4 @@ define i32 @"main"()
 
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.d" = internal constant [3 x i8] c"%d\00"
+@".str.PS0" = internal constant [3 x i8] c"%d\00"
