@@ -12,15 +12,9 @@ class StringToArray(ASTVisitor):
     If our string is not assigned to an array, we can safely say that our string cannot be altered and so,
     we can store it as a global string. To support this option, we will just keep the string in such cases
     """
-    def __init__(self):
-        self.to_remove = set()
 
     def visit(self, ast: AST):
-        self.to_remove = set()
-
         self.preorder(ast.root)
-        for n in self.to_remove:
-            n.parent.removeChild(n)
 
     def visitNode(self, node: ASTNode):
         pass
@@ -61,6 +55,9 @@ class StringToArray(ASTVisitor):
         """
         Split the characters while keeping special characters using '\' together
         """
+
+        string = node.text
+
         for char in string:
             if char == "\\" and not backslash:
                 backslash = True
@@ -73,11 +70,6 @@ class StringToArray(ASTVisitor):
             splitted_string.append(temp)
 
             backslash = False
-
-        """
-        add \00 byte to terminate the string
-        """
-        splitted_string.append('\00')
 
         """
         Using the characters we will make an initialization list
