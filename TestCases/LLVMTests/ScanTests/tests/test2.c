@@ -2,7 +2,6 @@
 
 int main()
 {
-    // Verify scanf consistency for const variables
 
     const float p = 3.14;
     float* q = &p;

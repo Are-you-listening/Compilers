@@ -31,16 +31,16 @@ class ScanfTests(unittest.TestCase):
             input_dict = json.loads(f.read())
 
         for i in file_range:
-            # print(i)
+            print(i)
             input = (input_dict.get(str(i), []))
             file_name = f"tests/test{i}.c"
 
             """
             make print buff
             """
-            # original = sys.stdout
-            # buff = StringIO()
-            # sys.stdout = buff
+            original = sys.stdout
+            buff = StringIO()
+            sys.stdout = buff
 
             original_error = sys.stderr
             error_buff = StringIO()
@@ -49,13 +49,20 @@ class ScanfTests(unittest.TestCase):
             try:
                 self.runAST(file_name)
 
-                c_out = subprocess.run(f"""clang-14 -S -emit-llvm tests/{file_name[:-2]}clang.ll""",
-                                       shell=True, capture_output=True, input=input, text=True)
+                # Run c file using gcc
+                c_out = subprocess.run(f"""gcc -ansi -pedantic {file_name} -o tests/temp""",
+                               shell=True, capture_output=True)
+                if c_out.returncode != 0:
+                    raise Exception("COmpilation Failed")
 
+                c_out = subprocess.run(f" tests/./temp ; rm tests/temp", shell=True, capture_output=True, text=True, input=input)
+
+                # Run our llvm
                 out = subprocess.run(f"""lli {file_name[:-2]}.ll""",
                                      shell=True, capture_output=True, input=input, text=True)
 
-                print(i, input, c_out.stdout, out.stdout)
+
+                #print(i, input, c_out.stdout, out.stdout)
 
                 """
                 assert for same output

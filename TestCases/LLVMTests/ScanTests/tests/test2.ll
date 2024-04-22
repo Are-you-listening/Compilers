@@ -6,74 +6,72 @@ define i32 @"main"()
 {
 .2:
   ;    INT main
-  ;  Verify scanf consistency for const variables
-  ;
-  %".6" = alloca float, align 4
-  store float 0x40091eb860000000, float* %".6", align 4
-  ;  const FLOAT p = 3.14
-  %".9" = alloca float*, align 8
-  store float* %".6", float** %".9", align 8
+  %".4" = alloca float, align 4
+  store float 0x40091eb860000000, float* %".4", align 4
+  ;   const FLOAT p = 3.14
+  %".7" = alloca float*, align 8
+  store float* %".4", float** %".7", align 8
   ; FLOAT * q = & p
-  %".12" = load float*, float** %".9", align 8
+  %".10" = load float*, float** %".7", align 8
   ; const FLOAT * s = q
-  %".14" = alloca float*, align 8
-  store float* %".12", float** %".14", align 8
-  %".16" = load float*, float** %".14", align 8
+  %".12" = alloca float*, align 8
+  store float* %".10", float** %".12", align 8
+  %".14" = load float*, float** %".12", align 8
   ;  scanf "%f" s
-  %".18" = bitcast [3 x i8]* @".str.PS0" to i8*
-  %".19" = alloca float*
-  store float* %".16", float** %".19"
-  %".21" = load float*, float** %".19"
-  %".22" = call i32 (i8*, ...) @"scanf"(i8* %".18", float* %".21")
-  %".23" = bitcast [3 x i8]* @".str.PS0" to i8*
-  %".24" = alloca float**
-  store float** %".14", float*** %".24"
-  %".26" = load float**, float*** %".24"
-  %".27" = call i32 (i8*, ...) @"printf"(i8* %".23", float** %".26")
+  %".16" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".17" = alloca float*
+  store float* %".14", float** %".17"
+  %".19" = load float*, float** %".17"
+  %".20" = call i32 (i8*, ...) @"scanf"(i8* %".16", float* %".19")
+  %".21" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".22" = alloca float**
+  store float** %".12", float*** %".22"
+  %".24" = load float**, float*** %".22"
+  %".25" = call i32 (i8*, ...) @"printf"(i8* %".21", float** %".24")
   ; printf "%f" & s
-  %".29" = load float, float* %".6", align 4
+  %".27" = load float, float* %".4", align 4
   ; printf "%f" p
-  %".31" = bitcast [3 x i8]* @".str.PS0" to i8*
-  %".32" = alloca float
-  store float %".29", float* %".32"
-  %".34" = load float, float* %".32"
-  %".35" = fpext float %".34" to double
-  %".36" = call i32 (i8*, ...) @"printf"(i8* %".31", double %".35")
-  %".37" = load float*, float** %".9", align 8
+  %".29" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".30" = alloca float
+  store float %".27", float* %".30"
+  %".32" = load float, float* %".30"
+  %".33" = fpext float %".32" to double
+  %".34" = call i32 (i8*, ...) @"printf"(i8* %".29", double %".33")
+  %".35" = load float*, float** %".7", align 8
   ;   scanf "%f" q
-  %".39" = bitcast [3 x i8]* @".str.PS0" to i8*
-  %".40" = alloca float*
-  store float* %".37", float** %".40"
-  %".42" = load float*, float** %".40"
-  %".43" = call i32 (i8*, ...) @"scanf"(i8* %".39", float* %".42")
-  %".44" = bitcast [3 x i8]* @".str.PS0" to i8*
-  %".45" = alloca float**
-  store float** %".9", float*** %".45"
-  %".47" = load float**, float*** %".45"
-  %".48" = call i32 (i8*, ...) @"printf"(i8* %".44", float** %".47")
+  %".37" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".38" = alloca float*
+  store float* %".35", float** %".38"
+  %".40" = load float*, float** %".38"
+  %".41" = call i32 (i8*, ...) @"scanf"(i8* %".37", float* %".40")
+  %".42" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".43" = alloca float**
+  store float** %".7", float*** %".43"
+  %".45" = load float**, float*** %".43"
+  %".46" = call i32 (i8*, ...) @"printf"(i8* %".42", float** %".45")
   ; printf "%f" & q
-  %".50" = load float, float* %".6", align 4
+  %".48" = load float, float* %".4", align 4
   ; printf "%f" p
-  %".52" = bitcast [3 x i8]* @".str.PS0" to i8*
-  %".53" = alloca float
-  store float %".50", float* %".53"
-  %".55" = load float, float* %".53"
-  %".56" = fpext float %".55" to double
-  %".57" = call i32 (i8*, ...) @"printf"(i8* %".52", double %".56")
-  %".58" = bitcast [3 x i8]* @".str.PS0" to i8*
-  %".59" = alloca float*
-  store float* %".6", float** %".59"
-  %".61" = load float*, float** %".59"
-  %".62" = call i32 (i8*, ...) @"scanf"(i8* %".58", float* %".61")
+  %".50" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".51" = alloca float
+  store float %".48", float* %".51"
+  %".53" = load float, float* %".51"
+  %".54" = fpext float %".53" to double
+  %".55" = call i32 (i8*, ...) @"printf"(i8* %".50", double %".54")
+  %".56" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".57" = alloca float*
+  store float* %".4", float** %".57"
+  %".59" = load float*, float** %".57"
+  %".60" = call i32 (i8*, ...) @"scanf"(i8* %".56", float* %".59")
   ;  scanf "%f" & p
-  %".64" = load float, float* %".6", align 4
+  %".62" = load float, float* %".4", align 4
   ; printf "%f" p
-  %".66" = bitcast [3 x i8]* @".str.PS0" to i8*
-  %".67" = alloca float
-  store float %".64", float* %".67"
-  %".69" = load float, float* %".67"
-  %".70" = fpext float %".69" to double
-  %".71" = call i32 (i8*, ...) @"printf"(i8* %".66", double %".70")
+  %".64" = bitcast [3 x i8]* @".str.PS0" to i8*
+  %".65" = alloca float
+  store float %".62", float* %".65"
+  %".67" = load float, float* %".65"
+  %".68" = fpext float %".67" to double
+  %".69" = call i32 (i8*, ...) @"printf"(i8* %".64", double %".68")
   ret i32 0
   ;  return 0
 }
