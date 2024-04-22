@@ -1,3 +1,4 @@
+import llvmlite.ir.types
 from src.llvm_target.LLVMSingleton import LLVMSingleton
 from llvmlite import ir
 import sys
@@ -294,8 +295,11 @@ class Calculation:
 class Printf:
     @staticmethod
     def printf(format_specifier: str, *args):
-        base_format = format_specifier[format_specifier.index("%"):format_specifier.index("%")+2]
-
+        """
+        :param format_specifier:
+        :param args:
+        :return:
+        """
         if LLVMSingleton.getInstance().getPrintF() is None:
             module = LLVMSingleton.getInstance().getModule()
             voidptr_ty = ir.IntType(8).as_pointer()
@@ -303,14 +307,38 @@ class Printf:
             printf = ir.Function(module, printf_ty, name="printf")
             LLVMSingleton.getInstance().setPrintF(printf)
 
-        format_specifier+='\00'
+        builder = LLVMSingleton.getInstance().getCurrentBlock()
+        args_values = Printf.makeArguments(format_specifier,args)
+        printf_call = builder.call(LLVMSingleton.getInstance().getPrintF(), args_values)
+
+        return printf_call
+
+    @staticmethod
+    def __reformat(llvm_var):
+        """
+        for certain formats we need to do a conversion
+
+        :param llvm_var: Variable to check
+        :return:
+        """
+        builder = LLVMSingleton.getInstance().getCurrentBlock()
+
+        if isinstance(llvm_var.type, llvmlite.ir.types.FloatType):  # Floats need to be converted to doubles under the hood
+            return builder.fpext(llvm_var, ir.DoubleType())
+
+        return llvm_var
+
+    @staticmethod
+    def makeArguments(format_specifier: str, args):
+        index = LLVMSingleton.getInstance().getStringIndex(format_specifier)
+        format_specifier += '\00'
         builder = LLVMSingleton.getInstance().getCurrentBlock()
         format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(format_specifier)),
                                        bytearray(format_specifier.encode("utf8")))
-        format_str_global = builder.module.globals.get(f".str.{base_format[1:]}")
+        format_str_global = builder.module.globals.get(f".str.PS{index}")
 
         if not format_str_global:
-            format_str_global = ir.GlobalVariable(builder.module, format_str_const.type, f".str.{base_format[1:]}")
+            format_str_global = ir.GlobalVariable(builder.module, format_str_const.type, f".str.PS{index}")
             format_str_global.linkage = "internal"
             format_str_global.global_constant = True
             format_str_global.initializer = format_str_const
@@ -324,34 +352,37 @@ class Printf:
         """
         Store the arguments in their respective alloca instructions
         """
-
         for arg_alloca, arg_value in zip(args_alloca, args):
             builder.store(arg_value, arg_alloca)
 
         """ 
         Load the arguments from their respective alloca instructions 
         """
+        args_values = [format_str_ptr] + [Printf.__reformat(builder.load(arg_alloca)) for arg_alloca in args_alloca]
 
-        args_values = [format_str_ptr] + [Printf.__reformat(base_format, builder.load(arg_alloca)) for arg_alloca in args_alloca]
-        printf_call = builder.call(LLVMSingleton.getInstance().getPrintF(), args_values)
+        return args_values
 
-        return printf_call
 
+class Scanf(Printf):
     @staticmethod
-    def __reformat(base_format: str, llvm_var):
+    def scanf(format_specifier: str, *args):
         """
-        for certain formats we need to do a conversion
-
-        :param base_format: format we use to print
-        :param llvm_var:
+        :param format_specifier:
+        :param args:
         :return:
         """
+        if LLVMSingleton.getInstance().getScanF() is None:  # Make sure the function is added hardcoded
+            module = LLVMSingleton.getInstance().getModule()
+            voidptr_ty = ir.IntType(8).as_pointer()
+            scanf_ty = ir.FunctionType(ir.IntType(32), [voidptr_ty], var_arg=True)
+            scanf = ir.Function(module, scanf_ty, name="scanf")
+            LLVMSingleton.getInstance().setScanF(scanf)
+
         builder = LLVMSingleton.getInstance().getCurrentBlock()
+        args_values = Printf.makeArguments(format_specifier, args)
+        scanf_call = builder.call(LLVMSingleton.getInstance().getScanF(), args_values)
 
-        if base_format == "%f":
-            return builder.fpext(llvm_var, ir.DoubleType())
-
-        return llvm_var
+        return scanf_call
 
 
 class Conversion:

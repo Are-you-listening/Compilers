@@ -35,7 +35,7 @@ conversion: '(' type ')' (literal | expr);
 initialize_list: ((expr ',')* expr)?;
 expr : literal
      | conversion
-     | function_call
+     | (function_call | printscanf)
      | '{' initialize_list '}'
      | '(' expr ')'
      | ('++' | '--' | '&' | '*') expr

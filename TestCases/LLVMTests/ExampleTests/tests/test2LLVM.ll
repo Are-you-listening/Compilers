@@ -12,7 +12,7 @@ define i32 @"main"()
   %".7" = alloca i32, align 4
   store i32 -22, i32* %".7", align 4
   ; INT y = - 22
-  %".10" = bitcast [3 x i8]* @".str.d" to i8*
+  %".10" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".11" = alloca i32
   store i32 0, i32* %".11"
   %".13" = load i32, i32* %".11"
@@ -22,7 +22,7 @@ define i32 @"main"()
   ; printf "%d" x != y
   %".18" = load i32, i32* %".7", align 4
   %".19" = icmp ne i32 %".16", %".18"
-  %".20" = bitcast [3 x i8]* @".str.d" to i8*
+  %".20" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".21" = alloca i1
   store i1 %".19", i1* %".21"
   %".23" = load i1, i1* %".21"
@@ -31,7 +31,7 @@ define i32 @"main"()
   ; printf "%d" x > y
   %".27" = load i32, i32* %".7", align 4
   %".28" = icmp sgt i32 %".25", %".27"
-  %".29" = bitcast [3 x i8]* @".str.d" to i8*
+  %".29" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".30" = alloca i1
   store i1 %".28", i1* %".30"
   %".32" = load i1, i1* %".30"
@@ -40,7 +40,7 @@ define i32 @"main"()
   ; printf "%d" x >= y
   %".36" = load i32, i32* %".7", align 4
   %".37" = icmp sge i32 %".34", %".36"
-  %".38" = bitcast [3 x i8]* @".str.d" to i8*
+  %".38" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".39" = alloca i1
   store i1 %".37", i1* %".39"
   %".41" = load i1, i1* %".39"
@@ -49,7 +49,7 @@ define i32 @"main"()
   ; printf "%d" x <= y
   %".45" = load i32, i32* %".7", align 4
   %".46" = icmp sle i32 %".43", %".45"
-  %".47" = bitcast [3 x i8]* @".str.d" to i8*
+  %".47" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".48" = alloca i1
   store i1 %".46", i1* %".48"
   %".50" = load i1, i1* %".48"
@@ -58,7 +58,7 @@ define i32 @"main"()
   ; printf "%d" x < y
   %".54" = load i32, i32* %".7", align 4
   %".55" = icmp slt i32 %".52", %".54"
-  %".56" = bitcast [3 x i8]* @".str.d" to i8*
+  %".56" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".57" = alloca i1
   store i1 %".55", i1* %".57"
   %".59" = load i1, i1* %".57"
@@ -69,4 +69,4 @@ define i32 @"main"()
 
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.d" = internal constant [3 x i8] c"%d\00"
+@".str.PS0" = internal constant [3 x i8] c"%d\00"

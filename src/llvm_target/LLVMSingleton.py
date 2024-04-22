@@ -13,7 +13,10 @@ class LLVMSingleton:
         self.__module.triple = "x86_64-pc-linux-gnu"
         self.__last_function = None
         self.__Printf = None
+        self.__Scanf = None
+        self.__PrintScanfString = []  # Keeps the name of the global formatting string mapped to an index, {"%x%d...": 1} means that the string "%x%d..." is identified in LLVM with index 1, thus '@.str.1' is the name of the global variable
         self.__current_block = ir.IRBuilder(ir.Block(self.__module))
+
 
     def clear(self):
         self.__instance = None
@@ -47,6 +50,25 @@ class LLVMSingleton:
 
     def getPrintF(self):
         return self.__Printf
+
+    def setScanF(self, scanfFunction):
+        self.__Scanf = scanfFunction
+
+    def getScanF(self):
+        return self.__Scanf
+
+    def getStringIndex(self, format_specifier: str):
+        """
+        Gives the index for a global string;
+        If it doesn't yet exist, a new index will be created
+        :param format_specifier:
+        :return:
+        """
+        try:
+            return self.__PrintScanfString.index(format_specifier)
+        except:  # It doesn't yet exist, so 'make' a new index
+            self.__PrintScanfString.append(format_specifier)
+            return len(self.__PrintScanfString)-1
 
     def getLastFunction(self):
         return self.__last_function

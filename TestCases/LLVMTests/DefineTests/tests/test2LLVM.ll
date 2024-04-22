@@ -6,7 +6,7 @@ define i32 @"main"()
 {
 .2:
   ;       INT main
-  %".4" = bitcast [3 x i8]* @".str.d" to i8*
+  %".4" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".5" = alloca i32
   store i32 1, i32* %".5"
   %".7" = load i32, i32* %".5"
@@ -33,7 +33,7 @@ define i32 @"main"()
   ;
   ;            area);
   ;
-  %".31" = bitcast [3 x i8]* @".str.d" to i8*
+  %".31" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".32" = alloca i32
   store i32 -20, i32* %".32"
   %".34" = load i32, i32* %".32"
@@ -41,7 +41,7 @@ define i32 @"main"()
   ; printf "%d" success
   store i32 7, i32* %".13", align 4
   ;  side = 7
-  %".39" = bitcast [3 x i8]* @".str.d" to i8*
+  %".39" = bitcast [3 x i8]* @".str.PS0" to i8*
   %".40" = alloca i32
   store i32 -20, i32* %".40"
   %".42" = load i32, i32* %".40"
@@ -53,4 +53,4 @@ define i32 @"main"()
 
 declare i32 @"printf"(i8* %".1", ...)
 
-@".str.d" = internal constant [3 x i8] c"%d\00"
+@".str.PS0" = internal constant [3 x i8] c"%d\00"
