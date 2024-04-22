@@ -1,8 +1,7 @@
 #include <stdio.h>
 
 int main(){
-
-    printf("%d", 5);
+    scanf("%c", 3.14); // Can't read to a value
     return 0;
 
 }

@@ -64,7 +64,7 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
-    #DotVisitor("output/debug-1").visit(ast)  # Export AST in Dot
+    DotVisitor("output/debug-1").visit(ast)  # Export AST in Dot
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
 
@@ -102,7 +102,7 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold, includeSTDIO):
-    #DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
+    DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
 
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 

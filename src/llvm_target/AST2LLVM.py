@@ -266,7 +266,7 @@ class AST2LLVM(ASTVisitor):
         if printf:
             Printf.printf(formatSpecifier, *args)
         else:
-            Scanf.scanf(formatSpecifier,*args)
+            Scanf.scanf(formatSpecifier, *args)
 
     def handleOperations(self, node: ASTNode):
         """

@@ -10,7 +10,7 @@ from src.parser.ASTTableCreator import *
 
 class TestSyntaxError(unittest.TestCase):
     def testSyntaxErrors(self):
-        file_indexes = range(1, 37)
+        file_indexes = range(1, 38)
 
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
