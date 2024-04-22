@@ -20,7 +20,7 @@ class ArrayTests(unittest.TestCase):
     """
 
     def testArray(self):
-        file_range = range(1, 11)
+        file_range = range(1, 13)
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         original = sys.stdout  # Temp catch any output
@@ -31,7 +31,7 @@ class ArrayTests(unittest.TestCase):
             error_dict = json.loads(f.read())
 
         for i in file_range:
-            #print(i)
+            print(i)
             file_name = f"tests/test{i}.c"
 
             original_error = sys.stderr  # Temp catch any errors
@@ -49,7 +49,7 @@ class ArrayTests(unittest.TestCase):
                 assert for same output
                 """
                 #print(i, out.stdout, c_out.stdout)
-                print(out.stderr, c_out.stderr)
+                #print(out.stderr, c_out.stderr)
                 assert out.stdout == c_out.stdout
             except SystemExit as e:
                 """

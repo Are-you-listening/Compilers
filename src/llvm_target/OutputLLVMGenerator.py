@@ -157,7 +157,14 @@ class Load:
     def identifier(load_llvm):
         block = LLVMSingleton.getInstance().getCurrentBlock()
 
-        llvm_var = block.load(load_llvm)
+        if isinstance(load_llvm.type.pointee, ir.types.ArrayType):
+            index_list = []
+            index_list.insert(0, ir.Constant(ir.types.IntType(32), 0))
+            index_list.insert(0, ir.Constant(ir.types.IntType(32), 0))
+
+            llvm_var = block.gep(load_llvm, index_list, True)  # Create the gep instruction
+        else:
+            llvm_var = block.load(load_llvm)
 
         if not isinstance(load_llvm, ir.GEPInstr):
             llvm_var.align = load_llvm.align
