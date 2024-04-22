@@ -7,7 +7,7 @@ int peer = 8;
 
 int x = 1;
 
-#include "../includes/define2.c" // Test different include path
+#include "../includes/define2.c"
 
 int main()
 {

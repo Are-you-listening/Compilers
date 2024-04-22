@@ -129,9 +129,9 @@ class LLVMTest(unittest.TestCase, ABC):
             if not os.path.splitext(file)[-1] == '.c':  # We only run c files
                 continue
 
-            index = int(file[4:-2])  # The index is used to refer to the files & other data belonging to this testfile
+            index = file[4:-2]  # The index is used to refer to the files & other data belonging to this testfile
             file_name = f"tests/test{index}.c"
-            print(index, file_name)  # Toggle for debug
+            #print(index, file_name)  # Toggle for debug
 
             """
             If input will be read, it needs to be retrieved
@@ -155,13 +155,15 @@ class LLVMTest(unittest.TestCase, ABC):
             try:
                 LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
 
+                # Run our llvm
                 main([0, "--input", file_name, "--target_llvm", "temp/temp.ll"])  # Run our compiler
+
 
                 # Run c file using gcc
                 c_out = subprocess.run(f"""gcc -ansi -pedantic {file_name} -o temp/temp""",
                                        shell=True, capture_output=True)
                 if c_out.returncode != 0:  # Compilation failed, warn client!
-                    raise Exception("Compilation Failed"+c_out.stderr)
+                    raise Exception("Compilation Failed")
 
                 # Run the compiled code
                 c_out = subprocess.run(f" temp/./temp ; rm temp/temp", shell=True, capture_output=True, text=True,input=input)
