@@ -7,7 +7,7 @@ int peer = 8;
 
 int x = 1;
 
-#include "define2.c"
+#include "../includes/define2.c"
 
 int main()
 {

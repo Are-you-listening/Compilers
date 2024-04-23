@@ -13,7 +13,7 @@ class CleanGlobalScope(Constraint):
         self.rejected = False
 
     def checkNode(self, node: ASTNode):
-        if node.text in ["Expr", "FunctionCall"] and node.getSymbolTable().isRoot() and node.parent.text == "Code":
+        if node.text in ["Expr", "FunctionCall", "printf", "scanf"] and node.getSymbolTable().isRoot() and node.parent.text == "Code":
             self.errorNode = node
             self.throwException()
 
