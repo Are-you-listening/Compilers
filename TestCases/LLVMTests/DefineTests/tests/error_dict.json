@@ -1,6 +1,4 @@
-{"4": ["[ Error ] line: 13 Macro names must be identifiers"],
-  "6": ["[ Syntax Error ] line 15:20 invalid symbol: '='"],
-  "10": ["[ Error ] line: 3 'tests/../includes/a3.c' File not found!"],
+{"10": ["[ Error ] line: 3 'tests/../includes/a3.c' File not found!"],
   "11": ["[ Syntax Error ] line 13:0 invalid symbol: '# '"],
   "12": ["[ Error ] line: 5 Macro names must be identifiers"]
 }

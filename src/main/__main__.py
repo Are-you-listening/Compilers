@@ -53,7 +53,7 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    #DotVisitor("output/u10").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)

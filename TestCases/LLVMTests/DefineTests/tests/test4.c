@@ -7,9 +7,7 @@
 
 int x = 1;
 
-#include "define2.c"
-
-//TODO
+#include "includes/define2.c"
 
 
 int main()

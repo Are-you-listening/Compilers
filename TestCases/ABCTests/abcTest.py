@@ -137,9 +137,9 @@ class LLVMTest(unittest.TestCase, ABC):
             If input will be read, it needs to be retrieved
             """
             if useSTDIN:
-                input = (input_dict.get(str(index), []))
+                inp = (input_dict.get(str(index), []))
             else:
-                input = ""
+                inp = ""
 
             """
             Redirect error & output buffs
@@ -158,27 +158,21 @@ class LLVMTest(unittest.TestCase, ABC):
                 # Run our llvm
                 main([0, "--input", file_name, "--target_llvm", "temp/temp.ll"])  # Run our compiler
 
-
-                # Run c file using gcc
-                c_out = subprocess.run(f"""gcc -ansi -pedantic {file_name} -o temp/temp""",
-                                       shell=True, capture_output=True)
-                if c_out.returncode != 0:  # Compilation failed, warn client!
-                    raise Exception("Compilation Failed")
-
-                # Run the compiled code
-                c_out = subprocess.run(f" temp/./temp ; rm temp/temp", shell=True, capture_output=True, text=True,input=input)
+                c_out = self.runC(file_name, inp)
 
                 # Run our llvm
-                out = subprocess.run(f"""lli temp/temp.ll""", shell=True, capture_output=True, input=input, text=True)
+                out = subprocess.run(f"""lli temp/temp.ll""", shell=True, capture_output=True, input=inp, text=True)
 
                 """
                 assert for same output
                 """
+                # print('a', out.stdout, 'b', c_out.stdout)
                 assert out.stdout == c_out.stdout
 
                 """
                 asser for no error
                 """
+                # print('1', out.stderr, '2', c_out.stderr)
                 assert out.stderr == c_out.stderr
 
                 """
@@ -197,3 +191,21 @@ class LLVMTest(unittest.TestCase, ABC):
 
             sys.stdout = original
             sys.stderr = original_error
+
+    def runC(self, file_name, inp):
+        """
+        Run and compile a c file
+        :param file_name: Name of the file
+        :param inp: Any optional input
+        :return:
+        """
+        # Run c file using gcc
+        c_out = subprocess.run(f"""gcc -ansi -pedantic {file_name} -o temp/temp""",
+                               shell=True, capture_output=True)
+        if c_out.returncode != 0:  # Compilation failed, warn client!
+            raise Exception("Compilation Failed")
+
+        # Run the compiled code
+        c_out = subprocess.run(f" temp/./temp ; rm temp/temp", shell=True, capture_output=True, text=True, input=inp)
+
+        return c_out

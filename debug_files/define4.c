@@ -1,22 +1,19 @@
 #include <stdio.h>
 
-#define CIRCLE_AREA 3.14
-#define bool const int
-#define True 1
-#define False 0
-#define appel int**
+int peer = 8;
+#define BUFFER_SIZE peer
+int x = 1;
+
+#include "includes/define1.c"
+
+#ifndef
+#define BUFFER_SIZE -100
+#endif
 
 int main()
 {
-
-    int radius = 21;
-    int side = 5;
-    int area;
-    bool success = True;
-
-    area = CIRCLE_AREA;
-    printf("%d%d%d", radius,
-           area, success);
-
+    printf("%d",z);
+    printf("%d",BUFFER_SIZE);
+    printf("%f", PI);
     return 0;
 }
