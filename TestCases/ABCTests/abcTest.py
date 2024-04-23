@@ -44,7 +44,6 @@ class ASTTest(ABC):
         for file in os.listdir(directory):  # Loop through all files
             if not os.path.splitext(file)[-1] == '.c':  # We only run c files
                 continue
-
             index = int(file[4:-2])  # The index is used to refer to the files & other data belonging to this testfile
             # print(index, file)  # Toggle for debug
 

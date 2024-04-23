@@ -107,7 +107,6 @@ class Declaration:
         new_function = ir.Function(LLVMSingleton.getInstance().getModule(), function_type, name=func_name)
         LLVMSingleton.getInstance().addFunction(new_function)
 
-
         return new_function
 
     @staticmethod

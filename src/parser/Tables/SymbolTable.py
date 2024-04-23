@@ -64,12 +64,17 @@ class SymbolEntry(TableEntry):
         while isinstance(d_t, SymbolTypePtr):
             ptr_string += "*"
 
+
             const_list.insert(0, d_t.isConst())
             d_t = d_t.deReference()
 
         const_list.insert(0, d_t.isConst())
 
-        return d_t.getType(), ptr_string, const_list
+        d_type = d_t.getType()
+        if isinstance(d_t, FunctionSymbolType):
+            d_type = f"Func:{d_t.return_type}:{d_t.param_types}"
+
+        return d_type, ptr_string, const_list
 
     def reference(self):
         self.referenced = True
