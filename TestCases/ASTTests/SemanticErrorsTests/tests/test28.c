@@ -3,4 +3,5 @@ int main() {
     {
         int x = 2; // should be fine, shadows previous declaration
     }
+    return 0;
 }
