@@ -6,13 +6,16 @@ class EListener(ErrorListener):
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
         if offendingSymbol is not None:
             text = offendingSymbol.text
+            file = offendingSymbol.source[1].fileName
         else:
             if "token recognition error at:" in msg:
                 text = msg[29:len(msg)-1]
+                file = ""
             else:
                 text = 'None'
+                file = ""
 
-        print(f"[ Syntax Error ] line {line}:{column} invalid symbol: '{text}'", file=sys.stderr)
+        print(f"[ Syntax Error ] {file} line {line}:{column} invalid symbol: '{text}'", file=sys.stderr)
         exit()
 
 
@@ -248,6 +251,11 @@ class ErrorExporter:
     @staticmethod
     def unMatchedEndIf(line_nr):
         print(f"[ Syntax Error ] line: {line_nr} Unmatched conditional directive: '#endif' ", file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def unMatchedStartIf(line_nr: int):
+        print(f"[ Syntax Error ] line: {line_nr} unterminated #ifndef ", file=sys.stderr)
         exit()
 
     @staticmethod

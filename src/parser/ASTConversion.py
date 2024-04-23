@@ -458,10 +458,10 @@ class ASTConversion(ASTVisitor):
         """
         type_node.addChildren(
             ASTNodeTerminal(to_type[0], type_node, type_node.getSymbolTable(), "Not Used",
-                            None, None))
+                            node.linenr, node.virtuallinenr))
 
         for t_child in to_type[1]:
             type_node.addChildren(
                 ASTNodeTerminal(t_child, type_node, type_node.getSymbolTable(), "Not Used",
-                                None, None))
+                                node.linenr, node.virtuallinenr))
         node.addNodeParent(new_node)

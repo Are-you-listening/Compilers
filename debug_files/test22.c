@@ -1,6 +1,5 @@
-#include <stdio.h>
+int main() {
 
-int main(){
-    int c = {1, 2};
-    return 0;
+char invalid = 'abcdef';
+char invalid2 = 'xyz\n';
 }

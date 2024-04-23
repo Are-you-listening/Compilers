@@ -6,9 +6,8 @@ int x = 1;
 
 #include "includes/define1.c"
 
-#ifndef A
+#ifndef
 #include "includes/define2.c"
-#endif
 
 int main()
 {

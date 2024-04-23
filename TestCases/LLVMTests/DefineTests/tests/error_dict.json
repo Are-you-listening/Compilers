@@ -1,4 +1,4 @@
-{"10": ["[ Error ] line: 3 'tests/../includes/a3.c' File not found!"],
-  "11": ["[ Syntax Error ] line 13:0 invalid symbol: '# '"],
-  "12": ["[ Error ] line: 5 Macro names must be identifiers"]
+{
+  "8": ["[ Syntax Error ] line: 11 Unmatched conditional directive: '#endif' "],
+  "9": ["[ Syntax Error ] line: 18 unterminated #ifndef "]
 }

@@ -1,6 +1,8 @@
-int main() {
-
-int x = 54;
-
-float y = &x;
+int main(){
+    {
+        int x = 1;
+    }
+    {
+        int x = 2;
+    }
 }
