@@ -315,3 +315,9 @@ class ErrorExporter:
         print(f"[ Error ] line {line_nr}: the array index is of type {index_type} which is not allowed",
               file=sys.stderr)
         exit()
+
+    @staticmethod
+    def lostInitializerList(line_nr: int):
+        print(f"[ Error ] line {line_nr}: an initializer list is provided while not being assigned to an array",
+              file=sys.stderr)
+        exit()

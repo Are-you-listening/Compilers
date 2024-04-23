@@ -150,7 +150,7 @@ class ArrayCleaner(ASTVisitor):
         """
 
         if node.parent not in self.array_map:
-            print("error Array Cleaner init list")
+            ErrorExporter.lostInitializerList(node.linenr)
             return
 
         array_sizes = self.array_map.get(node.parent)
