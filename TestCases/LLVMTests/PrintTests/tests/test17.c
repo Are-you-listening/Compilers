@@ -2,10 +2,9 @@
 
 int main()
 {
-    // TODO
     printf("%s", "This is a beautifull string");
 
-    char hello[6] = {'H', 'e', 'l', 'l', 'o', '\00'};
+    char hello[5] = {'H', 'e', 'l', 'l', 'o'};
 
     printf("%% %s", hello);
 

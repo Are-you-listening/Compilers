@@ -11,9 +11,9 @@ int main()
     printf("%% %c %f %x %f  kappa kappa",'a', p,12,p);
 
     printf("%x,f",5);
-    printf("%f '\n'", p);
-    printf("%f '\n'", p);
-    printf("a%fa '\n'", p);
+    printf("%f ", p);
+    printf("%f ", p);
+    printf("a%fa ", p);
 
     printf("%f", p);
 

@@ -3,8 +3,8 @@ int main() {
     int y = 5;
 
     int* ptr = &x;
-    ptr++; // now points to y
-    ptr--; // now points to x
+    ptr++;
+    ptr--;
 
     int is_x = (ptr == &x);
     int is_y = (ptr == &y);

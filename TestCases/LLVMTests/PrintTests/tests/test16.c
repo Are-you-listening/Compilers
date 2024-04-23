@@ -11,7 +11,7 @@ int main()
 
     const float* z = q;
 
-    printf("%% %d %x %f  kappa kappa",z, z,q);
+    printf("%% %f %f %f  kappa kappa",z, z,q);
 
 
 

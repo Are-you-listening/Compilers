@@ -8,12 +8,12 @@ int main()
 
     printf("%f %f %d ",3.14,p,7);
 
-    printf("%% %c %f %f  kappa kappa",'a',12,p);
+    printf("%% %c %d %f  kappa kappa",'a',12,p);
 
 
-    printf("%f '\n'", p);
-    printf("%f '\n'", p);
-    printf("a%fa '\n'", p);
+    printf("%f ", p);
+    printf("%f ", p);
+    printf("a%fa ", p);
 
     printf("%f", p);
 

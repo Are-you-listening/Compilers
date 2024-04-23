@@ -2,7 +2,6 @@
 
 int main()
 {
-    // TODO Need manual overwrite of gcc command in testcases
     for (int i = 0; i<5; i++){
         printf("%d", i);
     }

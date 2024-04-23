@@ -1,5 +1,5 @@
 int main() {
-//Incompatible Types?
+
 int x = 478;
 int b = -251454;
 
