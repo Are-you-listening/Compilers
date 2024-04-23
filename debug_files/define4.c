@@ -1,15 +1,24 @@
 #include <stdio.h>
 
 
-int main(){
-    char s[10] = "string he";
+int main() {
+// line 1
+char c = '\n';
 
-    s[0] = 'a';
-    s[1] = 101;
 
-    char* v;
-    *v = 'y';
+float f = 33.1; // another line
 
-    printf("%s", s);
-	return 0;
+
+/////// some documentation
+/////////////////////////////////////
+
+// abcdef 123 //////////
+float final_line = 33.99895;
+
+printf("%f", final_line);
+printf("%f", f);
+printf("%c", c);
+
+    return 0;
+
 }

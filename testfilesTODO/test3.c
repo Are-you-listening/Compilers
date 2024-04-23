@@ -11,15 +11,14 @@ int main() {
         printf("%d", *ptr);
 
     ptr++;
+            printf("%d", *ptr); // Not pointing to x/Y ?
     ptr--;
+            printf("%d", *ptr);
 
 
     int is_x = (ptr == &x);
     int is_y = (ptr == &y);
-    printf("%d", is_y);
-        printf("%d", is_x);
     is_y = (&x != ptr);
-        printf("%d", is_y);
 
     float* ptr2 = 0;
 
