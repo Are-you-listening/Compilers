@@ -6,6 +6,5 @@ class DefineTests(LLVMTest, unittest.TestCase):
     Test case to run llvm output, using preprocessor directives
     """
 
-    # TODO Work
-    # def test(self):
-    #     LLVMTest.LLVM_test(self, os.path.abspath(__file__), False)  # Call the base class test function
+    def test(self):
+        LLVMTest.LLVM_test(self, os.path.abspath(__file__), False)  # Call the base class test function

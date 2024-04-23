@@ -1,14 +1,25 @@
+#include <stdio.h>
+
+
 int main() {
     int x = 4;
     int y = 5;
 
+    printf("%d", x);
+
     int* ptr = &x;
-    ptr++; // now points to y
-    ptr--; // now points to x
+        printf("%d", *ptr);
+
+    ptr++;
+    ptr--;
+
 
     int is_x = (ptr == &x);
     int is_y = (ptr == &y);
+    printf("%d", is_y);
+        printf("%d", is_x);
     is_y = (&x != ptr);
+        printf("%d", is_y);
 
     float* ptr2 = 0;
 

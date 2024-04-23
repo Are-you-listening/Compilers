@@ -85,7 +85,7 @@ class ASTTest(ABC):
                 """
                 errors = str(buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
-                print("buff", buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
+                # print("buff", buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
                 assert errors == expected_errors
             except SystemExit:  # Upon crash
                 """
@@ -93,7 +93,7 @@ class ASTTest(ABC):
                 """
                 errors = str(error_buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
-                print("error", error_buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
+                # print("error", error_buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
                 assert errors == expected_errors
 
             """
@@ -131,15 +131,15 @@ class LLVMTest(unittest.TestCase, ABC):
 
             index = file[4:-2]  # The index is used to refer to the files & other data belonging to this testfile
             file_name = f"tests/test{index}.c"
-            #print(index, file_name)  # Toggle for debug
+            # print(index, file_name)  # Toggle for debug
 
             """
             If input will be read, it needs to be retrieved
             """
             if useSTDIN:
-                input = (input_dict.get(str(index), []))
+                inp = (input_dict.get(str(index), []))
             else:
-                input = ""
+                inp = ""
 
             """
             Redirect error & output buffs
@@ -158,27 +158,21 @@ class LLVMTest(unittest.TestCase, ABC):
                 # Run our llvm
                 main([0, "--input", file_name, "--target_llvm", "temp/temp.ll"])  # Run our compiler
 
-
-                # Run c file using gcc
-                c_out = subprocess.run(f"""gcc -ansi -pedantic {file_name} -o temp/temp""",
-                                       shell=True, capture_output=True)
-                if c_out.returncode != 0:  # Compilation failed, warn client!
-                    raise Exception("Compilation Failed")
-
-                # Run the compiled code
-                c_out = subprocess.run(f" temp/./temp ; rm temp/temp", shell=True, capture_output=True, text=True,input=input)
+                c_out = self.runC(file_name, inp)
 
                 # Run our llvm
-                out = subprocess.run(f"""lli temp/temp.ll""", shell=True, capture_output=True, input=input, text=True)
+                out = subprocess.run(f"""lli temp/temp.ll""", shell=True, capture_output=True, input=inp, text=True)
 
                 """
                 assert for same output
                 """
+                # print('a', out.stdout, 'b', c_out.stdout)
                 assert out.stdout == c_out.stdout
 
                 """
                 asser for no error
                 """
+                # print('1', out.stderr, '2', c_out.stderr)
                 assert out.stderr == c_out.stderr
 
                 """
@@ -197,3 +191,35 @@ class LLVMTest(unittest.TestCase, ABC):
 
             sys.stdout = original
             sys.stderr = original_error
+
+    def compileGCC(self, file_name):
+        return subprocess.run(f"""gcc -ansi -pedantic {file_name} -o temp/temp""",
+                                   shell=True, capture_output=True)
+
+    def runC(self, file_name, inp):
+        """
+        Run and compile a c file
+        :param file_name: Name of the file
+        :param inp: Any optional input
+        :return:
+        """
+
+        json_file = file_name[:-2] + ".json"
+        index = file_name[10:-2]
+
+        if os.path.isfile(json_file):  # If a .json file exists, we need to load the value from this file as c_out instead of the gcc compiler
+            with open(json_file, "rt") as f:
+                output_dict = json.loads(f.read())
+                c_out = subprocess.run(f"""ls""", shell=True, capture_output=True) # Create a useless c_out
+                c_out.stdout = output_dict[index]  # Modify output
+                c_out.stderr = ""  # No errors expected
+        else:
+            # Run c file using gcc
+            c_out = self.compileGCC(file_name)
+            if c_out.returncode != 0:  # Compilation failed, warn client!
+                raise Exception("Compilation Failed")
+
+            # Run the compiled code
+            c_out = subprocess.run(f" temp/./temp ; rm temp/temp", shell=True, capture_output=True, text=True, input=inp)
+
+        return c_out

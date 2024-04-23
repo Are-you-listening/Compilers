@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 if (1) {
     printf("Conditionals should not work globally\n");
 }

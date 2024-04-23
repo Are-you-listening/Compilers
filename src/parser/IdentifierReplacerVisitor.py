@@ -4,6 +4,14 @@ from src.parser.ErrorExporter import *
 from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 from src.parser.SwitchConverter import SwitchConverter
 
+
+def declaredPreviously(node: ASTNodeTerminal):
+    current_table = node.getSymbolTable().prev
+    while current_table is not None:
+        if node.text in current_table.symbols:
+            return True
+        current_table = current_table.prev
+
 class IdentifierReplacerVisitor(ASTVisitor):
     def __init__(self):
         self.previousNode = None
@@ -12,10 +20,15 @@ class IdentifierReplacerVisitor(ASTVisitor):
         pass
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        # if the node is not under a dereference we can never replace it with a value
+        # if the node is not under a dereference node we can never replace it with a value
         # We keep replacing derefs with values until we encounter something that we can't replace
+
         while node.parent.text == "Dereference" and node.text != "Conversion":
             toReplace = node.text
+
+            if toReplace not in node.getSymbolTable().symbols:
+                if node.inLoop() and declaredPreviously(node):
+                    return
 
             """
             the ++, and -- operator should not be evaluated by the value Adder, so we detect those situations

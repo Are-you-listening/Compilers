@@ -336,7 +336,7 @@ class Printf:
             LLVMSingleton.getInstance().setPrintF(printf)
 
         builder = LLVMSingleton.getInstance().getCurrentBlock()
-        args_values = Printf.makeArguments(format_specifier,args)
+        args_values = Printf.makeArguments(format_specifier, args)
         printf_call = builder.call(LLVMSingleton.getInstance().getPrintF(), args_values)
 
         return printf_call

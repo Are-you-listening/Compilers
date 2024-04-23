@@ -1,5 +1,5 @@
-#define GREETING Hello, world! // To many spaces?
+#define GREETING Hello, world!
 
-#define PI 3.14159 // Must be 2 values seperated by a space
+#define PI 3.14159
 
 int y = PI;
