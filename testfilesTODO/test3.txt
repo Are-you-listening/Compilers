@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-//TODO LLVM Crash
+
 int main(){
     char s[10] = "string he";
 

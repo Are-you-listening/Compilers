@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-//TODO
+
 int mul(int x){
     return x * 5;
 }

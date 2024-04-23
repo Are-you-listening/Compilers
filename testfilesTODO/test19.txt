@@ -3,7 +3,6 @@ int mul(int x, int y){
 return x * y;
 }
 
-// TODO Function Calls
 
 /*
 * My program

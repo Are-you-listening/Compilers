@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// TODO
+
 int main(){
     char[2] k;
     printf("%c", k);

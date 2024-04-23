@@ -1,5 +1,5 @@
 #include <stdio.h>
-// TODO
+
 
 int main(){
     int* k;

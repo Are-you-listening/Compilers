@@ -6,6 +6,6 @@
 
 int main()
 {
-    peer(); // TODO Test Function includes
+    peer(); // Test Function includes
     return 0;
 }
