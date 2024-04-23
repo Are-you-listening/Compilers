@@ -14,6 +14,7 @@ class SwitchConverter(ASTVisitor):
     """
     def __init__(self):
         self.break_map = {}
+        self.declare_map = {}
         self.to_add = []
         self.to_add_parent = []
         self.to_remove = set()
@@ -22,9 +23,22 @@ class SwitchConverter(ASTVisitor):
 
         """
         override the visit so we can remove after the traverse the nodes we don't need anymore
-
         """
 
+        """
+        Inside a switch statement we are not allowed to have declarations unless they are inside a scope
+        We are going to tickle up the mapping of a node -> boolean, indicating whether it has an illegal declaration,
+        when we come across a scope/Code Node this will be set to false, else we will take the true if exists,
+        instead of using real booleans we will stored the node of the declaration if present, so we can give the
+        proper error message
+        """
+        self.declare_map = {}
+
+        """
+        Maps the nodes to break nodes if exists, we do a postorder to tickle up the break statements, when we 
+        to figure out whether the case/default has a break statement. When we come across a while,for/switch statement, 
+        we will not tickle up those child breaks anymore
+        """
         self.break_map = {}
         self.to_add = []
         self.to_add_parent = []
@@ -56,13 +70,41 @@ class SwitchConverter(ASTVisitor):
             r.parent.removeChild(r)
 
     def visitNode(self, node: ASTNode):
+        """
+        This visitor will handle the switch statement actions
+        """
+
+        """
+        Do the tickle up for the declarations
+        """
+        self.declare_map[node] = None
+        for c in node.children:
+            if self.declare_map.get(c, None) is not None:
+                self.declare_map[node] = self.declare_map.get(c, None)
+                break
+
+        """
+        In case we come across a Code/Scope node, we will set the declare_map entry to False, so we can
+        check in a switch statement whether to send an error message or not
+        """
+        if node.text in ("Code", "Scope") and node.parent.text not in ("CASE", "DEFAULT"):
+            """
+            check 'node.parent.text not in ("CASE", "DEFAULT")' is because our grammar makes by default
+            a Code node for the case and default body
+            """
+            self.declare_map[node] = None
+
+        """
+        In case our node is a declaration we need to set the declare boolean for this node of true
+        """
+        if node.text == "Declaration":
+            self.declare_map[node] = node
 
         """
         Update the break map (indicating if the subtree has a break),
         This will do a tickle up of the break information, but if the break is inside a while/for loop,
         we don't want to pass it up
         """
-
         if node.text in ("WHILE", "FOR"):
             return
 
@@ -73,6 +115,18 @@ class SwitchConverter(ASTVisitor):
 
         if node.text != "SWITCH":
             return
+        """
+        In case we have a switch statement, we will first check whether no illegal declarations are inside the 
+        switch statement
+        """
+        if self.declare_map[node]:
+            """
+            When we have an illegal declaration, we will use the declaration node to properly throw the error
+            """
+            declaration_node = self.declare_map[node]
+            declared_line = declaration_node.getChild(1).linenr
+            declared_variable = declaration_node.getChild(1).text
+            ErrorExporter.switchDeclaration(declared_line, declared_variable)
 
         """
         Translate all the children to IF Else
@@ -199,6 +253,13 @@ class SwitchConverter(ASTVisitor):
                 self.to_add.append((node, if_node))
 
         self.to_remove.add(node)
+
+        """
+        In case we have nested switches, we want to make sure the breaks do not cascade to outside the 
+        inner switch statement
+        """
+        if node in self.break_map.keys():
+            self.break_map.pop(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
 

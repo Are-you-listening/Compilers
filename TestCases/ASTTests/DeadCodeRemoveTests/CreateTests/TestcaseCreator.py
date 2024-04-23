@@ -6,12 +6,10 @@ from src.parser.DotVisitor import *
 from src.parser.Constraints.ConstraintChecker import *
 from src.parser.ValueAdderVisitor import *
 from src.parser.ASTDereferencer import *
-from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
 from src.parser.ASTCleanerAfter import *
-from src.parser.Tables.TableDotVisitor import *
 from src.parser.CodeGetter import *
-from TestCases.ASTTests.AstLoader import AstLoader
+from TestCases.ABCTests.AstLoader import AstLoader
 from src.parser.ASTTableCreator import ASTTableCreator
 from src.parser.ASTLoopCleaner import *
 from src.parser.ASTIfCleaner import *
@@ -62,7 +60,7 @@ ASTCleanerAfter().visit(ast)  # Clean even more :)
 
 ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
-ConstraintChecker().visit(ast)  # Checkup Semantic & Syntax Errors
+ConstraintChecker(True).visit(ast)  # Checkup Semantic & Syntax Errors
 
 ConstantFoldingVisitor().visit(ast)
 

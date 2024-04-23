@@ -29,13 +29,26 @@ class ASTConversion(ASTVisitor):
         :param node: the node we are currently checking
         :return:
         """
-
-        if node.text == "Dereference":
+        is_array = (node.text == "Expr" and node.getChildAmount() == 3 and node.getChild(1).text == "[]")
+        if node.text == "Dereference" or is_array:
             """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was 
             before"""
             child = node.getChild(0)
             data_type, ptrs = self.type_mapping[child]
 
+            """
+            We we do a [] access, we need to check that the value provided is an integer
+            """
+            if is_array:
+                data_type2, ptrs2 = self.type_mapping[node.getChild(2)]
+                if data_type2 != "INT" or len(ptrs2) > 0:
+                    ErrorExporter.invalidArrayIndex(node.linenr, (data_type2, ptrs2))
+
+                """
+                The array has by default 1 ptr, but it it is the only 1, the array is not really an array
+                """
+                if len(ptrs) <= 1:
+                    ErrorExporter.invalidDereferenceNotPtr(node.linenr, (data_type, ptrs[:-1]), True)
             """
             when trying to dereference a non-ptr, throw an error
             """
@@ -114,8 +127,7 @@ class ASTConversion(ASTVisitor):
                         """
                         when the op is invalid for ptrs
                         """
-                        ErrorExporter.invalidOperation(node.linenr, operator, self.to_string_type(to_type),
-                                                       self.to_string_type(check_type))
+                        ErrorExporter.invalidOperation(node.linenr, operator, to_type, check_type)
 
                 """
                 for the non-first type, we will take the richest type
@@ -187,7 +199,7 @@ class ASTConversion(ASTVisitor):
             """
             logical operators expect booleans so we convert the given entry into a boolean
             """
-            to_type = ("BOOL", "")
+            to_type = ("BOOL", [])
 
         """
         add implicit conversions as explicit
@@ -198,11 +210,11 @@ class ASTConversion(ASTVisitor):
                 continue
 
             if type_tup != to_type:
-                if to_type == ("BOOL", ""):
+                if to_type == ("BOOL", []):
                     """
                     logical operators expect booleans so we convert the given entry into a boolean
                     """
-                    self.addConversion(child, ("BOOL", ""))
+                    self.addConversion(child, ("BOOL", []))
 
                     """
                     use continue so we don't throw warnings/errors for booleans
@@ -220,11 +232,9 @@ class ASTConversion(ASTVisitor):
                         """
                         when no operator, it is an assignment
                         """
-                        ErrorExporter.invalidAssignment(child.linenr, self.to_string_type(to_type),
-                                                        self.to_string_type(type_tup))
+                        ErrorExporter.invalidAssignment(child.linenr, to_type, type_tup)
                     else:
-                        ErrorExporter.invalidOperation(child.linenr, operator, self.to_string_type(to_type),
-                                                       self.to_string_type(type_tup))
+                        ErrorExporter.invalidOperation(child.linenr, operator, to_type, type_tup)
                     continue
 
                 if operator is not None:
@@ -232,8 +242,7 @@ class ASTConversion(ASTVisitor):
                         """
                         in case we have incompatible type
                         """
-                        ErrorExporter.invalidOperation(child.linenr, operator, self.to_string_type(to_type),
-                                                       self.to_string_type(type_tup))
+                        ErrorExporter.invalidOperation(child.linenr, operator, to_type, type_tup)
                         continue
 
                     if operator in ("==", "!=", "<=", ">=", "<", ">"):
@@ -260,12 +269,9 @@ class ASTConversion(ASTVisitor):
         equality operators give an integer back
         """
         if operator in ("==", "!=", "<=", ">=", "<", ">", "&&", "||", "!"):
-            self.type_mapping[node] = ("BOOL", "")
+            self.type_mapping[node] = ("BOOL", [])
         else:
             self.type_mapping[node] = to_type
-
-
-
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
@@ -275,12 +281,12 @@ class ASTConversion(ASTVisitor):
             """
             Use LLVM ptr format
             """
-            ptrs += "*"
+            ptrs.append("*")
 
             self.type_mapping[node] = (data_type, ptrs)
 
         elif node.type in types:
-            self.type_mapping[node] = (node.type, '')
+            self.type_mapping[node] = (node.type, [])
 
     @staticmethod
     def calculateType(node: ASTNode):
@@ -294,13 +300,13 @@ class ASTConversion(ASTVisitor):
             raise Exception("wrong node type")
 
         data_type = ""
-        ptrs = ""
+        ptrs = []
         for child in node.children:
             if child.text.upper() in types:
                 data_type = child.text.upper()
 
             if child.text == "*":
-                ptrs += "*"
+                ptrs.append("*")
 
         return data_type, ptrs
 
@@ -363,7 +369,7 @@ class ASTConversion(ASTVisitor):
 
     @staticmethod
     def to_string_type(type_tup):
-        if type_tup[1] == "":
+        if len(type_tup[1]) == 0:
             return type_tup[0]
 
         return "PTR"
@@ -408,7 +414,6 @@ class ASTConversion(ASTVisitor):
             """
             when comparison operator is given -> other error message
             """
-
             ErrorExporter.IncompatiblePtrTypesWarning(line_nr, to_type, type_tup2)
 
             return
@@ -455,7 +460,7 @@ class ASTConversion(ASTVisitor):
             ASTNodeTerminal(to_type[0], type_node, type_node.getSymbolTable(), "Not Used",
                             None, None))
 
-        for t_child in to_type[1].split():
+        for t_child in to_type[1]:
             type_node.addChildren(
                 ASTNodeTerminal(t_child, type_node, type_node.getSymbolTable(), "Not Used",
                                 None, None))

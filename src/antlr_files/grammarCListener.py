@@ -296,12 +296,30 @@ class grammarCListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by grammarCParser#initialize_list.
+    def enterInitialize_list(self, ctx:grammarCParser.Initialize_listContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#initialize_list.
+    def exitInitialize_list(self, ctx:grammarCParser.Initialize_listContext):
+        pass
+
+
     # Enter a parse tree produced by grammarCParser#expr.
     def enterExpr(self, ctx:grammarCParser.ExprContext):
         pass
 
     # Exit a parse tree produced by grammarCParser#expr.
     def exitExpr(self, ctx:grammarCParser.ExprContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#array.
+    def enterArray(self, ctx:grammarCParser.ArrayContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#array.
+    def exitArray(self, ctx:grammarCParser.ArrayContext):
         pass
 
 

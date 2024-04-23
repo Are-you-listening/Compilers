@@ -6,15 +6,17 @@ from src.parser.Constraints.PrintfConstraint import *
 from src.parser.Constraints.UndeclaredConstrained import *
 from src.parser.Constraints.GlobalsConstrained import *
 from src.parser.Constraints.CleanGlobalScopeConstraint import *
+from src.parser.Constraints.IOConstraint import *
+from src.parser.Constraints.UndefinedReferenceConstraint import *
 
 class ConstraintChecker(ASTVisitor):
     """
     Visitor to check all nodes to verify certain constraints
     """
 
-    def __init__(self):
-        self.constraints = [MainFoundConstraint(), RedefinitionConstraint(), UndeclaredConstrained(), ConstConstraint(),
-                            AmpersandConstraint(), PrintfConstraint(), UndeclaredConstrained(), GlobalsConstrained(), CleanGlobalScope()]
+    def __init__(self, includeSTDIO):
+        self.constraints = [CleanGlobalScope(), MainFoundConstraint(), RedefinitionConstraint(), UndeclaredConstrained(), ConstConstraint(),
+                            AmpersandConstraint(), PrintfConstraint(), UndeclaredConstrained(), GlobalsConstrained(), IOConstraint(includeSTDIO), UndefinedReferenceConstraint()]
 
     def visitNode(self, node: ASTNode):
         for c in self.constraints:

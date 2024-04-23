@@ -64,7 +64,10 @@ class ASTCreator(grammarCVisitor):
         self.__makeNode(ctx, "ParameterCall")
 
     def visitPrintscanf(self, ctx: grammarCParser.PrintscanfContext):
-        self.__makeNode(ctx, "printf")
+        if ctx.children[0].symbol.text == "scanf":
+            self.__makeNode(ctx, "scanf")
+        else:
+            self.__makeNode(ctx, "printf")
 
     def visitLine(self, ctx: grammarCParser.LineContext):
         self.__makeNode(ctx, "Line")
@@ -126,11 +129,11 @@ class ASTCreator(grammarCVisitor):
     def visitEnum(self, ctx: grammarCParser.EnumContext):
         self.__makeNode(ctx, "Enum")
 
-    def visitDefine(self, ctx: grammarCParser.DefineContext):
-        self.__makeNode(ctx, "Define")
+    def visitInitialize_list(self, ctx: grammarCParser.Initialize_listContext):
+        self.__makeNode(ctx, "InitList")
 
-    def visitParameter_call(self, ctx: grammarCParser.Parameter_callContext):
-        self.__makeNode(ctx, "ParameterCall")
+    def visitArray(self, ctx: grammarCParser.ArrayContext):
+        self.__makeNode(ctx, "ARRAY")
 
     def visitTerminal(self, ctx):
         """
@@ -146,8 +149,6 @@ class ASTCreator(grammarCVisitor):
                                ctx.getSymbol().line, "")
 
         self.parent.addChildren(node)
-
-
 
     def __makeNode(self, ctx, terminal_type: str, dovisitChildren: bool = True):
         """

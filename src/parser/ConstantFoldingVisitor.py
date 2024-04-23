@@ -142,7 +142,7 @@ class ConstantFoldingVisitor(ASTVisitor):
         if logical_operator == "||":
             if operand.text == "0":
                 ASTConversion.addConversion(node.getChild(0) if operand == node.getChild(2) else node.getChild(2),
-                                            ("BOOL", ""))
+                                            ("BOOL", []))
                 return None
             else:
                 return "1", "INT"
@@ -151,7 +151,7 @@ class ConstantFoldingVisitor(ASTVisitor):
                 return "0", "INT"
             else:
                 ASTConversion.addConversion(node.getChild(0) if operand == node.getChild(2) else node.getChild(2),
-                                            ("BOOL", ""))
+                                            ("BOOL", []))
                 return None
 
         return None

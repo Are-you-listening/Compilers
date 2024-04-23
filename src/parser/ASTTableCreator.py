@@ -48,10 +48,12 @@ class ASTTableCreator(ASTVisitor):
 
             visited.add(currentNode)
     @staticmethod
-    def __check_function_declarations(self, node: ASTNode):
+    def __check_function_declarations(self, node: ASTNode, param_types_and_ptrs: list):
         function_node = node.children[1]
         if function_node.symbol_table.exists(function_node.text):
-            if node.getChildAmount() == 2:
+            if param_types_and_ptrs != node.symbol_table.getEntry(function_node.text).getTypeObject().getParameterTypes():
+                ErrorExporter.conflictingFunctionTypes(function_node.linenr, function_node.text)
+            if node.getChildAmount() == 3:
                 return
             else:
                 if (node.symbol_table.getEntry(function_node.text).is_function_defined()):
@@ -60,6 +62,8 @@ class ASTTableCreator(ASTVisitor):
                     node.symbol_table.getEntry(function_node.text).set_function_defined(True)
         else:
             return
+
+
     def visitNode(self, node: ASTNode):
         """
         Assign the symbol table to the node
@@ -82,13 +86,12 @@ class ASTTableCreator(ASTVisitor):
                 node.symbol_table = self.table
 
         if node.text == "Function":
-            self.__check_function_declarations(self, node)
             child = node.findType("Type")
             param_types = []
             param_strings = []
             for param in node.children[2].children:
                 param_is_const = False
-                pointer_string = ""
+                pointer_list = []
                 if param.children[0].children[0].text != "const":
                     param_types.append(param.children[0].children[0].text)
                 else:
@@ -96,13 +99,17 @@ class ASTTableCreator(ASTVisitor):
                     param_is_const = True
                 if param_is_const:
                     for i in range(param.children[0].getChildAmount() - 2):
-                        pointer_string += "*"
+                        pointer_list.append(pointer_list)
                 else:
                     for i in range(param.children[0].getChildAmount() - 1):
-                        pointer_string += "*"
-                param_strings.append(pointer_string)
+                        pointer_list.append(pointer_list)
+                param_strings.append(pointer_list)
             param_types_and_ptrs = [(x, y) for x, y in zip(param_types, param_strings)]
+            self.__check_function_declarations(self, node, param_types_and_ptrs)
             self.__make_entry(node, child, lambda d, c: FunctionSymbolType(d, c, param_types_and_ptrs))
+            function_node = node.children[1]
+            if node.getChildAmount() == 4:
+                node.symbol_table.getEntry(function_node.text).set_function_defined(True)
 
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):

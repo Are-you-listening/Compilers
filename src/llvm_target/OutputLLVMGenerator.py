@@ -1,3 +1,4 @@
+import llvmlite.ir.types
 from src.llvm_target.LLVMSingleton import LLVMSingleton
 from llvmlite import ir
 import sys
@@ -58,7 +59,7 @@ class UnaryWrapper:
 
 class CTypesToLLVM:
     @staticmethod
-    def getBytesUse(data_type: str, ptrs: str):
+    def getBytesUse(data_type: str, ptrs: list):
         if len(ptrs) >= 1:
             return 8
 
@@ -66,7 +67,7 @@ class CTypesToLLVM:
         return convert_map.get(data_type, "TYPE ISSUE")
 
     @staticmethod
-    def getIRType(data_type: str, ptrs: str):
+    def getIRType(data_type: str, ptrs: list):
         convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType(), "BOOL": ir.IntType(1)}
         llvm_type = convert_map.get(data_type)
         for p in ptrs:
@@ -86,7 +87,7 @@ class CTypesToLLVM:
 
 class Declaration:
     @staticmethod
-    def declare(data_type: str, ptrs: str):
+    def declare(data_type: str, ptrs: list):
         block = LLVMSingleton.getInstance().getCurrentBlock()
         llvm_val = block.alloca(CTypesToLLVM.getIRType(data_type, ptrs))
         llvm_val.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
@@ -94,7 +95,7 @@ class Declaration:
         return llvm_val
 
     @staticmethod
-    def function(func_name: str, return_type: str, ptrs: str):
+    def function(func_name: str, return_type: str, ptrs: list):
         """
         change the current latest function
         """
@@ -106,8 +107,7 @@ class Declaration:
         return new_function
 
     @staticmethod
-    def assignment(store_register: int, value: int, align: int):
-
+    def assignment(store_register: ir.Instruction, value: ir.Instruction, align: int):
         """
         assignment
         :param store_register:
@@ -117,13 +117,21 @@ class Declaration:
         """
 
         block = LLVMSingleton.getInstance().getCurrentBlock()
+
+        """
+        In case we have an array of a string and we use its pointer, we want to add another bitcase
+        """
+        if store_register.type.is_pointer and value.type.is_pointer and \
+                isinstance(value.type.pointee, ir.types.ArrayType):
+            value = block.bitcast(value, ir.IntType(8).as_pointer())
+
         llvm_val = block.store(value, store_register)
 
         llvm_val.align = align
         return llvm_val
 
     @staticmethod
-    def llvmLiteral(value: str, data_type: str, ptrs: str):
+    def llvmLiteral(value: str, data_type: str, ptrs: list):
         if CTypesToLLVM.getIRType(data_type, ptrs) == ir.FloatType():
             value = float(value)
         elif CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(32):
@@ -150,14 +158,42 @@ class Declaration:
         text = text.replace("\n","")  # Comments in LLVM cannot contain new lines
         block.comment(text)
 
+    @staticmethod
+    def string(text: str):
+        index = LLVMSingleton.getInstance().getStringIndex(text)
+        builder = LLVMSingleton.getInstance().getCurrentBlock()
+        format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(text)),
+                                       bytearray(text.encode("utf8")))
+        format_str_global = builder.module.globals.get(f".str.{index}")
+
+        if not format_str_global:
+            format_str_global = ir.GlobalVariable(builder.module, format_str_const.type, f".str.{index}")
+            format_str_global.linkage = "internal"
+            format_str_global.global_constant = True
+            format_str_global.initializer = format_str_const
+
+        return format_str_global
+
 
 class Load:
     @staticmethod
     def identifier(load_llvm):
         block = LLVMSingleton.getInstance().getCurrentBlock()
-        llvm_var = block.load(load_llvm)
 
-        llvm_var.align = load_llvm.align
+        if isinstance(load_llvm.type.pointee, ir.types.ArrayType):
+            index_list = []
+            index_list.insert(0, ir.Constant(ir.types.IntType(32), 0))
+            index_list.insert(0, ir.Constant(ir.types.IntType(32), 0))
+
+            llvm_var = block.gep(load_llvm, index_list, True)  # Create the gep instruction
+        else:
+            llvm_var = block.load(load_llvm)
+
+        if not isinstance(load_llvm, ir.GEPInstr):
+            llvm_var.align = load_llvm.align
+        else:
+            llvm_var.align = CTypesToLLVM.getBytesUse("INT", [])
+
         return llvm_var
 
 
@@ -214,8 +250,11 @@ class Calculation:
             if llvm_op is not None:
                 llvm_var = llvm_op(operator, left, right)
                 return llvm_var
+        if isinstance(left.type, ir.types.PointerType) and operator in ["+", "-", "[]"]:
+            """
+            operator '[]' is for access of arrays. We can access an array using a GetElementPointer
+            """
 
-        if left.type.is_pointer and operator in ["+", "-"]:
             if not isinstance(right,
                               ir.Constant):  # If it is not a constant, LLVM requires a sign extend to match the size
                 right = block.sext(right, ir.IntType(64))
@@ -223,8 +262,15 @@ class Calculation:
             if operator == "-":  # Add subtract
                 right = Calculation.unary(right, "-")
 
-            new_value = block.gep(left, [right], True)  # Create the gep instruction
+            index_list = [right]
 
+            """
+            When we come across an array we need to define a value 0 followed by the index we want to access
+            """
+            if isinstance(left.type.pointee, ir.ArrayType):
+                index_list.insert(0, ir.Constant(ir.types.IntType(64), 0))
+
+            new_value = block.gep(left, index_list, True)  # Create the gep instruction
             return new_value
 
         """
@@ -266,16 +312,18 @@ class Calculation:
         # elif llvm_val.type
         else:
             llvm_op = op_translate.get(op, None)
-
         llvm_var = llvm_op(llvm_val)
         return llvm_var
 
 
 class Printf:
     @staticmethod
-    def printf(format_specifier: str, *args):
-        base_format = format_specifier[format_specifier.index("%"):format_specifier.index("%")+2]
-
+    def printf(format_specifier: ir.Constant, *args):
+        """
+        :param format_specifier:
+        :param args:
+        :return:
+        """
         if LLVMSingleton.getInstance().getPrintF() is None:
             module = LLVMSingleton.getInstance().getModule()
             voidptr_ty = ir.IntType(8).as_pointer()
@@ -283,18 +331,32 @@ class Printf:
             printf = ir.Function(module, printf_ty, name="printf")
             LLVMSingleton.getInstance().setPrintF(printf)
 
-        format_specifier+='\00'
         builder = LLVMSingleton.getInstance().getCurrentBlock()
-        format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(format_specifier)),
-                                       bytearray(format_specifier.encode("utf8")))
-        format_str_global = builder.module.globals.get(f".str.{base_format[1:]}")
+        args_values = Printf.makeArguments(format_specifier,args)
+        printf_call = builder.call(LLVMSingleton.getInstance().getPrintF(), args_values)
 
-        if not format_str_global:
-            format_str_global = ir.GlobalVariable(builder.module, format_str_const.type, f".str.{base_format[1:]}")
-            format_str_global.linkage = "internal"
-            format_str_global.global_constant = True
-            format_str_global.initializer = format_str_const
-        format_str_ptr = builder.bitcast(format_str_global, ir.IntType(8).as_pointer())
+        return printf_call
+
+    @staticmethod
+    def __reformat(llvm_var):
+        """
+        for certain formats we need to do a conversion
+
+        :param llvm_var: Variable to check
+        :return:
+        """
+        builder = LLVMSingleton.getInstance().getCurrentBlock()
+
+        if isinstance(llvm_var.type, llvmlite.ir.types.FloatType):  # Floats need to be converted to doubles under the hood
+            return builder.fpext(llvm_var, ir.DoubleType())
+
+        return llvm_var
+
+    @staticmethod
+    def makeArguments(format_specifier: ir.Constant, args):
+        builder = LLVMSingleton.getInstance().getCurrentBlock()
+
+        format_str_ptr = builder.bitcast(format_specifier, ir.IntType(8).as_pointer())
 
         """
         Create an alloca instruction for each argument
@@ -304,34 +366,37 @@ class Printf:
         """
         Store the arguments in their respective alloca instructions
         """
-
         for arg_alloca, arg_value in zip(args_alloca, args):
-            builder.store(arg_value, arg_alloca)
+            s = builder.store(arg_value, arg_alloca)
 
         """ 
         Load the arguments from their respective alloca instructions 
         """
+        args_values = [format_str_ptr] + [Printf.__reformat(builder.load(arg_alloca)) for arg_alloca in args_alloca]
 
-        args_values = [format_str_ptr] + [Printf.__reformat(base_format, builder.load(arg_alloca)) for arg_alloca in args_alloca]
-        printf_call = builder.call(LLVMSingleton.getInstance().getPrintF(), args_values)
+        return args_values
 
-        return printf_call
 
+class Scanf(Printf):
     @staticmethod
-    def __reformat(base_format: str, llvm_var):
+    def scanf(format_specifier: str, *args):
         """
-        for certain formats we need to do a conversion
-
-        :param base_format: format we use to print
-        :param llvm_var:
+        :param format_specifier:
+        :param args:
         :return:
         """
+        if LLVMSingleton.getInstance().getScanF() is None:  # Make sure the function is added hardcoded
+            module = LLVMSingleton.getInstance().getModule()
+            voidptr_ty = ir.IntType(8).as_pointer()
+            scanf_ty = ir.FunctionType(ir.IntType(32), [voidptr_ty], var_arg=True)
+            scanf = ir.Function(module, scanf_ty, name="scanf")
+            LLVMSingleton.getInstance().setScanF(scanf)
+
         builder = LLVMSingleton.getInstance().getCurrentBlock()
+        args_values = Printf.makeArguments(format_specifier, args)
+        scanf_call = builder.call(LLVMSingleton.getInstance().getScanF(), args_values)
 
-        if base_format == "%f":
-            return builder.fpext(llvm_var, ir.DoubleType())
-
-        return llvm_var
+        return scanf_call
 
 
 class Conversion:

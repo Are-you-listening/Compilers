@@ -1,5 +1,5 @@
 
-// Proof enums don't conflict with typedefs
+/*Proof enums don't conflict with typedefs*/
 #include<stdio.h>
 
 int x = 1;

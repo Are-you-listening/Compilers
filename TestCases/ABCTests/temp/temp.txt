@@ -1,0 +1,2 @@
+# Any temp file will be created in this directory
+# E.g. temporary LLVM outputs from Clang or compiled C code by gcc

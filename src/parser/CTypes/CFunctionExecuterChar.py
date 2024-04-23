@@ -26,10 +26,7 @@ class _BinaryOperations(BaseBinaryOperations):
     @staticmethod
     def Divide(a: int, b: int):
         r = a / b
-        if r > 0:
-            r = math.floor(r)
-        else:
-            r = math.ceil(r)
+        r = math.floor(r)
         return r
 
     @staticmethod

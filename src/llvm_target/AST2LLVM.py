@@ -119,7 +119,10 @@ class AST2LLVM(ASTVisitor):
             self.handleComment(node)
 
         if node.text == "printf":
-            self.handlePrintf(node)
+            self.handlePrintScanf(node, True)
+
+        if node.text == "scanf":
+            self.handlePrintScanf(node, False)
 
         if node.text == "Expr":
             self.handleOperations(node)
@@ -146,7 +149,11 @@ class AST2LLVM(ASTVisitor):
             self.llvm_map[node] = entry.llvm
 
         if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
-            llvm_var = Declaration.llvmLiteral(node.text, node.type, "")
+            llvm_var = Declaration.llvmLiteral(node.text, node.type, [])
+            self.llvm_map[node] = llvm_var
+
+        if node.type == "STRING":
+            llvm_var = Declaration.string(node.text)
             self.llvm_map[node] = llvm_var
 
     def handleDeclaration(self, node):
@@ -207,8 +214,15 @@ class AST2LLVM(ASTVisitor):
             store_reg = self.map_table.getEntry(left_child.text).llvm
 
         right_child = node.getChild(1)
+
         to_store_reg = self.llvm_map.get(right_child, None)
-        llvm_var = Declaration.assignment(store_reg, to_store_reg, store_reg.align)
+
+        if not isinstance(store_reg, ir.GEPInstr):
+            alignment = store_reg.align
+        else:
+            alignment = 4
+
+        llvm_var = Declaration.assignment(store_reg, to_store_reg, alignment)
 
         self.llvm_map[node] = llvm_var
 
@@ -236,24 +250,29 @@ class AST2LLVM(ASTVisitor):
     def handleReturn():
         LLVMSingleton.getInstance().getCurrentBlock().ret(ir.Constant(ir.IntType(32), 0))
 
-    def handlePrintf(self, node: ASTNode):
+    def handlePrintScanf(self, node: ASTNode, printf):
         """
-        Handle printf function
+        Handle printf or scanf function
         :param node:
+        :param printf: If true do make printf
         :return:
         """
-        formatSpecifier = node.children[0].text
+        format_specifier_node = node.children[0]
+        format_specifier = self.llvm_map[format_specifier_node]
         args = []
 
         """
         load part of printf statement we want to print
         """
-        for child in node.children:
+        for child in node.children[1:]:
             llvm_var = self.llvm_map.get(child, None)
             if llvm_var is not None:
                 args.append(llvm_var)
 
-        Printf.printf(formatSpecifier, *args)
+        if printf:
+            Printf.printf(format_specifier, *args)
+        else:
+            Scanf.scanf(format_specifier, *args)
 
     def handleOperations(self, node: ASTNode):
         """
@@ -290,7 +309,6 @@ class AST2LLVM(ASTVisitor):
             operator = operator_child.text
 
             if operator in ("&&", "||"):
-                #TODO: temp
                 left = self.llvm_map.get(node.getChild(0))
                 right = self.llvm_map.get(node.getChild(2))
 

@@ -1,55 +1,14 @@
-import unittest
-from io import StringIO
-import json
-import os
-from antlr4 import *
 from src.parser.Constraints.ConstraintChecker import *
-from src.parser.ASTTableCreator import *
-from TestCases.ASTTests.AstLoader import AstLoader
+from TestCases.ABCTests.abcTest import *
 
 
-class TestConstraints(unittest.TestCase):
-    def testConstraints(self):
-        file_indexes = range(1, 5)
+class TestConstraints(ASTTest, unittest.TestCase):
+    """
+    Test all the constraints (part of the Semantic Analyses)
+    """
 
-        os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    def execute(self, abstract_syntax_tree: AST):
+        ConstraintChecker(True).visit(abstract_syntax_tree)
 
-        with open("tests/error_dict.json", "rt") as f:
-            error_dict = json.loads(f.read())
-
-        for index in file_indexes:
-            print(index)
-            file_path = f"tests/test{index}.json"
-            with open(file_path, "rt") as f:
-                json_data = f.read()
-
-            ast_tree = AstLoader.load(json_data)
-
-            """
-            make print buff
-            """
-            original = sys.stdout
-            buff = StringIO()
-            sys.stdout = buff
-
-            original_error = sys.stderr
-            error_buff = StringIO()
-            sys.stderr = error_buff
-
-            """
-            conversion
-            """
-            try:
-                ConstraintChecker().visit(ast_tree)
-            except SystemExit as e:
-                """
-                tests errors Real errors
-                """
-                errors = str(error_buff.getvalue().splitlines())
-                expected_errors = str(error_dict.get(str(index), []))
-                print("error", error_buff.getvalue().splitlines(), index)
-                print(errors, expected_errors)
-                assert errors == expected_errors
-
-            sys.stdout = original
-            sys.stderr = original_error
+    def test(self):
+        ASTTest.AST_test(self, os.path.abspath(__file__))  # Call the baseClass function

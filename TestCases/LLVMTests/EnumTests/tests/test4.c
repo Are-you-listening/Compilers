@@ -1,17 +1,28 @@
-//Enum Semantic Error
 
 #include<stdio.h>
 
-enum Color {
-    RED,
-    GREEN,
-    BLUE
-};
+int x = 1;
 
-const int RED = 1; // Redefinitions error
+enum week{Mon, Tue, Wed, Thur, Fri, Sat, Sun};
 
+typedef int enumweek;
 
 int main()
 {
+    enum week day;
+    enumweek z = 1;
+    day = Wed;
+    printf("%d",day);
+    printf("%d",Mon);
+    int q = Thur- (Mon*Tue);
+    printf("%d",Tue);
+    printf("%d",Thur);
+    printf("%d",Fri);
+    printf("%d",Sat);
+    printf("%d",q);
+    printf("%d",Sun);
+    q = Sun;
+    printf("%d",q);
     return 0;
 }
+
