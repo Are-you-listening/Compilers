@@ -1,3 +1,6 @@
+#include <stdio.h>
+
+
 int main() {
 // line 1
 char c = '\n';

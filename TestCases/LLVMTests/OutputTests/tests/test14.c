@@ -1,3 +1,6 @@
+#include <stdio.h>
+
+
 int main() {
 const int b = -6250;
 const int x = 5;

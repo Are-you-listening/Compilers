@@ -1,3 +1,6 @@
+#include <stdio.h>
+
+
 int main() {
 const float f = 0.789;
 const float* f_ptr = &f;

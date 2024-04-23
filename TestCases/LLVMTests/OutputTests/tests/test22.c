@@ -1,5 +1,8 @@
 #include <stdio.h>
 
+
+#include <stdio.h>
+
 #define CIRCLE_AREA 3.14
 #define bool const int
 #define True 1

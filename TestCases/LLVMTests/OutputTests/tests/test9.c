@@ -1,3 +1,6 @@
+#include <stdio.h>
+
+
 int main() {
 
 const int x = 98362;
