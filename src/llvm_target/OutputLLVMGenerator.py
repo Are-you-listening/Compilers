@@ -158,11 +158,20 @@ class Declaration:
     @staticmethod
     def addComment(text: str):
         block = LLVMSingleton.getInstance().getCurrentBlock()
-        text = text.replace("\n","")  # Comments in LLVM cannot contain new lines
+        text = text.replace("\n", "")  # Comments in LLVM cannot contain new lines
         block.comment(text)
 
     @staticmethod
     def string(text: str):
+        """
+        Create LLVM strings
+        """
+
+        """
+        Support escape characters
+        """
+        text = text.encode('utf-8').decode('unicode-escape')
+
         index = LLVMSingleton.getInstance().getStringIndex(text)
         builder = LLVMSingleton.getInstance().getCurrentBlock()
         format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(text)),
