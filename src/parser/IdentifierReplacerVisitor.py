@@ -27,7 +27,7 @@ class IdentifierReplacerVisitor(ASTVisitor):
             toReplace = node.text
 
             if toReplace not in node.getSymbolTable().symbols:
-                if node.inWhileLoop() and declaredPreviously(node):
+                if node.inLoop() and declaredPreviously(node):
                     return
 
             """
