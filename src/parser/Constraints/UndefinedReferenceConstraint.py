@@ -16,7 +16,6 @@ class UndefinedReferenceConstraint(Constraint):
             function_node = node.children[0]
             while function_node.text == "Dereference":
                 function_node = function_node.children[0]
-            print(function_node.text)
             if node.symbol_table.exists(function_node.text):
                 if not node.symbol_table.getEntry(function_node.text).is_function_defined():
                     self.rejected = True

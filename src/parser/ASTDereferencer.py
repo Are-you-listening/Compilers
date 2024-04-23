@@ -17,7 +17,7 @@ class ASTDereferencer(ASTVisitor):
             d.parent.removeChild(d)
 
     def visitNode(self, node: ASTNode):
-        if node.text in ("Declaration", "Function", "Assignment"):
+        if node.text in ("Declaration", "Function", "Assignment", "Parameter"):
             left_child = node.getChild(0)
             if left_child.text == "Dereference":
                 super_child = left_child.getChild(0)
@@ -54,7 +54,8 @@ class ASTDereferencer(ASTVisitor):
         :param node:
         :return:
         """
-        if node.type != "IDENTIFIER":
+        # Temp fix for the dereference on a function call
+        if node.type != "IDENTIFIER" or (node.parent != None and node.parent.text == "FunctionCall"):
             return
 
         sibling_before = node.getSiblingNeighbour(-1)

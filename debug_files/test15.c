@@ -1,15 +1,16 @@
-int func(int a, int b);
+#include <stdio.h>
 
-
-
+int func(int a, int b) {
+    return a + b;
+}
 
 
 int main() {
-    int y = 10;
+    int y = 5;
     int u = 10;
-    float* ptr = &u;
     int c;
     c = func(y, u);
+    printf("%d\n", c);
     return y;
 }
 
@@ -17,6 +18,3 @@ int main() {
 
 
 
-int func(int a, int b) {
-    return a + b;
-}

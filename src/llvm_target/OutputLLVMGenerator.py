@@ -95,14 +95,18 @@ class Declaration:
         return llvm_val
 
     @staticmethod
-    def function(func_name: str, return_type: str, ptrs: list):
+    def function(func_name: str, return_type: str, ptrs: list, args: list):
         """
         change the current latest function
         """
-
-        function_type = ir.FunctionType(CTypesToLLVM.getIRType(return_type, ptrs), ())
+        llvmArgs = []
+        for arg in args:
+            arg_type = CTypesToLLVM.getIRType(arg[0], arg[1])
+            llvmArgs.append(arg_type)
+        function_type = ir.FunctionType(CTypesToLLVM.getIRType(return_type, ptrs), (llvmArgs))
         new_function = ir.Function(LLVMSingleton.getInstance().getModule(), function_type, name=func_name)
-        LLVMSingleton.getInstance().setLastFunction(new_function)
+        LLVMSingleton.getInstance().addFunction(new_function)
+
 
         return new_function
 

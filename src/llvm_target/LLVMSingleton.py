@@ -12,6 +12,7 @@ class LLVMSingleton:
         self.__module = ir.Module(name=__file__, context=self.__context)
         self.__module.triple = "x86_64-pc-linux-gnu"
         self.__last_function = None
+        self.__functions = []
         self.__Printf = None
         self.__Scanf = None
         self.__PrintScanfString = []  # Keeps the name of the global formatting string mapped to an index, {"%x%d...": 1} means that the string "%x%d..." is identified in LLVM with index 1, thus '@.str.1' is the name of the global variable
@@ -42,9 +43,16 @@ class LLVMSingleton:
         new_block = self.__last_function.append_basic_block()
         return ir.IRBuilder(new_block)
 
-    def setLastFunction(self, new_function: ir.Function):
-        self.__last_function = new_function
+    def addFunction(self, new_function: ir.Function):
+        self.__functions.append(new_function)
 
+    def setLastFunction(self, function):
+        self.__last_function = function
+    def getFunction(self, function_name):
+        for function in self.__functions:
+            if function.name == function_name:
+                return function
+        return None
     def setPrintF(self, printfFunction):
         self.__Printf = printfFunction
 

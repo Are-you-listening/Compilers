@@ -50,6 +50,8 @@ class AST2LLVM(ASTVisitor):
             if currentNode.text == "Function" and currentNode not in visited:
                 visited.add(currentNode)
                 self.map_table = MapTable(self.map_table)
+                function = LLVMSingleton.getInstance().getFunction(currentNode.getChild(0).text)
+                LLVMSingleton.getInstance().setLastFunction(function)
 
             if isinstance(currentNode, ASTNodeBlock) and currentNode.text == "Block" and currentNode not in visited:
                 node = currentNode
@@ -92,7 +94,6 @@ class AST2LLVM(ASTVisitor):
 
                 self.branch_needed.append(self.last_vertex)
             return
-
         if isinstance(node, ASTNodeBlock) and node.text == "PHI":
             """
             When coming across a PHI, node, we know that we need the LLVM phi
@@ -103,7 +104,7 @@ class AST2LLVM(ASTVisitor):
 
             return
 
-        if node.text == "Declaration":
+        if node.text == "Declaration" or node.text == "Parameter":
             self.handleDeclaration(node)
 
         if node.text == "Function":
@@ -133,8 +134,11 @@ class AST2LLVM(ASTVisitor):
         if node.text == "Return":
             self.handleReturn()
 
+        if node.text == "FunctionCall":
+            self.handleFunctionCall(node)
         if node.text not in ("Parameters"):
             self.addOriginalCodeAsComment(node)
+
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
@@ -337,6 +341,30 @@ class AST2LLVM(ASTVisitor):
         converted_var = Conversion.performConversion(llvm_var, to_type)
 
         self.llvm_map[node] = converted_var
+
+    def handleFunctionCall(self, node: ASTNode):
+        """
+        Handle function calls
+        :param node:
+        :return:
+        """
+        function_name = node.getChild(0).text
+        function = LLVMSingleton.getInstance().getFunction(function_name)
+
+        if function is None:
+            function = LLVMSingleton.getInstance().getModule().get_global(function_name)
+
+        builder = LLVMSingleton.getInstance().getCurrentBlock()
+
+        args = []
+        for child in node.children[1:]:
+            if child.text == "ParameterCall":
+                llvm_var = self.llvm_map[child.children[0]]
+                if llvm_var is not None:
+                    args.append(llvm_var)
+        llvm_var = builder.call(function, args)
+
+        self.llvm_map[node] = llvm_var
 
     @staticmethod
     def getConversionType(type_node: ASTNode):
