@@ -27,16 +27,12 @@ class StructCleanerAfter(ASTVisitor):
         """
         Retrieve the name of the struct
         """
-        structName = table.getEntry(lsib.text).typeObject.getType().split()[1]  # e.g. "struct kaas" -> structName = "kaas
-        structName = structName
+        structName = table.getEntry(lsib.text).getTypeObject().data_type
 
         node.text = "[]"  # Change to gep format
         identifier = rsib.text
         rsib.text = self.structTable[structName].index(identifier)  # Replace the identifier name with the struct index it refers to
         rsib.type = "INT"  # Set the new type to INT
-
-
-        #table.remove(identifier)
 
 
 

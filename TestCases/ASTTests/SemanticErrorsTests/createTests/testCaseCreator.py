@@ -13,7 +13,7 @@ from src.parser.Tables.TableDotVisitor import *
 from src.parser.CodeGetter import *
 from TestCases.ABCTests.AstLoader import AstLoader
 from src.parser.ASTTableCreator import ASTTableCreator
-from src.parser.EnumTypeMerger import *
+from src.parser.TypeMerger import *
 from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
 from src.parser.BlacklistVisitor import BlacklistVisitor
 
@@ -44,7 +44,7 @@ black_list_visitor.visit(ast)
 codegetter = CodeGetter()
 codegetter.visit(ast)
 
-EnumTypeMerger().visit(ast)
+TypeMerger().visit(ast)
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 

@@ -8,7 +8,7 @@ class ASTConversion(ASTVisitor):
     Makes implicit conversions explicit
     """
 
-    def __init__(self, structTable):
+    def __init__(self, structTable, type_struct_table):
         self.rc = RichnessChecker(types)
 
         """
@@ -16,6 +16,7 @@ class ASTConversion(ASTVisitor):
         """
         self.type_mapping = {}
         self.structTable = structTable
+        self.type_struct_table = type_struct_table
 
     def visit(self, ast: AST):
         """
@@ -278,14 +279,21 @@ class ASTConversion(ASTVisitor):
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
-            print(node.text)
+
             type_entry = node.getSymbolTable().getEntry(node.text)
-            data_type, ptrs = type_entry.getPtrTuple()
+            type_object = type_entry.getTypeObject()
+            if isinstance(type_object, SymbolTypeStruct) and node.parent.text != "Declaration":
+                    index = int(node.getSiblingNeighbour(1).getSiblingNeighbour(1).text)  # Get the index of the struct data member
+                    data_type, ptrs = type_object.getElementType(index)
+            else:
+                data_type, ptrs = type_entry.getPtrTuple()
 
             """
             Use LLVM ptr format
             """
             ptrs.append(("*", False))
+
+            print(node.text, data_type, ptrs)
 
             self.type_mapping[node] = (data_type, ptrs)
 

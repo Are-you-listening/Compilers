@@ -26,6 +26,12 @@ class TypeMerger(ASTVisitor):
         if node.text != "Type":
             return
 
+        if node.parent.text == "Struct" and node == node.parent.children[0]:   # The first type node is the struct its self
+            return
+
+        if node.children[0].type == "STRUCT":
+            return
+
         mergeType = node.children[0].text[0:6]
 
         if mergeType not in ["enum", "struct"]:
@@ -37,7 +43,10 @@ class TypeMerger(ASTVisitor):
         """
         line = node.children[0].linenr
         table = node.children[0].symbol_table
-        newname = mergeType + " " + node.children[1].text
+        if mergeType == "struct":
+            newname = node.children[1].text
+        else:
+            newname = mergeType + " " + node.children[1].text
 
         """
         Override the type children
@@ -46,10 +55,6 @@ class TypeMerger(ASTVisitor):
         node.children = [ASTNodeTerminal(newname, node, table, "IDENTIFIER", line, None)]
         if len(oldKids) > 2:
             node.children += oldKids[2:]
-
-        if mergeType == "struct":  # If we came across a struct, add this to the list of known types
-            BaseTypes.append(newname)
-            node.children[0].type = "STRUCT"
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass

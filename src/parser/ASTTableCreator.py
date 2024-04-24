@@ -1,5 +1,6 @@
 from src.parser.Tables.SymbolTable import *
 from src.parser.Tables.SymbolTypeArray import *
+from src.parser.Tables.SymbolTypeStruct import *
 
 
 class ASTTableCreator(ASTVisitor):
@@ -8,10 +9,15 @@ class ASTTableCreator(ASTVisitor):
     """
     def __init__(self):
         self.table = None
+        self.structs = {}
+        self.to_remove = set()
 
     def visit(self, ast: AST):
         self.table = None
         self.postorder(ast.root)
+
+        for n in self.to_remove:
+            n.parent.removeChild(n)
 
     def postorder(self, root: ASTNode):
         """for child in root.children:
@@ -69,6 +75,10 @@ class ASTTableCreator(ASTVisitor):
         """
         node.symbol_table = self.table
 
+        if node.text == "Struct":
+            self.__make_struct_type(node)
+            return
+
         if node.text == "Declaration" or node.text == "Parameter":
             child = node.findType("Type")
             symbol_type = SymbolType
@@ -114,6 +124,22 @@ class ASTTableCreator(ASTVisitor):
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         node.symbol_table = self.table
 
+    def __make_struct_type(self, node: ASTNode):
+        structName = node.children[0].text  # First child is struct type
+        pts_to = []
+
+        i = 1  # We can skip the first 2 nodes, these are used for the Struct ittself
+        while i < len(node.children):
+            child = node.children[i].children[0]  # Pick the type node
+
+            data_type = self.__get_data_type(child, SymbolType)
+            pts_to.append(data_type)
+
+            i += 1
+
+        self.structs[structName] = SymbolTypeStruct(pts_to, structName)
+        self.to_remove.add(node)
+
     @staticmethod
     def __make_ptr_type(latest_datatype: SymbolType, is_const: bool, terminal_type: str):
         """
@@ -126,17 +152,7 @@ class ASTTableCreator(ASTVisitor):
             datatype = SymbolTypePtr(latest_datatype, is_const)
         return datatype
 
-
-    @staticmethod
-    def __make_entry(node, child: ASTNodeTerminal, symbol_type):
-        """
-        Make symbol table entry
-        :param node:
-        :param child: Type node
-        :param symbol_type:
-        :return:
-        """
-
+    def __get_data_type(self, child, symbol_type):
         is_const = False
         latest_datatype = None
 
@@ -156,10 +172,22 @@ class ASTTableCreator(ASTVisitor):
             else:
                 if not ASTTypedefReplacer.isBaseType(grandchild):
                     latest_datatype = symbol_type(grandchild.text, is_const)  # Keep the typedef name
-                elif ASTTableCreator.isStructType(grandchild.text):
-                    latest_datatype = symbol_type(grandchild.text, is_const)  # Struct Types may not be made upper case
+                elif self.structs.get(grandchild.text) is not None:
+                    latest_datatype = self.structs[grandchild.text]
                 else:
                     latest_datatype = symbol_type(grandchild.text.upper(), is_const)
+
+        return latest_datatype
+
+    def __make_entry(self, node, child: ASTNodeTerminal, symbol_type):
+        """
+        Make symbol table entry
+        :param node:
+        :param child: Type node
+        :param symbol_type:
+        :return:
+        """
+        latest_datatype = self.__get_data_type(child, symbol_type)
 
         """
         the value in the symbol table is initially empty

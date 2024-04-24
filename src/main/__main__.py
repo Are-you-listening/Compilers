@@ -56,7 +56,7 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
 
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)
@@ -66,9 +66,11 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
-    structTable = StructCleaner().visit(ast)
+    structTable, type_struct_table = StructCleaner().visit(ast)
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
+
+    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     TypeMerger().visit(ast)  # Reformat enum declarations to our format
 
@@ -84,11 +86,9 @@ def cleanGreen(input_file, symbol_file):
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
+
     StringToArray().visit(ast)
-    #DotVisitor("output/qu1").visit(ast)
     ArrayCleaner().visit(ast)
-
-
 
     DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
 
@@ -102,21 +102,23 @@ def cleanGreen(input_file, symbol_file):
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
+    symbol_file = "output/symbol"
+
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
         s.visit(ast.root.getSymbolTable(), True)
 
-    return ast, codegetter, includeSTDIO, {}
+    return ast, codegetter, includeSTDIO, structTable, type_struct_table
 
 
-def Processing(ast, dot_file, fold, includeSTDIO, structTable):
+def Processing(ast, dot_file, fold, includeSTDIO, structTable, type_struct_table):
     DotVisitor("output/debug4").visit(ast)  # Export AST in Dot
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     """
     It is vital that AST conversion occurs before constant folding
     """
-    ASTConversion(structTable).visit(ast)
+    ASTConversion(structTable,type_struct_table).visit(ast)
 
     if fold:
         ConstantFoldingVisitor().visit(ast)
@@ -174,8 +176,8 @@ def main(argv):
     if input_file is None:
         ErrorExporter.StupidUser()
 
-    ast, codegetter, includeSTDIO, structTable = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
-    ast, cfgs = Processing(ast, dot_file, fold, includeSTDIO, structTable)  # Check for Errors , Apply Folding Techniques , ...
+    ast, codegetter, includeSTDIO, structTable, type_struct_table = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
+    ast, cfgs = Processing(ast, dot_file, fold, includeSTDIO, structTable, type_struct_table)  # Check for Errors , Apply Folding Techniques , ...
 
     if llvm_file is not None:
         LLVMSingleton.setName(input_file)

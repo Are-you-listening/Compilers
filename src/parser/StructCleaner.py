@@ -10,6 +10,7 @@ class StructCleaner(ASTVisitor):
     def __init__(self):
         self.to_remove = set()
         self.structTable = {}  # Keep track of the indices of parameters e.g. {"kaas": [("melk",type), ("fermented",type)]} melk has index 0, this will be used for adding the GEP instruction in LLVM
+        self.type_struct_table = {}  # Map type nodes to a struct and its data field, e.g. {("kaas",0): type }
 
     def visit(self, ast: AST):
         self.to_remove = set()
@@ -18,7 +19,7 @@ class StructCleaner(ASTVisitor):
         for n in self.to_remove:
             n.parent.removeChild(n)
 
-        return self.structTable
+        return self.structTable, self.type_struct_table
 
     def visitNode(self, node: ASTNode):
         self.__cleanStruct(node)
@@ -42,11 +43,9 @@ class StructCleaner(ASTVisitor):
                 self.to_remove.add(child)
             if child.text == "Declaration":  # The first child is the name of the struct; exclude it
                 self.structTable[structName].append(child.children[1].text)
-                child.children[0].parent = node  # Change parents
-                child.children[1].parent = node
-                node.children = node.children[:index] + child.children + node.children[index+1:]  # Insert children in list
-                index += 1
             index += 1
 
         for child in node.children:
             child.type = "STRUCT"
+
+        BaseTypes.append(structName)

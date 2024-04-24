@@ -1,10 +1,5 @@
 #include <stdio.h>
 
-enum week{
-    Mon,
-    Tue
-};
-
 struct kaas{
     int melk;
     int fermtented;
@@ -23,7 +18,9 @@ int main() {
    struct kaas ementaler;
    ementaler.melk = 1;
 
+   printf("%d", ementaler.melk);
 
+   printf("%d", z[0]);
 
 
     return 0;
