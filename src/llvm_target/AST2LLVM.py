@@ -135,7 +135,7 @@ class AST2LLVM(ASTVisitor):
             self.handleConversions(node)
 
         if node.text == "Return":
-            self.handleReturn()
+            self.handleReturn(node)
 
         if node.text == "FunctionCall":
             self.handleFunctionCall(node)
@@ -255,9 +255,9 @@ class AST2LLVM(ASTVisitor):
         comment_text = node.children[0].text
         Declaration.addComment(comment_text)
 
-    @staticmethod
-    def handleReturn():
-        LLVMSingleton.getInstance().getCurrentBlock().ret(ir.Constant(ir.IntType(32), 0))
+    def handleReturn(self, node: ASTNode):
+        return_val = self.llvm_map[node.getChild(1)]
+        LLVMSingleton.getInstance().getCurrentBlock().ret(return_val)
 
     def handlePrintScanf(self, node: ASTNode, printf):
         """
