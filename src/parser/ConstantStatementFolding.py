@@ -49,7 +49,7 @@ class ConstantStatementFolding(ASTVisitor):
         if not isinstance(condition, ASTNodeTerminal):
             return
 
-        assert condition.type == "BOOL"
+        assert condition.type in ("BOOL", "INT")
 
         if_location = node.parent.findChild(node)
 
