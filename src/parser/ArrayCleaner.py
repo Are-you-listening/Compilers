@@ -120,6 +120,15 @@ class ArrayCleaner(ASTVisitor):
 
         self.to_remove.add(node.getChild(1))
 
+        """
+        Remove redundant literal node
+        """
+        if node.text == "Literal":
+            """
+            remove the literal node by replacing the literal node in the parent with the first literal child
+            """
+            node.parent.replaceChild(node, node.getChild(0))
+
     @staticmethod
     def array_size(array_node: ASTNode, check_int: bool = False):
         array_sizes = []

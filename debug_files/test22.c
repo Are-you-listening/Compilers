@@ -1,13 +1,10 @@
 #include <stdio.h>
-#include "includes/define7.c"
 
-int main()
-{
+int main() {
+int q = 5;
+    int x[2][3];
 
-    int a = 5;
-    a = define4x();
-    printf("%d\n", a);
-    printf("%d\n", define5x());
-    printf("%d\n", define6x());
+    x[1][2] = 1;
+    printf("%d", x[1][2]);
     return 0;
 }
