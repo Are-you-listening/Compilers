@@ -29,6 +29,7 @@ from src.parser.StringToArray import *
 from src.parser.StructCleaner import *
 from src.parser.StructCleanerAfter import *
 
+
 def cleanGreen(input_file, symbol_file):
     """
     Standard function to generate parseTree & Export it to Dot
@@ -83,8 +84,8 @@ def cleanGreen(input_file, symbol_file):
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
-
     StringToArray().visit(ast)
+    #DotVisitor("output/qu1").visit(ast)
     ArrayCleaner().visit(ast)
 
 
@@ -100,8 +101,6 @@ def cleanGreen(input_file, symbol_file):
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
-
-    symbol_file = "output/symbol"
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
@@ -129,7 +128,7 @@ def Processing(ast, dot_file, fold, includeSTDIO, structTable):
     cfc = ControlFlowCreator()
     cfc.visit(ast)
 
-    DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
+    #DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
 
     if dot_file is not None:
         DotVisitor(dot_file).visit(ast)  # Export AST in Dot
