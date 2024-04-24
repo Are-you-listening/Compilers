@@ -737,4 +737,3 @@ class ControlFlowGraph:
                 return_vertex.removeEdge(e)
 
         cfg.abnormal_terminator_nodes["RETURN"] = []
-
