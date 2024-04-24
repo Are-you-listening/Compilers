@@ -128,10 +128,10 @@ class ArrayCleaner(ASTVisitor):
             if check_int:
                 if not isinstance(child, ASTNodeTerminal):
                     ErrorExporter.invalidArraySize(array_node.linenr, array_node.parent.getChild(1).text,
-                                                   ("Expression", []))
+                                                   (("Expression", False), []))
                 if child.type != "INT":
                     ErrorExporter.invalidArraySize(array_node.linenr, array_node.parent.getChild(1).text,
-                                                   (child.type, []))
+                                                   ((child.type, False), []))
 
             array_sizes.append(child.text)
 

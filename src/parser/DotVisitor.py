@@ -25,7 +25,7 @@ class DotVisitor(ASTVisitor):
         if node.text == "'\x00'" or node.text == "'\00'":
             label = "'\\\\00'"
         label = label.replace("\00", "\\\\00")
-        self.outfile.write(f'  "{id(node)}" [label="{label} {node.type}"];\n')
+        self.outfile.write(f'  "{id(node)}" [label="{label}"];\n')
 
     def __del__(self):
         self.outfile.write("}\n")

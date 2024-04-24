@@ -139,7 +139,6 @@ class AST2LLVM(ASTVisitor):
         if node.text not in ("Parameters"):
             self.addOriginalCodeAsComment(node)
 
-
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
             entry = self.map_table.getEntry(node.text)
@@ -153,7 +152,7 @@ class AST2LLVM(ASTVisitor):
             self.llvm_map[node] = entry.llvm
 
         if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
-            llvm_var = Declaration.llvmLiteral(node.text, node.type, [])
+            llvm_var = Declaration.llvmLiteral(node.text, (node.type, False), [])
             self.llvm_map[node] = llvm_var
 
         if node.type == "STRING":

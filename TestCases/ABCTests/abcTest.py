@@ -44,6 +44,7 @@ class ASTTest(ABC):
         for file in os.listdir(directory):  # Loop through all files
             if not os.path.splitext(file)[-1] == '.c':  # We only run c files
                 continue
+
             index = int(file[4:-2])  # The index is used to refer to the files & other data belonging to this testfile
             # print(index, file)  # Toggle for debug
 
@@ -84,7 +85,7 @@ class ASTTest(ABC):
                 """
                 errors = str(buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
-                # print("buff", buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
+                print("buff", buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
                 assert errors == expected_errors
             except SystemExit:  # Upon crash
                 """

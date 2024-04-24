@@ -93,18 +93,19 @@ class ASTTableCreator(ASTVisitor):
                 param_is_const = False
                 pointer_list = []
                 if param.children[0].children[0].text != "const":
-                    param_types.append(param.children[0].children[0].text)
+                    param_types.append((param.children[0].children[0].text, True))
                 else:
-                    param_types.append(param.children[0].children[1].text)
+                    param_types.append((param.children[0].children[1].text, False))
                     param_is_const = True
                 if param_is_const:
                     for i in range(param.children[0].getChildAmount() - 2):
-                        pointer_list.append(pointer_list)
+                        pointer_list.append((pointer_list, False))
                 else:
                     for i in range(param.children[0].getChildAmount() - 1):
-                        pointer_list.append(pointer_list)
+                        pointer_list.append((pointer_list, False))
                 param_strings.append(pointer_list)
             param_types_and_ptrs = [(x, y) for x, y in zip(param_types, param_strings)]
+
             self.__check_function_declarations(self, node, param_types_and_ptrs)
             self.__make_entry(node, child, lambda d, c: FunctionSymbolType(d, c, param_types_and_ptrs))
             function_node = node.children[1]

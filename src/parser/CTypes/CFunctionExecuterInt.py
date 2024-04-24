@@ -71,7 +71,7 @@ class _Conversions:
         """assume 4 bytes/ int"""
         b = value.to_bytes(8, byteorder="big", signed=True)
         b = b[-1:]
-        return f"'{chr(int.from_bytes(b, 'big', signed=True))}'"
+        return int.from_bytes(b, 'big', signed=True)
 
     @staticmethod
     def ToFloat(value):

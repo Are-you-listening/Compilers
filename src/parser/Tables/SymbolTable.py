@@ -47,12 +47,12 @@ class SymbolEntry(TableEntry):
         d_t = self.typeObject
         while isinstance(d_t, SymbolTypePtr):
             if isinstance(d_t, SymbolTypeArray):
-                ptr_list.append(str(d_t.size))
+                ptr_list.append((str(d_t.size), d_t.isConst()))
             else:
-                ptr_list.append("*")
+                ptr_list.append(("*", d_t.isConst()))
             d_t = d_t.deReference()
 
-        return d_t.getType(), ptr_list
+        return (d_t.getType(), d_t.isConst()), ptr_list
 
     def getJsonDataType(self):
         """
@@ -63,7 +63,6 @@ class SymbolEntry(TableEntry):
         d_t = self.typeObject
         while isinstance(d_t, SymbolTypePtr):
             ptr_string += "*"
-
 
             const_list.insert(0, d_t.isConst())
             d_t = d_t.deReference()

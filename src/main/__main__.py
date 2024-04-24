@@ -44,9 +44,6 @@ def cleanGreen(input_file, symbol_file):
 
     includeSTDIO, stream = PreProcessor(stream, lexer, input_file).preProcess()  # Apply preprocessing
 
-    for s in stream.tokens:
-        print("q", s.source)
-
     parser = grammarCParser(stream)  # Do actual parse
     parser.removeErrorListeners()  # Add our own error Listener
     parser.addErrorListener(EListener())

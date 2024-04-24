@@ -288,12 +288,14 @@ class ErrorExporter:
         """
         Convert the data to an output type
         """
-        out_type = in_type[0]
+
+        out_type = in_type[0][0]
+
         for v in reversed(in_type[1]):
-            if v == "*":
+            if v[0] == "*":
                 out_type += "*"
             else:
-                out_type += f"[{v}]"
+                out_type += f"[{v[0]}]"
 
         return out_type
 

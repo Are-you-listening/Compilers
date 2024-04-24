@@ -41,7 +41,8 @@ class ASTConversion(ASTVisitor):
             """
             if is_array:
                 data_type2, ptrs2 = self.type_mapping[node.getChild(2)]
-                if data_type2 != "INT" or len(ptrs2) > 0:
+
+                if data_type2[0] != "INT" or len(ptrs2) > 0:
                     ErrorExporter.invalidArrayIndex(node.linenr, (data_type2, ptrs2))
 
                 """
@@ -132,8 +133,8 @@ class ASTConversion(ASTVisitor):
                 """
                 for the non-first type, we will take the richest type
                 """
-                richest_native_type = self.rc.get_richest(to_type[0], check_type[0])
-
+                richest_native_type = self.rc.get_richest(to_type[0][0], check_type[0][0])
+                richest_native_type = (richest_native_type, False)
                 """
                 when 2 conflicting ptr types choose the one with the most ptrs: '*'
                 Because, PTR+PTR will be rejected in the future, and int+PTR, will be just fine
@@ -199,7 +200,7 @@ class ASTConversion(ASTVisitor):
             """
             logical operators expect booleans so we convert the given entry into a boolean
             """
-            to_type = ("BOOL", [])
+            to_type = (("BOOL", False), [])
 
         """
         add implicit conversions as explicit
@@ -209,12 +210,12 @@ class ASTConversion(ASTVisitor):
             if type_tup == (None, None):
                 continue
 
-            if type_tup != to_type:
-                if to_type == ("BOOL", []):
+            if type_tup[0][0] != to_type[0][0] or type_tup[1] != to_type[1]:
+                if to_type[0][0] == "BOOL" and len(to_type[1]) == 0:
                     """
                     logical operators expect booleans so we convert the given entry into a boolean
                     """
-                    self.addConversion(child, ("BOOL", []))
+                    self.addConversion(child, (("BOOL", False), []))
 
                     """
                     use continue so we don't throw warnings/errors for booleans
@@ -269,7 +270,7 @@ class ASTConversion(ASTVisitor):
         equality operators give an integer back
         """
         if operator in ("==", "!=", "<=", ">=", "<", ">", "&&", "||", "!"):
-            self.type_mapping[node] = ("BOOL", [])
+            self.type_mapping[node] = (("BOOL", False), [])
         else:
             self.type_mapping[node] = to_type
 
@@ -281,12 +282,12 @@ class ASTConversion(ASTVisitor):
             """
             Use LLVM ptr format
             """
-            ptrs.append("*")
+            ptrs.append(("*", False))
 
             self.type_mapping[node] = (data_type, ptrs)
 
         elif node.type in types:
-            self.type_mapping[node] = (node.type, [])
+            self.type_mapping[node] = ((node.type, False), [])
 
     @staticmethod
     def calculateType(node: ASTNode):
@@ -303,10 +304,10 @@ class ASTConversion(ASTVisitor):
         ptrs = []
         for child in node.children:
             if child.text.upper() in types:
-                data_type = child.text.upper()
+                data_type = (child.text.upper(), False)
 
             if child.text == "*":
-                ptrs.append("*")
+                ptrs.append(("*", False))
 
         return data_type, ptrs
 
@@ -334,7 +335,6 @@ class ASTConversion(ASTVisitor):
 
         if ASTConversion.to_string_type(to_type) in incompatible_ops.keys():
             incompatible = incompatible or operator in incompatible_ops.get(ASTConversion.to_string_type(to_type))
-
         return not incompatible
 
     @staticmethod
@@ -361,7 +361,7 @@ class ASTConversion(ASTVisitor):
             check if 1 is a PTR and 1 is a FLOAT to say the operation is invalid
             Some operations like '&&' are still valid
             """
-            if ptr_less_type[0] == "FLOAT" and len(ptr_less_type[1]) == 0 and operator not in (
+            if ptr_less_type[0][0] == "FLOAT" and len(ptr_less_type[1]) == 0 and operator not in (
                     "==", "<=", ">=", "<", ">", "!=", "&&", "||"):
                 incompatible = True
 
@@ -370,7 +370,7 @@ class ASTConversion(ASTVisitor):
     @staticmethod
     def to_string_type(type_tup):
         if len(type_tup[1]) == 0:
-            return type_tup[0]
+            return type_tup[0][0]
 
         return "PTR"
 
@@ -406,7 +406,7 @@ class ASTConversion(ASTVisitor):
         if max(len(to_type[1]), len(type_tup2[1])) == 0:
             return
 
-        if len(to_type[1]) != len(type_tup2[1]) or to_type[0] != type_tup2[0]:
+        if len(to_type[1]) != len(type_tup2[1]) or to_type[0][0] != type_tup2[0][0]:
             """
             when ptr amount is different or when type a ptr points to is different
             """
@@ -433,8 +433,7 @@ class ASTConversion(ASTVisitor):
         """
         if max(len(to_tup[1]), len(type_tup[1])) != 0:
             return
-
-        if self.rc.get_poorest(to_tup[0], type_tup[0]) == type_tup[0]:
+        if self.rc.get_poorest(to_tup[0][0], type_tup[0][0]) == type_tup[0][0]:
             return
 
         ErrorExporter.narrowingTypesWarning(line_nr, to_tup, type_tup)
@@ -457,11 +456,11 @@ class ASTConversion(ASTVisitor):
         add datatype
         """
         type_node.addChildren(
-            ASTNodeTerminal(to_type[0], type_node, type_node.getSymbolTable(), "Not Used",
+            ASTNodeTerminal(to_type[0][0], type_node, type_node.getSymbolTable(), "Not Used",
                             node.linenr, node.virtuallinenr))
 
         for t_child in to_type[1]:
             type_node.addChildren(
-                ASTNodeTerminal(t_child, type_node, type_node.getSymbolTable(), "Not Used",
+                ASTNodeTerminal(t_child[0], type_node, type_node.getSymbolTable(), "Not Used",
                                 node.linenr, node.virtuallinenr))
         node.addNodeParent(new_node)
