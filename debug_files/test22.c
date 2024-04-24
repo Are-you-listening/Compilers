@@ -1,8 +1,13 @@
-int main() {
-    int b = (char) 5;
-    float a = b;
-    int c = 5.5;
-    const char d = (const char) c;
-    char e = b+3.5;
-    char f = (int) e + 'a';
+#include <stdio.h>
+#include "includes/define7.c"
+
+int main()
+{
+
+    int a = 5;
+    a = define4x();
+    printf("%d\n", a);
+    printf("%d\n", define5x());
+    printf("%d\n", define6x());
+    return 0;
 }

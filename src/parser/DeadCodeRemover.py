@@ -45,6 +45,9 @@ class DeadCodeRemover(ASTVisitor):
     def visitNode(self, node: ASTNode):
 
         if isinstance(node, ASTNodeBlock) and node.text == "Block":
+            if node.getChildAmount() > 0 and node.getChild(0).text == "Parameters":
+                return
+
             if self.first_block:
                 """
                 ignore if the first node inside a function is 'unreachable'
@@ -87,8 +90,7 @@ class DeadCodeRemover(ASTVisitor):
             return
 
         pre_delete_node = node
-
-        while not (isinstance(pre_delete_node, ASTNodeBlock) and pre_delete_node.text == "Block"):
+        while not (isinstance(pre_delete_node, ASTNodeBlock) and pre_delete_node.text in "Block"):
             pre_parent = pre_delete_node.parent
             pre_delete_index = pre_parent.findChild(pre_delete_node)
             for c in pre_parent.children[pre_delete_index + 1:]:
