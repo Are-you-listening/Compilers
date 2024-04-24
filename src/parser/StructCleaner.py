@@ -48,6 +48,5 @@ class StructCleaner(ASTVisitor):
                 index += 1
             index += 1
 
-        print(node.children[len(node.children)-1].text)
-
-        print(self.structTable)
+        for child in node.children:
+            child.type = "STRUCT"

@@ -58,6 +58,9 @@ class ASTDereferencer(ASTVisitor):
         if node.type != "IDENTIFIER" or (node.parent != None and node.parent.text == "FunctionCall"):
             return
 
+        if node.parent.text == "Struct" or node.parent.parent.text == "Struct":
+            return
+
         sibling_before = node.getSiblingNeighbour(-1)
 
         if sibling_before is None:

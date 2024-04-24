@@ -16,7 +16,7 @@ class UndeclaredConstrained(Constraint):
             entry = node.symbol_table.getEntry(node.text)
 
             #print(entry.firstDeclared.linenr > node.linenr , entry)
-            if node.parent.text != "Struct":
+            if node.parent.text != "Struct" and node.parent.parent.text != "Struct":
                 if entry is None or entry.firstDeclared.virtuallinenr > node.virtuallinenr:
                     self.rejected = True
                     self.errorNode = node

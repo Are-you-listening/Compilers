@@ -277,20 +277,15 @@ class ASTConversion(ASTVisitor):
             self.type_mapping[node] = to_type
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-
-
         if node.type == "IDENTIFIER":
+            print(node.text)
             type_entry = node.getSymbolTable().getEntry(node.text)
             data_type, ptrs = type_entry.getPtrTuple()
-            if ASTTableCreator.isStructType(data_type[0]):
-                pass
-                #print(node.text, data_type, ptrs)
 
             """
             Use LLVM ptr format
             """
             ptrs.append(("*", False))
-
 
             self.type_mapping[node] = (data_type, ptrs)
 

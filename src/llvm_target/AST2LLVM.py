@@ -230,6 +230,8 @@ class AST2LLVM(ASTVisitor):
         else:
             alignment = 4
 
+        print(store_reg, " |||||||| ",  to_store_reg)
+
         llvm_var = Declaration.assignment(store_reg, to_store_reg, alignment)
 
         self.llvm_map[node] = llvm_var

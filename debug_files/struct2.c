@@ -14,6 +14,7 @@ struct kaas2{
     int melk;
     int fermtented;
     struct kaas* test;
+    struct kaas*** test3;
 };
 
 int main() {

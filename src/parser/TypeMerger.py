@@ -31,9 +31,6 @@ class TypeMerger(ASTVisitor):
         if mergeType not in ["enum", "struct"]:
             return
 
-
-        print(mergeType)
-
         """
         Merge the nodes 'enum' and '<ENUM NAME>' together; e.g. enum IOReader status, 1 new node has the text 
         'enum IOReader'
@@ -52,6 +49,7 @@ class TypeMerger(ASTVisitor):
 
         if mergeType == "struct":  # If we came across a struct, add this to the list of known types
             BaseTypes.append(newname)
+            node.children[0].type = "STRUCT"
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass

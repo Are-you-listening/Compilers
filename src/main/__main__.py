@@ -55,7 +55,7 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)
@@ -71,7 +71,7 @@ def cleanGreen(input_file, symbol_file):
 
     TypeMerger().visit(ast)  # Reformat enum declarations to our format
 
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+    DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
 
 
@@ -89,29 +89,29 @@ def cleanGreen(input_file, symbol_file):
 
 
 
-    #DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
+    DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 
     StructCleanerAfter(structTable).visit(ast)
 
-    #DotVisitor("output/debug3").visit(ast)  # Export AST in Dot
+    DotVisitor("output/debug3").visit(ast)  # Export AST in Dot
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
-    #symbol_file = "output/symbol"
+    symbol_file = "output/symbol"
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
         s.visit(ast.root.getSymbolTable(), True)
 
-    return ast, codegetter, includeSTDIO, structTable
+    return ast, codegetter, includeSTDIO, {}
 
 
 def Processing(ast, dot_file, fold, includeSTDIO, structTable):
-    #DotVisitor("output/debug4").visit(ast)  # Export AST in Dot
+    DotVisitor("output/debug4").visit(ast)  # Export AST in Dot
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     """
@@ -129,7 +129,7 @@ def Processing(ast, dot_file, fold, includeSTDIO, structTable):
     cfc = ControlFlowCreator()
     cfc.visit(ast)
 
-    #DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
+    DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
 
     if dot_file is not None:
         DotVisitor(dot_file).visit(ast)  # Export AST in Dot
