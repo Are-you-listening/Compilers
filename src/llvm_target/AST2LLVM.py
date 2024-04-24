@@ -1,5 +1,6 @@
 from src.llvm_target.OutputLLVMGenerator import *
 from src.llvm_target.MapTable.MapTable import *
+from src.parser.Tables.SymbolTypeStruct import *
 
 from src.parser.CodeGetter import *
 from llvmlite import ir
@@ -81,6 +82,8 @@ class AST2LLVM(ASTVisitor):
         :param node:
         :return:
         """
+
+        #print(node.text)
 
         if isinstance(node, ASTNodeBlock) and node.text == "Block":
             if self.last_vertex is not None:
@@ -168,7 +171,12 @@ class AST2LLVM(ASTVisitor):
         ask the var type, and search its value in the symbol table
         """
         var_child: ASTNode = node.getChild(0)
-        data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
+        entry = var_child.getSymbolTable().getEntry(var_child.text)
+        data_type, ptrs = entry.getPtrTuple()
+
+        if data_type[0] not in ["INT", "FLOAT", "CHAR", "PTR"]:  # Using a struct
+            if isinstance(entry.getTypeObject(), SymbolTypeStruct):
+                data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getTypeObject().getFullType()
 
         if var_child.symbol_table.isRoot():  # Globals; extra stuff needs to be done
             llvm_var = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), CTypesToLLVM.getIRType(data_type, ptrs), var_child.text)  # Declare a global variable
@@ -186,7 +194,7 @@ class AST2LLVM(ASTVisitor):
             """
             all children of type_child are terminals
             """
-            llvm_var = Declaration.declare(data_type, ptrs)
+            llvm_var = Declaration.declare(data_type, ptrs, var_child.text)  # The name is optionally needed for structs
         """
         store var in llvm map
         """

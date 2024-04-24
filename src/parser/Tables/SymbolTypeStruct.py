@@ -23,3 +23,21 @@ class SymbolTypeStruct(SymbolType):
             d_t = d_t.deReference()
 
         return (d_t.getType(), d_t.isConst()), ptr_list
+
+    def getFullType(self):
+        ptr_list = []
+        temp = []
+        for item in self.pts_to:
+            while isinstance(item, SymbolTypePtr):
+                if isinstance(item, SymbolTypeArray):
+                    temp.append((str(item.size), item.isConst()))
+                else:
+                    temp.append(("*", item.isConst()))
+                item = item.deReference()
+
+            if temp == []:
+                temp = (item.getType(), item.isConst()), []
+
+            ptr_list.append(temp)
+            temp = []
+        return (self.getType(), self.isConst()), ptr_list

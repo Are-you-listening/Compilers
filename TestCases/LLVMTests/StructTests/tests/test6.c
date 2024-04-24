@@ -13,27 +13,23 @@ struct pointer{
 int main() {
    struct kaas ementaler;
 
-   int z[1];
-   z[0] = 2;
-
    ementaler.melk = 1;
    ementaler.fermtented = 18;
    printf("%d", ementaler.melk );
    printf("%d", ementaler.fermtented);
 
 
-//   struct kaas gouda;
-//
-//      gouda.melk = 2;
-//   gouda.fermtented = 7;
-//   printf("%d", gouda.melk );
-//   printf("%d", gouda.fermtented);
-//
-//      printf("%d", ementaler.melk );
-//   printf("%d", ementaler.fermtented);
+   struct kaas gouda;
 
-    struct kaas* gouda_ptr = &ementaler;
-    printf("%d   ", (*gouda_ptr).melk );
+      gouda.melk = 2;
+   gouda.fermtented = 7;
+   printf("%d", gouda.melk );
+   printf("%d", gouda.fermtented);
+
+      printf("%d", ementaler.melk );
+   printf("%d", ementaler.fermtented);
+    //struct kaas* gouda_ptr = &ementaler;
+    //printf("%d   ", (* (int) (pointer.kaas_ptr + 1 + 2 + 3 )).melk );
     //printf("%d   ", (*gouda_ptr).melk );
 
 

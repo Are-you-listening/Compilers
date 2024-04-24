@@ -7,13 +7,15 @@ class ASTConversion(ASTVisitor):
     Makes implicit conversions explicit
     """
 
-    def __init__(self):
+    def __init__(self, structTable):
         self.rc = RichnessChecker(types)
 
         """
         Map each node on its resulting type after the node has been executed
         """
         self.type_mapping = {}
+
+        self.structTable = structTable # Keep track of the struct names
 
     def visit(self, ast: AST):
         """
@@ -24,6 +26,7 @@ class ASTConversion(ASTVisitor):
         self.postorder(ast.root)
 
     def visitNode(self, node: ASTNode):
+        #print(node.text)
         """
         Visit AST Nodes and give it a type, if the type changes implicit, add conversion nodes
         :param node: the node we are currently checking
@@ -232,6 +235,9 @@ class ASTConversion(ASTVisitor):
             if type_tup == (None, None):
                 continue
 
+            if type_tup[0][0] in self.structTable.keys() or to_type[0][0] in self.structTable.keys():  # Don't check struct types
+                continue
+
             if type_tup[0][0] != to_type[0][0] or type_tup[1] != to_type[1]:
                 if to_type[0][0] == "BOOL" and len(to_type[1]) == 0:
                     """
@@ -298,12 +304,16 @@ class ASTConversion(ASTVisitor):
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
-
             type_entry = node.getSymbolTable().getEntry(node.text)
             type_object = type_entry.getTypeObject()
-            if isinstance(type_object, SymbolTypeStruct) and node.parent.text != "Declaration":
-                index = int(node.getSiblingNeighbour(1).getSiblingNeighbour(1).text)  # Get the index of the struct data member
-                data_type, ptrs = type_object.getElementType(index)
+
+            if isinstance(type_object, SymbolTypePtr):
+                pointee = type_object.pts_to
+                while isinstance(pointee, SymbolTypePtr):
+                    pointee = pointee.pts_to
+
+            if isinstance(type_object, SymbolTypeStruct) or (isinstance(type_object, SymbolTypePtr) and isinstance(pointee, SymbolTypeStruct) ):
+                data_type, ptrs = self.handleStruct(node)
             else:
                 data_type, ptrs = type_entry.getPtrTuple()
 
@@ -316,6 +326,36 @@ class ASTConversion(ASTVisitor):
 
         elif node.type in types:
             self.type_mapping[node] = ((node.type, False), [])
+
+    def handleStruct(self, node):
+        type_entry = node.getSymbolTable().getEntry(node.text)
+        type_object = type_entry.getTypeObject()
+
+        oldGuy = node.parent
+        ptrss = []
+        while oldGuy.text == "Dereference":
+            ptrss += [('*', False)]
+            oldGuy = oldGuy.parent
+
+        if oldGuy.text == "Expr":
+            if node.getSiblingNeighbour(-1) is not None:  # RHS of the '.' operator
+                index = int(node.text)  # Get the index of the struct data member
+                data_type, ptrs = type_object.getElementType(index)
+            else:  # LHS of the '.' operator
+                ptrs = [('*', False)] + ptrss
+                index_node = oldGuy.children[0].getSiblingNeighbour(1).getSiblingNeighbour(1)
+                identifier = index_node.text
+
+                data_type, ptrs2 = type_entry.getPtrTuple()
+                struct_name = data_type[0]
+
+                index = self.structTable[struct_name].index(identifier)  # Replace the struct data member name with an index
+                index_node.text = index
+                ptrs += ptrs2
+
+            return data_type, ptrs
+        return type_entry.getPtrTuple()
+
 
     @staticmethod
     def calculateType(node: ASTNode):
@@ -504,7 +544,7 @@ class ASTConversion(ASTVisitor):
         if ass:
             text += "*("
 
-        print(node)
+        #print(node)
 
         brackets_needed = False
 
