@@ -16,9 +16,18 @@ class ControlFlowCreator(ASTVisitor):
         self.root = None
         self.to_remove = set()
 
+        """
+        Maps function name to its corresponding control flow graph
+        """
+        self.function_map = {}
+
     def visit(self, ast: AST):
         self.control_flow_map = {}
         self.eval_scope_node = None
+        """
+        Maps function name to its corresponding control flow graph
+        """
+        self.function_map = {}
 
         self.to_remove = set()
 
@@ -106,8 +115,7 @@ class ControlFlowCreator(ASTVisitor):
             """
             Create a block with the entire code base being a child
             """
-            func_name = node.children[0].text
-            function = LLVMSingleton.getInstance().getFunction(func_name)
+
             ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, cf.root,
                                      node.virtuallinenr)
             ast_block2 = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, cf.root,
@@ -116,6 +124,10 @@ class ControlFlowCreator(ASTVisitor):
             node.getChild(1).addNodeParent(ast_block)
             node.getChild(2).addNodeChildEmerge(ast_block2)
 
+            """
+            Map CFG for function
+            """
+            self.function_map[node.getChild(0).text] = cf
 
         """
         With an IF statement 2 situations occur:
@@ -224,8 +236,7 @@ class ControlFlowCreator(ASTVisitor):
 
             self.control_flow_map[node] = new_cfg
 
-    @staticmethod
-    def handleFunction(node: ASTNode):
+    def handleFunction(self, node: ASTNode):
         """
         Create a new function
 
@@ -318,7 +329,7 @@ class ControlFlowCreator(ASTVisitor):
         self.control_flow_map[node.getSiblingNeighbour(1)] = own_sub_control
 
     def getControlFlowGraph(self):
-        return self.control_flow_map.get(self.root, None)
+        return self.function_map
 
     def handle_eval_scope_end(self, node: ASTNode):
         """

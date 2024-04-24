@@ -176,7 +176,7 @@ def main(argv):
         ErrorExporter.StupidUser()
 
     ast, codegetter, includeSTDIO, structTable = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
-    ast, cfg = Processing(ast, dot_file, fold, includeSTDIO, structTable)  # Check for Errors , Apply Folding Techniques , ...
+    ast, cfgs = Processing(ast, dot_file, fold, includeSTDIO, structTable)  # Check for Errors , Apply Folding Techniques , ...
 
     if llvm_file is not None:
         LLVMSingleton.setName(input_file)
@@ -185,8 +185,9 @@ def main(argv):
         to_llvm.visit(ast)
 
         if control_flow_file is not None:
-            control_dot = ControlFlowDotVisitor(control_flow_file)  # Create a CFG
-            control_dot.visit(cfg.root)
+            for function_name, cfg in cfgs.items():
+                control_dot = ControlFlowDotVisitor(f"{control_flow_file}_{function_name}")  # Create a CFG
+                control_dot.visit(cfg.root)
 
 
 if __name__ == '__main__':
