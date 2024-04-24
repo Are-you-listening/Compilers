@@ -111,7 +111,7 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     cfc = ControlFlowCreator()
     cfc.visit(ast)
 
-    DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
+    #DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
 
     if dot_file is not None:
         DotVisitor(dot_file).visit(ast)  # Export AST in Dot

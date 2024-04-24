@@ -15,12 +15,12 @@ class AST2LLVM(ASTVisitor):
         self.root = None
         self.last_vertex = None
 
-        self.branch_needed = []
+        self.branch_needed = set()
 
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
         self.llvm_map = {}
-        self.branch_needed = []
+        self.branch_needed = set()
 
         self.root = ast.root
         self.postorder(self.root)
@@ -92,7 +92,7 @@ class AST2LLVM(ASTVisitor):
                 a conditional branch
                 """
 
-                self.branch_needed.append(self.last_vertex)
+                self.branch_needed.add(self.last_vertex)
             return
         if isinstance(node, ASTNodeBlock) and node.text == "PHI":
             """
@@ -196,6 +196,7 @@ class AST2LLVM(ASTVisitor):
         """
         add value to map to map var to address register
         """
+
         self.map_table.addEntry(MapEntry(var_child.text, llvm_var))
 
         """
@@ -240,6 +241,7 @@ class AST2LLVM(ASTVisitor):
         :return:
         """
         child_llvm = node.getChild(0)
+
         llvm_data = self.llvm_map.get(child_llvm)
 
         """
@@ -351,6 +353,7 @@ class AST2LLVM(ASTVisitor):
         :param node:
         :return:
         """
+
         function_name = node.getChild(0).text
         function = LLVMSingleton.getInstance().getFunction(function_name)
 
@@ -401,10 +404,7 @@ class AST2LLVM(ASTVisitor):
         :return:
         """
 
-        func_node = node.parent.getChild(0)  # Get the function node;
-
-        func = LLVMSingleton.getInstance().getFunction(func_node.text)
-
+        func = LLVMSingleton.getInstance().getLastFunction()
         # Get the arguments of the function
         arguments = func.args
 

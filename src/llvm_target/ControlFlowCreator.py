@@ -110,8 +110,12 @@ class ControlFlowCreator(ASTVisitor):
             function = LLVMSingleton.getInstance().getFunction(func_name)
             ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, cf.root,
                                      node.virtuallinenr)
-            node.getChild(2).addNodeChildEmerge(ast_block)
-            node.getChild(1).addNodeChildEmerge(ast_block)
+            ast_block2 = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, cf.root,
+                                     node.virtuallinenr)
+
+            node.getChild(1).addNodeParent(ast_block)
+            node.getChild(2).addNodeChildEmerge(ast_block2)
+
 
         """
         With an IF statement 2 situations occur:
@@ -415,7 +419,7 @@ class ControlFlowCreator(ASTVisitor):
             All the blocks we needed to add will be add here, after the hole tree is visited
             """
 
-            ast_block.move(function_node.getChild(2))
+            ast_block.move(function_node.getChild(function_node.getChildAmount()-1))
 
     def handleIf(self, node: ASTNode):
         """

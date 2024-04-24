@@ -45,6 +45,7 @@ class LLVMSingleton:
 
     def addFunction(self, new_function: ir.Function):
         self.__functions.append(new_function)
+        self.__last_function = new_function
 
     def setLastFunction(self, function):
         self.__last_function = function
