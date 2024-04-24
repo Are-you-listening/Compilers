@@ -30,6 +30,13 @@ class ASTDereferencer(ASTVisitor):
         in case we user x[1][2], we still need to dereference this entire subtree
         """
         if node.getChildAmount() == 3 and node.getChild(1).text == "[]":
+            temp = ""
+            if node.getSiblingNeighbour(-1) is not None:
+                temp = node.getSiblingNeighbour(-1).text
+            if temp == "&":
+                # remove the ampersand and don't add a dereference node
+                self.to_remove.add(node.getSiblingNeighbour(-1))
+                return
             self.addDereference(node)
             return
 
