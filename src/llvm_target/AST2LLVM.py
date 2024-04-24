@@ -256,7 +256,7 @@ class AST2LLVM(ASTVisitor):
         Declaration.addComment(comment_text)
 
     def handleReturn(self, node: ASTNode):
-        return_val = self.llvm_map[node.getChild(1)]
+        return_val = self.llvm_map[node.getChild(0)]
         LLVMSingleton.getInstance().getCurrentBlock().ret(return_val)
 
     def handlePrintScanf(self, node: ASTNode, printf):

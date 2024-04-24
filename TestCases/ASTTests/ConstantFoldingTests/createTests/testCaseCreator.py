@@ -14,7 +14,7 @@ from TestCases.ABCTests.AstLoader import AstLoader
 from src.parser.ASTTableCreator import ASTTableCreator
 from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
 from src.parser.BlacklistVisitor import BlacklistVisitor
-from src.parser.EnumTypeMerger import EnumTypeMerger
+from src.parser.TypeMerger import TypeMerger
 from src.parser.ASTIfCleaner import ASTIfCleaner
 from src.parser.ASTLoopCleaner import ASTLoopCleaner
 
@@ -47,7 +47,7 @@ black_list_visitor.visit(ast)
 codegetter = CodeGetter()  # Link each line of code to a line number
 codegetter.visit(ast)
 
-EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
+TypeMerger().visit(ast)  # Reformat enum declarations to our format
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 

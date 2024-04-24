@@ -9,7 +9,7 @@ from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
 from src.parser.BlacklistVisitor import BlacklistVisitor
 from src.parser.Constraints.ConstraintChecker import *
 from src.parser.EnumConverter import *
-from src.parser.EnumTypeMerger import *
+from src.parser.TypeMerger import *
 from src.parser.ASTIfCleaner import *
 from src.parser.ASTLoopCleaner import *
 from src.parser.ASTCleaner import *
@@ -49,7 +49,7 @@ below add needed stuff
 
 CodeGetter().visit(ast)
 EnumConverter().visit(ast)
-EnumTypeMerger().visit(ast)
+TypeMerger().visit(ast)
 ASTTypedefReplacer().visit(ast)
 ASTIfCleaner().visit(ast)
 ASTLoopCleaner().visit(ast)

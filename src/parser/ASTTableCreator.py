@@ -54,7 +54,7 @@ class ASTTableCreator(ASTVisitor):
 
             visited.add(currentNode)
     @staticmethod
-    def __check_function_declarations(self, node: ASTNode, param_types_and_ptrs: list):
+    def __check_function_declarations(node: ASTNode, param_types_and_ptrs: list):
         function_node = node.children[1]
         if function_node.symbol_table.exists(function_node.text):
             if param_types_and_ptrs != node.symbol_table.getEntry(function_node.text).getTypeObject().getParameterTypes():
@@ -115,7 +115,7 @@ class ASTTableCreator(ASTVisitor):
                 param_strings.append(pointer_list)
             param_types_and_ptrs = [(x, y) for x, y in zip(param_types, param_strings)]
 
-            self.__check_function_declarations(self, node, param_types_and_ptrs)
+            self.__check_function_declarations(node, param_types_and_ptrs)
             self.__make_entry(node, child, lambda d, c: FunctionSymbolType(d, c, param_types_and_ptrs))
             function_node = node.children[1]
             if node.getChildAmount() == 4:

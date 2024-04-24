@@ -32,18 +32,14 @@ class FunctionReturnConstraint(Constraint):
         if node.text == "Function":
             # create a new dict entry for a function and all the returns in the function body
             self.map[node] = []
+        if node.text == "Return":
+            function_node = findfunction(node)
+            if function_node is not None:
+                self.map[function_node].append(node)
 
 
     def checkTerminalNode(self, node: ASTNodeTerminal):
-        if node.text == "return":
-            function_node = findfunction(node)
-
-            if function_node is not None:
-                self.map[function_node].append(node)
-            else:
-                # return node without enclosing function ??
-                # this should never happen, stopped by grammar
-                pass
+        pass
 
     def throwException(self):
         for error_node in self.errorNodes:
