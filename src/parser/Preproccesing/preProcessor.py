@@ -56,7 +56,6 @@ class PreProcessor:
             i += 1
             token = self.stream.tokens[i]  # Get new token
             type = self.lexer.ruleNames[token.type - 1]
-            print("t", token, token.line)
         return value, i
 
     def __being_skipped(self):

@@ -60,16 +60,19 @@ class UnaryWrapper:
 class CTypesToLLVM:
     @staticmethod
     def getBytesUse(data_type: tuple, ptrs: list[tuple]):
+        convert_dict = {"INT": 4, "CHAR": 1, "FLOAT": 4, "BOOL": 1}
         if len(ptrs) >= 1:
             return 8
-
-        convert_map = {"INT": 4, "CHAR": 1, "FLOAT": 4, "BOOL": 1}
-        return convert_map.get(data_type[0], "TYPE ISSUE")
+        return convert_dict.get(data_type[0], "TYPE ISSUE")
 
     @staticmethod
-    def getIRType(data_type: tuple, ptrs: list[tuple]):
+    def getIRType(data_type: tuple, ptrs: list):
         convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType(), "BOOL": ir.IntType(1)}
         llvm_type = convert_map.get(data_type[0])
+
+        if llvm_type is None:  # Most likely, a struct was used
+            return None
+
         for p in ptrs:
             if p[0] == "*":
                 """
@@ -87,12 +90,37 @@ class CTypesToLLVM:
 
 class Declaration:
     @staticmethod
-    def declare(data_type: tuple, ptrs: list[tuple]):
+    def declare(data_type: tuple, ptrs: list):
         block = LLVMSingleton.getInstance().getCurrentBlock()
-        llvm_val = block.alloca(CTypesToLLVM.getIRType(data_type, ptrs))
+        irType = CTypesToLLVM.getIRType(data_type, ptrs)
+
+        if irType is None:
+            return Declaration.struct(data_type, ptrs)
+
+        llvm_val = block.alloca(irType)
         llvm_val.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
 
         return llvm_val
+
+    @staticmethod
+    def struct(data_type: tuple, ptrs: list):
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+        types = []
+        align = 0
+
+        for entry in ptrs:  # The datatype is different for structs
+            irType = CTypesToLLVM.getIRType(entry[0], entry[1])
+            align += CTypesToLLVM.getBytesUse(entry[0], entry[1])
+            types.append(irType)
+
+        struct_type = ir.LiteralStructType(types)
+        struct = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), struct_type, "kaas")
+        struct.align = align
+        #struct.name_prefix = '%'
+
+        llvm_var = block.alloca(struct_type)
+        llvm_var.align = 4
+        return llvm_var
 
     @staticmethod
     def function(func_name: str, return_type: tuple, ptrs: list[tuple], args: list):
@@ -278,9 +306,11 @@ class Calculation:
             """
             When we come across an array we need to define a value 0 followed by the index we want to access
             """
-
             if isinstance(left.type.pointee, ir.ArrayType):
                 index_list.insert(0, ir.Constant(ir.types.IntType(64), 0))
+            elif isinstance(left.type.pointee, ir.LiteralStructType):
+                index_list.insert(0, ir.Constant(ir.types.IntType(32), 0))
+
             new_value = block.gep(left, index_list, True)  # Create the gep instruction
             return new_value
 

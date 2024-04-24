@@ -1,5 +1,4 @@
 from src.parser.CTypes.COperationHandler import *
-from src.parser.Tables.SymbolTable import *
 from src.parser.ASTTableCreator import *
 
 
@@ -8,15 +7,13 @@ class ASTConversion(ASTVisitor):
     Makes implicit conversions explicit
     """
 
-    def __init__(self, structTable, type_struct_table):
+    def __init__(self):
         self.rc = RichnessChecker(types)
 
         """
         Map each node on its resulting type after the node has been executed
         """
         self.type_mapping = {}
-        self.structTable = structTable
-        self.type_struct_table = type_struct_table
 
     def visit(self, ast: AST):
         """
@@ -185,9 +182,9 @@ class ASTConversion(ASTVisitor):
             check if has the right amount of arguments
             """
             if len(node.parent.children) - 1 < len(parameterTypes):
-                ErrorExporter.tooFewFunctionArguments(node.linenr,len(parameterTypes),len(node.children), functionNode.text)
+                ErrorExporter.tooFewFunctionArguments(node.linenr, len(parameterTypes), len(node.children), functionNode.text)
             if len(node.parent.children) - 1 > len(parameterTypes):
-                ErrorExporter.tooManyFunctionArguments(node.linenr,len(parameterTypes),len(node.children), functionNode.text)
+                ErrorExporter.tooManyFunctionArguments(node.linenr, len(parameterTypes), len(node.children), functionNode.text)
             """
             be default 1 ptr is added, so remove it again, because assignment
             """
@@ -283,8 +280,8 @@ class ASTConversion(ASTVisitor):
             type_entry = node.getSymbolTable().getEntry(node.text)
             type_object = type_entry.getTypeObject()
             if isinstance(type_object, SymbolTypeStruct) and node.parent.text != "Declaration":
-                    index = int(node.getSiblingNeighbour(1).getSiblingNeighbour(1).text)  # Get the index of the struct data member
-                    data_type, ptrs = type_object.getElementType(index)
+                index = int(node.getSiblingNeighbour(1).getSiblingNeighbour(1).text)  # Get the index of the struct data member
+                data_type, ptrs = type_object.getElementType(index)
             else:
                 data_type, ptrs = type_entry.getPtrTuple()
 
@@ -292,8 +289,6 @@ class ASTConversion(ASTVisitor):
             Use LLVM ptr format
             """
             ptrs.append(("*", False))
-
-            print(node.text, data_type, ptrs)
 
             self.type_mapping[node] = (data_type, ptrs)
 

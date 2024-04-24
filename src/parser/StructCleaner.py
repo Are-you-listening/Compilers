@@ -1,4 +1,3 @@
-from src.parser.CTypes.COperationHandler import COperationHandler
 from src.parser.Tables.SymbolTable import *
 
 
@@ -10,7 +9,6 @@ class StructCleaner(ASTVisitor):
     def __init__(self):
         self.to_remove = set()
         self.structTable = {}  # Keep track of the indices of parameters e.g. {"kaas": [("melk",type), ("fermented",type)]} melk has index 0, this will be used for adding the GEP instruction in LLVM
-        self.type_struct_table = {}  # Map type nodes to a struct and its data field, e.g. {("kaas",0): type }
 
     def visit(self, ast: AST):
         self.to_remove = set()
@@ -19,7 +17,7 @@ class StructCleaner(ASTVisitor):
         for n in self.to_remove:
             n.parent.removeChild(n)
 
-        return self.structTable, self.type_struct_table
+        return self.structTable
 
     def visitNode(self, node: ASTNode):
         self.__cleanStruct(node)

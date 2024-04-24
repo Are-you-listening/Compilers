@@ -2,6 +2,7 @@ from src.parser.ErrorExporter import *
 from src.parser.Tables.SymbolTypePtr import *
 from src.parser.Tables.SymbolTypeArray import SymbolTypeArray
 from src.parser.Tables.FunctionSymbolType import *
+from src.parser.Tables.SymbolTypeStruct import *
 
 from src.parser.AST import *
 from src.parser.ASTTypedefReplacer import *
@@ -51,6 +52,22 @@ class SymbolEntry(TableEntry):
             else:
                 ptr_list.append(("*", d_t.isConst()))
             d_t = d_t.deReference()
+
+        if isinstance(d_t, SymbolTypeStruct):
+            temp = []
+            for item in d_t.pts_to:
+                while isinstance(item, SymbolTypePtr):
+                    if isinstance(item, SymbolTypeArray):
+                        temp.append((str(item.size), item.isConst()))
+                    else:
+                        temp.append(("*", item.isConst()))
+                    item = item.deReference()
+
+                if temp == []:
+                    temp = (item.getType(), item.isConst()), []
+
+                ptr_list.append(temp)
+                temp = []
 
         return (d_t.getType(), d_t.isConst()), ptr_list
 

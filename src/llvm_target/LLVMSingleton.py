@@ -17,6 +17,7 @@ class LLVMSingleton:
         self.__Scanf = None
         self.__PrintScanfString = []  # Keeps the name of the global formatting string mapped to an index, {"%x%d...": 1} means that the string "%x%d..." is identified in LLVM with index 1, thus '@.str.1' is the name of the global variable
         self.__current_block = ir.IRBuilder(ir.Block(self.__module))
+        self.__structs = []
 
 
     def clear(self):
@@ -49,11 +50,13 @@ class LLVMSingleton:
 
     def setLastFunction(self, function):
         self.__last_function = function
+
     def getFunction(self, function_name):
         for function in self.__functions:
             if function.name == function_name:
                 return function
         return None
+
     def setPrintF(self, printfFunction):
         self.__Printf = printfFunction
 
@@ -79,6 +82,10 @@ class LLVMSingleton:
             self.__PrintScanfString.append(format_specifier)
             return len(self.__PrintScanfString)-1
 
+    def getStruct(self, struct_name):
+        return self.__structs.index(struct_name)
+
+
     def getLastFunction(self):
         return self.__last_function
 
@@ -87,3 +94,6 @@ class LLVMSingleton:
 
     def removeBlock(self, builder):
         self.__last_function.blocks.remove(builder.block)
+
+    def getContext(self):
+        return self.__context

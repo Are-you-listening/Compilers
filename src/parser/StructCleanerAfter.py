@@ -33,6 +33,3 @@ class StructCleanerAfter(ASTVisitor):
         identifier = rsib.text
         rsib.text = self.structTable[structName].index(identifier)  # Replace the identifier name with the struct index it refers to
         rsib.type = "INT"  # Set the new type to INT
-
-
-
