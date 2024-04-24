@@ -52,7 +52,6 @@ def cleanGreen(input_file, symbol_file):
     toAST = ASTCreator(lexer)  # Create Actual AST
     toAST.visit(tree)
     ast = toAST.getAST()
-
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     virtualLine = VirtualLineVisitor()
@@ -79,13 +78,13 @@ def cleanGreen(input_file, symbol_file):
 
     #DotVisitor("output/prearray").visit(ast)  # Export AST in Dot
     ArrayCleaner().visit(ast)
-    #DotVisitor("output/postarray").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
+    #DotVisitor("output/postarray").visit(ast)  # Export AST in Dot
 
 
     if symbol_file is not None:

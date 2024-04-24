@@ -25,7 +25,6 @@ class ASTDereferencer(ASTVisitor):
 
         if node.text != "Expr":
             return
-
         """
         in case we user x[1][2], we still need to dereference this entire subtree
         """
@@ -48,7 +47,6 @@ class ASTDereferencer(ASTVisitor):
         if left_child.text == "*":
             ref = self.addDereference(right_child)
             node.parent.replaceChild(node, ref)
-            node.removeChild(left_child)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         """

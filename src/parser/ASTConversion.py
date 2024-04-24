@@ -486,11 +486,29 @@ class ASTConversion(ASTVisitor):
 
             text += node.text
 
+        ass = node.parent.text == "Assignment" and node.text == "Dereference"
+        if ass:
+            text += "*("
+
+        print(node)
+
+        brackets_needed = False
+
+
         if node.text == "Dereference":
-            text += "*"
+            brackets_needed = not isinstance(node.getChild(0), ASTNodeTerminal) or node.getChild(0).type != "IDENTIFIER"
+
+            if brackets_needed:
+                text += "("
 
         for child in node.children:
             text += ASTConversion.subtree_to_text(child)
+
+        if brackets_needed:
+            text += ")"
+
+        if ass:
+            text += ")"
 
         return text
 
