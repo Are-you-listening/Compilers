@@ -16,7 +16,7 @@ class ConstraintChecker(ASTVisitor):
     """
 
     def __init__(self, includeSTDIO):
-        self.constraints = [CleanGlobalScope(), MainFoundConstraint(), RedefinitionConstraint(), UndeclaredConstrained(), ConstConstraint(),
+        self.constraints = [CleanGlobalScope(), MainFoundConstraint(), RedefinitionConstraint(), UndeclaredConstrained(),
                             AmpersandConstraint(), PrintfConstraint(), UndeclaredConstrained(), GlobalsConstrained(), IOConstraint(includeSTDIO), UndefinedReferenceConstraint(), FunctionReturnConstraint()]
 
     def visitNode(self, node: ASTNode):

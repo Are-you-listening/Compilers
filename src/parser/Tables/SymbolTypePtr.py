@@ -17,4 +17,4 @@ class SymbolTypePtr(SymbolType):
         if not self.const:
             const_str = ""
 
-        return f"{self.pts_to.getStringType()}* {const_str} "
+        return f"{self.pts_to.getStringType()}*{const_str}"

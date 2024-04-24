@@ -25,11 +25,17 @@ class ASTDereferencer(ASTVisitor):
 
         if node.text != "Expr":
             return
-
         """
         in case we user x[1][2], we still need to dereference this entire subtree
         """
         if node.getChildAmount() == 3 and node.getChild(1).text == "[]":
+            temp = ""
+            if node.getSiblingNeighbour(-1) is not None:
+                temp = node.getSiblingNeighbour(-1).text
+            if temp == "&":
+                # remove the ampersand and don't add a dereference node
+                node.parent.parent.replaceChild(node.parent, node)
+                return
             self.addDereference(node)
             return
 
@@ -41,7 +47,6 @@ class ASTDereferencer(ASTVisitor):
         if left_child.text == "*":
             ref = self.addDereference(right_child)
             node.parent.replaceChild(node, ref)
-            node.removeChild(left_child)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         """

@@ -2,9 +2,9 @@
 
 int main() {
     const int a = 5;
-    const int* b = &a;
+    const int* const b = &a;
+    const int** const c = &b;
 
-    *(b+1) = 8;
-
+    c = 0;
     return 0;
 }
