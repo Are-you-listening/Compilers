@@ -104,8 +104,11 @@ class AST2LLVM(ASTVisitor):
 
             return
 
-        if node.text == "Declaration" or node.text == "Parameter":
+        if node.text == "Declaration":
             self.handleDeclaration(node)
+
+        if node.text == "Parameters":
+            self.handleParameters(node)
 
         if node.text == "Function":
             self.map_table = self.map_table.prev
@@ -136,6 +139,7 @@ class AST2LLVM(ASTVisitor):
 
         if node.text == "FunctionCall":
             self.handleFunctionCall(node)
+
         if node.text not in ("Parameters"):
             self.addOriginalCodeAsComment(node)
 
@@ -364,6 +368,76 @@ class AST2LLVM(ASTVisitor):
         llvm_var = builder.call(function, args)
 
         self.llvm_map[node] = llvm_var
+
+    def handleParameters(self, node: ASTNode):
+        """
+        Handle function parameters
+        The function has already been declared, so we can get the function from the LLVM module, and its paramters should be allocated, stored and loaded, so if the function gets called with some arguments
+        those arguments are then used in the function body. Right now our ouput is this:
+        define i32 @"func"(i32 %".1", i32 %".2")
+            {
+            .4:
+              ;    INT func INT a INT b
+              %".6" = load i32, i32* %".2", align 4
+              ; return a + b
+              %".8" = load i32, i32* %".3", align 4
+              %".9" = add i32 %".6", %".8"
+              ret i32 0
+            }
+        But when parameters are correctly handeld, the output should be:
+        ; Function Attrs: noinline nounwind optnone uwtable
+    define dso_local i32 @func(i32 noundef %0, i32 noundef %1) #0
+    {
+          %3 = alloca i32, align 4
+          %4 = alloca i32, align 4
+          store i32 %0, i32* %3, align 4
+          store i32 %1, i32* %4, align 4
+          %5 = load i32, i32* %3, align 4
+          %6 = load i32, i32* %4, align 4
+          %7 = add nsw i32 %5, %6
+          ret i32 %7
+        }
+        :param node:
+        :return:
+        """
+
+        func_node = node.parent.getChild(0)  # Get the function node;
+
+        func = LLVMSingleton.getInstance().getFunction(func_node.text)
+
+        # Get the arguments of the function
+        arguments = func.args
+
+        # Iterate over the arguments
+        index = 0
+
+        builder = LLVMSingleton.getInstance().getCurrentBlock()
+        for arg in arguments:
+
+            # Get the argument type
+            arg_type = arg.type
+
+            # Create an alloca instruction
+            alloca = builder.alloca(arg_type)
+
+            # Store the argument value in the alloca instruction
+            store = builder.store(arg, alloca)
+
+
+            # Add the alloca instruction to the map
+            self.llvm_map[node.getChild(index).getChild(0)] = alloca
+
+            # Add the store instruction to the map
+            self.llvm_map[node.getChild(index).getChild(0)] = store
+
+
+
+            # Add the alloca instruction to the map
+            self.map_table.addEntry(MapEntry(node.getChild(index).getChild(0).text, alloca))
+
+
+            index+=1
+
 
     @staticmethod
     def getConversionType(type_node: ASTNode):
