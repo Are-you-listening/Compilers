@@ -35,7 +35,7 @@ class ASTDereferencer(ASTVisitor):
                 temp = node.getSiblingNeighbour(-1).text
             if temp == "&":
                 # remove the ampersand and don't add a dereference node
-                self.to_remove.add(node.getSiblingNeighbour(-1))
+                node.parent.parent.replaceChild(node.parent, node)
                 return
             self.addDereference(node)
             return
