@@ -135,6 +135,12 @@ class ASTCreator(grammarCVisitor):
     def visitArray(self, ctx: grammarCParser.ArrayContext):
         self.__makeNode(ctx, "ARRAY")
 
+    def visitStructunion(self, ctx: grammarCParser.StructunionContext):
+        if ctx.children[0].symbol.text == "struct":
+            self.__makeNode(ctx, "Struct")
+        else:
+            self.__makeNode(ctx, "Union")
+
     def visitTerminal(self, ctx):
         """
         :param ctx:

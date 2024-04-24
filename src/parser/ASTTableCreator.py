@@ -63,7 +63,6 @@ class ASTTableCreator(ASTVisitor):
         else:
             return
 
-
     def visitNode(self, node: ASTNode):
         """
         Assign the symbol table to the node
@@ -112,7 +111,6 @@ class ASTTableCreator(ASTVisitor):
             if node.getChildAmount() == 4:
                 node.symbol_table.getEntry(function_node.text).set_function_defined(True)
 
-
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         node.symbol_table = self.table
 
@@ -134,7 +132,7 @@ class ASTTableCreator(ASTVisitor):
         """
         Make symbol table entry
         :param node:
-        :param child:
+        :param child: Type node
         :param symbol_type:
         :return:
         """
@@ -158,6 +156,8 @@ class ASTTableCreator(ASTVisitor):
             else:
                 if not ASTTypedefReplacer.isBaseType(grandchild):
                     latest_datatype = symbol_type(grandchild.text, is_const)  # Keep the typedef name
+                elif ASTTableCreator.isStructType(grandchild.text):
+                    latest_datatype = symbol_type(grandchild.text, is_const)  # Struct Types may not be made upper case
                 else:
                     latest_datatype = symbol_type(grandchild.text.upper(), is_const)
 
@@ -166,4 +166,13 @@ class ASTTableCreator(ASTVisitor):
         """
         symbol_entry = SymbolEntry(latest_datatype, node.children[1].text, None, node.children[1], None)
         node.symbol_table.add(symbol_entry)
+
+    @staticmethod
+    def isStructType(text: str):
+        """
+        Returns true if the type is a struct defined by the user
+        :param text:
+        """
+        return "struct" == text[0:6]
+
 

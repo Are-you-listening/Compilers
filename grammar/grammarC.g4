@@ -26,11 +26,11 @@ enum: 'enum' IDENTIFIER '{' (IDENTIFIER',')* IDENTIFIER? '}';
 printscanf: ('printf' | 'scanf') '(' STRING (',' expr)* ')';
 type: ('const')? ('int' | 'char' | 'float' | 'void' | (('struct' | 'enum' |'union') IDENTIFIER) | IDENTIFIER) ('*' | 'const')*;
 return: 'return' expr?;
-structunion: ('struct' | 'union') IDENTIFIER '{' (declaration* ';'+)+ '}';
+structunion: ('struct' | 'union') IDENTIFIER '{' ( declaration* ';'+)+ '}';
 function_ptr: (type) function_ptr_2 ;
 function_ptr_2: '(' '*' (function_ptr_2 | IDENTIFIER) ')' '(' parameters ')';
 declaration: type IDENTIFIER array? ('=' expr)?;
-assignment: ((('*')* IDENTIFIER array?) | (('*')+ '(' expr ')'))  ('=' expr);
+assignment: ('*')* expr (array)? ('=' expr);
 conversion: '(' type ')' (literal | expr);
 initialize_list: ((expr ',')* expr)?;
 expr : literal
@@ -40,6 +40,7 @@ expr : literal
      | '(' expr ')'
      | ('++' | '--' | '&' | '*') expr
      | IDENTIFIER ('++' | '--')
+     | expr '.' IDENTIFIER
      | ('+'|'-' | '~' | '!' ) expr
      | expr ('*' | '/' | '%') expr
      | expr ('+'|'-') expr

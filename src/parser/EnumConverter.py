@@ -23,18 +23,19 @@ class EnumConverter(ASTVisitor):
         """
         This visitor will make sure to only take into account 'Enum nodes'
         """
-        if node.text != "Enum":
+        if node.text not in ["Enum"]:
             return
 
         """
         Retrieve the relevant information about the enum node and add this enum node tot the to remove
         """
+        name = node.text.lower()
         line = node.linenr  # Line nr
         index = 0  # Value for each enum
         parent = node.parent
         self.to_remove.add(node)
 
-        self.__make_manual_typedef(line, node.virtuallinenr, ["INT"], "enum " + node.children[1].text, node.symbol_table, node.parent, parent.findChild(node))  # Make a typedef for this enum type
+        self.__make_manual_typedef(line, node.virtuallinenr, ["INT"], name + " " + node.children[1].text, node.symbol_table, node.parent, parent.findChild(node))  # Make a typedef for this enum type
 
         # Add all other enums 'identifiers/variables' as "const int" variables to the current scope
         for i in range(2, len(node.children)):

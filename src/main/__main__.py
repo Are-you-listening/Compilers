@@ -20,12 +20,14 @@ from src.parser.ConstantStatementFolding import *
 from src.parser.DeadCodeRemover import *
 from src.parser.BlacklistVisitor import *
 from src.parser.SwitchConverter import *
-from src.parser.EnumTypeMerger import *
+from src.parser.TypeMerger import *
 from src.parser.VirtualLineNrVisitor import *
 from src.parser.ArrayCleaner import ArrayCleaner
 from src.parser.EnumConverter import *
 from src.parser.Preproccesing.preProcessor import *
 from src.parser.StringToArray import *
+from src.parser.StructCleaner import *
+from src.parser.StructCleanerAfter import *
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -63,9 +65,15 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
+    structTable = StructCleaner().visit(ast)
+
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
 
-    EnumTypeMerger().visit(ast)  # Reformat enum declarations to our format
+    TypeMerger().visit(ast)  # Reformat enum declarations to our format
+
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+
+
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
@@ -77,29 +85,39 @@ def cleanGreen(input_file, symbol_file):
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
     StringToArray().visit(ast)
-    #DotVisitor("output/qu1").visit(ast)
     ArrayCleaner().visit(ast)
 
+
+
+    #DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
+
     ASTTableCreator().visit(ast)  # Create the symbol table
+
+    StructCleanerAfter(structTable).visit(ast)
+
+    #DotVisitor("output/debug3").visit(ast)  # Export AST in Dot
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
+    #symbol_file = "output/symbol"
+
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
         s.visit(ast.root.getSymbolTable(), True)
 
-    return ast, codegetter, includeSTDIO
+    return ast, codegetter, includeSTDIO, structTable
 
 
-def Processing(ast, dot_file, fold, includeSTDIO):
+def Processing(ast, dot_file, fold, includeSTDIO, structTable):
+    #DotVisitor("output/debug4").visit(ast)  # Export AST in Dot
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     """
     It is vital that AST conversion occurs before constant folding
     """
-    ASTConversion().visit(ast)
+    ASTConversion(structTable).visit(ast)
 
     if fold:
         ConstantFoldingVisitor().visit(ast)
@@ -157,8 +175,8 @@ def main(argv):
     if input_file is None:
         ErrorExporter.StupidUser()
 
-    ast, codegetter, includeSTDIO = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
-    ast, cfg = Processing(ast, dot_file, fold, includeSTDIO)  # Check for Errors , Apply Folding Techniques , ...
+    ast, codegetter, includeSTDIO, structTable = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
+    ast, cfg = Processing(ast, dot_file, fold, includeSTDIO, structTable)  # Check for Errors , Apply Folding Techniques , ...
 
     if llvm_file is not None:
         LLVMSingleton.setName(input_file)

@@ -1,9 +1,10 @@
 from src.parser.ASTVisitor import *
+from src.parser.ASTTypedefReplacer import *
 
 
-class EnumTypeMerger(ASTVisitor):
+class TypeMerger(ASTVisitor):
     """
-    Formats declarations with enums to our format.
+    Formats declarations with enums, structs to our format.
 
     E.g. enum IOReader status, 1 new node has the text "enum IOReader"
     """
@@ -17,28 +18,40 @@ class EnumTypeMerger(ASTVisitor):
         'Type' node with 2 children: 'enum' 'weekday',
         we want to merge those 2 children into 1 child: 'enum weekday'
 
+        The same happens for structs.
+
         :param node:
         :return:
         """
-        if node.text != "Declaration":
+        if node.text != "Type":
             return
 
-        if node.children[0].children[0].text != "enum":
+        mergeType = node.children[0].text[0:6]
+
+        if mergeType not in ["enum", "struct"]:
             return
+
+
+        print(mergeType)
 
         """
         Merge the nodes 'enum' and '<ENUM NAME>' together; e.g. enum IOReader status, 1 new node has the text 
         'enum IOReader'
         """
-        type_node = node.children[0]
-        line = type_node.children[0].linenr
-        table = type_node.children[0].symbol_table
-        newname = "enum " + type_node.children[1].text
+        line = node.children[0].linenr
+        table = node.children[0].symbol_table
+        newname = mergeType + " " + node.children[1].text
 
         """
         Override the type children
         """
-        type_node.children = [ASTNodeTerminal(newname, type_node, table, "IDENTIFIER", line, None)]
+        oldKids = node.children
+        node.children = [ASTNodeTerminal(newname, node, table, "IDENTIFIER", line, None)]
+        if len(oldKids) > 2:
+            node.children += oldKids[2:]
+
+        if mergeType == "struct":  # If we came across a struct, add this to the list of known types
+            BaseTypes.append(newname)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass

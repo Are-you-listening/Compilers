@@ -16,11 +16,11 @@ class UndeclaredConstrained(Constraint):
             entry = node.symbol_table.getEntry(node.text)
 
             #print(entry.firstDeclared.linenr > node.linenr , entry)
-
-            if entry is None or entry.firstDeclared.virtuallinenr > node.virtuallinenr:
-                self.rejected = True
-                self.errorNode = node
-                self.throwException()
+            if node.parent.text != "Struct":
+                if entry is None or entry.firstDeclared.virtuallinenr > node.virtuallinenr:
+                    self.rejected = True
+                    self.errorNode = node
+                    self.throwException()
 
     def checkNode(self, node: ASTNode):
         if node.text == "Assignment":

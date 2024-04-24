@@ -1,5 +1,6 @@
 from src.parser.CTypes.COperationHandler import *
 from src.parser.Tables.SymbolTable import *
+from src.parser.ASTTableCreator import *
 
 
 class ASTConversion(ASTVisitor):
@@ -7,13 +8,14 @@ class ASTConversion(ASTVisitor):
     Makes implicit conversions explicit
     """
 
-    def __init__(self):
+    def __init__(self, structTable):
         self.rc = RichnessChecker(types)
 
         """
         Map each node on its resulting type after the node has been executed
         """
         self.type_mapping = {}
+        self.structTable = structTable
 
     def visit(self, ast: AST):
         """
@@ -275,14 +277,20 @@ class ASTConversion(ASTVisitor):
             self.type_mapping[node] = to_type
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
+
+
         if node.type == "IDENTIFIER":
             type_entry = node.getSymbolTable().getEntry(node.text)
             data_type, ptrs = type_entry.getPtrTuple()
+            if ASTTableCreator.isStructType(data_type[0]):
+                pass
+                #print(node.text, data_type, ptrs)
 
             """
             Use LLVM ptr format
             """
             ptrs.append(("*", False))
+
 
             self.type_mapping[node] = (data_type, ptrs)
 
