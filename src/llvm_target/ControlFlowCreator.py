@@ -111,6 +111,7 @@ class ControlFlowCreator(ASTVisitor):
             ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, cf.root,
                                      node.virtuallinenr)
             node.getChild(2).addNodeChildEmerge(ast_block)
+            node.getChild(1).addNodeChildEmerge(ast_block)
 
         """
         With an IF statement 2 situations occur:
