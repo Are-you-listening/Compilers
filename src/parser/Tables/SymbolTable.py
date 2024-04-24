@@ -46,6 +46,10 @@ class SymbolEntry(TableEntry):
         """
         ptr_list = []
         d_t = self.typeObject
+
+        if isinstance(d_t, FunctionSymbolType):
+            d_t = d_t.return_type
+
         while isinstance(d_t, SymbolTypePtr):
             if isinstance(d_t, SymbolTypeArray):
                 ptr_list.append((str(d_t.size), d_t.isConst()))
@@ -88,7 +92,7 @@ class SymbolEntry(TableEntry):
 
         d_type = d_t.getType()
         if isinstance(d_t, FunctionSymbolType):
-            d_type = f"Func:{d_t.return_type}:{d_t.param_types}"
+            d_type = f"Func:{d_t.return_type.getType()}:{d_t.param_types}"
 
         return d_type, ptr_string, const_list
 

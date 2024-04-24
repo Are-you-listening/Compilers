@@ -131,6 +131,7 @@ class Declaration:
         for arg in args:
             arg_type = CTypesToLLVM.getIRType(arg[0], arg[1])
             llvmArgs.append(arg_type)
+
         function_type = ir.FunctionType(CTypesToLLVM.getIRType(return_type, ptrs), (llvmArgs))
         new_function = ir.Function(LLVMSingleton.getInstance().getModule(), function_type, name=func_name)
         LLVMSingleton.getInstance().addFunction(new_function)

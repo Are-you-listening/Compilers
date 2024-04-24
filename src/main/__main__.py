@@ -86,6 +86,7 @@ def cleanGreen(input_file, symbol_file):
 
     # DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
 
+    #DotVisitor("output/debug5").visit(ast)  # Export AST in Dot
     ASTTableCreator().visit(ast)  # Create the symbol table
 
     StructCleanerAfter(structTable).visit(ast)

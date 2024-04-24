@@ -116,7 +116,16 @@ class ASTTableCreator(ASTVisitor):
             param_types_and_ptrs = [(x, y) for x, y in zip(param_types, param_strings)]
 
             self.__check_function_declarations(node, param_types_and_ptrs)
-            self.__make_entry(node, child, lambda d, c: FunctionSymbolType(d, c, param_types_and_ptrs))
+
+            return_type = self.__get_data_type(child, SymbolType)
+
+            """
+            Make func type
+            """
+            function_type = FunctionSymbolType(return_type, param_types_and_ptrs)
+            symbol_entry = SymbolEntry(function_type, node.children[1].text, None, node.children[1], None)
+            node.symbol_table.add(symbol_entry)
+
             function_node = node.children[1]
             if node.getChildAmount() == 4:
                 node.symbol_table.getEntry(function_node.text).set_function_defined(True)
@@ -168,6 +177,7 @@ class ASTTableCreator(ASTVisitor):
                 is_const = True
             elif grandchild.text == "*":
                 is_const = False
+
                 latest_datatype = ASTTableCreator.__make_ptr_type(latest_datatype, is_const, grandchild.type)
             else:
                 if not ASTTypedefReplacer.isBaseType(grandchild):

@@ -1,6 +1,6 @@
 from src.parser.CTypes.COperationHandler import *
 from src.parser.ASTTableCreator import *
-
+from src.parser.Constraints.FunctionReturnConstraint import findfunction
 
 class ASTConversion(ASTVisitor):
     """
@@ -79,7 +79,7 @@ class ASTConversion(ASTVisitor):
 
             self.type_mapping[node] = (data_type, ptrs)
             return
-        if node.text not in ("Literal", "Expr", "Declaration", "Assignment", "ParameterCall", "FunctionCall"):
+        if node.text not in ("Literal", "Expr", "Declaration", "Assignment", "ParameterCall", "FunctionCall", "Return"):
 
             """
             For our conversion we are only interested in Nodes that have a type,
@@ -215,6 +215,14 @@ class ASTConversion(ASTVisitor):
             logical operators expect booleans so we convert the given entry into a boolean
             """
             to_type = (("BOOL", False), [])
+
+
+        if node.text == "Return":
+            function = findfunction(node)
+            function_name = function.getChild(0).text
+
+            return_type = function.getSymbolTable().getEntry(function_name).getPtrTuple()
+            to_type = return_type
 
         """
         add implicit conversions as explicit

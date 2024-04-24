@@ -40,16 +40,23 @@ class AstLoader:
             for entry in symbol_table["entries"]:
                 type_tup = entry["type"]
                 base_type, ptrs, const_list = type_tup
+
+                func = False
                 if ":" in base_type:
+                    func = True
                     base_type = base_type.split(":")
 
-                    symbol_type = FunctionSymbolType(base_type[1], const_list[0], ast.literal_eval(base_type[2]))
+                    symbol_type = SymbolType(base_type[1], const_list[0])
+
                 else:
                     symbol_type = SymbolType(base_type, const_list[0])
 
                 for i in range(len(ptrs)):
                     const_list = const_list[1:]
                     symbol_type = SymbolTypePtr(symbol_type, const_list[0])
+
+                if func:
+                    symbol_type = FunctionSymbolType(symbol_type, ast.literal_eval(base_type[2]))
 
                 symbol_table_entry = SymbolEntry(symbol_type, entry["name"], map_id_to_node.get(entry["value"], None), map_id_to_node.get(entry["firstDeclared"]), map_id_to_node.get(entry["firstUsed"]))
                 symbol_table_real.add(symbol_table_entry)
