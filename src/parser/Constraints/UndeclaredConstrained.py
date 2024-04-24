@@ -17,7 +17,7 @@ class UndeclaredConstrained(Constraint):
 
             #print(entry.firstDeclared.linenr > node.linenr , entry)
 
-            if entry is None or entry.firstDeclared.linenr > node.linenr:
+            if entry is None or entry.firstDeclared.virtuallinenr > node.virtuallinenr:
                 self.rejected = True
                 self.errorNode = node
                 self.throwException()

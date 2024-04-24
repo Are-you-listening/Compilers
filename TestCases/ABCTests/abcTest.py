@@ -85,7 +85,7 @@ class ASTTest(ABC):
                 """
                 errors = str(buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
-                # print("buff", buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
+                print("buff", buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
                 assert errors == expected_errors
             except SystemExit:  # Upon crash
                 """
@@ -166,7 +166,7 @@ class LLVMTest(unittest.TestCase, ABC):
                 """
                 assert for same output
                 """
-                # print('a', out.stdout, 'b', c_out.stdout)
+                #print('a', out.stdout, 'b', c_out.stdout)
                 assert out.stdout == c_out.stdout
 
                 """
@@ -186,7 +186,7 @@ class LLVMTest(unittest.TestCase, ABC):
                 """
                 errors = str(error_buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
-                # print("error", error_buff.getvalue().splitlines(), index)  # Print any errors we didn't expect
+                print("error", error_buff.getvalue().splitlines(), index)  # Print any errors we didn't expect
                 assert errors == expected_errors
 
             sys.stdout = original

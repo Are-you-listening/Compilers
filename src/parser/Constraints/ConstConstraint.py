@@ -62,3 +62,4 @@ class ConstConstraint(Constraint):
 
     def throwException(self):
         pass
+

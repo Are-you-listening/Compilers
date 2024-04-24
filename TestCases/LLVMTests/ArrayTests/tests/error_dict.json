@@ -6,5 +6,6 @@
   "13": ["[ Error ] line 4: the array size definition of x should be an integer instead of 'FLOAT'"],
   "16": ["[ Error ] line 8: the array size definition of x should be an integer instead of 'IDENTIFIER'"],
   "17": ["[ Error ] line 3: the array index is of type FLOAT which is not allowed"],
-  "18": ["[ Error ] line 3:  indirection requires array operand ('INT' invalid)"]
+  "18": ["[ Error ] line 3:  indirection requires array operand ('INT' invalid)"],
+  "20": ["[ Error ] line 4: an initializer list is provided while not being assigned to an array"]
 }

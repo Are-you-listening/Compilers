@@ -10,7 +10,6 @@ class PreProcessor:
         self.lexer = lexer
         self.defined = {}
         self.stdio = False
-        self.path = PreProcessor.__getPath(input_file)
         self.files = [input_file]
         self.ifndef = []  # Indicated if we passed an #ifndef e.g. [False,True] | We use a list, so we can pop and keep track of 'scoped' "#ifndef"
 
@@ -39,9 +38,15 @@ class PreProcessor:
         :param i: Index at which the '#define' started
         :return: j , index of the last token
         """
+
+        """
+        Get the line nr corresponding to the define line
+        """
+        line = self.stream.tokens[i].line  # Current line number
+
         i += 2
         token = self.stream.tokens[i]  # Token we're working on
-        line = token.line  # Current line number
+
         value = []
         type = self.lexer.ruleNames[token.type - 1]  # Type of the token in string format
 
@@ -51,8 +56,17 @@ class PreProcessor:
             i += 1
             token = self.stream.tokens[i]  # Get new token
             type = self.lexer.ruleNames[token.type - 1]
-
+            print("t", token, token.line)
         return value, i
+
+    def __being_skipped(self):
+        """
+        Check if an include guards makes it so the code is currently being skipped
+        """
+        if len(self.ifndef) == 0:
+            return False
+
+        return self.ifndef[-1] is not None
 
     def preProcess(self):
         """
@@ -69,7 +83,11 @@ class PreProcessor:
             type = self.lexer.ruleNames[token.type - 1]
 
             if '#' in text and (type not in ["SINGLECOMMENT", "MULTILINE"]):  # We came across a preprocessor directive
-                if "define" in text:
+                o = ""
+                for s in self.stream.tokens:
+                    o += s.text
+
+                if "define" in text and not self.__being_skipped():
                     identifier = self.stream.tokens[i + 1]
                     if "IDENTIFIER" != self.lexer.ruleNames[identifier.type - 1]:  # Can only use identifiers as macro names!
                         ErrorExporter.nonIdentifierDefine(identifier.line)
@@ -84,14 +102,17 @@ class PreProcessor:
 
                     i = j - len(value) - 3  # Adjust index so we don't go to far
 
-                elif "include" in text:
-                    identifier = self.stream.tokens[i + 1].text
-                    file = self.path + identifier[
+                elif "include" in text and not self.__being_skipped():
+                    file_name_token = self.stream.tokens[i + 1]
+
+                    identifier = file_name_token.text
+                    path = self.__getPath(file_name_token.source[1].fileName)
+                    file = path + identifier[
                                        1:len(identifier) - 1]  # Remove the '"' char before and after + add the path
                     k = i
 
-                    if identifier != "<stdio.h>" and not self.__isDefined(
-                            file):  # 'not self.ifndef[-1]' is important, so we make sure that we don't double define or have circular includes
+                    if identifier != "<stdio.h>" and \
+                            not self.__isDefined(file):  # 'not self.ifndef[-1]' is important, so we make sure that we don't double define or have circular includes
                         try:
                             input_stream = FileStream(file)  # Verify the file exists
                         except:
@@ -107,6 +128,7 @@ class PreProcessor:
                         for tempToken in stream.tokens:  # Add a note for SemanticAnalyses another file was used
                             if tempToken.text != "<EOF>":  # The file doesn't yet end xd
                                 tempToken.HIDDEN_CHANNEL = len(self.files) - 1
+
                                 self.stream.tokens.insert(i, tempToken)  # Add the tokens to the current stream
                                 i += 1  # Update the index to insert to
 
@@ -119,16 +141,30 @@ class PreProcessor:
                     i -= 1  # Adjust index so we don't go to far
 
                 elif "ifndef" in text:
-                    self.ifndef.append(True)
-                    del self.stream.tokens[i:i + 1]  # Remove the '#ifndef' directive
+                    definer = self.stream.tokens[i+1].text
+
+                    if definer in self.defined or self.__being_skipped():
+                        self.ifndef.append(i)
+                    else:
+                        self.ifndef.append(None)
+                    del self.stream.tokens[i:i + 2]  # Remove the '#ifndef' directive
                     i -= 1  # Adjust index so we don't go to far
 
                 elif "endif" in text:
                     if len(self.ifndef) == 0:
                         ErrorExporter.unMatchedEndIf(token.line)
-                    self.ifndef.pop()
+                    skipped_index = self.ifndef.pop()
+
+                    if skipped_index is not None:
+                        del self.stream.tokens[skipped_index:i]  # remove skipped code
+                        i = skipped_index
+
                     del self.stream.tokens[i:i + 1]  # Remove the '#endif' directive
                     i -= 1  # Adjust index so we don't go to far
+
+                o = ""
+                for s in self.stream.tokens:
+                    o += s.text
 
             if type not in ["SINGLECOMMENT", "MULTILINE"]:
                 if text in self.defined.keys():  # Replace any defines
@@ -153,5 +189,8 @@ class PreProcessor:
             # for token in self.stream.tokens:  # For debug
             #     tokenstring += token.text+" "
             # print(tokenstring)
+
+        if len(self.ifndef) != 0:
+            ErrorExporter.unMatchedStartIf(token.line)
 
         return self.stdio, self.stream

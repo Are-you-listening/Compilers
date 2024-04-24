@@ -6,13 +6,16 @@ class EListener(ErrorListener):
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
         if offendingSymbol is not None:
             text = offendingSymbol.text
+            file = offendingSymbol.source[1].fileName
         else:
             if "token recognition error at:" in msg:
                 text = msg[29:len(msg)-1]
+                file = ""
             else:
                 text = 'None'
+                file = ""
 
-        print(f"[ Syntax Error ] line {line}:{column} invalid symbol: '{text}'", file=sys.stderr)
+        print(f"[ Syntax Error ] {file} line {line}:{column} invalid symbol: '{text}'", file=sys.stderr)
         exit()
 
 
@@ -251,6 +254,11 @@ class ErrorExporter:
         exit()
 
     @staticmethod
+    def unMatchedStartIf(line_nr: int):
+        print(f"[ Syntax Error ] line: {line_nr} unterminated #ifndef ", file=sys.stderr)
+        exit()
+
+    @staticmethod
     def fileNotFound(line_nr, file):
         print(f"[ Error ] line: {line_nr} '{file}' File not found!", file=sys.stderr)
         exit()
@@ -280,12 +288,14 @@ class ErrorExporter:
         """
         Convert the data to an output type
         """
-        out_type = in_type[0]
+
+        out_type = in_type[0][0]
+
         for v in reversed(in_type[1]):
-            if v == "*":
+            if v[0] == "*":
                 out_type += "*"
             else:
-                out_type += f"[{v}]"
+                out_type += f"[{v[0]}]"
 
         return out_type
 
@@ -313,5 +323,15 @@ class ErrorExporter:
     def invalidArrayIndex(line_nr: int, index_type: tuple):
         index_type = ErrorExporter.__to_output_type(index_type)
         print(f"[ Error ] line {line_nr}: the array index is of type {index_type} which is not allowed",
+              file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def missingReturn(line_nr: int, return_type: str):
+        print(f"[ Warning ] line {line_nr}: function with return type {return_type} is missing a valid return statement")
+
+    @staticmethod
+    def lostInitializerList(line_nr: int):
+        print(f"[ Error ] line {line_nr}: an initializer list is provided while not being assigned to an array",
               file=sys.stderr)
         exit()

@@ -169,6 +169,10 @@ class ASTCleaner(ASTVisitor):
             if isinstance(child, ASTNodeTerminal) and child.type == "IDENTIFIER" and identifier_node is None:
                 identifier_node = child
 
+        # we do an assignment through a pointer dereference + pointer arithmetic
+        if identifier_node is None:
+            return
+
         for i, ln in enumerate(dereference_counter):
             id_parent = identifier_node.parent
             parent_expr = ASTNode("Expr", id_parent, id_parent.getSymbolTable(), id_parent.linenr, id_parent.virtuallinenr)

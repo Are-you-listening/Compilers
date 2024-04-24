@@ -2,6 +2,7 @@ import json
 from src.parser.Tables.SymbolTable import *
 from typing import List
 from src.llvm_target.ControlFlow.ControlFlowGraph import Vertex
+import ast
 
 class AstLoader:
     """
@@ -39,7 +40,12 @@ class AstLoader:
             for entry in symbol_table["entries"]:
                 type_tup = entry["type"]
                 base_type, ptrs, const_list = type_tup
-                symbol_type = SymbolType(base_type, const_list[0])
+                if ":" in base_type:
+                    base_type = base_type.split(":")
+
+                    symbol_type = FunctionSymbolType(base_type[1], const_list[0], ast.literal_eval(base_type[2]))
+                else:
+                    symbol_type = SymbolType(base_type, const_list[0])
 
                 for i in range(len(ptrs)):
                     const_list = const_list[1:]

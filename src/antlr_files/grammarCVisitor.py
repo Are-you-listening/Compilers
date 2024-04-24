@@ -164,6 +164,11 @@ class grammarCVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by grammarCParser#pointer_deref.
+    def visitPointer_deref(self, ctx:grammarCParser.Pointer_derefContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by grammarCParser#conversion.
     def visitConversion(self, ctx:grammarCParser.ConversionContext):
         return self.visitChildren(ctx)

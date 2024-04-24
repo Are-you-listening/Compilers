@@ -287,6 +287,15 @@ class grammarCListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by grammarCParser#pointer_deref.
+    def enterPointer_deref(self, ctx:grammarCParser.Pointer_derefContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#pointer_deref.
+    def exitPointer_deref(self, ctx:grammarCParser.Pointer_derefContext):
+        pass
+
+
     # Enter a parse tree produced by grammarCParser#conversion.
     def enterConversion(self, ctx:grammarCParser.ConversionContext):
         pass

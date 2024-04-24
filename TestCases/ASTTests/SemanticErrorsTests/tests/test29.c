@@ -8,4 +8,5 @@ int main(){
     }
     int z = x;
     // z should now be 1
+    return 0;
 }

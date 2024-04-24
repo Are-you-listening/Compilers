@@ -6,7 +6,7 @@ int x = 1;
 
 #include "includes/define1.c"
 
-#ifndef
+#ifndef A
 #include "includes/define2.c"
 #endif
 

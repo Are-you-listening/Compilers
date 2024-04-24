@@ -59,19 +59,19 @@ class UnaryWrapper:
 
 class CTypesToLLVM:
     @staticmethod
-    def getBytesUse(data_type: str, ptrs: list):
+    def getBytesUse(data_type: tuple, ptrs: list[tuple]):
         if len(ptrs) >= 1:
             return 8
 
         convert_map = {"INT": 4, "CHAR": 1, "FLOAT": 4, "BOOL": 1}
-        return convert_map.get(data_type, "TYPE ISSUE")
+        return convert_map.get(data_type[0], "TYPE ISSUE")
 
     @staticmethod
-    def getIRType(data_type: str, ptrs: list):
+    def getIRType(data_type: tuple, ptrs: list[tuple]):
         convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType(), "BOOL": ir.IntType(1)}
-        llvm_type = convert_map.get(data_type)
+        llvm_type = convert_map.get(data_type[0])
         for p in ptrs:
-            if p == "*":
+            if p[0] == "*":
                 """
                 In case a '*' is in the ptr, we have a ptr element
                 """
@@ -80,14 +80,14 @@ class CTypesToLLVM:
                 """
                 When we have an integer, we have an array
                 """
-                llvm_type = ir.ArrayType(llvm_type, int(p))
+                llvm_type = ir.ArrayType(llvm_type, int(p[0]))
 
         return llvm_type
 
 
 class Declaration:
     @staticmethod
-    def declare(data_type: str, ptrs: list):
+    def declare(data_type: tuple, ptrs: list[tuple]):
         block = LLVMSingleton.getInstance().getCurrentBlock()
         llvm_val = block.alloca(CTypesToLLVM.getIRType(data_type, ptrs))
         llvm_val.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
@@ -95,14 +95,17 @@ class Declaration:
         return llvm_val
 
     @staticmethod
-    def function(func_name: str, return_type: str, ptrs: list):
+    def function(func_name: str, return_type: tuple, ptrs: list[tuple], args: list):
         """
         change the current latest function
         """
-
-        function_type = ir.FunctionType(CTypesToLLVM.getIRType(return_type, ptrs), ())
+        llvmArgs = []
+        for arg in args:
+            arg_type = CTypesToLLVM.getIRType(arg[0], arg[1])
+            llvmArgs.append(arg_type)
+        function_type = ir.FunctionType(CTypesToLLVM.getIRType(return_type, ptrs), (llvmArgs))
         new_function = ir.Function(LLVMSingleton.getInstance().getModule(), function_type, name=func_name)
-        LLVMSingleton.getInstance().setLastFunction(new_function)
+        LLVMSingleton.getInstance().addFunction(new_function)
 
         return new_function
 
@@ -131,13 +134,12 @@ class Declaration:
         return llvm_val
 
     @staticmethod
-    def llvmLiteral(value: str, data_type: str, ptrs: list):
+    def llvmLiteral(value: str, data_type: tuple, ptrs: list):
         if CTypesToLLVM.getIRType(data_type, ptrs) == ir.FloatType():
             value = float(value)
         elif CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(32):
             value = int(value)
         elif CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(8):
-
             """
             removes "'" before and after character
             """
@@ -155,11 +157,20 @@ class Declaration:
     @staticmethod
     def addComment(text: str):
         block = LLVMSingleton.getInstance().getCurrentBlock()
-        text = text.replace("\n","")  # Comments in LLVM cannot contain new lines
+        text = text.replace("\n", "")  # Comments in LLVM cannot contain new lines
         block.comment(text)
 
     @staticmethod
     def string(text: str):
+        """
+        Create LLVM strings
+        """
+
+        """
+        Support escape characters
+        """
+        text = text.encode('utf-8').decode('unicode-escape')
+
         index = LLVMSingleton.getInstance().getStringIndex(text)
         builder = LLVMSingleton.getInstance().getCurrentBlock()
         format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(text)),
@@ -187,12 +198,13 @@ class Load:
 
             llvm_var = block.gep(load_llvm, index_list, True)  # Create the gep instruction
         else:
+
             llvm_var = block.load(load_llvm)
 
         if not isinstance(load_llvm, ir.GEPInstr):
             llvm_var.align = load_llvm.align
         else:
-            llvm_var.align = CTypesToLLVM.getBytesUse("INT", [])
+            llvm_var.align = CTypesToLLVM.getBytesUse(("INT", False), [])
 
         return llvm_var
 
@@ -254,7 +266,6 @@ class Calculation:
             """
             operator '[]' is for access of arrays. We can access an array using a GetElementPointer
             """
-
             if not isinstance(right,
                               ir.Constant):  # If it is not a constant, LLVM requires a sign extend to match the size
                 right = block.sext(right, ir.IntType(64))
@@ -267,9 +278,9 @@ class Calculation:
             """
             When we come across an array we need to define a value 0 followed by the index we want to access
             """
+
             if isinstance(left.type.pointee, ir.ArrayType):
                 index_list.insert(0, ir.Constant(ir.types.IntType(64), 0))
-
             new_value = block.gep(left, index_list, True)  # Create the gep instruction
             return new_value
 
@@ -410,7 +421,6 @@ class Conversion:
         """
         dict we use to retrieve which conversion command to call
         """
-
         conversion_dict = {(ir.IntType, "FLOAT"): lambda x, x_to: block.sitofp(x, x_to),
                            (ir.FloatType, "INT"): lambda x, x_to: block.fptosi(x, x_to),
                            (ir.IntType, "CHAR"): lambda x, x_to: block.trunc(x, x_to),
@@ -424,7 +434,7 @@ class Conversion:
                            (ir.PointerType, "CHAR"): lambda x, x_to: block.ptrtoint(x, x_to),
                            (ir.PointerType, "PTR"): lambda x, x_to: block.bitcast(x, x_to)}
 
-        llvm_to_type = CTypesToLLVM.getIRType(native_type, ptrs)
+        llvm_to_type = CTypesToLLVM.getIRType((native_type, False), ptrs)
 
         """
         make a simplified to type for checking the conversion dict

@@ -6,7 +6,7 @@ int x = 1;
 
 #include "includes/define1.c"
 
-#ifndef
+#ifndef A
 #define BUFFER_SIZE -100
 #endif
 

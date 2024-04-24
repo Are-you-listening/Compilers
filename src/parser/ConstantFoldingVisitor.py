@@ -55,9 +55,11 @@ class ConstantFoldingVisitor(ASTVisitor):
 
             index = parent.findChild(node)
 
-            node = ASTNodeTerminal(str(result),
+            c_type_to = c_type_executors[to_type]()
+            node = ASTNodeTerminal(c_type_to.getString(result),
                                    parent, parent.getSymbolTable(), to_type, node.linenr, node.virtuallinenr)
             parent.setChild(index, node)
+
             return
 
         if node.text != "Expr":
@@ -142,7 +144,7 @@ class ConstantFoldingVisitor(ASTVisitor):
         if logical_operator == "||":
             if operand.text == "0":
                 ASTConversion.addConversion(node.getChild(0) if operand == node.getChild(2) else node.getChild(2),
-                                            ("BOOL", []))
+                                            (("BOOL", False), []))
                 return None
             else:
                 return "1", "INT"
@@ -151,7 +153,7 @@ class ConstantFoldingVisitor(ASTVisitor):
                 return "0", "INT"
             else:
                 ASTConversion.addConversion(node.getChild(0) if operand == node.getChild(2) else node.getChild(2),
-                                            ("BOOL", []))
+                                            (("BOOL", False), []))
                 return None
 
         return None

@@ -106,6 +106,8 @@ class ControlFlowCreator(ASTVisitor):
             """
             Create a block with the entire code base being a child
             """
+            func_name = node.children[0].text
+            function = LLVMSingleton.getInstance().getFunction(func_name)
             ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, cf.root,
                                      node.virtuallinenr)
             node.getChild(2).addNodeChildEmerge(ast_block)
@@ -227,7 +229,8 @@ class ControlFlowCreator(ASTVisitor):
         """
         var_child: ASTNode = node.getChild(0)
         data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
-        Declaration.function(var_child.text, data_type, ptrs)
+        args = var_child.getSymbolTable().getEntry(var_child.text).getTypeObject().getParameterTypes()
+        Declaration.function(var_child.text, data_type, ptrs, args)
 
     def handleOperations(self, node: ASTNode):
         """
