@@ -18,4 +18,4 @@ class SymbolType:
         const_str = "const"
         if not self.const:
             const_str = ""
-        return f"{const_str} {self.data_type} "
+        return f"{const_str} {self.data_type}"

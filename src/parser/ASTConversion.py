@@ -173,6 +173,20 @@ class ASTConversion(ASTVisitor):
             """
             self.type_mapping[assign_node] = to_type
 
+            if node.text == "Assignment":
+                """
+                Check if we assign to const assign node, if so throw an error
+                """
+
+                if len(to_type[1]) > 0:
+                    const_assign = to_type[1][0][1]
+                else:
+                    const_assign = to_type[0][1]
+
+                if const_assign:
+                    ErrorExporter.constComplaint(node.linenr, self.subtree_to_text(assign_node),
+                                                 self.subtree_to_text(assign_node), self.format_type(to_type))
+
         if node.text == "ParameterCall":
             functionNode = node.parent.children[0]
             while functionNode.text == "Dereference":
@@ -464,3 +478,32 @@ class ASTConversion(ASTVisitor):
                 ASTNodeTerminal(t_child[0], type_node, type_node.getSymbolTable(), "Not Used",
                                 node.linenr, node.virtuallinenr))
         node.addNodeParent(new_node)
+
+    @staticmethod
+    def subtree_to_text(node: ASTNode):
+        text = ""
+        if isinstance(node, ASTNodeTerminal):
+
+            text += node.text
+
+        if node.text == "Dereference":
+            text += "*"
+
+        for child in node.children:
+            text += ASTConversion.subtree_to_text(child)
+
+        return text
+
+    @staticmethod
+    def format_type(format_type: tuple):
+        const = ""
+        if format_type[0][1]:
+            const = "const"
+
+        type_text = f"{const} {format_type[0][0]}"
+        for p in reversed(format_type[1]):
+            const = ""
+            if p[1]:
+                const = "const"
+            type_text += f"*{const}"
+        return type_text
