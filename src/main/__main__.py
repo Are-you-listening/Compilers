@@ -82,7 +82,10 @@ def cleanGreen(input_file, symbol_file):
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
     StringToArray().visit(ast)
+
+    #DotVisitor("output/debug5").visit(ast)  # Export AST in Dot
     ArrayCleaner().visit(ast)
+    #DotVisitor("output/debug6").visit(ast)  # Export AST in Dot
 
     # DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
 

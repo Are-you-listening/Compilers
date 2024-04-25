@@ -45,29 +45,34 @@ class ArrayCleaner(ASTVisitor):
         """
         Check if node is a declaration
         """
-        if node.text != "Declaration":
+        if node.text not in ("Declaration", "Parameter"):
             return
-
+        print("he", node.text)
         """
         Check if the declaration has enough children
         """
         if node.getChildAmount() < 3:
             return
-
+        print("he", node.text)
         """
         check if the child index 2 is a terminal with type array
         """
         if node.getChild(2).text != "ARRAY":
             return
-
+        print("he", node.text)
         type_node = node.getChild(0)
 
         array_sizes = self.array_size(node.getChild(2), True)
 
         self.array_map[node] = array_sizes
 
-        for new_ptr_val in array_sizes:
-            new_ptr = ASTNodeTerminal("*", type_node.parent, type_node.getSymbolTable(), f"ARRAY_{new_ptr_val}",
+        for i, new_ptr_val in enumerate(array_sizes):
+            if i == 0 and node.text == "Parameter":
+                data_type = "PTR"
+            else:
+                data_type = f"ARRAY_{new_ptr_val}"
+
+            new_ptr = ASTNodeTerminal("*", type_node.parent, type_node.getSymbolTable(), data_type,
                                       type_node.linenr, type_node.virtuallinenr)
             type_node.addChildren(new_ptr)
 

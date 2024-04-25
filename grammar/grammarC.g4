@@ -7,7 +7,7 @@ comment : MULTILINE | SINGLECOMMENT;
 function : (type) IDENTIFIER '(' parameters ')' ('{' block_code '}')? ';'*;
 line: (declaration | expr | assignment | typedef | enum | structunion | function_ptr);
 parameters: ((parameter',')* parameter)?;
-parameter: type IDENTIFIER;
+parameter: type IDENTIFIER array?;
 function_call: ( '(' '*' (function_call | IDENTIFIER) ')' | IDENTIFIER) ('(' ((parameter_call',')* parameter_call)? ')')+;
 parameter_call: expr;
 block_line: (line | printscanf | 'break' | 'continue' | return);
