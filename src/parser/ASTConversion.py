@@ -209,7 +209,7 @@ class ASTConversion(ASTVisitor):
             """
             TODO: support for ptrs in function calls (string zijn sterretjes)
             """
-            to_type = parameterTypes[node.parent.findChild(node) - 1]
+            to_type = parameterTypes[node.parent.findChild(node) - 1].getPtrTuple()
             """
             make sure assignment doesn't convert to a ptr less
             """
@@ -235,6 +235,7 @@ class ASTConversion(ASTVisitor):
             if type_tup == (None, None):
                 continue
 
+            # TODO Temp
             if type_tup[0][0] in self.structTable.keys() or to_type[0][0] in self.structTable.keys():  # Don't check struct types
                 continue
 

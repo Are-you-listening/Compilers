@@ -1,1 +1,3 @@
-{}
+{
+  "5": ["[ Syntax Error ] tests/test5.c line 3:10 invalid symbol: 'd'"]
+}

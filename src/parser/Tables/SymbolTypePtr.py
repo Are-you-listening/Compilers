@@ -18,3 +18,13 @@ class SymbolTypePtr(SymbolType):
             const_str = ""
 
         return f"{self.pts_to.getStringType()}*{const_str}"
+
+    def getPtrTuple(self):
+
+        data_type, ptrs = self.pts_to.getPtrTuple()
+        ptrs.append(("*", self.isConst()))
+        return data_type, ptrs
+
+    def __eq__(self, other):
+
+        return super().__eq__(other) and self.isConst() == other.isConst() and self.pts_to == other.pts_to
