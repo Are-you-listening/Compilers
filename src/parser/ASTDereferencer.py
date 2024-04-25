@@ -36,6 +36,7 @@ class ASTDereferencer(ASTVisitor):
                 # remove the ampersand and don't add a dereference node
                 node.parent.parent.replaceChild(node.parent, node)
                 return
+
             self.addDereference(node)
             return
 

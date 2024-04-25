@@ -153,7 +153,6 @@ class AST2LLVM(ASTVisitor):
             if entry is None:
                 return
 
-            print("node id",node.parent.text, node.text, entry.llvm)
             self.llvm_map[node] = entry.llvm
 
         if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
@@ -231,7 +230,6 @@ class AST2LLVM(ASTVisitor):
         else:
             alignment = 4
 
-        print(store_reg, "q", to_store_reg)
         llvm_var = Declaration.assignment(store_reg, to_store_reg, alignment)
 
         self.llvm_map[node] = llvm_var
@@ -368,11 +366,9 @@ class AST2LLVM(ASTVisitor):
         for child in node.children[1:]:
             if child.text == "ParameterCall":
                 llvm_var = self.llvm_map[child.children[0]]
-                print("call llvm", llvm_var)
                 if llvm_var is not None:
                     args.append(llvm_var)
 
-        print(args)
         llvm_var = builder.call(function, args)
 
         self.llvm_map[node] = llvm_var

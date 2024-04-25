@@ -1,16 +1,25 @@
 #include <stdio.h>
 
-int d(int w[2]){
-    printf("%d", w[0]);
-    printf("%d", w[1]);
-    w[1] = 5;
-    return w[1];
-}
-
-
 int main() {
-    int c[2] = {1, 2};
-    int u = d(c);
-    printf("%d", u);
+    int x[2][3];
+
+    x[0][0] = 0;
+    x[0][1] = 1;
+    x[0][2] = 2;
+    x[1][0] = 3;
+    x[1][1] = 4;
+    x[1][2] = 5;
+    printf("%d", x[0][0]);
+    printf("%d", x[0][1]);
+    printf("%d", x[0][2]);
+    printf("%d", x[1][0]);
+    printf("%d", x[1][1]);
+    printf("%d", x[1][2]);
+
+    x[0][2] = x[1][2] + x[1][0];
+
+    printf("%d", x[0][2]);
+    printf("%d", x[1][2]);
+    printf("%d", x[1][0]);
     return 0;
 }

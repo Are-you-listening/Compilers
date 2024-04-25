@@ -39,6 +39,7 @@ expr : literal
      | '{' initialize_list '}'
      | '(' expr ')'
      | ('++' | '--' | '&' | '*') expr
+     | expr array
      | IDENTIFIER ('++' | '--')
      | expr '.' IDENTIFIER
      | ('+'|'-' | '~' | '!' ) expr
@@ -52,8 +53,9 @@ expr : literal
      | expr '|' expr
      | expr '&&' expr
      | expr '||' expr;
+
 array: ('[' expr ']')+ ;
-literal : (INT | FLOAT | CHAR | STRING | (IDENTIFIER array?)) ;
+literal : (INT | FLOAT | CHAR | STRING | (IDENTIFIER)) ;
 
 MULTILINE: '/*' (.)*?  '*/' ;
 SINGLECOMMENT: '//' (~[\n])*;

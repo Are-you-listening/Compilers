@@ -19,6 +19,7 @@ class ASTCleanerAfter(ASTVisitor):
 
     def visitNode(self, node: ASTNodeTerminal):
         self.cleanDeclaration(node)
+        self.cleanExpr(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.cleanReturn(node)
@@ -41,3 +42,12 @@ class ASTCleanerAfter(ASTVisitor):
             return
 
         self.to_remove.add(node)
+
+    def cleanExpr(self, node: ASTNode):
+        if node.text != "Expr":
+            return
+
+        if node.getChildAmount() != 1:
+            return
+
+        node.parent.replaceChild(node, node.getChild(0))

@@ -47,19 +47,19 @@ class ArrayCleaner(ASTVisitor):
         """
         if node.text not in ("Declaration", "Parameter"):
             return
-        print("he", node.text)
+
         """
         Check if the declaration has enough children
         """
         if node.getChildAmount() < 3:
             return
-        print("he", node.text)
+
         """
         check if the child index 2 is a terminal with type array
         """
         if node.getChild(2).text != "ARRAY":
             return
-        print("he", node.text)
+
         type_node = node.getChild(0)
 
         array_sizes = self.array_size(node.getChild(2), True)
