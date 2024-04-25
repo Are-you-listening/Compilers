@@ -251,12 +251,12 @@ class grammarCListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by grammarCParser#function_ptr.
-    def enterFunction_ptr(self, ctx:grammarCParser.Function_ptrContext):
+    # Enter a parse tree produced by grammarCParser#functionPtrDeclaration.
+    def enterFunctionPtrDeclaration(self, ctx:grammarCParser.FunctionPtrDeclarationContext):
         pass
 
-    # Exit a parse tree produced by grammarCParser#function_ptr.
-    def exitFunction_ptr(self, ctx:grammarCParser.Function_ptrContext):
+    # Exit a parse tree produced by grammarCParser#functionPtrDeclaration.
+    def exitFunctionPtrDeclaration(self, ctx:grammarCParser.FunctionPtrDeclarationContext):
         pass
 
 
@@ -266,6 +266,15 @@ class grammarCListener(ParseTreeListener):
 
     # Exit a parse tree produced by grammarCParser#function_ptr_2.
     def exitFunction_ptr_2(self, ctx:grammarCParser.Function_ptr_2Context):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#function_ptr_params.
+    def enterFunction_ptr_params(self, ctx:grammarCParser.Function_ptr_paramsContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#function_ptr_params.
+    def exitFunction_ptr_params(self, ctx:grammarCParser.Function_ptr_paramsContext):
         pass
 
 

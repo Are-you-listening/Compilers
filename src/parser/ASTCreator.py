@@ -141,6 +141,15 @@ class ASTCreator(grammarCVisitor):
         else:
             self.__makeNode(ctx, "Union")
 
+    def visitFunctionPtrDeclaration(self, ctx:grammarCParser.FunctionPtrDeclarationContext):
+        self.__makeNode(ctx, "FunctionPtrDeclaration")
+
+    def visitFunction_ptr_2(self, ctx: grammarCParser.Function_ptr_2Context):
+        self.__makeNode(ctx, "FunctionPtr")
+
+    def visitFunction_ptr_params(self, ctx:grammarCParser.Function_ptr_paramsContext):
+        self.__makeNode(ctx, "FunctionPtrParam")
+
     def visitTerminal(self, ctx):
         """
         :param ctx:

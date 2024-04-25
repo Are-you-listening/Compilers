@@ -56,8 +56,6 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-
-
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)
 
@@ -65,6 +63,8 @@ def cleanGreen(input_file, symbol_file):
 
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
+
+    #DotVisitor("output/debug3").visit(ast)  # Export AST in Dot
 
     structTable = StructCleaner().visit(ast)
 

@@ -144,13 +144,18 @@ class grammarCVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by grammarCParser#function_ptr.
-    def visitFunction_ptr(self, ctx:grammarCParser.Function_ptrContext):
+    # Visit a parse tree produced by grammarCParser#functionPtrDeclaration.
+    def visitFunctionPtrDeclaration(self, ctx:grammarCParser.FunctionPtrDeclarationContext):
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by grammarCParser#function_ptr_2.
     def visitFunction_ptr_2(self, ctx:grammarCParser.Function_ptr_2Context):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by grammarCParser#function_ptr_params.
+    def visitFunction_ptr_params(self, ctx:grammarCParser.Function_ptr_paramsContext):
         return self.visitChildren(ctx)
 
 
