@@ -64,14 +64,21 @@ class ASTTableCreator(ASTVisitor):
         return True
 
 
-    def __check_function_declarations(self, node: ASTNode, param_types_and_ptrs: list):
+    def __check_function_declarations(self, node: ASTNode, param_types_and_ptrs: list, return_type: SymbolType ):
         function_node = node.children[1]
+        #check if the function is already declared
         if function_node.symbol_table.exists(function_node.text):
+            #check if the return types match, if not, throw an error
+            if return_type.getPtrTuple() != node.symbol_table.getEntry(function_node.text).getPtrTuple():
+                ErrorExporter.conflictingFunctionReturnType(function_node.linenr, function_node.text)
+            #check if the parameter types match, if not, throw an error
             if not self.__equelParamTypes(param_types_and_ptrs, node.symbol_table.getEntry(function_node.text).getTypeObject().getParameterTypes()):
-                ErrorExporter.conflictingFunctionTypes(function_node.linenr, function_node.text)
+                ErrorExporter.conflictingFunctionParameterTypes(function_node.linenr, function_node.text)
+            #check if the function is a declaration or a definition
             if node.getChildAmount() == 3:
                 return
             else:
+                #the function is a definition, check if it is already defined, if so, throw an error, else set it to defined
                 if (node.symbol_table.getEntry(function_node.text).is_function_defined()):
                     ErrorExporter.functionRedefenition(function_node.linenr, function_node.text)
                 else:
@@ -111,9 +118,11 @@ class ASTTableCreator(ASTVisitor):
                 param_type = self.__get_data_type(param.getChild(0), SymbolType)
                 param_types.append(param_type)
 
-            self.__check_function_declarations(node, param_types)
-
             return_type = self.__get_data_type(child, SymbolType)
+
+            self.__check_function_declarations(node, param_types, return_type)
+
+
 
             """
             Make func type

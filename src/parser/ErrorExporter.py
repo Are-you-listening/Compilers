@@ -275,8 +275,13 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def conflictingFunctionTypes(line_nr: str, func_name: str):
+    def conflictingFunctionParameterTypes(line_nr: str, func_name: str):
         print(f"[ Error ] line {line_nr}: conflicting types for {func_name}", file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def conflictingFunctionReturnType(line_nr: str, func_name: str):
+        print(f"[ Error ] line {line_nr}: conflicting return type for {func_name}", file=sys.stderr)
         exit()
 
     @staticmethod
