@@ -1,0 +1,11 @@
+{"1":  ["[ Error ] line 9: undefined reference to func"],
+  "2":  ["[ Error ] line 7: use of undeclared variable func"],
+  "3":  ["[ Error ] line 17: conflicting types for func"],
+  "4":  ["[ Error ] line 17: conflicting types for func"],
+  "5":  ["[ Error ] line 17: conflicting types for func"],
+  "6":  ["[ Error ] line 10: too many arguments to function 'func': expected 2, got 1"],
+  "7":  ["[ Error ] line 10: too few arguments to function 'func': expected 2, got 1"],
+  "8":  ["[ Error ] line 18: conflicting return type for func"],
+  "9":  ["[ Error ] line 18: conflicting return type for func"],
+  "10":  ["[ Error ] line 7: redefinition of func"]
+}
