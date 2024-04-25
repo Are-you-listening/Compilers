@@ -54,6 +54,9 @@ class FunctionReturnConstraint(Constraint):
             entry = func.getSymbolTable().getEntry(func.getChild(0).text)
             if entry.getType() == 'VOID':
                 continue
+            # check if the entry is a declaration, if so, skip the function (function declarations have no code node)
+            if func.getChildAmount() == 2:
+                continue
             if len(returns) == 0:
                 self.errorNodes.append(func)
         if len(self.errorNodes) > 0:
