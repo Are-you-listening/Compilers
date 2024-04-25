@@ -10,3 +10,8 @@ class SymbolTypeArray(SymbolTypePtr):
         Store the ptr size 1, means singel array size, when size > 1 => ptr to an array
         """
         self.size = size
+
+    def getPtrTuple(self):
+        data_type, ptrs = self.pts_to.getPtrTuple()
+        ptrs.append((str(self.size), self.isConst()))
+        return data_type, ptrs

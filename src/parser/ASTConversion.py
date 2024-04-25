@@ -206,7 +206,7 @@ class ASTConversion(ASTVisitor):
             """
             TODO: support for ptrs in function calls (string zijn sterretjes)
             """
-            to_type = parameterTypes[node.parent.findChild(node) - 1]
+            to_type = parameterTypes[node.parent.findChild(node) - 1].getPtrTuple()
             """
             make sure assignment doesn't convert to a ptr less
             """
@@ -503,8 +503,6 @@ class ASTConversion(ASTVisitor):
         ass = node.parent.text == "Assignment" and node.text == "Dereference"
         if ass:
             text += "*("
-
-        print(node)
 
         brackets_needed = False
 

@@ -83,7 +83,7 @@ class ASTTableCreator(ASTVisitor):
             child = node.findType("Type")
             symbol_type = SymbolType
 
-            self.__make_entry(node, child, symbol_type)
+            self.__make_entry(node, child, symbol_type, True)
 
         if node.text in ("Function", "Code", "Scope"):
             """
@@ -97,32 +97,18 @@ class ASTTableCreator(ASTVisitor):
         if node.text == "Function":
             child = node.findType("Type")
             param_types = []
-            param_strings = []
             for param in node.children[2].children:
-                param_is_const = False
-                pointer_list = []
-                if param.children[0].children[0].text != "const":
-                    param_types.append((param.children[0].children[0].text, True))
-                else:
-                    param_types.append((param.children[0].children[1].text, False))
-                    param_is_const = True
-                if param_is_const:
-                    for i in range(param.children[0].getChildAmount() - 2):
-                        pointer_list.append((pointer_list, False))
-                else:
-                    for i in range(param.children[0].getChildAmount() - 1):
-                        pointer_list.append((pointer_list, False))
-                param_strings.append(pointer_list)
-            param_types_and_ptrs = [(x, y) for x, y in zip(param_types, param_strings)]
+                param_type = self.__get_data_type(param.getChild(0), SymbolType)
+                param_types.append(param_type)
 
-            self.__check_function_declarations(node, param_types_and_ptrs)
+            self.__check_function_declarations(node, param_types)
 
             return_type = self.__get_data_type(child, SymbolType)
 
             """
             Make func type
             """
-            function_type = FunctionSymbolType(return_type, param_types_and_ptrs)
+            function_type = FunctionSymbolType(return_type, param_types)
             symbol_entry = SymbolEntry(function_type, node.children[1].text, None, node.children[1], None)
             node.symbol_table.add(symbol_entry)
 
@@ -189,7 +175,7 @@ class ASTTableCreator(ASTVisitor):
 
         return latest_datatype
 
-    def __make_entry(self, node, child: ASTNodeTerminal, symbol_type):
+    def __make_entry(self, node, child: ASTNodeTerminal, symbol_type, referenced=False):
         """
         Make symbol table entry
         :param node:
@@ -203,6 +189,8 @@ class ASTTableCreator(ASTVisitor):
         the value in the symbol table is initially empty
         """
         symbol_entry = SymbolEntry(latest_datatype, node.children[1].text, None, node.children[1], None)
+        if referenced:
+            symbol_entry.reference()
         node.symbol_table.add(symbol_entry)
 
     @staticmethod

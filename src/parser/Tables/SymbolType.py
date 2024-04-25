@@ -19,3 +19,9 @@ class SymbolType:
         if not self.const:
             const_str = ""
         return f"{const_str} {self.data_type}"
+
+    def getPtrTuple(self):
+        return (self.data_type, self.isConst()), []
+
+    def __eq__(self, other):
+        return self.isConst() == other.isConst() and self.data_type == self.data_type

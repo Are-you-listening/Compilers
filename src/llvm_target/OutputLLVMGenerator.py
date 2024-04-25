@@ -129,6 +129,7 @@ class Declaration:
         """
         llvmArgs = []
         for arg in args:
+            arg = arg.getPtrTuple()
             arg_type = CTypesToLLVM.getIRType(arg[0], arg[1])
             llvmArgs.append(arg_type)
 
