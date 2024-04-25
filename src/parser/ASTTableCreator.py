@@ -53,11 +53,21 @@ class ASTTableCreator(ASTVisitor):
                 stack.pop(current_index)
 
             visited.add(currentNode)
+
     @staticmethod
-    def __check_function_declarations(node: ASTNode, param_types_and_ptrs: list):
+    def __equelParamTypes(param_types_and_ptrs: list, param_types: list):
+        if len(param_types_and_ptrs) != len(param_types):
+            return False
+        for i in range(len(param_types_and_ptrs)):
+            if param_types_and_ptrs[i].getPtrTuple() != param_types[i].getPtrTuple():
+                return False
+        return True
+
+
+    def __check_function_declarations(self, node: ASTNode, param_types_and_ptrs: list):
         function_node = node.children[1]
         if function_node.symbol_table.exists(function_node.text):
-            if param_types_and_ptrs != node.symbol_table.getEntry(function_node.text).getTypeObject().getParameterTypes():
+            if not self.__equelParamTypes(param_types_and_ptrs, node.symbol_table.getEntry(function_node.text).getTypeObject().getParameterTypes()):
                 ErrorExporter.conflictingFunctionTypes(function_node.linenr, function_node.text)
             if node.getChildAmount() == 3:
                 return
