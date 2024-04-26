@@ -6,6 +6,7 @@ from src.parser.ASTDereferencer import ASTDereferencer
 from src.parser.StructCleaner import StructCleaner
 from src.parser.StructCleanerAfter import StructCleanerAfter
 
+
 class TestSemanticErrors(ASTTest, unittest.TestCase):
     """
     Test semantic errors

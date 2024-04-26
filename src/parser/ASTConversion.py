@@ -48,27 +48,25 @@ class ASTConversion(ASTVisitor):
         if is_array:  # TODO fix the statement
             child = node.getChild(0)
             data_type = self.type_mapping[child]
-            if isinstance(data_type, SymbolTypeStruct):
+            if isinstance(data_type, SymbolTypePtr) and isinstance(data_type.deReference(), SymbolTypeStruct):
                 is_struct = True
 
-        if is_struct and False:  # TODO Need a way to pass the type to the node above
-            index = int(node.getChild(2).text)  # Index of the struct data member
+        if is_struct:  # TODO Need a way to pass the type to the node above
             lchild = node.getChild(0)  # LHS of the '.' 'operator
-            if lchild.text == "Dereference":
-                lchild = self.structPtrMap.get(node.getChild(0))
 
-            type_object = node.symbol_table.getEntry(lchild.text).getTypeObject()
-            if isinstance(type_object, SymbolTypePtr):
-                tempPtrs = []
-                while isinstance(type_object, SymbolTypePtr):  # We need to find the StructType
-                    tempPtrs.append(('*', False))
-                    type_object = type_object.pts_to
-            else:
-                data_type2, tempPtrs = self.type_mapping[lchild]
+            """
+            Get the struct ptr type from the left child
+            """
+            struct_ptr_type = self.type_mapping[lchild]
+            struct_type = struct_ptr_type.pts_to
 
-            data_type, ptrs = type_object.pts_to[index].getPtrTuple()
-            ptrs = tempPtrs + ptrs
-            self.type_mapping[node] = (data_type, ptrs)
+            """
+            Use the struct type to translate 'struct'.'value' -> struct[index]
+            """
+            self.replaceIdentifierWithIndex(node, struct_type)
+            index = int(node.getChild(2).text)  # Index of the struct data member
+
+            data_type = struct_type.getElementType(index)
             data_type3 = data_type
 
         if node.text == "Dereference" or is_array:
@@ -76,8 +74,7 @@ class ASTConversion(ASTVisitor):
             """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was 
             before"""
             child = node.getChild(0)
-            data_type = self.type_mapping[child]
-
+            data_type: SymbolType = self.type_mapping[child]
             """
             We we do a [] access, we need to check that the value provided is an integer
             """
@@ -90,11 +87,13 @@ class ASTConversion(ASTVisitor):
                 """
                 The array has by default 1 ptr, but it it is the only 1, the array is not really an array
                 """
-                if data_type.getPtrAmount() <= 1:
+
+                if data_type.getPtrAmount() <= 1 and not isinstance(data_type.deReference(), SymbolTypeStruct):
                     ErrorExporter.invalidDereferenceNotPtr(node.linenr, data_type, True)
             """
             when trying to dereference a non-ptr, throw an error
             """
+
             if data_type.isBase():
                 ErrorExporter.invalidDereferenceNotPtr(node.linenr, data_type)
 
@@ -223,6 +222,7 @@ class ASTConversion(ASTVisitor):
             """
             be default 1 ptr is added, so remove it again, because assignment
             """
+
             to_type = assign_type.deReference()
             """
             make sure assignment doesn't convert to a ptr less
@@ -375,7 +375,7 @@ class ASTConversion(ASTVisitor):
         elif node.type in types:
             self.type_mapping[node] = SymbolType(node.type, False)
 
-    def replaceIdentifierWithIndex(self, oldGuy, struct_name):
+    def replaceIdentifierWithIndex(self, oldGuy, struct_name: SymbolType):
         """
         Replace the data field identifier of a struct with a corresponding index
         :param oldGuy: Struct Node
@@ -385,7 +385,8 @@ class ASTConversion(ASTVisitor):
         index_node = oldGuy.children[0].getSiblingNeighbour(1).getSiblingNeighbour(1)
         identifier = index_node.text
 
-        index = self.structTable[struct_name].index(identifier)  # Replace the struct data member name with an index
+
+        index = self.structTable[struct_name.getBaseType()].index(identifier)  # Replace the struct data member name with an index
         index_node.text = index
 
 

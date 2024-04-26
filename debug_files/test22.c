@@ -1,8 +1,20 @@
+#include <stdio.h>
+
+struct kaas{
+    int melk;
+    int fermtented;
+};
+
+
 int main() {
-    int x = 4;
+   struct kaas ementaler;
 
-    int* ptr = &x;
-    int is_x = (ptr == &x);
+   struct kaas gouda;
 
+   struct kaas* gouda_ptr = &ementaler;
+   printf("%d   ", (*gouda_ptr).melk );
+
+
+
+    return 0;
 }
-

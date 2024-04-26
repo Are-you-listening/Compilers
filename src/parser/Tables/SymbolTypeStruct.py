@@ -12,17 +12,10 @@ class SymbolTypeStruct(SymbolType):
         :param index:
         :return:
         """
-        ptr_list = [('*', False)]
-        d_t = self.pts_to[index]
 
-        while isinstance(d_t, SymbolTypePtr):
-            if isinstance(d_t, SymbolTypeArray):
-                ptr_list.append((str(d_t.size), d_t.isConst()))
-            else:
-                ptr_list.append(("*", d_t.isConst()))
-            d_t = d_t.deReference()
+        symbol_type = SymbolTypePtr(self.pts_to[index], False)
 
-        return (d_t.getType(), d_t.isConst()), ptr_list
+        return symbol_type
 
     def getPtrTuple(self):
         ptrs = [('*', self.isConst())]
