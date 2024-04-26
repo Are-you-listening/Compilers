@@ -36,7 +36,7 @@ class ASTConversion(ASTVisitor):
         is_struct = False
         data_type3 = None
 
-        if is_array:  # TODO fix the statement
+        if is_array:
             child = node.getChild(0)
             data_type, ptrs = self.type_mapping[child]
             if data_type[0] not in ["FLOAT", "CHAR", "INT"]:
