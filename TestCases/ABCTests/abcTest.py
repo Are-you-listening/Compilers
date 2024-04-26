@@ -85,7 +85,7 @@ class ASTTest(ABC):
                 """
                 errors = str(buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
-                print("buff", buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
+                # print("buff", buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
                 assert errors == expected_errors
             except SystemExit:  # Upon crash
                 """
@@ -93,7 +93,7 @@ class ASTTest(ABC):
                 """
                 errors = str(error_buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
-                print("error", error_buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
+                # print("error", error_buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
                 assert errors == expected_errors
 
             """
@@ -131,7 +131,7 @@ class LLVMTest(unittest.TestCase, ABC):
 
             index = file[4:-2]  # The index is used to refer to the files & other data belonging to this testfile
             file_name = f"tests/test{index}.c"
-            print(index, file_name)  # Toggle for debug
+            #print(index, file_name)  # Toggle for debug
 
             """
             If input will be read, it needs to be retrieved

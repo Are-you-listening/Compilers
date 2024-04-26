@@ -1,4 +1,5 @@
 {
   "8": ["[ Syntax Error ] line: 11 Unmatched conditional directive: '#endif' "],
-  "9": ["[ Syntax Error ] line: 18 unterminated #ifndef "]
+  "9": ["[ Syntax Error ] line: 18 unterminated #ifndef "],
+  "12": ["[ Error ] Cyclic Include detected from tests/includes/cycle1.c to tests/includes/cycle2.c"]
 }
