@@ -52,8 +52,6 @@ class FunctionPtrCleaner(ASTVisitor):
         if node.text != "FunctionPtr":
             return
 
-        print("he")
-
         identifier_node = node.getChild(1)
         node.removeChild(identifier_node)
 
