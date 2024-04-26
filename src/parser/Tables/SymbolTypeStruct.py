@@ -24,6 +24,10 @@ class SymbolTypeStruct(SymbolType):
 
         return (d_t.getType(), d_t.isConst()), ptr_list
 
+    def getPtrTuple(self):
+        ptrs = [('*', self.isConst())]
+        return (self.data_type, self.isConst()), ptrs
+
     def getFullType(self):
         ptr_list = []
         temp = []

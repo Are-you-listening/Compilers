@@ -8,7 +8,8 @@ class StructCleaner(ASTVisitor):
 
     def __init__(self):
         self.to_remove = set()
-        self.structTable = {}  # Keep track of the indices of parameters e.g. {"kaas": [("melk",type), ("fermented",type)]} melk has index 0, this will be used for adding the GEP instruction in LLVM
+        self.structTable = {}  # Keep track of the indices of parameters e.g. {"kaas": ["melk", "fermented"]} melk has index 0, this will be used for adding the GEP instruction in LLVM
+        #self.struct_type_table = {}  # Keep track of the type of parameters e.g. {"kaas": ["INT", "INT"]} melk has index 0 with type "INT"
 
     def visit(self, ast: AST):
         self.to_remove = set()
