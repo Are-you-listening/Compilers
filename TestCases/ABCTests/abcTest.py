@@ -186,7 +186,7 @@ class LLVMTest(unittest.TestCase, ABC):
                 """
                 errors = str(error_buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
-                print("error", error_buff.getvalue().splitlines(), index)  # Print any errors we didn't expect
+                #print("error", error_buff.getvalue().splitlines(), index)  # Print any errors we didn't expect
                 assert errors == expected_errors
 
             sys.stdout = original
