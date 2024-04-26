@@ -106,7 +106,7 @@ def cleanGreen(input_file, symbol_file):
 def Processing(ast, dot_file, fold, includeSTDIO, structTable):
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
-    DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
 
     """

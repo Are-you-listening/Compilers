@@ -34,8 +34,9 @@ class ASTConversion(ASTVisitor):
         """
         is_array = (node.text == "Expr" and node.getChildAmount() == 3 and node.getChild(1).text == "[]")
         is_struct = False
+        data_type3 = None
 
-        print(is_array, is_struct, node.text)
+        #print(is_array, is_struct, node.text)
 
         if is_array:  # TODO fix the statement
             child = node.getChild(0)
@@ -66,19 +67,19 @@ class ASTConversion(ASTVisitor):
 
             data_type, ptrs = type_object.pts_to[index].getPtrTuple()
             ptrs = tempPtrs + ptrs
+            print(node.text, "struct ptrs", ptrs)
             self.type_mapping[node] = (data_type, ptrs)
+            data_type3 = data_type
             #print("struct", node.text, node.parent.text, data_type, ptrs)
 
 
         if node.text == "Dereference" or is_array:
-
-
             """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was 
             before"""
             child = node.getChild(0)
             #if not is_struct:
             data_type, ptrs = self.type_mapping[child]
-            print('before', is_struct, is_array, node.text, node.parent.text, data_type, ptrs)
+            #print('before', is_struct, is_array, node.text, node.parent.text, data_type, ptrs)
 
             #print("array", data_type, ptrs)
 
@@ -103,10 +104,15 @@ class ASTConversion(ASTVisitor):
                 ErrorExporter.invalidDereferenceNotPtr(node.linenr, (data_type, ptrs))
 
             ptrs = ptrs[:-1]  # Remove 1 ptr
-            # if not is_struct:
+
             self.type_mapping[node] = (data_type, ptrs)
+            print(node.text, "array ptrs", ptrs)
+            if is_struct:
+                self.type_mapping[node] = (data_type3, ptrs)
+                print(data_type3, data_type)
+
             #print("array change: ", node.text , data_type, ptrs)
-            print('after' , is_struct, is_array, node.text, node.parent.text, data_type, ptrs)
+            #print('after' , is_struct, is_array, node.text, node.parent.text, data_type, ptrs)
             return
 
         if node.text == "Conversion":
@@ -280,10 +286,6 @@ class ASTConversion(ASTVisitor):
             if type_tup == (None, None):
                 continue
 
-            # TODO Temp
-            # if type_tup[0][0] in self.structTable.keys() or to_type[0][0] in self.structTable.keys():  # Don't check struct types
-            #     continue
-
             if type_tup[0][0] != to_type[0][0] or type_tup[1] != to_type[1]:
                 if to_type[0][0] == "BOOL" and len(to_type[1]) == 0:
                     """
@@ -334,8 +336,8 @@ class ASTConversion(ASTVisitor):
                         ptr+int, does not require to convert the int to an int*
                         """
                         continue
-                if child.text == "Expr" and child.getChildAmount() == 3 and child.getChild(1).text == "[]":
-                    continue
+                #if child.text == "Expr" and child.getChildAmount() == 3 and child.getChild(1).text == "[]":
+                #    continue
                 self.pointer_warning_check(child.linenr, to_type, type_tup)
                 self.narrowing_warning_check(child.linenr, to_type, type_tup)
 
@@ -415,7 +417,8 @@ class ASTConversion(ASTVisitor):
             index = int(node.text)  # Get the index of the struct data member
             data_type, ptrs = type_object.getElementType(index)
         elif node.getSiblingNeighbour(1) is not None and node.getSiblingNeighbour(1).text == "[]":  # LHS of the '.' operator
-            ptrs = [('*', False)]
+            #ptrs = [('*', False)]
+            ptrs = []
             data_type, ptrs2 = type_object.getPtrTuple()
             ptrs += ptrs2
             self.replaceIdentifierWithIndex(oldGuy, data_type[0])
