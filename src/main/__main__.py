@@ -1,4 +1,6 @@
 from antlr4 import *
+import sys
+
 from src.antlr_files.grammarCLexer import grammarCLexer
 from src.antlr_files.grammarCParser import grammarCParser
 from src.parser.ASTCreator import ASTCreator
@@ -29,7 +31,9 @@ from src.parser.StringToArray import *
 from src.parser.StructCleaner import *
 from src.parser.StructCleanerAfter import *
 from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
+from TestCases.ABCTests.AstLoader import AstLoader
 
+from importlib import reload
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -38,6 +42,7 @@ def cleanGreen(input_file, symbol_file):
     :param symbol_file:
     :return:
     """
+
     input_stream = FileStream(input_file)  # Create input stream
     lexer = grammarCLexer(input_stream)
 
