@@ -177,7 +177,6 @@ class AST2LLVM(ASTVisitor):
         if data_type[0] not in ["INT", "FLOAT", "CHAR", "PTR"]:  # Using a struct
             if isinstance(entry.getTypeObject(), SymbolTypeStruct):
                 data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getTypeObject().getFullType()
-
         if var_child.symbol_table.isRoot():  # Globals; extra stuff needs to be done
             llvm_var = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), CTypesToLLVM.getIRType(data_type, ptrs), var_child.text)  # Declare a global variable
             value = var_child.symbol_table.getEntry(var_child.text).value  # Get the value

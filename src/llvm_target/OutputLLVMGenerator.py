@@ -105,7 +105,7 @@ class Declaration:
             if isinstance(ptrs[0][0], tuple):  # Declara a struct type
                 return Declaration.struct(data_type, ptrs, var_name)
             else:  # Declara a ptr to a struct type
-                return Declaration.struct_ptr(data_type)
+                return Declaration.struct_ptr(data_type, ptrs)
 
         llvm_val = block.alloca(irType)
         llvm_val.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
@@ -113,7 +113,7 @@ class Declaration:
         return llvm_val
 
     @staticmethod
-    def struct_ptr(data_type: tuple):
+    def struct_ptr(data_type: tuple, ptrs: list):
         """
         Create a ptr to a struct
         :param data_type:
@@ -123,6 +123,8 @@ class Declaration:
 
         struct_type = LLVMSingleton.getInstance().getStruct(data_type[0])
         struct_ptr = ir.PointerType(struct_type)
+        for i in range(1, len(ptrs)):  # If we point to a struct ptr, the struct_ptr needs to be extended
+            struct_ptr = ir.PointerType(struct_ptr)
 
         llvm_var = block.alloca(struct_ptr)
         llvm_var.align = 8
@@ -152,7 +154,7 @@ class Declaration:
         #     struct.align = align
 
         llvm_var = block.alloca(struct_type)
-        llvm_var.align = align
+        llvm_var.align = max(align%2, (align+1)%2)  # In LLVM align must be a power of 2
         return llvm_var
 
     @staticmethod

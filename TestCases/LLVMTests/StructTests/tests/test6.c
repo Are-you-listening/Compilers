@@ -5,10 +5,6 @@ struct kaas{
     int fermtented;
 };
 
-struct pointer{
-    struct kaas* kaas_ptr;
-};
-
 
 int main() {
    struct kaas ementaler;
@@ -28,11 +24,13 @@ int main() {
 
       printf("%d", ementaler.melk );
    printf("%d", ementaler.fermtented);
-    //struct kaas* gouda_ptr = &ementaler;
-    //printf("%d   ", (* (int) (pointer.kaas_ptr + 1 + 2 + 3 )).melk );
-    //printf("%d   ", (*gouda_ptr).melk );
+
+    struct kaas* gouda_ptr = &ementaler;
+    printf("%d   ", (*gouda_ptr).melk );
+
+
+    int a = (int) (*gouda_ptr).melk * 3.45 || 36;
 
 
     return 0;
-
 }
