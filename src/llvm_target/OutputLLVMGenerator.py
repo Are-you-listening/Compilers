@@ -66,15 +66,22 @@ class CTypesToLLVM:
         return convert_dict.get(data_type[0], "TYPE ISSUE")
 
     @staticmethod
-    def getIRType(data_type: tuple, ptrs: list):
+    def getIRType(data_type: tuple, ptrs: list, function_type=False):
+        """
+        :param ptrs:
+        :param data_type:
+        :param function_type: When true we will translate our type to ptrs instead of arrays when we have an array
+        :return:
+        """
+
         convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType(), "BOOL": ir.IntType(1)}
         llvm_type = convert_map.get(data_type[0])
 
         if llvm_type is None:  # Most likely, a struct was used
             return None
 
-        for p in ptrs:
-            if p[0] == "*":
+        for i, p in enumerate(ptrs):
+            if p[0] == "*" or (function_type and i == len(ptrs)-1):
                 """
                 In case a '*' is in the ptr, we have a ptr element
                 """
@@ -254,14 +261,12 @@ class Load:
 
             llvm_var = block.gep(load_llvm, index_list, True)  # Create the gep instruction
         else:
-
             llvm_var = block.load(load_llvm)
 
         if not isinstance(load_llvm, ir.GEPInstr):
             llvm_var.align = load_llvm.align
         else:
             llvm_var.align = CTypesToLLVM.getBytesUse(("INT", False), [])
-
         return llvm_var
 
 
@@ -334,12 +339,16 @@ class Calculation:
             """
             When we come across an array we need to define a value 0 followed by the index we want to access
             """
+
             if isinstance(left.type.pointee, ir.ArrayType):
                 index_list.insert(0, ir.Constant(ir.types.IntType(64), 0))
             elif isinstance(left.type.pointee, ir.LiteralStructType):
                 index_list.insert(0, ir.Constant(ir.types.IntType(32), 0))
+            elif operator == "[]":
+                left = block.load(left)
 
             new_value = block.gep(left, index_list, True)  # Create the gep instruction
+
             return new_value
 
         """

@@ -1,23 +1,14 @@
 #include <stdio.h>
 
-int d(int* w){
-    printf("%d", *w);
-    *w = 6;
-    return *w;
-}
-
-float e(){
-    return 5.67;
+int d(int a){
+    return a;
 }
 
 int main() {
-    int c = 5;
-    int* b = &c;
 
-    int a = d(b);
-    printf("%d", *b);
-    printf("%d", a);
-    a =e();
-    printf("%d", a);
+    int (*e)(int) = &d;
+    int c = (*e)(5);
+    d(4);
+    printf("%d", c);
     return 0;
 }

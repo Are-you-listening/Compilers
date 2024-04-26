@@ -10,11 +10,3 @@ int main() {
     printf("%d\n", c);
     return y;
 }
-
-
-
-
-int func(int a, int b) {
-    return a + b;
-}
-

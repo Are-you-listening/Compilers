@@ -246,8 +246,10 @@ class ControlFlowCreator(ASTVisitor):
         var_child: ASTNode = node.getChild(0)
         data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getPtrTuple()
         args = var_child.getSymbolTable().getEntry(var_child.text).getTypeObject().getParameterTypes()
+        if LLVMSingleton.getInstance().getFunction(var_child.text) is None:
+            Declaration.function(var_child.text, data_type, ptrs, args)
 
-        Declaration.function(var_child.text, data_type, ptrs, args)
+
 
     def handleOperations(self, node: ASTNode):
         """

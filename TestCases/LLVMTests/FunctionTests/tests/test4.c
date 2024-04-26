@@ -14,7 +14,7 @@ int main() {
 
 
 
-int func(int a, int b) {
+int func(int* a, int b) {
     return a + b;
 }
 

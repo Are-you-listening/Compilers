@@ -376,6 +376,7 @@ class AST2LLVM(ASTVisitor):
                 llvm_var = self.llvm_map[child.children[0]]
                 if llvm_var is not None:
                     args.append(llvm_var)
+
         llvm_var = builder.call(function, args)
 
         self.llvm_map[node] = llvm_var

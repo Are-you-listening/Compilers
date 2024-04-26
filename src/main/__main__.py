@@ -28,6 +28,7 @@ from src.parser.Preproccesing.preProcessor import *
 from src.parser.StringToArray import *
 from src.parser.StructCleaner import *
 from src.parser.StructCleanerAfter import *
+from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
 
 
 def cleanGreen(input_file, symbol_file):
@@ -56,6 +57,8 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
+
+
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)
 
@@ -69,6 +72,7 @@ def cleanGreen(input_file, symbol_file):
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
+
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
@@ -79,8 +83,15 @@ def cleanGreen(input_file, symbol_file):
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
     StringToArray().visit(ast)
+
+    FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
+
+    #DotVisitor("output/debug5").visit(ast)  # Export AST in Dot
     ArrayCleaner().visit(ast)
 
+    # DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
+
+    #DotVisitor("output/debug5").visit(ast)  # Export AST in Dot
     ASTTableCreator().visit(ast)  # Create the symbol table
 
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
@@ -110,6 +121,8 @@ def Processing(ast, dot_file, fold, includeSTDIO, structTable):
     ASTConversion(structTable).visit(ast)
 
     DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug4").visit(ast)  # Export AST in Dot
+    #ASTConversion().visit(ast)
 
     if fold:
         ConstantFoldingVisitor().visit(ast)
@@ -122,16 +135,10 @@ def Processing(ast, dot_file, fold, includeSTDIO, structTable):
 
     ConstantStatementFolding().visit(ast)
 
-    DotVisitor("output/debug5").visit(ast)  # Export AST in Dot
-
     cfc = ControlFlowCreator()
     cfc.visit(ast)
 
-    DotVisitor("output/debug6").visit(ast)  # Export AST in Dot
-
     DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
-
-    DotVisitor("output/debug7").visit(ast)  # Export AST in Dot
 
     if dot_file is not None:
         DotVisitor(dot_file).visit(ast)  # Export AST in Dot

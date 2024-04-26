@@ -45,7 +45,7 @@ class ArrayCleaner(ASTVisitor):
         """
         Check if node is a declaration
         """
-        if node.text != "Declaration":
+        if node.text not in ("Declaration", "Parameter"):
             return
 
         """
@@ -66,8 +66,13 @@ class ArrayCleaner(ASTVisitor):
 
         self.array_map[node] = array_sizes
 
-        for new_ptr_val in array_sizes:
-            new_ptr = ASTNodeTerminal("*", type_node.parent, type_node.getSymbolTable(), f"ARRAY_{new_ptr_val}",
+        for i, new_ptr_val in enumerate(array_sizes):
+            if i == 0 and node.text == "Parameter":
+                data_type = "PTR"
+            else:
+                data_type = f"ARRAY_{new_ptr_val}"
+
+            new_ptr = ASTNodeTerminal("*", type_node.parent, type_node.getSymbolTable(), data_type,
                                       type_node.linenr, type_node.virtuallinenr)
             type_node.addChildren(new_ptr)
 

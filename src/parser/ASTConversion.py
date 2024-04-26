@@ -26,7 +26,6 @@ class ASTConversion(ASTVisitor):
         self.postorder(ast.root)
 
     def visitNode(self, node: ASTNode):
-        #print(node.text)
         """
         Visit AST Nodes and give it a type, if the type changes implicit, add conversion nodes
         :param node: the node we are currently checking
@@ -192,8 +191,7 @@ class ASTConversion(ASTVisitor):
 
         if node.text == "ParameterCall":
             functionNode = node.parent.children[0]
-            while functionNode.text == "Dereference":
-                functionNode = functionNode.children[0]
+
             parameterTypes = node.parent.getSymbolTable().getEntry(functionNode.text).getTypeObject().getParameterTypes()
             """
             check if has the right amount of arguments
@@ -317,6 +315,7 @@ class ASTConversion(ASTVisitor):
                 data_type, ptrs = self.handleStruct(node)
             else:
                 data_type, ptrs = type_entry.getPtrTuple()
+
 
             """
             Use LLVM ptr format
