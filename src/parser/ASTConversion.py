@@ -282,7 +282,8 @@ class ASTConversion(ASTVisitor):
                         ptr+int, does not require to convert the int to an int*
                         """
                         continue
-
+                if child.text == "Expr" and child.getChildAmount() == 3 and child.getChild(1).text == "[]":
+                    continue
                 self.pointer_warning_check(child.linenr, to_type, type_tup)
                 self.narrowing_warning_check(child.linenr, to_type, type_tup)
 
