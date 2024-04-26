@@ -67,7 +67,6 @@ class ASTConversion(ASTVisitor):
 
             data_type, ptrs = type_object.pts_to[index].getPtrTuple()
             ptrs = tempPtrs + ptrs
-            print(node.text, "struct ptrs", ptrs)
             self.type_mapping[node] = (data_type, ptrs)
             data_type3 = data_type
             #print("struct", node.text, node.parent.text, data_type, ptrs)
@@ -106,10 +105,9 @@ class ASTConversion(ASTVisitor):
             ptrs = ptrs[:-1]  # Remove 1 ptr
 
             self.type_mapping[node] = (data_type, ptrs)
-            print(node.text, "array ptrs", ptrs)
             if is_struct:
                 self.type_mapping[node] = (data_type3, ptrs)
-                print(data_type3, data_type)
+
 
             #print("array change: ", node.text , data_type, ptrs)
             #print('after' , is_struct, is_array, node.text, node.parent.text, data_type, ptrs)
