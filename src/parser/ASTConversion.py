@@ -189,8 +189,7 @@ class ASTConversion(ASTVisitor):
 
         if node.text == "ParameterCall":
             functionNode = node.parent.children[0]
-            while functionNode.text == "Dereference":
-                functionNode = functionNode.children[0]
+
             parameterTypes = node.parent.getSymbolTable().getEntry(functionNode.text).getTypeObject().getParameterTypes()
             """
             check if has the right amount of arguments
@@ -303,9 +302,12 @@ class ASTConversion(ASTVisitor):
             type_object = type_entry.getTypeObject()
             if isinstance(type_object, SymbolTypeStruct) and node.parent.text != "Declaration":
                 index = int(node.getSiblingNeighbour(1).getSiblingNeighbour(1).text)  # Get the index of the struct data member
+
                 data_type, ptrs = type_object.getElementType(index)
+
             else:
                 data_type, ptrs = type_entry.getPtrTuple()
+
 
             """
             Use LLVM ptr format

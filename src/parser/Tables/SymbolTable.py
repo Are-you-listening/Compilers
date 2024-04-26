@@ -57,7 +57,9 @@ class SymbolEntry(TableEntry):
                 ptr_list.append(("*", d_t.isConst()))
             d_t = d_t.deReference()
 
-        return (d_t.getType(), d_t.isConst()), ptr_list
+        d_t_type = d_t.getType()
+
+        return (d_t_type, d_t.isConst()), ptr_list
 
     def getJsonDataType(self):
         """

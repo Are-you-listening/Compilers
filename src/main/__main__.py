@@ -28,6 +28,7 @@ from src.parser.Preproccesing.preProcessor import *
 from src.parser.StringToArray import *
 from src.parser.StructCleaner import *
 from src.parser.StructCleanerAfter import *
+from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
 
 
 def cleanGreen(input_file, symbol_file):
@@ -83,6 +84,8 @@ def cleanGreen(input_file, symbol_file):
 
     StringToArray().visit(ast)
 
+    FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
+
     #DotVisitor("output/debug5").visit(ast)  # Export AST in Dot
     ArrayCleaner().visit(ast)
     #DotVisitor("output/debug6").visit(ast)  # Export AST in Dot
@@ -90,7 +93,9 @@ def cleanGreen(input_file, symbol_file):
     # DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
 
     #DotVisitor("output/debug5").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
     ASTTableCreator().visit(ast)  # Create the symbol table
+    #DotVisitor("output/debug3").visit(ast)  # Export AST in Dot
 
     StructCleanerAfter(structTable).visit(ast)
 
@@ -115,6 +120,7 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     """
     It is vital that AST conversion occurs before constant folding
     """
+    #DotVisitor("output/debug4").visit(ast)  # Export AST in Dot
     ASTConversion().visit(ast)
 
     if fold:
