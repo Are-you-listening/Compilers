@@ -1,5 +1,5 @@
 
-typedef float int;
+#include "includes/cycle1.c"
 
 int main() {
     int x = 4;

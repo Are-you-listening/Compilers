@@ -70,7 +70,12 @@ def cleanGreen(input_file, symbol_file):
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
+
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops

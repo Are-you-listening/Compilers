@@ -29,6 +29,11 @@ class ErrorExporter:
         exit()
 
     @staticmethod
+    def cyclicInclude(file: str, file2: str):
+        print(f"[ Error ] Cyclic Include detected from {file} to {file2}", file=sys.stderr)
+        exit()
+
+    @staticmethod
     def mainNotFound():
         print("[ Error ] main function not found", file=sys.stderr)
         exit()

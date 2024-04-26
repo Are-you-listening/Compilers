@@ -11,6 +11,8 @@ class PreProcessor:
         self.defined = {}
         self.stdio = False
         self.files = [input_file]
+        self.cycles = {}
+        self.__curr_file = input_file
         self.ifndef = []  # Indicated if we passed an #ifndef e.g. [False,True] | We use a list, so we can pop and keep track of 'scoped' "#ifndef"
 
     @staticmethod
@@ -67,6 +69,35 @@ class PreProcessor:
 
         return self.ifndef[-1] is not None
 
+    def __add_file_cycle(self, file):
+        lst = self.cycles.get(self.__curr_file, [])
+        lst.append(file)
+        self.cycles[self.__curr_file] = lst
+
+        for item in self.cycles.items():
+            lst = item[1]
+            key = item[0]
+            if self.__curr_file in lst:
+                self.cycles[key].append(file)
+
+        print(self.cycles)
+        self.__check_cycle()
+        self.__curr_file = file
+
+    def __check_cycle(self):
+        tpls = []
+
+        for key in self.cycles.keys():
+            for item in self.cycles.items():
+                lst = item[1]
+                if key in lst and key != item[0]:
+                    tpls.append((key, item[0]))
+
+        for tup in tpls:
+            for tup2 in tpls:
+                if tup[0]==tup2[1] and tup2[0]==tup[1]:
+                    ErrorExporter.cyclicInclude(tup[0], tup[1])
+
     def preProcess(self):
         """
         Removes all '#' statements and replace them accordingly
@@ -116,6 +147,8 @@ class PreProcessor:
                             input_stream = FileStream(file)  # Verify the file exists
                         except:
                             ErrorExporter.fileNotFound(token.line, file)
+
+                        self.__add_file_cycle(file)
 
                         lexer = grammarCLexer(input_stream)  # Create a new input stream
                         stream = CommonTokenStream(lexer)
