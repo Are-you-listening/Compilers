@@ -1,4 +1,5 @@
 from src.parser.ASTVisitor import *
+from src.parser.ASTTableCreator import *
 
 
 class ASTDereferencer(ASTVisitor):
@@ -64,9 +65,6 @@ class ASTDereferencer(ASTVisitor):
         if node.type != "IDENTIFIER" or (node.parent != None and node.parent.text == "FunctionCall"):
             return
 
-        if node.parent.text == "Struct" or node.parent.parent.text == "Struct":
-            return
-
         sibling_before = node.getSiblingNeighbour(-1)
 
         if sibling_before is None:
@@ -93,7 +91,10 @@ class ASTDereferencer(ASTVisitor):
             parent = node.parent
 
             parent.removeChild(sibling_before)
-            node = self.addDereference(node)
+            #node = self.addDereference(node)
+
+            if not self.isStructPtr(node):
+                node = self.addDereference(node)
 
         new_node = self.addDereference(node)
 
@@ -106,9 +107,33 @@ class ASTDereferencer(ASTVisitor):
             parent = grand_parent
 
     @staticmethod
+    def isStructPtr(node):
+        type_entry = node.getSymbolTable().getEntry(node.text)
+        if type_entry is None:
+            return False
+        type_object = type_entry.getTypeObject()
+
+        if isinstance(type_object, SymbolTypePtr):
+            pointee = type_object.pts_to
+            while isinstance(pointee, SymbolTypePtr):
+                pointee = pointee.pts_to
+            return isinstance(type_object, SymbolTypePtr) and isinstance(pointee, SymbolTypeStruct)
+        else:
+            return False
+
+
+    @staticmethod
     def addDereference(node):
-        if node.getSiblingNeighbour(1) is not None and node.getSiblingNeighbour(1).text == "[]":
-            return
+        rsib = node.getSiblingNeighbour(1)
+        if rsib is not None:
+            if rsib.text == "[]":
+                return
+
+        # if node.parent.text == "Expr" and node.symbol_table.getEntry(node.text) is not None:
+        #     type_object = node.symbol_table.getEntry(node.text).getTypeObject()
+        #     if isinstance(type_object, SymbolTypePtr) and type_object.data_type == "PTR" and isinstance(type_object.pts_to, SymbolTypeStruct):
+        #         return node
+
 
         new_node = ASTNode("Dereference", None, node.symbol_table, node.linenr, node.virtuallinenr)
         node.addNodeParent(new_node)

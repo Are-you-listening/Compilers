@@ -16,9 +16,11 @@ int main() {
 
     struct kaas* gouda_ptr = &ementaler;
 
-    struct kaas** gouda_ptr_ptr = &gouda_ptr;
+    int** s = &z;
 
-    printf("%d %d %d %d %d %d", ementaler.melk, z[0], *ptr, (*gouda_ptr).melk, (**gouda_ptr_ptr).melk);
+        struct kaas** gouda_ptr_ptr = &gouda_ptr;
+
+    //printf("%d %d %d %d %d %d", ementaler.melk, z[0], *ptr, (*gouda_ptr).melk, s[0], (**gouda_ptr_ptr).melk);
 
 
 

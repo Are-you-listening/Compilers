@@ -8,6 +8,7 @@ int main() {
 
     int (*e)(int) = &d;
     int c = (*e)(5);
+    d(4);
     printf("%d", c);
     return 0;
 }

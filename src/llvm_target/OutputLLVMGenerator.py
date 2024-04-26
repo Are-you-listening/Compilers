@@ -97,12 +97,15 @@ class CTypesToLLVM:
 
 class Declaration:
     @staticmethod
-    def declare(data_type: tuple, ptrs: list):
+    def declare(data_type: tuple, ptrs: list, var_name: str):
         block = LLVMSingleton.getInstance().getCurrentBlock()
         irType = CTypesToLLVM.getIRType(data_type, ptrs)
 
         if irType is None:
-            return Declaration.struct(data_type, ptrs)
+            if isinstance(ptrs[0][0], tuple):  # Declara a struct type
+                return Declaration.struct(data_type, ptrs, var_name)
+            else:  # Declara a ptr to a struct type
+                return Declaration.struct_ptr(data_type)
 
         llvm_val = block.alloca(irType)
         llvm_val.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
@@ -110,7 +113,29 @@ class Declaration:
         return llvm_val
 
     @staticmethod
-    def struct(data_type: tuple, ptrs: list):
+    def struct_ptr(data_type: tuple):
+        """
+        Create a ptr to a struct
+        :param data_type:
+        :return:
+        """
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+
+        struct_type = LLVMSingleton.getInstance().getStruct(data_type[0])
+        struct_ptr = ir.PointerType(struct_type)
+
+        llvm_var = block.alloca(struct_ptr)
+        llvm_var.align = 8
+        return llvm_var
+
+    @staticmethod
+    def struct(data_type: tuple, ptrs: list, var_name: str):
+        """
+        Create a global struct type
+        :param data_type:
+        :param ptrs:
+        :return:
+        """
         block = LLVMSingleton.getInstance().getCurrentBlock()
         types = []
         align = 0
@@ -121,12 +146,13 @@ class Declaration:
             types.append(irType)
 
         struct_type = ir.LiteralStructType(types)
-        struct = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), struct_type, "kaas")
-        struct.align = align
-        #struct.name_prefix = '%'
+        LLVMSingleton.getInstance().addStruct(data_type[0], struct_type)
+        # if LLVMSingleton.getInstance().getModule().globals.get(data_type[0]) is None:
+        #     struct = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), struct_type, data_type[0])
+        #     struct.align = align
 
         llvm_var = block.alloca(struct_type)
-        llvm_var.align = 4
+        llvm_var.align = align
         return llvm_var
 
     @staticmethod

@@ -7,13 +7,16 @@ class ASTConversion(ASTVisitor):
     Makes implicit conversions explicit
     """
 
-    def __init__(self):
+    def __init__(self, structTable):
         self.rc = RichnessChecker(types)
 
         """
         Map each node on its resulting type after the node has been executed
         """
         self.type_mapping = {}
+
+        self.structTable = structTable  # Keep track of the struct names and their data fields
+        self.structPtrMap = {}  # Map 'Dereference' nodes above a pointer to the pointer node so it can be used later to give the correct type to Expr nodes
 
     def visit(self, ast: AST):
         """
@@ -30,11 +33,49 @@ class ASTConversion(ASTVisitor):
         :return:
         """
         is_array = (node.text == "Expr" and node.getChildAmount() == 3 and node.getChild(1).text == "[]")
+        is_struct = False
+
+        if is_array: # TODO fix the statement
+            child = node.getChild(0)
+            data_type, ptrs = self.type_mapping[child]
+            if data_type[0] not in ["FLOAT", "CHAR", "INT"]:
+                is_struct = True
+                #is_array = False
+
+        if is_struct:  # TODO Need a way to pass the type to the node above
+            #tempPtrs = [('*', False)]
+            tempPtrs = []
+            index = int(node.getChild(2).text)  # Index of the struct data member
+            lchild = node.getChild(0)  # LHS of the '.' 'operator
+            if lchild.text == "Dereference":
+                lchild = self.structPtrMap.get(node.getChild(0))
+
+            type_object = node.symbol_table.getEntry(lchild.text).getTypeObject()
+            if isinstance(type_object, SymbolTypePtr):
+                #tempPtrs = [('*', False)]
+                tempPtrs = []
+                #print(node.text)
+                while isinstance(type_object, SymbolTypePtr):  # We need to find the StructType
+                    tempPtrs.append(('*', False))
+                    type_object = type_object.pts_to
+            else:
+                #print('y')
+                data_type2, tempPtrs = self.type_mapping[lchild]
+
+            data_type, ptrs = type_object.pts_to[index].getPtrTuple()
+            ptrs = tempPtrs + ptrs
+            self.type_mapping[node] = (data_type, ptrs)
+            #print("struct", node.text, node.parent.text, data_type, ptrs)
+
+
         if node.text == "Dereference" or is_array:
             """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was 
             before"""
             child = node.getChild(0)
-            data_type, ptrs = self.type_mapping[child]
+            if not is_struct:
+                data_type, ptrs = self.type_mapping[child]
+
+            #print("array", data_type, ptrs)
 
             """
             We we do a [] access, we need to check that the value provided is an integer
@@ -57,7 +98,10 @@ class ASTConversion(ASTVisitor):
                 ErrorExporter.invalidDereferenceNotPtr(node.linenr, (data_type, ptrs))
 
             ptrs = ptrs[:-1]  # Remove 1 ptr
+            # if not is_struct:
             self.type_mapping[node] = (data_type, ptrs)
+            #print("array change: ", node.text , data_type, ptrs)
+            #print(is_struct, is_array, node.text, node.parent.text, data_type, ptrs)
             return
 
         if node.text == "Conversion":
@@ -189,8 +233,7 @@ class ASTConversion(ASTVisitor):
 
         if node.text == "ParameterCall":
             functionNode = node.parent.children[0]
-            while functionNode.text == "Dereference":
-                functionNode = functionNode.children[0]
+
             parameterTypes = node.parent.getSymbolTable().getEntry(functionNode.text).getTypeObject().getParameterTypes()
             """
             check if has the right amount of arguments
@@ -231,6 +274,10 @@ class ASTConversion(ASTVisitor):
             type_tup = self.type_mapping.get(child, (None, None))
             if type_tup == (None, None):
                 continue
+
+            # TODO Temp
+            # if type_tup[0][0] in self.structTable.keys() or to_type[0][0] in self.structTable.keys():  # Don't check struct types
+            #     continue
 
             if type_tup[0][0] != to_type[0][0] or type_tup[1] != to_type[1]:
                 if to_type[0][0] == "BOOL" and len(to_type[1]) == 0:
@@ -299,24 +346,92 @@ class ASTConversion(ASTVisitor):
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
-
             type_entry = node.getSymbolTable().getEntry(node.text)
             type_object = type_entry.getTypeObject()
-            if isinstance(type_object, SymbolTypeStruct) and node.parent.text != "Declaration":
-                index = int(node.getSiblingNeighbour(1).getSiblingNeighbour(1).text)  # Get the index of the struct data member
-                data_type, ptrs = type_object.getElementType(index)
+
+            if isinstance(type_object, SymbolTypePtr):
+                pointee = type_object.pts_to
+                while isinstance(pointee, SymbolTypePtr):
+                    pointee = pointee.pts_to
+
+            if isinstance(type_object, SymbolTypeStruct) or (isinstance(type_object, SymbolTypePtr) and isinstance(pointee, SymbolTypeStruct)):
+                data_type, ptrs = self.handleStruct(node)
             else:
                 data_type, ptrs = type_entry.getPtrTuple()
+
 
             """
             Use LLVM ptr format
             """
-            ptrs.append(("*", False))
+            ptrs.append(("*", False)) # TODO Maybe this shouldn't be done for structs?
+
+            #print( node.text, data_type, ptrs)
 
             self.type_mapping[node] = (data_type, ptrs)
 
         elif node.type in types:
             self.type_mapping[node] = ((node.type, False), [])
+
+    def replaceIdentifierWithIndex(self, oldGuy, struct_name):
+        """
+        Replace the data field identifier of a struct with a corresponding index
+        :param oldGuy: Struct Node
+        :param struct_name: name of the struct
+        :return:
+        """
+        index_node = oldGuy.children[0].getSiblingNeighbour(1).getSiblingNeighbour(1)
+        identifier = index_node.text
+
+        index = self.structTable[struct_name].index(identifier)  # Replace the struct data member name with an index
+        index_node.text = index
+
+        #print('replacing identifier with index')
+
+    def handleStruct(self, node):
+        type_entry = node.getSymbolTable().getEntry(node.text)
+        type_object = type_entry.getTypeObject()
+
+        oldGuy = node.parent
+        oldGuy_passed = False
+        #ptrss = []
+        while oldGuy.text == "Dereference":
+            #ptrss += [('*', False)]
+            oldGuy_passed = True
+            oldGuy = oldGuy.parent
+
+        # if node.parent.text == "Dereference" and node.symbol_table.getEntry(node.text) is not None:
+        #     type_object = node.symbol_table.getEntry(node.text).getTypeObject()
+        #     if isinstance(type_object, SymbolTypePtr) and type_object.data_type == "PTR" and isinstance(type_object.pts_to, SymbolTypeStruct):
+        #         data_type, ptrs = type_entry.getPtrTuple()
+        #         print(node.text)
+        #         return data_type, ptrs
+
+        if node.getSiblingNeighbour(-1) is not None and node.getSiblingNeighbour(-1).text == "[]":  # RHS of the '.' operator
+            index = int(node.text)  # Get the index of the struct data member
+            data_type, ptrs = type_object.getElementType(index)
+        elif node.getSiblingNeighbour(1) is not None and node.getSiblingNeighbour(1).text == "[]":  # LHS of the '.' operator
+            ptrs = [('*', False)]
+            data_type, ptrs2 = type_object.getPtrTuple()
+            ptrs += ptrs2
+            self.replaceIdentifierWithIndex(oldGuy, data_type[0])
+        # elif node.text == "Declaration":
+        #     data_type, ptrs = type_entry.getPtrTuple()
+        #     ptrs = [('*', False)] + ptrs
+        elif oldGuy_passed:
+            data_type, ptrs = type_object.getPtrTuple()
+            self.replaceIdentifierWithIndex(oldGuy,data_type[0])
+
+            temp = node.parent
+            while temp.text == "Dereference":
+                self.structPtrMap[temp] = node
+                temp = temp.parent
+
+        else:
+            data_type, ptrs = type_object.getPtrTuple()
+
+        return data_type, ptrs
+
+
 
     @staticmethod
     def calculateType(node: ASTNode):
@@ -504,6 +619,8 @@ class ASTConversion(ASTVisitor):
         ass = node.parent.text == "Assignment" and node.text == "Dereference"
         if ass:
             text += "*("
+
+        #print(node)
 
         brackets_needed = False
 

@@ -97,10 +97,18 @@ class ASTTableCreator(ASTVisitor):
             return
 
         if node.text == "Declaration" or node.text == "Parameter":
-            child = node.findType("Type")
-            symbol_type = SymbolType
+            child = node.getChild(0)
 
-            self.__make_entry(node, child, symbol_type, True)
+            if child.text == "FunctionPtr":
+
+                func_ptr = self.__get_func_ptr_type(child)
+
+                symbol_entry = SymbolEntry(func_ptr, node.children[1].text, None, node.children[1], None)
+                node.symbol_table.add(symbol_entry)
+
+            else:
+                symbol_type = SymbolType
+                self.__make_entry(node, child, symbol_type, True)
 
         if node.text in ("Function", "Code", "Scope"):
             """
@@ -112,7 +120,7 @@ class ASTTableCreator(ASTVisitor):
                 node.symbol_table = self.table
 
         if node.text == "Function":
-            child = node.findType("Type")
+            child = node.getChild(0)
             param_types = []
             for param in node.children[2].children:
                 param_type = self.__get_data_type(param.getChild(0), SymbolType)
@@ -121,8 +129,6 @@ class ASTTableCreator(ASTVisitor):
             return_type = self.__get_data_type(child, SymbolType)
 
             self.__check_function_declarations(node, param_types, return_type)
-
-
 
             """
             Make func type
@@ -194,7 +200,7 @@ class ASTTableCreator(ASTVisitor):
 
         return latest_datatype
 
-    def __make_entry(self, node, child: ASTNodeTerminal, symbol_type, referenced=False):
+    def __make_entry(self, node, child: ASTNode, symbol_type, referenced=False):
         """
         Make symbol table entry
         :param node:
@@ -220,4 +226,18 @@ class ASTTableCreator(ASTVisitor):
         """
         return "struct" == text[0:6]
 
+    def __get_func_ptr_type(self, node: ASTNode):
 
+        return_type_child = node.getChild(0)
+        return_type = self.__get_data_type(return_type_child, SymbolType)
+        function_params = node.getChild(1)
+
+        param_type_list = []
+        for param in function_params.children:
+            param_type = self.__get_data_type(param, SymbolType)
+            param_type_list.append(param_type)
+
+        function_type = FunctionSymbolType(return_type, param_type_list)
+        func_ptr = SymbolTypePtr(function_type, False)
+
+        return func_ptr
