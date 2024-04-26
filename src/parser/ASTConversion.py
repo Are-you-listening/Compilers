@@ -2,6 +2,7 @@ from src.parser.CTypes.COperationHandler import *
 from src.parser.ASTTableCreator import *
 from src.parser.Constraints.FunctionReturnConstraint import findfunction
 
+
 class ASTConversion(ASTVisitor):
     """
     Makes implicit conversions explicit
@@ -15,8 +16,16 @@ class ASTConversion(ASTVisitor):
         """
         self.type_mapping = {}
 
-        self.structTable = structTable  # Keep track of the struct names and their data fields
-        self.structPtrMap = {}  # Map 'Dereference' nodes above a pointer to the pointer node so it can be used later to give the correct type to Expr nodes
+        """
+        Keep track of the struct names and their data fields
+        """
+        self.structTable = structTable
+
+        """
+        Map 'Dereference' nodes above a pointer to the pointer node so it can be used later to give the correct type 
+        to Expr nodes
+        """
+        self.structPtrMap = {}
 
     def visit(self, ast: AST):
         """
@@ -36,18 +45,13 @@ class ASTConversion(ASTVisitor):
         is_struct = False
         data_type3 = None
 
-        #print(is_array, is_struct, node.text)
-
         if is_array:  # TODO fix the statement
             child = node.getChild(0)
-            data_type, ptrs = self.type_mapping[child]
-            if data_type[0] not in ["FLOAT", "CHAR", "INT"]:
+            data_type = self.type_mapping[child]
+            if isinstance(data_type, SymbolTypeStruct):
                 is_struct = True
-                #is_array = False
 
-        if is_struct:  # TODO Need a way to pass the type to the node above
-            #tempPtrs = [('*', False)]
-            tempPtrs = []
+        if is_struct and False:  # TODO Need a way to pass the type to the node above
             index = int(node.getChild(2).text)  # Index of the struct data member
             lchild = node.getChild(0)  # LHS of the '.' 'operator
             if lchild.text == "Dereference":
@@ -55,62 +59,50 @@ class ASTConversion(ASTVisitor):
 
             type_object = node.symbol_table.getEntry(lchild.text).getTypeObject()
             if isinstance(type_object, SymbolTypePtr):
-                #tempPtrs = [('*', False)]
                 tempPtrs = []
-                #print(node.text)
                 while isinstance(type_object, SymbolTypePtr):  # We need to find the StructType
                     tempPtrs.append(('*', False))
                     type_object = type_object.pts_to
             else:
-                #print('y')
                 data_type2, tempPtrs = self.type_mapping[lchild]
 
             data_type, ptrs = type_object.pts_to[index].getPtrTuple()
             ptrs = tempPtrs + ptrs
             self.type_mapping[node] = (data_type, ptrs)
             data_type3 = data_type
-            #print("struct", node.text, node.parent.text, data_type, ptrs)
-
 
         if node.text == "Dereference" or is_array:
+
             """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was 
             before"""
             child = node.getChild(0)
-            #if not is_struct:
-            data_type, ptrs = self.type_mapping[child]
-            #print('before', is_struct, is_array, node.text, node.parent.text, data_type, ptrs)
-
-            #print("array", data_type, ptrs)
+            data_type = self.type_mapping[child]
 
             """
             We we do a [] access, we need to check that the value provided is an integer
             """
             if is_array:
-                data_type2, ptrs2 = self.type_mapping[node.getChild(2)]
+                data_type2 = self.type_mapping[node.getChild(2)]
 
-                if data_type2[0] != "INT" or len(ptrs2) > 0:
-                    ErrorExporter.invalidArrayIndex(node.linenr, (data_type2, ptrs2))
+                if not data_type2.isBase() or data_type2.getType() != "INT":
+                    ErrorExporter.invalidArrayIndex(node.linenr, data_type2)
 
                 """
                 The array has by default 1 ptr, but it it is the only 1, the array is not really an array
                 """
-                if len(ptrs) <= 1:
-                    ErrorExporter.invalidDereferenceNotPtr(node.linenr, (data_type, ptrs[:-1]), True)
+                if data_type.getPtrAmount() <= 1:
+                    ErrorExporter.invalidDereferenceNotPtr(node.linenr, data_type, True)
             """
             when trying to dereference a non-ptr, throw an error
             """
-            if len(ptrs) == 0:
-                ErrorExporter.invalidDereferenceNotPtr(node.linenr, (data_type, ptrs))
+            if data_type.isBase():
+                ErrorExporter.invalidDereferenceNotPtr(node.linenr, data_type)
 
-            ptrs = ptrs[:-1]  # Remove 1 ptr
+            data_type = data_type.deReference()
 
-            self.type_mapping[node] = (data_type, ptrs)
+            self.type_mapping[node] = data_type
             if is_struct:
-                self.type_mapping[node] = (data_type3, ptrs)
-
-
-            #print("array change: ", node.text , data_type, ptrs)
-            #print('after' , is_struct, is_array, node.text, node.parent.text, data_type, ptrs)
+                self.type_mapping[node] = data_type3
             return
 
         if node.text == "Conversion":
@@ -119,18 +111,18 @@ class ASTConversion(ASTVisitor):
             """
 
             type_value = node.getChild(0)
-            data_type, ptrs = self.calculateType(type_value)
+            data_type = self.calculateType(type_value)
 
             """
             check first is the conversion is redundant (float) of float
             """
-            if self.type_mapping[node.getChild(1)] == (data_type, ptrs):
+            if self.type_mapping[node.getChild(1)] == data_type:
                 """
                 this case the conversion is redundant
                 """
                 node.parent.replaceChild(node, node.getChild(1))
 
-            self.type_mapping[node] = (data_type, ptrs)
+            self.type_mapping[node] = data_type
             return
         if node.text not in ("Literal", "Expr", "Declaration", "Assignment", "ParameterCall", "FunctionCall", "Return"):
 
@@ -143,7 +135,7 @@ class ASTConversion(ASTVisitor):
         """
         now we are going to decide which type we should convert to if we do not yet have that type
         """
-        to_type: tuple = (None, None)
+        to_type: SymbolType = None
         operator = self.get_operator(node)
 
         if node.text in ("Literal", "Expr"):
@@ -155,14 +147,14 @@ class ASTConversion(ASTVisitor):
                 """
                 when a child does not have a type, we will ignore it
                 """
-                check_type: tuple = self.type_mapping.get(child, None)
+                check_type: SymbolType = self.type_mapping.get(child, None)
                 if check_type is None:
                     continue
 
                 """
                 first type does not have to check if it is richer
                 """
-                if to_type == (None, None):
+                if to_type is None:
                     to_type = check_type
                     continue
 
@@ -171,7 +163,7 @@ class ASTConversion(ASTVisitor):
                 To check this, we will take the min of to_type and type_tup their ptr length, and this always needs
                 to be 0, else we throw een error
                 """
-                if min(len(to_type[1]), len(check_type[1])) != 0:
+                if not to_type.isBase() and not check_type.isBase():
 
                     """
                     pointers cannot do operation together unless condition operations
@@ -181,25 +173,33 @@ class ASTConversion(ASTVisitor):
                         """
                         when the op is invalid for ptrs
                         """
+
                         ErrorExporter.invalidOperation(node.linenr, operator, to_type, check_type)
 
                 """
                 for the non-first type, we will take the richest type
                 """
-                richest_native_type = self.rc.get_richest(to_type[0][0], check_type[0][0])
-                richest_native_type = (richest_native_type, False)
+                richest_native_type = self.rc.get_richest(to_type.getBaseType(), check_type.getBaseType())
+
+                richest_native_type = SymbolType(richest_native_type, False)
+
                 """
                 when 2 conflicting ptr types choose the one with the most ptrs: '*'
                 Because, PTR+PTR will be rejected in the future, and int+PTR, will be just fine
                 """
-                to_ptr = to_type[1]
-                if len(check_type[1]) > len(to_type[1]):
-                    to_ptr = check_type[1]
-                    richest_native_type = check_type[0]
-                elif len(to_type[1]) > len(check_type[1]):
-                    richest_native_type = to_type[0]
 
-                to_type = (richest_native_type, to_ptr)
+                if check_type.getPtrAmount() > to_type.getPtrAmount():
+                    temp_to = check_type
+                elif check_type.getPtrAmount() < to_type.getPtrAmount():
+                    temp_to = to_type
+                else:
+                    temp_to = richest_native_type
+
+                    for i in range(check_type.getPtrAmount()):
+                        temp_to = SymbolTypePtr(temp_to, False)
+
+                #print("q", temp_to.getPtrTuple(), to_type.getPtrTuple(), check_type.getPtrTuple())
+                to_type = temp_to
 
         """for declaration and assignment the type is the type of the value that is declared/assigned (and not the 
         necessarily the poorest type)"""
@@ -208,9 +208,12 @@ class ASTConversion(ASTVisitor):
             while functionNode.text == "Dereference":
                 functionNode = functionNode.children[0]
 
-            return_type = node.parent.getSymbolTable().getEntry(functionNode.text).getPtrTuple()
+            function_type = node.parent.getSymbolTable().getEntry(functionNode.text).getTypeObject()
 
-            self.type_mapping[node] = return_type
+            if not isinstance(function_type, FunctionSymbolType):
+                raise Exception("Function symbol type required")
+
+            self.type_mapping[node] = function_type.return_type
             return
 
         if node.text in ("Declaration", "Assignment"):
@@ -220,7 +223,7 @@ class ASTConversion(ASTVisitor):
             """
             be default 1 ptr is added, so remove it again, because assignment
             """
-            to_type = (assign_type[0], assign_type[1][:-1])
+            to_type = assign_type.deReference()
             """
             make sure assignment doesn't convert to a ptr less
             """
@@ -231,10 +234,7 @@ class ASTConversion(ASTVisitor):
                 Check if we assign to const assign node, if so throw an error
                 """
 
-                if len(to_type[1]) > 0:
-                    const_assign = to_type[1][0][1]
-                else:
-                    const_assign = to_type[0][1]
+                const_assign = to_type.isConst()
 
                 if const_assign:
                     ErrorExporter.constComplaint(node.linenr, self.subtree_to_text(assign_node),
@@ -258,7 +258,7 @@ class ASTConversion(ASTVisitor):
             """
             TODO: support for ptrs in function calls (string zijn sterretjes)
             """
-            to_type = parameterTypes[node.parent.findChild(node) - 1].getPtrTuple()
+            to_type = parameterTypes[node.parent.findChild(node) - 1]
             """
             make sure assignment doesn't convert to a ptr less
             """
@@ -266,26 +266,30 @@ class ASTConversion(ASTVisitor):
             """
             logical operators expect booleans so we convert the given entry into a boolean
             """
-            to_type = (("BOOL", False), [])
-
+            to_type = SymbolType("BOOL", False)
 
         if node.text == "Return":
             function = findfunction(node)
             function_name = function.getChild(0).text
 
-            return_type = function.getSymbolTable().getEntry(function_name).getPtrTuple()
-            to_type = return_type
+            function_type = function.getSymbolTable().getEntry(function_name).getTypeObject()
+            to_type = function_type.return_type
 
         """
         add implicit conversions as explicit
         """
+
         for child in node.children:
-            type_tup = self.type_mapping.get(child, (None, None))
-            if type_tup == (None, None):
+            type_tup: SymbolType = self.type_mapping.get(child, None)
+
+
+            if type_tup is None:
                 continue
 
-            if type_tup[0][0] != to_type[0][0] or type_tup[1] != to_type[1]:
-                if to_type[0][0] == "BOOL" and len(to_type[1]) == 0:
+
+            if type_tup != to_type:
+
+                if to_type.isBase() and to_type.getBaseType() == "BOOL":
                     """
                     logical operators expect booleans so we convert the given entry into a boolean
                     """
@@ -309,6 +313,7 @@ class ASTConversion(ASTVisitor):
                         """
                         ErrorExporter.invalidAssignment(child.linenr, to_type, type_tup)
                     else:
+
                         ErrorExporter.invalidOperation(child.linenr, operator, to_type, type_tup)
                     continue
 
@@ -317,65 +322,58 @@ class ASTConversion(ASTVisitor):
                         """
                         in case we have incompatible type
                         """
+                        #print("c", to_type.getPtrTuple(), type_tup.getPtrTuple())
                         ErrorExporter.invalidOperation(child.linenr, operator, to_type, type_tup)
                         continue
 
                     if operator in ("==", "!=", "<=", ">=", "<", ">"):
                         ErrorExporter.IncompatibleComparison(child.linenr, to_type, type_tup)
-                        self.addConversion(child, to_type)
+                        self.addConversion(child, to_type.getPtrTuple())
                         continue
 
                     """
                     in case ptr+int, we don't need to convert the int,
                     only counts for operators not assignments
                     """
-                    if len(to_type[1]) > 0 and len(type_tup[1]) == 0:
+                    if to_type.getPtrAmount() > 0 and type_tup.isBase():
                         """
                         ptr+int, does not require to convert the int to an int*
                         """
                         continue
-                #if child.text == "Expr" and child.getChildAmount() == 3 and child.getChild(1).text == "[]":
-                #    continue
+
                 self.pointer_warning_check(child.linenr, to_type, type_tup)
                 self.narrowing_warning_check(child.linenr, to_type, type_tup)
 
-                self.addConversion(child, to_type)
+                self.addConversion(child, to_type.getPtrTuple())
 
         """
         equality operators give an integer back
         """
         if operator in ("==", "!=", "<=", ">=", "<", ">", "&&", "||", "!"):
-            self.type_mapping[node] = (("BOOL", False), [])
+            self.type_mapping[node] = SymbolType("BOOL", False)
+
         else:
             self.type_mapping[node] = to_type
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
+        """
+        In Case we have an identifier we want to retrieve the type of symbol table entry corresponding
+        to this identifier
+        """
         if node.type == "IDENTIFIER":
             type_entry = node.getSymbolTable().getEntry(node.text)
             type_object = type_entry.getTypeObject()
 
-            if isinstance(type_object, SymbolTypePtr):
-                pointee = type_object.pts_to
-                while isinstance(pointee, SymbolTypePtr):
-                    pointee = pointee.pts_to
-
-            if isinstance(type_object, SymbolTypeStruct) or (isinstance(type_object, SymbolTypePtr) and isinstance(pointee, SymbolTypeStruct)):
-                data_type, ptrs = self.handleStruct(node)
-            else:
-                data_type, ptrs = type_entry.getPtrTuple()
-
-
             """
-            Use LLVM ptr format
+            The identifier itself is just a reference to the object, so we add another extra SymbolPtrType
             """
-            ptrs.append(("*", False)) # TODO Maybe this shouldn't be done for structs?
 
-            #print( node.text, data_type, ptrs)
+            type_object = SymbolTypePtr(type_object, False)
 
-            self.type_mapping[node] = (data_type, ptrs)
+            self.type_mapping[node] = type_object
 
         elif node.type in types:
-            self.type_mapping[node] = ((node.type, False), [])
+            self.type_mapping[node] = SymbolType(node.type, False)
 
     def replaceIdentifierWithIndex(self, oldGuy, struct_name):
         """
@@ -390,7 +388,6 @@ class ASTConversion(ASTVisitor):
         index = self.structTable[struct_name].index(identifier)  # Replace the struct data member name with an index
         index_node.text = index
 
-        #print('replacing identifier with index')
 
     def handleStruct(self, node):
         type_entry = node.getSymbolTable().getEntry(node.text)
@@ -437,8 +434,6 @@ class ASTConversion(ASTVisitor):
 
         return data_type, ptrs
 
-
-
     @staticmethod
     def calculateType(node: ASTNode):
         """
@@ -450,19 +445,18 @@ class ASTConversion(ASTVisitor):
         if node.text != "Type":
             raise Exception("wrong node type")
 
-        data_type = ""
-        ptrs = []
+        data_type = None
         for child in node.children:
             if child.text.upper() in types:
-                data_type = (child.text.upper(), False)
+                data_type = SymbolType(child.text.upper(), False)
 
             if child.text == "*":
-                ptrs.append(("*", False))
+                data_type = SymbolTypePtr(data_type, False)
 
-        return data_type, ptrs
+        return data_type
 
     @staticmethod
-    def compatible(type_tup: tuple, to_type: tuple, operator: str):
+    def compatible(type_tup: SymbolType, to_type: SymbolType, operator: str):
         """
         Check the blacklist for absolute incompatible operations or types
         :param operator:
@@ -479,16 +473,16 @@ class ASTConversion(ASTVisitor):
 
         incompatible = False
         incompatible = incompatible or (
-            ASTConversion.to_string_type(type_tup), operator, ASTConversion.to_string_type(to_type)) in blocklist
-        if ASTConversion.to_string_type(type_tup) in incompatible_ops.keys():
-            incompatible = incompatible or operator in incompatible_ops.get(ASTConversion.to_string_type(type_tup))
+            ASTConversion.to_string_type(type_tup.getPtrTuple()), operator, ASTConversion.to_string_type(to_type.getPtrTuple())) in blocklist
+        if ASTConversion.to_string_type(type_tup.getPtrTuple()) in incompatible_ops.keys():
+            incompatible = incompatible or operator in incompatible_ops.get(ASTConversion.to_string_type(type_tup.getPtrTuple()))
 
-        if ASTConversion.to_string_type(to_type) in incompatible_ops.keys():
-            incompatible = incompatible or operator in incompatible_ops.get(ASTConversion.to_string_type(to_type))
+        if ASTConversion.to_string_type(to_type.getPtrTuple()) in incompatible_ops.keys():
+            incompatible = incompatible or operator in incompatible_ops.get(ASTConversion.to_string_type(to_type.getPtrTuple()))
         return not incompatible
 
     @staticmethod
-    def compatible_2(type_tup: tuple, to_type: tuple, operator: str):
+    def compatible_2(type_tup: SymbolType, to_type: SymbolType, operator: str):
         """
         check specific compatibility for ptrs and float combinations
         :param type_tup:
@@ -502,16 +496,16 @@ class ASTConversion(ASTVisitor):
         """
         incompatible = False
 
-        if max(len(to_type[1]), len(type_tup[1])) != 0:
+        if max(to_type.getPtrAmount(), type_tup.getPtrAmount()) != 0:
             ptr_less_type = to_type
-            if len(type_tup[1]) == 0:
+            if type_tup.getPtrAmount() == 0:
                 ptr_less_type = type_tup
 
             """
             check if 1 is a PTR and 1 is a FLOAT to say the operation is invalid
             Some operations like '&&' are still valid
             """
-            if ptr_less_type[0][0] == "FLOAT" and len(ptr_less_type[1]) == 0 and operator not in (
+            if ptr_less_type.getBaseType() == "FLOAT" and ptr_less_type.getPtrAmount() == 0 and operator not in (
                     "==", "<=", ">=", "<", ">", "!=", "&&", "||"):
                 incompatible = True
 
@@ -540,7 +534,7 @@ class ASTConversion(ASTVisitor):
         return None
 
     @staticmethod
-    def pointer_warning_check(line_nr: int, to_type: tuple, type_tup2: tuple):
+    def pointer_warning_check(line_nr: int, to_type: SymbolType, type_tup2: SymbolType):
         """
         when float* to int* convert we need to throw a warning
         This function will check for such situations and throw a warning accordingly
@@ -553,10 +547,10 @@ class ASTConversion(ASTVisitor):
         """
         when no ptrs are in the file, this check does nothing
         """
-        if max(len(to_type[1]), len(type_tup2[1])) == 0:
+        if max(to_type.getPtrAmount(), type_tup2.getPtrAmount()) == 0:
             return
 
-        if len(to_type[1]) != len(type_tup2[1]) or to_type[0][0] != type_tup2[0][0]:
+        if to_type.getPtrAmount() != type_tup2.getPtrAmount() or to_type.getBaseType() != type_tup2.getBaseType():
             """
             when ptr amount is different or when type a ptr points to is different
             """
@@ -568,7 +562,7 @@ class ASTConversion(ASTVisitor):
 
             return
 
-    def narrowing_warning_check(self, line_nr: int, to_tup: tuple, type_tup: tuple):
+    def narrowing_warning_check(self, line_nr: int, to_tup: SymbolType, type_tup: SymbolType):
         """
         Give a warning when an implicit conversion narrows the type
 
@@ -581,9 +575,10 @@ class ASTConversion(ASTVisitor):
         """
         ignore ptrs for this
         """
-        if max(len(to_tup[1]), len(type_tup[1])) != 0:
+        if max(to_tup.getPtrAmount(), type_tup.getPtrAmount()) != 0:
             return
-        if self.rc.get_poorest(to_tup[0][0], type_tup[0][0]) == type_tup[0][0]:
+
+        if self.rc.get_poorest(to_tup.getBaseType(), type_tup.getBaseType()) == type_tup.getBaseType():
             return
 
         ErrorExporter.narrowingTypesWarning(line_nr, to_tup, type_tup)
@@ -649,15 +644,21 @@ class ASTConversion(ASTVisitor):
         return text
 
     @staticmethod
-    def format_type(format_type: tuple):
+    def format_type(format_type: SymbolType):
+        type_text = ""
+        while isinstance(format_type, SymbolTypePtr):
+
+            const = ""
+            if format_type.isConst():
+                const = "const"
+
+            type_text = f"*{const}" + type_text
+            format_type = format_type.deReference()
+
         const = ""
-        if format_type[0][1]:
+        if format_type.isConst():
             const = "const"
 
-        type_text = f"{const} {format_type[0][0]}"
-        for p in reversed(format_type[1]):
-            const = ""
-            if p[1]:
-                const = "const"
-            type_text += f"*{const}"
+        type_text = f"{const} {format_type.getBaseType()}" + type_text
+
         return type_text

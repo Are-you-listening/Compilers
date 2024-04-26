@@ -18,6 +18,8 @@ from src.parser.SwitchConverter import *
 from src.parser.ArrayCleaner import *
 from src.parser.ASTTableCreator import *
 from src.parser.ASTDereferencer import *
+from src.parser.StructCleaner import StructCleaner
+from src.parser.StructCleanerAfter import StructCleanerAfter
 
 input_file = "read_file.c"
 
@@ -48,6 +50,9 @@ below add needed stuff
 """
 
 CodeGetter().visit(ast)
+
+structTable = StructCleaner().visit(ast)  # Massage the structs
+
 EnumConverter().visit(ast)
 TypeMerger().visit(ast)
 ASTTypedefReplacer().visit(ast)
@@ -57,6 +62,7 @@ ASTCleaner().visit(ast)
 SwitchConverter().visit(ast)
 ArrayCleaner().visit(ast)
 ASTTableCreator().visit(ast)
+StructCleanerAfter(structTable).visit(ast)
 ASTCleanerAfter().visit(ast)
 ASTDereferencer().visit(ast)
 

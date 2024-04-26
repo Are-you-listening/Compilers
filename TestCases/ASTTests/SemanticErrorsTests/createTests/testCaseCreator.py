@@ -16,6 +16,9 @@ from src.parser.ASTTableCreator import ASTTableCreator
 from src.parser.TypeMerger import *
 from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
 from src.parser.BlacklistVisitor import BlacklistVisitor
+from src.parser.StructCleaner import StructCleaner
+from src.parser.StructCleanerAfter import StructCleanerAfter
+
 
 input_file = "read_file.c"
 
@@ -44,6 +47,8 @@ black_list_visitor.visit(ast)
 codegetter = CodeGetter()
 codegetter.visit(ast)
 
+structTable = StructCleaner().visit(ast)  # Massage the structs
+
 TypeMerger().visit(ast)
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
@@ -53,6 +58,7 @@ astcleaner.visit(ast)
 
 ASTTableCreator().visit(ast)  # Create the symbol table
 
+StructCleanerAfter(structTable).visit(ast)
 
 astcleanerafter = ASTCleanerAfter()  # Do a standard cleaning
 astcleanerafter.visit(ast)
@@ -83,7 +89,7 @@ cfv = ConstantFoldingVisitor()
 cfv.visit(ast)
 
 
-ast_conv = ASTConversion()
+ast_conv = ASTConversion(structTable)
 ast_conv.visit(ast)
 
 """

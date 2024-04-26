@@ -1,6 +1,6 @@
 from antlr4.error.ErrorListener import ErrorListener
 import sys
-
+from src.parser.Tables.SymbolType import SymbolType
 
 class EListener(ErrorListener):
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
@@ -39,10 +39,10 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def invalidOperation(linenr: str, operator: str, type1: tuple, type2: tuple):
+    def invalidOperation(linenr: str, operator: str, type1: SymbolType, type2: SymbolType):
 
-        type1 = ErrorExporter.__to_output_type(type1)
-        type2 = ErrorExporter.__to_output_type(type2)
+        type1 = ErrorExporter.__to_output_type(type1.getPtrTuple())
+        type2 = ErrorExporter.__to_output_type(type2.getPtrTuple())
 
         print(f"[ Error ] line {linenr}: invalid operation {operator} on type(s): {type1}  {type2}", file=sys.stderr)
         exit()
@@ -84,7 +84,7 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def IncompatiblePtrTypesWarning(line_nr: int, type1: tuple, type2: tuple):
+    def IncompatiblePtrTypesWarning(line_nr: int, type1: SymbolType, type2: SymbolType):
         """
         print a warning for an incompatible conversion of ptr types int** to float** for example
         :param line_nr:
@@ -93,8 +93,8 @@ class ErrorExporter:
         :return:
         """
 
-        type1 = ErrorExporter.__to_output_type(type1)
-        type2 = ErrorExporter.__to_output_type(type2)
+        type1 = ErrorExporter.__to_output_type(type1.getPtrTuple())
+        type2 = ErrorExporter.__to_output_type(type2.getPtrTuple())
 
         print(f"[ Warning ] line {line_nr}: incompatible pointer types initializing '{type1}' with an expression of type '{type2}' ")
 
@@ -104,7 +104,7 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def narrowingTypesWarning(line_nr: int, to_type: tuple, from_type: tuple):
+    def narrowingTypesWarning(line_nr: int, to_type: SymbolType, from_type: SymbolType):
         """
         print a warning for an incompatible conversion of ptr types int** to float** for example
         :param line_nr:
@@ -113,13 +113,13 @@ class ErrorExporter:
         :return:
         """
 
-        to_type = ErrorExporter.__to_output_type(to_type)
-        from_type = ErrorExporter.__to_output_type(from_type)
+        to_type = ErrorExporter.__to_output_type(to_type.getPtrTuple())
+        from_type = ErrorExporter.__to_output_type(from_type.getPtrTuple())
 
         print(f"[ Warning ] line {line_nr}: Narrowing type from '{from_type}' to '{to_type}' ")
 
     @staticmethod
-    def IncompatibleComparison(line_nr: int, type1: tuple, type2: tuple):
+    def IncompatibleComparison(line_nr: int, type1: SymbolType, type2: SymbolType):
         """
         print a warning for an incompatible conversion of ptr types int** to float** for example
         :param line_nr:
@@ -128,13 +128,13 @@ class ErrorExporter:
         :return:
         """
 
-        type1 = ErrorExporter.__to_output_type(type1)
-        type2 = ErrorExporter.__to_output_type(type2)
+        type1 = ErrorExporter.__to_output_type(type1.getPtrTuple())
+        type2 = ErrorExporter.__to_output_type(type2.getPtrTuple())
 
         print(f"[ Warning ] line {line_nr}: comparison of different types ('{type1}' and '{type2}') ")
 
     @staticmethod
-    def invalidAssignment(line_nr: int, type1: tuple, type2: tuple):
+    def invalidAssignment(line_nr: int, type1: SymbolType, type2: SymbolType):
         """
         an assignment between invalid types
         :param line_nr:
@@ -142,14 +142,14 @@ class ErrorExporter:
         :param type2:
         :return:
         """
-        type1 = ErrorExporter.__to_output_type(type1)
-        type2 = ErrorExporter.__to_output_type(type2)
+        type1 = ErrorExporter.__to_output_type(type1.getPtrTuple())
+        type2 = ErrorExporter.__to_output_type(type2.getPtrTuple())
 
         print(f"[ Error ] line {line_nr}: assignment of incompatible types ('{type1}' and '{type2}') ", file=sys.stderr)
         exit()
 
     @staticmethod
-    def invalidDereferenceNotPtr(line_nr: int, type1: tuple, is_array: bool = False):
+    def invalidDereferenceNotPtr(line_nr: int, type1: SymbolType, is_array: bool = False):
         """
         an assignment between invalid types
         :param is_array: optional boolean indicating whether the value is an array or not
@@ -157,7 +157,8 @@ class ErrorExporter:
         :param type1:
         :return:
         """
-
+        type1 = type1.getPtrTuple()
+        type1 = (type1[0], type1[1][:-1])
         type1 = ErrorExporter.__to_output_type(type1)
 
         required = "pointer"
@@ -326,8 +327,8 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def invalidArrayIndex(line_nr: int, index_type: tuple):
-        index_type = ErrorExporter.__to_output_type(index_type)
+    def invalidArrayIndex(line_nr: int, index_type: SymbolType):
+        index_type = ErrorExporter.__to_output_type(index_type.getPtrTuple())
         print(f"[ Error ] line {line_nr}: the array index is of type {index_type} which is not allowed",
               file=sys.stderr)
         exit()

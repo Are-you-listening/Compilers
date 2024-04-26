@@ -157,7 +157,7 @@ class ASTTableCreator(ASTVisitor):
 
             i += 1
 
-        self.structs[structName] = SymbolTypeStruct(pts_to, structName)
+        self.structs[structName] = SymbolTypeStruct(structName, pts_to)
         self.to_remove.add(node)
 
     @staticmethod

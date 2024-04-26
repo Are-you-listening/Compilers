@@ -2,8 +2,8 @@ from src.parser.Tables.SymbolTypeArray import *
 
 
 class SymbolTypeStruct(SymbolType):
-    def __init__(self, pts_to: [SymbolType], structName):
-        super().__init__(structName, False)
+    def __init__(self, struct_name, pts_to: [SymbolType]):
+        super().__init__(struct_name, False)
         self.pts_to = pts_to
 
     def getElementType(self, index: int):
@@ -45,3 +45,7 @@ class SymbolTypeStruct(SymbolType):
             ptr_list.append(temp)
             temp = []
         return (self.getType(), self.isConst()), ptr_list
+
+    @staticmethod
+    def isBase():
+        return False
