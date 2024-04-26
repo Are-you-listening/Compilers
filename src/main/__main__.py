@@ -29,6 +29,7 @@ from src.parser.StringToArray import *
 from src.parser.StructCleaner import *
 from src.parser.StructCleanerAfter import *
 from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
+from src.llvm_target.VoidReturnAdder import *
 
 
 def cleanGreen(input_file, symbol_file):
@@ -136,6 +137,8 @@ def Processing(ast, dot_file, fold, includeSTDIO, structTable):
 
     DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
 
+
+    VoidReturnAdder().addReturn(cfc.getControlFlowGraph())
     #DotVisitor("output/debug7").visit(ast)  # Export AST in Dot
 
     if dot_file is not None:

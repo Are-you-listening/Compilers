@@ -196,7 +196,7 @@ class AST2LLVM(ASTVisitor):
             """
             all children of type_child are terminals
             """
-            print(data_type, ptrs)
+            #print(data_type, ptrs)
             llvm_var = Declaration.declare(data_type, ptrs, var_child.text)  # The name is optionally needed for structs
         """
         store var in llvm map
@@ -267,8 +267,12 @@ class AST2LLVM(ASTVisitor):
         Declaration.addComment(comment_text)
 
     def handleReturn(self, node: ASTNode):
-        return_val = self.llvm_map[node.getChild(0)]
-        LLVMSingleton.getInstance().getCurrentBlock().ret(return_val)
+        #check if the return is from a void function, if so, return void
+        if node.children[0].text == "Void":
+            LLVMSingleton.getInstance().getCurrentBlock().ret_void()
+        else:
+            return_val = self.llvm_map[node.getChild(0)]
+            LLVMSingleton.getInstance().getCurrentBlock().ret(return_val)
 
     def handlePrintScanf(self, node: ASTNode, printf):
         """
