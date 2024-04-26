@@ -1,6 +1,8 @@
 from TestCases.ABCTests.abcTest import *
 from src.parser.ASTTableCreator import *
 from src.parser.ASTCleaner import *
+from src.parser.StructCleaner import StructCleaner
+from src.parser.StructCleanerAfter import StructCleanerAfter
 
 
 class TestTypedef(ASTTest, unittest.TestCase):

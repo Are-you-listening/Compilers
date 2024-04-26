@@ -18,6 +18,12 @@ class ASTDereferencer(ASTVisitor):
             d.parent.removeChild(d)
 
     def visitNode(self, node: ASTNode):
+
+        # first check if this node is still present in the tree and hasn't been replaced
+        for child in node.children:
+            if child.parent != node:
+                return
+
         if node.text in ("Declaration", "Function", "Assignment", "Parameter"):
             left_child = node.getChild(0)
             if left_child.text == "Dereference":
@@ -26,18 +32,16 @@ class ASTDereferencer(ASTVisitor):
 
         if node.text != "Expr":
             return
+
+        # if we have already moved the ampersand up we detect it here and don't add a dereference node
+        if node.getChildAmount() == 4 and node.getChild(0).text == "&" and node.getChild(2).text == "[]":
+            node.removeChild(node.getChild(0))
+            return
+
         """
         in case we user x[1][2], we still need to dereference this entire subtree
         """
         if node.getChildAmount() == 3 and node.getChild(1).text == "[]":
-            temp = ""
-            if node.getSiblingNeighbour(-1) is not None:
-                temp = node.getSiblingNeighbour(-1).text
-            if temp == "&":
-                # remove the ampersand and don't add a dereference node
-                # node.parent.parent.replaceChild(node.parent, node)
-                return
-
             self.addDereference(node)
             return
 
@@ -79,6 +83,15 @@ class ASTDereferencer(ASTVisitor):
             parent = node.parent
 
             node.getSymbolTable().reference(node.text)
+
+            # move the ampersand up, otherwise it is removed here and the dereference node is added like usual
+            grand_parent = parent.parent
+            if grand_parent.text == "Expr" and grand_parent.getChildAmount() == 3 and grand_parent.getChild(1).text == "[]":
+                sibling_before.parent = grand_parent
+                grand_parent.insertChild(0, sibling_before)
+                parent.removeChild(sibling_before)
+                grand_parent.replaceChild(parent, node)
+                return
 
             parent.removeChild(sibling_before)
             while parent.text in ("Expr", "Literal") and parent.getChildAmount() == 1:

@@ -11,6 +11,8 @@ from src.parser.BlacklistVisitor import BlacklistVisitor
 from src.parser.ASTIfCleaner import *
 from src.parser.ASTLoopCleaner import *
 from src.parser.SwitchConverter import *
+from src.parser.StructCleaner import StructCleaner
+from src.parser.StructCleanerAfter import StructCleanerAfter
 
 input_file = "read_file.c"
 
@@ -38,6 +40,8 @@ black_list_visitor.visit(ast)
 
 codegetter = CodeGetter()  # Link each line of code to a line number
 codegetter.visit(ast)
+
+structTable = StructCleaner().visit(ast)  # Massage the structs
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 

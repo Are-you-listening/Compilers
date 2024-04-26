@@ -17,6 +17,8 @@ from src.parser.BlacklistVisitor import BlacklistVisitor
 from src.parser.TypeMerger import TypeMerger
 from src.parser.ASTIfCleaner import ASTIfCleaner
 from src.parser.ASTLoopCleaner import ASTLoopCleaner
+from src.parser.StructCleaner import StructCleaner
+from src.parser.StructCleanerAfter import StructCleanerAfter
 
 
 input_file = "read_file.c"
@@ -47,6 +49,8 @@ black_list_visitor.visit(ast)
 codegetter = CodeGetter()  # Link each line of code to a line number
 codegetter.visit(ast)
 
+structTable = StructCleaner().visit(ast)  # Massage the structs
+
 TypeMerger().visit(ast)  # Reformat enum declarations to our format
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
@@ -58,6 +62,8 @@ ASTCleaner().visit(ast)  # Do a standard cleaning
 
 
 ASTTableCreator().visit(ast)  # Create the symbol table
+
+StructCleanerAfter(structTable).visit(ast)
 
 ASTCleanerAfter().visit(ast)  # Clean even more :)
 

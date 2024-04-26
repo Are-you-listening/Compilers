@@ -20,6 +20,8 @@ from src.parser.DeadCodeRemover import *
 from src.llvm_target.ControlFlowCreator import *
 from src.parser.VirtualLineNrVisitor import *
 from src.parser.BlacklistVisitor import *
+from src.parser.StructCleaner import StructCleaner
+from src.parser.StructCleanerAfter import StructCleanerAfter
 
 
 input_file = "read_file.c"
@@ -49,6 +51,8 @@ black_list_visitor.visit(ast)
 codegetter = CodeGetter()  # Link each line of code to a line number
 codegetter.visit(ast)
 
+structTable = StructCleaner().visit(ast)  # Massage the structs
+
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
 ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
@@ -58,6 +62,8 @@ ASTCleaner().visit(ast)  # Do a standard cleaning
 
 ASTTableCreator().visit(ast)  # Create the symbol table
 
+StructCleanerAfter(structTable).visit(ast)
+
 ASTCleanerAfter().visit(ast)  # Clean even more :)
 
 ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
@@ -66,7 +72,7 @@ ConstraintChecker(True).visit(ast)  # Checkup Semantic & Syntax Errors
 
 ConstantFoldingVisitor().visit(ast)
 
-ASTConversion().visit(ast)
+ASTConversion(structTable).visit(ast)
 
 ValueAdderVisitor().visit(ast)
 

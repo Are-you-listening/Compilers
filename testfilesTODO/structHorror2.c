@@ -4,6 +4,7 @@ struct kaas{
     int melk;
     float fermtented;
     char lol;
+    char* zeta; // TODO Pointers other then struct pointers are not yet possible
 };
 
 int main() {
@@ -12,7 +13,8 @@ int main() {
    ementaler.melk = 1;
    ementaler.fermtented = 18.9;
    ementaler.lol = 'l';
-   printf("%d %f %c", ementaler.melk, ementaler.fermtented, ementaler.lol);
+   char b = ementaler.lol;
+   printf("%d %f %c", ementaler.melk,ementaler.fermtented, ementaler.lol);
 
     return 0;
 

@@ -3,7 +3,8 @@ from src.parser.ASTConversion import ASTConversion
 from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
 from src.parser.Constraints.ConstraintChecker import ConstraintChecker
 from src.parser.ASTDereferencer import ASTDereferencer
-
+from src.parser.StructCleaner import StructCleaner
+from src.parser.StructCleanerAfter import StructCleanerAfter
 
 class TestSemanticErrors(ASTTest, unittest.TestCase):
     """

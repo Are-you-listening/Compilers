@@ -9,6 +9,8 @@ from TestCases.ABCTests.AstLoader import AstLoader
 from src.parser.ASTTableCreator import *
 from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
 from src.parser.BlacklistVisitor import BlacklistVisitor
+from src.parser.StructCleaner import StructCleaner
+from src.parser.StructCleanerAfter import StructCleanerAfter
 
 input_file = "read_file.c"
 
@@ -37,6 +39,8 @@ black_list_visitor.visit(ast)
 
 codegetter = CodeGetter()
 codegetter.visit(ast)
+
+structTable = StructCleaner().visit(ast)  # Massage the structs
 
 """
 add needed stuff above

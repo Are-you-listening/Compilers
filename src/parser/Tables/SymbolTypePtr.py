@@ -9,6 +9,12 @@ class SymbolTypePtr(SymbolType):
     def deReference(self):
         return self.pts_to
 
+    def getBaseType(self):
+        return self.pts_to.getBaseType()
+
+    def getBaseConst(self):
+        return self.pts_to.getBaseConst()
+
     def __str__(self):
         return f"{str(self.data_type)} {str(self.const)} {str(self.pts_to)}"
 
@@ -26,5 +32,14 @@ class SymbolTypePtr(SymbolType):
         return data_type, ptrs
 
     def __eq__(self, other):
+        if not isinstance(other, SymbolTypePtr):
+            return False
 
-        return super().__eq__(other) and self.isConst() == other.isConst() and self.pts_to == other.pts_to
+        return super().__eq__(other) and self.pts_to == other.pts_to
+
+    def getPtrAmount(self):
+        return self.pts_to.getPtrAmount()+1
+
+    @staticmethod
+    def isBase():
+        return False

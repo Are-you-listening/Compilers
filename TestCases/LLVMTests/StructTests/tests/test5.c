@@ -1,17 +1,6 @@
-int main() {
-
-
-
-
-    return 0;
-
-}
-
-/*
-
 #include <stdio.h>
 
-int cry;
+
 
 struct kaas{
     int melk;
@@ -24,9 +13,6 @@ struct kaas2{
 };
 
 int main() {
-//    int z[1];
-//    z[0] = 5;
-
    struct kaas ementaler;
    ementaler.melk = 1;
    ementaler.fermtented = 18;
@@ -35,8 +21,6 @@ int main() {
    printf("%d", ementaler.melk );
 
    printf("%d", ementaler.fermtented);
-//
-//   printf("%d", z[0]);
 
    struct kaas gouda;
    gouda.melk = 7;
@@ -46,9 +30,11 @@ int main() {
 
    printf("%d", gouda.fermtented);
 
-//   struct kaas* gouda_ptr = &gouda;
-//    printf("%d   ", (*gouda_ptr).melk );
+   struct kaas* gouda_ptr = &gouda;
+    printf("%d   ", (*gouda_ptr).melk );
 
     return 0;
 
-} */
+}
+
+

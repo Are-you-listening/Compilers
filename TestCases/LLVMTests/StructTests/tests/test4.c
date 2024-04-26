@@ -15,7 +15,7 @@ int main() {
    printf("%d", ementaler.fermtented);
 
 
-    struct kaas* gouda_ptr = &gouda;
+    struct kaas* gouda_ptr = &ementaler;
     printf("%d   ", (*gouda_ptr).melk );
 
     return 0;

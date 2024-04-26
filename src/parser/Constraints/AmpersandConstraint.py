@@ -20,8 +20,9 @@ class AmpersandConstraint(Constraint):
             # This operation is only applicable on a single identifier, not on a literal/expr
             if rSibl.text == "Expr" and rSibl.children[0].text not in ["-", "~", "!", "+", "&",
                                                                        "*"]:
-                ErrorExporter.invalidOperatorPtr("", node.linenr)
-                self.rejected = True
+                if rSibl.children[1].text != '[]':  # Exclude array operations
+                    ErrorExporter.invalidOperatorPtr("", node.linenr)
+                    self.rejected = True
 
     def throwException(self):
         pass

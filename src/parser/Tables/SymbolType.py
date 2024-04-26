@@ -8,6 +8,12 @@ class SymbolType:
     def getType(self):
         return self.data_type
 
+    def getBaseType(self):
+        return self.data_type
+
+    def getBaseConst(self):
+        return self.const
+
     def isConst(self):
         return self.const
 
@@ -24,4 +30,14 @@ class SymbolType:
         return (self.data_type, self.isConst()), []
 
     def __eq__(self, other):
-        return self.isConst() == other.isConst() and self.data_type == self.data_type
+        return self.data_type == other.data_type
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def getPtrAmount(self):
+        return 0
+
+    @staticmethod
+    def isBase():
+        return True
