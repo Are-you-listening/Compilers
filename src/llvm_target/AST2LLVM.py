@@ -177,6 +177,8 @@ class AST2LLVM(ASTVisitor):
         if data_type[0] not in ["INT", "FLOAT", "CHAR", "PTR"]:  # Using a struct
             if isinstance(entry.getTypeObject(), SymbolTypeStruct):
                 data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getTypeObject().getFullType()
+                print("struct", data_type, ptrs)
+
 
         if var_child.symbol_table.isRoot():  # Globals; extra stuff needs to be done
             llvm_var = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), CTypesToLLVM.getIRType(data_type, ptrs), var_child.text)  # Declare a global variable
@@ -194,6 +196,7 @@ class AST2LLVM(ASTVisitor):
             """
             all children of type_child are terminals
             """
+            print(data_type, ptrs)
             llvm_var = Declaration.declare(data_type, ptrs, var_child.text)  # The name is optionally needed for structs
         """
         store var in llvm map
