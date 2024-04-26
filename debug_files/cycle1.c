@@ -7,7 +7,7 @@
 
 int x = 1;
 
-#include "define2.c"
+#include "cycle2.c"
 
 int main()
 {
