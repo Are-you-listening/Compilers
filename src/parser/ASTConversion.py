@@ -35,7 +35,9 @@ class ASTConversion(ASTVisitor):
         is_array = (node.text == "Expr" and node.getChildAmount() == 3 and node.getChild(1).text == "[]")
         is_struct = False
 
-        if is_array: # TODO fix the statement
+        print(is_array, is_struct, node.text)
+
+        if is_array:  # TODO fix the statement
             child = node.getChild(0)
             data_type, ptrs = self.type_mapping[child]
             if data_type[0] not in ["FLOAT", "CHAR", "INT"]:
@@ -69,11 +71,14 @@ class ASTConversion(ASTVisitor):
 
 
         if node.text == "Dereference" or is_array:
+
+
             """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was 
             before"""
             child = node.getChild(0)
-            if not is_struct:
-                data_type, ptrs = self.type_mapping[child]
+            #if not is_struct:
+            data_type, ptrs = self.type_mapping[child]
+            print('before', is_struct, is_array, node.text, node.parent.text, data_type, ptrs)
 
             #print("array", data_type, ptrs)
 
@@ -101,7 +106,7 @@ class ASTConversion(ASTVisitor):
             # if not is_struct:
             self.type_mapping[node] = (data_type, ptrs)
             #print("array change: ", node.text , data_type, ptrs)
-            #print(is_struct, is_array, node.text, node.parent.text, data_type, ptrs)
+            print('after' , is_struct, is_array, node.text, node.parent.text, data_type, ptrs)
             return
 
         if node.text == "Conversion":

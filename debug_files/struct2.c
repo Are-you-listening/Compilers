@@ -5,11 +5,6 @@ struct kaas{
 };
 
 int main() {
-   int melk = 1;
-
-   int* ptr = &melk;
-   int z[1] = {1};
-
    struct kaas ementaler;
    ementaler.melk = 1;
    printf("%d", ementaler.melk);
@@ -18,7 +13,7 @@ int main() {
 
     struct kaas** gouda_ptr_ptr = &gouda_ptr;
 
-    printf("%d %d %d %d %d %d", ementaler.melk, z[0], *ptr, (*gouda_ptr).melk, (**gouda_ptr_ptr).melk);
+    printf("%d %d ", (*gouda_ptr).melk, (**gouda_ptr_ptr).melk);
 
 
 
