@@ -166,7 +166,7 @@ class LLVMTest(unittest.TestCase, ABC):
                 """
                 assert for same output
                 """
-                print('a', out.stdout, 'b', c_out.stdout)
+                #print('a', out.stdout, 'b', c_out.stdout)
                 assert out.stdout == c_out.stdout
 
                 """

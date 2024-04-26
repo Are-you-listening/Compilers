@@ -41,6 +41,7 @@ class TypedefTable(AbstractTable):
         :param node: The subtree containing the typedef
         :return:
         """
+
         to_type_mapping = node.getChild(2).text
 
         """
