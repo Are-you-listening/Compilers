@@ -8,7 +8,6 @@ function : (type) IDENTIFIER '(' parameters ')' ('{' block_code '}')? ';'*;
 line: (declaration | expr | assignment | typedef | enum | structunion);
 parameters: ((parameter',')* parameter)?;
 parameter: type IDENTIFIER array?;
-function_call: ( '(' '*' (function_call | IDENTIFIER) ')' | IDENTIFIER) ('(' ((parameter_call',')* parameter_call)? ')')+;
 parameter_call: expr;
 block_line: (line | printscanf | 'break' | 'continue' | return);
 block_code: (block_line ';'+ | comment | if | for | while | anonymous_scope | switch | include | define)* ';'*;
@@ -30,6 +29,7 @@ structunion: ('struct' | 'union') IDENTIFIER '{' ( declaration* ';'+)+ '}';
 functionPtrDeclaration: (type) function_ptr_2 ;
 function_ptr_2: '(' '*' (function_ptr_2 | IDENTIFIER) ')' '(' function_ptr_params ')';
 function_ptr_params: ((type',')* type)?;
+parameter_calls: ((parameter_call',')* parameter_call)?;
 
 declaration: ((type IDENTIFIER array?) | functionPtrDeclaration) ('=' expr)?;
 assignment: expr ('=' expr);
@@ -37,7 +37,8 @@ conversion: '(' type ')' (literal | expr);
 initialize_list: ((expr ',')* expr)?;
 expr : literal
      | conversion
-     | (function_call | printscanf)
+     | expr '(' parameter_calls ')'
+     | printscanf
      | '{' initialize_list '}'
      | '(' expr ')'
                | expr '.' IDENTIFIER

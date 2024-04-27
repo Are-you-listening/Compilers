@@ -57,8 +57,8 @@ class ASTCreator(grammarCVisitor):
     def visitTypedef(self, ctx: grammarCParser.TypedefContext):
         self.__makeNode(ctx, "Typedef")
 
-    def visitFunction_call(self, ctx: grammarCParser.Function_callContext):
-        self.__makeNode(ctx, "FunctionCall")
+    def visitParameter_calls(self, ctx: grammarCParser.Parameter_callsContext):
+        self.__makeNode(ctx, "ParameterCalls")
 
     def visitParameter_call(self, ctx: grammarCParser.Parameter_callContext):
         self.__makeNode(ctx, "ParameterCall")

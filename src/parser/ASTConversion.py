@@ -125,7 +125,21 @@ class ASTConversion(ASTVisitor):
 
             self.type_mapping[node] = data_type
             return
-        if node.text not in ("Literal", "Expr", "Declaration", "Assignment", "ParameterCall", "FunctionCall", "Return"):
+
+        if node.text == "ParameterCalls":
+            corresponding_function_type = self.type_mapping.get(node.parent.children[0])
+
+            parameterTypes = corresponding_function_type.getParameterTypes()
+            """
+            check if has the right amount of arguments
+            """
+            if len(node.children) < len(parameterTypes):
+                ErrorExporter.tooFewFunctionArguments(node.linenr, len(parameterTypes), len(node.children), self.subtree_to_text(node.parent.children[0]))
+            if len(node.children) > len(parameterTypes):
+                ErrorExporter.tooManyFunctionArguments(node.linenr, len(parameterTypes), len(node.children), self.subtree_to_text(node.parent.children[0]))
+            return
+
+        if node.text not in ("Literal", "Expr", "Declaration", "Assignment", "Return", "ParameterCall"):
 
             """
             For our conversion we are only interested in Nodes that have a type,
@@ -140,6 +154,19 @@ class ASTConversion(ASTVisitor):
         operator = self.get_operator(node)
 
         if node.text in ("Literal", "Expr"):
+
+            """
+            if we have an expression that is a function call, we need to check that we call a function
+            """
+            if node.text == "Expr" and node.getChildAmount() == 3 and node.getChild(1).text == "()":
+                called_type: SymbolType = self.type_mapping.get(node.getChild(0))
+                """
+                In case we do a function call on a not function we will throw this error
+                """
+                if not isinstance(called_type, FunctionSymbolType):
+                    ErrorExporter.functionCallNotFunction(node.linenr, self.subtree_to_text(node.getChild(0)),
+                                                          called_type)
+
             """
             check the type of the children to calculate our type.
             We need to take the richest type for expressions
@@ -201,21 +228,6 @@ class ASTConversion(ASTVisitor):
 
                 to_type = temp_to
 
-        """for declaration and assignment the type is the type of the value that is declared/assigned (and not the 
-        necessarily the poorest type)"""
-        if node.text == "FunctionCall":
-            functionNode = node.children[0]
-            while functionNode.text == "Dereference":
-                functionNode = functionNode.children[0]
-
-            function_type = node.parent.getSymbolTable().getEntry(functionNode.text).getTypeObject()
-
-            if not isinstance(function_type, FunctionSymbolType):
-                raise Exception("Function symbol type required")
-
-            self.type_mapping[node] = function_type.return_type
-            return
-
         if node.text in ("Declaration", "Assignment"):
             assign_node = node.getChild(0)
             assign_type = self.type_mapping[assign_node]
@@ -242,27 +254,15 @@ class ASTConversion(ASTVisitor):
                                                  self.subtree_to_text(assign_node), self.format_type(to_type))
 
         if node.text == "ParameterCall":
-            functionNode = node.parent.children[0]
+            """
+            Do an implicit conversion of the parameters
+            """
+            corresponding_function_type = self.type_mapping.get(node.parent.parent.children[0])
 
-            parameterTypes = node.parent.getSymbolTable().getEntry(functionNode.text).getTypeObject().getParameterTypes()
-            """
-            check if has the right amount of arguments
-            """
-            if len(node.parent.children) - 1 < len(parameterTypes):
-                ErrorExporter.tooFewFunctionArguments(node.linenr, len(parameterTypes), len(node.children), functionNode.text)
-            if len(node.parent.children) - 1 > len(parameterTypes):
-                ErrorExporter.tooManyFunctionArguments(node.linenr, len(parameterTypes), len(node.children), functionNode.text)
-            """
-            be default 1 ptr is added, so remove it again, because assignment
-            """
+            parameterTypes = corresponding_function_type.getParameterTypes()
 
-            """
-            TODO: support for ptrs in function calls (string zijn sterretjes)
-            """
             to_type = parameterTypes[node.parent.findChild(node) - 1]
-            """
-            make sure assignment doesn't convert to a ptr less
-            """
+
         if operator in ("&&", "||"):
             """
             logical operators expect booleans so we convert the given entry into a boolean
@@ -287,6 +287,7 @@ class ASTConversion(ASTVisitor):
                 continue
 
             if type_tup != to_type:
+
                 if to_type.isBase() and to_type.getBaseType() == "BOOL":
                     """
                     logical operators expect booleans so we convert the given entry into a boolean
@@ -305,6 +306,7 @@ class ASTConversion(ASTVisitor):
 
                 if not self.compatible_2(type_tup, to_type, operator):
                     if operator is None:
+
                         """
                         when no operator, it is an assignment
                         """
@@ -345,7 +347,15 @@ class ASTConversion(ASTVisitor):
         """
         equality operators give an integer back
         """
-        if operator in ("==", "!=", "<=", ">=", "<", ">", "&&", "||", "!"):
+
+        if operator == "()":
+            """
+            In case we have a function call, we want to continue with the return type, for where it is used,
+            not the function type itself
+            """
+            self.type_mapping[node] = to_type.return_type
+
+        elif operator in ("==", "!=", "<=", ">=", "<", ">", "&&", "||", "!"):
             self.type_mapping[node] = SymbolType("BOOL", False)
 
         else:
@@ -364,7 +374,8 @@ class ASTConversion(ASTVisitor):
             The identifier itself is just a reference to the object, so we add another extra SymbolPtrType
             """
 
-            type_object = SymbolTypePtr(type_object, False)
+            if not isinstance(type_object, FunctionSymbolType):
+                type_object = SymbolTypePtr(type_object, False)
 
             self.type_mapping[node] = type_object
 
@@ -383,6 +394,7 @@ class ASTConversion(ASTVisitor):
 
         index = self.structTable[struct_name.getBaseType()].index(identifier)  # Replace the struct data member name with an index
         index_node.text = index
+
 
     @staticmethod
     def calculateType(node: ASTNode):

@@ -93,14 +93,12 @@ def cleanGreen(input_file, symbol_file):
 
     FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
 
-    #DotVisitor("output/debug5").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/d0").visit(ast)  # Export AST in Dot
     ArrayCleaner().visit(ast)
 
     #DotVisitor("output/debug-1").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
-
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     StructCleanerAfter(structTable).visit(ast)
 
@@ -127,13 +125,16 @@ def Processing(ast, dot_file, fold, includeSTDIO, structTable):
     """
     It is vital that AST conversion occurs before constant folding
     """
+    #DotVisitor("output/d0").visit(ast)  # Export AST in Dot
     ASTConversion(structTable).visit(ast)
 
+    #DotVisitor("output/d1").visit(ast)  # Export AST in Dot
     #DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
 
     if fold:
         ConstantFoldingVisitor().visit(ast)
 
+    #DotVisitor("output/debug3").visit(ast)  # Export AST in Dot
     #DotVisitor("output/debug3").visit(ast)  # Export AST in Dot
 
     ValueAdderVisitor().visit(ast)

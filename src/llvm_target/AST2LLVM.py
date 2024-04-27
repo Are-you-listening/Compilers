@@ -83,8 +83,6 @@ class AST2LLVM(ASTVisitor):
         :return:
         """
 
-        #print(node.text)
-
         if isinstance(node, ASTNodeBlock) and node.text == "Block":
             if self.last_vertex is not None:
                 self.last_vertex.check_flipped()
@@ -115,6 +113,7 @@ class AST2LLVM(ASTVisitor):
 
         if node.text == "Function":
             self.map_table = self.map_table.prev
+            self.handleFunction(node)
 
         if node.text == "Dereference":
             self.handleDereference(node)
@@ -140,8 +139,12 @@ class AST2LLVM(ASTVisitor):
         if node.text == "Return":
             self.handleReturn(node)
 
-        if node.text == "FunctionCall":
-            self.handleFunctionCall(node)
+
+        if node.text == "ParameterCalls":
+            self.handleParameterCalls(node)
+
+        if node.text == "ParameterCall":
+            self.llvm_map[node] = self.llvm_map[node.getChild(0)]
 
         if node.text not in ("Parameters"):
             self.addOriginalCodeAsComment(node)
@@ -211,6 +214,25 @@ class AST2LLVM(ASTVisitor):
         """
         if node.getChildAmount() == 2:
             self.handleAssignment(node)
+
+    def handleFunction(self, node: ASTNode):
+        function_name = node.getChild(0).text
+        function = LLVMSingleton.getInstance().getFunction(function_name)
+
+        if function is None:
+            function = LLVMSingleton.getInstance().getModule().get_global(function_name)
+
+        self.map_table.addEntry(MapEntry(function_name, function))
+
+    def handleParameterCalls(self, node: ASTNode):
+        args = []
+        for child in node.children:
+            llvm_var = self.llvm_map.get(child)
+            if llvm_var is not None:
+                args.append(llvm_var)
+
+        self.llvm_map[node] = args
+
 
     def __del__(self):
         #print(LLVMSingleton.getInstance().getModule())

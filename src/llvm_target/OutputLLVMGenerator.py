@@ -270,7 +270,9 @@ class Load:
         else:
             llvm_var = block.load(load_llvm)
 
-        if not isinstance(load_llvm, ir.GEPInstr):
+        if isinstance(load_llvm, ir.Function):
+            llvm_var.align = 8
+        elif not isinstance(load_llvm, ir.GEPInstr):
             llvm_var.align = load_llvm.align
         else:
             llvm_var.align = CTypesToLLVM.getBytesUse(("INT", False), [])
@@ -305,7 +307,8 @@ class Calculation:
                         ">>": block.ashr,
                         "&": block.and_,
                         "|": block.or_,
-                        "^": block.xor
+                        "^": block.xor,
+                        "()": block.call
                         }
 
         op_translate_icmp = {"<": block.icmp_signed,

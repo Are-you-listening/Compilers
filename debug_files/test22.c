@@ -1,11 +1,16 @@
 #include <stdio.h>
 
-typedef int appel;
-typedef const appel const kaas;
+int d(int w[2]){
+    printf("%d", w[0]);
+    printf("%d", w[1]);
+    w[1] = 5;
+    return w[1];
+}
 
-int main(){
-    kaas k = 3;
-    appel z = k;
-    printf("%d %d", k, z);
+
+int main() {
+    int c[2] = {1, 2};
+    int u = d(c);
+    printf("%d", u);
     return 0;
-};
+}
