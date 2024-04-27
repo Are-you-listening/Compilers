@@ -96,8 +96,6 @@ def cleanGreen(input_file, symbol_file):
     #DotVisitor("output/d0").visit(ast)  # Export AST in Dot
     ArrayCleaner().visit(ast)
 
-    #DotVisitor("output/debug-1").visit(ast)  # Export AST in Dot
-
     ASTTableCreator().visit(ast)  # Create the symbol table
 
     StructCleanerAfter(structTable).visit(ast)

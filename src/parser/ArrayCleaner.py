@@ -66,7 +66,7 @@ class ArrayCleaner(ASTVisitor):
 
         self.array_map[node] = array_sizes
 
-        for i, new_ptr_val in enumerate(array_sizes):
+        for i, new_ptr_val in enumerate(reversed(array_sizes)):
             if i == 0 and node.text == "Parameter":
                 data_type = "PTR"
             else:
