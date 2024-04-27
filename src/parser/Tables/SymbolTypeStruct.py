@@ -41,6 +41,9 @@ class SymbolTypeStruct(SymbolType):
             temp = []
         return (self.getType(), self.isConst()), ptr_list
 
+    def getPtrAmount(self):
+        return 1
+
     @staticmethod
     def isBase():
         return False

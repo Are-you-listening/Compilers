@@ -24,41 +24,61 @@ class ASTDereferencer(ASTVisitor):
             if child.parent != node:
                 return
 
+        """
+        When we come across a Declaration, ... We need to remove 1 dereference node on the left side
+        because we assign our value to the mem location not the value
+        """
         if node.text in ("Declaration", "Function", "Assignment", "Parameter"):
-            left_child = node.getChild(0)
-            if left_child.text == "Dereference":
-                super_child = left_child.getChild(0)
-                node.replaceChild(left_child, super_child)
+            self.removeDereference(node.getChild(0))
 
         if node.text != "Expr":
             return
 
-        # if we have already moved the ampersand up we detect it here and don't add a dereference node
-        if node.getChildAmount() == 4 and node.getChild(0).text == "&" and node.getChild(2).text == "[]":
-            node.removeChild(node.getChild(0))
-            return
+        operator = node.getChild(1).text
+        if node.getChildAmount() == 3 and operator in ("()", "[]"):
+            """
+            '()' and '[]' are kinda similar to the '&' type, so in these cases we also need to 
+            remove the dereference from the value whose 'index' we want to access
+            """
+            self.removeDereference(node.getChild(0))
 
-        if node.getChildAmount() == 2 and node.getChild(0).text == "&" and node.getChild(1).text == "Dereference":  # Reference and Dereference operators complement each other
-            to_replace_child = node.getChild(1).getChild(0)
-            node.parent.replaceChild(node, to_replace_child)
-            return
-
-
-        """
-        in case we user x[1][2], we still need to dereference this entire subtree
-        """
-        if node.getChildAmount() == 3 and node.getChild(1).text == "[]":
-            self.addDereference(node)
+            """
+            When accessing a [], we still need a dereference
+            """
+            if operator == "[]":
+                self.addDereference(node)
             return
 
         if node.getChildAmount() != 2:
             return
 
-        left_child = node.getChild(0)
-        right_child = node.getChild(1)
-        if left_child.text == "*":
-            ref = self.addDereference(right_child)
-            node.parent.replaceChild(node, ref)
+        if node.getChild(0).text == "&":
+            self.removeDereference(node.getChild(1))
+
+            """
+            Remove '&' terminal
+            """
+            self.to_remove.add(node.getChild(0))
+
+            """
+            In case we have a 'Expr' node withput any children we want to remove it, because it doesn't have any 
+            use anymore
+            """
+            node.parent.replaceChild(node, node.getChild(1))
+
+        if node.getChild(0).text == "*":
+            self.addDereference(node.getChild(1))
+
+            """
+            Remove '*' terminal
+            """
+            self.to_remove.add(node.getChild(0))
+
+            """
+            In case we have a 'Expr' node withput any children we want to remove it, because it doesn't have any 
+            use anymore
+            """
+            node.parent.replaceChild(node, node.getChild(1))
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         """
@@ -75,57 +95,10 @@ class ASTDereferencer(ASTVisitor):
         if node.type != "IDENTIFIER" or (node.parent != None and node.parent.text == "FunctionCall"):
             return
 
-        sibling_before = node.getSiblingNeighbour(-1)
-
-        if sibling_before is None:
-            self.addDereference(node)
-            return
-
-        if not isinstance(sibling_before, ASTNodeTerminal):
-            self.addDereference(node)
-            return
-
-        if sibling_before.text == "&" and node.getSiblingNeighbour(-2) is None:  # Removes the de reference sign
-            parent = node.parent
-
-            node.getSymbolTable().reference(node.text)
-
-            # move the ampersand up, otherwise it is removed here and the dereference node is added like usual
-            grand_parent = parent.parent
-            if grand_parent.text == "Expr" and grand_parent.getChildAmount() == 3 and grand_parent.getChild(1).text == "[]":
-                sibling_before.parent = grand_parent
-                grand_parent.insertChild(0, sibling_before)
-                parent.removeChild(sibling_before)
-                grand_parent.replaceChild(parent, node)
-                return
-
-            #if parent.text == "Expr" and  node.s node.getChild(0).text
-
-            parent.removeChild(sibling_before)
-            while parent.text in ("Expr", "Literal") and parent.getChildAmount() == 1:
-                grand_parent = parent.parent
-                grand_parent.replaceChild(parent, node)
-                parent = grand_parent
-            return
-
-        if sibling_before.text == "*" and node.getSiblingNeighbour(-2) is None:  # Removes the dereference sign
-            parent = node.parent
-
-            parent.removeChild(sibling_before)
-            #node = self.addDereference(node)
-
-            if not self.isStructPtr(node):
-                node = self.addDereference(node)
-
-        new_node = self.addDereference(node)
-
-        """Check if the dereference can replace parent 'literal'/ 'Expr'"""
-
-        parent = new_node.parent
-        while parent.text in ("Expr", "Literal") and parent.getChildAmount() == 1:
-            grand_parent = parent.parent
-            grand_parent.replaceChild(parent, new_node)
-            parent = grand_parent
+        """
+        Each identifier gets a dereference node by default, unless it is a Function Call
+        """
+        self.addDereference(node)
 
     @staticmethod
     def isStructPtr(node):
@@ -145,22 +118,22 @@ class ASTDereferencer(ASTVisitor):
 
     @staticmethod
     def addDereference(node):
-        rsib = node.getSiblingNeighbour(1)
-        lsib = node.getSiblingNeighbour(-1)
-        if rsib is not None:
-            if rsib.text in ("[]", "()"):
-                return
-
-        # if node.text == "Expr" and lsib is not None:  # No extra dereference may be need upon accessing the address of a struct member
-        #     if lsib.text == "&" and node.getChild(1).text == "[]":
-        #         return
-
-        # if node.parent.text == "Expr" and node.symbol_table.getEntry(node.text) is not None:
-        #     type_object = node.symbol_table.getEntry(node.text).getTypeObject()
-        #     if isinstance(type_object, SymbolTypePtr) and type_object.data_type == "PTR" and isinstance(type_object.pts_to, SymbolTypeStruct):
-        #         return node
-
+        """
+        Add a Dereference node to the parent
+        """
 
         new_node = ASTNode("Dereference", None, node.symbol_table, node.linenr, node.virtuallinenr)
         node.addNodeParent(new_node)
         return new_node
+
+    @staticmethod
+    def removeDereference(node: ASTNode):
+        """
+        Remove a Dereference, if it is a dereference node
+        """
+
+        if node.text == "Dereference":
+            super_child = node.getChild(0)
+            node.parent.replaceChild(node, super_child)
+        else:
+            ErrorExporter.LValueReference(node.linenr)

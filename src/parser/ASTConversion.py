@@ -75,6 +75,7 @@ class ASTConversion(ASTVisitor):
             before"""
             child = node.getChild(0)
             data_type: SymbolType = self.type_mapping[child]
+
             """
             We we do a [] access, we need to check that the value provided is an integer
             """
@@ -372,13 +373,19 @@ class ASTConversion(ASTVisitor):
             The identifier itself is just a reference to the object, so we add another extra SymbolPtrType
             """
 
-            if not isinstance(type_object, FunctionSymbolType):
-                type_object = SymbolTypePtr(type_object, False)
+            type_object = SymbolTypePtr(type_object, False)
 
             self.type_mapping[node] = type_object
 
         elif node.type in types:
             self.type_mapping[node] = SymbolType(node.type, False)
+        elif node.text == "()":
+            """
+            Simulate a single dereference on the left side
+            """
+            left_sibling = node.getSiblingNeighbour(-1)
+            left_type = self.type_mapping[left_sibling]
+            self.type_mapping[left_sibling] = left_type.deReference()
 
     def replaceIdentifierWithIndex(self, oldGuy, struct_name: SymbolType):
         """
