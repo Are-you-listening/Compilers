@@ -45,13 +45,13 @@ class ASTConversion(ASTVisitor):
         is_struct = False
         data_type3 = None
 
-        if is_array:  # TODO fix the statement
+        if is_array:
             child = node.getChild(0)
             data_type = self.type_mapping[child]
             if isinstance(data_type, SymbolTypePtr) and isinstance(data_type.deReference(), SymbolTypeStruct):
                 is_struct = True
 
-        if is_struct:  # TODO Need a way to pass the type to the node above
+        if is_struct:
             lchild = node.getChild(0)  # LHS of the '.' 'operator
 
             """
@@ -101,7 +101,7 @@ class ASTConversion(ASTVisitor):
 
             self.type_mapping[node] = data_type
             if is_struct:
-                self.type_mapping[node] = data_type3  # TODO Does this maybe need a dereference too?
+                self.type_mapping[node] = data_type3
             return
 
         if node.text == "Conversion":
