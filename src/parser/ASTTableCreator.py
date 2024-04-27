@@ -1,6 +1,7 @@
 from src.parser.Tables.SymbolTable import *
 from src.parser.Tables.SymbolTypeArray import *
 from src.parser.Tables.SymbolTypeStruct import *
+from src.parser.CTypes.COperationHandler import *
 
 
 class ASTTableCreator(ASTVisitor):
@@ -92,7 +93,7 @@ class ASTTableCreator(ASTVisitor):
         """
         node.symbol_table = self.table
 
-        if node.text == "Struct":
+        if node.text in ["Struct", "Union"]:
             self.__make_struct_type(node)
             return
 
@@ -162,8 +163,28 @@ class ASTTableCreator(ASTVisitor):
 
             i += 1
 
+        if node.text == "Union":  # For Unions, take the biggest type as type for all data members
+            pts_to = [self.getRichestType(pts_to)]
+
         self.structs[structName] = SymbolTypeStruct(structName, pts_to)
         self.to_remove.add(node)
+
+    @staticmethod
+    def getRichestType(pts_to: list):
+        richest = pts_to[0]
+        check = RichnessChecker(types)
+        for pointee in pts_to:
+            if isinstance(pointee, SymbolTypePtr) or isinstance(pointee, SymbolTypeStruct) or isinstance(pointee,
+                                                                                                         SymbolTypeArray):
+                richest = pointee
+                break
+            else:
+                data_type, ptrs = richest.getPtrTuple()
+                data_type2, ptrs2 = pointee.getPtrTuple()
+                if data_type2[0] == check.get_richest(data_type[0], data_type2[0]):
+                    richest = pointee
+        return richest
+
 
     @staticmethod
     def __make_ptr_type(latest_datatype: SymbolType, is_const: bool, terminal_type: str):
@@ -229,7 +250,7 @@ class ASTTableCreator(ASTVisitor):
         Returns true if the type is a struct defined by the user
         :param text:
         """
-        return "struct" == text[0:6]
+        return "struct" == text[0:6] or "union" == text[0:6]
 
     def __get_func_ptr_type(self, node: ASTNode):
 

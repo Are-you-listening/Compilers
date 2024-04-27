@@ -66,9 +66,7 @@ class ASTConversion(ASTVisitor):
             """
             self.replaceIdentifierWithIndex(node, struct_type)
             index = int(node.getChild(2).text)  # Index of the struct data member
-
             data_type = struct_type.getElementType(index)
-            # print(data_type.getPtrTuple())
             data_type3 = data_type
 
         if node.text == "Dereference" or is_array:
@@ -400,9 +398,11 @@ class ASTConversion(ASTVisitor):
         index_node = oldGuy.children[0].getSiblingNeighbour(1).getSiblingNeighbour(1)
         identifier = index_node.text
 
-        index = self.structTable[struct_name.getBaseType()].index(identifier)  # Replace the struct data member name with an index
+        if self.structTable[struct_name.getBaseType()][-1:][0] == "union":  # If we have a Union
+            index = 0
+        else:
+            index = self.structTable[struct_name.getBaseType()].index(identifier)  # Replace the struct data member name with an index
         index_node.text = index
-
 
     @staticmethod
     def calculateType(node: ASTNode):

@@ -80,9 +80,6 @@ class CTypesToLLVM:
         :param function_type: When true we will translate our type to ptrs instead of arrays when we have an array
         :return:
         """
-
-        print("d", type(data_type))
-
         if isinstance(data_type, FunctionSymbolType):
             return_llvm = CTypesToLLVM.getIRType(data_type.return_type)
 
@@ -222,7 +219,7 @@ class Declaration:
                 isinstance(value.type.pointee, ir.types.ArrayType):
             value = block.bitcast(value, ir.IntType(8).as_pointer())
 
-        print(store_register)
+        #print(store_register)
         llvm_val = block.store(value, store_register)
 
         llvm_val.align = align

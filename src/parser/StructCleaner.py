@@ -9,7 +9,6 @@ class StructCleaner(ASTVisitor):
     def __init__(self):
         self.to_remove = set()
         self.structTable = {}  # Keep track of the indices of parameters e.g. {"kaas": ["melk", "fermented"]} melk has index 0, this will be used for adding the GEP instruction in LLVM
-        #self.struct_type_table = {}  # Keep track of the type of parameters e.g. {"kaas": ["INT", "INT"]} melk has index 0 with type "INT"
 
     def visit(self, ast: AST):
         self.to_remove = set()
@@ -27,7 +26,7 @@ class StructCleaner(ASTVisitor):
         pass
 
     def __cleanStruct(self, node: ASTNode):
-        if node.text != "Struct":
+        if node.text not in ["Struct", "Union"]:
             return
 
         node.children = node.children[1:]
@@ -38,13 +37,16 @@ class StructCleaner(ASTVisitor):
         index = 1
         while index < len(node.children):
             child = node.children[index]
-            if child.text in ["{", "}", ";", "struct"]:  # Remove unnecessary characters
+            if child.text in ["{", "}", ";", "struct", "union"]:  # Remove unnecessary characters
                 self.to_remove.add(child)
             if child.text == "Declaration":  # The first child is the name of the struct; exclude it
                 self.structTable[structName].append(child.children[1].text)
             index += 1
 
         for child in node.children:
-            child.type = "STRUCT"
+            child.type = "STRUCTUNION"
+
+        if node.text == "Union":
+            self.structTable[structName].append("union")  # Extra info to later check if it's a union or struct
 
         BaseTypes.append(structName)
