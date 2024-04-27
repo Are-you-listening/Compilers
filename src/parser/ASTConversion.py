@@ -90,15 +90,16 @@ class ASTConversion(ASTVisitor):
                 """
                 The array has by default 1 ptr, but it it is the only 1, the array is not really an array
                 """
-
                 if data_type.getPtrAmount() <= 1 and not isinstance(data_type.deReference(), SymbolTypeStruct):
                     ErrorExporter.invalidDereferenceNotPtr(node.linenr, data_type, True)
             """
             when trying to dereference a non-ptr, throw an error
             """
-
             if data_type.isBase():
                 ErrorExporter.invalidDereferenceNotPtr(node.linenr, data_type)
+
+            if isinstance(data_type, SymbolTypeStruct):  # Can't further dereference; '.'/'[]' operator is used on the wrong type
+                ErrorExporter.invalidOperation(node.linenr, '.', data_type, None)
 
             data_type = data_type.deReference()
 

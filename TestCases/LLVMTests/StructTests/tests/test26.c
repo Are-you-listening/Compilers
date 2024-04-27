@@ -13,10 +13,10 @@ int main() {
     struct kaas gouda;
     struct kaas beemster;
     beemster.melk = 1;
-    gouda.melk = 1;
+    gouda.melk = 88;
 
     struct kaas z[2] = {gouda, beemster};
 
-    printf("%d", (z[0]).melk);
+    printf("%d %d", (z[0]).melk, (z[1]).melk);
     return 0;
 }
