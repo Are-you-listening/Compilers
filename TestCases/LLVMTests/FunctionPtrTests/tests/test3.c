@@ -1,8 +1,8 @@
 #include <stdio.h>
 
 int f(int (*z)()){
-    int a = (*z)();
-    return a;
+    int v = (*z)();
+    return v;
 }
 
 int d(){

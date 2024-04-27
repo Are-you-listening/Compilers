@@ -1,5 +1,6 @@
 from src.parser.Constraints.Constraint import *
 from src.parser.ErrorExporter import *
+from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 
 
 class UndefinedReferenceConstraint(Constraint):
@@ -15,7 +16,9 @@ class UndefinedReferenceConstraint(Constraint):
         if node.text == "Expr" and node.getChildAmount() == 3 and node.getChild(1).text == "()":
             function_node = node.children[0]
 
-            if not isinstance(function_node, ASTNodeTerminal):
+            entry = node.symbol_table.getEntry(function_node.text)
+            if not isinstance(function_node, ASTNodeTerminal) or not isinstance(entry.getTypeObject(),
+                                                                                FunctionSymbolType):
                 return
 
             if node.symbol_table.exists(function_node.text):
@@ -32,5 +35,4 @@ class UndefinedReferenceConstraint(Constraint):
             # this should never happen but who knows
             return
         node = self.errorNode
-        print("hey", node.text)
         ErrorExporter.undefinedFunctionReference(node.linenr, node.text)

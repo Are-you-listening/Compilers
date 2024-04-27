@@ -246,8 +246,11 @@ class ControlFlowCreator(ASTVisitor):
         var_child: ASTNode = node.getChild(0)
         function_type = var_child.getSymbolTable().getEntry(var_child.text).getTypeObject()
         args = function_type.getParameterTypes()
+
         if LLVMSingleton.getInstance().getFunction(var_child.text) is None:
+
             Declaration.function(var_child.text, function_type.return_type, args)
+
 
 
 

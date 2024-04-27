@@ -81,8 +81,6 @@ class CTypesToLLVM:
         :return:
         """
 
-        print("d", type(data_type))
-
         if isinstance(data_type, FunctionSymbolType):
             return_llvm = CTypesToLLVM.getIRType(data_type.return_type)
 
@@ -197,6 +195,7 @@ class Declaration:
             arg_type = CTypesToLLVM.getIRType(arg)
             llvmArgs.append(arg_type)
 
+
         function_type = ir.FunctionType(CTypesToLLVM.getIRType(return_type), (llvmArgs))
         new_function = ir.Function(LLVMSingleton.getInstance().getModule(), function_type, name=func_name)
         LLVMSingleton.getInstance().addFunction(new_function)
@@ -222,7 +221,6 @@ class Declaration:
                 isinstance(value.type.pointee, ir.types.ArrayType):
             value = block.bitcast(value, ir.IntType(8).as_pointer())
 
-        print(store_register)
         llvm_val = block.store(value, store_register)
 
         llvm_val.align = align

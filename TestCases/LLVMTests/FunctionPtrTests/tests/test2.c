@@ -1,9 +1,5 @@
 #include <stdio.h>
 
-int f(int (*z)()){
-    int a = (*z)();
-    return a;
-}
 
 int d(){
     printf("%d", 1);
@@ -15,8 +11,5 @@ int main() {
     int (*e)() = &d;
     int u = (*e)();
     printf("%d", u);
-
-    int y = f(e);
-    printf("%d", y);
     return 0;
 }
