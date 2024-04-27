@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 struct kaas{
-    int melk;
+    char lol;
 };
 
 struct pointer{
@@ -10,13 +10,13 @@ struct pointer{
 
 
 int main() {
-    struct kaas gouda;
-    gouda.melk = 1;
+struct kaas ementaler;
+   ementaler.lol = 'l';
 
     struct pointer ptr;
-    ptr.kaas_ptr = &gouda;
+    ptr.kaas_ptr = &ementaler;
 
-    printf("%d", (*ptr.kaas_ptr).melk);
+    printf("%c", (*ptr.kaas_ptr).lol);
 
     return 0;
 }

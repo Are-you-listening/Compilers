@@ -41,12 +41,10 @@ expr : literal
      | printscanf
      | '{' initialize_list '}'
      | '(' expr ')'
-               | expr '.' IDENTIFIER
+     | expr '.' IDENTIFIER
      | ('++' | '--' | '&' | '*') expr
      | expr array
      | IDENTIFIER ('++' | '--')
-
-
      | ('+'|'-' | '~' | '!' ) expr
      | expr ('*' | '/' | '%') expr
      | expr ('+'|'-') expr
