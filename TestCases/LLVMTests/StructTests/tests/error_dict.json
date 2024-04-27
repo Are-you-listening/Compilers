@@ -1,1 +1,4 @@
-{}
+{
+  "17": ["[ Error ] line 22: use of undeclared variable kaas_ptr"],
+  "18": ["[ Error ] line 10: use of undeclared variable kaas"]
+}

@@ -144,7 +144,12 @@ class Declaration:
 
         for entry in ptrs:  # The datatype is different for structs
             irType = CTypesToLLVM.getIRType(entry[0], entry[1])
-            align += CTypesToLLVM.getBytesUse(entry[0], entry[1])
+            if irType is None:  # TODO struct pointing to a ptr
+                struct_type = LLVMSingleton.getInstance().getStruct(entry[0][0])
+                irType = ir.PointerType(struct_type)
+                align += 8
+            else:
+                align += CTypesToLLVM.getBytesUse(entry[0], entry[1])
             types.append(irType)
 
         struct_type = ir.LiteralStructType(types)

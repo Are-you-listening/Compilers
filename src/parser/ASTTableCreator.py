@@ -151,9 +151,14 @@ class ASTTableCreator(ASTVisitor):
         i = 1  # We can skip the first 2 nodes, these are used for the Struct ittself
         while i < len(node.children):
             child = node.children[i].children[0]  # Pick the type node
+            identifier = node.children[i].children[1].text
 
             data_type = self.__get_data_type(child, SymbolType)
             pts_to.append(data_type)
+
+            # Remove the struct data member identifier from the table, it is no actual member
+            entry = self.table.getEntry(identifier)
+            self.table.remove(entry)
 
             i += 1
 

@@ -40,10 +40,12 @@ expr : literal
      | (function_call | printscanf)
      | '{' initialize_list '}'
      | '(' expr ')'
+               | expr '.' IDENTIFIER
      | ('++' | '--' | '&' | '*') expr
      | expr array
      | IDENTIFIER ('++' | '--')
-     | expr '.' IDENTIFIER
+
+
      | ('+'|'-' | '~' | '!' ) expr
      | expr ('*' | '/' | '%') expr
      | expr ('+'|'-') expr

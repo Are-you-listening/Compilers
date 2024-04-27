@@ -44,3 +44,6 @@ class SymbolTypeStruct(SymbolType):
     @staticmethod
     def isBase():
         return False
+
+    def getPtrAmount(self):
+        return 1

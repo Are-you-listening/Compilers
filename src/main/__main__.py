@@ -75,7 +75,7 @@ def cleanGreen(input_file, symbol_file):
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
@@ -95,6 +95,8 @@ def cleanGreen(input_file, symbol_file):
 
     #DotVisitor("output/debug5").visit(ast)  # Export AST in Dot
     ArrayCleaner().visit(ast)
+
+    #DotVisitor("output/debug-1").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 

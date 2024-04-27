@@ -55,7 +55,7 @@ def serializedATN():
         8,36,1,36,0,1,68,37,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,
         34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,0,14,
         2,0,5,5,66,66,1,0,60,61,1,0,26,27,2,0,25,25,33,34,2,0,11,11,28,28,
-        1,0,33,34,2,0,11,11,37,39,1,0,37,38,2,0,16,16,41,43,2,0,11,11,44,
+        1,0,33,34,2,0,11,11,38,40,1,0,38,39,2,0,16,16,41,43,2,0,11,11,44,
         45,2,0,16,16,41,41,1,0,46,47,1,0,48,51,1,0,52,53,562,0,74,1,0,0,
         0,2,90,1,0,0,0,4,99,1,0,0,0,6,104,1,0,0,0,8,107,1,0,0,0,10,109,1,
         0,0,0,12,132,1,0,0,0,14,143,1,0,0,0,16,145,1,0,0,0,18,158,1,0,0,
@@ -175,22 +175,22 @@ def serializedATN():
         430,429,1,0,0,0,431,447,1,0,0,0,432,433,5,8,0,0,433,434,3,66,33,
         0,434,435,5,9,0,0,435,447,1,0,0,0,436,437,5,6,0,0,437,438,3,68,34,
         0,438,439,5,7,0,0,439,447,1,0,0,0,440,441,7,6,0,0,441,447,3,68,34,
-        15,442,443,5,62,0,0,443,447,7,7,0,0,444,445,7,8,0,0,445,447,3,68,
+        14,442,443,5,62,0,0,443,447,7,7,0,0,444,445,7,8,0,0,445,447,3,68,
         34,11,446,425,1,0,0,0,446,427,1,0,0,0,446,430,1,0,0,0,446,432,1,
         0,0,0,446,436,1,0,0,0,446,440,1,0,0,0,446,442,1,0,0,0,446,444,1,
         0,0,0,447,485,1,0,0,0,448,449,10,10,0,0,449,450,7,9,0,0,450,484,
         3,68,34,11,451,452,10,9,0,0,452,453,7,10,0,0,453,484,3,68,34,10,
         454,455,10,8,0,0,455,456,7,11,0,0,456,484,3,68,34,9,457,458,10,7,
         0,0,458,459,7,12,0,0,459,484,3,68,34,8,460,461,10,6,0,0,461,462,
-        7,13,0,0,462,484,3,68,34,7,463,464,10,5,0,0,464,465,5,39,0,0,465,
+        7,13,0,0,462,484,3,68,34,7,463,464,10,5,0,0,464,465,5,40,0,0,465,
         484,3,68,34,6,466,467,10,4,0,0,467,468,5,54,0,0,468,484,3,68,34,
         5,469,470,10,3,0,0,470,471,5,55,0,0,471,484,3,68,34,4,472,473,10,
         2,0,0,473,474,5,56,0,0,474,484,3,68,34,3,475,476,10,1,0,0,476,477,
-        5,57,0,0,477,484,3,68,34,2,478,479,10,14,0,0,479,484,3,70,35,0,480,
-        481,10,12,0,0,481,482,5,40,0,0,482,484,5,62,0,0,483,448,1,0,0,0,
+        5,57,0,0,477,484,3,68,34,2,478,479,10,15,0,0,479,480,5,37,0,0,480,
+        484,5,62,0,0,481,482,10,13,0,0,482,484,3,70,35,0,483,448,1,0,0,0,
         483,451,1,0,0,0,483,454,1,0,0,0,483,457,1,0,0,0,483,460,1,0,0,0,
         483,463,1,0,0,0,483,466,1,0,0,0,483,469,1,0,0,0,483,472,1,0,0,0,
-        483,475,1,0,0,0,483,478,1,0,0,0,483,480,1,0,0,0,484,487,1,0,0,0,
+        483,475,1,0,0,0,483,478,1,0,0,0,483,481,1,0,0,0,484,487,1,0,0,0,
         485,483,1,0,0,0,485,486,1,0,0,0,486,69,1,0,0,0,487,485,1,0,0,0,488,
         489,5,58,0,0,489,490,3,68,34,0,490,491,5,59,0,0,491,493,1,0,0,0,
         492,488,1,0,0,0,493,494,1,0,0,0,494,492,1,0,0,0,494,495,1,0,0,0,
@@ -220,7 +220,7 @@ class grammarCParser ( Parser ):
                      "'case'", "':'", "'default'", "'enum'", "'printf'", 
                      "'scanf'", "'const'", "'int'", "'char'", "'float'", 
                      "'void'", "'struct'", "'union'", "'return'", "'='", 
-                     "'++'", "'--'", "'&'", "'.'", "'+'", "'~'", "'!'", 
+                     "'.'", "'++'", "'--'", "'&'", "'+'", "'~'", "'!'", 
                      "'/'", "'%'", "'>>'", "'<<'", "'<'", "'>'", "'>='", 
                      "'<='", "'=='", "'!='", "'^'", "'|'", "'&&'", "'||'", 
                      "'['", "']'" ]
@@ -500,7 +500,7 @@ class grammarCParser ( Parser ):
             self.state = 90
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & -1152905115045082796) != 0) or ((((_la - 64)) & ~0x3f) == 0 and ((1 << (_la - 64)) & 7) != 0):
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & -1152904152972408492) != 0) or ((((_la - 64)) & ~0x3f) == 0 and ((1 << (_la - 64)) & 7) != 0):
                 self.state = 88
                 self._errHandler.sync(self)
                 la_ = self._interp.adaptivePredict(self._input,1,self._ctx)
@@ -1157,7 +1157,7 @@ class grammarCParser ( Parser ):
                     self.state = 170
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 2233785670729466917) != 0):
+                    if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 2233785685761852453) != 0):
                         self.state = 166
                         self._errHandler.sync(self)
                         _alt = self._interp.adaptivePredict(self._input,12,self._ctx)
@@ -1424,7 +1424,7 @@ class grammarCParser ( Parser ):
             self.state = 202
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while ((((_la - 4)) & ~0x3f) == 0 and ((1 << (_la - 4)) & 9151315469312180117) != 0):
+            while ((((_la - 4)) & ~0x3f) == 0 and ((1 << (_la - 4)) & 9151315529441722261) != 0):
                 self.state = 200
                 self._errHandler.sync(self)
                 la_ = self._interp.adaptivePredict(self._input,17,self._ctx)
@@ -1796,7 +1796,7 @@ class grammarCParser ( Parser ):
             self.state = 244
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 2233785671799539173) != 0):
+            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 2233785686831924709) != 0):
                 self.state = 243
                 self.block_line()
 
@@ -1806,7 +1806,7 @@ class grammarCParser ( Parser ):
             self.state = 248
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 2233785671799539173) != 0):
+            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 2233785686831924709) != 0):
                 self.state = 247
                 self.block_line()
 
@@ -1816,7 +1816,7 @@ class grammarCParser ( Parser ):
             self.state = 252
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 2233785671799539173) != 0):
+            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 2233785686831924709) != 0):
                 self.state = 251
                 self.block_line()
 
@@ -2479,7 +2479,7 @@ class grammarCParser ( Parser ):
             self.state = 344
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 2233785670729466917) != 0):
+            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 2233785685761852453) != 0):
                 self.state = 343
                 self.expr(0)
 
@@ -3067,7 +3067,7 @@ class grammarCParser ( Parser ):
             self.state = 423
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 2233785670729466917) != 0):
+            if ((((_la - 6)) & ~0x3f) == 0 and ((1 << (_la - 6)) & 2233785685761852453) != 0):
                 self.state = 419
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,47,self._ctx)
@@ -3215,13 +3215,13 @@ class grammarCParser ( Parser ):
             elif la_ == 6:
                 self.state = 440
                 _la = self._input.LA(1)
-                if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 962072676352) != 0)):
+                if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 1924145350656) != 0)):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
                     self.consume()
                 self.state = 441
-                self.expr(15)
+                self.expr(14)
                 pass
 
             elif la_ == 7:
@@ -3229,7 +3229,7 @@ class grammarCParser ( Parser ):
                 self.match(grammarCParser.IDENTIFIER)
                 self.state = 443
                 _la = self._input.LA(1)
-                if not(_la==37 or _la==38):
+                if not(_la==38 or _la==39):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -3359,7 +3359,7 @@ class grammarCParser ( Parser ):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 5)")
                         self.state = 464
-                        self.match(grammarCParser.T__38)
+                        self.match(grammarCParser.T__39)
                         self.state = 465
                         self.expr(6)
                         pass
@@ -3420,24 +3420,24 @@ class grammarCParser ( Parser ):
                         localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 478
-                        if not self.precpred(self._ctx, 14):
+                        if not self.precpred(self._ctx, 15):
                             from antlr4.error.Errors import FailedPredicateException
-                            raise FailedPredicateException(self, "self.precpred(self._ctx, 14)")
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 15)")
                         self.state = 479
-                        self.array()
+                        self.match(grammarCParser.T__36)
+                        self.state = 480
+                        self.match(grammarCParser.IDENTIFIER)
                         pass
 
                     elif la_ == 12:
                         localctx = grammarCParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 480
-                        if not self.precpred(self._ctx, 12):
-                            from antlr4.error.Errors import FailedPredicateException
-                            raise FailedPredicateException(self, "self.precpred(self._ctx, 12)")
                         self.state = 481
-                        self.match(grammarCParser.T__39)
+                        if not self.precpred(self._ctx, 13):
+                            from antlr4.error.Errors import FailedPredicateException
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 13)")
                         self.state = 482
-                        self.match(grammarCParser.IDENTIFIER)
+                        self.array()
                         pass
 
              
@@ -3657,11 +3657,11 @@ class grammarCParser ( Parser ):
          
 
             if predIndex == 10:
-                return self.precpred(self._ctx, 14)
+                return self.precpred(self._ctx, 15)
          
 
             if predIndex == 11:
-                return self.precpred(self._ctx, 12)
+                return self.precpred(self._ctx, 13)
          
 
 
