@@ -75,12 +75,7 @@ def cleanGreen(input_file, symbol_file):
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
-
-
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
-
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
-
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
@@ -93,7 +88,6 @@ def cleanGreen(input_file, symbol_file):
 
     FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
 
-    #DotVisitor("output/d0").visit(ast)  # Export AST in Dot
     ArrayCleaner().visit(ast)
 
     ASTTableCreator().visit(ast)  # Create the symbol table
@@ -102,10 +96,7 @@ def cleanGreen(input_file, symbol_file):
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
@@ -119,7 +110,6 @@ def Processing(ast, dot_file, fold, includeSTDIO, structTable):
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
-
 
     """
     It is vital that AST conversion occurs before constant folding

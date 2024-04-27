@@ -1,20 +1,9 @@
 #include <stdio.h>
 
-union kaas{
-    int melk;
-    float yoghurt;
-};
-
-
-
+(5.0 + 3.2) * (8.7 / 2.0) - (6.1 * 2.5);
 
 int main() {
-    union kaas gouda;
 
-    gouda.melk = 5;
-    gouda.yoghurt = 3.14;
-
-    printf("%f %f", gouda.melk , gouda.yoghurt);
 
     return 0;
 }

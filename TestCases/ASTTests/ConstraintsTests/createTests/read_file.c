@@ -3,12 +3,5 @@ int main(){
 }
 
 
+appel;
 
-appel(); //Function calls are not allowed
-
-
-
-
-int foo(){
-    return 0;
-}

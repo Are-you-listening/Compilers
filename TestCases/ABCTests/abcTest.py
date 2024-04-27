@@ -46,7 +46,7 @@ class ASTTest(ABC):
                 continue
 
             index = int(file[4:-2])  # The index is used to refer to the files & other data belonging to this testfile
-            # print(index, file)  # Toggle for debug
+            #print(index, file)  # Toggle for debug
 
             """
             Load the AST from the JSON file
@@ -93,7 +93,7 @@ class ASTTest(ABC):
                 """
                 errors = str(error_buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
-                #print("error", error_buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
+                #print("error", expected_errors, errors)  # Disable/Enable for Debug
                 assert errors == expected_errors
 
             """
@@ -187,7 +187,7 @@ class LLVMTest(unittest.TestCase, ABC):
                 """
                 errors = str(error_buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
-                # print("error", errors, expected_errors)  # Print any errors we didn't expect
+                #print("error", errors, expected_errors)  # Print any errors we didn't expect
                 assert errors == expected_errors
 
             sys.stdout = original

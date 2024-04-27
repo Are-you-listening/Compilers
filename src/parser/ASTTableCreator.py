@@ -174,17 +174,17 @@ class ASTTableCreator(ASTVisitor):
         richest = pts_to[0]
         check = RichnessChecker(types)
         for pointee in pts_to:
-            if isinstance(pointee, SymbolTypePtr) or isinstance(pointee, SymbolTypeStruct) or isinstance(pointee,
-                                                                                                         SymbolTypeArray):
+            if isinstance(pointee, SymbolTypeArray):  # Arrays are always the biggest since they contain 1 to multiple pointers
                 richest = pointee
                 break
+            if isinstance(pointee, SymbolTypePtr):
+                richest = pointee
             else:
                 data_type, ptrs = richest.getPtrTuple()
                 data_type2, ptrs2 = pointee.getPtrTuple()
                 if data_type2[0] == check.get_richest(data_type[0], data_type2[0]):
                     richest = pointee
         return richest
-
 
     @staticmethod
     def __make_ptr_type(latest_datatype: SymbolType, is_const: bool, terminal_type: str):

@@ -2,5 +2,6 @@
   "17": ["[ Error ] line 22: use of undeclared variable kaas_ptr"],
   "18": ["[ Error ] line 10: use of undeclared variable kaas"],
   "23": ["[ Error ] line 24: invalid operation . on type(s): kaas*"],
-  "24": ["[ Error ] line 26: invalid operation . on type(s): kaas*"]
+  "24": ["[ Error ] line 26: invalid operation . on type(s): kaas*"],
+  "28": ["[ Error ] line 13: assignment of incompatible types ('INT*' and 'FLOAT') "]
 }
