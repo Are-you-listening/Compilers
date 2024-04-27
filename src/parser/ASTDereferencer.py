@@ -38,6 +38,12 @@ class ASTDereferencer(ASTVisitor):
             node.removeChild(node.getChild(0))
             return
 
+        if node.getChildAmount() == 2 and node.getChild(0).text == "&" and node.getChild(1).text == "Dereference":  # Reference and Dereference operators complement each other
+            to_replace_child = node.getChild(1).getChild(0)
+            node.parent.replaceChild(node, to_replace_child)
+            return
+
+
         """
         in case we user x[1][2], we still need to dereference this entire subtree
         """
@@ -93,6 +99,8 @@ class ASTDereferencer(ASTVisitor):
                 grand_parent.replaceChild(parent, node)
                 return
 
+            #if parent.text == "Expr" and  node.s node.getChild(0).text
+
             parent.removeChild(sibling_before)
             while parent.text in ("Expr", "Literal") and parent.getChildAmount() == 1:
                 grand_parent = parent.parent
@@ -138,9 +146,14 @@ class ASTDereferencer(ASTVisitor):
     @staticmethod
     def addDereference(node):
         rsib = node.getSiblingNeighbour(1)
+        lsib = node.getSiblingNeighbour(-1)
         if rsib is not None:
             if rsib.text in ("[]", "()"):
                 return
+
+        # if node.text == "Expr" and lsib is not None:  # No extra dereference may be need upon accessing the address of a struct member
+        #     if lsib.text == "&" and node.getChild(1).text == "[]":
+        #         return
 
         # if node.parent.text == "Expr" and node.symbol_table.getEntry(node.text) is not None:
         #     type_object = node.symbol_table.getEntry(node.text).getTypeObject()
