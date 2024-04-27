@@ -12,10 +12,14 @@ class ASTTableCreator(ASTVisitor):
         self.table = None
         self.structs = {}
         self.to_remove = set()
+        self.param_list = []
 
     def visit(self, ast: AST):
         self.table = None
+        self.param_list = []
+
         self.postorder(ast.root)
+
 
         for n in self.to_remove:
             n.parent.removeChild(n)
@@ -102,14 +106,15 @@ class ASTTableCreator(ASTVisitor):
 
             if child.text == "FunctionPtr":
 
-                func_ptr = self.__get_func_ptr_type(child)
-
-                symbol_entry = SymbolEntry(func_ptr, node.children[1].text, None, node.children[1], None)
+                symbol_type = self.__get_func_ptr_type(child)
+                symbol_entry = SymbolEntry(symbol_type, node.children[1].text, None, node.children[1], None)
                 node.symbol_table.add(symbol_entry)
 
             else:
-                symbol_type = SymbolType
-                self.__make_entry(node, child, symbol_type, True)
+                symbol_type = self.__make_entry(node, child, SymbolType, True)
+
+            if node.text == "Parameter":
+                self.param_list.append(symbol_type)
 
         if node.text in ("Function", "Code", "Scope"):
             """
@@ -121,12 +126,10 @@ class ASTTableCreator(ASTVisitor):
                 node.symbol_table = self.table
 
         if node.text == "Function":
-            child = node.getChild(0)
-            param_types = []
-            for param in node.children[2].children:
-                param_type = self.__get_data_type(param.getChild(0), SymbolType)
-                param_types.append(param_type)
+            param_types = self.param_list
+            self.param_list = []
 
+            child = node.getChild(0)
             return_type = self.__get_data_type(child, SymbolType)
 
             self.__check_function_declarations(node, param_types, return_type)
@@ -243,6 +246,7 @@ class ASTTableCreator(ASTVisitor):
         if referenced:
             symbol_entry.reference()
         node.symbol_table.add(symbol_entry)
+        return latest_datatype
 
     @staticmethod
     def isStructType(text: str):

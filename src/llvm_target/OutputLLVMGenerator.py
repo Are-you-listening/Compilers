@@ -219,7 +219,6 @@ class Declaration:
                 isinstance(value.type.pointee, ir.types.ArrayType):
             value = block.bitcast(value, ir.IntType(8).as_pointer())
 
-        #print(store_register)
         llvm_val = block.store(value, store_register)
 
         llvm_val.align = align

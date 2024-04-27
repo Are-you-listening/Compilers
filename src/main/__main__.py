@@ -77,6 +77,9 @@ def cleanGreen(input_file, symbol_file):
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+
+
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
@@ -88,6 +91,7 @@ def cleanGreen(input_file, symbol_file):
 
     FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
 
+    #DotVisitor("output/d0").visit(ast)  # Export AST in Dot
     ArrayCleaner().visit(ast)
 
     ASTTableCreator().visit(ast)  # Create the symbol table
