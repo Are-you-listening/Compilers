@@ -6,6 +6,7 @@ from src.parser.Tables.SymbolType import SymbolType
 from src.parser.Tables.SymbolTypePtr import SymbolTypePtr
 from src.parser.Tables.SymbolTypeArray import SymbolTypeArray
 from src.parser.Tables.SymbolTypeStruct import SymbolTypeStruct
+from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 """
 This line is not because our lack of capabilities to avoid recursions, this line exist because LLVMLite itself
 uses recursions 
@@ -79,6 +80,18 @@ class CTypesToLLVM:
         :param function_type: When true we will translate our type to ptrs instead of arrays when we have an array
         :return:
         """
+
+        print("d", type(data_type))
+
+        if isinstance(data_type, FunctionSymbolType):
+            return_llvm = CTypesToLLVM.getIRType(data_type.return_type)
+
+            param_llvm = []
+            for param in data_type.getParameterTypes():
+                param_llvm.append(CTypesToLLVM.getIRType(param))
+
+            llvm_type = ir.types.FunctionType(return_llvm, param_llvm)
+            return llvm_type
 
         if isinstance(data_type, SymbolTypeStruct):
             types = []
@@ -209,6 +222,7 @@ class Declaration:
                 isinstance(value.type.pointee, ir.types.ArrayType):
             value = block.bitcast(value, ir.IntType(8).as_pointer())
 
+        print(store_register)
         llvm_val = block.store(value, store_register)
 
         llvm_val.align = align
