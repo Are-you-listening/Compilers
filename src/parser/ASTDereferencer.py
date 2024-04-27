@@ -139,7 +139,7 @@ class ASTDereferencer(ASTVisitor):
     def addDereference(node):
         rsib = node.getSiblingNeighbour(1)
         if rsib is not None:
-            if rsib.text == "[]":
+            if rsib.text in ("[]", "()"):
                 return
 
         # if node.parent.text == "Expr" and node.symbol_table.getEntry(node.text) is not None:

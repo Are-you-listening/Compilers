@@ -347,3 +347,10 @@ class ErrorExporter:
         print(f"[ Error ] line {line_nr}: an initializer list is provided while not being assigned to an array",
               file=sys.stderr)
         exit()
+
+    @staticmethod
+    def functionCallNotFunction(line_nr: int, called: str, call_type: SymbolType):
+        call_type = ErrorExporter.__to_output_type(call_type.getPtrTuple())
+        print(f"[ Error ] line {line_nr}: you cannot do a function call for the non-function '{called}' which is of type {call_type}",
+              file=sys.stderr)
+        exit()

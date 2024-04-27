@@ -3,7 +3,7 @@
   "3":  ["[ Error ] line 17: conflicting types for func"],
   "4":  ["[ Error ] line 17: conflicting types for func"],
   "5":  ["[ Error ] line 17: conflicting types for func"],
-  "6":  ["[ Error ] line 10: too many arguments to function 'func': expected 2, got 1"],
+  "6":  ["[ Error ] line 10: too many arguments to function 'func': expected 2, got 3"],
   "7":  ["[ Error ] line 10: too few arguments to function 'func': expected 2, got 1"],
   "8":  ["[ Error ] line 18: conflicting return type for func"],
   "9":  ["[ Error ] line 18: conflicting return type for func"],

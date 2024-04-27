@@ -23,6 +23,7 @@ class ASTCleaner(ASTVisitor):
         self.cleanPrintf(node)
         self.cleanOvershootConst(node)
         self.cleanDereferenceAssignments(node)
+        self.formatFunctionCall(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.cleanEqualSign(node)
@@ -198,3 +199,18 @@ class ASTCleaner(ASTVisitor):
             return
 
         self.to_remove.add(node)
+
+    def formatFunctionCall(self, node):
+        """
+        We want to have a '()' for function calls format
+
+        :param node:
+        :return:
+        """
+
+        if node.text != "ParameterCalls":
+            return
+
+        operator_node = ASTNodeTerminal("()", node.parent, node.getSymbolTable(), "", node.linenr, node.virtuallinenr)
+        index = node.parent.findChild(node)
+        node.parent.insertChild(index, operator_node)
