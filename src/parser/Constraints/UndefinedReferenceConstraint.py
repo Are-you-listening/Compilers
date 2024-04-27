@@ -14,8 +14,10 @@ class UndefinedReferenceConstraint(Constraint):
     def checkNode(self, node: ASTNode):
         if node.text == "Expr" and node.getChildAmount() == 3 and node.getChild(1).text == "()":
             function_node = node.children[0]
-            while function_node.text == "Dereference":
-                function_node = function_node.children[0]
+
+            if not isinstance(function_node, ASTNodeTerminal):
+                return
+
             if node.symbol_table.exists(function_node.text):
                 if not node.symbol_table.getEntry(function_node.text).is_function_defined():
                     self.rejected = True
@@ -30,4 +32,5 @@ class UndefinedReferenceConstraint(Constraint):
             # this should never happen but who knows
             return
         node = self.errorNode
+        print("hey", node.text)
         ErrorExporter.undefinedFunctionReference(node.linenr, node.text)

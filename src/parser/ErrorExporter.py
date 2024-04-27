@@ -58,6 +58,11 @@ class ErrorExporter:
         exit()
 
     @staticmethod
+    def LValueReference(linenr: str):
+        print(f"[ Error ] line {linenr}: you can't have a reference to an LValue", file=sys.stderr)
+        exit()
+
+    @staticmethod
     def invalidRvalue(identifier: str, linenr: str):
         print(f"[ Error ] line {linenr}: invalid assignment to {identifier}", file=sys.stderr)
         exit()
