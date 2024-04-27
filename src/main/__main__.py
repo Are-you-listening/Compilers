@@ -104,6 +104,8 @@ def cleanGreen(input_file, symbol_file):
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
     if symbol_file is not None:

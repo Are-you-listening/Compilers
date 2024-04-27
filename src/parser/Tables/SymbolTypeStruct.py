@@ -34,6 +34,8 @@ class SymbolTypeStruct(SymbolType):
 
             if temp == []:
                 temp = (item.getType(), item.isConst()), []
+            else:
+                temp = (item.getType(), item.isConst()), temp
 
             ptr_list.append(temp)
             temp = []

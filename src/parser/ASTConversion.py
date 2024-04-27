@@ -101,7 +101,7 @@ class ASTConversion(ASTVisitor):
 
             self.type_mapping[node] = data_type
             if is_struct:
-                self.type_mapping[node] = data_type3
+                self.type_mapping[node] = data_type3  # TODO Does this maybe need a dereference too?
             return
 
         if node.text == "Conversion":
@@ -197,7 +197,6 @@ class ASTConversion(ASTVisitor):
                     for i in range(check_type.getPtrAmount()):
                         temp_to = SymbolTypePtr(temp_to, False)
 
-                #print("q", temp_to.getPtrTuple(), to_type.getPtrTuple(), check_type.getPtrTuple())
                 to_type = temp_to
 
         """for declaration and assignment the type is the type of the value that is declared/assigned (and not the 
@@ -282,13 +281,10 @@ class ASTConversion(ASTVisitor):
         for child in node.children:
             type_tup: SymbolType = self.type_mapping.get(child, None)
 
-
             if type_tup is None:
                 continue
 
-
             if type_tup != to_type:
-
                 if to_type.isBase() and to_type.getBaseType() == "BOOL":
                     """
                     logical operators expect booleans so we convert the given entry into a boolean
@@ -307,7 +303,6 @@ class ASTConversion(ASTVisitor):
 
                 if not self.compatible_2(type_tup, to_type, operator):
                     if operator is None:
-
                         """
                         when no operator, it is an assignment
                         """
@@ -322,7 +317,6 @@ class ASTConversion(ASTVisitor):
                         """
                         in case we have incompatible type
                         """
-                        #print("c", to_type.getPtrTuple(), type_tup.getPtrTuple())
                         ErrorExporter.invalidOperation(child.linenr, operator, to_type, type_tup)
                         continue
 
@@ -385,55 +379,8 @@ class ASTConversion(ASTVisitor):
         index_node = oldGuy.children[0].getSiblingNeighbour(1).getSiblingNeighbour(1)
         identifier = index_node.text
 
-
         index = self.structTable[struct_name.getBaseType()].index(identifier)  # Replace the struct data member name with an index
         index_node.text = index
-
-
-    def handleStruct(self, node):
-        type_entry = node.getSymbolTable().getEntry(node.text)
-        type_object = type_entry.getTypeObject()
-
-        oldGuy = node.parent
-        oldGuy_passed = False
-        #ptrss = []
-        while oldGuy.text == "Dereference":
-            #ptrss += [('*', False)]
-            oldGuy_passed = True
-            oldGuy = oldGuy.parent
-
-        # if node.parent.text == "Dereference" and node.symbol_table.getEntry(node.text) is not None:
-        #     type_object = node.symbol_table.getEntry(node.text).getTypeObject()
-        #     if isinstance(type_object, SymbolTypePtr) and type_object.data_type == "PTR" and isinstance(type_object.pts_to, SymbolTypeStruct):
-        #         data_type, ptrs = type_entry.getPtrTuple()
-        #         print(node.text)
-        #         return data_type, ptrs
-
-        if node.getSiblingNeighbour(-1) is not None and node.getSiblingNeighbour(-1).text == "[]":  # RHS of the '.' operator
-            index = int(node.text)  # Get the index of the struct data member
-            data_type, ptrs = type_object.getElementType(index)
-        elif node.getSiblingNeighbour(1) is not None and node.getSiblingNeighbour(1).text == "[]":  # LHS of the '.' operator
-            #ptrs = [('*', False)]
-            ptrs = []
-            data_type, ptrs2 = type_object.getPtrTuple()
-            ptrs += ptrs2
-            self.replaceIdentifierWithIndex(oldGuy, data_type[0])
-        # elif node.text == "Declaration":
-        #     data_type, ptrs = type_entry.getPtrTuple()
-        #     ptrs = [('*', False)] + ptrs
-        elif oldGuy_passed:
-            data_type, ptrs = type_object.getPtrTuple()
-            self.replaceIdentifierWithIndex(oldGuy,data_type[0])
-
-            temp = node.parent
-            while temp.text == "Dereference":
-                self.structPtrMap[temp] = node
-                temp = temp.parent
-
-        else:
-            data_type, ptrs = type_object.getPtrTuple()
-
-        return data_type, ptrs
 
     @staticmethod
     def calculateType(node: ASTNode):
@@ -621,8 +568,6 @@ class ASTConversion(ASTVisitor):
         ass = node.parent.text == "Assignment" and node.text == "Dereference"
         if ass:
             text += "*("
-
-        #print(node)
 
         brackets_needed = False
 
