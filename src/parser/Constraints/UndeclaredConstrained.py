@@ -27,7 +27,7 @@ class UndeclaredConstrained(Constraint):
             self.checkViableAssignment(node)
         elif node.text == "Declaration":
             if len(node.children) >= 2:
-                if not self.viableDeclaration(node.children[0].text, [node.children[1]]):
+                if not self.viableDeclaration(node.children[0], [node.children[1]]):
                     self.errorNode = node.children[0]
                     self.rejected = True
                     self.throwException()
@@ -47,7 +47,7 @@ class UndeclaredConstrained(Constraint):
             else:
                 self.checkViableAssignment(child)
 
-    def viableDeclaration(self, identifier: str, children: list):
+    def viableDeclaration(self, identifier: ASTNode, children: list):
         """
         Checks if a given identifier is not used in its children, e.g. int z = z is not viable!
         :param identifier:
@@ -55,7 +55,10 @@ class UndeclaredConstrained(Constraint):
         :return:
         """
         for child in children:
-            if child.text == identifier:
+            if child.text == identifier.text:
+                lsib = child.getSiblingNeighbour(-1)
+                if lsib is not None and lsib.text == '[]':  # Upon struct data member access, the datamember name is structName.datamember, so not redeclared upon datamember
+                    return True
                 return False
             if not self.viableDeclaration(identifier, child.children):
                 return False

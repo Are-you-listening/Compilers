@@ -46,6 +46,7 @@ class ASTConversion(ASTVisitor):
         data_type3 = None
 
         if is_array:
+            #print(node.text)
             child = node.getChild(0)
             data_type = self.type_mapping[child]
             if isinstance(data_type, SymbolTypePtr) and isinstance(data_type.deReference(), SymbolTypeStruct):
@@ -53,7 +54,7 @@ class ASTConversion(ASTVisitor):
 
         if is_struct:
             lchild = node.getChild(0)  # LHS of the '.' 'operator
-
+            #print(node.text)
             """
             Get the struct ptr type from the left child
             """
@@ -67,6 +68,7 @@ class ASTConversion(ASTVisitor):
             index = int(node.getChild(2).text)  # Index of the struct data member
 
             data_type = struct_type.getElementType(index)
+            # print(data_type.getPtrTuple())
             data_type3 = data_type
 
         if node.text == "Dereference" or is_array:

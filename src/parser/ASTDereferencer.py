@@ -61,7 +61,7 @@ class ASTDereferencer(ASTVisitor):
             self.to_remove.add(node.getChild(0))
 
             """
-            In case we have a 'Expr' node withput any children we want to remove it, because it doesn't have any 
+            In case we have a 'Expr' node without any children we want to remove it, because it doesn't have any 
             use anymore
             """
             node.parent.replaceChild(node, node.getChild(1))
@@ -99,22 +99,6 @@ class ASTDereferencer(ASTVisitor):
         Each identifier gets a dereference node by default, unless it is a Function Call
         """
         self.addDereference(node)
-
-    @staticmethod
-    def isStructPtr(node):
-        type_entry = node.getSymbolTable().getEntry(node.text)
-        if type_entry is None:
-            return False
-        type_object = type_entry.getTypeObject()
-
-        if isinstance(type_object, SymbolTypePtr):
-            pointee = type_object.pts_to
-            while isinstance(pointee, SymbolTypePtr):
-                pointee = pointee.pts_to
-            return isinstance(type_object, SymbolTypePtr) and isinstance(pointee, SymbolTypeStruct)
-        else:
-            return False
-
 
     @staticmethod
     def addDereference(node):
