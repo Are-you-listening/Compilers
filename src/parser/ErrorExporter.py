@@ -47,9 +47,12 @@ class ErrorExporter:
     def invalidOperation(linenr: str, operator: str, type1: SymbolType, type2: SymbolType):
 
         type1 = ErrorExporter.__to_output_type(type1.getPtrTuple())
-        type2 = ErrorExporter.__to_output_type(type2.getPtrTuple())
+        if type2 is not None:
+            type2 = " " + ErrorExporter.__to_output_type(type2.getPtrTuple())
+        else:
+            type2 = ""
 
-        print(f"[ Error ] line {linenr}: invalid operation {operator} on type(s): {type1}  {type2}", file=sys.stderr)
+        print(f"[ Error ] line {linenr}: invalid operation {operator} on type(s): {type1}{type2}", file=sys.stderr)
         exit()
 
     @staticmethod
