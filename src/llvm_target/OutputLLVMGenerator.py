@@ -358,6 +358,7 @@ class Calculation:
             if llvm_op is not None:
                 llvm_var = llvm_op(operator, left, right)
                 return llvm_var
+
         if isinstance(left.type, ir.types.PointerType) and operator in ["+", "-", "[]"]:
             """
             operator '[]' is for access of arrays. We can access an array using a GetElementPointer

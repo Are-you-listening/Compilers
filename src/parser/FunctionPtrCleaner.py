@@ -28,7 +28,7 @@ class FunctionPtrCleaner(ASTVisitor):
     def visitNode(self, node: ASTNode):
         self.__check_func_ptr_declaration(node)
         self.__check_func_ptr(node)
-        #self.__check_function_ptr_return(node)
+        self.__check_function_ptr_return(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass
@@ -76,7 +76,7 @@ class FunctionPtrCleaner(ASTVisitor):
         """
         In case our function node has 4 children, no function ptrs are being returned
         """
-        if node.getChildAmount() == 4:
+        if node.getChildAmount() <= 4:
             return
 
         type_node = node.getChild(0)

@@ -132,7 +132,7 @@ def Processing(ast, dot_file, fold, includeSTDIO, structTable):
     """
     #DotVisitor("output/d0").visit(ast)  # Export AST in Dot
     ASTConversion(structTable).visit(ast)
-
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     #DotVisitor("output/d1").visit(ast)  # Export AST in Dot
     #DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
 
