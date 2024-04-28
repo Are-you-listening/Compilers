@@ -159,6 +159,8 @@ class ASTConversion(ASTVisitor):
                     ErrorExporter.functionCallNotFunction(node.position.linenr, self.subtree_to_text(node.getChild(0)),
                                                           called_type)
 
+
+
             """
             check the type of the children to calculate our type.
             We need to take the richest type for expressions
@@ -250,6 +252,23 @@ class ASTConversion(ASTVisitor):
             Do an implicit conversion of the parameters
             """
             corresponding_function_type = self.type_mapping.get(node.parent.parent.children[0])
+
+            """
+            Support for a(1), when 'a' is a function ptr, by adding an extra dereference
+            """
+            if isinstance(corresponding_function_type, SymbolTypePtr) and \
+                    isinstance(corresponding_function_type.pts_to, FunctionSymbolType):
+                child = node.parent.parent.children[0]
+
+                deref = ASTNode("Dereference", child.parent, child.getSymbolTable(), node.position, node.structTable)
+                child.addNodeParent(deref)
+                self.visitNode(deref)
+                corresponding_function_type = self.type_mapping.get(node.parent.parent.children[0])
+
+            if not isinstance(corresponding_function_type, FunctionSymbolType):
+                ErrorExporter.functionCallNotFunction(node.linenr, self.subtree_to_text(node.parent.parent.children[0]),
+                                                      corresponding_function_type)
+
 
             parameterTypes = corresponding_function_type.getParameterTypes()
 

@@ -82,7 +82,6 @@ class FunctionPtrCleaner(ASTVisitor):
         if isinstance(identifier_node, ASTNodeTerminal) and identifier_node.type == "IDENTIFIER":
 
             identifier_node.parent.removeChild(identifier_node)
-            print(self.last_func_ptr_declare)
             self.last_func_ptr_declare.insertChild(1, identifier_node)
             identifier_node.parent = self.last_func_ptr_declare
 
