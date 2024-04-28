@@ -1,9 +1,6 @@
-int main(){
-    {
-        int x = 1;
-    }
-    {
-        int x = 2;
-    }
+int main() {
+
+x = 5;
     return 0;
+
 }

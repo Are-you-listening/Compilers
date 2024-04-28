@@ -1,12 +1,20 @@
 #include <stdio.h>
 
-int d(int y){
-    printf("%d\n", 2);
-    printf("%d", 5);
-    return 0;
+int func(int a, int b);
+
+int main() {
+    int y = 5;
+    int u = 10;
+    int c;
+    c = func(y, u);
+    printf("%d\n", c);
+    return y;
 }
 
-int main(){
-    d(5);
-    return 0;
-};
+
+
+
+int func(int a, int b) {
+    return a + b;
+}
+

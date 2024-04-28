@@ -1,16 +1,19 @@
 #include <stdio.h>
 
-int d(int a){
-
-    return 2;
-}
-
+int func(int* a, int b);
 
 int main() {
-    int c = 1;
-
-    int (*e)(int) = &d;
-    int u = (*e)(c);
-    printf("%d", u);
-    return 0;
+    int y = 5;
+    int u = 10;
+    int c;
+    c = func(y, u);
+    printf("%d\n", c);
+    return y;
 }
+
+int func(int* a, int b) {
+    printf("%d\n", a);
+    printf("%d\n", b);
+    return a + b;
+}
+

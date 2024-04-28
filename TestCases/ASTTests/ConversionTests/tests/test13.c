@@ -3,5 +3,6 @@ int main() {
     float* y = 5;
 
     float v = x && y;
+    return 0;
 
 }

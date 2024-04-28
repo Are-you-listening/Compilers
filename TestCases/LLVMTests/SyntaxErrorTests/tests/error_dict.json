@@ -39,5 +39,7 @@
   "41": ["[ Error ] line: 4 Macro names must be identifiers"],
   "42": ["[ Error ] line: 5 Macro names must be identifiers"],
   "43": ["[ Error ] line 11: redefinition or redeclaration of INT RED"],
-  "44": ["[ Error ] line 11: unknown type name '( enum week )'"]
+  "44": ["[ Error ] line 11: unknown type name '( enum week )'"],
+  "46": ["[ Syntax Error ] tests/test46.c line 1:25 invalid symbol: 'int'"],
+  "47": ["[ Syntax Error ] tests/test47.c line 7:13 invalid symbol: '999'"]
 }

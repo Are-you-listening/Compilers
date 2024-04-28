@@ -1,4 +1,8 @@
 int main() {
-    int a = 5;
-    char b = a;
+    float x = 4.2;
+    float* y = 5;
+
+    float v = x && y;
+    return 0;
+
 }
