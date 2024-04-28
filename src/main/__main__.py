@@ -75,6 +75,8 @@ def cleanGreen(input_file, symbol_file):
 
     PointerReformater().visit(ast)
 
+    ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
+
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     StructCleaner().visit(ast)  # Massage the structs
@@ -82,7 +84,7 @@ def cleanGreen(input_file, symbol_file):
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
-    ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
+
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
