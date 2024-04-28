@@ -48,7 +48,7 @@ BlacklistVisitor().visit(ast)
 codegetter = CodeGetter()  # Link each line of code to a line number
 codegetter.visit(ast)
 
-structTable = StructCleaner().visit(ast)  # Massage the structs
+StructCleaner().visit(ast)  # Massage the structs
 
 EnumConverter().visit(ast)  # Convert enum to typedef & const bools
 TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
@@ -70,7 +70,7 @@ ArrayCleaner().visit(ast)
 
 ASTTableCreator().visit(ast)  # Create the symbol table
 
-StructCleanerAfter(structTable).visit(ast)
+StructCleanerAfter().visit(ast)
 
 ASTCleanerAfter().visit(ast)  # Clean even more :)
 
@@ -99,7 +99,7 @@ d.visit(ast)
 add check stuff
 """
 
-ast_conv = ASTConversion(structTable)
+ast_conv = ASTConversion()
 ast_conv.visit(ast)
 
 """

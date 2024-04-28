@@ -1,6 +1,5 @@
-from src.parser.CTypes.COperationHandler import *
 from src.parser.ASTTableCreator import *
-from src.parser.Constraints.FunctionReturnConstraint import findfunction
+from src.parser.Constraints.FunctionReturnConstraint import findFunction
 
 
 class ASTConversion(ASTVisitor):
@@ -8,18 +7,13 @@ class ASTConversion(ASTVisitor):
     Makes implicit conversions explicit
     """
 
-    def __init__(self, structTable):
+    def __init__(self):
         self.rc = RichnessChecker(types)
 
         """
         Map each node on its resulting type after the node has been executed
         """
         self.type_mapping = {}
-
-        """
-        Keep track of the struct names and their data fields
-        """
-        self.structTable = structTable
 
         """
         Map 'Dereference' nodes above a pointer to the pointer node so it can be used later to give the correct type 
@@ -46,7 +40,6 @@ class ASTConversion(ASTVisitor):
         data_type3 = None
 
         if is_array:
-            #print(node.text)
             child = node.getChild(0)
             data_type = self.type_mapping[child]
             if isinstance(data_type, SymbolTypePtr) and isinstance(data_type.deReference(), SymbolTypeStruct):
@@ -54,7 +47,6 @@ class ASTConversion(ASTVisitor):
 
         if is_struct:
             lchild = node.getChild(0)  # LHS of the '.' 'operator
-            #print(node.text)
             """
             Get the struct ptr type from the left child
             """
@@ -83,21 +75,21 @@ class ASTConversion(ASTVisitor):
                 data_type2 = self.type_mapping[node.getChild(2)]
 
                 if not data_type2.isBase() or data_type2.getType() != "INT":
-                    ErrorExporter.invalidArrayIndex(node.linenr, data_type2)
+                    ErrorExporter.invalidArrayIndex(node.position.linenr, data_type2)
 
                 """
                 The array has by default 1 ptr, but it it is the only 1, the array is not really an array
                 """
                 if data_type.getPtrAmount() <= 1 and not isinstance(data_type.deReference(), SymbolTypeStruct):
-                    ErrorExporter.invalidDereferenceNotPtr(node.linenr, data_type, True)
+                    ErrorExporter.invalidDereferenceNotPtr(node.position.linenr, data_type, True)
             """
             when trying to dereference a non-ptr, throw an error
             """
             if data_type.isBase():
-                ErrorExporter.invalidDereferenceNotPtr(node.linenr, data_type)
+                ErrorExporter.invalidDereferenceNotPtr(node.position.linenr, data_type)
 
             if isinstance(data_type, SymbolTypeStruct):  # Can't further dereference; '.'/'[]' operator is used on the wrong type
-                ErrorExporter.invalidOperation(node.linenr, '.', data_type, None)
+                ErrorExporter.invalidOperation(node.position.linenr, '.', data_type, None)
 
             data_type = data_type.deReference()
 
@@ -134,9 +126,9 @@ class ASTConversion(ASTVisitor):
             check if has the right amount of arguments
             """
             if len(node.children) < len(parameterTypes):
-                ErrorExporter.tooFewFunctionArguments(node.linenr, len(parameterTypes), len(node.children), self.subtree_to_text(node.parent.children[0]))
+                ErrorExporter.tooFewFunctionArguments(node.position.linenr, len(parameterTypes), len(node.children), self.subtree_to_text(node.parent.children[0]))
             if len(node.children) > len(parameterTypes):
-                ErrorExporter.tooManyFunctionArguments(node.linenr, len(parameterTypes), len(node.children), self.subtree_to_text(node.parent.children[0]))
+                ErrorExporter.tooManyFunctionArguments(node.position.linenr, len(parameterTypes), len(node.children), self.subtree_to_text(node.parent.children[0]))
             return
 
         if node.text not in ("Literal", "Expr", "Declaration", "Assignment", "Return", "ParameterCall"):
@@ -164,7 +156,7 @@ class ASTConversion(ASTVisitor):
                 In case we do a function call on a not function we will throw this error
                 """
                 if not isinstance(called_type, FunctionSymbolType):
-                    ErrorExporter.functionCallNotFunction(node.linenr, self.subtree_to_text(node.getChild(0)),
+                    ErrorExporter.functionCallNotFunction(node.position.linenr, self.subtree_to_text(node.getChild(0)),
                                                           called_type)
 
             """
@@ -202,7 +194,7 @@ class ASTConversion(ASTVisitor):
                         when the op is invalid for ptrs
                         """
 
-                        ErrorExporter.invalidOperation(node.linenr, operator, to_type, check_type)
+                        ErrorExporter.invalidOperation(node.position.linenr, operator, to_type, check_type)
 
                 """
                 for the non-first type, we will take the richest type
@@ -250,7 +242,7 @@ class ASTConversion(ASTVisitor):
                 const_assign = to_type.isConst()
 
                 if const_assign:
-                    ErrorExporter.constComplaint(node.linenr, self.subtree_to_text(assign_node),
+                    ErrorExporter.constComplaint(node.position.linenr, self.subtree_to_text(assign_node),
                                                  self.subtree_to_text(assign_node), self.format_type(to_type))
 
         if node.text == "ParameterCall":
@@ -270,7 +262,7 @@ class ASTConversion(ASTVisitor):
             to_type = SymbolType("BOOL", False)
 
         if node.text == "Return":
-            function = findfunction(node)
+            function = findFunction(node)
             function_name = function.getChild(0).text
 
             function_type = function.getSymbolTable().getEntry(function_name).getTypeObject()
@@ -310,10 +302,10 @@ class ASTConversion(ASTVisitor):
                         """
                         when no operator, it is an assignment
                         """
-                        ErrorExporter.invalidAssignment(child.linenr, to_type, type_tup)
+                        ErrorExporter.invalidAssignment(child.position.linenr, to_type, type_tup)
                     else:
 
-                        ErrorExporter.invalidOperation(child.linenr, operator, to_type, type_tup)
+                        ErrorExporter.invalidOperation(child.position.linenr, operator, to_type, type_tup)
                     continue
 
                 if operator is not None:
@@ -321,11 +313,11 @@ class ASTConversion(ASTVisitor):
                         """
                         in case we have incompatible type
                         """
-                        ErrorExporter.invalidOperation(child.linenr, operator, to_type, type_tup)
+                        ErrorExporter.invalidOperation(child.position.linenr, operator, to_type, type_tup)
                         continue
 
                     if operator in ("==", "!=", "<=", ">=", "<", ">"):
-                        ErrorExporter.IncompatibleComparison(child.linenr, to_type, type_tup)
+                        ErrorExporter.IncompatibleComparison(child.position.linenr, to_type, type_tup)
                         self.addConversion(child, to_type.getPtrTuple())
                         continue
 
@@ -339,8 +331,8 @@ class ASTConversion(ASTVisitor):
                         """
                         continue
 
-                self.pointer_warning_check(child.linenr, to_type, type_tup)
-                self.narrowing_warning_check(child.linenr, to_type, type_tup)
+                self.pointer_warning_check(child.position.linenr, to_type, type_tup)
+                self.narrowing_warning_check(child.position.linenr, to_type, type_tup)
 
                 self.addConversion(child, to_type.getPtrTuple())
 
@@ -388,7 +380,7 @@ class ASTConversion(ASTVisitor):
             left_type = self.type_mapping[left_sibling]
             self.type_mapping[left_sibling] = left_type.deReference()
 
-    def replaceIdentifierWithIndex(self, oldGuy, struct_name: SymbolType):
+    def replaceIdentifierWithIndex(self, oldGuy: ASTNode, struct_name: SymbolType):
         """
         Replace the data field identifier of a struct with a corresponding index
         :param oldGuy: Struct Node
@@ -398,10 +390,10 @@ class ASTConversion(ASTVisitor):
         index_node = oldGuy.children[0].getSiblingNeighbour(1).getSiblingNeighbour(1)
         identifier = index_node.text
 
-        if self.structTable[struct_name.getBaseType()][-1:][0] == "union":  # If we have a Union
+        if oldGuy.structTable.isUnion(struct_name.getBaseType(), oldGuy.position.linenr):  # If we have a Union
             index = 0
         else:
-            index = self.structTable[struct_name.getBaseType()].index(identifier)  # Replace the struct data member name with an index
+            index = oldGuy.structTable.getEntry(struct_name.getBaseType(), identifier, oldGuy.position.linenr)  # Replace the struct data member name with an index
         index_node.text = index
 
     @staticmethod
@@ -563,8 +555,8 @@ class ASTConversion(ASTVisitor):
         :return:
         """
 
-        new_node = ASTNode("Conversion", node.parent, node.getSymbolTable(), node.linenr, node.virtuallinenr)
-        type_node = ASTNode("Type", new_node, new_node.getSymbolTable(), node.linenr, node.virtuallinenr)
+        new_node = ASTNode("Conversion", node.parent, node.getSymbolTable(), node.position, node.structTable)
+        type_node = ASTNode("Type", new_node, new_node.getSymbolTable(), node.position, node.structTable)
         new_node.addChildren(type_node)
 
         """
@@ -572,12 +564,12 @@ class ASTConversion(ASTVisitor):
         """
         type_node.addChildren(
             ASTNodeTerminal(to_type[0][0], type_node, type_node.getSymbolTable(), "Not Used",
-                            node.linenr, node.virtuallinenr))
+                            node.position, node.structTable))
 
         for t_child in to_type[1]:
             type_node.addChildren(
                 ASTNodeTerminal(t_child[0], type_node, type_node.getSymbolTable(), "Not Used",
-                                node.linenr, node.virtuallinenr))
+                                node.position, node.structTable))
         node.addNodeParent(new_node)
 
     @staticmethod
@@ -592,7 +584,6 @@ class ASTConversion(ASTVisitor):
             text += "*("
 
         brackets_needed = False
-
 
         if node.text == "Dereference":
             brackets_needed = not isinstance(node.getChild(0), ASTNodeTerminal) or node.getChild(0).type != "IDENTIFIER"

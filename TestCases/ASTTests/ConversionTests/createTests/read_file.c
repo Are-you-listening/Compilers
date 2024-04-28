@@ -1,18 +1,5 @@
-#include <stdio.h>
-
-union kaas{
-    int melk;
-    float yoghurt;
-    int* lol;
-};
-
 int main() {
-    union kaas gouda;
-
-    gouda.melk = 5;
-    gouda.yoghurt = 3;
-
-    printf("%d%d", gouda.melk , gouda.yoghurt);
-
-    return 0;
+    int a = 5;
+    int* b = &a;
+    int* c = b + 5.3;
 }

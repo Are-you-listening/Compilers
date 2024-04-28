@@ -1,7 +1,8 @@
 from src.parser.Tables.SymbolTable import *
-from src.llvm_target.LLVMSingleton import *
 from src.llvm_target.OutputLLVMGenerator import *
 from src.llvm_target.ControlFlow.ControlFlowGraph import *
+from src.parser.AST import ASTNodeBlock
+from src.parser.ASTVisitor import *
 
 
 class ControlFlowCreator(ASTVisitor):
@@ -116,10 +117,8 @@ class ControlFlowCreator(ASTVisitor):
             Create a block with the entire code base being a child
             """
 
-            ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, cf.root,
-                                     node.virtuallinenr)
-            ast_block2 = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, cf.root,
-                                     node.virtuallinenr)
+            ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), cf.root, node.position, node.structTable)
+            ast_block2 = ASTNodeBlock("Block", node, node.getSymbolTable(), cf.root, node.position, node.structTable)
 
             node.getChild(1).addNodeParent(ast_block)
             node.getChild(2).addNodeChildEmerge(ast_block2)
@@ -209,7 +208,7 @@ class ControlFlowCreator(ASTVisitor):
             after the traverse (Because the function block is only created at the end) and we don't want to break the 
             traverse structure
             """
-            ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr, block, node.parent.virtuallinenr)
+            ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), block, node.parent.position, node.parent.structTable)
 
             """
             Add the block NODE as parent of the subexpression
@@ -236,7 +235,8 @@ class ControlFlowCreator(ASTVisitor):
 
             self.control_flow_map[node] = new_cfg
 
-    def handleFunction(self, node: ASTNode):
+    @staticmethod
+    def handleFunction(node: ASTNode):
         """
         Create a new function
 
@@ -250,9 +250,6 @@ class ControlFlowCreator(ASTVisitor):
         if LLVMSingleton.getInstance().getFunction(var_child.text) is None:
 
             Declaration.function(var_child.text, function_type.return_type, args)
-
-
-
 
     def handleOperations(self, node: ASTNode):
         """
@@ -356,15 +353,15 @@ class ControlFlowCreator(ASTVisitor):
         """
         Add a new block for everything that comes after the logical expression (because we cannot continue in the block before the expression)
         """
-        ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), node.parent.linenr,
-                                 cf.accepting, node.parent.virtuallinenr)
+        ast_block = ASTNodeBlock("Block", node.parent, node.parent.getSymbolTable(), cf.accepting, node.parent.position,
+                                 node.parent.structTable)
 
         """
         Replace the subtree, that contained the actual expression and replace it by a "PHI" node, 
         indicating a PHI instruction (The PHI instruction will refer to the result calculated in the removed subtree)
         The subtree will still exist in another block, because it will be inserted in de code again
         """
-        phi_node = ASTNodeBlock("PHI", node.parent, node.parent.getSymbolTable(), node.parent.linenr, cf.accepting, node.parent.virtuallinenr)
+        phi_node = ASTNodeBlock("PHI", node.parent, node.parent.getSymbolTable(), cf.accepting, node.parent.position, node.parent.structTable)
 
         node.parent.replaceChild(node, phi_node)
 
@@ -448,7 +445,7 @@ class ControlFlowCreator(ASTVisitor):
         """
         Create block for if statement
         """
-        ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, if_cfg.root, node.virtuallinenr)
+        ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), if_cfg.root, node.position,  node.structTable)
         node.getChild(1).addNodeParent(ast_block)
         else_cfg = None
 
@@ -461,7 +458,7 @@ class ControlFlowCreator(ASTVisitor):
             """
             Create block for else statement
             """
-            ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr, else_cfg.root, node.virtuallinenr)
+            ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), else_cfg.root, node.position,  node.structTable)
             node.getChild(2).addNodeParent(ast_block)
 
         final_cfg = ControlFlowGraph.if_statement(if_cfg, else_cfg)
@@ -487,8 +484,7 @@ class ControlFlowCreator(ASTVisitor):
         """
         Create block for condition
         """
-        ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr,
-                                 condition_vertex, node.virtuallinenr)
+        ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), condition_vertex, node.position, node.structTable)
 
         condition_node = node.getChild(0)
         condition_node.addNodeParent(ast_block)
@@ -496,8 +492,7 @@ class ControlFlowCreator(ASTVisitor):
         """
         Create block for inside the while loop
         """
-        ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), node.linenr,
-                                original_root, node.virtuallinenr)
+        ast_block = ASTNodeBlock("Block", node, node.getSymbolTable(), original_root, node.position,  node.structTable)
 
         loop_node = node.getChild(1)
         loop_node.addNodeParent(ast_block)
@@ -533,8 +528,7 @@ class ControlFlowCreator(ASTVisitor):
         """
         after = target_node.getSiblingNeighbour(1)
 
-        ast_block = ASTNodeBlock("Block", code_node, code_node.getSymbolTable(), code_node.linenr,
-                                 final_cfg.accepting, code_node.virtuallinenr)
+        ast_block = ASTNodeBlock("Block", code_node, code_node.getSymbolTable(), final_cfg.accepting, code_node.position, code_node.structTable)
 
         if after is not None:
 

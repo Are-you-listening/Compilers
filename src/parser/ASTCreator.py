@@ -1,7 +1,6 @@
 from src.antlr_files.grammarCVisitor import *
 from src.antlr_files.grammarCParser import *
-from src.parser.Tables.SymbolTable import *
-from src.parser.Tables.TypedefTable import *
+from src.parser.AST import *
 
 
 class ASTCreator(grammarCVisitor):
@@ -45,11 +44,11 @@ class ASTCreator(grammarCVisitor):
         self.AST = AST(self.parent)
 
     def visitStart_(self, ctx: grammarCParser.Start_Context):
-        self.parent = ASTNode("Start", None, None, ctx.start.line, ctx.start.line)
+        self.parent = ASTNode("Start", None, None, Position(None, ctx.start.line, ctx.start.line), None)
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx: grammarCParser.FunctionContext):
-        node = self.__makeNode(ctx, "Function")
+        self.__makeNode(ctx, "Function")
 
     def visitCode(self, ctx: grammarCParser.CodeContext):
         self.__makeNode(ctx, "Code")
@@ -120,7 +119,7 @@ class ASTCreator(grammarCVisitor):
     def visitDefault(self, ctx: grammarCParser.DefaultContext):
         self.__makeNode(ctx, "DEFAULT")
 
-    def visitParameter(self, ctx:grammarCParser.ParameterContext):
+    def visitParameter(self, ctx: grammarCParser.ParameterContext):
         self.__makeNode(ctx, "Parameter")
 
     def visitParameters(self, ctx: grammarCParser.ParametersContext):
@@ -141,13 +140,13 @@ class ASTCreator(grammarCVisitor):
         else:
             self.__makeNode(ctx, "Union")
 
-    def visitFunctionPtrDeclaration(self, ctx:grammarCParser.FunctionPtrDeclarationContext):
+    def visitFunctionPtrDeclaration(self, ctx: grammarCParser.FunctionPtrDeclarationContext):
         self.__makeNode(ctx, "FunctionPtrDeclaration")
 
     def visitFunction_ptr_2(self, ctx: grammarCParser.Function_ptr_2Context):
         self.__makeNode(ctx, "FunctionPtr")
 
-    def visitFunction_ptr_params(self, ctx:grammarCParser.Function_ptr_paramsContext):
+    def visitFunction_ptr_params(self, ctx: grammarCParser.Function_ptr_paramsContext):
         self.__makeNode(ctx, "FunctionPtrParam")
 
     def visitTerminal(self, ctx):
@@ -161,7 +160,7 @@ class ASTCreator(grammarCVisitor):
             text = text.upper()
 
         node = ASTNodeTerminal(text, self.parent, None, self.translateLexerID(ctx.getSymbol().type),
-                               ctx.getSymbol().line, "")
+                               Position(None, ctx.getSymbol().line, None), None)
 
         self.parent.addChildren(node)
 
@@ -175,7 +174,7 @@ class ASTCreator(grammarCVisitor):
         """
         makes new Object and makes sure this will be a child of it's parent
         """
-        node = ASTNode(terminal_type, self.parent, None, ctx.start.line, None)  # Also attaches the current table/scope
+        node = ASTNode(terminal_type, self.parent, None, Position(None, ctx.start.line, None), None)  # Also attaches the current table/scope
         self.parent.addChildren(node)
         old_parent = self.parent
         self.parent = node

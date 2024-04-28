@@ -15,9 +15,8 @@ class UndeclaredConstrained(Constraint):
         if node.type == "IDENTIFIER":
             entry = node.symbol_table.getEntry(node.text)
 
-            #print(entry.firstDeclared.linenr > node.linenr , entry)
             if node.parent.text != "Struct" and node.parent.parent.text != "Struct":
-                if entry is None or entry.firstDeclared.virtuallinenr > node.virtuallinenr:
+                if entry is None or entry.firstDeclared.position.virtual_linenr > node.position.virtual_linenr:
                     self.rejected = True
                     self.errorNode = node
                     self.throwException()
@@ -35,7 +34,7 @@ class UndeclaredConstrained(Constraint):
     def throwException(self):
         if self.errorNode is None:
             return
-        ErrorExporter.undeclaredVariable(self.errorNode.text, self.errorNode.linenr)
+        ErrorExporter.undeclaredVariable(self.errorNode.text, self.errorNode.position.linenr)
 
     def checkViableAssignment(self, node):
         for child in node.children:
@@ -57,7 +56,7 @@ class UndeclaredConstrained(Constraint):
         for child in children:
             if child.text == identifier.text:
                 lsib = child.getSiblingNeighbour(-1)
-                if lsib is not None and lsib.text == '[]':  # Upon struct data member access, the datamember name is structName.datamember, so not redeclared upon datamember
+                if lsib is not None and lsib.text == '[]':  # Upon struct data member access, the data member name is structName.data-member, so not redeclared upon data member
                     return True
                 return False
             if not self.viableDeclaration(identifier, child.children):

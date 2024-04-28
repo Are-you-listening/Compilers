@@ -1,4 +1,3 @@
-from src.llvm_target.LLVMSingleton import LLVMSingleton
 from llvmlite import ir
 import copy
 
@@ -116,8 +115,7 @@ class Vertex:
             when different endpoints for true and false, we make a conditional branch
             """
             last_instruction = ControlFlowGraph.makeBool(self.llvm)
-            self.llvm.cbranch(last_instruction, true_edge.to_vertex.llvm.block,
-                                        false_edge.to_vertex.llvm.block)
+            self.llvm.cbranch(last_instruction, true_edge.to_vertex.llvm.block, false_edge.to_vertex.llvm.block)
 
     def create_phi(self):
         """
@@ -212,7 +210,7 @@ class ControlFlowGraph:
         """
         Initialize a new Control Graph
 
-        :param new_block: an optional boolean, indicating if we want to create a new LLVM block
+        :param start_vertex: an optional boolean, indicating if we want to create a new LLVM block
         """
 
         """
@@ -302,11 +300,11 @@ class ControlFlowGraph:
         """
         self.reject = None
 
-
     @staticmethod
     def makeBool(builder, constant=None):
         """
         convert to LLVM bool type
+        :param constant:
         :param builder:
         :return:
         """
@@ -377,7 +375,6 @@ class ControlFlowGraph:
         """
         new_graph.accepting = control_flow_2.accepting
         new_graph.reject = control_flow_2.reject
-
 
         return new_graph
 

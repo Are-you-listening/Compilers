@@ -12,7 +12,7 @@ class VirtualLineVisitor(ASTVisitor):
         """
         Assign virtual line nr
         """
-        node.virtuallinenr = self.virtual_line
+        node.position.virtual_linenr = self.virtual_line
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         """
@@ -20,4 +20,4 @@ class VirtualLineVisitor(ASTVisitor):
         """
         if node.text == ';':
             self.virtual_line += 1
-        node.virtuallinenr = self.virtual_line
+        node.position.virtual_linenr = self.virtual_line

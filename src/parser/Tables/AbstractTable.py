@@ -1,4 +1,4 @@
-from src.parser.ASTTypedefReplacer import *
+from abc import abstractmethod
 
 
 class TableEntry:

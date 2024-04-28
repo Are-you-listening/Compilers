@@ -1,5 +1,4 @@
 from src.parser.ASTVisitor import *
-from src.parser.ErrorExporter import *
 
 
 class PointerReformater(ASTVisitor):
@@ -15,8 +14,8 @@ class PointerReformater(ASTVisitor):
             parent = node.parent
 
             # Create a new Exp node with children: '*' and lsib
-            new_expr = ASTNode("Expr", parent, lsib.symbol_table, lsib.linenr, lsib.virtuallinenr)
-            new_star = ASTNodeTerminal("*", new_expr, lsib.symbol_table, -1, lsib.linenr, lsib.virtuallinenr)
+            new_expr = ASTNode("Expr", parent, lsib.symbol_table, lsib.position, lsib.structTable)
+            new_star = ASTNodeTerminal("*", new_expr, lsib.symbol_table, -1, lsib.position, lsib.structTable)
             new_expr.addChildren(new_star)
             new_expr.addChildren(lsib)
 

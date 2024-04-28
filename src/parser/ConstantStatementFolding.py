@@ -1,5 +1,4 @@
-from src.parser.CTypes.COperationHandler import COperationHandler
-from src.parser.Tables.SymbolTable import *
+from src.parser.ASTVisitor import *
 
 
 class ConstantStatementFolding(ASTVisitor):
@@ -76,7 +75,8 @@ class ConstantStatementFolding(ASTVisitor):
             else:
                 node.parent.removeChild(node)
 
-    def __check_while(self, node: ASTNode):
+    @staticmethod
+    def __check_while(node: ASTNode):
         if node.text != "WHILE":
             return
 

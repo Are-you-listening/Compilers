@@ -1,4 +1,6 @@
 from src.parser.ASTVisitor import *
+from src.parser.Tables import StructTable
+from src.parser.AST import Position
 
 
 class EnumConverter(ASTVisitor):
@@ -30,25 +32,25 @@ class EnumConverter(ASTVisitor):
         Retrieve the relevant information about the enum node and add this enum node tot the to remove
         """
         name = node.text.lower()
-        line = node.linenr  # Line nr
+        line = node.position  # Line nr
         index = 0  # Value for each enum
         parent = node.parent
         self.to_remove.add(node)
 
-        self.__make_manual_typedef(line, node.virtuallinenr, ["INT"], name + " " + node.children[1].text, node.symbol_table, node.parent, parent.findChild(node))  # Make a typedef for this enum type
+        self.__make_manual_typedef(line, node.structTable, ["INT"], name + " " + node.children[1].text, node.symbol_table, node.parent, parent.findChild(node))  # Make a typedef for this enum type
 
         # Add all other enums 'identifiers/variables' as "const int" variables to the current scope
         for i in range(2, len(node.children)):
             name = node.children[i].text
             # For each enum, recreate the Declaration structure so the rest of the program will take care of it!
-            self.__make_manual_declaration(parent, line, node.virtuallinenr, name, ["const", "INT"], index, node.symbol_table, parent.findChild(node))
+            self.__make_manual_declaration(parent, line, node.structTable, name, ["const", "INT"], index, node.symbol_table, parent.findChild(node))
             index += 1  # Incr value for enum
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass
 
     @staticmethod
-    def __make_manual_declaration(parent: ASTNode, line: str, virtuallinenr, name: str, types: list, value, table, insert_index: int):
+    def __make_manual_declaration(parent: ASTNode, position: Position, struct_table: StructTable, name: str, types: list, value, table, insert_index: int):
         """
         Helper function to create some (const) declarations manually for AST manipulation
 
@@ -57,7 +59,7 @@ class EnumConverter(ASTVisitor):
         :param insert_index: de index of the parent where our value needs to be inserted
         :param table:
         :param parent: To this node, any new nodes will be added as children
-        :param line: Line nr
+        :param position: Line nr
         :param name: Name of the variable
         :param types: Type of the variable
         :param value: Value of the variable
@@ -67,7 +69,7 @@ class EnumConverter(ASTVisitor):
         """
         Add the const declaration node
         """
-        declaration = ASTNode("Declaration", parent, table, line, virtuallinenr)
+        declaration = ASTNode("Declaration", parent, table, position, struct_table)
         """
         Insert the parent on the right spot of the parent
         """
@@ -76,35 +78,35 @@ class EnumConverter(ASTVisitor):
         """
         Create the node containing the type of the declaration value
         """
-        type_node = ASTNode("Type", declaration, table, line, virtuallinenr)
+        type_node = ASTNode("Type", declaration, table, position, struct_table)
         declaration.addChildren(type_node)
 
         """
         types is a list of type related parts that are used to construct the type ex: ["const", "INT"]
         """
         for type_element in types:
-            type_part_node = ASTNodeTerminal(type_element, type_node, table, -1, line, virtuallinenr)  # Add the actual types
+            type_part_node = ASTNodeTerminal(type_element, type_node, table, -1, position, struct_table)  # Add the actual types
             type_node.addChildren(type_part_node)
 
         """
         We will also add the identifier itself, being the enum value
         """
-        var = ASTNodeTerminal(name, declaration, table, "IDENTIFIER", line, virtuallinenr)  # Add enum variable
+        var = ASTNodeTerminal(name, declaration, table, "IDENTIFIER", position, struct_table)  # Add enum variable
         declaration.addChildren(var)
 
         """
         At this point the compiler sequence, we haven't removed the '=' sign so we still need to add it
         """
-        equal_sign = ASTNodeTerminal("=", declaration, table, -1, line, virtuallinenr)  # Add '='
+        equal_sign = ASTNodeTerminal("=", declaration, table, -1, position, struct_table)  # Add '='
         declaration.addChildren(equal_sign)
 
         """
         On the right hand side of our declaration we have the literal
         We will construct the subtree Expr -> Literal -> Value
         """
-        expr = ASTNode("Expr", declaration, table, line, virtuallinenr)  # Add value nodes
+        expr = ASTNode("Expr", declaration, table, position, struct_table)  # Add value nodes
         declaration.addChildren(expr)
-        literal = ASTNode("Literal", expr, table, line, virtuallinenr)
+        literal = ASTNode("Literal", expr, table, position, struct_table)
         expr.addChildren(literal)
 
         """
@@ -119,30 +121,30 @@ class EnumConverter(ASTVisitor):
         """
         Create the node containing the value corresponding to the ENUM identifier
         """
-        value_node = ASTNodeTerminal(value, literal, table, terminal_type, line, virtuallinenr)
+        value_node = ASTNodeTerminal(value, literal, table, terminal_type, position, struct_table)
         literal.addChildren(value_node)
         return name
 
     @staticmethod
-    def __make_manual_typedef(line: str, virtuallinenr, base_types: list, replace_type: str, table, grandparent, insert_index: int):
+    def __make_manual_typedef(position: Position, structTable: StructTable, base_types: list, replace_type: str, table, grandparent, insert_index: int):
         """
         Create a manual typedef without relying on ctx for AST manipulation
         :return:
         """
-        parent = ASTNode("Typedef", grandparent, table, line, virtuallinenr)
+        parent = ASTNode("Typedef", grandparent, table, position, structTable)
         grandparent.insertChild(insert_index, parent)
 
-        node_typedef = ASTNodeTerminal("typedef", parent, table, -1, line, virtuallinenr)
+        node_typedef = ASTNodeTerminal("typedef", parent, table, -1, position, structTable)
         parent.addChildren(node_typedef)
 
         """
         Store the type under a 'Type node'
         """
-        node_type = ASTNode("Type", parent, table, line, virtuallinenr)  # Add the type translations
+        node_type = ASTNode("Type", parent, table, position, structTable)  # Add the type translations
         parent.addChildren(node_type)
         for type_element in base_types:  # Add base types
-            node_base_type = ASTNodeTerminal(type_element, node_type, table, -1, line, virtuallinenr)
+            node_base_type = ASTNodeTerminal(type_element, node_type, table, -1, position, structTable)
             node_type.addChildren(node_base_type)
 
-        node_typedef_part2 = ASTNodeTerminal(replace_type, parent, table, "IDENTIFIER", line, virtuallinenr)  # Add second part of typedef
+        node_typedef_part2 = ASTNodeTerminal(replace_type, parent, table, "IDENTIFIER", position, structTable)  # Add second part of typedef
         parent.addChildren(node_typedef_part2)

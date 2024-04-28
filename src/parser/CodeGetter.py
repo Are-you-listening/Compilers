@@ -17,14 +17,14 @@ class CodeGetter(ASTVisitor):
         if node.type in {"MULTILINE", "SINGLECOMMENT"}:
             return
 
-        if node.linenr in self.codeLines:
-            self.codeLines[node.linenr] += " " + str(node.text)
+        if node.position.linenr in self.codeLines.keys():
+            self.codeLines[node.position.linenr] += " " + str(node.text)
         else:
-            self.codeLines[node.linenr] = node.text
+            self.codeLines[node.position.linenr] = node.text
         pass
 
     def getLine(self, node: ASTNode):
-        lineNR = node.linenr
+        lineNR = int(node.position.linenr)
         if lineNR is None or lineNR <= self.highest_line_nr:
             return
 

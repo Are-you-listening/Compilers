@@ -56,7 +56,6 @@ class ASTVisitor:
 
             visited.add(currentNode)
 
-
     @abstractmethod
     def visitNode(self, node: ASTNode):
         pass

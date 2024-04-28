@@ -43,7 +43,8 @@ class ASTCleanerAfter(ASTVisitor):
 
         self.to_remove.add(node)
 
-    def cleanExpr(self, node: ASTNode):
+    @staticmethod
+    def cleanExpr(node: ASTNode):
         if node.text != "Expr":
             return
 

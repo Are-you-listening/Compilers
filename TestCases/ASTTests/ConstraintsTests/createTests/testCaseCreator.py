@@ -51,7 +51,7 @@ below add needed stuff
 
 CodeGetter().visit(ast)
 
-structTable = StructCleaner().visit(ast)  # Massage the structs
+StructCleaner().visit(ast)  # Massage the structs
 
 EnumConverter().visit(ast)
 TypeMerger().visit(ast)
@@ -62,7 +62,7 @@ ASTCleaner().visit(ast)
 SwitchConverter().visit(ast)
 ArrayCleaner().visit(ast)
 ASTTableCreator().visit(ast)
-StructCleanerAfter(structTable).visit(ast)
+StructCleanerAfter().visit(ast)
 ASTCleanerAfter().visit(ast)
 ASTDereferencer().visit(ast)
 

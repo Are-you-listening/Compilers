@@ -1,5 +1,5 @@
-from src.parser.CTypes.COperationHandler import COperationHandler
-from src.parser.Tables.SymbolTable import *
+from src.parser.AST import ASTNodeBlock
+from src.parser.ASTVisitor import *
 
 
 class DeadCodeRemover(ASTVisitor):

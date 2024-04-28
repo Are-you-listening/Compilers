@@ -1,5 +1,6 @@
 from src.parser.CTypes.COperationHandler import COperationHandler
-from src.parser.Tables.SymbolTable import *
+from src.parser.ASTVisitor import ASTVisitor
+from src.parser.AST import ASTNode, ASTNodeTerminal, AST
 
 
 class ASTCleaner(ASTVisitor):
@@ -98,7 +99,7 @@ class ASTCleaner(ASTVisitor):
         else:
             resulting_comment = resulting_comment[2:len(resulting_comment) - 2]
         node.clearChildren()
-        comment_node = ASTNodeTerminal(resulting_comment, node, node.getSymbolTable(), "COMMENT", node.linenr, node.virtuallinenr)
+        comment_node = ASTNodeTerminal(resulting_comment, node, node.getSymbolTable(), "COMMENT", node.position, node.structTable)
         node.addChildren(comment_node)
 
     @staticmethod
@@ -176,8 +177,8 @@ class ASTCleaner(ASTVisitor):
 
         for i, ln in enumerate(dereference_counter):
             id_parent = identifier_node.parent
-            parent_expr = ASTNode("Expr", id_parent, id_parent.getSymbolTable(), id_parent.linenr, id_parent.virtuallinenr)
-            parent_expr.addChildren(ASTNodeTerminal("*", parent_expr, parent_expr.getSymbolTable(), ln, "", ""))
+            parent_expr = ASTNode("Expr", id_parent, id_parent.getSymbolTable(), id_parent.position, id_parent.structTable)
+            parent_expr.addChildren(ASTNodeTerminal("*", parent_expr, parent_expr.getSymbolTable(), ln, id_parent.position, id_parent.structTable))
 
             identifier_node.addNodeParent(parent_expr)
 
@@ -200,7 +201,8 @@ class ASTCleaner(ASTVisitor):
 
         self.to_remove.add(node)
 
-    def formatFunctionCall(self, node):
+    @staticmethod
+    def formatFunctionCall(node):
         """
         We want to have a '()' for function calls format
 
@@ -211,6 +213,6 @@ class ASTCleaner(ASTVisitor):
         if node.text != "ParameterCalls":
             return
 
-        operator_node = ASTNodeTerminal("()", node.parent, node.getSymbolTable(), "", node.linenr, node.virtuallinenr)
+        operator_node = ASTNodeTerminal("()", node.parent, node.getSymbolTable(), "", node.position, node.structTable)
         index = node.parent.findChild(node)
         node.parent.insertChild(index, operator_node)

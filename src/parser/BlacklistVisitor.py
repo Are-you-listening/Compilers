@@ -39,11 +39,10 @@ class BlacklistVisitor(ASTVisitor):
         for child in node.children:
             if child.text in (";", ")") and last_useful.text in self.blacklist and \
                     isinstance(last_useful, ASTNodeTerminal):
-                self.add.add((child, ASTNode(None, None, None, None, None)))
+                self.add.add((child, ASTNode(None, None, None, child.position, child.structTable)))
 
             last_useful = child
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.text in self.blacklist:
             self.to_remove.add(node)
-

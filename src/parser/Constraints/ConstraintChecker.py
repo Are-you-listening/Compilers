@@ -1,8 +1,6 @@
 from src.parser.Constraints.MainFoundConstraint import *
-from src.parser.Constraints.ConstConstraint import *
 from src.parser.Constraints.RedefinitionConstrained import *
 from src.parser.Constraints.AmpersandConstraint import *
-from src.parser.Constraints.PrintfConstraint import *
 from src.parser.Constraints.UndeclaredConstrained import *
 from src.parser.Constraints.GlobalsConstrained import *
 from src.parser.Constraints.CleanGlobalScopeConstraint import *
@@ -10,14 +8,18 @@ from src.parser.Constraints.IOConstraint import *
 from src.parser.Constraints.UndefinedReferenceConstraint import *
 from src.parser.Constraints.FunctionReturnConstraint import *
 
+
 class ConstraintChecker(ASTVisitor):
     """
     Visitor to check all nodes to verify certain constraints
     """
 
     def __init__(self, includeSTDIO):
-        self.constraints = [CleanGlobalScope(), MainFoundConstraint(), RedefinitionConstraint(), UndeclaredConstrained(),
-                            AmpersandConstraint(), PrintfConstraint(), UndeclaredConstrained(), GlobalsConstrained(), IOConstraint(includeSTDIO), UndefinedReferenceConstraint(), FunctionReturnConstraint()]
+        # TODO Readd ConstConstrained
+        self.constraints = [CleanGlobalScope(), MainFoundConstraint(), RedefinitionConstraint(),
+                            UndeclaredConstrained(),
+                            AmpersandConstraint(), UndeclaredConstrained(), GlobalsConstrained(),
+                            IOConstraint(includeSTDIO), UndefinedReferenceConstraint(), FunctionReturnConstraint()]
 
     def visitNode(self, node: ASTNode):
         for c in self.constraints:

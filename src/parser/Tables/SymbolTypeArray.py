@@ -7,7 +7,7 @@ class SymbolTypeArray(SymbolTypePtr):
         self.pts_to = pts_to
 
         """
-        Store the ptr size 1, means singel array size, when size > 1 => ptr to an array
+        Store the ptr size 1, means single array size, when size > 1 => ptr to an array
         """
         self.size = size
 

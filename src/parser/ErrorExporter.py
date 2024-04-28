@@ -2,6 +2,7 @@ from antlr4.error.ErrorListener import ErrorListener
 import sys
 from src.parser.Tables.SymbolType import SymbolType
 
+
 class EListener(ErrorListener):
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
         if offendingSymbol is not None:
@@ -97,7 +98,7 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def IncompatiblePtrTypesWarning(line_nr: int, type1: SymbolType, type2: SymbolType):
+    def IncompatiblePtrTypesWarning(line_nr: str, type1: SymbolType, type2: SymbolType):
         """
         print a warning for an incompatible conversion of ptr types int** to float** for example
         :param line_nr:
@@ -112,12 +113,12 @@ class ErrorExporter:
         print(f"[ Warning ] line {line_nr}: incompatible pointer types initializing '{type1}' with an expression of type '{type2}' ")
 
     @staticmethod
-    def divideByZero(line_nr: int, numerator):
+    def divideByZero(line_nr: str, numerator):
         print(f"[ Error ] line {line_nr}: can't divide {numerator} by zero", file=sys.stderr)
         exit()
 
     @staticmethod
-    def narrowingTypesWarning(line_nr: int, to_type: SymbolType, from_type: SymbolType):
+    def narrowingTypesWarning(line_nr: str, to_type: SymbolType, from_type: SymbolType):
         """
         print a warning for an incompatible conversion of ptr types int** to float** for example
         :param line_nr:
@@ -132,7 +133,7 @@ class ErrorExporter:
         print(f"[ Warning ] line {line_nr}: Narrowing type from '{from_type}' to '{to_type}' ")
 
     @staticmethod
-    def IncompatibleComparison(line_nr: int, type1: SymbolType, type2: SymbolType):
+    def IncompatibleComparison(line_nr: str, type1: SymbolType, type2: SymbolType):
         """
         print a warning for an incompatible conversion of ptr types int** to float** for example
         :param line_nr:
@@ -147,7 +148,7 @@ class ErrorExporter:
         print(f"[ Warning ] line {line_nr}: comparison of different types ('{type1}' and '{type2}') ")
 
     @staticmethod
-    def invalidAssignment(line_nr: int, type1: SymbolType, type2: SymbolType):
+    def invalidAssignment(line_nr: str, type1: SymbolType, type2: SymbolType):
         """
         an assignment between invalid types
         :param line_nr:
@@ -162,7 +163,7 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def invalidDereferenceNotPtr(line_nr: int, type1: SymbolType, is_array: bool = False):
+    def invalidDereferenceNotPtr(line_nr: str, type1: SymbolType, is_array: bool = False):
         """
         an assignment between invalid types
         :param is_array: optional boolean indicating whether the value is an array or not
@@ -184,7 +185,7 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def invalidDereference(line_nr: int, type: str):
+    def invalidDereference(line_nr: str, type: str):
         """
         attempting to dereference something that cannot be dereferenced
         :param line_nr:
@@ -195,7 +196,7 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def TypeDefDoubleDeclare(line_nr: int, from_type1: str, from_type2: str):
+    def TypeDefDoubleDeclare(line_nr: str, from_type1: str, from_type2: str):
         """
         an error in case we have a typedef that is not allowed because it already exists (within scope)
         :return:
@@ -204,7 +205,7 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def TypeDefKeyword(line_nr: int, key: str):
+    def TypeDefKeyword(line_nr: str, key: str):
         """
         an error in case we have a typedef that is not allowed because it uses a keyword
         :return:
@@ -214,7 +215,7 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def TypeDefUndefined(line_nr: int, to_type: str):
+    def TypeDefUndefined(line_nr: str, to_type: str):
         """
         an error in case we have a typedef that is not allowed because it already exists (within scope)
         :return:
@@ -259,7 +260,7 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def functionRedefenition(line_nr: str, func_name: str):
+    def functionRedefinition(line_nr: str, func_name: str):
         print(f"[ Error ] line {line_nr}: redefinition of {func_name}", file=sys.stderr)
         exit()
 
@@ -269,7 +270,7 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def unMatchedStartIf(line_nr: int):
+    def unMatchedStartIf(line_nr: str):
         print(f"[ Syntax Error ] line: {line_nr} unterminated #ifndef ", file=sys.stderr)
         exit()
 
@@ -284,7 +285,7 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def switchDeclaration(line_nr: int, variable_name: str):
+    def switchDeclaration(line_nr: str, variable_name: str):
         print(f"[ Error ] line: {line_nr} variable '{variable_name}' is not allowed to be declared inside a switch statement without an additional scope", file=sys.stderr)
         exit()
 
@@ -320,19 +321,19 @@ class ErrorExporter:
         return out_type
 
     @staticmethod
-    def wrongInitializationListSize(line_nr: int, variable: str):
+    def wrongInitializationListSize(line_nr: str, variable: str):
         print(f"[ Error ] line {line_nr}: the initializer list its size for array {variable} is not the right size",
               file=sys.stderr)
         exit()
 
     @staticmethod
-    def wrongInitializationListFormat(line_nr: int, variable: str):
+    def wrongInitializationListFormat(line_nr: str, variable: str):
         print(f"[ Error ] line {line_nr}: the initializer list its size for array {variable} is not the right format",
               file=sys.stderr)
         exit()
 
     @staticmethod
-    def invalidArraySize(line_nr: int, variable: str, index_type: tuple):
+    def invalidArraySize(line_nr: str, variable: str, index_type: tuple):
         index_type = ErrorExporter.__to_output_type(index_type)
         print(f"[ Error ] line {line_nr}: the array size definition of {variable} should be an integer instead of "
               f"'{index_type}'",
@@ -340,24 +341,24 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def invalidArrayIndex(line_nr: int, index_type: SymbolType):
+    def invalidArrayIndex(line_nr: str, index_type: SymbolType):
         index_type = ErrorExporter.__to_output_type(index_type.getPtrTuple())
         print(f"[ Error ] line {line_nr}: the array index is of type {index_type} which is not allowed",
               file=sys.stderr)
         exit()
 
     @staticmethod
-    def missingReturn(line_nr: int, return_type: str):
+    def missingReturn(line_nr: str, return_type: str):
         print(f"[ Warning ] line {line_nr}: function with return type {return_type} is missing a valid return statement")
 
     @staticmethod
-    def lostInitializerList(line_nr: int):
+    def lostInitializerList(line_nr: str):
         print(f"[ Error ] line {line_nr}: an initializer list is provided while not being assigned to an array",
               file=sys.stderr)
         exit()
 
     @staticmethod
-    def functionCallNotFunction(line_nr: int, called: str, call_type: SymbolType):
+    def functionCallNotFunction(line_nr: str, called: str, call_type: SymbolType):
         call_type = ErrorExporter.__to_output_type(call_type.getPtrTuple())
         print(f"[ Error ] line {line_nr}: you cannot do a function call for the non-function '{called}' which is of type {call_type}",
               file=sys.stderr)

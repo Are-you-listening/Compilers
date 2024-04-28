@@ -1,10 +1,9 @@
-from src.parser.ASTVisitor import *
 from src.parser.ASTConversion import *
 
 
 class SwitchConverter(ASTVisitor):
     """
-    This visitor makes sure that the switch statement will be converted to a if else statement
+    This visitor makes sure that the switch statement will be converted to an if else statement
     The receiving format for this visitor will be an SWITCH node with the following children in order:
     node 0: switched value
     all other nodes: ASTnode with name Case or Default
@@ -22,7 +21,7 @@ class SwitchConverter(ASTVisitor):
     def visit(self, ast: AST):
 
         """
-        override the visit so we can remove after the traverse the nodes we don't need anymore
+        override the visit, so we can remove after the traverse the nodes we don't need anymore
         """
 
         """
@@ -124,7 +123,7 @@ class SwitchConverter(ASTVisitor):
             When we have an illegal declaration, we will use the declaration node to properly throw the error
             """
             declaration_node = self.declare_map[node]
-            declared_line = declaration_node.getChild(1).linenr
+            declared_line = declaration_node.getChild(1).position.linenr
             declared_variable = declaration_node.getChild(1).text
             ErrorExporter.switchDeclaration(declared_line, declared_variable)
 
@@ -270,21 +269,21 @@ class SwitchConverter(ASTVisitor):
 
     @staticmethod
     def createEqualCheckNode(node_1: ASTNodeTerminal, node_2: ASTNodeTerminal, flip_condition=False):
-        check_node = ASTNode("Expr", None, node_1.getSymbolTable(), node_1.linenr, node_1.virtuallinenr)
+        check_node = ASTNode("Expr", None, node_1.getSymbolTable(), node_1.position, node_1.structTable)
         check_node.addChildren(ASTNodeTerminal(node_1.text, check_node, node_1.getSymbolTable(),
-                                               node_1.type, node_1.linenr, node_1.virtuallinenr))
+                                               node_1.type, node_1.position, node_1.structTable))
 
         terminal_label = "=="
         if flip_condition:
             terminal_label = "!="
 
-        equal = ASTNodeTerminal(terminal_label, check_node, node_1.getSymbolTable(), -1, node_1.linenr,
-                                node_1.virtuallinenr)
+        equal = ASTNodeTerminal(terminal_label, check_node, node_1.getSymbolTable(), -1, node_1.position,
+                                node_1.structTable)
 
         check_node.addChildren(equal)
 
         check_node.addChildren(ASTNodeTerminal(node_2.text, check_node, node_2.getSymbolTable(),
-                                               node_2.type, node_2.linenr, node_2.virtuallinenr))
+                                               node_2.type, node_2.position, node_2.structTable))
 
         return check_node
 
@@ -293,7 +292,7 @@ class SwitchConverter(ASTVisitor):
         """
         Make an 'or' between 2 nodes
         """
-        check_node = ASTNode("Expr", None, node_1.getSymbolTable(), node_1.linenr, node_1.virtuallinenr)
+        check_node = ASTNode("Expr", None, node_1.getSymbolTable(), node_1.position, node_1.structTable)
         check_node.addChildren(node_1)
         node_1.parent = check_node
 
@@ -301,8 +300,8 @@ class SwitchConverter(ASTVisitor):
         if flip_condition:
             terminal_label = "&&"
 
-        or_node = ASTNodeTerminal(terminal_label, check_node, node_1.getSymbolTable(), -1, node_1.linenr,
-                                  node_1.virtuallinenr)
+        or_node = ASTNodeTerminal(terminal_label, check_node, node_1.getSymbolTable(), -1, node_1.position,
+                                  node_1.structTable)
         check_node.addChildren(or_node)
 
         check_node.addChildren(node_2)
@@ -316,8 +315,8 @@ class SwitchConverter(ASTVisitor):
         Construction for If statement
         """
 
-        check_node = ASTNode("IF", None, execute_block.getSymbolTable(), execute_block.linenr,
-                             execute_block.virtuallinenr)
+        check_node = ASTNode("IF", None, execute_block.getSymbolTable(), execute_block.position,
+                             execute_block.structTable)
 
         check_node.addChildren(condition)
         condition.parent = check_node
@@ -329,8 +328,8 @@ class SwitchConverter(ASTVisitor):
         When the If code, block does not have a 'Code', note, we add a 'Code' node
         """
         if execute_block.text != "Code":
-            temp = ASTNode("Code", None, check_node.getSymbolTable(), check_node.linenr,
-                           execute_block.virtuallinenr)
+            temp = ASTNode("Code", None, check_node.getSymbolTable(), check_node.position,
+                           execute_block.structTable)
 
             execute_block.addNodeParent(temp)
 
@@ -347,10 +346,10 @@ class SwitchConverter(ASTVisitor):
         """
 
         if not isinstance(node, ASTNodeTerminal):
-            new_node = ASTNode(node.text, node.parent, node.getSymbolTable(), node.linenr, node.virtuallinenr)
+            new_node = ASTNode(node.text, node.parent, node.getSymbolTable(), node.position, node.structTable)
         else:
             new_node = ASTNodeTerminal(node.text, node.parent, node.getSymbolTable(), node.type,
-                                       node.linenr, node.virtuallinenr)
+                                       node.position, node.structTable)
 
         for child in node.children:
             copy_child = SwitchConverter.createCopy(child)

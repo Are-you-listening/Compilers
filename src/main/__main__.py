@@ -77,10 +77,7 @@ def cleanGreen(input_file, symbol_file):
 
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
-    structTable = StructCleaner().visit(ast)  # Massage the structs
-
-
-
+    StructCleaner().visit(ast)  # Massage the structs
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
@@ -106,7 +103,7 @@ def cleanGreen(input_file, symbol_file):
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 
-    StructCleanerAfter(structTable).visit(ast)
+    StructCleanerAfter().visit(ast)
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
@@ -116,10 +113,10 @@ def cleanGreen(input_file, symbol_file):
         s = TableDotVisitor(symbol_file)
         s.visit(ast.root.getSymbolTable(), True)
 
-    return ast, codegetter, includeSTDIO, structTable
+    return ast, codegetter, includeSTDIO
 
 
-def Processing(ast, dot_file, fold, includeSTDIO, structTable):
+def Processing(ast, dot_file, fold, includeSTDIO):
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
@@ -128,7 +125,7 @@ def Processing(ast, dot_file, fold, includeSTDIO, structTable):
     It is vital that AST conversion occurs before constant folding
     """
     #DotVisitor("output/d0").visit(ast)  # Export AST in Dot
-    ASTConversion(structTable).visit(ast)
+    ASTConversion().visit(ast)
 
     #DotVisitor("output/d1").visit(ast)  # Export AST in Dot
     #DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
@@ -200,8 +197,8 @@ def main(argv):
     if input_file is None:
         ErrorExporter.StupidUser()
 
-    ast, codegetter, includeSTDIO, structTable = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
-    ast, cfgs = Processing(ast, dot_file, fold, includeSTDIO, structTable)  # Check for Errors , Apply Folding Techniques , ...
+    ast, codegetter, includeSTDIO = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
+    ast, cfgs = Processing(ast, dot_file, fold, includeSTDIO)  # Check for Errors , Apply Folding Techniques , ...
 
     if llvm_file is not None:
         LLVMSingleton.setName(input_file)

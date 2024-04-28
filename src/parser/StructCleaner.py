@@ -1,4 +1,6 @@
-from src.parser.Tables.SymbolTable import *
+from src.parser.Tables.StructTable import *
+from src.parser.ASTVisitor import *
+from src.parser.ASTTypedefReplacer import BaseTypes
 
 
 class StructCleaner(ASTVisitor):
@@ -8,22 +10,28 @@ class StructCleaner(ASTVisitor):
 
     def __init__(self):
         self.to_remove = set()
-        self.structTable = {}  # Keep track of the indices of parameters e.g. {"kaas": ["melk", "fermented"]} melk has index 0, this will be used for adding the GEP instruction in LLVM
+        self.table = StructTable(None)
 
     def visit(self, ast: AST):
         self.to_remove = set()
 
-        self.preorder(ast.root)
+        self.postorder(ast.root)
         for n in self.to_remove:
             n.parent.removeChild(n)
 
-        return self.structTable
-
     def visitNode(self, node: ASTNode):
-        self.__cleanStruct(node)
+        if node.text in ["Function", "Code"]:
+            temp = StructTable(self.table)
+            if self.table is not None:
+                self.table.nextTable(temp)
+            self.table = temp
+        else:
+            self.__cleanStruct(node)
+
+        node.structTable = self.table
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        pass
+        node.structTable = self.table
 
     def __cleanStruct(self, node: ASTNode):
         if node.text not in ["Struct", "Union"]:
@@ -32,7 +40,7 @@ class StructCleaner(ASTVisitor):
         node.children = node.children[1:]
         structName = node.children[0].text
         node.children[0].type = ""
-        self.structTable[structName] = []
+        self.table.add(structName)
 
         index = 1
         while index < len(node.children):
@@ -40,13 +48,13 @@ class StructCleaner(ASTVisitor):
             if child.text in ["{", "}", ";", "struct", "union"]:  # Remove unnecessary characters
                 self.to_remove.add(child)
             if child.text == "Declaration":  # The first child is the name of the struct; exclude it
-                self.structTable[structName].append(child.children[1].text)
+                self.table.addDataMember(structName, child.children[1].text)
             index += 1
 
         for child in node.children:
             child.type = "STRUCTUNION"
 
         if node.text == "Union":
-            self.structTable[structName].append("union")  # Extra info to later check if it's a union or struct
+            self.table.addDataMember(structName, "union")  # Extra info to later check if it's a union or struct
 
         BaseTypes.append(structName)

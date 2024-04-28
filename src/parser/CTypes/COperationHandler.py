@@ -77,18 +77,18 @@ class COperationHandler:
         try:
             sub_result = c_type.RangeCheck.checkRange(
                 foldable[operation](data1, data2))
-        except ZeroDivisionError as e:
-            ErrorExporter.divideByZero(lineNr, data1)
-        except InvalidOperatorFloatError as e:
+        except ZeroDivisionError:
+            ErrorExporter.divideByZero(str(lineNr), data1)
+        except InvalidOperatorFloatError:
             ErrorExporter.invalidOperatorFloat(operation, str(lineNr))
-        except InvalidOperatorPtrError as e:
+        except InvalidOperatorPtrError:
             ErrorExporter.invalidOperatorPtr(operation, str(lineNr))
 
         result = c_type.getString(sub_result)
 
         return result, poorest_type
 
-    def doOperationUnary(self, val1: tuple, operation: str, lineNr: int):
+    def doOperationUnary(self, val1: tuple, operation: str, lineNr: str):
 
         c_type = self.c_type_executors[val1[1]]()
         data1 = c_type.fromString(val1[0])
@@ -104,9 +104,9 @@ class COperationHandler:
         try:
             sub_result = c_type.RangeCheck.checkRange(foldable[operation](data1))
 
-        except InvalidOperatorFloatError as e:
+        except InvalidOperatorFloatError:
             ErrorExporter.invalidOperatorFloat("UNARY " + operation, str(lineNr))
-        except InvalidOperatorPtrError as e:
+        except InvalidOperatorPtrError:
             ErrorExporter.invalidOperatorPtr("UNARY " + operation, str(lineNr))
 
         result = c_type.getString(sub_result)

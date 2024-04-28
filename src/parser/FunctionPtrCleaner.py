@@ -1,5 +1,4 @@
-from src.parser.CTypes.COperationHandler import COperationHandler
-from src.parser.Tables.SymbolTable import *
+from src.parser.ASTVisitor import *
 
 
 class FunctionPtrCleaner(ASTVisitor):
@@ -60,4 +59,5 @@ class FunctionPtrCleaner(ASTVisitor):
         """
         remove redundant *
         """
-        self.to_remove.add(node.getChild(0))
+        self.to_remove.add(node.getChild(0)
+                           )

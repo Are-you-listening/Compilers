@@ -75,7 +75,6 @@ class CTypesToLLVM:
     @staticmethod
     def getIRType(data_type: SymbolType, function_type=False):
         """
-        :param ptrs:
         :param data_type:
         :param function_type: When true we will translate our type to ptrs instead of arrays when we have an array
         :return:
@@ -158,8 +157,8 @@ class Declaration:
     def struct(data_type: SymbolType, var_name: str):
         """
         Create a global struct type
+        :param var_name:
         :param data_type:
-        :param ptrs:
         :return:
         """
         block = LLVMSingleton.getInstance().getCurrentBlock()
@@ -181,7 +180,7 @@ class Declaration:
         #     struct.align = align
 
         llvm_var = block.alloca(struct_type)
-        llvm_var.align = max(align%2, (align+1)%2)  # In LLVM align must be a power of 2
+        llvm_var.align = max(align % 2, (align+1) % 2)  # In LLVM align must be a power of 2
         return llvm_var
 
     @staticmethod
@@ -213,7 +212,7 @@ class Declaration:
         block = LLVMSingleton.getInstance().getCurrentBlock()
 
         """
-        In case we have an array of a string and we use its pointer, we want to add another bitcase
+        In case we have an array of a string and we use its pointer, we want to add another bit cast
         """
         if store_register.type.is_pointer and value.type.is_pointer and \
                 isinstance(value.type.pointee, ir.types.ArrayType):
@@ -312,13 +311,7 @@ class Calculation:
             "/": block.fdiv
         }
 
-        op_translate_fcmp_float = {"<": block.fcmp_ordered,
-                              ">": block.fcmp_ordered,
-                              "==": block.fcmp_ordered,
-                              "!=": block.fcmp_ordered,
-                              "<=": block.fcmp_ordered,
-                              ">=": block.fcmp_ordered
-                              }
+        op_translate_fcmp_float = {"<": block.fcmp_ordered, ">": block.fcmp_ordered, "==": block.fcmp_ordered, "!=": block.fcmp_ordered, "<=": block.fcmp_ordered, ">=": block.fcmp_ordered}
 
         op_translate = {"+": block.add,
                         "-": block.sub,
@@ -399,7 +392,6 @@ class Calculation:
         llvm_var = llvm_op(operator, left, right)
 
         return llvm_var
-
 
     @staticmethod
     def unary(llvm_val, op: str):

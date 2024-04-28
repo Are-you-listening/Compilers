@@ -95,7 +95,7 @@ class PreProcessor:
 
         for tup in tpls:
             for tup2 in tpls:
-                if tup[0]==tup2[1] and tup2[0]==tup[1]:
+                if tup[0] == tup2[1] and tup2[0] == tup[1]:
                     ErrorExporter.cyclicInclude(tup[0], tup[1])
 
     def preProcess(self):
@@ -119,7 +119,8 @@ class PreProcessor:
 
                 if "define" in text and not self.__being_skipped():
                     identifier = self.stream.tokens[i + 1]
-                    if "IDENTIFIER" != self.lexer.ruleNames[identifier.type - 1]:  # Can only use identifiers as macro names!
+                    if "IDENTIFIER" != self.lexer.ruleNames[
+                        identifier.type - 1]:  # Can only use identifiers as macro names!
                         ErrorExporter.nonIdentifierDefine(identifier.line)
                     else:
                         identifier = identifier.text
@@ -138,11 +139,12 @@ class PreProcessor:
                     identifier = file_name_token.text
                     path = self.__getPath(file_name_token.source[1].fileName)
                     file = path + identifier[
-                                       1:len(identifier) - 1]  # Remove the '"' char before and after + add the path
+                                  1:len(identifier) - 1]  # Remove the '"' char before and after + add the path
                     k = i
 
                     if identifier != "<stdio.h>" and \
-                            not self.__isDefined(file):  # 'not self.ifndef[-1]' is important, so we make sure that we don't double define or have circular includes
+                            not self.__isDefined(
+                                file):  # 'not self.ifndef[-1]' is important, so we make sure that we don't double define or have circular includes
                         try:
                             input_stream = FileStream(file)  # Verify the file exists
                         except:
@@ -173,7 +175,7 @@ class PreProcessor:
                     i -= 1  # Adjust index so we don't go to far
 
                 elif "ifndef" in text:
-                    definer = self.stream.tokens[i+1].text
+                    definer = self.stream.tokens[i + 1].text
 
                     if definer in self.defined or self.__being_skipped():
                         self.ifndef.append(i)
