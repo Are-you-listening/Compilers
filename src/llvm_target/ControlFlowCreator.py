@@ -154,8 +154,9 @@ class ControlFlowCreator(ASTVisitor):
             merge_list = []
             for child in node.children:
                 cf = self.control_flow_map.get(child, None)
-                if cf is not None and cf not in merge_list:
+                if cf is not None and cf not in merge_list and cf not in self.function_map.values():
                     merge_list.append(cf)
+
 
             if len(merge_list) > 0:
                 """
