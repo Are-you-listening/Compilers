@@ -50,6 +50,8 @@ class AST2LLVM(ASTVisitor):
 
             if currentNode.text == "Function" and currentNode not in visited:
                 visited.add(currentNode)
+
+                self.handleFunction(currentNode)
                 self.map_table = MapTable(self.map_table)
                 function = LLVMSingleton.getInstance().getFunction(currentNode.getChild(0).text)
                 LLVMSingleton.getInstance().setLastFunction(function)
@@ -113,7 +115,6 @@ class AST2LLVM(ASTVisitor):
 
         if node.text == "Function":
             self.map_table = self.map_table.prev
-            self.handleFunction(node)
 
         if node.text == "Dereference":
             self.handleDereference(node)
@@ -145,7 +146,7 @@ class AST2LLVM(ASTVisitor):
         if node.text == "ParameterCall":
             self.llvm_map[node] = self.llvm_map[node.getChild(0)]
 
-        if node.text != "Parameters":
+        if node.text not in ("Parameters"):
             self.addOriginalCodeAsComment(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
@@ -219,7 +220,6 @@ class AST2LLVM(ASTVisitor):
     def handleFunction(self, node: ASTNode):
         function_name = node.getChild(0).text
         function = LLVMSingleton.getInstance().getFunction(function_name)
-
         if function is None:
             function = LLVMSingleton.getInstance().getModule().get_global(function_name)
 
@@ -284,8 +284,12 @@ class AST2LLVM(ASTVisitor):
         Declaration.addComment(comment_text)
 
     def handleReturn(self, node: ASTNode):
-        return_val = self.llvm_map[node.getChild(0)]
-        LLVMSingleton.getInstance().getCurrentBlock().ret(return_val)
+        #check if the return is from a void function, if so, return void
+        if node.children[0].text == "Void":
+            LLVMSingleton.getInstance().getCurrentBlock().ret_void()
+        else:
+            return_val = self.llvm_map[node.getChild(0)]
+            LLVMSingleton.getInstance().getCurrentBlock().ret(return_val)
 
     def handlePrintScanf(self, node: ASTNode, printf):
         """
@@ -317,7 +321,6 @@ class AST2LLVM(ASTVisitor):
         :param node:
         :return:
         """
-
         if node.getChildAmount() == 2:
             operator = node.getChild(0).text
             child = node.getChild(1)
@@ -403,33 +406,7 @@ class AST2LLVM(ASTVisitor):
 
     def handleParameters(self, node: ASTNode):
         """
-        Handle function parameters
-        The function has already been declared, so we can get the function from the LLVM module, and its parameters should be allocated, stored and loaded, so if the function gets called with some arguments
-        those arguments are then used in the function body. Right now our output is this:
-        define i32 @"func"(i32 %".1", i32 %".2")
-            {
-            .4:
-              ;    INT func INT a INT b
-              %".6" = load i32, i32* %".2", align 4
-              ; return a + b
-              %".8" = load i32, i32* %".3", align 4
-              %".9" = add i32 %".6", %".8"
-              ret i32 0
-            }
-        But when parameters are correctly handeld, the output should be:
-        ; Function Attrs: noinline nounwind optnone uwtable
-    define dso_local i32 @func(i32 noundef %0, i32 noundef %1) #0
-    {
-          %3 = alloca i32, align 4
-          %4 = alloca i32, align 4
-          store i32 %0, i32* %3, align 4
-          store i32 %1, i32* %4, align 4
-          %5 = load i32, i32* %3, align 4
-          %6 = load i32, i32* %4, align 4
-          %7 = add nsw i32 %5, %6
-          ret i32 %7
-        }
-        :param node:
+        param node:
         :return:
         """
 

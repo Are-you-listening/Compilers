@@ -1,20 +1,13 @@
-#include <stdio.h>
-
-int func(int a, int b);
-
 int main() {
-    int y = 5;
-    int u = 10;
-    int c;
-    c = func(y, u);
-    printf("%d\n", c);
-    return y;
+    int a = (10 + 3) * (7 - 2);
+    int b = (100 / 4) % 3;
+    int c = (5 << 2) + (8 >> 1);
+    int d = ~(~10 & 7);
+    int e = (15 | 3) ^ (7 & 2);
+    int f = (20 > 10) && (5 <= 7);
+    int g = (10 == 5) || (7 != 3);
+    int h = !(10 >= 20);
+    float j = (5.5 * 2.0) / (3.0 + 1.0);
+    float k = (7.0 + 3.0) * (2.5 - 1.5);
+    return 0;
 }
-
-
-
-
-int func(int a, int b) {
-    return a + b;
-}
-

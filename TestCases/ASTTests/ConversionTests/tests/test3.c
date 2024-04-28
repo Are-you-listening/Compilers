@@ -12,4 +12,5 @@ int main() {
 
     int*** g = c;
 
+    return 0;
 }

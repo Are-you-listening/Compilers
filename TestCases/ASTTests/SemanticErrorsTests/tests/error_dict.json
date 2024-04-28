@@ -24,8 +24,8 @@
  "25": ["[ Error ] line 10: Manipulation of variable '*(ptr_to_int)' is not allowed, because '*(ptr_to_int)' has type 'const INT'"],
  "27": ["[ Error ] line 8: use of undeclared variable z"],
  "32": ["[ Error ] line 2: use of undeclared variable x"],
- "34": ["[ Warning ] line 1: function with return type INT is missing a valid return statement"],
- "35": ["[ Warning ] line 1: function with return type FLOAT is missing a valid return statement", "[ Warning ] line 5: function with return type CHAR is missing a valid return statement"],
+ "34": ["[ Error ] line 1: function with return type INT is missing a valid return statement"],
+ "35": ["[ Error ] line 1: function with return type FLOAT is missing a valid return statement"],
  "36": ["[ Error ] line 8: Manipulation of variable 'c' is not allowed, because 'c' has type 'const INT**const'"],
  "37": ["[ Error ] line 7: Manipulation of variable '*(b)' is not allowed, because '*(b)' has type 'const INT'"],
  "38": ["[ Error ] line 7: Manipulation of variable 'b+1' is not allowed, because 'b+1' has type 'const INT'"]

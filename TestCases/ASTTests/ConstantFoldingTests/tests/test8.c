@@ -4,4 +4,5 @@ int main() {
     int b = a + x && 5 - 5;
     int c = 1 && a + x;
     int d = 0 || c / 80;
+    return 0;
    }

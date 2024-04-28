@@ -20,4 +20,6 @@ int main() {
     int num_skip_elements = 4;
 
     ptr = ptr + 4*num_skip_elements;
+
+    return 0;
 }

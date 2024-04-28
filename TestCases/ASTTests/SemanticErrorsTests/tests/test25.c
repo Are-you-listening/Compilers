@@ -8,4 +8,7 @@ char ch = 'x';
 const int* ptr_to_int = &z;
 ptr_to_int = &x; // this is allowed. The pointer now points to variable x
 *ptr_to_int = 33; // this is NOT allowed!
+
+    return 0;
+
 }

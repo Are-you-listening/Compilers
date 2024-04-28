@@ -3,4 +3,6 @@ int main() {
     char b = a;
     char* c = &a;
     float** d = &c;
+
+    return 0;
 }

@@ -6,5 +6,6 @@ int main() {
     // wrong types
     float* ptr3 = ptr2 + ptr;
     ptr3 = ptr - ptr3;
+    return 0;
 
 }

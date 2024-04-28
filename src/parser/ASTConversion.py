@@ -253,7 +253,11 @@ class ASTConversion(ASTVisitor):
 
             parameterTypes = corresponding_function_type.getParameterTypes()
 
-            to_type = parameterTypes[node.parent.findChild(node) - 1]
+            index = node.parent.findChild(node)
+            if index < 0 or index >= len(parameterTypes):
+                return
+
+            to_type = parameterTypes[index]
 
         if operator in ("&&", "||"):
             """

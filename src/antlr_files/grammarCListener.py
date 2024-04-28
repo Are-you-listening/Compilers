@@ -1,4 +1,4 @@
-# Generated from /home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
+# Generated from /home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
 from antlr4 import *
 if "." in __name__:
     from .grammarCParser import grammarCParser
@@ -50,6 +50,15 @@ class grammarCListener(ParseTreeListener):
 
     # Exit a parse tree produced by grammarCParser#comment.
     def exitComment(self, ctx:grammarCParser.CommentContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#function_signature.
+    def enterFunction_signature(self, ctx:grammarCParser.Function_signatureContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#function_signature.
+    def exitFunction_signature(self, ctx:grammarCParser.Function_signatureContext):
         pass
 
 

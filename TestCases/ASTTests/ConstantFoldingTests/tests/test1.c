@@ -19,5 +19,5 @@ int main () {
     float q = 15.6 * 2.0;
     float r = 20.0 / 4.0;
     float x = 555.0 + 445;
-
+    return 0;
 }

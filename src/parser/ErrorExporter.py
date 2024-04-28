@@ -349,7 +349,8 @@ class ErrorExporter:
 
     @staticmethod
     def missingReturn(line_nr: str, return_type: str):
-        print(f"[ Warning ] line {line_nr}: function with return type {return_type} is missing a valid return statement")
+        print(f"[ Error ] line {line_nr}: function with return type {return_type} is missing a valid return statement", file=sys.stderr)
+        exit()
 
     @staticmethod
     def lostInitializerList(line_nr: str):

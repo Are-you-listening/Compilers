@@ -12,4 +12,6 @@ int main() {
     float i = 4.2;
 
     float j = e+6.5;
+
+    return 0;
 }
