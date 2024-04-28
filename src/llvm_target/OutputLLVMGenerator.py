@@ -2,7 +2,11 @@ import llvmlite.ir.types
 from src.llvm_target.LLVMSingleton import LLVMSingleton
 from llvmlite import ir
 import sys
-
+from src.parser.Tables.SymbolType import SymbolType
+from src.parser.Tables.SymbolTypePtr import SymbolTypePtr
+from src.parser.Tables.SymbolTypeArray import SymbolTypeArray
+from src.parser.Tables.SymbolTypeStruct import SymbolTypeStruct
+from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 """
 This line is not because our lack of capabilities to avoid recursions, this line exist because LLVMLite itself
 uses recursions 
@@ -59,61 +63,82 @@ class UnaryWrapper:
 
 class CTypesToLLVM:
     @staticmethod
-    def getBytesUse(data_type: tuple, ptrs: list[tuple]):
-        convert_dict = {"INT": 4, "CHAR": 1, "FLOAT": 4, "BOOL": 1}
-        if len(ptrs) >= 1:
+    def getBytesUse(data_type: SymbolType):
+
+        if isinstance(data_type, SymbolTypePtr):
             return 8
-        return convert_dict.get(data_type[0], "TYPE ISSUE")
+
+        convert_dict = {"INT": 4, "CHAR": 1, "FLOAT": 4, "BOOL": 1}
+
+        return convert_dict.get(data_type.getBaseType(), 8)
 
     @staticmethod
-    def getIRType(data_type: tuple, ptrs: list, function_type=False):
+    def getIRType(data_type: SymbolType, function_type=False):
         """
         :param ptrs:
         :param data_type:
         :param function_type: When true we will translate our type to ptrs instead of arrays when we have an array
         :return:
         """
+        if isinstance(data_type, FunctionSymbolType):
+            return_llvm = CTypesToLLVM.getIRType(data_type.return_type)
+
+            param_llvm = []
+            for param in data_type.getParameterTypes():
+                param_llvm.append(CTypesToLLVM.getIRType(param))
+
+            llvm_type = ir.types.FunctionType(return_llvm, param_llvm)
+            return llvm_type
+
+        if isinstance(data_type, SymbolTypeStruct):
+            types = []
+            for v in data_type.pts_to:
+                types.append(CTypesToLLVM.getIRType(v))
+
+            llvm_type = ir.LiteralStructType(types)
+            return llvm_type
+
+        if isinstance(data_type, SymbolTypePtr):
+            llvm_type = CTypesToLLVM.getIRType(data_type.deReference(), function_type)
+
+            if isinstance(data_type, SymbolTypeArray):
+                llvm_type = ir.ArrayType(llvm_type, data_type.size)
+            else:
+                llvm_type = ir.PointerType(llvm_type)
+
+            return llvm_type
 
         convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType(), "BOOL": ir.IntType(1), "VOID": ir.VoidType()}
         llvm_type = convert_map.get(data_type[0])
+        convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType(), "BOOL": ir.IntType(1)}
+        llvm_type = convert_map.get(data_type.getBaseType())
 
         if llvm_type is None:  # Most likely, a struct was used
             return None
-
-        for i, p in enumerate(ptrs):
-            if p[0] == "*" or (function_type and i == len(ptrs)-1):
-                """
-                In case a '*' is in the ptr, we have a ptr element
-                """
-                llvm_type = ir.PointerType(llvm_type)
-            else:
-                """
-                When we have an integer, we have an array
-                """
-                llvm_type = ir.ArrayType(llvm_type, int(p[0]))
 
         return llvm_type
 
 
 class Declaration:
     @staticmethod
-    def declare(data_type: tuple, ptrs: list, var_name: str):
+    def declare(data_type: SymbolType, var_name: str):
         block = LLVMSingleton.getInstance().getCurrentBlock()
-        irType = CTypesToLLVM.getIRType(data_type, ptrs)
+
+        irType = CTypesToLLVM.getIRType(data_type)
 
         if irType is None:
-            if isinstance(ptrs[0][0], tuple):  # Declara a struct type
-                return Declaration.struct(data_type, ptrs, var_name)
+            if isinstance(data_type, SymbolTypeStruct):  # Declara a struct type
+                return Declaration.struct(data_type, var_name)
             else:  # Declara a ptr to a struct type
-                return Declaration.struct_ptr(data_type, ptrs)
+                return Declaration.struct_ptr(data_type)
 
         llvm_val = block.alloca(irType)
-        llvm_val.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
+        llvm_val.align = CTypesToLLVM.getBytesUse(data_type)
 
         return llvm_val
 
     @staticmethod
-    def struct_ptr(data_type: tuple, ptrs: list):
+    def struct_ptr(data_type: SymbolType):
         """
         Create a ptr to a struct
         :param data_type:
@@ -121,9 +146,10 @@ class Declaration:
         """
         block = LLVMSingleton.getInstance().getCurrentBlock()
 
-        struct_type = LLVMSingleton.getInstance().getStruct(data_type[0])
+        struct_type = LLVMSingleton.getInstance().getStruct(data_type.getPtrTuple()[0][0])
+
         struct_ptr = ir.PointerType(struct_type)
-        for i in range(1, len(ptrs)):  # If we point to a struct ptr, the struct_ptr needs to be extended
+        for i in range(1, data_type.getPtrAmount()):  # If we point to a struct ptr, the struct_ptr needs to be extended
             struct_ptr = ir.PointerType(struct_ptr)
 
         llvm_var = block.alloca(struct_ptr)
@@ -131,7 +157,7 @@ class Declaration:
         return llvm_var
 
     @staticmethod
-    def struct(data_type: tuple, ptrs: list, var_name: str):
+    def struct(data_type: SymbolType, var_name: str):
         """
         Create a global struct type
         :param data_type:
@@ -142,13 +168,16 @@ class Declaration:
         types = []
         align = 0
 
-        for entry in ptrs:  # The datatype is different for structs
-            irType = CTypesToLLVM.getIRType(entry[0], entry[1])
-            align += CTypesToLLVM.getBytesUse(entry[0], entry[1])
+        struct_name = data_type.getPtrTuple()[0][0]
+
+        data_type = data_type.pts_to
+        for d in data_type:
+            irType = CTypesToLLVM.getIRType(d)
+            align += CTypesToLLVM.getBytesUse(d)
             types.append(irType)
 
         struct_type = ir.LiteralStructType(types)
-        LLVMSingleton.getInstance().addStruct(data_type[0], struct_type)
+        LLVMSingleton.getInstance().addStruct(struct_name, struct_type)
         # if LLVMSingleton.getInstance().getModule().globals.get(data_type[0]) is None:
         #     struct = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), struct_type, data_type[0])
         #     struct.align = align
@@ -158,16 +187,17 @@ class Declaration:
         return llvm_var
 
     @staticmethod
-    def function(func_name: str, return_type: tuple, ptrs: list[tuple], args: list):
+    def function(func_name: str, return_type: SymbolType, args: list):
         """
         change the current latest function
         """
         llvmArgs = []
         for arg in args:
-            arg = arg.getPtrTuple()
-            arg_type = CTypesToLLVM.getIRType(arg[0], arg[1])
+            arg_type = CTypesToLLVM.getIRType(arg)
             llvmArgs.append(arg_type)
         function_type = ir.FunctionType(CTypesToLLVM.getIRType(return_type, ptrs), (llvmArgs))
+
+        function_type = ir.FunctionType(CTypesToLLVM.getIRType(return_type), (llvmArgs))
         new_function = ir.Function(LLVMSingleton.getInstance().getModule(), function_type, name=func_name)
         LLVMSingleton.getInstance().addFunction(new_function)
 
@@ -198,12 +228,12 @@ class Declaration:
         return llvm_val
 
     @staticmethod
-    def llvmLiteral(value: str, data_type: tuple, ptrs: list):
-        if CTypesToLLVM.getIRType(data_type, ptrs) == ir.FloatType():
+    def llvmLiteral(value: str, data_type: SymbolType):
+        if CTypesToLLVM.getIRType(data_type) == ir.FloatType():
             value = float(value)
-        elif CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(32):
+        elif CTypesToLLVM.getIRType(data_type) == ir.IntType(32):
             value = int(value)
-        elif CTypesToLLVM.getIRType(data_type, ptrs) == ir.IntType(8):
+        elif CTypesToLLVM.getIRType(data_type) == ir.IntType(8):
             """
             removes "'" before and after character
             """
@@ -216,7 +246,7 @@ class Declaration:
 
             value = ord(value)  # Values are strings
 
-        return ir.Constant(CTypesToLLVM.getIRType(data_type, ptrs), value)
+        return ir.Constant(CTypesToLLVM.getIRType(data_type), value)
 
     @staticmethod
     def addComment(text: str):
@@ -264,10 +294,13 @@ class Load:
         else:
             llvm_var = block.load(load_llvm)
 
-        if not isinstance(load_llvm, ir.GEPInstr):
+        if isinstance(load_llvm, ir.Function):
+            llvm_var.align = 8
+        elif not isinstance(load_llvm, ir.GEPInstr):
             llvm_var.align = load_llvm.align
         else:
-            llvm_var.align = CTypesToLLVM.getBytesUse(("INT", False), [])
+
+            llvm_var.align = CTypesToLLVM.getBytesUse(SymbolType("INT", False))
         return llvm_var
 
 
@@ -299,7 +332,8 @@ class Calculation:
                         ">>": block.ashr,
                         "&": block.and_,
                         "|": block.or_,
-                        "^": block.xor
+                        "^": block.xor,
+                        "()": block.call
                         }
 
         op_translate_icmp = {"<": block.icmp_signed,
@@ -328,6 +362,7 @@ class Calculation:
             """
             operator '[]' is for access of arrays. We can access an array using a GetElementPointer
             """
+
             if not isinstance(right,
                               ir.Constant):  # If it is not a constant, LLVM requires a sign extend to match the size
                 right = block.sext(right, ir.IntType(64))
@@ -480,9 +515,8 @@ class Scanf(Printf):
 
 class Conversion:
     @staticmethod
-    def performConversion(llvm_var, to_type):
-        native_type = to_type[0]
-        ptrs = to_type[1]
+    def performConversion(llvm_var, to_type: SymbolType):
+        native_type = to_type.getPtrTuple()[0][0]
 
         block = LLVMSingleton.getInstance().getCurrentBlock()  # Get the current block
 
@@ -502,13 +536,13 @@ class Conversion:
                            (ir.PointerType, "CHAR"): lambda x, x_to: block.ptrtoint(x, x_to),
                            (ir.PointerType, "PTR"): lambda x, x_to: block.bitcast(x, x_to)}
 
-        llvm_to_type = CTypesToLLVM.getIRType((native_type, False), ptrs)
+        llvm_to_type = CTypesToLLVM.getIRType(to_type)
 
         """
         make a simplified to type for checking the conversion dict
         """
         simplified_to_type = native_type
-        if len(ptrs) > 0:
+        if to_type.getPtrAmount() > 0:
             simplified_to_type = "PTR"
 
         c = conversion_dict.get((type(llvm_var.type), simplified_to_type))

@@ -45,15 +45,16 @@ class ASTConversion(ASTVisitor):
         is_struct = False
         data_type3 = None
 
-        if is_array:  # TODO fix the statement
+        if is_array:
+            #print(node.text)
             child = node.getChild(0)
             data_type = self.type_mapping[child]
             if isinstance(data_type, SymbolTypePtr) and isinstance(data_type.deReference(), SymbolTypeStruct):
                 is_struct = True
 
-        if is_struct:  # TODO Need a way to pass the type to the node above
+        if is_struct:
             lchild = node.getChild(0)  # LHS of the '.' 'operator
-
+            #print(node.text)
             """
             Get the struct ptr type from the left child
             """
@@ -65,7 +66,6 @@ class ASTConversion(ASTVisitor):
             """
             self.replaceIdentifierWithIndex(node, struct_type)
             index = int(node.getChild(2).text)  # Index of the struct data member
-
             data_type = struct_type.getElementType(index)
             data_type3 = data_type
 
@@ -75,6 +75,7 @@ class ASTConversion(ASTVisitor):
             before"""
             child = node.getChild(0)
             data_type: SymbolType = self.type_mapping[child]
+
             """
             We we do a [] access, we need to check that the value provided is an integer
             """
@@ -87,15 +88,16 @@ class ASTConversion(ASTVisitor):
                 """
                 The array has by default 1 ptr, but it it is the only 1, the array is not really an array
                 """
-
                 if data_type.getPtrAmount() <= 1 and not isinstance(data_type.deReference(), SymbolTypeStruct):
                     ErrorExporter.invalidDereferenceNotPtr(node.linenr, data_type, True)
             """
             when trying to dereference a non-ptr, throw an error
             """
-
             if data_type.isBase():
                 ErrorExporter.invalidDereferenceNotPtr(node.linenr, data_type)
+
+            if isinstance(data_type, SymbolTypeStruct):  # Can't further dereference; '.'/'[]' operator is used on the wrong type
+                ErrorExporter.invalidOperation(node.linenr, '.', data_type, None)
 
             data_type = data_type.deReference()
 
@@ -123,7 +125,21 @@ class ASTConversion(ASTVisitor):
 
             self.type_mapping[node] = data_type
             return
-        if node.text not in ("Literal", "Expr", "Declaration", "Assignment", "ParameterCall", "FunctionCall", "Return"):
+
+        if node.text == "ParameterCalls":
+            corresponding_function_type = self.type_mapping.get(node.parent.children[0])
+
+            parameterTypes = corresponding_function_type.getParameterTypes()
+            """
+            check if has the right amount of arguments
+            """
+            if len(node.children) < len(parameterTypes):
+                ErrorExporter.tooFewFunctionArguments(node.linenr, len(parameterTypes), len(node.children), self.subtree_to_text(node.parent.children[0]))
+            if len(node.children) > len(parameterTypes):
+                ErrorExporter.tooManyFunctionArguments(node.linenr, len(parameterTypes), len(node.children), self.subtree_to_text(node.parent.children[0]))
+            return
+
+        if node.text not in ("Literal", "Expr", "Declaration", "Assignment", "Return", "ParameterCall"):
 
             """
             For our conversion we are only interested in Nodes that have a type,
@@ -138,6 +154,19 @@ class ASTConversion(ASTVisitor):
         operator = self.get_operator(node)
 
         if node.text in ("Literal", "Expr"):
+
+            """
+            if we have an expression that is a function call, we need to check that we call a function
+            """
+            if node.text == "Expr" and node.getChildAmount() == 3 and node.getChild(1).text == "()":
+                called_type: SymbolType = self.type_mapping.get(node.getChild(0))
+                """
+                In case we do a function call on a not function we will throw this error
+                """
+                if not isinstance(called_type, FunctionSymbolType):
+                    ErrorExporter.functionCallNotFunction(node.linenr, self.subtree_to_text(node.getChild(0)),
+                                                          called_type)
+
             """
             check the type of the children to calculate our type.
             We need to take the richest type for expressions
@@ -197,23 +226,7 @@ class ASTConversion(ASTVisitor):
                     for i in range(check_type.getPtrAmount()):
                         temp_to = SymbolTypePtr(temp_to, False)
 
-                #print("q", temp_to.getPtrTuple(), to_type.getPtrTuple(), check_type.getPtrTuple())
                 to_type = temp_to
-
-        """for declaration and assignment the type is the type of the value that is declared/assigned (and not the 
-        necessarily the poorest type)"""
-        if node.text == "FunctionCall":
-            functionNode = node.children[0]
-            while functionNode.text == "Dereference":
-                functionNode = functionNode.children[0]
-
-            function_type = node.parent.getSymbolTable().getEntry(functionNode.text).getTypeObject()
-
-            if not isinstance(function_type, FunctionSymbolType):
-                raise Exception("Function symbol type required")
-
-            self.type_mapping[node] = function_type.return_type
-            return
 
         if node.text in ("Declaration", "Assignment"):
             assign_node = node.getChild(0)
@@ -241,27 +254,15 @@ class ASTConversion(ASTVisitor):
                                                  self.subtree_to_text(assign_node), self.format_type(to_type))
 
         if node.text == "ParameterCall":
-            functionNode = node.parent.children[0]
+            """
+            Do an implicit conversion of the parameters
+            """
+            corresponding_function_type = self.type_mapping.get(node.parent.parent.children[0])
 
-            parameterTypes = node.parent.getSymbolTable().getEntry(functionNode.text).getTypeObject().getParameterTypes()
-            """
-            check if has the right amount of arguments
-            """
-            if len(node.parent.children) - 1 < len(parameterTypes):
-                ErrorExporter.tooFewFunctionArguments(node.linenr, len(parameterTypes), len(node.children), functionNode.text)
-            if len(node.parent.children) - 1 > len(parameterTypes):
-                ErrorExporter.tooManyFunctionArguments(node.linenr, len(parameterTypes), len(node.children), functionNode.text)
-            """
-            be default 1 ptr is added, so remove it again, because assignment
-            """
+            parameterTypes = corresponding_function_type.getParameterTypes()
 
-            """
-            TODO: support for ptrs in function calls (string zijn sterretjes)
-            """
             to_type = parameterTypes[node.parent.findChild(node) - 1]
-            """
-            make sure assignment doesn't convert to a ptr less
-            """
+
         if operator in ("&&", "||"):
             """
             logical operators expect booleans so we convert the given entry into a boolean
@@ -282,10 +283,8 @@ class ASTConversion(ASTVisitor):
         for child in node.children:
             type_tup: SymbolType = self.type_mapping.get(child, None)
 
-
             if type_tup is None:
                 continue
-
 
             if type_tup != to_type:
 
@@ -322,7 +321,6 @@ class ASTConversion(ASTVisitor):
                         """
                         in case we have incompatible type
                         """
-                        #print("c", to_type.getPtrTuple(), type_tup.getPtrTuple())
                         ErrorExporter.invalidOperation(child.linenr, operator, to_type, type_tup)
                         continue
 
@@ -349,7 +347,15 @@ class ASTConversion(ASTVisitor):
         """
         equality operators give an integer back
         """
-        if operator in ("==", "!=", "<=", ">=", "<", ">", "&&", "||", "!"):
+
+        if operator == "()":
+            """
+            In case we have a function call, we want to continue with the return type, for where it is used,
+            not the function type itself
+            """
+            self.type_mapping[node] = to_type.return_type
+
+        elif operator in ("==", "!=", "<=", ">=", "<", ">", "&&", "||", "!"):
             self.type_mapping[node] = SymbolType("BOOL", False)
 
         else:
@@ -374,6 +380,13 @@ class ASTConversion(ASTVisitor):
 
         elif node.type in types:
             self.type_mapping[node] = SymbolType(node.type, False)
+        elif node.text == "()":
+            """
+            Simulate a single dereference on the left side
+            """
+            left_sibling = node.getSiblingNeighbour(-1)
+            left_type = self.type_mapping[left_sibling]
+            self.type_mapping[left_sibling] = left_type.deReference()
 
     def replaceIdentifierWithIndex(self, oldGuy, struct_name: SymbolType):
         """
@@ -385,55 +398,11 @@ class ASTConversion(ASTVisitor):
         index_node = oldGuy.children[0].getSiblingNeighbour(1).getSiblingNeighbour(1)
         identifier = index_node.text
 
-
-        index = self.structTable[struct_name.getBaseType()].index(identifier)  # Replace the struct data member name with an index
-        index_node.text = index
-
-
-    def handleStruct(self, node):
-        type_entry = node.getSymbolTable().getEntry(node.text)
-        type_object = type_entry.getTypeObject()
-
-        oldGuy = node.parent
-        oldGuy_passed = False
-        #ptrss = []
-        while oldGuy.text == "Dereference":
-            #ptrss += [('*', False)]
-            oldGuy_passed = True
-            oldGuy = oldGuy.parent
-
-        # if node.parent.text == "Dereference" and node.symbol_table.getEntry(node.text) is not None:
-        #     type_object = node.symbol_table.getEntry(node.text).getTypeObject()
-        #     if isinstance(type_object, SymbolTypePtr) and type_object.data_type == "PTR" and isinstance(type_object.pts_to, SymbolTypeStruct):
-        #         data_type, ptrs = type_entry.getPtrTuple()
-        #         print(node.text)
-        #         return data_type, ptrs
-
-        if node.getSiblingNeighbour(-1) is not None and node.getSiblingNeighbour(-1).text == "[]":  # RHS of the '.' operator
-            index = int(node.text)  # Get the index of the struct data member
-            data_type, ptrs = type_object.getElementType(index)
-        elif node.getSiblingNeighbour(1) is not None and node.getSiblingNeighbour(1).text == "[]":  # LHS of the '.' operator
-            #ptrs = [('*', False)]
-            ptrs = []
-            data_type, ptrs2 = type_object.getPtrTuple()
-            ptrs += ptrs2
-            self.replaceIdentifierWithIndex(oldGuy, data_type[0])
-        # elif node.text == "Declaration":
-        #     data_type, ptrs = type_entry.getPtrTuple()
-        #     ptrs = [('*', False)] + ptrs
-        elif oldGuy_passed:
-            data_type, ptrs = type_object.getPtrTuple()
-            self.replaceIdentifierWithIndex(oldGuy,data_type[0])
-
-            temp = node.parent
-            while temp.text == "Dereference":
-                self.structPtrMap[temp] = node
-                temp = temp.parent
-
+        if self.structTable[struct_name.getBaseType()][-1:][0] == "union":  # If we have a Union
+            index = 0
         else:
-            data_type, ptrs = type_object.getPtrTuple()
-
-        return data_type, ptrs
+            index = self.structTable[struct_name.getBaseType()].index(identifier)  # Replace the struct data member name with an index
+        index_node.text = index
 
     @staticmethod
     def calculateType(node: ASTNode):
@@ -621,8 +590,6 @@ class ASTConversion(ASTVisitor):
         ass = node.parent.text == "Assignment" and node.text == "Dereference"
         if ass:
             text += "*("
-
-        #print(node)
 
         brackets_needed = False
 

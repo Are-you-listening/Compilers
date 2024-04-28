@@ -1,4 +1,6 @@
 from antlr4 import *
+import sys
+
 from src.antlr_files.grammarCLexer import grammarCLexer
 from src.antlr_files.grammarCParser import grammarCParser
 from src.parser.ASTCreator import ASTCreator
@@ -30,7 +32,9 @@ from src.parser.StructCleaner import *
 from src.parser.StructCleanerAfter import *
 from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
 from src.llvm_target.VoidReturnAdder import *
+from TestCases.ABCTests.AstLoader import AstLoader
 
+from importlib import reload
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -39,6 +43,7 @@ def cleanGreen(input_file, symbol_file):
     :param symbol_file:
     :return:
     """
+
     input_stream = FileStream(input_file)  # Create input stream
     lexer = grammarCLexer(input_stream)
 
@@ -71,8 +76,6 @@ def cleanGreen(input_file, symbol_file):
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
@@ -89,12 +92,10 @@ def cleanGreen(input_file, symbol_file):
 
     FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
 
-    #DotVisitor("output/debug5").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/d0").visit(ast)  # Export AST in Dot
     ArrayCleaner().visit(ast)
 
     ASTTableCreator().visit(ast)  # Create the symbol table
-
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     StructCleanerAfter(structTable).visit(ast)
 
@@ -115,17 +116,19 @@ def Processing(ast, dot_file, fold, includeSTDIO, structTable):
 
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
-
     """
     It is vital that AST conversion occurs before constant folding
     """
+    #DotVisitor("output/d0").visit(ast)  # Export AST in Dot
     ASTConversion(structTable).visit(ast)
 
+    #DotVisitor("output/d1").visit(ast)  # Export AST in Dot
     #DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
 
     if fold:
         ConstantFoldingVisitor().visit(ast)
 
+    #DotVisitor("output/debug3").visit(ast)  # Export AST in Dot
     #DotVisitor("output/debug3").visit(ast)  # Export AST in Dot
 
     ValueAdderVisitor().visit(ast)
@@ -209,3 +212,4 @@ def main(argv):
 if __name__ == '__main__':
     main(sys.argv)
     LLVMSingleton.getInstance().clear()
+

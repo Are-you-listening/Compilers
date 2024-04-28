@@ -26,15 +26,15 @@ class TypeMerger(ASTVisitor):
         if node.text != "Type":
             return
 
-        if node.parent.text == "Struct" and node == node.parent.children[0]:   # The first type node is the struct its self
+        if node.parent.text in ["Struct", "Union"] and node == node.parent.children[0]:   # The first type node is the struct its self
             return
 
-        if node.children[0].type == "STRUCT":
+        if node.children[0].type in ["STRUCTUNION"]:
             return
 
         mergeType = node.children[0].text[0:6]
 
-        if mergeType not in ["enum", "struct"]:
+        if mergeType not in ["enum", "struct", "union"]:
             return
 
         """
@@ -43,7 +43,7 @@ class TypeMerger(ASTVisitor):
         """
         line = node.children[0].linenr
         table = node.children[0].symbol_table
-        if mergeType == "struct":
+        if mergeType in ["struct", "union"]:
             newname = node.children[1].text
         else:
             newname = mergeType + " " + node.children[1].text

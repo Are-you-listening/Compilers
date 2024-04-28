@@ -8,7 +8,7 @@ class TestConversion(ASTTest, unittest.TestCase):
     """
 
     def execute(self, abstract_syntax_tree: AST):
-        ASTConversion({}).visit(abstract_syntax_tree)
+        ASTConversion({'kaas': ['melk', 'yoghurt', 'lol', 'union']}).visit(abstract_syntax_tree)
 
     def test(self):
         ASTTest.AST_test(self, os.path.abspath(__file__))  # Call the baseClass function

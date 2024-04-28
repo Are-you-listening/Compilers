@@ -10,9 +10,9 @@ int main()
     float* q = &p;
 
     printf("%f %f ",3.14,p);
-    printf("True  " + "\n ");
 
 
+    printf("True  \n ");
 
 
     return 0;

@@ -18,22 +18,21 @@ int main() {
    ementaler.fermtented = 18;
 
 
-   printf("%d", ementaler.melk );
+   printf("%d ", ementaler.melk );
 
-   printf("%d", ementaler.fermtented);
+   printf("%d ", ementaler.fermtented);
 
-   printf("%d", z[0]);
 
    struct kaas gouda;
    gouda.melk = 7;
    gouda.fermtented = 9;
 
-   printf("%d", gouda.melk );
+   printf("%d ", gouda.melk );
 
-   printf("%d", gouda.fermtented);
+   printf("%d ", gouda.fermtented);
 
    struct kaas* gouda_ptr = &gouda;
-    printf("%d   ", (*gouda_ptr).melk );
+    printf("%d ", (*gouda_ptr).melk );
 
     return 0;
 

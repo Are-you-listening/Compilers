@@ -1,6 +1,7 @@
 from src.parser.Tables.SymbolTable import *
 from src.parser.Tables.SymbolTypeArray import *
 from src.parser.Tables.SymbolTypeStruct import *
+from src.parser.CTypes.COperationHandler import *
 
 
 class ASTTableCreator(ASTVisitor):
@@ -11,10 +12,14 @@ class ASTTableCreator(ASTVisitor):
         self.table = None
         self.structs = {}
         self.to_remove = set()
+        self.param_list = []
 
     def visit(self, ast: AST):
         self.table = None
+        self.param_list = []
+
         self.postorder(ast.root)
+
 
         for n in self.to_remove:
             n.parent.removeChild(n)
@@ -92,7 +97,7 @@ class ASTTableCreator(ASTVisitor):
         """
         node.symbol_table = self.table
 
-        if node.text == "Struct":
+        if node.text in ["Struct", "Union"]:
             self.__make_struct_type(node)
             return
 
@@ -101,14 +106,15 @@ class ASTTableCreator(ASTVisitor):
 
             if child.text == "FunctionPtr":
 
-                func_ptr = self.__get_func_ptr_type(child)
-
-                symbol_entry = SymbolEntry(func_ptr, node.children[1].text, None, node.children[1], None)
+                symbol_type = self.__get_func_ptr_type(child)
+                symbol_entry = SymbolEntry(symbol_type, node.children[1].text, None, node.children[1], None)
                 node.symbol_table.add(symbol_entry)
 
             else:
-                symbol_type = SymbolType
-                self.__make_entry(node, child, symbol_type, True)
+                symbol_type = self.__make_entry(node, child, SymbolType, True)
+
+            if node.text == "Parameter":
+                self.param_list.append(symbol_type)
 
         if node.text in ("Function", "Code", "Scope"):
             """
@@ -120,12 +126,10 @@ class ASTTableCreator(ASTVisitor):
                 node.symbol_table = self.table
 
         if node.text == "Function":
-            child = node.getChild(0)
-            param_types = []
-            for param in node.children[2].children:
-                param_type = self.__get_data_type(param.getChild(0), SymbolType)
-                param_types.append(param_type)
+            param_types = self.param_list
+            self.param_list = []
 
+            child = node.getChild(0)
             return_type = self.__get_data_type(child, SymbolType)
 
             self.__check_function_declarations(node, param_types, return_type)
@@ -151,14 +155,39 @@ class ASTTableCreator(ASTVisitor):
         i = 1  # We can skip the first 2 nodes, these are used for the Struct ittself
         while i < len(node.children):
             child = node.children[i].children[0]  # Pick the type node
+            identifier = node.children[i].children[1].text
 
             data_type = self.__get_data_type(child, SymbolType)
             pts_to.append(data_type)
 
+            # Remove the struct data member identifier from the table, it is no actual member
+            entry = self.table.getEntry(identifier)
+            self.table.remove(entry)
+
             i += 1
+
+        if node.text == "Union":  # For Unions, take the biggest type as type for all data members
+            pts_to = [self.getRichestType(pts_to)]
 
         self.structs[structName] = SymbolTypeStruct(structName, pts_to)
         self.to_remove.add(node)
+
+    @staticmethod
+    def getRichestType(pts_to: list):
+        richest = pts_to[0]
+        check = RichnessChecker(types)
+        for pointee in pts_to:
+            if isinstance(pointee, SymbolTypeArray):  # Arrays are always the biggest since they contain 1 to multiple pointers
+                richest = pointee
+                break
+            if isinstance(pointee, SymbolTypePtr):
+                richest = pointee
+            else:
+                data_type, ptrs = richest.getPtrTuple()
+                data_type2, ptrs2 = pointee.getPtrTuple()
+                if data_type2[0] == check.get_richest(data_type[0], data_type2[0]):
+                    richest = pointee
+        return richest
 
     @staticmethod
     def __make_ptr_type(latest_datatype: SymbolType, is_const: bool, terminal_type: str):
@@ -217,6 +246,7 @@ class ASTTableCreator(ASTVisitor):
         if referenced:
             symbol_entry.reference()
         node.symbol_table.add(symbol_entry)
+        return latest_datatype
 
     @staticmethod
     def isStructType(text: str):
@@ -224,7 +254,7 @@ class ASTTableCreator(ASTVisitor):
         Returns true if the type is a struct defined by the user
         :param text:
         """
-        return "struct" == text[0:6]
+        return "struct" == text[0:6] or "union" == text[0:6]
 
     def __get_func_ptr_type(self, node: ASTNode):
 

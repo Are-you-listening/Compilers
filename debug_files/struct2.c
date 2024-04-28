@@ -1,10 +1,9 @@
+#include <stdio.h>
 
-#include "cycle1.c"
-#include "cycle3.c"
-#include "cycle4.c"
+(5.0 + 3.2) * (8.7 / 2.0) - (6.1 * 2.5);
 
 int main() {
-    int x = 4;
-    return 0;
 
+
+    return 0;
 }

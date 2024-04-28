@@ -48,6 +48,7 @@ sudo apt install llvm
 - [X] Const Casting
 - [X] ControlFlow and visualization
 - [X] Else If Statements
+- Conversion Warnings?
 
 ### Technical Functionality: 
 - [X] README

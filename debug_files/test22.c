@@ -1,20 +1,16 @@
 #include <stdio.h>
 
-struct kaas{
-    int melk;
-    int fermtented;
-};
+int d(int a){
+
+    return 2;
+}
 
 
 int main() {
-   struct kaas ementaler;
+    int c = 1;
 
-   struct kaas gouda;
-
-   struct kaas* gouda_ptr = &ementaler;
-   printf("%d   ", (*gouda_ptr).melk );
-
-
-
+    int (*e)(int) = &d;
+    int u = (*e)(c);
+    printf("%d", u);
     return 0;
 }

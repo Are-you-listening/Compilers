@@ -47,14 +47,22 @@ class ErrorExporter:
     def invalidOperation(linenr: str, operator: str, type1: SymbolType, type2: SymbolType):
 
         type1 = ErrorExporter.__to_output_type(type1.getPtrTuple())
-        type2 = ErrorExporter.__to_output_type(type2.getPtrTuple())
+        if type2 is not None:
+            type2 = " " + ErrorExporter.__to_output_type(type2.getPtrTuple())
+        else:
+            type2 = ""
 
-        print(f"[ Error ] line {linenr}: invalid operation {operator} on type(s): {type1}  {type2}", file=sys.stderr)
+        print(f"[ Error ] line {linenr}: invalid operation {operator} on type(s): {type1}{type2}", file=sys.stderr)
         exit()
 
     @staticmethod
     def invalidOperatorPtr(operator: str, linenr: str):
         print(f"[ Error ] line {linenr}: invalid ptr operation {operator}", file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def LValueReference(linenr: str):
+        print(f"[ Error ] line {linenr}: you can't have a reference to an LValue", file=sys.stderr)
         exit()
 
     @staticmethod
@@ -346,5 +354,12 @@ class ErrorExporter:
     @staticmethod
     def lostInitializerList(line_nr: int):
         print(f"[ Error ] line {line_nr}: an initializer list is provided while not being assigned to an array",
+              file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def functionCallNotFunction(line_nr: int, called: str, call_type: SymbolType):
+        call_type = ErrorExporter.__to_output_type(call_type.getPtrTuple())
+        print(f"[ Error ] line {line_nr}: you cannot do a function call for the non-function '{called}' which is of type {call_type}",
               file=sys.stderr)
         exit()

@@ -1,22 +1,25 @@
-from antlr4 import *
-from src.antlr_files.grammarCLexer import grammarCLexer
 from src.antlr_files.grammarCParser import grammarCParser
 from src.parser.ASTCreator import ASTCreator
 from src.parser.DotVisitor import *
 from src.parser.Constraints.ConstraintChecker import *
-from src.parser.ValueAdderVisitor import *
 from src.parser.ASTDereferencer import *
-from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
 from src.parser.ASTCleanerAfter import *
-from src.parser.Tables.TableDotVisitor import *
-from src.parser.CodeGetter import *
+from src.llvm_target.AST2LLVM import *
+from src.parser.ASTIfCleaner import ASTIfCleaner
+from src.parser.ASTLoopCleaner import *
+from src.parser.BlacklistVisitor import *
+from src.parser.SwitchConverter import *
+from src.parser.TypeMerger import *
+from src.parser.VirtualLineNrVisitor import *
+from src.parser.ArrayCleaner import ArrayCleaner
+from src.parser.EnumConverter import *
+from src.parser.Preproccesing.preProcessor import *
+from src.parser.StringToArray import *
+from src.parser.StructCleaner import *
+from src.parser.StructCleanerAfter import *
+from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
 from TestCases.ABCTests.AstLoader import AstLoader
-from src.parser.ASTTableCreator import ASTTableCreator
-from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
-from src.parser.BlacklistVisitor import BlacklistVisitor
-from src.parser.StructCleaner import StructCleaner
-from src.parser.StructCleanerAfter import StructCleanerAfter
 
 input_file = "read_file.c"
 
@@ -37,37 +40,46 @@ ast = toAST.getAST()
 below add needed stuff
 """
 
-virtualline = VirtualLineVisitor()
-virtualline.visit(ast)
+virtualLine = VirtualLineVisitor()
+virtualLine.visit(ast)
 
-black_list_visitor = BlacklistVisitor()
-black_list_visitor.visit(ast)
+BlacklistVisitor().visit(ast)
 
-codegetter = CodeGetter()
+codegetter = CodeGetter()  # Link each line of code to a line number
 codegetter.visit(ast)
 
 structTable = StructCleaner().visit(ast)  # Massage the structs
 
+EnumConverter().visit(ast)  # Convert enum to typedef & const bools
+TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
+
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
-astcleaner = ASTCleaner()  # Do a standard cleaning
-astcleaner.visit(ast)
+ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
+ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
+
+ASTCleaner().visit(ast)  # Do a standard cleaning
+
+SwitchConverter().visit(ast)  # convert switch statement to if else
+
+StringToArray().visit(ast)
+
+FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
+
+ArrayCleaner().visit(ast)
 
 ASTTableCreator().visit(ast)  # Create the symbol table
 
 StructCleanerAfter(structTable).visit(ast)
 
-astcleanerafter = ASTCleanerAfter()  # Do a standard cleaning
-astcleanerafter.visit(ast)
+ASTCleanerAfter().visit(ast)  # Clean even more :)
 
-ast_deref = ASTDereferencer()  # Correct the use of references & pointers into our format
-ast_deref.visit(ast)
+ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
 constraint_checker = ConstraintChecker(True)  # Checkup Semantic & Syntax Errors
 constraint_checker.visit(ast)
 
-cfv = ConstantFoldingVisitor()
-cfv.visit(ast)
+
 
 
 """

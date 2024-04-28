@@ -83,8 +83,6 @@ class AST2LLVM(ASTVisitor):
         :return:
         """
 
-        #print(node.text)
-
         if isinstance(node, ASTNodeBlock) and node.text == "Block":
             if self.last_vertex is not None:
                 self.last_vertex.check_flipped()
@@ -115,6 +113,7 @@ class AST2LLVM(ASTVisitor):
 
         if node.text == "Function":
             self.map_table = self.map_table.prev
+            self.handleFunction(node)
 
         if node.text == "Dereference":
             self.handleDereference(node)
@@ -140,8 +139,12 @@ class AST2LLVM(ASTVisitor):
         if node.text == "Return":
             self.handleReturn(node)
 
-        if node.text == "FunctionCall":
-            self.handleFunctionCall(node)
+
+        if node.text == "ParameterCalls":
+            self.handleParameterCalls(node)
+
+        if node.text == "ParameterCall":
+            self.llvm_map[node] = self.llvm_map[node.getChild(0)]
 
         if node.text not in ("Parameters"):
             self.addOriginalCodeAsComment(node)
@@ -159,7 +162,7 @@ class AST2LLVM(ASTVisitor):
             self.llvm_map[node] = entry.llvm
 
         if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
-            llvm_var = Declaration.llvmLiteral(node.text, (node.type, False), [])
+            llvm_var = Declaration.llvmLiteral(node.text, SymbolType(node.type, False))
             self.llvm_map[node] = llvm_var
 
         if node.type == "STRING":
@@ -178,7 +181,8 @@ class AST2LLVM(ASTVisitor):
             if isinstance(entry.getTypeObject(), SymbolTypeStruct):
                 data_type, ptrs = var_child.getSymbolTable().getEntry(var_child.text).getTypeObject().getFullType()
         if var_child.symbol_table.isRoot():  # Globals; extra stuff needs to be done
-            llvm_var = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), CTypesToLLVM.getIRType(data_type, ptrs), var_child.text)  # Declare a global variable
+            llvm_var = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(),
+                                         CTypesToLLVM.getIRType(entry.getTypeObject()), var_child.text)  # Declare a global variable
             value = var_child.symbol_table.getEntry(var_child.text).value  # Get the value
             if value is None:
                 value = 0
@@ -186,14 +190,15 @@ class AST2LLVM(ASTVisitor):
                 value = value.text
 
             # Preset some values
-            llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(data_type, ptrs), value)
-            llvm_var.align = CTypesToLLVM.getBytesUse(data_type, ptrs)
+            llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(entry.getTypeObject()), value)
+            llvm_var.align = CTypesToLLVM.getBytesUse(entry.getTypeObject())
 
         else:
+
             """
             all children of type_child are terminals
             """
-            llvm_var = Declaration.declare(data_type, ptrs, var_child.text)  # The name is optionally needed for structs
+            llvm_var = Declaration.declare(entry.getTypeObject(), var_child.text)  # The name is optionally needed for structs
         """
         store var in llvm map
         """
@@ -211,6 +216,25 @@ class AST2LLVM(ASTVisitor):
         """
         if node.getChildAmount() == 2:
             self.handleAssignment(node)
+
+    def handleFunction(self, node: ASTNode):
+        function_name = node.getChild(0).text
+        function = LLVMSingleton.getInstance().getFunction(function_name)
+
+        if function is None:
+            function = LLVMSingleton.getInstance().getModule().get_global(function_name)
+
+        self.map_table.addEntry(MapEntry(function_name, function))
+
+    def handleParameterCalls(self, node: ASTNode):
+        args = []
+        for child in node.children:
+            llvm_var = self.llvm_map.get(child)
+            if llvm_var is not None:
+                args.append(llvm_var)
+
+        self.llvm_map[node] = args
+
 
     def __del__(self):
         #print(LLVMSingleton.getInstance().getModule())
@@ -452,22 +476,23 @@ class AST2LLVM(ASTVisitor):
 
 
     @staticmethod
-    def getConversionType(type_node: ASTNode):
+    def getConversionType(type_node: ASTNode) -> SymbolType:
         """"
         Extract the type of the AST node
         """
-        type_text = ""
-        ptr_text = ""
+
+        symbol_type = None
 
         for child in type_node.children:
             if child.text == "const":
                 continue
-            if "*" in child.text:
-                ptr_text += child.text
-            else:
-                type_text += child.text
 
-        return type_text, ptr_text
+            if child.text != "*":
+                symbol_type = SymbolType(child.text, False)
+            else:
+                symbol_type = SymbolTypePtr(symbol_type, False)
+
+        return symbol_type
 
     def addOriginalCodeAsComment(self, node: ASTNode):
         """

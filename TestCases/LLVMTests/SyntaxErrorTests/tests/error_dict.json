@@ -1,6 +1,7 @@
 {"1":  ["[ Syntax Error ] tests/test1.c line 2:14 invalid symbol: 'int'"],
 "2":  ["[ Syntax Error ] tests/test2.c line 1:7 invalid symbol: ';'"],
 "3":  ["[ Syntax Error ] tests/test3.c line 1:12 invalid symbol: 'int'"],
+  "4": ["[ Error ] line 9: redefinition or redeclaration of INT z"],
   "5": ["[ Syntax Error ] tests/test5.c line 9:6 invalid symbol: '0.3'"],
   "6": ["[ Syntax Error ] tests/test6.c line 7:12 invalid symbol: 'typedef'"],
   "8": ["[ Syntax Error ] tests/test8.c line 2:2 invalid symbol: '++'"],

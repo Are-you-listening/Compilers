@@ -1,5 +1,6 @@
 from src.parser.Constraints.Constraint import *
 from src.parser.ErrorExporter import *
+from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 
 
 class UndefinedReferenceConstraint(Constraint):
@@ -12,10 +13,14 @@ class UndefinedReferenceConstraint(Constraint):
         self.rejected = False
 
     def checkNode(self, node: ASTNode):
-        if node.text == "FunctionCall":
+        if node.text == "Expr" and node.getChildAmount() == 3 and node.getChild(1).text == "()":
             function_node = node.children[0]
-            while function_node.text == "Dereference":
-                function_node = function_node.children[0]
+
+            entry = node.symbol_table.getEntry(function_node.text)
+            if not isinstance(function_node, ASTNodeTerminal) or not isinstance(entry.getTypeObject(),
+                                                                                FunctionSymbolType):
+                return
+
             if node.symbol_table.exists(function_node.text):
                 if not node.symbol_table.getEntry(function_node.text).is_function_defined():
                     self.rejected = True

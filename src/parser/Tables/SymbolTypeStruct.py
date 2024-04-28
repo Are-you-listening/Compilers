@@ -34,11 +34,19 @@ class SymbolTypeStruct(SymbolType):
 
             if temp == []:
                 temp = (item.getType(), item.isConst()), []
+            else:
+                temp = (item.getType(), item.isConst()), temp
 
             ptr_list.append(temp)
             temp = []
         return (self.getType(), self.isConst()), ptr_list
 
+    def getPtrAmount(self):
+        return 1
+
     @staticmethod
     def isBase():
         return False
+
+    def getPtrAmount(self):
+        return 1
