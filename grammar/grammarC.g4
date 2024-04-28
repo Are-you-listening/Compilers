@@ -43,6 +43,7 @@ expr : literal
      | printscanf
      | '{' initialize_list '}'
      | '(' expr ')'
+     | expr '->' IDENTIFIER
      | expr '.' IDENTIFIER
      | ('++' | '--' | '&' | '*') expr
      | expr array

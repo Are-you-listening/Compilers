@@ -18,8 +18,5 @@ int main() {
 
     printf("%d", ptr.kaas_ptr->melk);
 
-     struct pointer* ptr2 = &ptr;
-    printf("%d", ptr2->kaas_ptr->melk);
-
     return 0;
 }
