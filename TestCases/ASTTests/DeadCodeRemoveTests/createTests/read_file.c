@@ -1,8 +1,13 @@
 #include <stdio.h>
 
 int main(){
-    while('a'=='a'){
-        printf("infinite loop");
-    }
+    int a = 0;
+
     return 0;
+
+    int b = 0;
+    b = 5;
+    if (b > 3){
+        int c = 0;
+    }
 }

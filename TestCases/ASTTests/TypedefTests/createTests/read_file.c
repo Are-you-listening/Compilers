@@ -1,7 +1,13 @@
-typedef int appel;
-typedef char appel;
+
+
+
+
+
+
+typedef
+
+float main;
 
 int main(){
-    appel x = 5;
     return 0;
 };

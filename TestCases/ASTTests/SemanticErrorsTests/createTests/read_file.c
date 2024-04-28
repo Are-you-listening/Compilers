@@ -1,6 +1,6 @@
 int main() {
-
-x = 5;
-    return 0;
+    float f;
+    **f = 5;
+        return 0;
 
 }

@@ -1,8 +1,8 @@
 int main() {
-    float x = 4.2;
-    float* y = 5;
+    int a = 5;
+    int* b = &a;
+    int* c = b + 5.3;
 
-    float v = x && y;
-    return 0;
+        return 0;
 
 }

@@ -24,7 +24,11 @@ class CodeGetter(ASTVisitor):
         pass
 
     def getLine(self, node: ASTNode):
-        lineNR = int(node.position.linenr)
+        position = node.position
+        if position is None:
+            lineNR = None
+        else:
+            lineNR = node.position.linenr
         if lineNR is None or lineNR <= self.highest_line_nr:
             return
 
