@@ -69,7 +69,7 @@ class ASTTableCreator(ASTVisitor):
         return True
 
 
-    def __check_function_declarations(self, node: ASTNode, param_types_and_ptrs: list, return_type: SymbolType ):
+    def __check_function_declarations(self, node: ASTNode, param_types_and_ptrs: list, return_type: SymbolType):
         function_node = node.children[1]
         #check if the function is already declared
         if function_node.symbol_table.exists(function_node.text):
@@ -130,7 +130,12 @@ class ASTTableCreator(ASTVisitor):
             self.param_list = []
 
             child = node.getChild(0)
-            return_type = self.__get_data_type(child, SymbolType)
+            if child.text == "FunctionPtr":
+
+                return_type = self.__get_func_ptr_type(child)
+
+            else:
+                return_type = self.__get_data_type(child, SymbolType)
 
             self.__check_function_declarations(node, param_types, return_type)
 
