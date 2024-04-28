@@ -34,6 +34,11 @@ class grammarCVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by grammarCParser#function_signature.
+    def visitFunction_signature(self, ctx:grammarCParser.Function_signatureContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by grammarCParser#function.
     def visitFunction(self, ctx:grammarCParser.FunctionContext):
         return self.visitChildren(ctx)

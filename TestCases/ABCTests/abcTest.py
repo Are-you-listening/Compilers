@@ -218,7 +218,7 @@ class LLVMTest(unittest.TestCase, ABC):
             # Run c file using gcc
             c_out = self.compileGCC(file_name)
             if c_out.returncode != 0:  # Compilation failed, warn client!
-                raise Exception("Compilation Failed")
+                raise Exception(f"Compilation Failed {file_name}")
 
             # Run the compiled code
             c_out = subprocess.run(f" temp/./temp ; rm temp/temp", shell=True, capture_output=True, text=True, input=inp)

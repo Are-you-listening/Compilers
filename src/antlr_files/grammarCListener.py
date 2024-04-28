@@ -53,6 +53,15 @@ class grammarCListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by grammarCParser#function_signature.
+    def enterFunction_signature(self, ctx:grammarCParser.Function_signatureContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#function_signature.
+    def exitFunction_signature(self, ctx:grammarCParser.Function_signatureContext):
+        pass
+
+
     # Enter a parse tree produced by grammarCParser#function.
     def enterFunction(self, ctx:grammarCParser.FunctionContext):
         pass

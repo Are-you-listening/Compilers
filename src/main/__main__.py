@@ -89,7 +89,9 @@ def cleanGreen(input_file, symbol_file):
 
     StringToArray().visit(ast)
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     #DotVisitor("output/d0").visit(ast)  # Export AST in Dot
     ArrayCleaner().visit(ast)
@@ -196,7 +198,7 @@ def main(argv):
 
     if llvm_file is not None:
         LLVMSingleton.setName(input_file)
-
+        #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
         to_llvm = AST2LLVM(codegetter, llvm_file)  # The codegetter is used to add the original code as comments
         to_llvm.visit(ast)
 

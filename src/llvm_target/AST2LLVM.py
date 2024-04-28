@@ -50,6 +50,8 @@ class AST2LLVM(ASTVisitor):
 
             if currentNode.text == "Function" and currentNode not in visited:
                 visited.add(currentNode)
+
+                self.handleFunction(currentNode)
                 self.map_table = MapTable(self.map_table)
                 function = LLVMSingleton.getInstance().getFunction(currentNode.getChild(0).text)
                 LLVMSingleton.getInstance().setLastFunction(function)
@@ -113,7 +115,6 @@ class AST2LLVM(ASTVisitor):
 
         if node.text == "Function":
             self.map_table = self.map_table.prev
-            self.handleFunction(node)
 
         if node.text == "Dereference":
             self.handleDereference(node)
@@ -220,7 +221,6 @@ class AST2LLVM(ASTVisitor):
     def handleFunction(self, node: ASTNode):
         function_name = node.getChild(0).text
         function = LLVMSingleton.getInstance().getFunction(function_name)
-
         if function is None:
             function = LLVMSingleton.getInstance().getModule().get_global(function_name)
 

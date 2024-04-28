@@ -4,7 +4,9 @@ code: (function | line ';'+ | comment | include | define | include_guard)* ';'*;
 include_guard: '#ifndef' IDENTIFIER code '#endif';
 include: '#include' ('<stdio.h>' | STRING );
 comment : MULTILINE | SINGLECOMMENT;
-function : (type) IDENTIFIER '(' parameters ')' ('{' block_code '}')? ';'*;
+
+function_signature: ('(' '*' function_signature ')' '(' function_ptr_params ')') | (IDENTIFIER '(' parameters ')');
+function : type function_signature ('{' block_code '}')? ';'*;
 line: (declaration | expr | assignment | typedef | enum | structunion);
 parameters: ((parameter',')* parameter)?;
 parameter: (type IDENTIFIER array?) | functionPtrDeclaration;
