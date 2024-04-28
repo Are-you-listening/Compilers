@@ -6,7 +6,7 @@ int main()
 
     char hello[5] = {'H', 'e', 'l', 'l', 'o'};
 
-    printf("%% %s", hello);
+
 
     return 0;
 }

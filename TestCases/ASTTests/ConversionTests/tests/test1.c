@@ -5,4 +5,5 @@ int main() {
     const char d = (const char) c;
     char e = b+3.5;
     char f = (int) e + 'a';
+    return 0;
 }

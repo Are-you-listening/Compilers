@@ -11,5 +11,6 @@ int main() {
     x_ptr = &b; //Warning
 
 
+    return 0;
 
 }

@@ -248,7 +248,6 @@ class ControlFlowCreator(ASTVisitor):
         args = function_type.getParameterTypes()
 
         if LLVMSingleton.getInstance().getFunction(var_child.text) is None:
-
             Declaration.function(var_child.text, function_type.return_type, args)
 
 

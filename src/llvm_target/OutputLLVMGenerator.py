@@ -109,8 +109,6 @@ class CTypesToLLVM:
             return llvm_type
 
         convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType(), "BOOL": ir.IntType(1), "VOID": ir.VoidType()}
-        llvm_type = convert_map.get(data_type[0])
-        convert_map = {"INT": ir.IntType(32), "CHAR": ir.IntType(8), "FLOAT": ir.FloatType(), "BOOL": ir.IntType(1)}
         llvm_type = convert_map.get(data_type.getBaseType())
 
         if llvm_type is None:  # Most likely, a struct was used
@@ -195,8 +193,6 @@ class Declaration:
         for arg in args:
             arg_type = CTypesToLLVM.getIRType(arg)
             llvmArgs.append(arg_type)
-        function_type = ir.FunctionType(CTypesToLLVM.getIRType(return_type, ptrs), (llvmArgs))
-
         function_type = ir.FunctionType(CTypesToLLVM.getIRType(return_type), (llvmArgs))
         new_function = ir.Function(LLVMSingleton.getInstance().getModule(), function_type, name=func_name)
         LLVMSingleton.getInstance().addFunction(new_function)
