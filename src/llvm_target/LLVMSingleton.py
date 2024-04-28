@@ -19,7 +19,6 @@ class LLVMSingleton:
         self.__current_block = ir.IRBuilder(ir.Block(self.__module))
         self.__structs = {}
 
-
     def clear(self):
         self.__instance = None
         self.__init__()
@@ -87,7 +86,6 @@ class LLVMSingleton:
 
     def addStruct(self, struct_name, structType: ir.LiteralStructType):
         self.__structs[struct_name] = structType
-
 
     def getLastFunction(self):
         return self.__last_function

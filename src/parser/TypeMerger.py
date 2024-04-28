@@ -1,4 +1,3 @@
-from src.parser.ASTVisitor import *
 from src.parser.ASTTypedefReplacer import *
 
 
@@ -41,7 +40,7 @@ class TypeMerger(ASTVisitor):
         Merge the nodes 'enum' and '<ENUM NAME>' together; e.g. enum IOReader status, 1 new node has the text 
         'enum IOReader'
         """
-        line = node.children[0].linenr
+        position = node.children[0].position
         table = node.children[0].symbol_table
         if mergeType in ["struct", "union"]:
             newname = node.children[1].text
@@ -52,7 +51,7 @@ class TypeMerger(ASTVisitor):
         Override the type children
         """
         oldKids = node.children
-        node.children = [ASTNodeTerminal(newname, node, table, "IDENTIFIER", line, None)]
+        node.children = [ASTNodeTerminal(newname, node, table, "IDENTIFIER", position, node.structTable)]
         if len(oldKids) > 2:
             node.children += oldKids[2:]
 

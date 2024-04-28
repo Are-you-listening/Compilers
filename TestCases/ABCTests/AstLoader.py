@@ -3,6 +3,8 @@ from src.parser.Tables.SymbolTable import *
 from typing import List
 from src.llvm_target.ControlFlow.ControlFlowGraph import Vertex
 import ast
+from src.parser.ASTVisitor import *
+from src.parser.AST import ASTNodeBlock, Position
 
 class AstLoader:
     """
@@ -79,13 +81,13 @@ class AstLoader:
 
         if "type" in ast_node_entry:
             ast_node = ASTNodeTerminal(text, parent, ast_node_entry["symbol_table_nr"], ast_node_entry["type"],
-                                       ast_node_entry["linenr"], ast_node_entry["virtuallinenr"])
+                                       Position(ast_node_entry["file"], ast_node_entry["linenr"], ast_node_entry["virtuallinenr"]), None)
 
         elif "is_block" in ast_node_entry and ast_node_entry["is_block"]:
-            ast_node = ASTNodeBlock(text, parent, ast_node_entry["symbol_table_nr"], ast_node_entry["linenr"], Vertex(None), ast_node_entry["virtuallinenr"])
+            ast_node = ASTNodeBlock(text, parent, ast_node_entry["symbol_table_nr"], Vertex(None),Position(ast_node_entry["file"], ast_node_entry["linenr"], ast_node_entry["virtuallinenr"]), None)
 
         else:
-            ast_node = ASTNode(text, parent, ast_node_entry["symbol_table_nr"], ast_node_entry["linenr"], ast_node_entry["virtuallinenr"])
+            ast_node = ASTNode(text, parent, ast_node_entry["symbol_table_nr"], Position(ast_node_entry["file"], ast_node_entry["linenr"], ast_node_entry["virtuallinenr"]), None)
 
         map_id_to_node[ast_tree["id"]] = ast_node
 
@@ -123,7 +125,7 @@ class AstLoader:
     @staticmethod
     def __make_dict(ast_node: ASTNode, ast_node_list: list, ast_tree: dict, symbol_tables: list, ast_to_id_map):
 
-        ast_dict = {"text": ast_node.text, "linenr": ast_node.linenr, "virtuallinenr": ast_node.virtuallinenr}
+        ast_dict = {"text": ast_node.text, "linenr": ast_node.position.linenr, "virtuallinenr": ast_node.position.virtual_linenr, "file": ast_node.position.file}
 
         symbol_table = ast_node.getSymbolTable()
         if symbol_table is not None:

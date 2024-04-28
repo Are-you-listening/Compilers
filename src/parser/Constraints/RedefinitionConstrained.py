@@ -28,4 +28,4 @@ class RedefinitionConstraint(Constraint):
             # this should never happen but who knows
             return
         node = self.errorNode
-        ErrorExporter.redefinition(node.linenr, node.symbol_table.getEntry(node.text).getType(), node.text)
+        ErrorExporter.redefinition(node.position.linenr, node.symbol_table.getEntry(node.text).getType(), node.text)

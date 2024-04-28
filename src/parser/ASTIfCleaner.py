@@ -1,4 +1,3 @@
-from src.parser.ASTVisitor import *
 from src.parser.ASTConversion import *
 
 

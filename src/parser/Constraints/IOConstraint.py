@@ -7,7 +7,7 @@ class IOConstraint(Constraint):
 
     """
 
-    def __init__(self, includeSTDIO ):
+    def __init__(self, includeSTDIO):
         super().__init__()
         self.rejected = False
         self.includeSTDIO = includeSTDIO
@@ -15,7 +15,7 @@ class IOConstraint(Constraint):
     def checkNode(self, node: ASTNode):
         if node.text in ["printf", "scanf"]:
             if not self.includeSTDIO:  # Check if stdio is included
-                ErrorExporter.undeclaredVariable(node.text, node.linenr, "function")
+                ErrorExporter.undeclaredVariable(node.text, node.position.linenr, "function")
 
     def checkTerminalNode(self, node: ASTNodeTerminal):
         pass

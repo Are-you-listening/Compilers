@@ -1,4 +1,3 @@
-from src.parser.ASTVisitor import *
 from src.parser.ASTTableCreator import *
 
 
@@ -75,7 +74,7 @@ class ASTDereferencer(ASTVisitor):
             self.to_remove.add(node.getChild(0))
 
             """
-            In case we have a 'Expr' node withput any children we want to remove it, because it doesn't have any 
+            In case we have a 'Expr' node without any children we want to remove it, because it doesn't have any 
             use anymore
             """
             node.parent.replaceChild(node, node.getChild(1))
@@ -91,8 +90,8 @@ class ASTDereferencer(ASTVisitor):
         :param node:
         :return:
         """
-        # Temp fix for the dereference on a function call
-        if node.type != "IDENTIFIER" or (node.parent != None and node.parent.text == "FunctionCall"):
+        # Temp fix for  dereference on a function call
+        if node.type != "IDENTIFIER" or (node.parent is not None and node.parent.text == "FunctionCall"):
             return
 
         """
@@ -106,7 +105,7 @@ class ASTDereferencer(ASTVisitor):
         Add a Dereference node to the parent
         """
 
-        new_node = ASTNode("Dereference", None, node.symbol_table, node.linenr, node.virtuallinenr)
+        new_node = ASTNode("Dereference", None, node.symbol_table, node.position, node.structTable)
         node.addNodeParent(new_node)
         return new_node
 
@@ -120,4 +119,4 @@ class ASTDereferencer(ASTVisitor):
             super_child = node.getChild(0)
             node.parent.replaceChild(node, super_child)
         else:
-            ErrorExporter.LValueReference(node.linenr)
+            ErrorExporter.LValueReference(node.position.linenr)

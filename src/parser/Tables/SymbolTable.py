@@ -1,11 +1,5 @@
-from src.parser.ErrorExporter import *
-from src.parser.Tables.SymbolTypePtr import *
-from src.parser.Tables.SymbolTypeArray import SymbolTypeArray
 from src.parser.Tables.FunctionSymbolType import *
 from src.parser.Tables.SymbolTypeStruct import *
-
-from src.parser.AST import *
-from src.parser.ASTTypedefReplacer import *
 from typing import Dict
 from src.parser.Tables.AbstractTable import *
 
@@ -18,7 +12,7 @@ class SymbolEntry(TableEntry):
         self.firstDeclared = first_declared  # The node this Entry is first declared
         self.firstUsed = first_used  # The node this Entry is first used
         self.referenced = False
-        self.function_is_defined = False # function only
+        self.function_is_defined = False  # function only
 
     def __str__(self):
         return f"""type: {self.typeObject} 

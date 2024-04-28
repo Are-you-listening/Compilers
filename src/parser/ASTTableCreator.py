@@ -1,25 +1,27 @@
 from src.parser.Tables.SymbolTable import *
-from src.parser.Tables.SymbolTypeArray import *
 from src.parser.Tables.SymbolTypeStruct import *
 from src.parser.CTypes.COperationHandler import *
+from src.parser.ASTVisitor import *
+from src.parser.ASTTypedefReplacer import ASTTypedefReplacer
 
 
 class ASTTableCreator(ASTVisitor):
     """
     Traverses through the three and creates the symbol table
     """
+
     def __init__(self):
         self.table = None
         self.structs = {}
         self.to_remove = set()
         self.param_list = []
+        self.structTable = {}
 
     def visit(self, ast: AST):
         self.table = None
         self.param_list = []
 
         self.postorder(ast.root)
-
 
         for n in self.to_remove:
             n.parent.removeChild(n)
@@ -60,7 +62,7 @@ class ASTTableCreator(ASTVisitor):
             visited.add(currentNode)
 
     @staticmethod
-    def __equelParamTypes(param_types_and_ptrs: list, param_types: list):
+    def __equalParamTypes(param_types_and_ptrs: list, param_types: list):
         if len(param_types_and_ptrs) != len(param_types):
             return False
         for i in range(len(param_types_and_ptrs)):
@@ -68,24 +70,24 @@ class ASTTableCreator(ASTVisitor):
                 return False
         return True
 
-
     def __check_function_declarations(self, node: ASTNode, param_types_and_ptrs: list, return_type: SymbolType):
         function_node = node.children[1]
-        #check if the function is already declared
+        # check if the function is already declared
         if function_node.symbol_table.exists(function_node.text):
-            #check if the return types match, if not, throw an error
+            # check if the return types match, if not, throw an error
             if return_type.getPtrTuple() != node.symbol_table.getEntry(function_node.text).getPtrTuple():
-                ErrorExporter.conflictingFunctionReturnType(function_node.linenr, function_node.text)
-            #check if the parameter types match, if not, throw an error
-            if not self.__equelParamTypes(param_types_and_ptrs, node.symbol_table.getEntry(function_node.text).getTypeObject().getParameterTypes()):
-                ErrorExporter.conflictingFunctionParameterTypes(function_node.linenr, function_node.text)
-            #check if the function is a declaration or a definition
+                ErrorExporter.conflictingFunctionReturnType(function_node.position.linenr, function_node.text)
+            # check if the parameter types match, if not, throw an error
+            if not self.__equalParamTypes(param_types_and_ptrs, node.symbol_table.getEntry(
+                    function_node.text).getTypeObject().getParameterTypes()):
+                ErrorExporter.conflictingFunctionParameterTypes(function_node.position.linenr, function_node.text)
+            # check if the function is a declaration or a definition
             if node.getChildAmount() == 3:
                 return
             else:
-                #the function is a definition, check if it is already defined, if so, throw an error, else set it to defined
-                if (node.symbol_table.getEntry(function_node.text).is_function_defined()):
-                    ErrorExporter.functionRedefenition(function_node.linenr, function_node.text)
+                # the function is a definition, check if it is already defined, if so, throw an error, else set it to defined
+                if node.symbol_table.getEntry(function_node.text).is_function_defined():
+                    ErrorExporter.functionRedefinition(function_node.position.linenr, function_node.text)
                 else:
                     node.symbol_table.getEntry(function_node.text).set_function_defined(True)
         else:
@@ -157,7 +159,7 @@ class ASTTableCreator(ASTVisitor):
         structName = node.children[0].text  # First child is struct type
         pts_to = []
 
-        i = 1  # We can skip the first 2 nodes, these are used for the Struct ittself
+        i = 1  # We can skip the first 2 nodes, these are used for the Struct itself
         while i < len(node.children):
             child = node.children[i].children[0]  # Pick the type node
             identifier = node.children[i].children[1].text
@@ -182,7 +184,8 @@ class ASTTableCreator(ASTVisitor):
         richest = pts_to[0]
         check = RichnessChecker(types)
         for pointee in pts_to:
-            if isinstance(pointee, SymbolTypeArray):  # Arrays are always the biggest since they contain 1 to multiple pointers
+            if isinstance(pointee,
+                          SymbolTypeArray):  # Arrays are always the biggest since they contain 1 to multiple pointers
                 richest = pointee
                 break
             if isinstance(pointee, SymbolTypePtr):

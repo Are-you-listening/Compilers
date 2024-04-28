@@ -1,4 +1,4 @@
-from src.parser.Tables.SymbolTable import *
+from src.parser.ASTVisitor import *
 
 
 class StringToArray(ASTVisitor):
@@ -48,7 +48,7 @@ class StringToArray(ASTVisitor):
                 self.__make_init_list(node)
 
     @staticmethod
-    def __make_init_list(node):
+    def __make_init_list(node: ASTNode):
         splitted_string = []
         backslash = False
 
@@ -75,7 +75,7 @@ class StringToArray(ASTVisitor):
         Using the characters we will make an initialization list
         """
 
-        init_list = ASTNode("InitList", node.parent, node.getSymbolTable(), node.linenr, node.virtuallinenr)
+        init_list = ASTNode("InitList", node.parent, node.getSymbolTable(), node.position, node.structTable)
 
         """
         Replace the string with the initialization list of characters
@@ -83,9 +83,10 @@ class StringToArray(ASTVisitor):
         node.parent.replaceChild(node, init_list)
 
         for char in splitted_string:
-            char_node = ASTNodeTerminal(f"'{char}'", init_list, node.getSymbolTable(), "CHAR", node.linenr,
-                                        node.virtuallinenr)
+            char_node = ASTNodeTerminal(f"'{char}'", init_list, node.getSymbolTable(), "CHAR", node.position,
+                                        node.structTable)
             init_list.addChildren(char_node)
 
-    def __add_last_byte(self, node):
+    @staticmethod
+    def __add_last_byte(node: ASTNode):
         node.text = node.text+"\00"

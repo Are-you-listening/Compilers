@@ -140,7 +140,6 @@ class AST2LLVM(ASTVisitor):
         if node.text == "Return":
             self.handleReturn(node)
 
-
         if node.text == "ParameterCalls":
             self.handleParameterCalls(node)
 
@@ -235,9 +234,7 @@ class AST2LLVM(ASTVisitor):
 
         self.llvm_map[node] = args
 
-
     def __del__(self):
-        #print(LLVMSingleton.getInstance().getModule())
         with open(self.fileName, 'w') as f:
             f.write(str(LLVMSingleton.getInstance().getModule()))
 
@@ -432,21 +429,16 @@ class AST2LLVM(ASTVisitor):
             # Store the argument value in the alloca instruction
             store = builder.store(arg, alloca)
 
-
             # Add the alloca instruction to the map
             self.llvm_map[node.getChild(index).getChild(0)] = alloca
 
             # Add the store instruction to the map
             self.llvm_map[node.getChild(index).getChild(0)] = store
 
-
-
             # Add the alloca instruction to the map
             self.map_table.addEntry(MapEntry(node.getChild(index).getChild(0).text, alloca))
 
-
-            index+=1
-
+            index += 1
 
     @staticmethod
     def getConversionType(type_node: ASTNode) -> SymbolType:

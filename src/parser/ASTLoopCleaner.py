@@ -1,4 +1,3 @@
-from src.parser.ASTVisitor import *
 from src.parser.ASTConversion import *
 
 
@@ -61,7 +60,7 @@ class ASTLoopCleaner(ASTVisitor):
         not outside. We enforce this by adding a 'Code' node, which will cause a new scope
         """
 
-        node.addNodeParent(ASTNode("Scope", node.parent, None, node.linenr, node.virtuallinenr))
+        node.addNodeParent(ASTNode("Scope", node.parent, None, node.position, node.structTable))
 
         node.text = "WHILE"
 
@@ -100,7 +99,7 @@ class ASTLoopCleaner(ASTVisitor):
         """
 
         if node.getChild(1).text is None:
-            true_node = ASTNodeTerminal("1", node, node.getSymbolTable(), "INT", node.linenr, node.virtuallinenr)
+            true_node = ASTNodeTerminal("1", node, node.getSymbolTable(), "INT", node.position, node.structTable)
             node.replaceChild(node.getChild(1), true_node)
 
         ASTConversion.addConversion(node.getChild(1), (("BOOL", False), []))

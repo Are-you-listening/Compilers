@@ -57,7 +57,7 @@ class ConstantFoldingVisitor(ASTVisitor):
 
             c_type_to = c_type_executors[to_type]()
             node = ASTNodeTerminal(c_type_to.getString(result),
-                                   parent, parent.getSymbolTable(), to_type, node.linenr, node.virtuallinenr)
+                                   parent, parent.getSymbolTable(), to_type, node.position, node.structTable)
             parent.setChild(index, node)
 
             return
@@ -92,7 +92,7 @@ class ConstantFoldingVisitor(ASTVisitor):
             result, datatype_name = self.operation_handler.doOperationBinary(
                 (node.getChild(0).text, node.getChild(0).type),
                 (node.getChild(2).text, node.getChild(2).type),
-                node.getChild(1).text, node.linenr)
+                node.getChild(1).text, int(node.position.linenr))
 
         elif node.getChildAmount() == node.getTerminalAmount() == 2:
             """Check for UNARY operations"""
@@ -102,7 +102,7 @@ class ConstantFoldingVisitor(ASTVisitor):
 
             result, datatype_name = self.operation_handler.doOperationUnary(
                 (node.getChild(1).text, node.getChild(1).type),
-                node.getChild(0).text, node.linenr)
+                node.getChild(0).text, node.position.linenr)
 
         else:
             return
@@ -110,8 +110,7 @@ class ConstantFoldingVisitor(ASTVisitor):
         """store the calculated value as an new node"""
         index = parent.findChild(node)
 
-        node = ASTNodeTerminal(result,
-                               parent, parent.getSymbolTable(), datatype_name, node.linenr, node.virtuallinenr)
+        node = ASTNodeTerminal(result, parent, parent.getSymbolTable(), datatype_name, node.position, node.structTable)
         parent.setChild(index, node)
 
         """do the visiting again"""

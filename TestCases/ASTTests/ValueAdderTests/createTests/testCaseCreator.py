@@ -46,7 +46,7 @@ black_list_visitor.visit(ast)
 codegetter = CodeGetter()
 codegetter.visit(ast)
 
-structTable = StructCleaner().visit(ast)  # Massage the structs
+StructCleaner().visit(ast)  # Massage the structs
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
@@ -55,7 +55,7 @@ astcleaner.visit(ast)
 
 ASTTableCreator().visit(ast)  # Create the symbol table
 
-StructCleanerAfter(structTable).visit(ast)
+StructCleanerAfter().visit(ast)
 
 astcleanerafter = ASTCleanerAfter()  # Do a standard cleaning
 astcleanerafter.visit(ast)
@@ -69,7 +69,7 @@ constraint_checker.visit(ast)
 cfv = ConstantFoldingVisitor()
 cfv.visit(ast)
 
-ast_conv = ASTConversion(structTable)
+ast_conv = ASTConversion()
 ast_conv.visit(ast)
 
 """

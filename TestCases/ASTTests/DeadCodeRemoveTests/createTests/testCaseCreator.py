@@ -51,7 +51,7 @@ black_list_visitor.visit(ast)
 codegetter = CodeGetter()  # Link each line of code to a line number
 codegetter.visit(ast)
 
-structTable = StructCleaner().visit(ast)  # Massage the structs
+StructCleaner().visit(ast)  # Massage the structs
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
@@ -62,7 +62,7 @@ ASTCleaner().visit(ast)  # Do a standard cleaning
 
 ASTTableCreator().visit(ast)  # Create the symbol table
 
-StructCleanerAfter(structTable).visit(ast)
+StructCleanerAfter().visit(ast)
 
 ASTCleanerAfter().visit(ast)  # Clean even more :)
 
@@ -72,7 +72,7 @@ ConstraintChecker(True).visit(ast)  # Checkup Semantic & Syntax Errors
 
 ConstantFoldingVisitor().visit(ast)
 
-ASTConversion(structTable).visit(ast)
+ASTConversion().visit(ast)
 
 ValueAdderVisitor().visit(ast)
 

@@ -63,7 +63,7 @@ ASTCleaner().visit(ast)  # Do a standard cleaning
 
 ASTTableCreator().visit(ast)  # Create the symbol table
 
-StructCleanerAfter(structTable).visit(ast)
+StructCleanerAfter().visit(ast)
 
 ASTCleanerAfter().visit(ast)  # Clean even more :)
 

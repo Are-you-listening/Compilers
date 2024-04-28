@@ -1,7 +1,8 @@
 from src.parser.Constraints.Constraint import *
 from src.parser.ErrorExporter import ErrorExporter
 
-def findfunction(node: ASTNode):
+
+def findFunction(node: ASTNode):
     """
     given a return node, find the enclosing Function node
     note that we don't need to support nested functions, so the first Function node we find is also the only one there is
@@ -33,10 +34,9 @@ class FunctionReturnConstraint(Constraint):
             # create a new dict entry for a function and all the returns in the function body
             self.map[node] = []
         if node.text == "Return":
-            function_node = findfunction(node)
+            function_node = findFunction(node)
             if function_node is not None:
                 self.map[function_node].append(node)
-
 
     def checkTerminalNode(self, node: ASTNodeTerminal):
         pass
@@ -45,7 +45,7 @@ class FunctionReturnConstraint(Constraint):
         for error_node in self.errorNodes:
             entry = error_node.getSymbolTable().getEntry(error_node.getChild(0).text)
             return_type = entry.getType()
-            ErrorExporter.missingReturn(error_node.linenr, return_type)
+            ErrorExporter.missingReturn(error_node.position.linenr, return_type)
 
     def isRejected(self):
         self.errorNodes.clear()

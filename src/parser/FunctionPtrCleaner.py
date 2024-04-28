@@ -1,5 +1,4 @@
-from src.parser.CTypes.COperationHandler import COperationHandler
-from src.parser.Tables.SymbolTable import *
+from src.parser.ASTVisitor import *
 
 
 class FunctionPtrCleaner(ASTVisitor):
@@ -112,7 +111,7 @@ class FunctionPtrCleaner(ASTVisitor):
         Add function Ptr node as parent of the type
         """
 
-        function_ptr_node = ASTNode("FunctionPtr", node, node.getSymbolTable(), node.linenr, node.virtuallinenr)
+        function_ptr_node = ASTNode("FunctionPtr", node, node.getSymbolTable(), node.position, node.structTable)
         type_node.addNodeParent(function_ptr_node)
 
         """

@@ -5,18 +5,33 @@ class ASTVisitor:  # Prevent circular inclusion
     pass
 
 
+class StructTable:
+    pass
+
+
+class Position:
+    """
+    Class to group linenr, virtual linenr and file name together
+    """
+
+    def __init__(self, file: str, linenr: str, virtual_linenr: str):
+        self.file = file
+        self.linenr = linenr
+        self.virtual_linenr = virtual_linenr
+
+
 class ASTNode:
     """
     A node inside the AST
     """
 
-    def __init__(self, text, parent, symbol_table, linenr, vlinenr):
+    def __init__(self, text, parent, symbol_table, position: Position, structTable: StructTable):
         self.children = []
         self.text = text
         self.parent = parent
         self.symbol_table = symbol_table
-        self.linenr = linenr
-        self.virtuallinenr = vlinenr
+        self.position = position
+        self.structTable = structTable
 
     def __hash__(self):
         return id(self)
@@ -176,8 +191,8 @@ class ASTNodeTerminal(ASTNode):
     A node inside the AST that contains a terminal
     """
 
-    def __init__(self, text, parent, symbol_table, terminal_type, linenr, vlinenr):
-        super(ASTNodeTerminal, self).__init__(text, parent, symbol_table, linenr, vlinenr)
+    def __init__(self, text, parent, symbol_table, terminal_type, position: Position, struct_table: StructTable):
+        super(ASTNodeTerminal, self).__init__(text, parent, symbol_table, position, struct_table)
         self.type = terminal_type
 
     def accept(self, v: ASTVisitor):
@@ -185,8 +200,8 @@ class ASTNodeTerminal(ASTNode):
 
 
 class ASTNodeBlock(ASTNode):
-    def __init__(self, text, parent, symbol_table, linenr, vertex, vlinenr):
-        super().__init__(text, parent, symbol_table, linenr, vlinenr)
+    def __init__(self, text, parent, symbol_table, vertex, position: Position, struct_table: StructTable):
+        super().__init__(text, parent, symbol_table, position, struct_table)
         self.vertex = vertex
         self.vertex.node_link = self
 

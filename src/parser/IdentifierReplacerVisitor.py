@@ -1,4 +1,3 @@
-import copy
 from src.parser.ASTVisitor import *
 from src.parser.ErrorExporter import *
 from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
@@ -11,6 +10,7 @@ def declaredPreviously(node: ASTNodeTerminal):
         if node.text in current_table.symbols:
             return True
         current_table = current_table.prev
+
 
 class IdentifierReplacerVisitor(ASTVisitor):
     def __init__(self):
@@ -64,7 +64,7 @@ class IdentifierReplacerVisitor(ASTVisitor):
             In case the value is None
             """
             if entry.value is None:
-                ErrorExporter.uninitializedVariable(toReplace, node.linenr)
+                ErrorExporter.uninitializedVariable(toReplace, node.position.linenr)
                 return
 
             if entry.value.text in ("Expr", "Dereference"):
@@ -78,7 +78,6 @@ class IdentifierReplacerVisitor(ASTVisitor):
             temp.parent = node.parent
             temp.symbol_table = node.symbol_table
             node = temp
-
 
             # replaces a dereference -> identifier pair with the value of that identifier
 

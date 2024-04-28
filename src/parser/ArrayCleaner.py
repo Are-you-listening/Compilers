@@ -1,5 +1,5 @@
-from src.parser.CTypes.COperationHandler import COperationHandler
-from src.parser.Tables.SymbolTable import *
+from src.parser.ErrorExporter import *
+from src.parser.ASTVisitor import *
 
 
 class ArrayCleaner(ASTVisitor):
@@ -73,7 +73,7 @@ class ArrayCleaner(ASTVisitor):
                 data_type = f"ARRAY_{new_ptr_val}"
 
             new_ptr = ASTNodeTerminal("*", type_node.parent, type_node.getSymbolTable(), data_type,
-                                      type_node.linenr, type_node.virtuallinenr)
+                                      type_node.position, type_node.structTable)
             type_node.addChildren(new_ptr)
 
         self.to_remove.add(node.getChild(2))
@@ -108,13 +108,12 @@ class ArrayCleaner(ASTVisitor):
             """
             Create a new parent: 'Expr', with children left hand side the identifier and right hand side the + index
             """
-            access_expr_node = ASTNode("Expr", None, node.getSymbolTable(), node.linenr, node.virtuallinenr)
+            access_expr_node = ASTNode("Expr", None, node.getSymbolTable(), node.position, node.structTable)
 
             access_expr_node.addChildren(left_child)
             left_child.parent = access_expr_node
 
-            access_expr_node.addChildren(ASTNodeTerminal("[]", access_expr_node, node.getSymbolTable(), "",
-                                                      node.linenr, node.virtuallinenr))
+            access_expr_node.addChildren(ASTNodeTerminal("[]", access_expr_node, node.getSymbolTable(), "", node.position, node.structTable))
 
             access_expr_node.addChildren(new_ptr_val)
             new_ptr_val.parent = access_expr_node
@@ -141,10 +140,10 @@ class ArrayCleaner(ASTVisitor):
 
             if check_int:
                 if not isinstance(child, ASTNodeTerminal):
-                    ErrorExporter.invalidArraySize(array_node.linenr, array_node.parent.getChild(1).text,
+                    ErrorExporter.invalidArraySize(array_node.position.linenr, array_node.parent.getChild(1).text,
                                                    (("Expression", False), []))
                 if child.type != "INT":
-                    ErrorExporter.invalidArraySize(array_node.linenr, array_node.parent.getChild(1).text,
+                    ErrorExporter.invalidArraySize(array_node.position.linenr, array_node.parent.getChild(1).text,
                                                    ((child.type, False), []))
 
             array_sizes.append(child.text)
@@ -164,7 +163,7 @@ class ArrayCleaner(ASTVisitor):
         """
 
         if node.parent not in self.array_map:
-            ErrorExporter.lostInitializerList(node.linenr)
+            ErrorExporter.lostInitializerList(node.position.linenr)
             return
 
         array_sizes = self.array_map.get(node.parent)
@@ -192,7 +191,7 @@ class ArrayCleaner(ASTVisitor):
             for current_node_tup in current_check_nodes:
                 node_index, current_node = current_node_tup
                 if size != current_node.getChildAmount():
-                    ErrorExporter.wrongInitializationListSize(node.linenr, declared_variable)
+                    ErrorExporter.wrongInitializationListSize(node.position.linenr, declared_variable)
 
                 """
                 Add the children to the next current node check
@@ -207,7 +206,7 @@ class ArrayCleaner(ASTVisitor):
                 else:
                     for j, c in enumerate(current_node.children):
                         if c.text != "InitList":
-                            ErrorExporter.wrongInitializationListFormat(node.linenr, declared_variable)
+                            ErrorExporter.wrongInitializationListFormat(node.position.linenr, declared_variable)
 
                         new_current_nodes.append((node_index+[j], c))
 
@@ -225,16 +224,16 @@ class ArrayCleaner(ASTVisitor):
         """
 
         for indexing, v in value_list:
-            assignment_node = ASTNode("Assignment", code_node, node.parent.getSymbolTable(), node.parent.linenr,
-                                      node.parent.virtuallinenr)
+            assignment_node = ASTNode("Assignment", code_node, node.parent.getSymbolTable(), node.parent.position,
+                                      node.parent.structTable)
 
             var_node = ASTNodeTerminal(declared_variable, assignment_node, assignment_node.getSymbolTable(),
-                                       "IDENTIFIER", assignment_node.linenr, assignment_node.virtuallinenr)
+                                       "IDENTIFIER", assignment_node.position, assignment_node.structTable)
 
             assignment_node.addChildren(var_node)
 
             array_node = ASTNode("ARRAY", assignment_node, assignment_node.getSymbolTable(),
-                                 assignment_node.linenr, assignment_node.virtuallinenr)
+                                 assignment_node.position, assignment_node.structTable)
 
             assignment_node.addChildren(array_node)
 
@@ -243,7 +242,7 @@ class ArrayCleaner(ASTVisitor):
             """
             for index in indexing:
                 index_node = ASTNodeTerminal(index, array_node, assignment_node.getSymbolTable(),
-                                             "INT", assignment_node.linenr, assignment_node.virtuallinenr)
+                                             "INT", assignment_node.position, assignment_node.structTable)
 
                 array_node.addChildren(index_node)
 
