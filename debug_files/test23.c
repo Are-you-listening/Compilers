@@ -1,16 +1,17 @@
 #include <stdio.h>
 
-int factorial(int n) {
-    if (n == 0) {
-        return 1;
-        }
-    else {
-        return n * factorial(n - 1);
-        }
+int a(int u) {
+    return u + 1;
+}
+
+
+int (*b())(int) {
+    int (*c)(int) = &a;
+    return c;
 }
 
 int main() {
-    int n = 5;
-    printf("%d\n", factorial(n));
+    int (*c)(int) = b();
+    printf("%d", (*c)(4));
     return 0;
 }
