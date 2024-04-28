@@ -36,9 +36,7 @@ class FunctionPtrCleaner(ASTVisitor):
     def __check_func_ptr_declaration(self, node: ASTNode):
         if node.text != "FunctionPtrDeclaration":
             return
-
-        self.to_remove.add(node)
-        self.last_func_ptr_declare = node
+        self.last_func_ptr_declare = node.parent
 
         return_type_child = node.getChild(0)
         function_ptr_child = node.getChild(1)
@@ -56,14 +54,38 @@ class FunctionPtrCleaner(ASTVisitor):
             return
 
         identifier_node = node.getChild(1)
-        node.removeChild(identifier_node)
 
-        self.last_func_ptr_declare.parent.insertChild(1, identifier_node)
+
+
+        """
+        Do a tickle up
+        """
+        parent = node.parent
+        if parent.text in ("FunctionPtrDeclaration", "FunctionPtr"):
+
+            node.removeChild(identifier_node)
+
+            parent.replaceChild(node, identifier_node)
+            parent.parent.replaceChild(parent, node)
+
+            parent.parent = None
+            node.insertChild(1, parent)
+            parent.parent = node
+
+            if parent.text == "FunctionPtrDeclaration":
+                node.replaceChild(parent, parent.getChild(0))
 
         """
         remove redundant *
         """
         self.to_remove.add(node.getChild(0))
+
+        if isinstance(identifier_node, ASTNodeTerminal) and identifier_node.type == "IDENTIFIER":
+
+            identifier_node.parent.removeChild(identifier_node)
+            print(self.last_func_ptr_declare)
+            self.last_func_ptr_declare.insertChild(1, identifier_node)
+            identifier_node.parent = self.last_func_ptr_declare
 
     def __check_function_ptr_return(self, node: ASTNode):
         """

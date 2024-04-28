@@ -135,8 +135,8 @@ class ASTTableCreator(ASTVisitor):
                 return_type = self.__get_func_ptr_type(child)
 
             else:
-                return_type = self.__get_data_type(child, SymbolType)
 
+                return_type = self.__get_data_type(child, SymbolType)
             self.__check_function_declarations(node, param_types, return_type)
 
             """
@@ -264,7 +264,11 @@ class ASTTableCreator(ASTVisitor):
     def __get_func_ptr_type(self, node: ASTNode):
 
         return_type_child = node.getChild(0)
-        return_type = self.__get_data_type(return_type_child, SymbolType)
+
+        if return_type_child.text == "FunctionPtr":
+            return_type = self.__get_func_ptr_type(return_type_child)
+        else:
+            return_type = self.__get_data_type(return_type_child, SymbolType)
         function_params = node.getChild(1)
 
         param_type_list = []

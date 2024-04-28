@@ -80,8 +80,6 @@ def cleanGreen(input_file, symbol_file):
     structTable = StructCleaner().visit(ast)  # Massage the structs
 
 
-
-
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
