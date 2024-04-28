@@ -1,8 +1,6 @@
 int main() {
     int a = 5;
-    int* b = &a;
-    int* c = b + 5.3;
+    char b = a;
 
-        return 0;
-
+    return 0;
 }

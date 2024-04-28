@@ -84,6 +84,9 @@ class TypedefTable(AbstractTable):
         """
         identifier, index = ASTTypedefReplacer.getTypeName(node.children)
 
+        if isinstance(node.getChild(index), ASTNodeTerminal) and node.getChild(index).type == "CASTING":
+            return
+
         translation = []
         args = [identifier, translation]
         self.traverse(lambda x, a: x.getTranslation(a), True, args)

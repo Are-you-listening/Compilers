@@ -84,6 +84,11 @@ class COperationHandler:
         except InvalidOperatorPtrError:
             ErrorExporter.invalidOperatorPtr(operation, str(lineNr))
 
+        if operation in ("!=", "==", "<", ">", "<=", ">+=", "&&", "||"):
+            sub_result = c_type.convertTo(sub_result, "BOOL")
+            poorest_type = "BOOL"
+            c_type = CFunctionExecuterInt()
+
         result = c_type.getString(sub_result)
 
         return result, poorest_type

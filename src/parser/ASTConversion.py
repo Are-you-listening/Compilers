@@ -403,20 +403,20 @@ class ASTConversion(ASTVisitor):
             left_type = self.type_mapping[left_sibling]
             self.type_mapping[left_sibling] = left_type.deReference()
 
-    def replaceIdentifierWithIndex(self, oldGuy: ASTNode, struct_name: SymbolType):
+    def replaceIdentifierWithIndex(self, node: ASTNode, struct_name: SymbolType):
         """
         Replace the data field identifier of a struct with a corresponding index
-        :param oldGuy: Struct Node
+        :param node: Struct Node
         :param struct_name: name of the struct
         :return:
         """
-        index_node = oldGuy.children[0].getSiblingNeighbour(1).getSiblingNeighbour(1)
+        index_node = node.children[0].getSiblingNeighbour(1).getSiblingNeighbour(1)
         identifier = index_node.text
 
-        if oldGuy.structTable.isUnion(struct_name.getBaseType(), oldGuy.position.linenr):  # If we have a Union
+        if node.structTable.isUnion(struct_name.getBaseType(), node.position.linenr):  # If we have a Union
             index = 0
         else:
-            index = oldGuy.structTable.getEntry(struct_name.getBaseType(), identifier, oldGuy.position.linenr)  # Replace the struct data member name with an index
+            index = node.structTable.getEntry(struct_name.getBaseType(), identifier, node.position.linenr)  # Replace the struct data member name with an index
         index_node.text = index
 
     @staticmethod
@@ -586,12 +586,12 @@ class ASTConversion(ASTVisitor):
         add datatype
         """
         type_node.addChildren(
-            ASTNodeTerminal(to_type[0][0], type_node, type_node.getSymbolTable(), "Not Used",
+            ASTNodeTerminal(to_type[0][0], type_node, type_node.getSymbolTable(), "CASTING",
                             node.position, node.structTable))
 
         for t_child in to_type[1]:
             type_node.addChildren(
-                ASTNodeTerminal(t_child[0], type_node, type_node.getSymbolTable(), "Not Used",
+                ASTNodeTerminal(t_child[0], type_node, type_node.getSymbolTable(), "CASTING",
                                 node.position, node.structTable))
         node.addNodeParent(new_node)
 

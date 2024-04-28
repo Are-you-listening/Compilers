@@ -28,7 +28,10 @@ class StructTable(AbstractTable):
             else:
                 return self.prev.getEntry(struct_name, data_member, linenr)
 
-        return self.structTable[struct_name].index(data_member)
+        try:
+            return self.structTable[struct_name].index(data_member)
+        except:
+            ErrorExporter.undeclaredVariable(data_member, linenr)
 
     def isUnion(self, struct_name: str, linenr: str):
         """

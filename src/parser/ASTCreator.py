@@ -44,7 +44,7 @@ class ASTCreator(grammarCVisitor):
         self.AST = AST(self.parent)
 
     def visitStart_(self, ctx: grammarCParser.Start_Context):
-        self.parent = ASTNode("Start", None, None, Position(None, ctx.start.line, ctx.start.line), None)
+        self.parent = ASTNode("Start", None, None, Position(ctx.start.source[1].fileName, ctx.start.line, ctx.start.line), None)
         self.visitChildren(ctx)
 
     def visitFunction(self, ctx: grammarCParser.FunctionContext):
@@ -160,7 +160,7 @@ class ASTCreator(grammarCVisitor):
             text = text.upper()
 
         node = ASTNodeTerminal(text, self.parent, None, self.translateLexerID(ctx.getSymbol().type),
-                               Position(None, ctx.getSymbol().line, None), None)
+                               Position(ctx.symbol.source[1].fileName, ctx.getSymbol().line, None), None)
 
         self.parent.addChildren(node)
 
@@ -174,7 +174,7 @@ class ASTCreator(grammarCVisitor):
         """
         makes new Object and makes sure this will be a child of it's parent
         """
-        node = ASTNode(terminal_type, self.parent, None, Position(None, ctx.start.line, None), None)  # Also attaches the current table/scope
+        node = ASTNode(terminal_type, self.parent, None, Position(ctx.start.source[1].fileName, ctx.start.line, None), None)  # Also attaches the current table/scope
         self.parent.addChildren(node)
         old_parent = self.parent
         self.parent = node
