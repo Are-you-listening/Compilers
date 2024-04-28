@@ -33,6 +33,7 @@ from src.parser.StructCleanerAfter import *
 from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
 from src.llvm_target.VoidReturnAdder import *
 from TestCases.ABCTests.AstLoader import AstLoader
+from src.parser.PointerReformater import *
 
 from importlib import reload
 
@@ -71,7 +72,16 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
+    PointerReformater().visit(ast)
+
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+
     structTable = StructCleaner().visit(ast)  # Massage the structs
+
+
+
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
@@ -111,7 +121,6 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold, includeSTDIO, structTable):
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
