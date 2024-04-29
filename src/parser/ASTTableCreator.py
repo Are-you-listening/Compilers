@@ -246,6 +246,8 @@ class ASTTableCreator(ASTVisitor):
         :return:
         """
         latest_datatype = self.__get_data_type(child, symbol_type)
+        if latest_datatype.getBaseType() == "VOID":
+            ErrorExporter.variableDeclaredVoid(node.position.linenr, node.children[1].text)
 
         """
         the value in the symbol table is initially empty

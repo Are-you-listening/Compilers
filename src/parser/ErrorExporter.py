@@ -364,3 +364,8 @@ class ErrorExporter:
         print(f"[ Error ] line {line_nr}: you cannot do a function call for the non-function '{called}' which is of type {call_type}",
               file=sys.stderr)
         exit()
+
+    @staticmethod
+    def variableDeclaredVoid(line_nr: str, var: str):
+        print(f"[ Error ] line {line_nr}: variable {var} declared void ",file=sys.stderr)
+        exit()
