@@ -17,6 +17,14 @@ class UndeclaredConstrained(Constraint):
 
             if node.parent.text != "Struct" and node.parent.parent.text != "Struct":
                 if entry is None or entry.firstDeclared.position.virtual_linenr > node.position.virtual_linenr:
+                    # still need to check if the var is not declared in a previous scope
+                    current_table = node.getSymbolTable().prev
+                    while current_table is not None:
+                        current_entry = current_table.getEntry(node.text)
+                        if current_entry is not None and current_entry.firstDeclared.position.virtual_linenr <= node.position.virtual_linenr:
+                            return
+                        current_table = current_table.prev
+
                     self.rejected = True
                     self.errorNode = node
                     self.throwException()
