@@ -117,10 +117,12 @@ class FunctionPtrCleaner(ASTVisitor):
         Move the functionPtr Param to be a child of FunctionPtr
         """
 
-        func_param = node.getChild(3)
+        func_param = node.getChild(-2)
         node.removeChild(func_param)
 
         function_ptr_node.addChildren(func_param)
         func_param.parent = function_ptr_node
 
         self.skip.add(function_ptr_node)
+
+        self.__check_function_ptr_return(node)

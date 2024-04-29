@@ -1,15 +1,5 @@
-#include <stdio.h>
+3+4;    // not allowed
 
-int a(int u) {
-    return u + 1;
-}
-
-int main() {
-
-    int (*u)(int) = &a;
-
-    printf("%d", (*u)(1));
-    printf("%d", u(1));
-    printf("%d", a(1));
+int main(){
     return 0;
 }

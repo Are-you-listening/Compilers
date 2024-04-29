@@ -110,10 +110,11 @@ class ASTTableCreator(ASTVisitor):
 
                 symbol_type = self.__get_func_ptr_type(child)
                 symbol_entry = SymbolEntry(symbol_type, node.children[1].text, None, node.children[1], None)
+                symbol_entry.referenced = node.text == "Parameter"
                 node.symbol_table.add(symbol_entry)
 
             else:
-                symbol_type = self.__make_entry(node, child, SymbolType, True)
+                symbol_type = self.__make_entry(node, child, SymbolType, node.text == "Parameter")
 
             if node.text == "Parameter":
                 self.param_list.append(symbol_type)
@@ -125,6 +126,7 @@ class ASTTableCreator(ASTVisitor):
             """
             if self.table.prev is not None:
                 self.table = self.table.prev
+
                 node.symbol_table = self.table
 
         if node.text == "Function":

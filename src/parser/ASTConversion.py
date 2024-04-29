@@ -119,7 +119,7 @@ class ASTConversion(ASTVisitor):
             return
 
         if node.text == "ParameterCalls":
-            corresponding_function_type = self.type_mapping.get(node.parent.children[0])
+            corresponding_function_type = self.get_function_type(node)
 
             parameterTypes = corresponding_function_type.getParameterTypes()
             """
@@ -251,24 +251,8 @@ class ASTConversion(ASTVisitor):
             """
             Do an implicit conversion of the parameters
             """
-            corresponding_function_type = self.type_mapping.get(node.parent.parent.children[0])
 
-            """
-            Support for a(1), when 'a' is a function ptr, by adding an extra dereference
-            """
-            if isinstance(corresponding_function_type, SymbolTypePtr) and \
-                    isinstance(corresponding_function_type.pts_to, FunctionSymbolType):
-                child = node.parent.parent.children[0]
-
-                deref = ASTNode("Dereference", child.parent, child.getSymbolTable(), node.position, node.structTable)
-                child.addNodeParent(deref)
-                self.visitNode(deref)
-                corresponding_function_type = self.type_mapping.get(node.parent.parent.children[0])
-
-            if not isinstance(corresponding_function_type, FunctionSymbolType):
-                ErrorExporter.functionCallNotFunction(node.linenr, self.subtree_to_text(node.parent.parent.children[0]),
-                                                      corresponding_function_type)
-
+            corresponding_function_type = self.get_function_type(node.parent)
 
             parameterTypes = corresponding_function_type.getParameterTypes()
 
@@ -644,3 +628,28 @@ class ASTConversion(ASTVisitor):
         type_text = f"{const} {format_type.getBaseType()}" + type_text
 
         return type_text
+
+    def get_function_type(self, node: ASTNode):
+        """
+        node needs to be a ParameterCalls Node
+        """
+
+        corresponding_function_type = self.type_mapping.get(node.parent.children[0])
+
+        """
+        Support for a(1), when 'a' is a function ptr, by adding an extra dereference
+        """
+        if isinstance(corresponding_function_type, SymbolTypePtr) and \
+                isinstance(corresponding_function_type.pts_to, FunctionSymbolType):
+            child = node.parent.children[0]
+
+            deref = ASTNode("Dereference", child.parent, child.getSymbolTable(), node.position, node.structTable)
+            child.addNodeParent(deref)
+            self.visitNode(deref)
+            corresponding_function_type = self.type_mapping.get(node.parent.children[0])
+
+        if not isinstance(corresponding_function_type, FunctionSymbolType):
+            ErrorExporter.functionCallNotFunction(node.linenr, self.subtree_to_text(node.parent.children[0]),
+                                                  corresponding_function_type)
+
+        return corresponding_function_type
