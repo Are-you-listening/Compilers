@@ -11,6 +11,7 @@ class PreProcessor:
         self.defined = {}
         self.stdio = False
         self.files = [input_file]
+        self.comments = {}  # Map (linenr, filename) to a list of comments ["lolol", "apappap"]
         self.cycles = {}
         self.__curr_file = input_file
         self.ifndef = []  # Indicated if we passed an #ifndef e.g. [False,True] | We use a list, so we can pop and keep track of 'scoped' "#ifndef"
@@ -52,7 +53,7 @@ class PreProcessor:
         value = []
         type = self.lexer.ruleNames[token.type - 1]  # Type of the token in string format
 
-        while type not in ["SINGLECOMMENT", "MULTILINE"] and token.line == line:
+        while type != "COMMENT" and token.line == line:
             value.append(token)
 
             i += 1
@@ -107,11 +108,10 @@ class PreProcessor:
 
         while i < len(self.stream.tokens) - 1:
             token = self.stream.tokens[i]
-            token.HIDDEN_CHANNEL = -1  # We use indices to keep track of the file we worked in
             text = token.text
             type = self.lexer.ruleNames[token.type - 1]
 
-            if '#' in text and (type not in ["SINGLECOMMENT", "MULTILINE"]):  # We came across a preprocessor directive
+            if '#' in text and type != "COMMENT":  # We came across a preprocessor directive
                 o = ""
                 for s in self.stream.tokens:
                     o += s.text
@@ -160,8 +160,6 @@ class PreProcessor:
 
                         for tempToken in stream.tokens:  # Add a note for SemanticAnalyses another file was used
                             if tempToken.text != "<EOF>":  # The file doesn't yet end xd
-                                tempToken.HIDDEN_CHANNEL = len(self.files) - 1
-
                                 self.stream.tokens.insert(i, tempToken)  # Add the tokens to the current stream
                                 i += 1  # Update the index to insert to
 
@@ -199,22 +197,26 @@ class PreProcessor:
                 for s in self.stream.tokens:
                     o += s.text
 
-            if type not in ["SINGLECOMMENT", "MULTILINE"]:
+            if type != "COMMENT":
                 if text in self.defined.keys():  # Replace any defines
                     replaceTokens = self.defined[text]  # Make a deepcopy
                     line = token.line
 
                     for tempToken in replaceTokens:  # Add a note for SemanticAnalyses another file was used
                         tempToken = tempToken.clone()  # Make a copy
-                        tempToken.HIDDEN_CHANNEL = len(self.files) - 1
                         tempToken.line = line  # Correct the line number
                         self.stream.tokens.insert(i, tempToken)  # Add the tokens to the current stream
                         i += 1  # Update the index to insert to
 
                     del self.stream.tokens[i:i + 1]  # Remove the identifier we're replacing
+            else:
+                if self.comments.get((self.__curr_file, token.line)) is None:
+                    self.comments[(self.__curr_file, token.line)] = ""
+                self.comments[(self.__curr_file, token.line)] += text
 
-            if token.HIDDEN_CHANNEL == -1:  # If no file has been assigned, the base file be set
-                token.HIDDEN_CHANNEL = 0
+                del self.stream.tokens[i:i + 1]  # Remove the identifier we're replacing
+                i -= 1  # Go 1 step back
+
 
             i += 1  # Go further
 
@@ -226,4 +228,4 @@ class PreProcessor:
         if len(self.ifndef) != 0:
             ErrorExporter.unMatchedStartIf(token.line)
 
-        return self.stdio, self.stream
+        return self.stdio, self.stream, self.comments

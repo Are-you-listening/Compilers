@@ -1,20 +1,26 @@
 #include <stdio.h>
 
-int peer = 8;
-#define BUFFER_SIZE peer
-int x = 1;
 
-#include "includes/define1.c"
+int main() {
+// line 1
+char c = '\n';
 
-#ifndef A
-#include "includes/define2.c"
-#endif
 
-int main()
-{
-    printf("%d",x);
-    printf("%d",y);
-    printf("%d",BUFFER_SIZE);
-    printf("%f", PI);
+float f = 33.1; // another line
+
+
+
+/////// some documentation
+
+/////////////////////////////////////
+
+// abcdef 123 //////////
+float final_line = 33.99895;
+
+printf("%f", final_line);
+printf("%f", f);
+printf("%c", c);
+
     return 0;
+
 }

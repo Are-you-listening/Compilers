@@ -15,7 +15,6 @@ class ConstraintChecker(ASTVisitor):
     """
 
     def __init__(self, includeSTDIO):
-        # TODO Readd ConstConstrained
         self.constraints = [CleanGlobalScope(), MainFoundConstraint(), RedefinitionConstraint(),
                             UndeclaredConstrained(),
                             AmpersandConstraint(), UndeclaredConstrained(), GlobalsConstrained(),

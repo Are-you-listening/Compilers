@@ -1,18 +1,12 @@
-from antlr4 import *
-import sys
-
-from src.antlr_files.grammarCLexer import grammarCLexer
 from src.antlr_files.grammarCParser import grammarCParser
 from src.parser.ASTCreator import ASTCreator
 from src.parser.DotVisitor import *
 from src.parser.Constraints.ConstraintChecker import *
 from src.parser.ValueAdderVisitor import *
 from src.parser.ASTDereferencer import *
-from src.parser.ASTConversion import *
 from src.parser.ASTCleaner import *
 from src.parser.ASTCleanerAfter import *
 from src.parser.Tables.TableDotVisitor import *
-from src.parser.ASTTableCreator import *
 from src.llvm_target.AST2LLVM import *
 from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
 from src.parser.ASTIfCleaner import ASTIfCleaner
@@ -32,9 +26,8 @@ from src.parser.StructCleaner import *
 from src.parser.StructCleanerAfter import *
 from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
 from src.llvm_target.VoidReturnAdder import *
-from TestCases.ABCTests.AstLoader import AstLoader
 from src.parser.PointerReformater import *
-from importlib import reload
+
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -51,7 +44,7 @@ def cleanGreen(input_file, symbol_file):
 
     stream = CommonTokenStream(lexer)  # Extract tokens
 
-    includeSTDIO, stream = PreProcessor(stream, lexer, input_file).preProcess()  # Apply preprocessing
+    includeSTDIO, stream, comments = PreProcessor(stream, lexer, input_file).preProcess()  # Apply preprocessing
 
     parser = grammarCParser(stream)  # Do actual parse
     parser.removeErrorListeners()  # Add our own error Listener
@@ -104,7 +97,7 @@ def cleanGreen(input_file, symbol_file):
         s = TableDotVisitor(symbol_file)
         s.visit(ast.root.getSymbolTable(), True)
 
-    return ast, codegetter, includeSTDIO
+    return ast, codegetter, includeSTDIO, comments
 
 
 def Processing(ast, dot_file, fold, includeSTDIO):
@@ -128,6 +121,8 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
 
     VoidReturnAdder().addReturn(cfc.getControlFlowGraph())
+
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     if dot_file is not None:
         DotVisitor(dot_file).visit(ast)  # Export AST in Dot
@@ -173,13 +168,13 @@ def main(argv):
     if input_file is None:
         ErrorExporter.StupidUser()
 
-    ast, codegetter, includeSTDIO = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
+    ast, codegetter, includeSTDIO, comments = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
     ast, cfgs = Processing(ast, dot_file, fold, includeSTDIO)  # Check for Errors , Apply Folding Techniques , ...
 
     if llvm_file is not None:
         LLVMSingleton.setName(input_file)
 
-        to_llvm = AST2LLVM(codegetter, llvm_file)  # The codegetter is used to add the original code as comments
+        to_llvm = AST2LLVM(codegetter, llvm_file, comments)  # The codegetter is used to add the original code as comments
         to_llvm.visit(ast)
 
         if control_flow_file is not None:

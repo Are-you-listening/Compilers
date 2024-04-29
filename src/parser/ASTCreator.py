@@ -89,8 +89,8 @@ class ASTCreator(grammarCVisitor):
     def visitConversion(self, ctx: grammarCParser.ConversionContext):
         self.__makeNode(ctx, "Conversion")
 
-    def visitComment(self, ctx: grammarCParser.CommentContext):
-        self.__makeNode(ctx, "Comment")
+#    def visitComment(self, ctx: grammarCParser.CommentContext):
+#        self.__makeNode(ctx, "Comment")
 
     def visitReturn(self, ctx: grammarCParser.ReturnContext):
         self.__makeNode(ctx, "Return")

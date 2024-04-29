@@ -1,9 +1,8 @@
 grammar grammarC;
 start_ : code EOF;
-code: (function | line ';'+ | comment | include | define | include_guard)* ';'*;
+code: (function | line ';'+ | include | define | include_guard)* ';'*;
 include_guard: '#ifndef' IDENTIFIER code '#endif';
 include: '#include' ('<stdio.h>' | STRING );
-comment : MULTILINE | SINGLECOMMENT;
 
 function_signature: ('(' '*' function_signature ')' '(' function_ptr_params ')') | (IDENTIFIER '(' parameters ')');
 function : type function_signature ('{' block_code '}')? ';'*;
@@ -12,7 +11,7 @@ parameters: ((parameter',')* parameter)?;
 parameter: (type IDENTIFIER array?) | functionPtrDeclaration;
 parameter_call: expr;
 block_line: (line | printscanf | 'break' | 'continue' | return);
-block_code: (block_line ';'+ | comment | if | for | while | anonymous_scope | switch | include | define)* ';'*;
+block_code: (block_line ';'+ | if | for | while | anonymous_scope | switch | include | define)* ';'*;
 typedef: 'typedef' type IDENTIFIER;
 define: '#define' IDENTIFIER ( ('-'? literal) | type );  // Remember, we can't allow Expressions here! (See project5.pdf)
 if: 'if' '(' expr ')' '{' block_code'}' ('else' ('{' block_code '}' | if))?;
@@ -61,10 +60,9 @@ expr : literal
      | expr '||' expr;
 
 array: ('[' expr ']')+ ;
-literal : (INT | FLOAT | CHAR | STRING | (IDENTIFIER)) ;
+literal : (INT | FLOAT | CHAR | STRING | IDENTIFIER) ;
 
-MULTILINE: '/*' (.)*?  '*/' ;
-SINGLECOMMENT: '//' (~[\n])*;
+COMMENT: ('//' (~[\n])*) | ('/*' (.)*?  '*/');
 IDENTIFIER: ([a-z]|[A-Z]|'_')([a-z]|[A-Z]|'_'|[0-9])*;
 INT : ([1-9][0-9]*) | [0-9] ;
 FLOAT:  INT | (INT*'.' (INT|'0')* );

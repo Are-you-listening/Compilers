@@ -8,13 +8,15 @@ from src.parser.AST import ASTNodeBlock
 
 
 class AST2LLVM(ASTVisitor):
-    def __init__(self, codegetter: CodeGetter, fileName):
+    def __init__(self, codegetter: CodeGetter, fileName, comments):
         self.map_table = MapTable(None)
         self.codegetter = codegetter
+        self.comments = comments
         self.llvm_map = {}
         self.fileName = fileName
         self.root = None
         self.last_vertex = None
+
 
         self.branch_needed = set()
 
@@ -122,9 +124,6 @@ class AST2LLVM(ASTVisitor):
         if node.text == "Assignment":
             self.handleAssignment(node)
 
-        if node.text == "Comment":
-            self.handleComment(node)
-
         if node.text == "printf":
             self.handlePrintScanf(node, True)
 
@@ -149,6 +148,8 @@ class AST2LLVM(ASTVisitor):
         if node.text not in ("Parameters"):
             self.addOriginalCodeAsComment(node)
 
+        self.handleComment(node)
+
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
             entry = self.map_table.getEntry(node.text)
@@ -168,6 +169,22 @@ class AST2LLVM(ASTVisitor):
         if node.type == "STRING":
             llvm_var = Declaration.string(node.text)
             self.llvm_map[node] = llvm_var
+
+    def handleComment(self, node):
+        if node.position is None:
+            return
+
+        curr_line = node.position.linenr
+        file = node.position.file
+        to_delete = []
+
+        for comment in self.comments.keys():
+            if comment[1] < curr_line and file == comment[0]:  # Insert all comments before this line (since some comments might not have code on the same line)
+                Declaration.addComment(self.comments[comment])
+                to_delete.append(comment)
+
+        for comment in to_delete:
+            del self.comments[comment]
 
     def handleDeclaration(self, node):
         """
@@ -235,6 +252,9 @@ class AST2LLVM(ASTVisitor):
         self.llvm_map[node] = args
 
     def __del__(self):
+        for comment in self.comments:  # Add any left over comments
+            Declaration.addComment(self.comments[comment])
+
         with open(self.fileName, 'w') as f:
             f.write(str(LLVMSingleton.getInstance().getModule()))
 
@@ -277,11 +297,6 @@ class AST2LLVM(ASTVisitor):
         """
         llvm_var = Load.identifier(llvm_data)
         self.llvm_map[node] = llvm_var
-
-    @staticmethod
-    def handleComment(node: ASTNode):
-        comment_text = node.children[0].text
-        Declaration.addComment(comment_text)
 
     def handleReturn(self, node: ASTNode):
         #check if the return is from a void function, if so, return void
