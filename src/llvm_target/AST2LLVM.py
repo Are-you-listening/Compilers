@@ -300,7 +300,7 @@ class AST2LLVM(ASTVisitor):
 
     def handleReturn(self, node: ASTNode):
         #check if the return is from a void function, if so, return void
-        if node.children[0].text == "Void":
+        if node.getChildAmount() == 0 or node.children[0].text == "Void":
             LLVMSingleton.getInstance().getCurrentBlock().ret_void()
         else:
             return_val = self.llvm_map[node.getChild(0)]

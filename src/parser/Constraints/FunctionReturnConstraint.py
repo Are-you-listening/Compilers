@@ -59,6 +59,9 @@ class FunctionReturnConstraint(Constraint):
                 continue
             if len(returns) == 0:
                 self.errorNodes.append(func)
+            for ret in returns:
+                if ret.getChildAmount() == 0:
+                    self.errorNodes.append(func)
         if len(self.errorNodes) > 0:
             return True
         return False

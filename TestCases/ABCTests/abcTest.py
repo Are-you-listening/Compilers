@@ -133,7 +133,7 @@ class LLVMTest(unittest.TestCase, ABC):
             for fold in [True, False]:
                 index = file[4:-2]  # The index is used to refer to the files & other data belonging to this testfile
                 file_name = f"tests/test{index}.c"
-                print(index, file_name, fold)  # Toggle for debug
+                #print(index, file_name, fold)  # Toggle for debug
 
                 """
                 If input will be read, it needs to be retrieved
