@@ -23,4 +23,4 @@ printf("%c", c);
 
     return 0;
 
-}
+}//this shouldn't give problems
