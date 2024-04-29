@@ -77,7 +77,7 @@ def cleanGreen(input_file, symbol_file):
 
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     StructCleaner().visit(ast)  # Massage the structs
 
@@ -113,7 +113,7 @@ def cleanGreen(input_file, symbol_file):
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)

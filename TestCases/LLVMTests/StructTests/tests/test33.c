@@ -10,33 +10,25 @@ struct pointer{
 
 int lol(){
     struct kaas{
-        int melk;
+        int appel;
     };
 
     struct kaas gouda;
-    gouda.melk = 9;
+    gouda.appel = 1;
 
-
-    printf("%d", gouda.melk);
-
-    return gouda.melk;
+    return 0;
 }
 
 int main() {
     struct kaas gouda;
     gouda.melk = 1; /* This may not thrown a semantic error */
-    printf("%d", gouda.melk);
-
 
     struct pointer ptr;
     ptr.kaas_ptr = &gouda;
 
     printf("%d", (*ptr.kaas_ptr).melk);
 
-    gouda.melk = lol();
-
-    printf("%d", gouda.melk);
-
+    lol();
 
     return 0;
 }

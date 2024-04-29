@@ -19,7 +19,7 @@ int lol(){
 
     printf("%d", gouda.melk);
 
-    return gouda.melk;
+    return 0;
 }
 
 int main() {
@@ -33,7 +33,7 @@ int main() {
 
     printf("%d", (*ptr.kaas_ptr).melk);
 
-    gouda.melk = lol();
+    lol();
 
     printf("%d", gouda.melk);
 
