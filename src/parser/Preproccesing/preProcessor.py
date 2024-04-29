@@ -80,7 +80,6 @@ class PreProcessor:
             if self.__curr_file in lst:
                 self.cycles[key].append(file)
 
-        print(self.cycles)
         self.__check_cycle()
         self.__curr_file = file
 

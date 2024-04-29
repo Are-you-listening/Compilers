@@ -125,73 +125,75 @@ class LLVMTest(unittest.TestCase, ABC):
             with open("tests/input_dict.json", "rt") as f:
                 input_dict = json.loads(f.read())
 
+
         for file in os.listdir(directory):  # Loop through all files
             if not os.path.splitext(file)[-1] == '.c':  # We only run c files
                 continue
 
-            index = file[4:-2]  # The index is used to refer to the files & other data belonging to this testfile
-            file_name = f"tests/test{index}.c"
-            #print(index, file_name)  # Toggle for debug
-
-            """
-            If input will be read, it needs to be retrieved
-            """
-            if useSTDIN:
-                inp = (input_dict.get(str(index), []))
-            else:
-                inp = ""
-
-            """
-            Redirect error & output buffs
-            """
-            original = sys.stdout
-            buff = StringIO()
-            sys.stdout = buff
-
-            original_error = sys.stderr
-            error_buff = StringIO()
-            sys.stderr = error_buff
-
-            try:
-                LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
-
-                # Run our llvm
-                main([0, "--input", file_name, "--target_llvm", "temp/temp.ll"])  # Run our compiler
-
-                c_out = self.runC(file_name, inp)
-
-                # Run our llvm
-                out = subprocess.run(f"""lli temp/temp.ll""", shell=True, capture_output=True, input=inp, text=True)
+            for fold in [True, False]:
+                index = file[4:-2]  # The index is used to refer to the files & other data belonging to this testfile
+                file_name = f"tests/test{index}.c"
+                #print(index, file_name, fold)  # Toggle for debug
 
                 """
-                assert for same output
+                If input will be read, it needs to be retrieved
                 """
-                # print('a', out.stdout, 'b', c_out.stdout)
-                assert out.stdout == c_out.stdout
+                if useSTDIN:
+                    inp = (input_dict.get(str(index), []))
+                else:
+                    inp = ""
 
                 """
-                asser for no error
+                Redirect error & output buffs
                 """
-                #print('1', out.stderr, '2', c_out.stderr)
-                assert out.stderr == c_out.stderr
+                original = sys.stdout
+                buff = StringIO()
+                sys.stdout = buff
 
-                """
-                Remove generated llvm file again
-                """
-                subprocess.run(f"rm temp/temp.ll", shell=True, capture_output=True)
+                original_error = sys.stderr
+                error_buff = StringIO()
+                sys.stderr = error_buff
 
-            except SystemExit:
+                try:
+                    LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
+
+                    # Run our llvm
+                    main([0, "--input", file_name, "--target_llvm", "temp/temp.ll", "--fold", fold])  # Run our compiler
+
+                    c_out = self.runC(file_name, inp)
+
+                    # Run our llvm
+                    out = subprocess.run(f"""lli temp/temp.ll""", shell=True, capture_output=True, input=inp, text=True)
+
+                    """
+                    assert for same output
+                    """
+                    #print('a', out.stdout, 'b', c_out.stdout)
+                    assert out.stdout == c_out.stdout
+
+                    """
+                    asser for no error
+                    """
+                    #print('1', out.stderr, '2', c_out.stderr)
+                    assert out.stderr == c_out.stderr
+
+                    """
+                    Remove generated llvm file again
+                    """
+                    subprocess.run(f"rm temp/temp.ll", shell=True, capture_output=True)
+
+                except SystemExit:
+                    #sys.stdout = original
+                    """
+                    In case of a failure, verify expected errors
+                    """
+                    errors = str(error_buff.getvalue().splitlines())
+                    expected_errors = str(error_dict.get(str(index), []))
+                    #print("error", errors, expected_errors)  # Print any errors we didn't expect
+                    assert errors == expected_errors
+
                 sys.stdout = original
-                """
-                In case of a failure, verify expected errors
-                """
-                errors = str(error_buff.getvalue().splitlines())
-                expected_errors = str(error_dict.get(str(index), []))
-                #print("error", errors, expected_errors)  # Print any errors we didn't expect
-                assert errors == expected_errors
-
-            sys.stdout = original
-            sys.stderr = original_error
+                sys.stderr = original_error
 
     def compileGCC(self, file_name):
         return subprocess.run(f"""gcc -ansi -pedantic {file_name} -o temp/temp""",

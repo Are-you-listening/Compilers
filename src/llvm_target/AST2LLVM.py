@@ -183,7 +183,7 @@ class AST2LLVM(ASTVisitor):
         if var_child.symbol_table.isRoot():  # Globals; extra stuff needs to be done
             llvm_var = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(),
                                          CTypesToLLVM.getIRType(entry.getTypeObject()), var_child.text)  # Declare a global variable
-            value = var_child.symbol_table.getEntry(var_child.text).value  # Get the value
+            value = var_child.getSiblingNeighbour(1)  # Get the value
             if value is None:
                 value = 0
             else:

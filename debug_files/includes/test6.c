@@ -12,7 +12,6 @@ int x = 1;
 
 int main()
 {
-    printf("%d",x);
     printf("%d",y);
     printf("%d",BUFFER_SIZE);
     printf("%f", PI);

@@ -43,7 +43,6 @@ def cleanGreen(input_file, symbol_file):
     :param symbol_file:
     :return:
     """
-
     input_stream = FileStream(input_file)  # Create input stream
     lexer = grammarCLexer(input_stream)
 
@@ -71,29 +70,18 @@ def cleanGreen(input_file, symbol_file):
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-
     PointerReformater().visit(ast)
 
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
-
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     StructCleaner().visit(ast)  # Massage the structs
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
-
-
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
-
-
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
-
-
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
@@ -102,7 +90,6 @@ def cleanGreen(input_file, symbol_file):
 
     FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
 
-    #DotVisitor("output/d0").visit(ast)  # Export AST in Dot
     ArrayCleaner().visit(ast)
 
     ASTTableCreator().visit(ast)  # Create the symbol table
@@ -112,8 +99,6 @@ def cleanGreen(input_file, symbol_file):
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
-
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
@@ -125,41 +110,24 @@ def cleanGreen(input_file, symbol_file):
 def Processing(ast, dot_file, fold, includeSTDIO):
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
-
     """
     It is vital that AST conversion occurs before constant folding
     """
-    #DotVisitor("output/d0").visit(ast)  # Export AST in Dot
     ASTConversion().visit(ast)
 
-    #DotVisitor("output/d1").visit(ast)  # Export AST in Dot
-    #DotVisitor("output/debug2").visit(ast)  # Export AST in Dot
+    ConstantFoldingVisitor().visit(ast)
 
     if fold:
-        ConstantFoldingVisitor().visit(ast)
-
-    #DotVisitor("output/debug3").visit(ast)  # Export AST in Dot
-    #DotVisitor("output/debug3").visit(ast)  # Export AST in Dot
-
-    ValueAdderVisitor().visit(ast)
-
-    #DotVisitor("output/debug4").visit(ast)  # Export AST in Dot
+        ValueAdderVisitor().visit(ast)
 
     ConstantStatementFolding().visit(ast)
-
-    #DotVisitor("output/debug5").visit(ast)  # Export AST in Dot
 
     cfc = ControlFlowCreator()
     cfc.visit(ast)
 
-    #DotVisitor("output/debug6").visit(ast)  # Export AST in Dot
-
     DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
 
-
     VoidReturnAdder().addReturn(cfc.getControlFlowGraph())
-    #DotVisitor("output/debug7").visit(ast)  # Export AST in Dot
 
     if dot_file is not None:
         DotVisitor(dot_file).visit(ast)  # Export AST in Dot
