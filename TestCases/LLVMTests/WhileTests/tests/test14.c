@@ -12,6 +12,6 @@ printf("%f", final_line);
 printf("%f", f);
 printf("%c", c);
 
-    return 0;
+    return 0; // I know this is no while test but this has a different runC command! :)
 
-}/*this shouldn't give problems*/
+}//this shouldn't give problems
