@@ -66,7 +66,7 @@ class StructCleaner(ASTVisitor):
             """
             if self.table.prev is not None:
                 self.table = self.table.prev
-                node.symbol_table = self.table
+                node.structTable = self.table
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         node.structTable = self.table

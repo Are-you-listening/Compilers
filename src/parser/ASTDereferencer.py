@@ -28,7 +28,7 @@ class ASTDereferencer(ASTVisitor):
         because we assign our value to the mem location not the value
         """
         if node.text in ("Declaration", "Function", "Assignment", "Parameter"):
-            self.removeDereference(node.getChild(0))
+            self.removeDereference(node.getChild(0), False)
 
         if node.text != "Expr":
             return
@@ -45,7 +45,11 @@ class ASTDereferencer(ASTVisitor):
             '()' and '[]' are kinda similar to the '&' type, so in these cases we also need to 
             remove the dereference from the value whose 'index' we want to access
             """
-            self.removeDereference(node.getChild(0))
+            error = True
+            if operator == "()":
+                error = False
+
+            self.removeDereference(node.getChild(0), error)
 
             """
             When accessing a [], we still need a dereference
@@ -142,7 +146,7 @@ class ASTDereferencer(ASTVisitor):
         return new_node
 
     @staticmethod
-    def removeDereference(node: ASTNode):
+    def removeDereference(node: ASTNode, error=True):
         """
         Remove a Dereference, if it is a dereference node
         """
@@ -150,5 +154,6 @@ class ASTDereferencer(ASTVisitor):
         if node.text == "Dereference":
             super_child = node.getChild(0)
             node.parent.replaceChild(node, super_child)
-        else:
+        elif error:
+            print("hey")
             ErrorExporter.LValueReference(node.position.linenr)

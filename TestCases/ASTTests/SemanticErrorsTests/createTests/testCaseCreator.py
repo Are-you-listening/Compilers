@@ -18,13 +18,15 @@ from src.parser.VirtualLineNrVisitor import VirtualLineVisitor
 from src.parser.BlacklistVisitor import BlacklistVisitor
 from src.parser.StructCleaner import StructCleaner
 from src.parser.StructCleanerAfter import StructCleanerAfter
-
+from src.parser.Preproccesing.preProcessor import PreProcessor
 
 input_file = "read_file.c"
 
 input_stream = FileStream(input_file)  # Declare some variables
 lexer = grammarCLexer(input_stream)
 stream = CommonTokenStream(lexer)
+includeSTDIO, stream, comments = PreProcessor(stream, lexer, input_file).preProcess()  # Apply preprocessing
+
 parser = grammarCParser(stream)
 
 parser.removeErrorListeners()  # Add our own error Listener
