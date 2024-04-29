@@ -8,7 +8,7 @@ class CodeGetter(ASTVisitor):
 
     def __init__(self):
         self.codeLines = {}
-        self.highest_line_nr = -1
+        self.highest_line_nrs = {}
 
     def visitNode(self, node: ASTNode):
         pass
@@ -17,25 +17,28 @@ class CodeGetter(ASTVisitor):
         if node.type == "COMMENT":
             return
 
-        if node.position.linenr in self.codeLines.keys():
-            self.codeLines[node.position.linenr] += " " + str(node.text)
+        if (node.position.file, node.position.linenr) in self.codeLines.keys():
+            self.codeLines[(node.position.file, node.position.linenr)] += " " + str(node.text)
         else:
-            self.codeLines[node.position.linenr] = node.text
+            self.codeLines[(node.position.file, node.position.linenr)] = node.text
+            self.highest_line_nrs[node.position.file] = -1
         pass
 
     def getLine(self, node: ASTNode):
         position = node.position
         if position is None:
             lineNR = None
+            file = None
         else:
             lineNR = node.position.linenr
-        if lineNR is None or lineNR <= self.highest_line_nr:
+            file = node.position.file
+        if lineNR is None or lineNR <= self.highest_line_nrs[file]:
             return
 
         output_text = ""
-        for line_nr in range(self.highest_line_nr+1, lineNR+1):
-            output_text += f"{self.codeLines.get(line_nr, '')} "
-        self.highest_line_nr = lineNR
+        for line_nr in range(self.highest_line_nrs[file]+1, lineNR+1):
+            output_text += f"{self.codeLines.get((file, line_nr), '')} "
+        self.highest_line_nrs[file] = lineNR
 
         """
         Remove last output message next line

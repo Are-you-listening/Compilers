@@ -34,6 +34,12 @@ class ASTDereferencer(ASTVisitor):
             return
 
         operator = node.getChild(1).text
+
+        # if we have already moved the ampersand up we detect it here and don't add a dereference node
+        if node.getChildAmount() == 4 and node.getChild(0).text == "&" and node.getChild(2).text == "[]":
+            node.removeChild(node.getChild(0))
+            return
+
         if node.getChildAmount() == 3 and operator in ("()", "[]"):
             """
             '()' and '[]' are kinda similar to the '&' type, so in these cases we also need to 
@@ -93,6 +99,32 @@ class ASTDereferencer(ASTVisitor):
         # Temp fix for  dereference on a function call
         if node.type != "IDENTIFIER" or (node.parent is not None and node.parent.text == "FunctionCall"):
             return
+
+
+        sibling_before = node.getSiblingNeighbour(-1)
+
+        if sibling_before is None:
+            self.addDereference(node)
+            return
+
+        if not isinstance(sibling_before, ASTNodeTerminal):
+            self.addDereference(node)
+            return
+
+        if sibling_before.text == "&" and node.getSiblingNeighbour(-2) is None:  # Removes the de reference sign
+            parent = node.parent
+
+            node.getSymbolTable().reference(node.text)
+
+            # move the ampersand up, otherwise it is removed here and the dereference node is added like usual
+            grand_parent = parent.parent
+            if grand_parent.text == "Expr" and grand_parent.getChildAmount() == 3 and grand_parent.getChild(1).text == "[]":
+                sibling_before.parent = grand_parent
+                grand_parent.insertChild(0, sibling_before)
+                parent.removeChild(sibling_before)
+                grand_parent.replaceChild(parent, node)
+                return
+
 
         """
         Each identifier gets a dereference node by default, unless it is a Function Call
