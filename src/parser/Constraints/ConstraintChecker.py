@@ -7,6 +7,7 @@ from src.parser.Constraints.CleanGlobalScopeConstraint import *
 from src.parser.Constraints.IOConstraint import *
 from src.parser.Constraints.UndefinedReferenceConstraint import *
 from src.parser.Constraints.FunctionReturnConstraint import *
+from src.parser.Constraints.VoidReturnConstraint import *
 
 
 class ConstraintChecker(ASTVisitor):
@@ -18,7 +19,8 @@ class ConstraintChecker(ASTVisitor):
         self.constraints = [CleanGlobalScope(), MainFoundConstraint(), RedefinitionConstraint(),
                             UndeclaredConstrained(),
                             AmpersandConstraint(), UndeclaredConstrained(), GlobalsConstrained(),
-                            IOConstraint(includeSTDIO), UndefinedReferenceConstraint(), FunctionReturnConstraint()]
+                            IOConstraint(includeSTDIO), UndefinedReferenceConstraint(), FunctionReturnConstraint(),
+                            VoidReturnConstraint()]
 
     def visitNode(self, node: ASTNode):
         for c in self.constraints:

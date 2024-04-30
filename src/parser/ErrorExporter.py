@@ -369,3 +369,7 @@ class ErrorExporter:
     def variableDeclaredVoid(line_nr: str, var: str):
         print(f"[ Error ] line {line_nr}: variable {var} declared void ",file=sys.stderr)
         exit()
+
+    @staticmethod
+    def voidWithNonEmptyReturn(line_nr: str):
+        print(f"[ Warning ] line {line_nr}: 'return' with a value, in function returning void")
