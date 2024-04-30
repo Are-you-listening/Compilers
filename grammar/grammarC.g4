@@ -46,7 +46,7 @@ expr : literal
      | expr '.' IDENTIFIER
      | ('++' | '--' | '&' | '*') expr
      | expr array
-     | IDENTIFIER ('++' | '--')
+     | expr ('++' | '--')
      | ('+'|'-' | '~' | '!' ) expr
      | expr ('*' | '/' | '%') expr
      | expr ('+'|'-') expr

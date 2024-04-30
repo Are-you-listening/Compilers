@@ -1,1 +1,13 @@
-{}
+{"26":  ["[ Error ] line 4: you can't have a reference to an LValue"],
+"27":  ["[ Error ] line 5: invalid operation + on type(s): INT* INT*"],
+  "28": ["[ Error ] line 2: use of undeclared variable x"],
+  "29": ["[ Error ] line 2: use of undeclared variable x"],
+  "30": ["[ Error ] line 3: use of undeclared variable z"],
+  "31": ["[ Error ] line 4: redefinition or redeclaration of INT x"],
+  "32": ["[ Error ] line 4: redefinition or redeclaration of INT x"],
+  "33": ["[ Error ] line 4: redefinition or redeclaration of INT x"],
+  "34": ["[ Error ] line 3: redefinition or redeclaration of INT x"],
+  "35": ["[ Error ] line 4: redefinition or redeclaration of INT x"],
+  "36": ["[ Error ] line 3: redefinition or redeclaration of INT x"]
+
+}

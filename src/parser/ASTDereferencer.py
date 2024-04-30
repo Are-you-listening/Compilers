@@ -155,5 +155,5 @@ class ASTDereferencer(ASTVisitor):
             super_child = node.getChild(0)
             node.parent.replaceChild(node, super_child)
         elif error:
-            print("hey")
+            #print("hey")
             ErrorExporter.LValueReference(node.position.linenr)

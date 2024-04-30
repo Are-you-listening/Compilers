@@ -18,7 +18,7 @@ class DotVisitor(ASTVisitor):
             self.outfile.write(f'  "{id(node)}" -> "{id(child)}";\n')
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        label = str(str(node.text)+" "+str(node.type))
+        label = str(node.text)
         label = label.replace('\\', '\\\\')
         label = label.replace('"', '\\\"')
 
