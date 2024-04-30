@@ -8,6 +8,18 @@
   "8":  ["[ Error ] line 18: conflicting return type for func"],
   "9":  ["[ Error ] line 18: conflicting return type for func"],
   "10":  ["[ Error ] line 7: redefinition of func"],
-  "20":  ["[ Error ] line 3: function with return type INT is missing a valid return statement"]
-
+  "20":  ["[ Error ] line 3: function with return type INT is missing a valid return statement"],
+  "24": ["[ Error ] line 5: conflicting return type for f"],
+  "25": ["[ Error ] line 5: conflicting types for f"],
+  "26": ["[ Error ] line 5: conflicting types for f"],
+  "27": ["[ Error ] line 5: conflicting return type for f"],
+  "28": ["[ Error ] line 5: conflicting types for f"],
+  "29": ["[ Error ] line 5: conflicting types for f"],
+  "30": ["[ Error ] line 4: too few arguments to function 'f': expected 2, got 1"],
+  "31": ["[ Error ] line 4: too many arguments to function 'f': expected 1, got 2"],
+  "32": ["[ Error ] line 7: redefinition of f"],
+  "33": ["[ Error ] line 7: redefinition of f"],
+  "34": ["[ Error ] line 7: redefinition of f"],
+  "35": ["[ Error ] line 5: undefined reference to f"],
+  "36": ["[ Error ] line 3 invalid statement in the global scope"]
 }

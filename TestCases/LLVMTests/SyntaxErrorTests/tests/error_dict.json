@@ -4,7 +4,7 @@
   "4": ["[ Error ] line 9: redefinition or redeclaration of INT z"],
   "5": ["[ Syntax Error ] tests/test5.c line 9:6 invalid symbol: '0.3'"],
   "6": ["[ Syntax Error ] tests/test6.c line 7:12 invalid symbol: 'typedef'"],
-  "8": ["[ Syntax Error ] tests/test8.c line 2:2 invalid symbol: '++'"],
+  "8": ["[ Syntax Error ] tests/test8.c line 3:3 invalid symbol: '/'"],
   "9": ["[ Syntax Error ] tests/test9.c line 3:29 invalid symbol: '/'"],
   "10": ["[ Syntax Error ] tests/test10.c line 4:0 invalid symbol: '/'"],
   "11": ["[ Syntax Error ] tests/test11.c line 2:0 invalid symbol: '/'"],
@@ -41,5 +41,8 @@
   "43": ["[ Error ] line 11: redefinition or redeclaration of INT RED"],
   "44": ["[ Error ] line 11: unknown type name '( enum week )'"],
   "46": ["[ Syntax Error ] tests/test46.c line 1:25 invalid symbol: 'int'"],
-  "47": ["[ Syntax Error ] tests/test47.c line 7:13 invalid symbol: '999'"]
+  "47": ["[ Syntax Error ] tests/test47.c line 7:13 invalid symbol: '999'"],
+  "48": ["[ Syntax Error ] tests/test48.c line 5:10 invalid symbol: '('"],
+  "49": ["[ Syntax Error ] tests/test49.c line 1:0 invalid symbol: 'return'"],
+  "53": ["[ Syntax Error ] tests/test53.c line 5:8 invalid symbol: '['"]
 }

@@ -11,5 +11,6 @@
   "12": ["[ Warning ] line 3: incompatible pointer types initializing 'FLOAT*' with an expression of type 'INT' "],
   "13": ["[ Warning ] line 3: incompatible pointer types initializing 'FLOAT*' with an expression of type 'INT' "],
   "15": ["[ Warning ] line 9: incompatible pointer types initializing 'INT**' with an expression of type 'INT*' ", "[ Warning ] line 10: incompatible pointer types initializing 'INT**' with an expression of type 'INT' ", "[ Warning ] line 11: incompatible pointer types initializing 'INT**' with an expression of type 'INT*' "],
-  "16": ["[ Error ] line 12:  indirection requires array operand ('kaas' invalid)"]
+  "16": ["[ Error ] line 12:  indirection requires array operand ('kaas' invalid)"],
+  "17": ["[ Warning ] line 5: Narrowing type from 'FLOAT' to 'INT' ", "[ Warning ] line 6: Narrowing type from 'FLOAT' to 'INT' "]
 }
