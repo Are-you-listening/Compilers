@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void name(int a, int a) {
+void name(int a) {
     int name = 0;
     return 0;
 }
@@ -13,7 +13,7 @@ void testingThis();
 
 int main() {
     int b = 5;
-    name(b, 5);
+    name(b);
     testingThis();
     return 0;
 }

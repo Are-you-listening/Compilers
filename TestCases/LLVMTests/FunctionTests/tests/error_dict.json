@@ -21,5 +21,6 @@
   "33": ["[ Error ] tests/test33.c line 7: redefinition of f"],
   "34": ["[ Error ] tests/test34.c line 7: redefinition of f"],
   "35": ["[ Error ] tests/test35.c line 5: undefined reference to f"],
-  "36": ["[ Error ] tests/test36.c line 3: invalid statement in the global scope"]
+  "36": ["[ Error ] tests/test36.c line 3: invalid statement in the global scope"],
+  "40": ["[ Error ] tests/test40.c line 3: redefinition or redeclaration of INT a"]
 }
