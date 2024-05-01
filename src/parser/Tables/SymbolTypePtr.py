@@ -7,6 +7,7 @@ class SymbolTypePtr(SymbolType):
         self.pts_to = pts_to
 
     def deReference(self):
+        self.pts_to.union = self.union
         return self.pts_to
 
     def getBaseType(self):

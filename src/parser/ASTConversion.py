@@ -177,7 +177,6 @@ class ASTConversion(ASTVisitor):
             be default 1 ptr is added, so remove it again, because assignment
             """
             to_type = assign_type.deReference()
-
             """
             make sure assignment doesn't convert to a ptr less
             """
