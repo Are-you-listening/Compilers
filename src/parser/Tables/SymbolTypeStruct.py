@@ -12,9 +12,7 @@ class SymbolTypeStruct(SymbolType):
         :param index:
         :return:
         """
-
         symbol_type = SymbolTypePtr(self.pts_to[index], False)
-
         return symbol_type
 
     def getPtrTuple(self):

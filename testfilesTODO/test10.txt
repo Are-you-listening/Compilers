@@ -8,7 +8,7 @@ int mul(int x){
 int main(){
     int* k;
     int result = mul(3);
-    printf("%d", result);
+    result = printf("%d", result);
     printf(mul( scanf("%d", &result))     );
     printf("%d", mul(result));
     return 0;
