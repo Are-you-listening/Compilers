@@ -432,3 +432,8 @@ class ErrorExporter:
         print(f"[ Error ] {position.file} line {position.linenr}: 'continue' statement not in loop",
               file=sys.stderr)
         exit()
+
+    @staticmethod
+    def invalidUnary(position: Position):
+        print(f"[ Error ] {position.file} line {position.linenr}: invalid unary operation", file=sys.stderr)
+        exit()

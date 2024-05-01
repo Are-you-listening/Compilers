@@ -27,7 +27,8 @@ from src.parser.StructCleanerAfter import *
 from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
 from src.llvm_target.VoidReturnAdder import *
 from src.parser.PointerReformater import *
-from src.parser.Constraints.CheckRvalueAssign import *
+from src.parser.Constraints.CheckRvalues import *
+from src.parser.UnarySaVisitor import *
 
 
 def cleanGreen(input_file, symbol_file):
@@ -94,7 +95,7 @@ def cleanGreen(input_file, symbol_file):
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
-    CheckRvalueAssign().visit(ast)
+    CheckRvalues().visit(ast)
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
@@ -117,6 +118,8 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     ASTConversion().visit(ast)
 
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
+
+    UnarySaVisitor().visit(ast)
 
     ConstantFoldingVisitor().visit(ast)
 
