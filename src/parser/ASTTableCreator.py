@@ -39,7 +39,7 @@ class ASTTableCreator(ASTVisitor):
             current_index = len(stack) - 1
             currentNode = stack[current_index]  # get top of stack without popping it
 
-            if currentNode not in visited and currentNode.text in ("Function", "Code"):
+            if currentNode not in visited and currentNode.text in ("Function", "Code", "Scope"):
                 """
                 Create a new scope for the children
                 """
