@@ -3,8 +3,9 @@ import subprocess
 
 
 class ControlFlowDotVisitor:
-    def __init__(self, outfile="ControlFlow"):
+    def __init__(self, function_name, outfile="ControlFlow", ):
         self.filename = outfile.split('.')[0]
+        self.filename = self.filename + "_" + function_name
         self.outfile = open(self.filename + ".dot", "w")
         self.outfile.write("digraph AST {\n")
         self.edge_blacklist = []
@@ -35,6 +36,13 @@ class ControlFlowDotVisitor:
             label = str(vertex.llvm.block)
 
             label = label.replace("\"", "\'")
+
+            label = label.replace('\\', '\\\\')
+            label = label.replace('"', '\\\"')
+
+            if label == "'\x00'" or label == "'\00'":
+                label = "'\\\\00'"
+            label = label.replace("\00", "\\\\00")
 
         self.outfile.write(f'  "{id(vertex)}" [label="{label}"];\n')
         for edge in vertex.edges:

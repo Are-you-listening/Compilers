@@ -179,7 +179,7 @@ def main(argv):
 
         if control_flow_file is not None:
             for function_name, cfg in cfgs.items():
-                control_dot = ControlFlowDotVisitor(f"{control_flow_file}_{function_name}")  # Create a CFG
+                control_dot = ControlFlowDotVisitor(function_name,control_flow_file)  # Create a CFG
                 control_dot.visit(cfg.root)
 
 
