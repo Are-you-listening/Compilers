@@ -1,25 +1,11 @@
 #include <stdio.h>
 
-void name(int a, int a) {
-    int name = 0;
-    return 0;
-}
-
 void xd(int a) {
-    return a + 10;
+    int x = a + 10;
+    printf("d%", x);
 }
-
-void testingThis();
 
 int main() {
     int b = 5;
-    name(b, 5);
-    testingThis();
-    return 0;
-}
-
-
-void testingThis() {
-    return 10;
-    printf("d%", 10);
+    return 5 + xd(4);
 }

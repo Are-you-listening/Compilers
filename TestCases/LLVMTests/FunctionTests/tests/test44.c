@@ -5,7 +5,14 @@ void xd(int a) {
     printf("d%", x);
 }
 
+int lol(int a)
+{
+
+    return a + 100;
+}
+
 int main() {
     int b = 5;
-    return 5 + xd(4);
+    lol(xd(5));
+    return 5;
 }
