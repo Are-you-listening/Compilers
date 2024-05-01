@@ -320,7 +320,24 @@ class ASTConversion(ASTVisitor):
         to this identifier
         """
         if node.type == "IDENTIFIER":
-            type_entry = node.getSymbolTable().getEntry(node.text)
+            """
+            if the identifier is a function call,
+            we make sure that we use the function and not a variable with the same name
+            """
+            type_entry = None
+            if node.getSiblingNeighbour(1) and node.getSiblingNeighbour(1).text == "()":
+                current_table = node.getSymbolTable()
+                while current_table.prev is not None:
+                    type_entry = current_table.getEntry(node.text)
+                    if type_entry:
+                        type_object = type_entry.getTypeObject()
+                        while isinstance(type_object, SymbolTypePtr):
+                            type_object = type_object.pts_to
+                        if isinstance(type_object, FunctionSymbolType):
+                            break
+                    current_table = current_table.prev
+            else:
+                type_entry = node.getSymbolTable().getEntry(node.text)
             type_object = type_entry.getTypeObject()
 
             """
