@@ -101,6 +101,8 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold, includeSTDIO):
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     """
@@ -121,8 +123,6 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
 
     VoidReturnAdder().addReturn(cfc.getControlFlowGraph())
-
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     if dot_file is not None:
         DotVisitor(dot_file).visit(ast)  # Export AST in Dot

@@ -17,6 +17,8 @@ class UndefinedReferenceConstraint(Constraint):
             function_node = node.children[0]
 
             entry = node.symbol_table.getEntry(function_node.text)
+            if entry is None and isinstance(function_node, ASTNodeTerminal):
+                ErrorExporter.undefinedFunctionReference(function_node.position, function_node.text)
             if not isinstance(function_node, ASTNodeTerminal) or not isinstance(entry.getTypeObject(),
                                                                                 FunctionSymbolType):
                 return

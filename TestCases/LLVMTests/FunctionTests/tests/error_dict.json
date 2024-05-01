@@ -29,9 +29,6 @@
   "44": ["[ Error ] tests/test44.c line 16: incorrect use of a function returning void"],
   "45": ["[ Error ] tests/test45.c line 10: incorrect use of a function returning void"],
   "46": ["[ Error ] tests/test46.c line 10: incorrect use of a function returning void"],
-  "47": ["[ Error ] tests/test47.c line 10: incorrect use of a function returning void"]
-
-
-
-
+  "47": ["[ Error ] tests/test47.c line 10: incorrect use of a function returning void"],
+  "49": ["[ Error ] tests/test49.c line 2: undefined reference to function f"]
 }
