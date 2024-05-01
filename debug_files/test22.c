@@ -1,20 +1,28 @@
+/*
+* My program
+*/
+
 #include <stdio.h>
 
-union NotTypeSafe {
-int as_integer;
-char as_str[30];
-float as_float;
+enum SYS_IO_ReceiverStatusBit {
+    READY,
+    BUSY,
+    OFFLINE
 };
 
 int main() {
-    union NotTypeSafe gouda;
+    enum SYS_IO_ReceiverStatusBit status = BUSY;
+    { /* unnamed scope */
+        int x = 1 + status + OFFLINE; /* Note: unscoped access of enum constants! */
+        while (x < 10) {
+            int result = x * 2;
+            if ( x > 5) {
+                result = result * x;
+            }
 
-    gouda.as_integer = 5;
-    gouda.as_str[0] = 'a';
-
-    int q = gouda.as_integer;
-
-    printf("%d", q);
-
+            printf("%d", result); /* show the result */
+            x = x + 1;
+        }
+    }
     return 0;
 }

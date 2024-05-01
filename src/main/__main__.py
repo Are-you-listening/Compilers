@@ -59,10 +59,10 @@ def cleanGreen(input_file, symbol_file):
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)
 
-    BlacklistVisitor().visit(ast)
-
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
+
+    BlacklistVisitor().visit(ast)
 
     PointerReformater().visit(ast)
 
@@ -76,7 +76,9 @@ def cleanGreen(input_file, symbol_file):
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
+
     ASTCleaner().visit(ast)  # Do a standard cleaning
+
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 

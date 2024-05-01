@@ -25,6 +25,7 @@ class ASTCleaner(ASTVisitor):
         self.cleanOvershootConst(node)
         self.cleanDereferenceAssignments(node)
         self.formatFunctionCall(node)
+        self.clean_anonymous_scope(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.cleanEqualSign(node)
@@ -216,3 +217,12 @@ class ASTCleaner(ASTVisitor):
         operator_node = ASTNodeTerminal("()", node.parent, node.getSymbolTable(), "", node.position, node.structTable)
         index = node.parent.findChild(node)
         node.parent.insertChild(index, operator_node)
+
+    def clean_anonymous_scope(self, node: ASTNode):
+        """
+        When coming across an anonymous scope, we don't want to have a 'Code' node, but just a 'Scope' node
+        Scope nodes, do not have an impact on the control flow
+        """
+
+        if node.text == "Code" and node.parent.text == "Code":
+            node.text = "Scope"

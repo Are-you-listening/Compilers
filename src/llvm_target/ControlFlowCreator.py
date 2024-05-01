@@ -3,6 +3,7 @@ from src.llvm_target.OutputLLVMGenerator import *
 from src.llvm_target.ControlFlow.ControlFlowGraph import *
 from src.parser.AST import ASTNodeBlock
 from src.parser.ASTVisitor import *
+from src.parser.ErrorExporter import ErrorExporter
 
 
 class ControlFlowCreator(ASTVisitor):
@@ -110,6 +111,11 @@ class ControlFlowCreator(ASTVisitor):
                 return
             cf, is_new = self.get_make_cfg(node.getChild(2))
 
+            if len(cf.abnormal_terminator_nodes["BREAK"]) > 0:
+                ErrorExporter.invalidBreak(cf.abnormal_terminator_nodes["BREAK"][0].abnormally_ended_position)
+            if len(cf.abnormal_terminator_nodes["CONTINUE"]) > 0:
+                ErrorExporter.invalidContinue(cf.abnormal_terminator_nodes["CONTINUE"][0].abnormally_ended_position)
+
             self.control_flow_map[node.getChild(2)] = cf
             ControlFlowGraph.check_return_statement(cf)
 
@@ -141,6 +147,8 @@ class ControlFlowCreator(ASTVisitor):
 
         if node.text == "Return":
             new_cfg = ControlFlowGraph()
+
+            new_cfg.root.abnormally_ended_position = node.position
             new_cfg.add_abnormal_terminator("RETURN", new_cfg.root)
 
             self.control_flow_map[node] = new_cfg
@@ -225,12 +233,16 @@ class ControlFlowCreator(ASTVisitor):
 
         if node.text == "break":
             new_cfg = ControlFlowGraph()
+
+            new_cfg.root.abnormally_ended_position = node.position
             new_cfg.add_abnormal_terminator("BREAK", new_cfg.root)
 
             self.control_flow_map[node] = new_cfg
 
         if node.text == "continue":
             new_cfg = ControlFlowGraph()
+
+            new_cfg.root.abnormally_ended_position = node.position
             new_cfg.add_abnormal_terminator("CONTINUE", new_cfg.root)
 
             self.control_flow_map[node] = new_cfg
