@@ -39,6 +39,9 @@ class ASTConversion(ASTVisitor):
         is_struct = False
         data_type3 = None
 
+        if node.text in ["scanf", "printf"]:
+            self.type_mapping[node] = SymbolType("INT", False)
+
         if is_array:
             child = node.getChild(0)
             data_type = self.type_mapping[child]

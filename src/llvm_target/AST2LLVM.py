@@ -324,9 +324,10 @@ class AST2LLVM(ASTVisitor):
                 args.append(llvm_var)
 
         if printf:
-            Printf.printf(format_specifier, *args)
+            llvm_var = Printf.printf(format_specifier, *args)
         else:
-            Scanf.scanf(format_specifier, *args)
+            llvm_var = Scanf.scanf(format_specifier, *args)
+        self.llvm_map[node] = llvm_var
 
     def handleOperations(self, node: ASTNode):
         """

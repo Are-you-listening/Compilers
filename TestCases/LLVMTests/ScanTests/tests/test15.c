@@ -2,10 +2,10 @@
 
 
 int main(){
-    int* k;
+    int k;
     int result = printf("%d", 1);
     printf("%d", result);
-    printf(scanf("%d", k);
-    printf("%d", &k);
+    printf("%d", scanf("%d", &k));
+    printf("%d", k);
     return 0;
 }
