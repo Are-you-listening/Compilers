@@ -27,6 +27,7 @@ from src.parser.StructCleanerAfter import *
 from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
 from src.llvm_target.VoidReturnAdder import *
 from src.parser.PointerReformater import *
+from src.parser.Constraints.CheckRvalueAssign import *
 
 
 def cleanGreen(input_file, symbol_file):
@@ -90,6 +91,8 @@ def cleanGreen(input_file, symbol_file):
     StructCleanerAfter().visit(ast)
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
+
+    CheckRvalueAssignBefore().visit(ast)
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
