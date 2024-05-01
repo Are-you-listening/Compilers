@@ -30,5 +30,6 @@
   "45": ["[ Error ] tests/test45.c line 10: incorrect use of a function returning void"],
   "46": ["[ Error ] tests/test46.c line 10: incorrect use of a function returning void"],
   "47": ["[ Error ] tests/test47.c line 10: incorrect use of a function returning void"],
-  "49": ["[ Error ] tests/test49.c line 2: undefined reference to function f"]
+  "49": ["[ Error ] tests/test49.c line 2: undefined reference to function f"],
+  "50": ["[ Warning ] tests/test50.c line 1: 'return' with a value, in function returning void"]
 }

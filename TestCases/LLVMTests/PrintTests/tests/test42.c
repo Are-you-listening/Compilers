@@ -7,8 +7,10 @@ int main(){
     s[0] = 'a';
     s[1] = 101;
 
-    char* v;
+    char a = 'a';
+    char* v = &a;
     *v = 'y';
+    printf("%c", *v);
 
     printf("%s", s);
 	return 0;
