@@ -76,7 +76,9 @@ def cleanGreen(input_file, symbol_file):
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
+
     ASTCleaner().visit(ast)  # Do a standard cleaning
+
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
