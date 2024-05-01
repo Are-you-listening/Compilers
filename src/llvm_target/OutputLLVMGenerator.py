@@ -291,7 +291,7 @@ class Load:
 
         if isinstance(load_llvm, ir.Function):
             llvm_var.align = 8
-        elif not isinstance(load_llvm, ir.GEPInstr):
+        elif not isinstance(load_llvm, ir.GEPInstr) and not isinstance(load_llvm, ir.CastInstr):
             llvm_var.align = load_llvm.align
         else:
 
@@ -511,7 +511,8 @@ class Scanf(Printf):
 class Conversion:
     @staticmethod
     def performConversion(llvm_var, to_type: SymbolType):
-        native_type = to_type.getPtrTuple()[0][0]
+        print("tt", type(to_type))
+
 
         block = LLVMSingleton.getInstance().getCurrentBlock()  # Get the current block
 
@@ -529,17 +530,26 @@ class Conversion:
                            (ir.FloatType, "BOOL"): lambda x, x_to: block.icmp_signed("!=", x, ir.Constant(x.type, 0)),
                            (ir.PointerType, "INT"): lambda x, x_to: block.ptrtoint(x, x_to),
                            (ir.PointerType, "CHAR"): lambda x, x_to: block.ptrtoint(x, x_to),
-                           (ir.PointerType, "PTR"): lambda x, x_to: block.bitcast(x, x_to)}
+                           (ir.PointerType, "PTR"): lambda x, x_to: block.bitcast(x, x_to),
+                           (ir.IntType, "ARRAY"): lambda x, x_to: block.bitcast(x, x_to)
+                           }
 
         llvm_to_type = CTypesToLLVM.getIRType(to_type)
-
+        print("type", llvm_to_type)
         """
         make a simplified to type for checking the conversion dict
         """
-        simplified_to_type = native_type
+        simplified_to_type = to_type.getBaseType()
         if to_type.getPtrAmount() > 0:
-            simplified_to_type = "PTR"
+            if isinstance(to_type, SymbolTypeArray):
+                simplified_to_type = "ARRAY"
+            else:
+                simplified_to_type = "PTR"
 
         c = conversion_dict.get((type(llvm_var.type), simplified_to_type))
+        print("c", c)
         llvm_var = c(llvm_var, llvm_to_type)
+
+        print("tt2", type(to_type))
+        print(llvm_var)
         return llvm_var

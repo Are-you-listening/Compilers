@@ -16,7 +16,7 @@ class StructTable(AbstractTable):
     def remove(self, entry: str):
         self.structTable.__delitem__(entry)
 
-    def getEntry(self, struct_name: str, data_member: str, position: Position):
+    def getEntry(self, struct_name: str, data_member: str, position: Position, union_as=False):
         """
         :param position:
         :param struct_name: Name of the struct

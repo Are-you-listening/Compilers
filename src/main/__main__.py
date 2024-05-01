@@ -109,7 +109,11 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     """
     It is vital that AST conversion occurs before constant folding
     """
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     ASTConversion().visit(ast)
+
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     ConstantFoldingVisitor().visit(ast)
 
@@ -124,6 +128,8 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
 
     VoidReturnAdder().addReturn(cfc.getControlFlowGraph())
+
+
 
     if dot_file is not None:
         DotVisitor(dot_file).visit(ast)  # Export AST in Dot

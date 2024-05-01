@@ -1,5 +1,13 @@
-3+4;    // not allowed
 
 int main(){
-    return 0;
+
+    int a = 0;
+
+    if (a){
+        return 0;
+    }else{
+        return 0;
+    }
+
+
 }

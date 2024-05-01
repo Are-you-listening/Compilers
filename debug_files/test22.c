@@ -1,16 +1,24 @@
 #include <stdio.h>
 
-int d(int a){
-
-    return 2;
-}
-
+union kaas{
+    int melk;
+    float yoghurt;
+    int* lol;
+};
 
 int main() {
-    int c = 1;
+    union kaas gouda;
 
-    int (*e)(int) = &d;
-    int u = (*e)(c);
-    printf("%d", u);
+    gouda.melk = 5;
+    gouda.yoghurt = 3.14;
+
+    printf("%f\n", gouda.yoghurt);
+    printf("%f\n", gouda.melk);
+
+    gouda.melk = 7;
+
+    printf("%d\n", gouda.melk);
+
+
     return 0;
 }

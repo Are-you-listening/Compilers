@@ -38,6 +38,7 @@ class ASTConversion(ASTVisitor):
         is_array = (node.text == "Expr" and node.getChildAmount() == 3 and node.getChild(1).text == "[]")
         is_struct = False
         data_type3 = None
+        override = True
 
         if node.text in ["scanf", "printf"]:
             self.type_mapping[node] = SymbolType("INT", False)
@@ -59,9 +60,31 @@ class ASTConversion(ASTVisitor):
             """
             Use the struct type to translate 'struct'.'value' -> struct[index]
             """
-            self.replaceIdentifierWithIndex(node, struct_type)
+            data_type_index = self.replaceIdentifierWithIndex(node, struct_type)
             index = int(node.getChild(2).text)  # Index of the struct data member
-            data_type = struct_type.getElementType(index)
+
+            if index == -1:
+                data_type = struct_type.getStoreType()
+                node.getChild(2).text = 0
+
+                store_data_type = struct_type.getElementType(data_type_index)
+
+                self.type_mapping[node] = store_data_type
+                override = False
+
+            else:
+                data_type = struct_type.getElementType(data_type_index)
+                if isinstance(struct_type, SymbolTypeUnion):
+                    store_type = struct_type.getStoreType()
+
+                    if store_type != data_type:
+                        print('b')
+                        self.addConversion(node, data_type.getPtrTuple())
+                    data_type = store_type
+
+            if data_type.union:
+                node.getChild(2).text = 0
+
             data_type3 = data_type
 
         if node.text == "Dereference" or is_array:
@@ -96,9 +119,11 @@ class ASTConversion(ASTVisitor):
 
             data_type = data_type.deReference()
 
-            self.type_mapping[node] = data_type
-            if is_struct:
-                self.type_mapping[node] = data_type3
+            if override:
+                self.type_mapping[node] = data_type
+                if is_struct:
+                    self.type_mapping[node] = data_type3
+
             return
 
         if node.text == "Conversion":
@@ -161,6 +186,8 @@ class ASTConversion(ASTVisitor):
                 if not isinstance(called_type, FunctionSymbolType):
                     ErrorExporter.functionCallNotFunction(node.position, self.subtree_to_text(node.getChild(0)),
                                                           called_type)
+
+
 
             """
             check the type of the children to calculate our type.
@@ -229,12 +256,11 @@ class ASTConversion(ASTVisitor):
         if node.text in ("Declaration", "Assignment"):
             assign_node = node.getChild(0)
             assign_type = self.type_mapping[assign_node]
-
             """
             be default 1 ptr is added, so remove it again, because assignment
             """
-
             to_type = assign_type.deReference()
+
             """
             make sure assignment doesn't convert to a ptr less
             """
@@ -244,6 +270,12 @@ class ASTConversion(ASTVisitor):
                 """
                 Check if we assign to const assign node, if so throw an error
                 """
+                if assign_type.union:
+                    real_type = self.type_mapping[node.getChild(0)]
+
+                    self.addConversion(assign_node, SymbolTypePtr(real_type, False).getPtrTuple())
+                    self.type_mapping[assign_node] = real_type
+                    to_type = real_type
 
                 const_assign = to_type.isConst()
 
@@ -404,11 +436,24 @@ class ASTConversion(ASTVisitor):
         index_node = node.children[0].getSiblingNeighbour(1).getSiblingNeighbour(1)
         identifier = index_node.text
 
-        if node.structTable.isUnion(struct_name.getBaseType(), node.position):  # If we have a Union
-            index = 0
+        if node.structTable.isUnion(struct_name.getBaseType(), node.position.linenr):  # If we have a Union
+
+            p = node
+            while p.parent is not None and p.parent.text not in ("Code", "Function", "Assignment", "Block", "Scope"):
+                p = p.parent
+            assignment = p.parent.text == "Assignment" and p.parent.findChild(p) == 0
+
+            index = node.structTable.getEntry(struct_name.getBaseType(), identifier, node.position.linenr)
+            data_type_index = index
+            if assignment:
+                index = -1
         else:
-            index = node.structTable.getEntry(struct_name.getBaseType(), identifier, node.position)  # Replace the struct data member name with an index
+            index = node.structTable.getEntry(struct_name.getBaseType(), identifier, node.position.linenr)  # Replace the struct data member name with an index
+            data_type_index = index
+
         index_node.text = index
+
+        return data_type_index
 
     @staticmethod
     def calculateType(node: ASTNode):
@@ -554,8 +599,6 @@ class ASTConversion(ASTVisitor):
         if max(to_tup.getPtrAmount(), type_tup.getPtrAmount()) != 0:
             return
 
-
-
         if self.rc.get_poorest(to_tup.getBaseType(), type_tup.getBaseType()) == type_tup.getBaseType():
             return
 
@@ -583,10 +626,16 @@ class ASTConversion(ASTVisitor):
                             node.position, node.structTable))
 
         for t_child in to_type[1]:
-            type_node.addChildren(
-                ASTNodeTerminal(t_child[0], type_node, type_node.getSymbolTable(), "CASTING",
-                                node.position, node.structTable))
+            conversion_ptr = t_child[0]
+            t_type = "CASTING"
+            if t_child[0] != "*":
+                conversion_ptr = "*"
+                t_type = f"ARRAY_{t_child[0]}"
+
+            type_node.addChildren(ASTNodeTerminal(conversion_ptr, type_node, type_node.getSymbolTable(), t_type,
+                                  node.position, node.structTable))
         node.addNodeParent(new_node)
+        return new_node
 
     @staticmethod
     def subtree_to_text(node: ASTNode):

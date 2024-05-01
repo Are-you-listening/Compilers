@@ -12,7 +12,13 @@ int main() {
     gouda.melk = 5;
     gouda.yoghurt = 3.14;
 
-    printf("%d %d", gouda.melk , gouda.yoghurt);
+    printf("%f\n", gouda.yoghurt);
+    printf("%f\n", gouda.melk);
+
+    gouda.melk = 7;
+
+    printf("%d\n", gouda.melk);
+
 
     return 0;
 }

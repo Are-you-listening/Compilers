@@ -35,7 +35,10 @@ class ControlFlowDotVisitor:
         else:
             label = str(vertex.llvm.block)
 
-            label = label.replace("\"", "\'")
+            label = label.replace('\\', '\\\\')
+            label = label.replace('"', '\\\"')
+
+            label = label.replace("\00", "\\\\00")
 
             label = label.replace('\\', '\\\\')
             label = label.replace('"', '\\\"')

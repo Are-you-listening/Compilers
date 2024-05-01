@@ -22,7 +22,6 @@ class IdentifierReplacerVisitor(ASTVisitor):
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         # if the node is not under a dereference node we can never replace it with a value
         # We keep replacing derefs with values until we encounter something that we can't replace
-
         while node.parent.text == "Dereference" and node.text != "Conversion":
             toReplace = node.text
 

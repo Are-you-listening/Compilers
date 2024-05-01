@@ -3,6 +3,7 @@ from src.parser.Tables.SymbolTypeStruct import *
 from src.parser.CTypes.COperationHandler import *
 from src.parser.ASTVisitor import *
 from src.parser.ASTTypedefReplacer import ASTTypedefReplacer
+from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
 
 
 class ASTTableCreator(ASTVisitor):
@@ -176,9 +177,13 @@ class ASTTableCreator(ASTVisitor):
             i += 1
 
         if node.text == "Union":  # For Unions, take the biggest type as type for all data members
-            pts_to = [self.getRichestType(pts_to)]
+            richest = self.getRichestType(pts_to)
 
-        self.structs[structName] = SymbolTypeStruct(structName, pts_to)
+            self.structs[structName] = SymbolTypeUnion(structName, richest, pts_to)
+        else:
+            self.structs[structName] = SymbolTypeStruct(structName, pts_to)
+
+
         self.to_remove.add(node)
 
     @staticmethod
@@ -188,7 +193,7 @@ class ASTTableCreator(ASTVisitor):
         for pointee in pts_to:
             if isinstance(pointee,
                           SymbolTypeArray):  # Arrays are always the biggest since they contain 1 to multiple pointers
-                richest = pointee
+                richest = SymbolTypeArray(SymbolType("FLOAT", False), False, pointee.size)
                 break
             if isinstance(pointee, SymbolTypePtr):
                 richest = pointee

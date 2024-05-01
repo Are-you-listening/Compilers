@@ -271,7 +271,7 @@ class AST2LLVM(ASTVisitor):
 
         to_store_reg = self.llvm_map.get(right_child, None)
 
-        if not isinstance(store_reg, ir.GEPInstr):
+        if not isinstance(store_reg, ir.GEPInstr) and not isinstance(store_reg, ir.CastInstr):
             alignment = store_reg.align
         else:
             alignment = 4
@@ -469,7 +469,10 @@ class AST2LLVM(ASTVisitor):
             if child.text != "*":
                 symbol_type = SymbolType(child.text, False)
             else:
-                symbol_type = SymbolTypePtr(symbol_type, False)
+                if child.type.startswith("ARRAY_"):
+                    symbol_type = SymbolTypeArray(symbol_type, False, int(child.type[6:]))
+                else:
+                    symbol_type = SymbolTypePtr(symbol_type, False)
 
         return symbol_type
 

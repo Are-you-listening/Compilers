@@ -8,7 +8,8 @@ class ValueAdderVisitor(ASTVisitor):
     AST visitor that adds identifier values to the symbol table
     """
     def visitNode(self, node: ASTNode):
-        if node.text in ("Declaration", "Assignment", "printf"):
+
+        if node.text in ("Declaration", "Assignment", "printf", "Conversion", "IF"):
             # there are 2 children: identifier and value
             ident = node.getChild(0)
         else:
@@ -23,7 +24,6 @@ class ValueAdderVisitor(ASTVisitor):
             return
 
         entry = ident.getSymbolTable().getEntry(ident.text)
-
         """
         printF does not have an entry
         """
