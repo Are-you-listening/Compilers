@@ -21,5 +21,6 @@
   "33": ["[ Error ] line 7: redefinition of f"],
   "34": ["[ Error ] line 7: redefinition of f"],
   "35": ["[ Error ] line 5: undefined reference to f"],
-  "36": ["[ Error ] line 3 invalid statement in the global scope"]
+  "36": ["[ Error ] line 3 invalid statement in the global scope"],
+  "40": ["[ Error ] line 3: redefinition or redeclaration of INT a"]
 }

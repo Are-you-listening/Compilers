@@ -18,7 +18,7 @@ class RedefinitionConstraint(Constraint):
         if node.type == "IDENTIFIER":
             if node.symbol_table.exists(node.text):
                 if node.symbol_table.getEntry(node.text).firstDeclared != node:
-                    if node.parent.text == "Declaration":
+                    if node.parent.text == "Declaration" or node.parent.text == "Parameter":
                         if node.parent.findChild(node) != 1:  # If it is no rvalue (index 1)
                             self.rejected = True
                             self.errorNode = node
