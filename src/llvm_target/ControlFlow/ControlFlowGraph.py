@@ -22,6 +22,7 @@ class Vertex:
         self.reverse_edges = []
 
         self.abnormally_ended = False
+        self.abnormally_ended_position = None
 
     def addEdge(self, edge: "Edge"):
         """
