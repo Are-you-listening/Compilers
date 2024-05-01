@@ -2,9 +2,9 @@
 
 
 int main(){
-    char k[2];
-    printf("%c", k);
+    char k[2] = {'b','b'};
+    printf("%c", *k);
     scanf("%c%c", k,k);
-    printf("%c", k);
+    printf("%c", *k);
     return 0;
 }

@@ -65,6 +65,8 @@ def cleanGreen(input_file, symbol_file):
 
     PointerReformater().visit(ast)
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
     StructCleaner().visit(ast)  # Massage the structs
@@ -101,8 +103,6 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold, includeSTDIO):
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     """
