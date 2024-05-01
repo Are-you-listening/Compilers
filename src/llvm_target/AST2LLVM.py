@@ -17,6 +17,7 @@ class AST2LLVM(ASTVisitor):
         self.root = None
         self.last_vertex = None
         self.branch_needed = set()
+        self.special_func_calls = {"malloc"}
 
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
@@ -156,7 +157,19 @@ class AST2LLVM(ASTVisitor):
             identifiers of declarations and functions are not yet defined
             """
             if entry is None:
-                return
+
+                if node.text in self.special_func_calls and LLVMSingleton.getInstance().getFunction(node.text) is None:
+                    """
+                    To support declaration of special function calls like 'malloc'
+                    """
+                    function_type = node.getSymbolTable().getEntry(node.text).getTypeObject()
+                    args = function_type.getParameterTypes()
+
+                    func = Declaration.function(node.text, function_type.return_type, args)
+                    self.map_table.addEntry(MapEntry(node.text, func))
+                    entry = self.map_table.getEntry(node.text)
+                else:
+                    return
 
             self.llvm_map[node] = entry.llvm
 
@@ -372,6 +385,7 @@ class AST2LLVM(ASTVisitor):
 
             left = self.llvm_map.get(node.getChild(0))
             right = self.llvm_map.get(node.getChild(2))
+
             llvm_var = Calculation.operation(left, right, operator)
 
         self.llvm_map[node] = llvm_var
@@ -392,31 +406,6 @@ class AST2LLVM(ASTVisitor):
 
         self.llvm_map[node] = converted_var
 
-    def handleFunctionCall(self, node: ASTNode):
-        """
-        Handle function calls
-        :param node:
-        :return:
-        """
-
-        function_name = node.getChild(0).text
-        function = LLVMSingleton.getInstance().getFunction(function_name)
-
-        if function is None:
-            function = LLVMSingleton.getInstance().getModule().get_global(function_name)
-
-        builder = LLVMSingleton.getInstance().getCurrentBlock()
-
-        args = []
-        for child in node.children[1:]:
-            if child.text == "ParameterCall":
-                llvm_var = self.llvm_map[child.children[0]]
-                if llvm_var is not None:
-                    args.append(llvm_var)
-
-        llvm_var = builder.call(function, args)
-
-        self.llvm_map[node] = llvm_var
 
     def handleParameters(self, node: ASTNode):
         """
@@ -486,3 +475,6 @@ class AST2LLVM(ASTVisitor):
         code = self.codegetter.getLine(node)
         if code is not None:
             Declaration.addComment(code)
+
+    def check_special_call(self, left, right):
+        print(left, right)

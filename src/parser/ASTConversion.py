@@ -338,6 +338,7 @@ class ASTConversion(ASTVisitor):
                     current_table = current_table.prev
             else:
                 type_entry = node.getSymbolTable().getEntry(node.text)
+
             type_object = type_entry.getTypeObject()
 
             """
@@ -639,6 +640,7 @@ class ASTConversion(ASTVisitor):
             corresponding_function_type = self.type_mapping.get(node.parent.children[0])
 
         if not isinstance(corresponding_function_type, FunctionSymbolType):
+            print("he")
             ErrorExporter.functionCallNotFunction(node.position, self.subtree_to_text(node.parent.children[0]),
                                                   corresponding_function_type)
 
