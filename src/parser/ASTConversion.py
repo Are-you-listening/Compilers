@@ -36,93 +36,9 @@ class ASTConversion(ASTVisitor):
         :return:
         """
         is_array = (node.text == "Expr" and node.getChildAmount() == 3 and node.getChild(1).text == "[]")
-        is_struct = False
-        data_type3 = None
-        override = True
-
-        if node.text in ["scanf", "printf"]:
-            self.type_mapping[node] = SymbolType("INT", False)
-
-        if is_array:
-            child = node.getChild(0)
-            data_type = self.type_mapping[child]
-            if isinstance(data_type, SymbolTypePtr) and isinstance(data_type.deReference(), SymbolTypeStruct):
-                is_struct = True
-
-        if is_struct:
-            lchild = node.getChild(0)  # LHS of the '.' 'operator
-            """
-            Get the struct ptr type from the left child
-            """
-            struct_ptr_type = self.type_mapping[lchild]
-            struct_type = struct_ptr_type.pts_to
-
-            """
-            Use the struct type to translate 'struct'.'value' -> struct[index]
-            """
-            data_type_index = self.replaceIdentifierWithIndex(node, struct_type)
-            index = int(node.getChild(2).text)  # Index of the struct data member
-
-            if index == -1:
-                data_type = struct_type.getStoreType()
-                node.getChild(2).text = 0
-
-                store_data_type = struct_type.getElementType(data_type_index)
-
-                self.type_mapping[node] = store_data_type
-                override = False
-
-            else:
-                data_type = struct_type.getElementType(data_type_index)
-                if isinstance(struct_type, SymbolTypeUnion):
-                    store_type = struct_type.getStoreType()
-
-                    if store_type != data_type:
-                        print('b')
-                        self.addConversion(node, data_type.getPtrTuple())
-                    data_type = store_type
-
-            if data_type.union:
-                node.getChild(2).text = 0
-
-            data_type3 = data_type
 
         if node.text == "Dereference" or is_array:
-
-            """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was 
-            before"""
-            child = node.getChild(0)
-            data_type: SymbolType = self.type_mapping[child]
-
-            """
-            We we do a [] access, we need to check that the value provided is an integer
-            """
-            if is_array:
-                data_type2 = self.type_mapping[node.getChild(2)]
-
-                if not data_type2.isBase() or data_type2.getType() != "INT":
-                    ErrorExporter.invalidArrayIndex(node.position, data_type2)
-
-                """
-                The array has by default 1 ptr, but it it is the only 1, the array is not really an array
-                """
-                if data_type.getPtrAmount() <= 1 and not isinstance(data_type.deReference(), SymbolTypeStruct):
-                    ErrorExporter.invalidDereferenceNotPtr(node.position, data_type, True)
-            """
-            when trying to dereference a non-ptr, throw an error
-            """
-            if data_type.isBase():
-                ErrorExporter.invalidDereferenceNotPtr(node.position, data_type)
-
-            if isinstance(data_type, SymbolTypeStruct):  # Can't further dereference; '.'/'[]' operator is used on the wrong type
-                ErrorExporter.invalidOperation(node.position, '.', data_type, None)
-
-            data_type = data_type.deReference()
-
-            if override:
-                self.type_mapping[node] = data_type
-                if is_struct:
-                    self.type_mapping[node] = data_type3
+            self.handle_dereference(node, is_array)
 
             return
 
@@ -186,8 +102,6 @@ class ASTConversion(ASTVisitor):
                 if not isinstance(called_type, FunctionSymbolType):
                     ErrorExporter.functionCallNotFunction(node.position, self.subtree_to_text(node.getChild(0)),
                                                           called_type)
-
-
 
             """
             check the type of the children to calculate our type.
@@ -436,24 +350,23 @@ class ASTConversion(ASTVisitor):
         index_node = node.children[0].getSiblingNeighbour(1).getSiblingNeighbour(1)
         identifier = index_node.text
 
+        union_assignment = False
         if node.structTable.isUnion(struct_name.getBaseType(), node.position.linenr):  # If we have a Union
 
             p = node
             while p.parent is not None and p.parent.text not in ("Code", "Function", "Assignment", "Block", "Scope"):
                 p = p.parent
-            assignment = p.parent.text == "Assignment" and p.parent.findChild(p) == 0
+            union_assignment = p.parent.text == "Assignment" and p.parent.findChild(p) == 0
 
             index = node.structTable.getEntry(struct_name.getBaseType(), identifier, node.position.linenr)
             data_type_index = index
-            if assignment:
-                index = -1
         else:
             index = node.structTable.getEntry(struct_name.getBaseType(), identifier, node.position.linenr)  # Replace the struct data member name with an index
             data_type_index = index
 
         index_node.text = index
 
-        return data_type_index
+        return data_type_index, union_assignment
 
     @staticmethod
     def calculateType(node: ASTNode):
@@ -711,3 +624,115 @@ class ASTConversion(ASTVisitor):
                                                   corresponding_function_type)
 
         return corresponding_function_type
+
+    def handle_dereference(self, node: ASTNode, is_array):
+        """
+        This Function handles dereferences
+        """
+
+        data_type3 = None
+
+        override = True
+
+        """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was
+                    before"""
+        child = node.getChild(0)
+        data_type: SymbolType = self.type_mapping[child]
+
+        """
+        We we do a [] access, we need to check that the value provided is an integer
+        """
+
+        is_struct = False
+        if is_array:
+
+            data_type2 = self.type_mapping[node.getChild(2)]
+
+            if not data_type2.isBase() or data_type2.getType() != "INT":
+                ErrorExporter.invalidArrayIndex(node.position.linenr, data_type2)
+
+            """
+            The array has by default 1 ptr, but it it is the only 1, the array is not really an array
+            """
+            if data_type.getPtrAmount() <= 1 and not isinstance(data_type.deReference(), SymbolTypeStruct):
+                ErrorExporter.invalidDereferenceNotPtr(node.position.linenr, data_type, True)
+
+            is_struct = self.is_struct(node)
+            if is_struct:
+                data_type3, override = self.handle_struct(node)
+
+        """
+        when trying to dereference a non-ptr, throw an error
+        """
+        if data_type.isBase():
+            ErrorExporter.invalidDereferenceNotPtr(node.position.linenr, data_type)
+
+        if isinstance(data_type,
+                      SymbolTypeStruct):  # Can't further dereference; '.'/'[]' operator is used on the wrong type
+            ErrorExporter.invalidOperation(node.position.linenr, '.', data_type, None)
+
+        data_type = data_type.deReference()
+
+        if override:
+            self.type_mapping[node] = data_type
+            if is_struct:
+                self.type_mapping[node] = data_type3
+
+    def is_struct(self, node: ASTNode):
+        """
+        Check if a node that will be dereferenced is a struct type
+        """
+        child = node.getChild(0)
+        data_type = self.type_mapping[child]
+        if isinstance(data_type, SymbolTypePtr) and isinstance(data_type.deReference(), SymbolTypeStruct):
+            return True
+
+        return False
+
+    def handle_struct(self, node: ASTNode):
+        override = True
+
+        lchild = node.getChild(0)  # LHS of the '.' 'operator
+        """
+        Get the struct ptr type from the left child
+        """
+        struct_ptr_type = self.type_mapping[lchild]
+        struct_type = struct_ptr_type.pts_to
+
+        """
+        Use the struct type to translate 'struct'.'value' -> struct[index]
+        """
+        data_type_index, union_assignment = self.replaceIdentifierWithIndex(node, struct_type)
+
+        if union_assignment:
+            """
+            In case we have a union assignment
+            """
+            data_type = struct_type.getStoreType()
+            node.getChild(2).text = 0
+
+            store_data_type = struct_type.getElementType(data_type_index)
+
+            self.type_mapping[node] = store_data_type
+            override = False
+
+        else:
+            """
+            In case we do not have a union assignment,we want to retrieve the value in his appropriate type
+            """
+            data_type = struct_type.getElementType(data_type_index)
+            if isinstance(struct_type, SymbolTypeUnion):
+                store_type = struct_type.getStoreType()
+
+                """
+                When we retrieve a type that doesn't match the store type, we will do a conversion so we end up 
+                with reading the right type
+                """
+                if store_type != data_type:
+                    self.addConversion(node, data_type.getPtrTuple())
+                data_type = store_type
+
+        if data_type.union:
+            node.getChild(2).text = 0
+
+        return data_type, override
