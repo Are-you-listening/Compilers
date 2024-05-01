@@ -420,3 +420,15 @@ class ErrorExporter:
     def incorrectVoidFuncUse(position: Position):
         print(f"[ Error ] {position.file} line {position.linenr}: incorrect use of a function returning void", file=sys.stderr)
         exit()
+
+    @staticmethod
+    def invalidBreak(position: Position):
+        print(f"[ Error ] {position.file} line {position.linenr}: 'break' statement not in loop or switch statement",
+              file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def invalidContinue(position: Position):
+        print(f"[ Error ] {position.file} line {position.linenr}: 'continue' statement not in loop",
+              file=sys.stderr)
+        exit()
