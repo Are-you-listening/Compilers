@@ -59,10 +59,10 @@ def cleanGreen(input_file, symbol_file):
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)
 
-    BlacklistVisitor().visit(ast)
-
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
+
+    BlacklistVisitor().visit(ast)
 
     PointerReformater().visit(ast)
 
