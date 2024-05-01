@@ -291,7 +291,7 @@ class ASTConversion(ASTVisitor):
                         continue
 
                 self.pointer_warning_check(child.position, to_type, type_tup)
-                if to_type.getBaseType() == "VOID" or type_tup.getBaseType() == "VOID":
+                if to_type.getBaseType() == "VOID" or type_tup.getBaseType() == "VOID" and type_tup.isBase():
                     ErrorExporter().incorrectVoidFuncUse(node.position)
                 self.narrowing_warning_check(child.position, to_type, type_tup)
 

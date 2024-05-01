@@ -17,7 +17,7 @@ class AST2LLVM(ASTVisitor):
         self.root = None
         self.last_vertex = None
         self.branch_needed = set()
-        self.special_func_calls = {"malloc"}
+        self.special_func_calls = {"malloc", "calloc", "free", "realloc"}
 
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
