@@ -6,11 +6,8 @@ int main(){
     if (a){
         return 0;
     }else{
-        if (a){
-            return 0;
-        }
 
     }
 
-
+    return 0;
 }
