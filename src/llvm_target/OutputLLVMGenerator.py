@@ -347,33 +347,39 @@ class Calculation:
             if llvm_op is not None:
                 llvm_var = llvm_op(operator, left, right)
                 return llvm_var
-
+        pointer = None
+        non_pointer = None
         if isinstance(left.type, ir.types.PointerType) and operator in ["+", "-", "[]"]:
+            pointer = left
+            non_pointer = right
+        if right is not None and not isinstance(right, list) and isinstance(right.type, ir.types.PointerType) and operator in ["+", "-", "[]"]:
+            pointer = right
+            non_pointer = left
             """
             operator '[]' is for access of arrays. We can access an array using a GetElementPointer
             """
-
-            if not isinstance(right,
+        if pointer is not None or non_pointer is not None and operator in ["+", "-", "[]"]:
+            if not isinstance(non_pointer,
                               ir.Constant):  # If it is not a constant, LLVM requires a sign extend to match the size
-                right = block.sext(right, ir.IntType(64))
+                non_pointer = block.sext(non_pointer, ir.IntType(64))
 
             if operator == "-":  # Add subtract
-                right = Calculation.unary(right, "-")
+                non_pointer = Calculation.unary(non_pointer, "-")
 
-            index_list = [right]
+            index_list = [non_pointer]
 
             """
             When we come across an array we need to define a value 0 followed by the index we want to access
             """
 
-            if isinstance(left.type.pointee, ir.ArrayType):
+            if isinstance(pointer.type.pointee, ir.ArrayType):
                 index_list.insert(0, ir.Constant(ir.types.IntType(64), 0))
-            elif isinstance(left.type.pointee, ir.LiteralStructType):
+            elif isinstance(pointer.type.pointee, ir.LiteralStructType):
                 index_list.insert(0, ir.Constant(ir.types.IntType(32), 0))
             elif operator == "[]":
-                left = block.load(left)
+                pointer = block.load(pointer)
 
-            new_value = block.gep(left, index_list, True)  # Create the gep instruction
+            new_value = block.gep(pointer, index_list, True)  # Create the gep instruction
 
             return new_value
 
