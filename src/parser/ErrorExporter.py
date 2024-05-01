@@ -316,18 +316,18 @@ class ErrorExporter:
 
     @staticmethod
     def conflictingFunctionParameterTypes(position: Position, func_name: str):
-        print(f"[ Error ] {position.file} line {position.linenr}: conflicting types for {func_name}", file=sys.stderr)
+        print(f"[ Error ] {position.file} line {position.linenr}: conflicting parameter types for function {func_name}", file=sys.stderr)
         exit()
 
     @staticmethod
     def conflictingFunctionReturnType(position: Position, func_name: str):
-        print(f"[ Error ] {position.file} line {position.linenr}: conflicting return type for {func_name}",
+        print(f"[ Error ] {position.file} line {position.linenr}: conflicting return type for function {func_name}",
               file=sys.stderr)
         exit()
 
     @staticmethod
     def undefinedFunctionReference(position: Position, func_name: str):
-        print(f"[ Error ] {position.file} line {position.linenr}: undefined reference to {func_name}",
+        print(f"[ Error ] {position.file} line {position.linenr}: undefined reference to function {func_name}",
               file=sys.stderr)
         exit()
 
