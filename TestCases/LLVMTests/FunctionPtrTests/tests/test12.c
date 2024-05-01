@@ -6,5 +6,5 @@ int (*incrementPtr)(int, float);
 incrementPtr = &increment;
 int z = 5;
 z = (*incrementPtr)(z, 0.689);
-// z is not equal to 6
 return 0;
+};
