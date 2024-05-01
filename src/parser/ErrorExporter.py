@@ -409,3 +409,7 @@ class ErrorExporter:
     def voidWithNonEmptyReturn(position: Position):
         print(f"[ Warning ] {position.file} line {position.linenr}: 'return' with a value, in function returning void")
 
+    @staticmethod
+    def incorrectVoidFuncUse(position: Position):
+        print(f"[ Error ] {position.file} line {position.linenr}: incorrect use of a function returning void", file=sys.stderr)
+        exit()

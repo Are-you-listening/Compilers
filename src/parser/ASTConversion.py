@@ -199,6 +199,9 @@ class ASTConversion(ASTVisitor):
                 """
                 for the non-first type, we will take the richest type
                 """
+
+                if to_type.getBaseType() == "VOID" or check_type.getBaseType() == "VOID":
+                    ErrorExporter().incorrectVoidFuncUse(node.position)
                 richest_native_type = self.rc.get_richest(to_type.getBaseType(), check_type.getBaseType())
 
                 richest_native_type = SymbolType(richest_native_type, False)
@@ -337,6 +340,8 @@ class ASTConversion(ASTVisitor):
                         continue
 
                 self.pointer_warning_check(child.position, to_type, type_tup)
+                if to_type.getBaseType() == "VOID" or type_tup.getBaseType() == "VOID":
+                    ErrorExporter().incorrectVoidFuncUse(node.position)
                 self.narrowing_warning_check(child.position, to_type, type_tup)
 
                 self.addConversion(child, to_type.getPtrTuple())
@@ -545,6 +550,8 @@ class ASTConversion(ASTVisitor):
         """
         if max(to_tup.getPtrAmount(), type_tup.getPtrAmount()) != 0:
             return
+
+
 
         if self.rc.get_poorest(to_tup.getBaseType(), type_tup.getBaseType()) == type_tup.getBaseType():
             return
