@@ -5,15 +5,14 @@ int main() {
     int x = 4;
     int y = 5;
 
-    printf("%d", x);
+    printf("%d ", x);
 
     int* ptr = &x;
-        printf("%d", *ptr);
+    printf("%d ", *ptr);
 
     ptr++;
-            printf("%d", *ptr); // Not pointing to x/Y ?
     ptr--;
-            printf("%d", *ptr);
+            printf("%d ", *ptr);
 
 
     int is_x = (ptr == &x);

@@ -20,10 +20,7 @@ int n = number++;
     printf("%d", n);
 
 
-n = n - n++;
-    printf("%d", n); // HORROR, print differs by 1
-++n;
-    printf("%d", n);
+
     return 0;
 
 }

@@ -1,14 +1,29 @@
-int main () {
-const int x = 5*(3/10 + 9/10);
-float y = x*2/( 2+1 * 2/3 +x) +8 * (8/4);
-y = x + y;
-int z;
-float* flt_ptr = &y;
-char ch = 'x';
-const int* ptr_to_int = &z;
-ptr_to_int = &x; // this is allowed. The pointer now points to variable x
-*ptr_to_int = 33; // this is NOT allowed!
+#include <stdio.h>
 
+
+int main() {
+int number = -55;
+
+    printf("%d ", number);
+
+
+number++;
+    printf("%d ", number);
+
+number = number++;
+    printf("%d ", number);
+
+
+int n = number++;
+
+    printf("%d ", number);
+    printf("%d ", n);
+
+
+n = n - n++;
+    printf("%d ", n); // HORROR, print differs by 1
+++n;
+    printf("%d ", n);
     return 0;
 
 }
