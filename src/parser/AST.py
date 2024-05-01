@@ -43,7 +43,9 @@ class ASTNode:
         self.children.append(child)
 
     def getChild(self, index, block_ignore=True) -> "ASTNode":
-        child = self.children[index]
+        child = None
+        if index < len(self.children):
+            child = self.children[index]
 
         """
         SKip AST Node Blocks
@@ -184,6 +186,20 @@ class ASTNode:
                 return True
             current_node = current_node.parent
         return False
+
+    def getLeaves(self):
+        """
+        get all the leaves from this ASTNode
+        :return: list of ASTNodeTerminals
+        """
+        leaves = []
+
+        for child in self.children:
+            if isinstance(child, ASTNodeTerminal):
+                leaves.append(child)
+            else:
+                leaves.extend(child.getLeaves())
+        return leaves
 
 
 class ASTNodeTerminal(ASTNode):
