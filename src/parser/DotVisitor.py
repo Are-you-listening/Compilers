@@ -13,7 +13,7 @@ class DotVisitor(ASTVisitor):
         self.outfile.write("digraph AST {\n")
 
     def visitNode(self, node: ASTNode):
-        self.outfile.write(f'  "{id(node)}" [label="{node.text}"];\n')
+        self.outfile.write(f'  "{id(node)}" [label="{node.text}  {node.position.linenr}"];\n')
         for child in node.children:
             self.outfile.write(f'  "{id(node)}" -> "{id(child)}";\n')
 

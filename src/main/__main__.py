@@ -29,6 +29,7 @@ from src.llvm_target.VoidReturnAdder import *
 from src.parser.PointerReformater import *
 from src.parser.Constraints.CheckRvalues import *
 from src.parser.UnarySaVisitor import *
+from src.parser.DynamicAllocation import DynamicAllocation
 
 
 def cleanGreen(input_file, symbol_file):
@@ -80,7 +81,6 @@ def cleanGreen(input_file, symbol_file):
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
-
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
     StringToArray().visit(ast)
@@ -90,6 +90,8 @@ def cleanGreen(input_file, symbol_file):
     ArrayCleaner().visit(ast)
 
     ASTTableCreator().visit(ast)  # Create the symbol table
+
+    DynamicAllocation.add_allocation(ast)
 
     StructCleanerAfter().visit(ast)
 

@@ -44,7 +44,7 @@ class FunctionReturnConstraint(Constraint):
     def throwException(self):
         for error_node in self.errorNodes:
             entry = error_node.getSymbolTable().getEntry(error_node.getChild(0).text)
-            return_type = entry.getType()
+            return_type = entry.getTypeObject().return_type
             ErrorExporter.missingReturn(error_node.position, return_type)
 
     def isRejected(self):

@@ -34,7 +34,7 @@ parameter_calls: ((parameter_call',')* parameter_call)?;
 
 declaration: ((type IDENTIFIER array?) | functionPtrDeclaration) ('=' expr)?;
 assignment: expr ('=' expr);
-conversion: '(' type ')' (literal | expr);
+conversion: '(' type ')' expr;
 initialize_list: ((expr ',')* expr)?;
 expr : literal
      | conversion

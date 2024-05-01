@@ -30,7 +30,6 @@ class VoidReturnConstraint(Constraint):
         self.errorNodes = []
         self.to_remove = set()
 
-
     def checkNode(self, node: ASTNode):
         if node.text == "Function":
             # create a new dict entry for a function and all the returns in the function body
