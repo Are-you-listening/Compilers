@@ -511,8 +511,6 @@ class Scanf(Printf):
 class Conversion:
     @staticmethod
     def performConversion(llvm_var, to_type: SymbolType):
-        print("tt", type(to_type))
-
 
         block = LLVMSingleton.getInstance().getCurrentBlock()  # Get the current block
 
@@ -535,7 +533,6 @@ class Conversion:
                            }
 
         llvm_to_type = CTypesToLLVM.getIRType(to_type)
-        print("type", llvm_to_type)
         """
         make a simplified to type for checking the conversion dict
         """
@@ -547,9 +544,6 @@ class Conversion:
                 simplified_to_type = "PTR"
 
         c = conversion_dict.get((type(llvm_var.type), simplified_to_type))
-        print("c", c)
         llvm_var = c(llvm_var, llvm_to_type)
 
-        print("tt2", type(to_type))
-        print(llvm_var)
         return llvm_var

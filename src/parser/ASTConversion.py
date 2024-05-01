@@ -42,6 +42,9 @@ class ASTConversion(ASTVisitor):
 
             return
 
+        if node.text in ["scanf", "printf"]:
+            self.type_mapping[node] = SymbolType("INT", False)
+
         if node.text == "Conversion":
             """
             When we have a conversion node, the new type will be the type defined in the conversion
@@ -351,17 +354,17 @@ class ASTConversion(ASTVisitor):
         identifier = index_node.text
 
         union_assignment = False
-        if node.structTable.isUnion(struct_name.getBaseType(), node.position.linenr):  # If we have a Union
+        if node.structTable.isUnion(struct_name.getBaseType(), node.position):  # If we have a Union
 
             p = node
             while p.parent is not None and p.parent.text not in ("Code", "Function", "Assignment", "Block", "Scope"):
                 p = p.parent
             union_assignment = p.parent.text == "Assignment" and p.parent.findChild(p) == 0
 
-            index = node.structTable.getEntry(struct_name.getBaseType(), identifier, node.position.linenr)
+            index = node.structTable.getEntry(struct_name.getBaseType(), identifier, node.position)
             data_type_index = index
         else:
-            index = node.structTable.getEntry(struct_name.getBaseType(), identifier, node.position.linenr)  # Replace the struct data member name with an index
+            index = node.structTable.getEntry(struct_name.getBaseType(), identifier, node.position)  # Replace the struct data member name with an index
             data_type_index = index
 
         index_node.text = index
@@ -649,13 +652,13 @@ class ASTConversion(ASTVisitor):
             data_type2 = self.type_mapping[node.getChild(2)]
 
             if not data_type2.isBase() or data_type2.getType() != "INT":
-                ErrorExporter.invalidArrayIndex(node.position.linenr, data_type2)
+                ErrorExporter.invalidArrayIndex(node.position, data_type2)
 
             """
             The array has by default 1 ptr, but it it is the only 1, the array is not really an array
             """
             if data_type.getPtrAmount() <= 1 and not isinstance(data_type.deReference(), SymbolTypeStruct):
-                ErrorExporter.invalidDereferenceNotPtr(node.position.linenr, data_type, True)
+                ErrorExporter.invalidDereferenceNotPtr(node.position, data_type, True)
 
             is_struct = self.is_struct(node)
             if is_struct:
@@ -665,11 +668,11 @@ class ASTConversion(ASTVisitor):
         when trying to dereference a non-ptr, throw an error
         """
         if data_type.isBase():
-            ErrorExporter.invalidDereferenceNotPtr(node.position.linenr, data_type)
+            ErrorExporter.invalidDereferenceNotPtr(node.position, data_type)
 
         if isinstance(data_type,
                       SymbolTypeStruct):  # Can't further dereference; '.'/'[]' operator is used on the wrong type
-            ErrorExporter.invalidOperation(node.position.linenr, '.', data_type, None)
+            ErrorExporter.invalidOperation(node.position, '.', data_type, None)
 
         data_type = data_type.deReference()
 
