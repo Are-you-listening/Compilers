@@ -1,17 +1,20 @@
 #include <stdio.h>
 
+union kaas{
+    int melk;
+    float yoghurt;
+};
 
-int main(){
-    char s[10] = "string he";
 
-    s[0] = 'a';
-    s[1] = 101;
 
-    char a = 'a';
-    char* v = &a;
-    *v = 'y';
-    printf("%c", *v);
 
-    printf("%s", s);
-	return 0;
+int main() {
+    union kaas gouda;
+
+    gouda.melk = 5;
+    gouda.yoghurt = 3.14;
+
+    printf("%f %f", gouda.melk , gouda.yoghurt);
+
+    return 0;
 }
