@@ -386,7 +386,9 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def missingReturn(position: Position, return_type: str):
+    def missingReturn(position: Position, return_type: SymbolType):
+        return_type = ErrorExporter.__to_output_type(return_type.getPtrTuple())
+
         print(
             f"[ Error ] {position.file} line {position.linenr}: function with return type {return_type} is missing a valid return statement",
             file=sys.stderr)

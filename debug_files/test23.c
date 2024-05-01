@@ -1,13 +1,15 @@
+#include <stdio.h>
 
 int main(){
+    int a = 1;
+    int b = 1;
+    a = 1;
+    b = 1;
 
-    int a = 0;
+    int f;
+    f = (a || !b);
+    printf("%d", f);
 
-    if (a){
-        return 0;
-    }else{
-        return 0;
-    }
-
+    return 0;
 
 }

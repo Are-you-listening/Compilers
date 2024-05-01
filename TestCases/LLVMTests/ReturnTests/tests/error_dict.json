@@ -1,3 +1,4 @@
 {
-  "5": ["[ Syntax Error ] tests/test5.c line 3:10 invalid symbol: 'd'"]
+  "5": ["[ Syntax Error ] tests/test5.c line 3:10 invalid symbol: 'd'"],
+  "13": ["[ Error ] tests/test13.c line 4: function with return type INT is missing a valid return statement"]
 }
