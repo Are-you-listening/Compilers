@@ -1,1 +1,4 @@
-{}
+{
+  "6": ["[ Error ] tests/test6.c line 10: invalid unary operation"],
+  "7": ["[ Error ] tests/test7.c line 10: invalid unary operation"]
+}

@@ -44,5 +44,7 @@
   "47": ["[ Syntax Error ] tests/test47.c line 7:13 invalid symbol: '999'"],
   "48": ["[ Syntax Error ] tests/test48.c line 5:10 invalid symbol: '('"],
   "49": ["[ Syntax Error ] tests/test49.c line 1:0 invalid symbol: 'return'"],
-  "53": ["[ Syntax Error ] tests/test53.c line 5:8 invalid symbol: '['"]
+  "53": ["[ Syntax Error ] tests/test53.c line 5:8 invalid symbol: '['"],
+  "54": ["[ Error ] tests/test54.c line 5: invalid unary operation"],
+  "55": ["[ Error ] tests/test55.c line 5: invalid unary operation"]
 }
