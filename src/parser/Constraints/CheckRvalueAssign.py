@@ -2,7 +2,7 @@ from src.parser.ErrorExporter import *
 from src.parser.ASTVisitor import *
 
 
-class CheckRvalueAssignBefore(ASTVisitor):
+class CheckRvalueAssign(ASTVisitor):
     """
     check that situations like this don't happen
     1 = 3;
@@ -53,12 +53,3 @@ class CheckRvalueAssignBefore(ASTVisitor):
 
     def isRejected(self):
         return self.rejected
-
-
-class CheckRvalueAssignAfter(ASTVisitor):
-    def visitNode(self, node: ASTNode):
-        if node.text == "Assignment":
-            pass
-
-    def visitNodeTerminal(self, node: ASTNodeTerminal):
-        pass

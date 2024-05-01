@@ -92,7 +92,7 @@ def cleanGreen(input_file, symbol_file):
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
-    CheckRvalueAssignBefore().visit(ast)
+    CheckRvalueAssign().visit(ast)
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
