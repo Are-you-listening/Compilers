@@ -45,7 +45,7 @@ class VoidReturnConstraint(Constraint):
 
     def throwException(self):
         for error_node in self.errorNodes:
-            ErrorExporter.voidWithNonEmptyReturn(error_node.position.linenr)
+            ErrorExporter.voidWithNonEmptyReturn(error_node.position)
         for n in self.to_remove:
             n.parent.removeChild(n)
 

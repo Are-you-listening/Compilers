@@ -406,6 +406,6 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def voidWithNonEmptyReturn(line_nr: str):
-        print(f"[ Warning ] line {line_nr}: 'return' with a value, in function returning void")
+    def voidWithNonEmptyReturn(position: Position):
+        print(f"[ Warning ] {position.file} line {position.linenr}: 'return' with a value, in function returning void")
 
