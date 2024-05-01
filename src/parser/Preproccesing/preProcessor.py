@@ -96,7 +96,7 @@ class PreProcessor:
         for tup in tpls:
             for tup2 in tpls:
                 if tup[0] == tup2[1] and tup2[0] == tup[1]:
-                    ErrorExporter.cyclicInclude(tup[0], tup[1])
+                    ErrorExporter.cyclicInclude(tup[0], tup[1], self.__curr_file)
 
     def preProcess(self):
         """
@@ -120,7 +120,7 @@ class PreProcessor:
                     identifier = self.stream.tokens[i + 1]
                     if "IDENTIFIER" != self.lexer.ruleNames[
                         identifier.type - 1]:  # Can only use identifiers as macro names!
-                        ErrorExporter.nonIdentifierDefine(identifier.line)
+                        ErrorExporter.nonIdentifierDefine(identifier.line, self.__curr_file)
                     else:
                         identifier = identifier.text
                     value, j = self.__getValuePart(i)
@@ -147,7 +147,7 @@ class PreProcessor:
                         try:
                             input_stream = FileStream(file)  # Verify the file exists
                         except:
-                            ErrorExporter.fileNotFound(token.line, file)
+                            ErrorExporter.fileNotFound(token.line, file, self.__curr_file)
 
                         self.__add_file_cycle(file)
 
@@ -183,7 +183,7 @@ class PreProcessor:
 
                 elif "endif" in text:
                     if len(self.ifndef) == 0:
-                        ErrorExporter.unMatchedEndIf(token.line)
+                        ErrorExporter.unMatchedEndIf(token.line, self.__curr_file)
                     skipped_index = self.ifndef.pop()
 
                     if skipped_index is not None:
@@ -217,15 +217,9 @@ class PreProcessor:
                 del self.stream.tokens[i:i + 1]  # Remove the identifier we're replacing
                 i -= 1  # Go 1 step back
 
-
             i += 1  # Go further
 
-            # tokenstring = ""
-            # for token in self.stream.tokens:  # For debug
-            #     tokenstring += token.text+" "
-            # print(tokenstring)
-
         if len(self.ifndef) != 0:
-            ErrorExporter.unMatchedStartIf(token.line)
+            ErrorExporter.unMatchedStartIf(self.__curr_file, token.line)
 
         return self.stdio, self.stream, self.comments

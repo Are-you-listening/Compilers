@@ -1,6 +1,7 @@
 from antlr4.error.ErrorListener import ErrorListener
 import sys
 from src.parser.Tables.SymbolType import SymbolType
+from src.parser.AST import Position
 
 
 class EListener(ErrorListener):
@@ -10,7 +11,7 @@ class EListener(ErrorListener):
             file = offendingSymbol.source[1].fileName
         else:
             if "token recognition error at:" in msg:
-                text = msg[29:len(msg)-1]
+                text = msg[29:len(msg) - 1]
                 file = ""
             else:
                 text = 'None'
@@ -25,27 +26,28 @@ class ErrorExporter:
         self.listener = EListener()
 
     @staticmethod
-    def undeclaredTypedef(linenr: str, type: str):
-        print(f"[ Error ] line {linenr}: unknown type name '( {type} )'", file=sys.stderr)
+    def undeclaredTypedef(position: Position, type: str):
+        print(f"[ Error ] {position.file} line {position.linenr}: unknown type name '( {type} )'", file=sys.stderr)
         exit()
 
     @staticmethod
-    def cyclicInclude(file: str, file2: str):
-        print(f"[ Error ] Cyclic Include detected from {file} to {file2}", file=sys.stderr)
+    def cyclicInclude(file: str, file2: str, err_file: str):
+        print(f"[ Error ] {err_file} Cyclic Include detected from {file} to {file2}", file=sys.stderr)
         exit()
 
     @staticmethod
-    def mainNotFound():
-        print("[ Error ] main function not found", file=sys.stderr)
+    def mainNotFound(position: Position):
+        print(f"[ Error ] {position.file} main function not found", file=sys.stderr)
         exit()
 
     @staticmethod
-    def invalidOperatorFloat(operator: str, linenr: str):
-        print(f"[ Error ] line {linenr}: invalid float operation {operator}", file=sys.stderr)
+    def invalidOperatorFloat(operator: str, position: Position):
+        print(f"[ Error ] {position.file} line {position.linenr}: invalid float operation {operator}",
+              file=sys.stderr)
         exit()
 
     @staticmethod
-    def invalidOperation(linenr: str, operator: str, type1: SymbolType, type2: SymbolType):
+    def invalidOperation(position: Position, operator: str, type1: SymbolType, type2: SymbolType):
 
         type1 = ErrorExporter.__to_output_type(type1.getPtrTuple())
         if type2 is not None:
@@ -53,55 +55,63 @@ class ErrorExporter:
         else:
             type2 = ""
 
-        print(f"[ Error ] line {linenr}: invalid operation {operator} on type(s): {type1}{type2}", file=sys.stderr)
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: invalid operation {operator} on type(s): {type1}{type2}",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def invalidOperatorPtr(operator: str, linenr: str):
-        print(f"[ Error ] line {linenr}: invalid ptr operation {operator}", file=sys.stderr)
+    def invalidOperatorPtr(operator: str, position: Position):
+        print(f"[ Error ] {position.file} line {position.linenr}: invalid ptr operation {operator}", file=sys.stderr)
         exit()
 
     @staticmethod
-    def LValueReference(linenr: str):
-        print(f"[ Error ] line {linenr}: you can't have a reference to an LValue", file=sys.stderr)
-        exit()
-
-    @staticmethod
-    def invalidRvalue(identifier: str, linenr: str):
-        print(f"[ Error ] line {linenr}: invalid assignment to {identifier}", file=sys.stderr)
-        exit()
-
-    @staticmethod
-    def uninitializedVariable(identifier: str, linenr: str):
-        print(f"[ Warning] line {linenr}: use of uninitialized variable {identifier}")
-
-    @staticmethod
-    def undeclaredVariable(identifier: str, linenr: str, type="variable"):
-        print(f"[ Error ] line {linenr}: use of undeclared {type} {identifier}", file=sys.stderr)
-        exit()
-
-    @staticmethod
-    def constComplaint(linenr: str, real_expression: str, identifier: str, type1: str):
-
-        print(f"[ Error ] line {linenr}: Manipulation of variable '{real_expression}' is not allowed, because '{identifier}' has type '{type1}'",
+    def LValueReference(position: Position):
+        print(f"[ Error ] {position.file} line {position.linenr}: you can't have a reference to an LValue",
               file=sys.stderr)
         exit()
 
     @staticmethod
-    def redefinition(linenr: str, type: str, variable: str):
-        print(f"[ Error ] line {linenr}: redefinition or redeclaration of {type} {variable}", file=sys.stderr)
+    def invalidRvalue(identifier: str, position: Position):
+        print(f"[ Error ] {position.file} line {position.linenr}: invalid assignment to {identifier}",
+              file=sys.stderr)
         exit()
 
     @staticmethod
-    def wrongRefCombination(type1: str, type2: str, linenr: str):
-        print(f"[ Error ] line {linenr}: reference types do not match: {type1} and {type2}", file=sys.stderr)
+    def uninitializedVariable(identifier: str, position: Position):
+        print(f"[ Warning] {position.file} line {position.linenr}: use of uninitialized variable {identifier}")
+
+    @staticmethod
+    def undeclaredVariable(identifier: str, position: Position, type="variable"):
+        print(f"[ Error ] {position.file} line {position.linenr}: use of undeclared {type} {identifier}",
+              file=sys.stderr)
         exit()
 
     @staticmethod
-    def IncompatiblePtrTypesWarning(line_nr: str, type1: SymbolType, type2: SymbolType):
+    def constComplaint(position: Position, real_expression: str, identifier: str, type1: str):
+
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: Manipulation of variable '{real_expression}' is not allowed, because '{identifier}' has type '{type1}'",
+            file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def redefinition(position: Position, type: str, variable: str):
+        print(f"[ Error ] {position.file} line {position.linenr}: redefinition or redeclaration of {type} {variable}",
+              file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def wrongRefCombination(type1: str, type2: str, position: Position):
+        print(f"[ Error ] {position.file} line {position.linenr}: reference types do not match: {type1} and {type2}",
+              file=sys.stderr)
+        exit()
+
+    @staticmethod
+    def IncompatiblePtrTypesWarning(position: Position, type1: SymbolType, type2: SymbolType):
         """
         print a warning for an incompatible conversion of ptr types int** to float** for example
-        :param line_nr:
+        :param position:
         :param type1:
         :param type2:
         :return:
@@ -110,48 +120,47 @@ class ErrorExporter:
         type1 = ErrorExporter.__to_output_type(type1.getPtrTuple())
         type2 = ErrorExporter.__to_output_type(type2.getPtrTuple())
 
-        print(f"[ Warning ] line {line_nr}: incompatible pointer types initializing '{type1}' with an expression of type '{type2}' ")
+        print(
+            f"[ Warning ] {position.file} line {position.linenr}: incompatible pointer types initializing '{type1}' with an expression of type '{type2}' ")
 
     @staticmethod
-    def divideByZero(line_nr: str, numerator):
-        print(f"[ Error ] line {line_nr}: can't divide {numerator} by zero", file=sys.stderr)
+    def divideByZero(position: Position, numerator):
+        print(f"[ Error ] {position.file} line {position.linenr}: can't divide {numerator} by zero", file=sys.stderr)
         exit()
 
     @staticmethod
-    def narrowingTypesWarning(line_nr: str, to_type: SymbolType, from_type: SymbolType):
+    def narrowingTypesWarning(position: Position, to_type: SymbolType, from_type: SymbolType):
         """
         print a warning for an incompatible conversion of ptr types int** to float** for example
-        :param line_nr:
+        :param position:
         :param to_type:
         :param from_type:
         :return:
         """
-
         to_type = ErrorExporter.__to_output_type(to_type.getPtrTuple())
         from_type = ErrorExporter.__to_output_type(from_type.getPtrTuple())
 
-        print(f"[ Warning ] line {line_nr}: Narrowing type from '{from_type}' to '{to_type}' ")
+        print(f"[ Warning ] {position.file} line {position.linenr}: Narrowing type from '{from_type}' to '{to_type}' ")
 
     @staticmethod
-    def IncompatibleComparison(line_nr: str, type1: SymbolType, type2: SymbolType):
+    def IncompatibleComparison(position: Position, type1: SymbolType, type2: SymbolType):
         """
         print a warning for an incompatible conversion of ptr types int** to float** for example
-        :param line_nr:
+        :param position:
         :param type1:
         :param type2:
         :return:
         """
-
         type1 = ErrorExporter.__to_output_type(type1.getPtrTuple())
         type2 = ErrorExporter.__to_output_type(type2.getPtrTuple())
 
-        print(f"[ Warning ] line {line_nr}: comparison of different types ('{type1}' and '{type2}') ")
+        print( f"[ Warning ] {position.file} line {position.linenr}: comparison of different types ('{type1}' and '{type2}') ")
 
     @staticmethod
-    def invalidAssignment(line_nr: str, type1: SymbolType, type2: SymbolType):
+    def invalidAssignment(position: Position, type1: SymbolType, type2: SymbolType):
         """
         an assignment between invalid types
-        :param line_nr:
+        :param position:
         :param type1:
         :param type2:
         :return:
@@ -159,15 +168,17 @@ class ErrorExporter:
         type1 = ErrorExporter.__to_output_type(type1.getPtrTuple())
         type2 = ErrorExporter.__to_output_type(type2.getPtrTuple())
 
-        print(f"[ Error ] line {line_nr}: assignment of incompatible types ('{type1}' and '{type2}') ", file=sys.stderr)
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: assignment of incompatible types ('{type1}' and '{type2}') ",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def invalidDereferenceNotPtr(line_nr: str, type1: SymbolType, is_array: bool = False):
+    def invalidDereferenceNotPtr(position: Position, type1: SymbolType, is_array: bool = False):
         """
         an assignment between invalid types
+        :param position:
         :param is_array: optional boolean indicating whether the value is an array or not
-        :param line_nr:
         :param type1:
         :return:
         """
@@ -180,48 +191,52 @@ class ErrorExporter:
             required = "array"
 
         print(
-            f"[ Error ] line {line_nr}:  indirection requires {required} operand ('{type1}' invalid)",
+            f"[ Error ] {position.file} line {position.linenr}:  indirection requires {required} operand ('{type1}' invalid)",
             file=sys.stderr)
         exit()
 
     @staticmethod
-    def invalidDereference(line_nr: str, type: str):
+    def invalidDereference(position: Position, type: str):
         """
         attempting to dereference something that cannot be dereferenced
-        :param line_nr:
+        :param position:
         :param type:
         :return:
         """
-        print(f"[ Error ] line {line_nr}:  attempted dereference of invalid type: {type}", file=sys.stderr)
+        print(f"[ Error ] {position.file} line {position.linenr}:  attempted dereference of invalid type: {type}",
+              file=sys.stderr)
         exit()
 
     @staticmethod
-    def TypeDefDoubleDeclare(line_nr: str, from_type1: str, from_type2: str):
+    def TypeDefDoubleDeclare(position: Position, from_type1: str, from_type2: str):
         """
         an error in case we have a typedef that is not allowed because it already exists (within scope)
         :return:
         """
-        print(f"[ Error ] line {line_nr}: typedef redefinition with different types ('{from_type1}' vs '{from_type2}')", file=sys.stderr)
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: typedef redefinition with different types ('{from_type1}' vs '{from_type2}')",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def TypeDefKeyword(line_nr: str, key: str):
+    def TypeDefKeyword(position: Position, key: str):
         """
         an error in case we have a typedef that is not allowed because it uses a keyword
         :return:
         """
-        print(f"[ Error ] line {line_nr}: typedef cannot be assigned to keyword ('{key}')",
+        print(f"[ Error ] {position.file} line {position.linenr}: typedef cannot be assigned to keyword ('{key}')",
               file=sys.stderr)
         exit()
 
     @staticmethod
-    def TypeDefUndefined(line_nr: str, to_type: str):
+    def TypeDefUndefined(position: Position, to_type: str):
         """
         an error in case we have a typedef that is not allowed because it already exists (within scope)
         :return:
         """
-        print(f"[ Error ] line {line_nr}: typedef cannot be done for a type that does not exist ('{to_type}')",
-              file=sys.stderr)
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: typedef cannot be done for a type that does not exist ('{to_type}')",
+            file=sys.stderr)
         exit()
 
     @staticmethod
@@ -235,73 +250,85 @@ class ErrorExporter:
         exit()
 
     @staticmethod
-    def GlobalsNonImplicitDeclaration(line_nr: str):
-        print(f"[ Error ] line {line_nr} Only implicit declarations are allowed for globals", file=sys.stderr)
+    def GlobalsNonImplicitDeclaration(position: Position, ):
+        print(f"[ Error ] {position.file} line {position.linenr}: Only implicit declarations are allowed for globals",
+              file=sys.stderr)
         exit()
 
     @staticmethod
-    def GlobalsInvalidDeclaration(line_nr: str):
-        print(f"[ Error ] line {line_nr} You can't initialise a global variable with a global variable", file=sys.stderr)
+    def GlobalsInvalidDeclaration(position: Position):
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: You can't initialise a global variable with a global variable",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def InvalidGlobalExpression(line_nr: str):
-        print(f"[ Error ] line {line_nr} invalid statement in the global scope", file=sys.stderr)
+    def InvalidGlobalExpression(position: Position):
+        print(f"[ Error ] {position.file} line {position.linenr}: invalid statement in the global scope",
+              file=sys.stderr)
         exit()
 
     @staticmethod
-    def tooFewFunctionArguments(line_nr: str, expected: int, got: int, function: str):
-        print(f"[ Error ] line {line_nr}: too few arguments to function '{function}': expected {expected}, got {got}", file=sys.stderr)
+    def tooFewFunctionArguments(position: Position, expected: int, got: int, function: str):
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: too few arguments to function '{function}': expected {expected}, got {got}",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def tooManyFunctionArguments(line_nr: str, expected: int, got: int, function: str):
-        print(f"[ Error ] line {line_nr}: too many arguments to function '{function}': expected {expected}, got {got}", file=sys.stderr)
+    def tooManyFunctionArguments(position: Position, expected: int, got: int, function: str):
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: too many arguments to function '{function}': expected {expected}, got {got}",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def functionRedefinition(line_nr: str, func_name: str):
-        print(f"[ Error ] line {line_nr}: redefinition of {func_name}", file=sys.stderr)
+    def functionRedefinition(position: Position, func_name: str):
+        print(f"[ Error ] {position.file} line {position.linenr}: redefinition of {func_name}", file=sys.stderr)
         exit()
 
     @staticmethod
-    def unMatchedEndIf(line_nr):
-        print(f"[ Syntax Error ] line: {line_nr} Unmatched conditional directive: '#endif' ", file=sys.stderr)
+    def unMatchedEndIf(line_nr: str, file: str):
+        print(f"[ Syntax Error ] {file} line {line_nr}: Unmatched conditional directive: '#endif' ", file=sys.stderr)
         exit()
 
     @staticmethod
-    def unMatchedStartIf(line_nr: str):
-        print(f"[ Syntax Error ] line: {line_nr} unterminated #ifndef ", file=sys.stderr)
+    def unMatchedStartIf(file: str, line: str):
+        print(f"[ Syntax Error ] {file} line {line}: unterminated #ifndef ", file=sys.stderr)
         exit()
 
     @staticmethod
-    def fileNotFound(line_nr, file):
-        print(f"[ Error ] line: {line_nr} '{file}' File not found!", file=sys.stderr)
+    def fileNotFound(line_nr, file, file2):
+        print(f"[ Error ] {file2} line {line_nr}: '{file}' File not found!", file=sys.stderr)
         exit()
 
     @staticmethod
-    def nonIdentifierDefine(line_nr):
-        print(f"[ Error ] line: {line_nr} Macro names must be identifiers", file=sys.stderr)
+    def nonIdentifierDefine(line_nr: str, file: str):
+        print(f"[ Error ] {file} line {line_nr}: Macro names must be identifiers", file=sys.stderr)
         exit()
 
     @staticmethod
-    def switchDeclaration(line_nr: str, variable_name: str):
-        print(f"[ Error ] line: {line_nr} variable '{variable_name}' is not allowed to be declared inside a switch statement without an additional scope", file=sys.stderr)
+    def switchDeclaration(position: Position, variable_name: str):
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: variable '{variable_name}' is not allowed to be declared inside a switch statement without an additional scope",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def conflictingFunctionParameterTypes(line_nr: str, func_name: str):
-        print(f"[ Error ] line {line_nr}: conflicting types for {func_name}", file=sys.stderr)
+    def conflictingFunctionParameterTypes(position: Position, func_name: str):
+        print(f"[ Error ] {position.file} line {position.linenr}: conflicting types for {func_name}", file=sys.stderr)
         exit()
 
     @staticmethod
-    def conflictingFunctionReturnType(line_nr: str, func_name: str):
-        print(f"[ Error ] line {line_nr}: conflicting return type for {func_name}", file=sys.stderr)
+    def conflictingFunctionReturnType(position: Position, func_name: str):
+        print(f"[ Error ] {position.file} line {position.linenr}: conflicting return type for {func_name}",
+              file=sys.stderr)
         exit()
 
     @staticmethod
-    def undefinedFunctionReference(line_nr: str, func_name: str):
-        print(f"[ Error ] line {line_nr}: undefined reference to {func_name}", file=sys.stderr)
+    def undefinedFunctionReference(position: Position, func_name: str):
+        print(f"[ Error ] {position.file} line {position.linenr}: undefined reference to {func_name}",
+              file=sys.stderr)
         exit()
 
     @staticmethod
@@ -321,51 +348,59 @@ class ErrorExporter:
         return out_type
 
     @staticmethod
-    def wrongInitializationListSize(line_nr: str, variable: str):
-        print(f"[ Error ] line {line_nr}: the initializer list its size for array {variable} is not the right size",
-              file=sys.stderr)
+    def wrongInitializationListSize(position: Position, variable: str):
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: the initializer list its size for array {variable} is not the right size",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def wrongInitializationListFormat(line_nr: str, variable: str):
-        print(f"[ Error ] line {line_nr}: the initializer list its size for array {variable} is not the right format",
-              file=sys.stderr)
+    def wrongInitializationListFormat(position: Position, variable: str):
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: the initializer list its size for array {variable} is not the right format",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def invalidArraySize(line_nr: str, variable: str, index_type: tuple):
+    def invalidArraySize(position: Position, variable: str, index_type: tuple):
         index_type = ErrorExporter.__to_output_type(index_type)
-        print(f"[ Error ] line {line_nr}: the array size definition of {variable} should be an integer instead of "
-              f"'{index_type}'",
-              file=sys.stderr)
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: the array size definition of {variable} should be an integer instead of "
+            f"'{index_type}'",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def invalidArrayIndex(line_nr: str, index_type: SymbolType):
+    def invalidArrayIndex(position: Position, index_type: SymbolType):
         index_type = ErrorExporter.__to_output_type(index_type.getPtrTuple())
-        print(f"[ Error ] line {line_nr}: the array index is of type {index_type} which is not allowed",
-              file=sys.stderr)
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: the array index is of type {index_type} which is not allowed",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def missingReturn(line_nr: str, return_type: str):
-        print(f"[ Error ] line {line_nr}: function with return type {return_type} is missing a valid return statement", file=sys.stderr)
+    def missingReturn(position: Position, return_type: str):
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: function with return type {return_type} is missing a valid return statement",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def lostInitializerList(line_nr: str):
-        print(f"[ Error ] line {line_nr}: an initializer list is provided while not being assigned to an array",
-              file=sys.stderr)
+    def lostInitializerList(position: Position, ):
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: an initializer list is provided while not being assigned to an array",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def functionCallNotFunction(line_nr: str, called: str, call_type: SymbolType):
+    def functionCallNotFunction(position: Position, called: str, call_type: SymbolType):
         call_type = ErrorExporter.__to_output_type(call_type.getPtrTuple())
-        print(f"[ Error ] line {line_nr}: you cannot do a function call for the non-function '{called}' which is of type {call_type}",
-              file=sys.stderr)
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: you cannot do a function call for the non-function '{called}' which is of type {call_type}",
+            file=sys.stderr)
         exit()
 
     @staticmethod
-    def variableDeclaredVoid(line_nr: str, var: str):
-        print(f"[ Error ] line {line_nr}: variable {var} declared void ",file=sys.stderr)
+    def variableDeclaredVoid(position: Position, var: str):
+        print(f"[ Error ] {position.file} line {position.linenr}: variable {var} declared void ", file=sys.stderr)
         exit()

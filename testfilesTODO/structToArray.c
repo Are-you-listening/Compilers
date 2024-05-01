@@ -10,9 +10,9 @@ int main() {
     union NotTypeSafe gouda;
 
     gouda.as_integer = 5;
-    gouda.as_str = {"a"};
+    gouda.as_str[0] = 'a';
 
-    printf("%d %d", gouda.melk , gouda.yoghurt);
+
 
     return 0;
 }

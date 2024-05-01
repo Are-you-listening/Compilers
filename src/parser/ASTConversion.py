@@ -75,21 +75,21 @@ class ASTConversion(ASTVisitor):
                 data_type2 = self.type_mapping[node.getChild(2)]
 
                 if not data_type2.isBase() or data_type2.getType() != "INT":
-                    ErrorExporter.invalidArrayIndex(node.position.linenr, data_type2)
+                    ErrorExporter.invalidArrayIndex(node.position, data_type2)
 
                 """
                 The array has by default 1 ptr, but it it is the only 1, the array is not really an array
                 """
                 if data_type.getPtrAmount() <= 1 and not isinstance(data_type.deReference(), SymbolTypeStruct):
-                    ErrorExporter.invalidDereferenceNotPtr(node.position.linenr, data_type, True)
+                    ErrorExporter.invalidDereferenceNotPtr(node.position, data_type, True)
             """
             when trying to dereference a non-ptr, throw an error
             """
             if data_type.isBase():
-                ErrorExporter.invalidDereferenceNotPtr(node.position.linenr, data_type)
+                ErrorExporter.invalidDereferenceNotPtr(node.position, data_type)
 
             if isinstance(data_type, SymbolTypeStruct):  # Can't further dereference; '.'/'[]' operator is used on the wrong type
-                ErrorExporter.invalidOperation(node.position.linenr, '.', data_type, None)
+                ErrorExporter.invalidOperation(node.position, '.', data_type, None)
 
             data_type = data_type.deReference()
 
@@ -126,9 +126,9 @@ class ASTConversion(ASTVisitor):
             check if has the right amount of arguments
             """
             if len(node.children) < len(parameterTypes):
-                ErrorExporter.tooFewFunctionArguments(node.position.linenr, len(parameterTypes), len(node.children), self.subtree_to_text(node.parent.children[0]))
+                ErrorExporter.tooFewFunctionArguments(node.position, len(parameterTypes), len(node.children), self.subtree_to_text(node.parent.children[0]))
             if len(node.children) > len(parameterTypes):
-                ErrorExporter.tooManyFunctionArguments(node.position.linenr, len(parameterTypes), len(node.children), self.subtree_to_text(node.parent.children[0]))
+                ErrorExporter.tooManyFunctionArguments(node.position, len(parameterTypes), len(node.children), self.subtree_to_text(node.parent.children[0]))
             return
 
         if node.text not in ("Literal", "Expr", "Declaration", "Assignment", "Return", "ParameterCall"):
@@ -156,10 +156,8 @@ class ASTConversion(ASTVisitor):
                 In case we do a function call on a not function we will throw this error
                 """
                 if not isinstance(called_type, FunctionSymbolType):
-                    ErrorExporter.functionCallNotFunction(node.position.linenr, self.subtree_to_text(node.getChild(0)),
+                    ErrorExporter.functionCallNotFunction(node.position, self.subtree_to_text(node.getChild(0)),
                                                           called_type)
-
-
 
             """
             check the type of the children to calculate our type.
@@ -196,7 +194,7 @@ class ASTConversion(ASTVisitor):
                         when the op is invalid for ptrs
                         """
 
-                        ErrorExporter.invalidOperation(node.position.linenr, operator, to_type, check_type)
+                        ErrorExporter.invalidOperation(node.position, operator, to_type, check_type)
 
                 """
                 for the non-first type, we will take the richest type
@@ -244,7 +242,7 @@ class ASTConversion(ASTVisitor):
                 const_assign = to_type.isConst()
 
                 if const_assign:
-                    ErrorExporter.constComplaint(node.position.linenr, self.subtree_to_text(assign_node),
+                    ErrorExporter.constComplaint(node.position, self.subtree_to_text(assign_node),
                                                  self.subtree_to_text(assign_node), self.format_type(to_type))
 
         if node.text == "ParameterCall":
@@ -309,10 +307,10 @@ class ASTConversion(ASTVisitor):
                         """
                         when no operator, it is an assignment
                         """
-                        ErrorExporter.invalidAssignment(child.position.linenr, to_type, type_tup)
+                        ErrorExporter.invalidAssignment(child.position, to_type, type_tup)
                     else:
 
-                        ErrorExporter.invalidOperation(child.position.linenr, operator, to_type, type_tup)
+                        ErrorExporter.invalidOperation(child.position, operator, to_type, type_tup)
                     continue
 
                 if operator is not None:
@@ -320,11 +318,11 @@ class ASTConversion(ASTVisitor):
                         """
                         in case we have incompatible type
                         """
-                        ErrorExporter.invalidOperation(child.position.linenr, operator, to_type, type_tup)
+                        ErrorExporter.invalidOperation(child.position, operator, to_type, type_tup)
                         continue
 
                     if operator in ("==", "!=", "<=", ">=", "<", ">"):
-                        ErrorExporter.IncompatibleComparison(child.position.linenr, to_type, type_tup)
+                        ErrorExporter.IncompatibleComparison(child.position, to_type, type_tup)
                         self.addConversion(child, to_type.getPtrTuple())
                         continue
 
@@ -338,8 +336,8 @@ class ASTConversion(ASTVisitor):
                         """
                         continue
 
-                self.pointer_warning_check(child.position.linenr, to_type, type_tup)
-                self.narrowing_warning_check(child.position.linenr, to_type, type_tup)
+                self.pointer_warning_check(child.position, to_type, type_tup)
+                self.narrowing_warning_check(child.position, to_type, type_tup)
 
                 self.addConversion(child, to_type.getPtrTuple())
 
@@ -387,7 +385,8 @@ class ASTConversion(ASTVisitor):
             left_type = self.type_mapping[left_sibling]
             self.type_mapping[left_sibling] = left_type.deReference()
 
-    def replaceIdentifierWithIndex(self, node: ASTNode, struct_name: SymbolType):
+    @staticmethod
+    def replaceIdentifierWithIndex(node: ASTNode, struct_name: SymbolType):
         """
         Replace the data field identifier of a struct with a corresponding index
         :param node: Struct Node
@@ -397,10 +396,10 @@ class ASTConversion(ASTVisitor):
         index_node = node.children[0].getSiblingNeighbour(1).getSiblingNeighbour(1)
         identifier = index_node.text
 
-        if node.structTable.isUnion(struct_name.getBaseType(), node.position.linenr):  # If we have a Union
+        if node.structTable.isUnion(struct_name.getBaseType(), node.position):  # If we have a Union
             index = 0
         else:
-            index = node.structTable.getEntry(struct_name.getBaseType(), identifier, node.position.linenr)  # Replace the struct data member name with an index
+            index = node.structTable.getEntry(struct_name.getBaseType(), identifier, node.position)  # Replace the struct data member name with an index
         index_node.text = index
 
     @staticmethod
@@ -503,11 +502,11 @@ class ASTConversion(ASTVisitor):
         return None
 
     @staticmethod
-    def pointer_warning_check(line_nr: int, to_type: SymbolType, type_tup2: SymbolType):
+    def pointer_warning_check(position: Position, to_type: SymbolType, type_tup2: SymbolType):
         """
         when float* to int* convert we need to throw a warning
         This function will check for such situations and throw a warning accordingly
-        :param line_nr:
+        :param position:
         :param to_type:
         :param type_tup2:
         :return:
@@ -527,15 +526,15 @@ class ASTConversion(ASTVisitor):
             """
             when comparison operator is given -> other error message
             """
-            ErrorExporter.IncompatiblePtrTypesWarning(line_nr, to_type, type_tup2)
+            ErrorExporter.IncompatiblePtrTypesWarning(position, to_type, type_tup2)
 
             return
 
-    def narrowing_warning_check(self, line_nr: int, to_tup: SymbolType, type_tup: SymbolType):
+    def narrowing_warning_check(self, position: Position, to_tup: SymbolType, type_tup: SymbolType):
         """
         Give a warning when an implicit conversion narrows the type
 
-        :param line_nr:
+        :param position:
         :param to_tup:
         :param type_tup:
         :return:
@@ -550,7 +549,7 @@ class ASTConversion(ASTVisitor):
         if self.rc.get_poorest(to_tup.getBaseType(), type_tup.getBaseType()) == type_tup.getBaseType():
             return
 
-        ErrorExporter.narrowingTypesWarning(line_nr, to_tup, type_tup)
+        ErrorExporter.narrowingTypesWarning(position, to_tup, type_tup)
 
     @staticmethod
     def addConversion(node: ASTNode, to_type: tuple):
@@ -649,7 +648,7 @@ class ASTConversion(ASTVisitor):
             corresponding_function_type = self.type_mapping.get(node.parent.children[0])
 
         if not isinstance(corresponding_function_type, FunctionSymbolType):
-            ErrorExporter.functionCallNotFunction(node.linenr, self.subtree_to_text(node.parent.children[0]),
+            ErrorExporter.functionCallNotFunction(node.position, self.subtree_to_text(node.parent.children[0]),
                                                   corresponding_function_type)
 
         return corresponding_function_type

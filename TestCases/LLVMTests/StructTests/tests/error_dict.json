@@ -1,8 +1,8 @@
 {
-  "17": ["[ Error ] line 22: use of undeclared variable kaas_ptr"],
-  "18": ["[ Error ] line 10: use of undeclared variable kaas"],
-  "23": ["[ Error ] line 24: invalid operation . on type(s): kaas*"],
-  "24": ["[ Error ] line 26: invalid operation . on type(s): kaas*"],
-  "28": ["[ Error ] line 13: assignment of incompatible types ('INT*' and 'FLOAT') "],
-  "32": ["[ Error ] line 19: use of undeclared variable melk"]
+  "17": ["[ Error ] tests/test17.c line 22: use of undeclared variable kaas_ptr"],
+  "18": ["[ Error ] tests/test18.c line 10: use of undeclared variable kaas"],
+  "23": ["[ Error ] tests/test23.c line 24: invalid operation . on type(s): kaas*"],
+  "24": ["[ Error ] tests/test24.c line 26: invalid operation . on type(s): kaas*"],
+  "28": ["[ Error ] tests/test28.c line 13: assignment of incompatible types ('INT*' and 'FLOAT') "],
+  "32": ["[ Error ] tests/test32.c line 19: use of undeclared variable melk"]
 }

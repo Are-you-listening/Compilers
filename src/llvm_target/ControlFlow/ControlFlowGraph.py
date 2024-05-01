@@ -544,7 +544,7 @@ class ControlFlowGraph:
         """
 
         """
-        For IF statements without else We need to do the follwoing actions:
+        For IF statements without else We need to do the following actions:
         - Add a new root vertex, that connects to the old root when  True,
         - When False/after original end (accepting) go to the new end (accepting)
         """

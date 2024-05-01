@@ -104,7 +104,6 @@ class ASTDereferencer(ASTVisitor):
         if node.type != "IDENTIFIER" or (node.parent is not None and node.parent.text == "FunctionCall"):
             return
 
-
         sibling_before = node.getSiblingNeighbour(-1)
 
         if sibling_before is None:
@@ -128,7 +127,6 @@ class ASTDereferencer(ASTVisitor):
                 parent.removeChild(sibling_before)
                 grand_parent.replaceChild(parent, node)
                 return
-
 
         """
         Each identifier gets a dereference node by default, unless it is a Function Call
@@ -155,5 +153,4 @@ class ASTDereferencer(ASTVisitor):
             super_child = node.getChild(0)
             node.parent.replaceChild(node, super_child)
         elif error:
-            #print("hey")
-            ErrorExporter.LValueReference(node.position.linenr)
+            ErrorExporter.LValueReference(node.position)

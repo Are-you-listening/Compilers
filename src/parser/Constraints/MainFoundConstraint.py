@@ -15,6 +15,10 @@ class MainFoundConstraint(Constraint):
     def checkTerminalNode(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER" and node.text == "main" and node.parent.text == "Function":
             self.accepted = True
+            self.errorNode = node
 
     def throwException(self):
-        ErrorExporter.mainNotFound()
+        if self.errorNode is None:
+            ErrorExporter.mainNotFound(Position("", "", ""))
+        else:
+            ErrorExporter.mainNotFound(self.errorNode.position)

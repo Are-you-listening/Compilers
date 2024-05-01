@@ -1,4 +1,4 @@
 {
-  "10": ["[ Error ] line 8: use of undeclared function printf"],
-  "39": ["[ Error ] main function not found"]
+  "10": ["[ Error ] tests/test10.c line 8: use of undeclared function printf"],
+  "39": ["[ Error ]  main function not found"]
 }

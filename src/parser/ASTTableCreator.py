@@ -76,18 +76,18 @@ class ASTTableCreator(ASTVisitor):
         if function_node.symbol_table.exists(function_node.text):
             # check if the return types match, if not, throw an error
             if return_type.getPtrTuple() != node.symbol_table.getEntry(function_node.text).getPtrTuple():
-                ErrorExporter.conflictingFunctionReturnType(function_node.position.linenr, function_node.text)
+                ErrorExporter.conflictingFunctionReturnType(function_node.position, function_node.text)
             # check if the parameter types match, if not, throw an error
             if not self.__equalParamTypes(param_types_and_ptrs, node.symbol_table.getEntry(
                     function_node.text).getTypeObject().getParameterTypes()):
-                ErrorExporter.conflictingFunctionParameterTypes(function_node.position.linenr, function_node.text)
+                ErrorExporter.conflictingFunctionParameterTypes(function_node.position, function_node.text)
             # check if the function is a declaration or a definition
             if node.getChildAmount() == 3:
                 return
             else:
                 # the function is a definition, check if it is already defined, if so, throw an error, else set it to defined
                 if node.symbol_table.getEntry(function_node.text).is_function_defined():
-                    ErrorExporter.functionRedefinition(function_node.position.linenr, function_node.text)
+                    ErrorExporter.functionRedefinition(function_node.position, function_node.text)
                 else:
                     node.symbol_table.getEntry(function_node.text).set_function_defined(True)
         else:
@@ -249,7 +249,7 @@ class ASTTableCreator(ASTVisitor):
         """
         latest_datatype = self.__get_data_type(child, symbol_type)
         if latest_datatype.getBaseType() == "VOID":
-            ErrorExporter.variableDeclaredVoid(node.position.linenr, node.children[1].text)
+            ErrorExporter.variableDeclaredVoid(node.position, node.children[1].text)
 
         """
         the value in the symbol table is initially empty

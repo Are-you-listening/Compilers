@@ -42,7 +42,7 @@ class UndeclaredConstrained(Constraint):
     def throwException(self):
         if self.errorNode is None:
             return
-        ErrorExporter.undeclaredVariable(self.errorNode.text, self.errorNode.position.linenr)
+        ErrorExporter.undeclaredVariable(self.errorNode.text, self.errorNode.position)
 
     def checkViableAssignment(self, node):
         for child in node.children:

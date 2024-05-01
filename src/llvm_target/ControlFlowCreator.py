@@ -157,7 +157,6 @@ class ControlFlowCreator(ASTVisitor):
                 if cf is not None and cf not in merge_list and cf not in self.function_map.values():
                     merge_list.append(cf)
 
-
             if len(merge_list) > 0:
                 """
                 Do default merges when a control flow graph exists

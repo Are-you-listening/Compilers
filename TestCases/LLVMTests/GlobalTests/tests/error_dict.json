@@ -1,3 +1,3 @@
-{"3": ["[ Error ] line 4 You can't initialise a global variable with a global variable"],
-  "4": ["[ Error ] line 6: use of undeclared variable a"]
+{"3": ["[ Error ] tests/test3.c line 4: You can't initialise a global variable with a global variable"],
+  "4": ["[ Error ] tests/test4.c line 6: use of undeclared variable a"]
 }

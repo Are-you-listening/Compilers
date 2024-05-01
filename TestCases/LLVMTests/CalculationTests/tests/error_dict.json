@@ -1,2 +1,2 @@
-{"22":  ["[ Error ] line 2:  indirection requires pointer operand ('INT' invalid)"]
+{"22":  ["[ Error ] tests/test22.c line 2:  indirection requires pointer operand ('INT' invalid)"]
 }

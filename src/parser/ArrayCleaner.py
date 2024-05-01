@@ -140,10 +140,10 @@ class ArrayCleaner(ASTVisitor):
 
             if check_int:
                 if not isinstance(child, ASTNodeTerminal):
-                    ErrorExporter.invalidArraySize(array_node.position.linenr, array_node.parent.getChild(1).text,
+                    ErrorExporter.invalidArraySize(array_node.position, array_node.parent.getChild(1).text,
                                                    (("Expression", False), []))
                 if child.type != "INT":
-                    ErrorExporter.invalidArraySize(array_node.position.linenr, array_node.parent.getChild(1).text,
+                    ErrorExporter.invalidArraySize(array_node.position, array_node.parent.getChild(1).text,
                                                    ((child.type, False), []))
 
             array_sizes.append(child.text)
@@ -163,7 +163,7 @@ class ArrayCleaner(ASTVisitor):
         """
 
         if node.parent not in self.array_map:
-            ErrorExporter.lostInitializerList(node.position.linenr)
+            ErrorExporter.lostInitializerList(node.position)
             return
 
         array_sizes = self.array_map.get(node.parent)
@@ -191,7 +191,7 @@ class ArrayCleaner(ASTVisitor):
             for current_node_tup in current_check_nodes:
                 node_index, current_node = current_node_tup
                 if size != current_node.getChildAmount():
-                    ErrorExporter.wrongInitializationListSize(node.position.linenr, declared_variable)
+                    ErrorExporter.wrongInitializationListSize(node.position, declared_variable)
 
                 """
                 Add the children to the next current node check
@@ -206,7 +206,7 @@ class ArrayCleaner(ASTVisitor):
                 else:
                     for j, c in enumerate(current_node.children):
                         if c.text != "InitList":
-                            ErrorExporter.wrongInitializationListFormat(node.position.linenr, declared_variable)
+                            ErrorExporter.wrongInitializationListFormat(node.position, declared_variable)
 
                         new_current_nodes.append((node_index+[j], c))
 

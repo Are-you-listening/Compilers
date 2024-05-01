@@ -1,4 +1,4 @@
-{"1":  ["[ Error ] line: 10 variable 'c' is not allowed to be declared inside a switch statement without an additional scope"],
- "2": ["[ Error ] line: 13 variable 'd' is not allowed to be declared inside a switch statement without an additional scope"],
- "3": ["[ Error ] line: 16 variable 'e' is not allowed to be declared inside a switch statement without an additional scope"]
+{"1":  ["[ Error ] read_file.c line 10: variable 'c' is not allowed to be declared inside a switch statement without an additional scope"],
+ "2": ["[ Error ] read_file.c line 13: variable 'd' is not allowed to be declared inside a switch statement without an additional scope"],
+ "3": ["[ Error ] read_file.c line 16: variable 'e' is not allowed to be declared inside a switch statement without an additional scope"]
 }

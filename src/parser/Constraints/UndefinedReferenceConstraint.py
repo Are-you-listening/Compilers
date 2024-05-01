@@ -35,4 +35,4 @@ class UndefinedReferenceConstraint(Constraint):
             # this should never happen but who knows
             return
         node = self.errorNode
-        ErrorExporter.undefinedFunctionReference(node.position.linenr, node.text)
+        ErrorExporter.undefinedFunctionReference(node.position, node.text)

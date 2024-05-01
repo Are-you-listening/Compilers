@@ -16,8 +16,6 @@ class AST2LLVM(ASTVisitor):
         self.fileName = fileName
         self.root = None
         self.last_vertex = None
-
-
         self.branch_needed = set()
 
     def visit(self, ast: AST):
@@ -252,7 +250,7 @@ class AST2LLVM(ASTVisitor):
         self.llvm_map[node] = args
 
     def __del__(self):
-        for comment in self.comments:  # Add any left over comments
+        for comment in self.comments:  # Add any leftover comments
             Declaration.addComment(self.comments[comment])
 
         with open(self.fileName, 'w') as f:
@@ -299,7 +297,7 @@ class AST2LLVM(ASTVisitor):
         self.llvm_map[node] = llvm_var
 
     def handleReturn(self, node: ASTNode):
-        #check if the return is from a void function, if so, return void
+        # check if the return is from a void function, if so, return void
         if node.getChildAmount() == 0 or node.children[0].text == "Void":
             LLVMSingleton.getInstance().getCurrentBlock().ret_void()
         else:

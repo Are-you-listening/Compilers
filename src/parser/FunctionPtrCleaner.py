@@ -54,8 +54,6 @@ class FunctionPtrCleaner(ASTVisitor):
 
         identifier_node = node.getChild(1)
 
-
-
         """
         Do a tickle up
         """

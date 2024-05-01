@@ -15,16 +15,16 @@ class GlobalsConstrained(Constraint):
     def checkNode(self, node: ASTNode):
         if node.text == "Assignment" and node.getChild(
                 0).symbol_table.isRoot():  # Only implicit declarations are allowed for globals, e.g. int x = 5; is allowed but int x; x = 5; ISN'T
-            ErrorExporter.GlobalsNonImplicitDeclaration(node.getChild(0).position.linenr)
+            ErrorExporter.GlobalsNonImplicitDeclaration(node.getChild(0).position)
 
         if node.text == "Declaration":  # Global declarations neither allow assigment of other globals
             if node.getChildAmount() > 1:
                 table = node.getChild(1).symbol_table
                 if table.isRoot() and table.entryExists(
                         node.getChild(1).text):  # If the second part of the statement contains an identifier
-                    ErrorExporter.GlobalsInvalidDeclaration(node.getChild(0).position.linenr)
+                    ErrorExporter.GlobalsInvalidDeclaration(node.getChild(0).position)
                 if table.isRoot() and GlobalsConstrained.containsIdentifier(node.getChild(1)):
-                    ErrorExporter.GlobalsInvalidDeclaration(node.getChild(1).position.linenr)
+                    ErrorExporter.GlobalsInvalidDeclaration(node.getChild(1).position)
 
     @staticmethod
     def containsIdentifier(root: ASTNode):

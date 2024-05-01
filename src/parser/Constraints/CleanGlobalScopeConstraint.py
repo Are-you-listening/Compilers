@@ -22,7 +22,7 @@ class CleanGlobalScope(Constraint):
 
     def throwException(self):
         self.rejected = True
-        ErrorExporter.InvalidGlobalExpression(self.errorNode.position.linenr)
+        ErrorExporter.InvalidGlobalExpression(self.errorNode.position)
 
     def isRejected(self):
         return self.rejected

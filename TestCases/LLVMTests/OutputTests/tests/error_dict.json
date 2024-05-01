@@ -1,13 +1,13 @@
-{"26":  ["[ Error ] line 4: you can't have a reference to an LValue"],
-"27":  ["[ Error ] line 5: invalid operation + on type(s): INT* INT*"],
-  "28": ["[ Error ] line 2: use of undeclared variable x"],
-  "29": ["[ Error ] line 2: use of undeclared variable x"],
-  "30": ["[ Error ] line 3: use of undeclared variable z"],
-  "31": ["[ Error ] line 4: redefinition or redeclaration of INT x"],
-  "32": ["[ Error ] line 4: redefinition or redeclaration of INT x"],
-  "33": ["[ Error ] line 4: redefinition or redeclaration of INT x"],
-  "34": ["[ Error ] line 3: redefinition or redeclaration of INT x"],
-  "35": ["[ Error ] line 4: redefinition or redeclaration of INT x"],
-  "36": ["[ Error ] line 3: redefinition or redeclaration of INT x"]
+{"26":  ["[ Error ] tests/test26.c line 4: you can't have a reference to an LValue"],
+"27":  ["[ Error ] tests/test27.c line 5: invalid operation + on type(s): INT* INT*"],
+  "28": ["[ Error ] tests/test28.c line 2: use of undeclared variable x"],
+  "29": ["[ Error ] tests/test29.c line 2: use of undeclared variable x"],
+  "30": ["[ Error ] tests/test30.c line 3: use of undeclared variable z"],
+  "31": ["[ Error ] tests/test31.c line 4: redefinition or redeclaration of INT x"],
+  "32": ["[ Error ] tests/test32.c line 4: redefinition or redeclaration of INT x"],
+  "33": ["[ Error ] tests/test33.c line 4: redefinition or redeclaration of INT x"],
+  "34": ["[ Error ] tests/test34.c line 3: redefinition or redeclaration of INT x"],
+  "35": ["[ Error ] tests/test35.c line 4: redefinition or redeclaration of INT x"],
+  "36": ["[ Error ] tests/test36.c line 3: redefinition or redeclaration of INT x"]
 
 }

@@ -52,7 +52,7 @@ class TypedefTable(AbstractTable):
         side note: 'IF' is valid, 'if' not (like gcc reference), so keep that in mind
         """
         if to_type_mapping in keywords:
-            ErrorExporter.TypeDefKeyword(node.position.linenr, to_type_mapping)
+            ErrorExporter.TypeDefKeyword(node.position, to_type_mapping)
             return True
 
         """
@@ -67,7 +67,7 @@ class TypedefTable(AbstractTable):
             s1 = self.getNodeString(type_node1)
             s2 = self.getNodeString(type_node2)
             if s1 != s2:
-                ErrorExporter.TypeDefDoubleDeclare(node.position.linenr, s1, s2)
+                ErrorExporter.TypeDefDoubleDeclare(node.position, s1, s2)
             return
 
         while ASTTypedefReplacer.containsNonBaseType(
@@ -92,7 +92,7 @@ class TypedefTable(AbstractTable):
         self.traverse(lambda x, a: x.getTranslation(a), True, args)
 
         if translation == []:  # No translation was found
-            ErrorExporter.undeclaredTypedef(node.position.linenr, identifier)
+            ErrorExporter.undeclaredTypedef(node.position, identifier)
 
         node.typedefReplaceChildren(translation, index)
 
@@ -149,7 +149,7 @@ class TypedefTable(AbstractTable):
             when the translate to type is an IDENTIFIER and does not yet exist, throw error
             """
             if c.type == "IDENTIFIER" and not self.exists(c.text)[0]:
-                ErrorExporter.TypeDefUndefined(node.position.linenr, self.getNodeString(node))
+                ErrorExporter.TypeDefUndefined(node.position, self.getNodeString(node))
 
     @staticmethod
     def getNodeString(node: ASTNode):

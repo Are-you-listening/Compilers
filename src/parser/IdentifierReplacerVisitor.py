@@ -42,7 +42,7 @@ class IdentifierReplacerVisitor(ASTVisitor):
                 return
 
             if node.type != "IDENTIFIER":
-                ErrorExporter.invalidDereference(node.linenr, node.type)
+                ErrorExporter.invalidDereference(node.position, node.type)
                 return
 
             # get the symbolTable entry of the identifier we are going to replace
@@ -64,7 +64,7 @@ class IdentifierReplacerVisitor(ASTVisitor):
             In case the value is None
             """
             if entry.value is None:
-                ErrorExporter.uninitializedVariable(toReplace, node.position.linenr)
+                ErrorExporter.uninitializedVariable(toReplace, node.position)
                 return
 
             if entry.value.text in ("Expr", "Dereference"):

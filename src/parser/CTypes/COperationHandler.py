@@ -31,7 +31,7 @@ class COperationHandler:
                                  "FLOAT": CFunctionExecuterFloat,
                                  "BOOL": CFunctionExecuterInt}
 
-    def doOperationBinary(self, val1: tuple, val2: tuple, operation: str, lineNr: int):
+    def doOperationBinary(self, val1: tuple, val2: tuple, operation: str, position: Position):
 
         if val1[1] == val2[1] == "PTR":
             poorest_type = "PTR"
@@ -78,11 +78,11 @@ class COperationHandler:
             sub_result = c_type.RangeCheck.checkRange(
                 foldable[operation](data1, data2))
         except ZeroDivisionError:
-            ErrorExporter.divideByZero(str(lineNr), data1)
+            ErrorExporter.divideByZero(position, data1)
         except InvalidOperatorFloatError:
-            ErrorExporter.invalidOperatorFloat(operation, str(lineNr))
+            ErrorExporter.invalidOperatorFloat(operation, position)
         except InvalidOperatorPtrError:
-            ErrorExporter.invalidOperatorPtr(operation, str(lineNr))
+            ErrorExporter.invalidOperatorPtr(operation, position)
 
         if operation in ("!=", "==", "<", ">", "<=", ">+=", "&&", "||"):
             sub_result = c_type.convertTo(sub_result, "BOOL")
@@ -93,7 +93,7 @@ class COperationHandler:
 
         return result, poorest_type
 
-    def doOperationUnary(self, val1: tuple, operation: str, lineNr: str):
+    def doOperationUnary(self, val1: tuple, operation: str, position: Position):
 
         c_type = self.c_type_executors[val1[1]]()
         data1 = c_type.fromString(val1[0])
@@ -110,9 +110,9 @@ class COperationHandler:
             sub_result = c_type.RangeCheck.checkRange(foldable[operation](data1))
 
         except InvalidOperatorFloatError:
-            ErrorExporter.invalidOperatorFloat("UNARY " + operation, str(lineNr))
+            ErrorExporter.invalidOperatorFloat("UNARY " + operation, position)
         except InvalidOperatorPtrError:
-            ErrorExporter.invalidOperatorPtr("UNARY " + operation, str(lineNr))
+            ErrorExporter.invalidOperatorPtr("UNARY " + operation, position)
 
         result = c_type.getString(sub_result)
 

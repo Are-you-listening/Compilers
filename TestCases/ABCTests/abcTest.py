@@ -46,7 +46,7 @@ class ASTTest(ABC):
                 continue
 
             index = int(file[4:-2])  # The index is used to refer to the files & other data belonging to this testfile
-            #print(index, file)  # Toggle for debug
+            # print(index, file)  # Toggle for debug
 
             """
             Load the AST from the JSON file
@@ -79,21 +79,22 @@ class ASTTest(ABC):
                 json_test_result = AstLoader.store(ast_tree)
 
                 assert json_test_result == json_data_result  # Verify if we retrieved the same result
-
+                # sys.stdout = original
                 """
                 Verify if we got the same warnings or outputs (can be empty)
                 """
                 errors = str(buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
-                #print("buff", buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
+                # print("buff", buff.getvalue().splitlines(), index)  # Disable/Enable for Debug
                 assert errors == expected_errors
             except SystemExit:  # Upon crash
+                # sys.stdout = original
                 """
                 Verify if any errors thrown are as expected
                 """
                 errors = str(error_buff.getvalue().splitlines())
                 expected_errors = str(error_dict.get(str(index), []))
-                #print("error", expected_errors, errors)  # Disable/Enable for Debug
+                # print("error", expected_errors, errors)  # Disable/Enable for Debug
                 assert errors == expected_errors
 
             """
@@ -157,6 +158,8 @@ class LLVMTest(unittest.TestCase, ABC):
                 try:
                     LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
 
+                    #sys.stdout = original
+
                     # Run our llvm
                     main([0, "--input", file_name, "--target_llvm", "temp/temp.ll", "--fold", fold])  # Run our compiler
 
@@ -174,6 +177,7 @@ class LLVMTest(unittest.TestCase, ABC):
                     """
                     asser for no error
                     """
+
                     #print('1', out.stderr, '2', c_out.stderr)
                     assert out.stderr == c_out.stderr
 

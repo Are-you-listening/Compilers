@@ -21,7 +21,7 @@ class AmpersandConstraint(Constraint):
             if rSibl.text == "Expr" and rSibl.children[0].text not in ["-", "~", "!", "+", "&",
                                                                        "*"]:
                 if rSibl.children[1].text != '[]':  # Exclude array operations
-                    ErrorExporter.invalidOperatorPtr("", node.position.linenr)
+                    ErrorExporter.invalidOperatorPtr("", node.position)
                     self.rejected = True
 
     def throwException(self):

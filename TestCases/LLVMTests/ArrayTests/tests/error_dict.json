@@ -1,14 +1,14 @@
 {
-  "6": ["[ Error ] line 5: the initializer list its size for array x is not the right size"],
-  "7": ["[ Error ] line 5: the initializer list its size for array x is not the right size"],
-  "8": ["[ Error ] line 5: the initializer list its size for array x is not the right format"],
-  "9": ["[ Error ] line 7: the array index is of type FLOAT which is not allowed"],
-  "13": ["[ Error ] line 4: the array size definition of x should be an integer instead of 'FLOAT'"],
-  "16": ["[ Error ] line 8: the array size definition of x should be an integer instead of 'IDENTIFIER'"],
-  "17": ["[ Error ] line 3: the array index is of type FLOAT which is not allowed"],
-  "18": ["[ Error ] line 3:  indirection requires array operand ('INT' invalid)"],
-  "20": ["[ Error ] line 4: an initializer list is provided while not being assigned to an array"],
-  "26": ["[ Error ] line 3: the array index is of type FLOAT which is not allowed"],
-  "27": ["[ Error ] line 3:  indirection requires array operand ('INT' invalid)"],
-  "28": ["[ Error ] line 2: the array size definition of x should be an integer instead of 'FLOAT'"]
+  "6": ["[ Error ] tests/test6.c line 5: the initializer list its size for array x is not the right size"],
+  "7": ["[ Error ] tests/test7.c line 5: the initializer list its size for array x is not the right size"],
+  "8": ["[ Error ] tests/test8.c line 5: the initializer list its size for array x is not the right format"],
+  "9": ["[ Error ] tests/test9.c line 7: the array index is of type FLOAT which is not allowed"],
+  "13": ["[ Error ] tests/test13.c line 4: the array size definition of x should be an integer instead of 'FLOAT'"],
+  "16": ["[ Error ] tests/test16.c line 8: the array size definition of x should be an integer instead of 'IDENTIFIER'"],
+  "17": ["[ Error ] tests/test17.c line 3: the array index is of type FLOAT which is not allowed"],
+  "18": ["[ Error ] tests/test18.c line 3:  indirection requires array operand ('INT' invalid)"],
+  "20": ["[ Error ] tests/test20.c line 4: an initializer list is provided while not being assigned to an array"],
+  "26": ["[ Error ] tests/test26.c line 3: the array index is of type FLOAT which is not allowed"],
+  "27": ["[ Error ] tests/test27.c line 3:  indirection requires array operand ('INT' invalid)"],
+  "28": ["[ Error ] tests/test28.c line 2: the array size definition of x should be an integer instead of 'FLOAT'"]
 }
