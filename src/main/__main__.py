@@ -104,6 +104,7 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold, includeSTDIO):
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     """

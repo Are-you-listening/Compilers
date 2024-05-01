@@ -28,5 +28,6 @@
  "35": ["[ Error ] read_file.c line 1: function with return type FLOAT is missing a valid return statement"],
  "36": ["[ Error ] read_file.c line 8: Manipulation of variable 'c' is not allowed, because 'c' has type 'const INT**const'"],
  "37": ["[ Error ] read_file.c line 7: Manipulation of variable '*(b)' is not allowed, because '*(b)' has type 'const INT'"],
- "38": ["[ Error ] read_file.c line 7: Manipulation of variable 'b+1' is not allowed, because 'b+1' has type 'const INT'"]
+ "38": ["[ Error ] read_file.c line 7: Manipulation of variable 'b+1' is not allowed, because 'b+1' has type 'const INT'"],
+ "40": ["[ Error ] read_file.c line 4: invalid operation ++  "]
 }

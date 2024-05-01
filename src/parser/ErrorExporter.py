@@ -48,15 +48,22 @@ class ErrorExporter:
 
     @staticmethod
     def invalidOperation(position: Position, operator: str, type1: SymbolType, type2: SymbolType):
-
-        type1 = ErrorExporter.__to_output_type(type1.getPtrTuple())
+        if type1 is not None:
+            type1 = ErrorExporter.__to_output_type(type1.getPtrTuple())
+        else:
+            type1 = ""
         if type2 is not None:
             type2 = " " + ErrorExporter.__to_output_type(type2.getPtrTuple())
         else:
             type2 = ""
 
+        if type1 == "" and type2 == "":
+            typings = ""
+        else:
+            typings = "on type(s):"
+
         print(
-            f"[ Error ] {position.file} line {position.linenr}: invalid operation {operator} on type(s): {type1}{type2}",
+            f"[ Error ] {position.file} line {position.linenr}: invalid operation {operator} {typings} {type1}{type2}",
             file=sys.stderr)
         exit()
 
