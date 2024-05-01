@@ -1,30 +1,25 @@
-int p;
+enum Direction {
+NORTH,
+EAST,
+SOUTH,
+WEST,
+};
 
-// lol
+int main()
+{
+/* NORTH++; This should thrown an semantic error because */
+/* const int* appel = &peer; This should also give an error */
+int peer = 1;
+int* appel = &peer;
+appel--;
+--appel;
+ (*appel)--;
+--(*appel);
+--appel;
 
-
-int main() {
-    // Calculate pi of 15
-    p = 3;
-    p = p + 4;
-    p = p + 4;
-    p = p + 4;
-    p = p + 4;
-    p = p + 4; // Funny comment
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    return 0;
+/* --(peer+peer); This is not allowed */
+--(peer);
+--(appel);
+ /* appel + --appel; This returns an semantic error*/
+return 0;
 }
