@@ -4,8 +4,7 @@
 int main(){
     int* k;
     int result = printf("%d", 1);
-    printf("%d", result);
-    printf("%d", scanf("%d", k);
-    printf("%d", &k);
+    float lol = printf("%d", result);
+    printf("%f", lol);
     return 0;
 }

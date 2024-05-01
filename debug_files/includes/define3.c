@@ -1,6 +1,6 @@
 
-int appel(){};
+int appel();
 
 int peer(){
-    printf("%d",5);
+    return printf("%d",5);
 };
