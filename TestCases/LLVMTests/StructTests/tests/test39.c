@@ -12,6 +12,7 @@ int main() {
     gouda.as_integer = 5;
     gouda.as_str[0] = 'a';
 
+    printf("gouda.as_integer: %c", gouda.as_integer);
 
 
     return 0;
