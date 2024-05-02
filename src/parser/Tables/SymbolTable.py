@@ -56,8 +56,10 @@ class SymbolEntry(TableEntry):
         return (d_t_type, d_t.isConst()), ptr_list
 
     def __eq__(self, other):
-        print("does eq")
-        return self.name == other.name and self.typeObject == other.typeObject
+        return self.__hash__() == other.__hash__()
+
+    def __hash__(self):
+        return str(id(self))
 
     def getJsonDataType(self):
         """
