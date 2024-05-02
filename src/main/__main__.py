@@ -30,7 +30,7 @@ from src.parser.PointerReformater import *
 from src.parser.Constraints.CheckRvalues import *
 from src.parser.UnarySaVisitor import *
 from src.parser.DynamicAllocation import DynamicAllocation
-
+from src.parser.FileIO import FileIO
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -92,6 +92,7 @@ def cleanGreen(input_file, symbol_file):
     ASTTableCreator().visit(ast)  # Create the symbol table
 
     DynamicAllocation.add_allocation(ast)
+    FileIO.add_io(ast)
 
     StructCleanerAfter().visit(ast)
 

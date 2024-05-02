@@ -17,7 +17,7 @@ class AST2LLVM(ASTVisitor):
         self.root = None
         self.last_vertex = None
         self.branch_needed = set()
-        self.special_func_calls = {"malloc", "calloc", "free", "realloc"}
+        self.special_func_calls = {"malloc", "calloc", "free", "realloc", "fgets"}
 
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
@@ -168,6 +168,7 @@ class AST2LLVM(ASTVisitor):
                     func = Declaration.function(node.text, function_type.return_type, args)
                     self.map_table.addEntry(MapEntry(node.text, func))
                     entry = self.map_table.getEntry(node.text)
+
                 else:
                     return
 
@@ -476,5 +477,8 @@ class AST2LLVM(ASTVisitor):
         if code is not None:
             Declaration.addComment(code)
 
-    def check_special_call(self, left, right):
-        print(left, right)
+    def handle_IO(self):
+        """
+        Create I/O needed File ptr format equivalent for LLVM
+        """
+        Declaration.IdentifiedStructIO()
