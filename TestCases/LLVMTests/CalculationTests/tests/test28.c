@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 
 enum Direction {
@@ -12,7 +13,7 @@ int main()
  //NORTH++;  /* This should thrown an semantic error because */
 
 int peer = 1;
-int* appel = &peer;
+const int* const appel = &peer;
 --appel;
 
 appel++;
@@ -29,8 +30,9 @@ printf("%d ", peer);
 
 --appel;
 
+/* --(peer+peer); This is not allowed /
 --(peer);
 --(appel);
-appel + --appel; /* This returns an semantic error*/
+/ appel + --appel; This returns an semantic error*/
 return 0;
 }

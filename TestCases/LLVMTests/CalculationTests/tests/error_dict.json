@@ -1,2 +1,6 @@
-{"22":  ["[ Error ] tests/test22.c line 2:  indirection requires pointer operand ('INT' invalid)"]
+{"22":  ["[ Error ] tests/test22.c line 2:  indirection requires pointer operand ('INT' invalid)"],
+  "27": ["[ Error ] tests/test27.c line 12: invalid unary operation"],
+  "28": ["[ Error ] tests/test28.c line 17: invalid unary operation"],
+  "29": ["[ Error ] tests/test29.c line 32: invalid unary operation"],
+  "30": ["[ Error ] tests/test30.c line 34: invalid operation + on type(s): INT* INT*"]
 }

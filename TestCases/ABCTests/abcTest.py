@@ -171,14 +171,14 @@ class LLVMTest(unittest.TestCase, ABC):
                     """
                     assert for same output
                     """
-                    #print('a', out.stdout, 'b', c_out.stdout)
+                    print('a', out.stdout, 'b', c_out.stdout)
                     assert out.stdout == c_out.stdout
 
                     """
                     asser for no error
                     """
 
-                    #print('1', out.stderr, '2', c_out.stderr)
+                    print('1', out.stderr, '2', c_out.stderr)
                     assert out.stderr == c_out.stderr
 
                     """

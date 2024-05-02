@@ -29,6 +29,7 @@ printf("%d ", peer);
 
 --appel;
 
+--(peer+peer);
 --(peer);
 --(appel);
 appel + --appel; /* This returns an semantic error*/
