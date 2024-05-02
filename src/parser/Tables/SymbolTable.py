@@ -55,6 +55,10 @@ class SymbolEntry(TableEntry):
 
         return (d_t_type, d_t.isConst()), ptr_list
 
+    def __eq__(self, other):
+        print("does eq")
+        return self.name == other.name and self.typeObject == other.typeObject
+
     def getJsonDataType(self):
         """
         returns a tuple: (type, amount of * depending on how many ptrs there are in the chain)
