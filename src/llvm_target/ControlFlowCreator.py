@@ -256,7 +256,18 @@ class ControlFlowCreator(ASTVisitor):
         :return:
         """
         var_child: ASTNode = node.getChild(0)
-        function_type = var_child.getSymbolTable().getEntry(var_child.text).getTypeObject()
+        function_type = None
+        current_table = node.getSymbolTable()
+        while current_table is not None:
+            type_entry = current_table.getEntry(var_child.text)
+            if type_entry:
+                function_type = type_entry.getTypeObject()
+                while isinstance(function_type, SymbolTypePtr):
+                    function_type = function_type.pts_to
+                if isinstance(function_type, FunctionSymbolType):
+                    break
+            current_table = current_table.prev
+
         args = function_type.getParameterTypes()
 
         if LLVMSingleton.getInstance().getFunction(var_child.text) is None:

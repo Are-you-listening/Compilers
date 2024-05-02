@@ -74,7 +74,7 @@ class ASTTableCreator(ASTVisitor):
     def __check_function_declarations(self, node: ASTNode, param_types_and_ptrs: list, return_type: SymbolType):
         function_node = node.children[1]
         # check if the function is already declared
-        if function_node.symbol_table.exists(function_node.text):
+        if function_node.symbol_table.exists(function_node.text) and isinstance(function_node.getSymbolTable().getEntry(function_node.text).getTypeObject(), FunctionSymbolType):
             # check if the return types match, if not, throw an error
             if return_type.getPtrTuple() != node.symbol_table.getEntry(function_node.text).getPtrTuple():
                 ErrorExporter.conflictingFunctionReturnType(function_node.position, function_node.text)
