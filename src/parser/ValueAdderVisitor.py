@@ -9,7 +9,7 @@ class ValueAdderVisitor(ASTVisitor):
     """
     def visitNode(self, node: ASTNode):
 
-        if node.text in ("Declaration", "Assignment", "printf", "Conversion", "IF"):
+        if node.text in ("Declaration", "Assignment", "printf", "Conversion", "IF", "Return"):
             # there are 2 children: identifier and value
             ident = node.getChild(0)
         else:
