@@ -89,6 +89,7 @@ def cleanGreen(input_file, symbol_file):
 
     ArrayCleaner().visit(ast)
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ASTTableCreator().visit(ast)  # Create the symbol table
 
     DynamicAllocation.add_allocation(ast)
@@ -130,6 +131,8 @@ def Processing(ast, dot_file, fold, includeSTDIO):
         ValueAdderVisitor().visit(ast)
 
     ConstantStatementFolding().visit(ast)
+
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     cfc = ControlFlowCreator()
     cfc.visit(ast)

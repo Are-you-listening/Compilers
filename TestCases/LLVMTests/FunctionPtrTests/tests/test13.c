@@ -6,7 +6,7 @@ float mul(int** b){
 }
 
 int main() {
-    float (*m)(float**) = &mul;
+    float (*m)(int**) = &mul;
 
     int c = 6;
     int* a = &c;
