@@ -6,11 +6,18 @@ class DeadCodeRemover(ASTVisitor):
     def __init__(self):
         self.to_remove = set()
         self.first_block = False
+        self.cfg_table = {}
+        self.reachable = set()
 
-    def visit(self, ast: AST):
+    def visit(self, ast: AST, cfgs):
         self.to_remove = set()
-        self.postorder(ast.root)
+        self.cfg_table = cfgs
         self.first_block = False
+        self.reachable = set()
+        self.reachability_list()
+
+        self.postorder(ast.root)
+
 
         for c in self.to_remove:
             c.parent.removeChild(c)
@@ -45,23 +52,10 @@ class DeadCodeRemover(ASTVisitor):
     def visitNode(self, node: ASTNode):
 
         if isinstance(node, ASTNodeBlock) and node.text == "Block":
-            if node.getChildAmount() > 0 and node.getChild(0).text == "Parameters":
-                return
-
-            if self.first_block:
-                """
-                ignore if the first node inside a function is 'unreachable'
-                because is reached at start of function call
-                """
-                self.first_block = False
-                return
-
             """
-            When our block is unreachable (no reverse edges), we will remove this block, and
-            Also cascade these changes to other blocks that might only be reachable when this block is reachable
+            Remove code blocks whose vertex are not reachable from the start of the function
             """
-
-            if len(node.vertex.reverse_edges) == 0:
+            if node.vertex not in self.reachable:
                 node.vertex.remove_edges()
                 self.to_remove.add(node)
 
@@ -97,3 +91,19 @@ class DeadCodeRemover(ASTVisitor):
                 self.to_remove.add(c)
 
             pre_delete_node = pre_parent
+
+    def reachability_list(self):
+        self.reachable = set()
+
+        for function_name, cfg in self.cfg_table.items():
+            stack = [cfg.root]
+            self.reachable.add(cfg.root)
+
+            while len(stack) > 0:
+                vertex = stack.pop()
+                for e in vertex.edges:
+                    if e.to_vertex in self.reachable:
+                        continue
+                    stack.append(e.to_vertex)
+                    self.reachable.add(e.to_vertex)
+

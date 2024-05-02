@@ -5,7 +5,7 @@
 int main(){
 
     char buffer[50];
-    char* c = "some_filename.txt";
+    char* c = "files/test1.txt";
     fgets(buffer, 50, c);
 
     return 0;

@@ -135,6 +135,20 @@ class Declaration:
         return llvm_val
 
     @staticmethod
+    def IdentifiedStructIO():
+        """
+        Create the identified structs for I/O operations
+        :return:
+        """
+        context = LLVMSingleton.getInstance().getModule().context
+        
+        struct_type = context.get_identified_type("my_struct")
+        struct_type.set_body(ir.IntType(32), ir.FloatType())
+
+        global_var = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), struct_type, "my_structs")
+        global_var.initializer = ir.Constant(struct_type, None)
+
+    @staticmethod
     def struct_ptr(data_type: SymbolType):
         """
         Create a ptr to a struct
