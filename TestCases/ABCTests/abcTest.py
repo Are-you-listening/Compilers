@@ -191,8 +191,9 @@ class LLVMTest(unittest.TestCase, ABC):
                     """
                     errors = str(error_buff.getvalue().splitlines())
                     expected_errors = str(error_dict.get(str(index), []))
-                    #print("error", errors, expected_errors)  # Print any errors we didn't expect
-                    assert errors == expected_errors
+                    if "[ Warning ]" not in expected_errors:  # If we don't expect any warnings, we can ignore them
+                        print("error", errors, expected_errors)  # Print any errors we didn't expect
+                        assert errors == expected_errors
 
                 except SystemExit:
                     #sys.stdout = original

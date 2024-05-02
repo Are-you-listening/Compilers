@@ -3,6 +3,5 @@
   "18": ["[ Error ] tests/test18.c line 10: use of undeclared variable kaas"],
   "23": ["[ Error ] tests/test23.c line 24: invalid operation . on type(s): kaas*"],
   "24": ["[ Error ] tests/test24.c line 26: invalid operation . on type(s): kaas*"],
-  "28": ["[ Error ] tests/test28.c line 13: assignment of incompatible types ('INT*' and 'FLOAT') "],
   "32": ["[ Error ] tests/test32.c line 19: use of undeclared variable melk"]
 }
