@@ -56,10 +56,11 @@ class SymbolEntry(TableEntry):
         return (d_t_type, d_t.isConst()), ptr_list
 
     def __eq__(self, other):
+        print("does conv")
         return self.__hash__() == other.__hash__()
 
     def __hash__(self):
-        return str(id(self))
+        return hash(self.name)
 
     def getJsonDataType(self):
         """
