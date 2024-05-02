@@ -11,7 +11,9 @@
 sudo apt install llvm
 ```
 
-### Mandatory Functionality: 
+### Mandatory Functionality:
+
+
 - [X] Binary operations +, -,* and /
 - [X] Binary operations >, <, and ==
 - [X] Unary operators + and -
@@ -43,11 +45,18 @@ sudo apt install llvm
 - [X] Outputting to the standard output using printf
 - [X] Typedefs
 - [X] Code Generation: LLVM IR
+- [X] Include Guards 
+- [X] Unions
+- [X] Function Pointers
+
 
 ### Optional Functionality: 
 - [X] Const Casting
 - [X] ControlFlow and visualization
 - [X] Else If Statements
+- [X] Do not generate code for conditions that are always false
+- [x] Dynamic Arrays (stored on heap)
+
 - Conversion Warnings?
 
 ### Technical Functionality: 

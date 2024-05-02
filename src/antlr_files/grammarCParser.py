@@ -1,4 +1,4 @@
-# Generated from /home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
+# Generated from /home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -131,7 +131,7 @@ def serializedATN():
         290,1,0,0,0,288,286,1,0,0,0,288,289,1,0,0,0,289,292,1,0,0,0,290,
         288,1,0,0,0,291,293,5,62,0,0,292,291,1,0,0,0,292,293,1,0,0,0,293,
         294,1,0,0,0,294,295,5,10,0,0,295,43,1,0,0,0,296,297,7,1,0,0,297,
-        298,5,6,0,0,298,303,5,66,0,0,299,300,5,11,0,0,300,302,3,68,34,0,
+        298,5,6,0,0,298,303,3,68,34,0,299,300,5,11,0,0,300,302,3,68,34,0,
         301,299,1,0,0,0,302,305,1,0,0,0,303,301,1,0,0,0,303,304,1,0,0,0,
         304,306,1,0,0,0,305,303,1,0,0,0,306,307,5,8,0,0,307,45,1,0,0,0,308,
         310,5,28,0,0,309,308,1,0,0,0,309,310,1,0,0,0,310,318,1,0,0,0,311,
@@ -2145,9 +2145,6 @@ class grammarCParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def STRING(self):
-            return self.getToken(grammarCParser.STRING, 0)
-
         def expr(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(grammarCParser.ExprContext)
@@ -2192,7 +2189,7 @@ class grammarCParser ( Parser ):
             self.state = 297
             self.match(grammarCParser.T__5)
             self.state = 298
-            self.match(grammarCParser.STRING)
+            self.expr(0)
             self.state = 303
             self._errHandler.sync(self)
             _la = self._input.LA(1)

@@ -186,6 +186,14 @@ class LLVMTest(unittest.TestCase, ABC):
                     """
                     subprocess.run(f"rm temp/temp.ll", shell=True, capture_output=True)
 
+                    """
+                    Double check that errors are as expected
+                    """
+                    errors = str(error_buff.getvalue().splitlines())
+                    expected_errors = str(error_dict.get(str(index), []))
+                    #print("error", errors, expected_errors)  # Print any errors we didn't expect
+                    assert errors == expected_errors
+
                 except SystemExit:
                     #sys.stdout = original
                     """

@@ -43,7 +43,16 @@ class ASTConversion(ASTVisitor):
             return
 
         if node.text in ["scanf", "printf"]:
-            self.type_mapping[node] = SymbolType("INT", False)
+            self.type_mapping[node] = SymbolType("INT", False)  # By default printf & scanf return an int
+
+            format_type = self.type_mapping.get(node.children[0], None)  # First child is the format str
+            if format_type is None:
+                format_type = node.children[0].type
+            else:
+                format_type = format_type.getBaseType()
+
+            if format_type not in ["STRING", "CHAR"]:  # If the format string is not an string or char, there is a type error
+                ErrorExporter().conflictingFunctionParameterTypes(node.position, node.text)
 
         if node.text == "Conversion":
             """

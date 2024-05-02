@@ -23,7 +23,7 @@ case: 'case' (literal | IDENTIFIER) ':' block_code;
 default: 'default' ':' block_code;
 
 enum: 'enum' IDENTIFIER '{' (IDENTIFIER',')* IDENTIFIER? '}';
-printscanf: ('printf' | 'scanf') '(' STRING (',' expr)* ')';
+printscanf: ('printf' | 'scanf') '(' expr (',' expr)* ')';
 type: ('const')? ('int' | 'char' | 'float' | 'void' | (('struct' | 'enum' |'union') IDENTIFIER) | IDENTIFIER) ('*' | 'const')*;
 return: 'return' expr?;
 structunion: ('struct' | 'union') IDENTIFIER '{' ( declaration* ';'+)+ '}';
