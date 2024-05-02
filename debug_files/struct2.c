@@ -3,32 +3,16 @@
 
 int main(){
 
-char s = 's';
-int k = s;
-float l = k;
-k = l;
-s = k;
+    char k[4] = {'l','o','c','k'};
 
-k = (int) l;
-s = (char) k;
 
-int* kptr = &k;
-char* sptr = &s;
+    char* c = &k[1];
 
-kptr = sptr;
-kptr = (int*) sptr;
+    printf("%c", *c);
 
-int** kptrptr = kptr;
+    //k = k + 3;
+    printf("%c", *(k+2));
 
-char*** sptrptrptr = kptr;
 
-float p = 3.14;
-
-float* pptr = &p;
-float** ptrptr = pptr;
-float** pieter = &pptr;
-
-printf("%f", **pieter);
-
-return 0;
+    return 0;
 }
