@@ -1,12 +1,34 @@
 #include <stdio.h>
 
+
 int main(){
-    int array[3] = {1,2,3};
-    int* ptr1 = &array[0];
-    int* ptr2 = &array[1];
-    printf("%d\n", ptr1 < ptr2);
-    printf("%d\n", ptr1 > ptr2);
-    printf("%d\n", ptr1 != ptr2);
-    printf("%d\n", ptr1 == ptr2);
-    return 0;
+
+char s = 's';
+int k = s;
+float l = k;
+k = l;
+s = k;
+
+k = (int) l;
+s = (char) k;
+
+int* kptr = &k;
+char* sptr = &s;
+
+kptr = sptr;
+kptr = (int*) sptr;
+
+int** kptrptr = kptr;
+
+char*** sptrptrptr = kptr;
+
+float p = 3.14;
+
+float* pptr = &p;
+float** ptrptr = pptr;
+float** pieter = &pptr;
+
+printf("%f", **pieter);
+
+return 0;
 }

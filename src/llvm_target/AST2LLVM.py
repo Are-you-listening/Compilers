@@ -236,9 +236,12 @@ class AST2LLVM(ASTVisitor):
             else:
                 value = value.text
 
-            # Preset some values
-            llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(entry.getTypeObject()), value)
-            llvm_var.align = CTypesToLLVM.getBytesUse(entry.getTypeObject())
+            if not isinstance(entry.getTypeObject(), SymbolTypeArray):
+                # Preset some values
+                llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(entry.getTypeObject()), value)
+                llvm_var.align = CTypesToLLVM.getBytesUse(entry.getTypeObject())
+            else:
+                llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(entry.getTypeObject()), [ir.Constant(ir.IntType(32), 0)]*entry.getTypeObject().size)
 
         else:
 
@@ -278,6 +281,9 @@ class AST2LLVM(ASTVisitor):
         args = []
         for child in node.children:
             llvm_var = self.llvm_map.get(child)
+            if isinstance(llvm_var.type, ir.types.PointerType) and isinstance(llvm_var.type.pointee, ir.types.ArrayType):
+                block = LLVMSingleton.getInstance().getCurrentBlock()
+                llvm_var = block.bitcast(llvm_var, ir.types.PointerType(llvm_var.type.pointee.element))
             if llvm_var is not None:
                 args.append(llvm_var)
 
@@ -435,7 +441,6 @@ class AST2LLVM(ASTVisitor):
         param node:
         :return:
         """
-
 
         func = LLVMSingleton.getInstance().getLastFunction()
         # Get the arguments of the function

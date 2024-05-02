@@ -12,5 +12,7 @@
   "13": ["[ Warning ] read_file.c line 3: incompatible pointer types initializing 'FLOAT*' with an expression of type 'INT' "],
   "15": ["[ Warning ] read_file.c line 9: incompatible pointer types initializing 'INT**' with an expression of type 'INT*' ", "[ Warning ] read_file.c line 10: incompatible pointer types initializing 'INT**' with an expression of type 'INT' ", "[ Warning ] read_file.c line 11: incompatible pointer types initializing 'INT**' with an expression of type 'INT*' "],
   "16": ["[ Error ] read_file.c line 12:  indirection requires array operand ('kaas' invalid)"],
-  "17": ["[ Warning ] read_file.c line 5: Narrowing type from 'FLOAT' to 'INT' ", "[ Warning ] read_file.c line 6: Narrowing type from 'FLOAT' to 'INT' "]
+  "17": ["[ Warning ] read_file.c line 5: Narrowing type from 'FLOAT' to 'INT' ", "[ Warning ] read_file.c line 6: Narrowing type from 'FLOAT' to 'INT' "],
+  "19": ["[ Warning ] read_file.c line 9: Narrowing type from 'FLOAT' to 'INT' ", "[ Warning ] read_file.c line 10: Narrowing type from 'INT' to 'CHAR' "],
+  "20": ["[ Warning ] read_file.c line 9: Narrowing type from 'FLOAT' to 'INT' ", "[ Warning ] read_file.c line 10: Narrowing type from 'INT' to 'CHAR' ", "[ Warning ] read_file.c line 18: incompatible pointer types initializing 'INT*' with an expression of type 'CHAR*' ", "[ Warning ] read_file.c line 21: incompatible pointer types initializing 'INT**' with an expression of type 'INT*' ", "[ Warning ] read_file.c line 23: incompatible pointer types initializing 'CHAR***' with an expression of type 'INT*' ", "[ Warning ] read_file.c line 28: incompatible pointer types initializing 'FLOAT**' with an expression of type 'FLOAT*' "]
 }

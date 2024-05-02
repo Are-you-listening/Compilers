@@ -3,5 +3,7 @@
   "9": ["[ Syntax Error ] tests/includes/define1.c line 18: unterminated #ifndef "],
   "12": ["[ Error ] tests/includes/cycle3.c Cyclic Include detected from tests/includes/cycle1.c to tests/includes/cycle2.c"],
   "13": ["[ Error ] tests/test13.c line 1: 'tests/' File not found!"],
-  "15": ["[ Syntax Error ]  line 2:0 invalid symbol: '##'"]
+  "15": ["[ Syntax Error ]  line 2:0 invalid symbol: '##'"],
+  "16": ["[ Error ] tests/test16.c line 11: redefinition of printthings1"],
+  "21": ["[ Error ] tests/includes/yay3.c line 1: redefinition of printAppel"]
 }
