@@ -1,5 +1,4 @@
-
-##include <stdio.h>
+#include <stdio.h>
 
 struct kaas{
     int a;
@@ -10,7 +9,7 @@ struct kaas{
 int main(){
 
     struct kaas k;
-    //printf("%d", k.a.melk);
+    printf("%d", k.a.melk);
     k.a.melk = 1;
     return 0;
 }

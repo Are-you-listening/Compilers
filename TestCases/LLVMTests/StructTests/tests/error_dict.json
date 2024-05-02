@@ -3,5 +3,7 @@
   "18": ["[ Error ] tests/test18.c line 10: use of undeclared variable kaas"],
   "23": ["[ Error ] tests/test23.c line 24: invalid operation . on type(s): kaas*"],
   "24": ["[ Error ] tests/test24.c line 26: invalid operation . on type(s): kaas*"],
-  "32": ["[ Error ] tests/test32.c line 19: use of undeclared variable melk"]
+  "32": ["[ Error ] tests/test32.c line 19: use of undeclared variable melk"],
+  "40": ["[ Error ] tests/test40.c line 12:  indirection requires array operand ('INT' invalid)"],
+  "41": ["[ Error ] tests/test41.c line 12:  indirection requires array operand ('INT' invalid)"]
 }

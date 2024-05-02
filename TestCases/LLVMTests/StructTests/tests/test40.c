@@ -1,6 +1,4 @@
 
-##include <stdio.h>
-
 struct kaas{
     int a;
     int b;
