@@ -114,4 +114,6 @@ class CFunctionExecuterChar(CFunctionExecuter):
         return self.conversion_dict[to_type](data)
 
     def getString(self, data):
+        while data < 0:
+            data += 256
         return f"'{chr(data)}'"
