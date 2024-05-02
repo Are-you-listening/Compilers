@@ -13,6 +13,7 @@ class SymbolEntry(TableEntry):
         self.firstUsed = first_used  # The node this Entry is first used
         self.referenced = False
         self.function_is_defined = False  # function only
+        self.table = None
 
     def __str__(self):
         return f"""type: {self.typeObject} 
@@ -60,7 +61,7 @@ class SymbolEntry(TableEntry):
         return self.__hash__() == other.__hash__()
 
     def __hash__(self):
-        return hash(self.name)
+        return hash(self.name+str(id(self.table))+str(self.typeObject.getPtrTuple()))
 
     def getJsonDataType(self):
         """
@@ -120,17 +121,27 @@ class SymbolTable(AbstractTable):
             return
 
         self.symbols[entry.name] = entry
+        entry.table = self
 
     def remove(self, symbol: SymbolEntry):
         self.symbols.pop(symbol.name)
 
-    def getEntry(self, name):
+    def getEntry(self, name, vlinenr: int = None):
         """
         Get entry
         :param name: name of the entry
         :return:
         """
         if name in self.symbols.keys():
+            entry = self.symbols.get(name)
+
+            if vlinenr is not None:
+                if entry.firstDeclared.position.virtual_linenr > vlinenr:
+                    if self.prev is not None:
+                        return self.prev.getEntry(name)
+                    else:
+                        return None
+
             return self.symbols.get(name)
         else:
             if self.prev is not None:

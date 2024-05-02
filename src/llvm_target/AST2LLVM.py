@@ -151,28 +151,46 @@ class AST2LLVM(ASTVisitor):
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
-            entry = self.map_table.getEntry(node.text)
+
+            symbol_entry = None
+            if node.getSiblingNeighbour(1) and node.getSiblingNeighbour(1).text == "()":
+                current_table = node.getSymbolTable()
+                while current_table.prev is not None:
+                    symbol_entry = current_table.getEntry(node.text, node.position.virtual_linenr)
+                    if symbol_entry:
+                        type_object = symbol_entry.getTypeObject()
+                        while isinstance(type_object, SymbolTypePtr):
+                            type_object = type_object.pts_to
+                        if isinstance(type_object, FunctionSymbolType):
+                            break
+                    current_table = current_table.prev
+            else:
+                #symbol_entry = node.getSymbolTable().getEntry(node.text)
+
+                symbol_entry = node.getSymbolTable().getEntry(node.text, node.position.virtual_linenr)
+            entry = self.map_table.getEntry(symbol_entry)
+            #print(node.text,entry, id(symbol_entry), id(node.symbol_table))
 
             """
             identifiers of declarations and functions are not yet defined
             """
             if entry is None:
-
                 if node.text in self.special_func_calls and LLVMSingleton.getInstance().getFunction(node.text) is None:
                     """
                     To support declaration of special function calls like 'malloc'
                     """
-                    function_type = node.getSymbolTable().getEntry(node.text).getTypeObject()
+                    symbol_entry = node.getSymbolTable().getEntry(node.text)
+                    function_type = symbol_entry.getTypeObject()
                     args = function_type.getParameterTypes()
 
                     func = Declaration.function(node.text, function_type.return_type, args)
-                    self.map_table.addEntry(MapEntry(node.text, func))
-                    entry = self.map_table.getEntry(node.text)
-
+                    entry = MapEntry(node.text, func)
+                    self.map_table.addEntry(entry, symbol_entry)
                 else:
                     return
 
             self.llvm_map[node] = entry.llvm
+            #print(entry.llvm)
 
         if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
             llvm_var = Declaration.llvmLiteral(node.text, SymbolType(node.type, False))
@@ -238,7 +256,7 @@ class AST2LLVM(ASTVisitor):
         add value to map to map var to address register
         """
 
-        self.map_table.addEntry(MapEntry(var_child.text, llvm_var))
+        self.map_table.addEntry(MapEntry(var_child.text, llvm_var), entry)
 
         """
         see assignment to declaration as assignment
@@ -252,7 +270,9 @@ class AST2LLVM(ASTVisitor):
         if function is None:
             function = LLVMSingleton.getInstance().getModule().get_global(function_name)
 
-        self.map_table.addEntry(MapEntry(function_name, function))
+        entry = node.getChild(0).getSymbolTable().getEntry(function_name)
+
+        self.map_table.addEntry(MapEntry(function_name, function), entry)
 
     def handleParameterCalls(self, node: ASTNode):
         args = []
@@ -279,7 +299,7 @@ class AST2LLVM(ASTVisitor):
         left_child = node.getChild(0)
         store_reg = self.llvm_map.get(left_child, None)
         if store_reg is None:
-            store_reg = self.map_table.getEntry(left_child.text).llvm
+            store_reg = self.map_table.getEntry(left_child.getSymbolTable().getEntry(left_child.text)).llvm
 
         right_child = node.getChild(1)
 
@@ -387,6 +407,8 @@ class AST2LLVM(ASTVisitor):
             left = self.llvm_map.get(node.getChild(0))
             right = self.llvm_map.get(node.getChild(2))
 
+            #print(left,  node.getChild(0).text, right, node.getChild(2).text, operator)
+
             llvm_var = Calculation.operation(left, right, operator)
 
         self.llvm_map[node] = llvm_var
@@ -414,6 +436,7 @@ class AST2LLVM(ASTVisitor):
         :return:
         """
 
+
         func = LLVMSingleton.getInstance().getLastFunction()
         # Get the arguments of the function
         arguments = func.args
@@ -439,8 +462,10 @@ class AST2LLVM(ASTVisitor):
             # Add the store instruction to the map
             self.llvm_map[node.getChild(index).getChild(0)] = store
 
+            entry = node.getSymbolTable().getEntry(node.getChild(index).getChild(0).text)
+
             # Add the alloca instruction to the map
-            self.map_table.addEntry(MapEntry(node.getChild(index).getChild(0).text, alloca))
+            self.map_table.addEntry(MapEntry(node.getChild(index).getChild(0).text, alloca), entry)
 
             index += 1
 

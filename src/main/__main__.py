@@ -138,8 +138,6 @@ def Processing(ast, dot_file, fold, includeSTDIO):
 
     VoidReturnAdder().addReturn(cfc.getControlFlowGraph())
 
-
-
     if dot_file is not None:
         DotVisitor(dot_file).visit(ast)  # Export AST in Dot
 

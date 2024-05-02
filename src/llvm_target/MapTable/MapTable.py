@@ -1,4 +1,4 @@
-
+from src.parser.Tables.SymbolTable import SymbolEntry
 
 class MapEntry:
     def __init__(self, entry: str, llvm):
@@ -12,7 +12,7 @@ class MapTable:
         self.symbols = {}
         self.symbols_reverse = {}
 
-    def getEntry(self, entry, reverse: bool = False):
+    def getEntry(self, entry: SymbolEntry, reverse: bool = False):
         """
         Get entry
         :param reverse:
@@ -31,8 +31,8 @@ class MapTable:
 
             return None
 
-    def addEntry(self, map_entry: MapEntry):
-        self.symbols[map_entry.entry] = map_entry
+    def addEntry(self, map_entry: MapEntry, SymbolTable_entry: SymbolEntry):
+        self.symbols[SymbolTable_entry] = map_entry
         self.symbols_reverse[map_entry.llvm] = map_entry
 
     def getOutStr(self, absolute: bool = False):
