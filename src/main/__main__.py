@@ -134,7 +134,7 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     cfc = ControlFlowCreator()
     cfc.visit(ast)
 
-    DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
+    DeadCodeRemover().visit(ast, cfc.getControlFlowGraph())  # removes dead code inside a block coming after a return/continue or break
 
     VoidReturnAdder().addReturn(cfc.getControlFlowGraph())
 

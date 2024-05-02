@@ -6,7 +6,7 @@ int main(){
     while (10 == 10){
         printf("%d", i);
         i++;
-        break
+        break;
 
     }
 
