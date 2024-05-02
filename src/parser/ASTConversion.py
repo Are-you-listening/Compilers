@@ -223,6 +223,7 @@ class ASTConversion(ASTVisitor):
 
             to_type = parameterTypes[index]
 
+
         if operator in ("&&", "||"):
             """
             logical operators expect booleans so we convert the given entry into a boolean
@@ -649,7 +650,7 @@ class ASTConversion(ASTVisitor):
             corresponding_function_type = self.type_mapping.get(node.parent.children[0])
 
         if not isinstance(corresponding_function_type, FunctionSymbolType):
-            print("he")
+
             ErrorExporter.functionCallNotFunction(node.position, self.subtree_to_text(node.parent.children[0]),
                                                   corresponding_function_type)
 
