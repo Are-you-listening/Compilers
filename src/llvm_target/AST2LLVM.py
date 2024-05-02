@@ -201,7 +201,7 @@ class AST2LLVM(ASTVisitor):
             self.llvm_map[node] = llvm_var
 
     def handleComment(self, node):
-        if node.position is None:
+        if node.position is None or node.symbol_table is None or node.symbol_table.isRoot():  # We can't add comments in the global scope of llvm
             return
 
         curr_line = node.position.linenr
@@ -291,6 +291,7 @@ class AST2LLVM(ASTVisitor):
 
     def __del__(self):
         for comment in self.comments:  # Add any leftover comments
+            print(comment)
             Declaration.addComment(self.comments[comment])
 
         with open(self.fileName, 'w') as f:
@@ -502,6 +503,9 @@ class AST2LLVM(ASTVisitor):
         :param node: the node in the AST that we are currently handling
         :return:
         """
+
+        if node.symbol_table is None or node.symbol_table.isRoot():  # LLVM thing in which you can't properly place comments in the global scope
+            return
 
         code = self.codegetter.getLine(node)
         if code is not None:

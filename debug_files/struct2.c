@@ -1,34 +1,22 @@
 #include <stdio.h>
 
+struct kaas{
+    int melk; //Melk
+    float yoghurt;
+};
 
-int main(){
+struct kaas* structCreator(int melk, float yoghurt){ //Struct Creator
+    struct kaas gouda;
+    gouda.melk = melk;
+    gouda.yoghurt = yoghurt;
+    struct kaas* ptr = &gouda;
+    return ptr;
+}
 
-char s = 's';
-int k = s;
-float l = k;
-k = l;
-s = k;
+int main() {
+    struct kaas* ptr; //kaas* ptr definition in main
 
-k = (int) l;
-s = (char) k;
-
-int* kptr = &k;
-char* sptr = &s;
-
-kptr = sptr;
-kptr = (int*) sptr;
-
-int** kptrptr = kptr;
-
-char*** sptrptrptr = kptr;
-
-float p = 3.14;
-
-float* pptr = &p;
-float** ptrptr = pptr;
-float** pieter = &pptr;
-
-printf("%f", **pieter);
-
-return 0;
+    ptr = structCreator(10, 20.0);
+    printf("%d %f ", ptr->melk, ptr->yoghurt);
+    return 0;
 }

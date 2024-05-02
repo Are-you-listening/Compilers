@@ -227,9 +227,10 @@ class Declaration:
         """
         In case we have an array of a string and we use its pointer, we want to add another bit cast
         """
+
         if store_register.type.is_pointer and value.type.is_pointer and \
                 isinstance(value.type.pointee, ir.types.ArrayType):
-            value = block.bitcast(value, ir.IntType(8).as_pointer())
+            value = block.bitcast(value, store_register.type.pointee)
 
         llvm_val = block.store(value, store_register)
 

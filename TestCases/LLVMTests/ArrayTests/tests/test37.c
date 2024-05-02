@@ -13,8 +13,5 @@ int main(){
     k + 3;
     printf("%c", *(k+2));
 
-    k + 3.14;
-
-
     return 0;
 }
