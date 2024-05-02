@@ -134,6 +134,7 @@ class LLVMTest(unittest.TestCase, ABC):
             for fold in [True, False]:
                 index = file[4:-2]  # The index is used to refer to the files & other data belonging to this testfile
                 file_name = f"tests/test{index}.c"
+
                 #print(index, file_name, fold)  # Toggle for debug
 
                 """
@@ -155,9 +156,9 @@ class LLVMTest(unittest.TestCase, ABC):
                 error_buff = StringIO()
                 sys.stderr = error_buff
 
-                try:
-                    LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
+                LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
 
+                try:
                     #sys.stdout = original
 
                     # Run our llvm

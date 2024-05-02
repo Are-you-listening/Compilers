@@ -62,6 +62,46 @@ class _RelationalOperations(BaseRelationalOperations):
     Relation functions equivalent to the functionality of C
     """
 
+    @staticmethod
+    def LessThan(a, b):
+        if a > 127:
+            a -= 256
+
+        if b > 127:
+            b -= 256
+
+        return int(a < b)
+
+    @staticmethod
+    def GreaterThan(a, b):
+        if a > 127:
+            a -= 256
+
+        if b > 127:
+            b -= 256
+
+        return int(a > b)
+
+    @staticmethod
+    def LessThanOrEqualTo(a, b):
+        if a > 127:
+            a -= 256
+
+        if b > 127:
+            b -= 256
+
+        return int(a <= b)
+
+    @staticmethod
+    def GreaterThanOrEqualTo(a, b):
+        if a > 127:
+            a -= 256
+
+        if b > 127:
+            b -= 256
+
+        return int(a >= b)
+
 
 class _Conversions:
 
