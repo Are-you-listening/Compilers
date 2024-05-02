@@ -9,5 +9,4 @@
   "34": ["[ Error ] tests/test34.c line 3: redefinition or redeclaration of INT x"],
   "35": ["[ Error ] tests/test35.c line 4: redefinition or redeclaration of INT x"],
   "36": ["[ Error ] tests/test36.c line 3: redefinition or redeclaration of INT x"]
-
 }

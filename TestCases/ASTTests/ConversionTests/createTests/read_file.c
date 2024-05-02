@@ -1,7 +1,34 @@
-/* Should NOT generate warning */
+#include <stdio.h>
+
+
 int main(){
-    int x = 5;
-    float y = x;
-    float z = 0.5 + 1;
-    return 0;
+
+char s = 's';
+int k = s;
+float l = k;
+k = l;
+s = k;
+
+k = (int) l;
+s = (char) k;
+
+int* kptr = &k;
+char* sptr = &s;
+
+kptr = sptr;
+kptr = (int*) sptr;
+
+int** kptrptr = kptr;
+
+char*** sptrptrptr = kptr;
+
+float p = 3.14;
+
+float* pptr = &p;
+float** ptrptr = pptr;
+float** pieter = &pptr;
+
+printf("%f", **pieter);
+
+return 0;
 }
