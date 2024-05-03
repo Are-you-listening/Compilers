@@ -411,7 +411,13 @@ class AST2LLVM(ASTVisitor):
                 super_child = child.getChild(0)
 
                 u = self.llvm_map[super_child]
-                Declaration.assignment(u, llvm_var, u.align)
+
+                if not isinstance(u, ir.GEPInstr):
+                    align = u.align
+                else:
+                    align = 4
+
+                Declaration.assignment(u, llvm_var, align)
 
             if post_incr:
                 llvm_var = child_llvm
