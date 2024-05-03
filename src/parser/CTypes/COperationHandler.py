@@ -37,6 +37,8 @@ class COperationHandler:
             poorest_type = "PTR"
         else:
             poorest_type = self.richness_checker.get_richest(val1[1], val2[1])
+            if poorest_type == "CHAR":
+                poorest_type = "INT"
 
         """
         make sure we do the right type of operation (int op, char op, ...) and the values need to be converted

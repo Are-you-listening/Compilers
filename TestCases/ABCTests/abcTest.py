@@ -46,7 +46,7 @@ class ASTTest(ABC):
                 continue
 
             index = int(file[4:-2])  # The index is used to refer to the files & other data belonging to this testfile
-            print(index, file)  # Toggle for debug
+            #print(index, file)  # Toggle for debug
 
             """
             Load the AST from the JSON file

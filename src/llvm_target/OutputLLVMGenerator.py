@@ -524,6 +524,18 @@ class Scanf(Printf):
 
 
 class Conversion:
+
+    @staticmethod
+    def intToInt(x: ir.Instruction, x_to:ir.types):
+        block = LLVMSingleton.getInstance().getCurrentBlock()
+        if x.type.width == 8 and x_to.width == 32:
+            v = block.sext(x, x_to)
+        else:
+            v = block.zext(x, x_to)
+        return v
+
+
+
     @staticmethod
     def performConversion(llvm_var, to_type: SymbolType):
 
@@ -536,7 +548,7 @@ class Conversion:
                            (ir.FloatType, "INT"): lambda x, x_to: block.fptosi(x, x_to),
                            (ir.IntType, "CHAR"): lambda x, x_to: block.trunc(x, x_to),
                            (ir.FloatType, "CHAR"): lambda x, x_to: block.fptosi(x, x_to),
-                           (ir.IntType, "INT"): lambda x, x_to: block.zext(x, x_to),
+                           (ir.IntType, "INT"): lambda x, x_to: Conversion.intToInt(x, x_to),
                            (ir.IntType, "PTR"): lambda x, x_to: block.inttoptr(x, x_to),
                            (ir.FloatType, "PTR"): lambda x, x_to: block.inttoptr(x, x_to),
                            (ir.IntType, "BOOL"): lambda x, x_to: block.icmp_signed("!=", x, ir.Constant(x.type, 0)),

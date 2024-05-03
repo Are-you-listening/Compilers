@@ -29,10 +29,10 @@
  "36": ["[ Error ] read_file.c line 8: Manipulation of variable 'c' is not allowed, because 'c' has type 'const INT**const'"],
  "37": ["[ Error ] read_file.c line 7: Manipulation of variable '*(b)' is not allowed, because '*(b)' has type 'const INT'"],
  "38": ["[ Error ] read_file.c line 7: Manipulation of variable 'b+1' is not allowed, because 'b+1' has type 'const INT'"],
- "40": ["[ Error ] read_file.c line 4: invalid operation ++  "],
+ "40": [],
  "41": ["[ Error ] read_file.c line 31: invalid operation + on type(s): FLOAT* FLOAT**"],
  "42": ["[ Error ] read_file.c line 31: invalid operation - on type(s): FLOAT* FLOAT**"],
  "43": ["[ Warning ] read_file.c line 9: Narrowing type from 'FLOAT' to 'INT' ", "[ Warning ] read_file.c line 10: Narrowing type from 'INT' to 'CHAR' ", "[ Warning ] read_file.c line 18: incompatible pointer types initializing 'INT*' with an expression of type 'CHAR*' ", "[ Warning ] read_file.c line 21: incompatible pointer types initializing 'INT**' with an expression of type 'INT*' ", "[ Warning ] read_file.c line 23: incompatible pointer types initializing 'CHAR***' with an expression of type 'INT*' ", "[ Warning ] read_file.c line 28: incompatible pointer types initializing 'FLOAT**' with an expression of type 'FLOAT*' ", "[ Warning ] read_file.c line 31: incompatible pointer types initializing 'INT' with an expression of type 'FLOAT*' "],
- "45": ["[ Warning ] read_file.c line 10: incompatible pointer types initializing 'INT*' with an expression of type 'INT' "],
- "46": ["[ Error ] read_file.c line 14:  indirection requires pointer operand ('INT' invalid)"]
+ "45": ["[ Error ] read_file.c line 10: invalid operation + on type(s): INT* INT*"],
+ "46": ["[ Error ] read_file.c line 16: invalid operation + on type(s): CHAR* FLOAT"]
 }

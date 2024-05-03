@@ -309,7 +309,6 @@ class AST2LLVM(ASTVisitor):
 
     def __del__(self):
         for comment in self.comments:  # Add any leftover comments
-            print(comment)
             Declaration.addComment(self.comments[comment])
 
         with open(self.fileName, 'w') as f:

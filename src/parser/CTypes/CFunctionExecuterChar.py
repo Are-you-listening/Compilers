@@ -9,7 +9,22 @@ class _RangeCheck(BaseRangeCheck):
         """assume 1 byte/char"""
         b = value.to_bytes(8, byteorder="big", signed=True)
         b = b[-1:]
-        return int.from_bytes(b, 'big', signed=False)
+
+        val = int.from_bytes(b, 'big', signed=True)
+
+        return val
+
+    @staticmethod
+    def toSigned(val: int):
+        while val > 127:
+            val -= 256
+        return val
+
+    @staticmethod
+    def toUnsigned(val: int):
+        while val < 0:
+            val += 256
+        return val
 
 
 class _UnaryOperations(BaseUnaryOperations):
@@ -22,6 +37,10 @@ class _BinaryOperations(BaseBinaryOperations):
     """
     Binary functions equivalent to the functionality of C
     """
+
+    @staticmethod
+    def Subtract(a, b):
+        return a - b
 
     @staticmethod
     def Divide(a: int, b: int):
@@ -64,42 +83,18 @@ class _RelationalOperations(BaseRelationalOperations):
 
     @staticmethod
     def LessThan(a, b):
-        if a > 127:
-            a -= 256
-
-        if b > 127:
-            b -= 256
-
         return int(a < b)
 
     @staticmethod
     def GreaterThan(a, b):
-        if a > 127:
-            a -= 256
-
-        if b > 127:
-            b -= 256
-
         return int(a > b)
 
     @staticmethod
     def LessThanOrEqualTo(a, b):
-        if a > 127:
-            a -= 256
-
-        if b > 127:
-            b -= 256
-
         return int(a <= b)
 
     @staticmethod
     def GreaterThanOrEqualTo(a, b):
-        if a > 127:
-            a -= 256
-
-        if b > 127:
-            b -= 256
-
         return int(a >= b)
 
 
@@ -145,7 +140,8 @@ class CFunctionExecuterChar(CFunctionExecuter):
         self.conversion_dict = {"INT": _Conversions.ToInt, "FLOAT": _Conversions.ToFloat, "BOOL": _Conversions.ToBool}
 
     def fromString(self, string: str):
-        return ord(string[1])
+        data = ord(string[1])
+        return _RangeCheck.toSigned(data)
 
     def convertTo(self, data, to_type):
         if to_type == "CHAR":
@@ -154,6 +150,5 @@ class CFunctionExecuterChar(CFunctionExecuter):
         return self.conversion_dict[to_type](data)
 
     def getString(self, data):
-        while data < 0:
-            data += 256
+        data = _RangeCheck.toUnsigned(data)
         return f"'{chr(data)}'"
