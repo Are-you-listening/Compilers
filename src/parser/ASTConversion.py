@@ -459,7 +459,7 @@ class ASTConversion(ASTVisitor):
                      ("CHAR", "*", "PTR"), ("INT", "*", "PTR")]
         incompatible_ops = {  # Keep a list of absolutely incompatible types & operations
             "FLOAT": ["%", "|", "&", "~", "CHAR"],  # FLOAT & CHAR are always incompatible
-            "PTR": ["/", "^", ">>", "<<", "%", "|", "~"]  # TODO should add unary - & +, binary &
+            "PTR": ["/", "^", ">>", "<<", "%", "|", "~"]
         }
 
         to_type_asStr = ASTConversion.to_string_type(to_type.getPtrTuple())
