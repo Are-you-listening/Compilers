@@ -7,4 +7,5 @@ int main(){
     char q = 'b';
 
     char g = a+c+e+b+e+q+d;
+    return 0;
 }
