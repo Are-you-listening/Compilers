@@ -318,8 +318,8 @@ class ASTConversion(ASTVisitor):
                 In case non matching func ptr types
                 """
                 if isinstance(to_type, SymbolTypePtr) and isinstance(to_type.deReference(), FunctionSymbolType):
-                    pass
-                    convert_override = to_type
+
+                    ErrorExporter.invalidFunctionPtr(node.position, to_type, type_tup)
 
                 self.addConversion(child, to_type.getPtrTuple(), )
 
