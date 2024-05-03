@@ -13,8 +13,6 @@ class ValueAdderVisitor(ASTVisitor):
         self.placeable_list = {}
 
     def visit(self, ast: AST):
-        self.placeable_list = {}
-
         self.postorder(ast.root)
 
     def visitNode(self, node: ASTNode):

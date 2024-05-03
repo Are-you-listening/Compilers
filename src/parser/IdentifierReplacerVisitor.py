@@ -4,6 +4,24 @@ from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 from src.parser.SwitchConverter import SwitchConverter
 
 
+class CheckForFunction(ASTVisitor):
+    def __init__(self):
+        self.found = False
+
+    def visit(self, astnode: ASTNode):
+        self.postorder(astnode)
+        return self.found
+
+    def visitNode(self, node: ASTNode):
+        if node.text in ("printf", "scanf"):
+            self.found = True
+
+    def visitNodeTerminal(self, node: ASTNodeTerminal):
+        entry = node.getSymbolTable().getEntry(node.text)
+        if entry and isinstance(entry.getTypeObject(), FunctionSymbolType):
+            self.found = True
+
+
 def declaredPreviously(node: ASTNodeTerminal):
     current_table = node.getSymbolTable().prev
     while current_table is not None:
@@ -71,6 +89,16 @@ class IdentifierReplacerVisitor(ASTVisitor):
                 return
 
             if entry.value.text in ("Expr", "Dereference"):
+                return
+
+            checker = CheckForFunction()
+            if checker.visit(entry.value):
+                """
+                there is a function call in the value tree of the variable -> so we are not allowed to replace
+                """
+                return
+
+            if entry.value.position.virtual_linenr >= node.position.virtual_linenr:
                 return
 
             """

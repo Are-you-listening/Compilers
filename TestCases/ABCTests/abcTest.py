@@ -164,7 +164,7 @@ class LLVMTest(unittest.TestCase, ABC):
                     # Run our llvm
                     main([0, "--input", file_name, "--target_llvm", f"temp/temp.ll", "--fold", fold])  # Run our compiler
 
-                    c_out = self.runC(file_name, inp)
+                    c_out = self.runC(file_name, inp, fold)
 
                     # Run our llvm
                     out = subprocess.run(f"""lli temp/temp.ll""", shell=True, capture_output=True, input=inp, text=True)
@@ -213,7 +213,7 @@ class LLVMTest(unittest.TestCase, ABC):
         return subprocess.run(f"""gcc -ansi -pedantic {file_name} -o temp/temp""",
                                    shell=True, capture_output=True)
 
-    def runC(self, file_name, inp):
+    def runC(self, file_name, inp, fold):
         """
         Run and compile a c file
         :param file_name: Name of the file
@@ -228,7 +228,7 @@ class LLVMTest(unittest.TestCase, ABC):
             with open(json_file, "rt") as f:
                 output_dict = json.loads(f.read())
                 c_out = subprocess.run(f"""ls""", shell=True, capture_output=True) # Create a useless c_out
-                c_out.stdout = output_dict[index]  # Modify output
+                c_out.stdout = output_dict[str(index)+"_"+fold]  # Modify output
                 c_out.stderr = ""  # No errors expected
         else:
             # Run c file using gcc
