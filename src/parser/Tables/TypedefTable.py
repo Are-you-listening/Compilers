@@ -92,7 +92,14 @@ class TypedefTable(AbstractTable):
         self.traverse(lambda x, a: x.getTranslation(a), True, args)
 
         if translation == []:  # No translation was found
-            ErrorExporter.undeclaredTypedef(node.position, identifier)
+            if node.getChild(1) is not None and node.getChild(1).text == '*' and node.getChildAmount() == 2:  # Hacky stuff when it could be a multiplication
+                parent = node.parent
+                parent.text = "Expr"
+                parent.replaceChild(node, node.children[0])
+                parent.insertChild(1, node.children[1])
+                return
+            else:
+                ErrorExporter.undeclaredTypedef(node.position, identifier)
 
         node.typedefReplaceChildren(translation, index)
 

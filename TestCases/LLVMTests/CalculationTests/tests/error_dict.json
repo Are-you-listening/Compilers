@@ -2,5 +2,16 @@
   "27": ["[ Error ] tests/test27.c line 12: invalid unary operation"],
   "28": ["[ Error ] tests/test28.c line 17: invalid unary operation"],
   "29": ["[ Error ] tests/test29.c line 32: invalid unary operation"],
-  "30": ["[ Error ] tests/test30.c line 34: invalid operation + on type(s): INT* INT*"]
+  "30": ["[ Error ] tests/test30.c line 34: invalid operation + on type(s): INT* INT*"],
+  "38": ["[ Error ] tests/test38.c line 7: invalid operation ~ on type(s): INT[4]"],
+  "39": ["[ Error ] tests/test39.c line 7: invalid operation ~ on type(s): INT*"],
+  "41": ["[ Error ] tests/test41.c line 15: invalid operation - on type(s): INT* INT"],
+  "42": ["[ Error ] tests/test42.c line 16: invalid operation - on type(s): INT* INT"],
+  "43": ["[ Error ] tests/test43.c line 18: invalid operation * on type(s): INT* INT"],
+  "44": ["[ Error ] tests/test44.c line 21: invalid operation * on type(s): INT* INT"],
+  "45": ["[ Error ] tests/test45.c line 24: invalid operation / on type(s): INT* INT"],
+  "46": ["[ Error ] tests/test46.c line 25: invalid operation / on type(s): INT* INT"],
+  "47": ["[ Error ] tests/test47.c line 24: invalid operation / on type(s): INT* INT"],
+  "48": ["[ Error ] tests/test48.c line 25: invalid operation / on type(s): INT* INT"],
+  "49": ["[ Error ] tests/test49.c line 29: invalid operation % on type(s): INT* INT"]
 }

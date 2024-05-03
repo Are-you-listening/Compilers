@@ -127,6 +127,10 @@ class ASTConversion(ASTVisitor):
                 if check_type is None:
                     continue
 
+                if node.text == "Expr" and node.getChildAmount() == 2:  # Unary Ops
+                    if not self.compatible_unary(check_type, operator, node):
+                        pass
+
                 """
                 first type does not have to check if it is richer
                 """
@@ -145,7 +149,7 @@ class ASTConversion(ASTVisitor):
                     pointers cannot do operation together unless condition operations
                     """
 
-                    if operator not in ("==", "<=", ">=", "<", ">", "!="):
+                    if operator not in ("==", "<=", ">=", "<", ">", "!=", "||", "&&", "!"):
                         """
                         when the op is invalid for ptrs
                         """
@@ -429,6 +433,20 @@ class ASTConversion(ASTVisitor):
         return data_type
 
     @staticmethod
+    def compatible_unary(type: SymbolType, operator: str, node: ASTNode):
+        incompatible_ops = {
+            "FLOAT": ["%", "|", "&", "~"],
+            "PTR": ["^", "|", "~", "-", "+"]
+        }
+
+        type_as_str = ASTConversion.to_string_type(type.getPtrTuple())
+        if type_as_str in incompatible_ops.keys():
+            if operator in incompatible_ops[type_as_str]:
+                ErrorExporter.invalidOperation(node.position, operator, type , None)
+
+
+
+    @staticmethod
     def compatible(type_tup: SymbolType, to_type: SymbolType, operator: str):
         """
         Check the blacklist for absolute incompatible operations or types
@@ -441,17 +459,22 @@ class ASTConversion(ASTVisitor):
                      ("CHAR", "*", "PTR"), ("INT", "*", "PTR")]
         incompatible_ops = {  # Keep a list of absolutely incompatible types & operations
             "FLOAT": ["%", "|", "&", "~", "CHAR"],  # FLOAT & CHAR are always incompatible
-            "PTR": ["/", "^", ">>", "<<", "%", "|", "~"]  # TODO should add unary - & +, binary &
+            "PTR": ["/", "^", ">>", "<<", "%", "|", "~"]
         }
+
+        to_type_asStr = ASTConversion.to_string_type(to_type.getPtrTuple())
+        type_tup_asStr = ASTConversion.to_string_type(type_tup.getPtrTuple())
+        if to_type_asStr == "PTR" and operator == '-':
+            return False
 
         incompatible = False
         incompatible = incompatible or (
-            ASTConversion.to_string_type(type_tup.getPtrTuple()), operator, ASTConversion.to_string_type(to_type.getPtrTuple())) in blocklist
-        if ASTConversion.to_string_type(type_tup.getPtrTuple()) in incompatible_ops.keys():
-            incompatible = incompatible or operator in incompatible_ops.get(ASTConversion.to_string_type(type_tup.getPtrTuple()))
+            type_tup_asStr, operator, to_type_asStr) in blocklist
+        if type_tup_asStr in incompatible_ops.keys():
+            incompatible = incompatible or operator in incompatible_ops.get(type_tup_asStr)
 
-        if ASTConversion.to_string_type(to_type.getPtrTuple()) in incompatible_ops.keys():
-            incompatible = incompatible or operator in incompatible_ops.get(ASTConversion.to_string_type(to_type.getPtrTuple()))
+        if to_type_asStr in incompatible_ops.keys():
+            incompatible = incompatible or operator in incompatible_ops.get(to_type_asStr)
         return not incompatible
 
     @staticmethod

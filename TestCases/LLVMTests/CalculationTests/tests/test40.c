@@ -1,8 +1,27 @@
 #include <stdio.h>
 
-int main () {
+int main(){
+    int a[4] = {1,2,3,4};
+    int* sa = a;
+    int ia = 3;
 
-    char f1 = 45435+ 5 + 'x' + 0 * 8;
-    printf("%d", ((int) f1));
+    int* z;
+
+    ia + ia;
+    ia + sa;
+    sa + ia;
+
+    ia - ia;
+
+
+    ia * ia;
+
+
+    ia / ia;
+
+
+    ia % ia;
+
+
     return 0;
 }
