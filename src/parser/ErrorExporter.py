@@ -439,3 +439,8 @@ class ErrorExporter:
     def invalidUnary(position: Position):
         print(f"[ Error ] {position.file} line {position.linenr}: invalid unary operation", file=sys.stderr)
         exit()
+
+    @staticmethod
+    def invalidMainType(position: Position):
+        print(f"[ Error ] {position.file} line {position.linenr}: main function initialised with an other type than int", file=sys.stderr)
+        exit()
