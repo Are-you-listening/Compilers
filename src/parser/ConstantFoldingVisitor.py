@@ -41,6 +41,7 @@ class ConstantFoldingVisitor(ASTVisitor):
             for child in node.getChild(0).getChildren():
                 if "*" in child.text:
                     return
+            to_type = None
             for child in node.getChild(0).getChildren():
                 if child.text in c_type_executors:
                     to_type = child.text  # This scares me a little :( - Kars
