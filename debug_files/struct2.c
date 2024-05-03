@@ -1,22 +1,30 @@
 #include <stdio.h>
 
-struct kaas{
-    int melk; //Melk
-    float yoghurt;
-};
+int main(){
+int b[2];
+    int a[4] = {1,2,3,4};
+    int* k = a;
+    k = k + 2;
+    printf("%d ", *k);
+    int e = 5 > a;
+    int t = a > 5;
+    //0 > 1;
+    printf("%d %d ", e,t); //46
 
-struct kaas* structCreator(int melk, float yoghurt){ //Struct Creator
-    struct kaas gouda;
-    gouda.melk = melk;
-    gouda.yoghurt = yoghurt;
-    struct kaas* ptr = &gouda;
-    return ptr;
-}
+    //a || b; Allowed
+    //!a; // allowed
+    //~a; Not allowed
+    //-a; Not allowed
+    //a%b; Not allowed
+    //a^a; Not allowed
+    // allowed a&&a;
+    // bitwise not allowed
+    //shifts not allowed
 
-int main() {
-    struct kaas* ptr; //kaas* ptr definition in main
+    //int* s = 0;
+    //int* k = 0;
+    //s > 0;
+    //a >> b; Not allowed
 
-    ptr = structCreator(10, 20.0);
-    printf("%d %f ", ptr->melk, ptr->yoghurt);
     return 0;
 }
