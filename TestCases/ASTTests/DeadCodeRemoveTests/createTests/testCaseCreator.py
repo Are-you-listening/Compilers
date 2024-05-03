@@ -99,7 +99,7 @@ d = DotVisitor("read_file_before")  # Export AST in Dot
 d.visit(ast)
 
 
-DeadCodeRemover().visit(ast)  # removes dead code inside a block coming after a return/continue or break
+DeadCodeRemover().visit(ast, cfc.getControlFlowGraph())  # removes dead code inside a block coming after a return/continue or break
 
 """
 add check stuff above

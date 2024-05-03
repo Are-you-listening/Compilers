@@ -131,7 +131,7 @@ class LLVMTest(unittest.TestCase, ABC):
             if not os.path.splitext(file)[-1] == '.c':  # We only run c files
                 continue
 
-            for fold in [True, False]:
+            for fold in ['True', 'False']:
                 index = file[4:-2]  # The index is used to refer to the files & other data belonging to this testfile
                 file_name = f"tests/test{index}.c"
 

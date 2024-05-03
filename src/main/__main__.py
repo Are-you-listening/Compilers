@@ -58,6 +58,11 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
+    parser.reset()
+    lexer.reset()
+    stream.reset()
+    input_stream.reset()
+
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)
 

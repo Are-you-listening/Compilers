@@ -45,7 +45,10 @@ class IdentifierReplacerVisitor(ASTVisitor):
                 return
 
             # get the symbolTable entry of the identifier we are going to replace
+
             entry = node.getSymbolTable().getEntry(toReplace)
+
+
             if (not entry.isConst() and entry.firstUsed is not None) or entry.is_referenced() or \
                     isinstance(entry.getTypeObject(), FunctionSymbolType):
                 return
