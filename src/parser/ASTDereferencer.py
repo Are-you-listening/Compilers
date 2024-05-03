@@ -148,6 +148,9 @@ class ASTDereferencer(ASTVisitor):
         """
         Remove a Dereference, if it is a dereference node
         """
+        if node.text == "Conversion":
+            ASTDereferencer.removeDereference(node.getChild(1), error)
+            return 
 
         if node.text == "Dereference":
             super_child = node.getChild(0)

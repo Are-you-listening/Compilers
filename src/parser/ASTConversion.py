@@ -102,7 +102,6 @@ class ASTConversion(ASTVisitor):
         operator = self.get_operator(node)
 
         if node.text in ("Literal", "Expr"):
-
             """
             if we have an expression that is a function call, we need to check that we call a function
             """
@@ -192,6 +191,7 @@ class ASTConversion(ASTVisitor):
             be default 1 ptr is added, so remove it again, because assignment
             """
             to_type = assign_type.deReference()
+
             """
             make sure assignment doesn't convert to a ptr less
             """
@@ -314,11 +314,14 @@ class ASTConversion(ASTVisitor):
                     ErrorExporter().incorrectVoidFuncUse(node.position)
                 self.narrowing_warning_check(child.position, to_type, type_tup)
 
-                convert_override = None
+                """
+                In case non matching func ptr types
+                """
                 if isinstance(to_type, SymbolTypePtr) and isinstance(to_type.deReference(), FunctionSymbolType):
+                    pass
                     convert_override = to_type
 
-                self.addConversion(child, to_type.getPtrTuple(), convert_override)
+                self.addConversion(child, to_type.getPtrTuple(), )
 
         """
         equality operators give an integer back
@@ -428,8 +431,10 @@ class ASTConversion(ASTVisitor):
                 data_type = SymbolType(child.text.upper(), False)
 
             if child.text == "*":
-                data_type = SymbolTypePtr(data_type, False)
-
+                if child.type.startswith("ARRAY_"):
+                    data_type = SymbolTypeArray(data_type, False, int(child.type[6:]))
+                else:
+                    data_type = SymbolTypePtr(data_type, False)
         return data_type
 
     @staticmethod
@@ -580,7 +585,7 @@ class ASTConversion(ASTVisitor):
         ErrorExporter.narrowingTypesWarning(position, to_tup, type_tup)
 
     @staticmethod
-    def addConversion(node: ASTNode, to_type: tuple, override: SymbolType=None):
+    def addConversion(node: ASTNode, to_type: tuple):
         """
         add a conversion to the provided type
 
@@ -591,30 +596,8 @@ class ASTConversion(ASTVisitor):
 
         new_node = ASTNode("Conversion", node.parent, node.getSymbolTable(), node.position, node.structTable)
 
-        if override is None:
-            type_node = ASTConversion.get_type_node(new_node, to_type)
-            new_node.addChildren(type_node)
-
-        else:
-            if isinstance(override, SymbolTypePtr) and isinstance(override.deReference(), FunctionSymbolType):
-                # TODO This code is waiting on Kasper
-                f_type = override.deReference()
-
-                func_ptr = ASTNode("FunctionPtr", new_node, new_node.getSymbolTable(), new_node.position,
-                                   node.structTable)
-
-                type_node = ASTConversion.get_type_node(func_ptr, f_type.return_type.getPtrTuple())
-                func_ptr.addChildren(type_node)
-
-                func_ptr_param = ASTNode("FunctionPtrParam", new_node, new_node.getSymbolTable(), new_node.position,
-                                         node.structTable)
-                func_ptr.addChildren(func_ptr_param)
-
-                for p in f_type.getParameterTypes():
-                    type_node = ASTConversion.get_type_node(func_ptr_param, p.getPtrTuple())
-                    func_ptr_param.addChildren(type_node)
-
-                new_node.addChildren(func_ptr)
+        type_node = ASTConversion.get_type_node(new_node, to_type)
+        new_node.addChildren(type_node)
 
         node.addNodeParent(new_node)
         return new_node
@@ -647,7 +630,7 @@ class ASTConversion(ASTVisitor):
         text = ""
         if isinstance(node, ASTNodeTerminal):
 
-            text += node.text
+            text += str(node.text)
 
         ass = node.parent.text == "Assignment" and node.text == "Dereference"
         if ass:

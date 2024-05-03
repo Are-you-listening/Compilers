@@ -13,8 +13,6 @@ class ValueAdderVisitor(ASTVisitor):
         self.placeable_list = {}
 
     def visit(self, ast: AST):
-        self.placeable_list = {}
-
         self.postorder(ast.root)
 
     def visitNode(self, node: ASTNode):
@@ -50,7 +48,7 @@ class ValueAdderVisitor(ASTVisitor):
         if node.type == "IDENTIFIER":
             # if it is a variable, and it is not the node where it is first declared -> update firstUsed if necessary
             entry = node.getSymbolTable().getEntry(node.text)
-            if node != entry.firstDeclared:
+            if node != entry.firstDeclared and entry.firstUsed is None:
                 entry.firstUsed = node
 
             if isinstance(entry.getTypeObject(), FunctionSymbolType):
