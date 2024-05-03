@@ -1,5 +1,7 @@
 from src.parser.ErrorExporter import *
 from src.parser.ASTVisitor import *
+from src.parser.SwitchConverter import SwitchConverter
+import copy
 
 
 class ArrayCleaner(ASTVisitor):
@@ -223,14 +225,42 @@ class ArrayCleaner(ASTVisitor):
         each value in value_list is a tuple starting with the assignment index part followed by the corresponding node
         """
 
+        type_node2 = node.parent.getChild(0)
+
+
         for indexing, v in value_list:
+
+            type_node3 = SwitchConverter.createCopy(type_node2)
+            type_node3.addChildren(ASTNodeTerminal("*", type_node3, node.parent.getSymbolTable(), "Not used", node.parent.position,
+                                      node.parent.structTable))
+
+            to_remove = set()
+            for i, t in enumerate(type_node3.children):
+                if t.text == "const":
+                    print("hwdw", t.text)
+                    to_remove.add(t)
+
+            for r in to_remove:
+                type_node3.removeChild(r)
+
             assignment_node = ASTNode("Assignment", code_node, node.parent.getSymbolTable(), node.parent.position,
                                       node.parent.structTable)
 
-            var_node = ASTNodeTerminal(declared_variable, assignment_node, assignment_node.getSymbolTable(),
+            assign_to = assignment_node
+            if len(to_remove) > 0:
+                conversion = ASTNode("Conversion", assignment_node, node.parent.getSymbolTable(), node.parent.position,
+                                     node.parent.structTable)
+
+                assignment_node.addChildren(conversion)
+
+                conversion.addChildren(type_node3)
+                type_node3.parent = conversion
+                assign_to = conversion
+
+            var_node = ASTNodeTerminal(declared_variable, assign_to, assignment_node.getSymbolTable(),
                                        "IDENTIFIER", assignment_node.position, assignment_node.structTable)
 
-            assignment_node.addChildren(var_node)
+            assign_to.addChildren(var_node)
 
             array_node = ASTNode("ARRAY", assignment_node, assignment_node.getSymbolTable(),
                                  assignment_node.position, assignment_node.structTable)

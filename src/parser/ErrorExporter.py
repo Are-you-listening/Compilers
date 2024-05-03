@@ -440,6 +440,28 @@ class ErrorExporter:
         print(f"[ Error ] {position.file} line {position.linenr}: invalid unary operation", file=sys.stderr)
         exit()
 
+    """
+    @staticmethod
+    def invalidFunctionPtr(position: Position, to_type: SymbolType, from_type: SymbolType):
+
+        if isinstance(to_type, SymbolTypePtr) and isinstance(to_type.deReference(), FunctionSymbolType):
+            to_type_return = ErrorExporter.__to_output_type(to_type.deReference().return_type.getPtrTuple())
+            for p in to_type.deReference().getParameterTypes():
+                p_type = ErrorExporter.__to_output_type(p.getPtrTuple())
+        else:
+            to_type = ErrorExporter.__to_output_type(to_type.getPtrTuple())
+
+
+        if isinstance(from_type, FunctionSymbolType):
+            from_type_return = ErrorExporter.__to_output_type(from_type.return_type.getPtrTuple())
+
+        print(f"[ Error ] {position.file} line {position.linenr}: invalid unary operation", file=sys.stderr)
+        exit()
+
+    from src.parser.Tables import FunctionSymbolType
+    from src.parser.Tables import SymbolTypePtr
+    """
+
     @staticmethod
     def invalidMainType(position: Position):
         print(f"[ Error ] {position.file} line {position.linenr}: main function initialised with an other type than int", file=sys.stderr)

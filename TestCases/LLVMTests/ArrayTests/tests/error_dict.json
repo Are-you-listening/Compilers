@@ -10,5 +10,6 @@
   "20": ["[ Error ] tests/test20.c line 4: an initializer list is provided while not being assigned to an array"],
   "26": ["[ Error ] tests/test26.c line 3: the array index is of type FLOAT which is not allowed"],
   "27": ["[ Error ] tests/test27.c line 3:  indirection requires array operand ('INT' invalid)"],
-  "28": ["[ Error ] tests/test28.c line 2: the array size definition of x should be an integer instead of 'FLOAT'"]
+  "28": ["[ Error ] tests/test28.c line 2: the array size definition of x should be an integer instead of 'FLOAT'"],
+  "51": ["[ Error ] tests/test51.c line 7: Manipulation of variable 'arr[]2' is not allowed, because 'arr[]2' has type 'const FLOAT'"]
 }
