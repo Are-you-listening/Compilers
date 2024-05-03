@@ -40,7 +40,11 @@ class UnaryWrapper:
     def LogicalNot(llvm_var):
         block = LLVMSingleton.getInstance().getCurrentBlock()
         llvm_type = llvm_var.type
-        sub_bool = block.icmp_signed("!=", llvm_var, ir.Constant(llvm_type, 0))
+        if isinstance(llvm_type, ir.PointerType):
+            sub_bool = block.icmp_signed("!=", llvm_var, ir.Constant(llvm_type, None))  # Ptr expect 'null' instead of '0'
+        else:
+            sub_bool = block.icmp_signed("!=", llvm_var, ir.Constant(llvm_type, 0))
+
         llvm_var = block.xor(sub_bool, ir.Constant(ir.IntType(1), 1))
         return llvm_var
 
@@ -556,8 +560,10 @@ class Conversion:
                            (ir.PointerType, "INT"): lambda x, x_to: block.ptrtoint(x, x_to),
                            (ir.PointerType, "CHAR"): lambda x, x_to: block.ptrtoint(x, x_to),
                            (ir.PointerType, "PTR"): lambda x, x_to: block.bitcast(x, x_to),
-                           (ir.IntType, "ARRAY"): lambda x, x_to: block.bitcast(x, x_to)
-                           }
+                           (ir.IntType, "ARRAY"): lambda x, x_to: block.bitcast(x, x_to),
+                           (ir.PointerType, "BOOL"): lambda x, x_to: block.icmp_signed("!=", x, ir.Constant(x.type, None)),
+
+                           }  # todo add ptr/toint bool
 
         llvm_to_type = CTypesToLLVM.getIRType(to_type)
 

@@ -14,6 +14,8 @@ class MainFoundConstraint(Constraint):
 
     def checkTerminalNode(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER" and node.text == "main" and node.parent.text == "Function":
+            if node.symbol_table.getEntry(node.text).getType() != "INT":
+                ErrorExporter.invalidMainType(node.position)
             self.accepted = True
             self.errorNode = node
 

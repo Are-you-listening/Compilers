@@ -1,6 +1,6 @@
 grammar grammarC;
 start_ : code EOF;
-code: (function | line ';'+ | include | define | include_guard)* ';'*;
+code: ((function | line ';'+ | include | define | include_guard) (';'*))* (';'*);
 include_guard: '#ifndef' IDENTIFIER code '#endif';
 include: '#include' ('<stdio.h>' | STRING );
 
@@ -11,7 +11,7 @@ parameters: ((parameter',')* parameter)?;
 parameter: (type IDENTIFIER array?) | functionPtrDeclaration;
 parameter_call: expr;
 block_line: (line | printscanf | 'break' | 'continue' | return);
-block_code: (block_line ';'+ | if | for | while | anonymous_scope | switch | include | define)* ';'*;
+block_code: ((block_line ';'+ | if | for | while | anonymous_scope | switch | include | define) (';'*) )* (';'*);
 typedef: 'typedef' type IDENTIFIER;
 define: '#define' IDENTIFIER ( ('-'? literal) | type );  // Remember, we can't allow Expressions here! (See project5.pdf)
 if: 'if' '(' expr ')' '{' block_code'}' ('else' ('{' block_code '}' | if))?;
