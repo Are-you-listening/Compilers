@@ -273,9 +273,19 @@ class AST2LLVM(ASTVisitor):
         if function is None:
             function = LLVMSingleton.getInstance().getModule().get_global(function_name)
 
-        entry = node.getChild(0).getSymbolTable().getEntry(function_name)
+        symbol_entry = None
+        current_table = node.getSymbolTable()
+        while current_table is not None:
+            symbol_entry = current_table.getEntry(function_name, node.position.virtual_linenr)
+            if symbol_entry:
+                type_object = symbol_entry.getTypeObject()
+                while isinstance(type_object, SymbolTypePtr):
+                    type_object = type_object.pts_to
+                if isinstance(type_object, FunctionSymbolType):
+                    break
+            current_table = current_table.prev
 
-        self.map_table.addEntry(MapEntry(function_name, function), entry)
+        self.map_table.addEntry(MapEntry(function_name, function), symbol_entry)
 
     def handleParameterCalls(self, node: ASTNode):
         args = []
