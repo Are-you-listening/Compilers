@@ -7,7 +7,6 @@ int main() {
     printf("%d", a);
     a = *(array_ptr++);
     printf("%d", a);
-    a = *(array_ptr - 1);
-    printf("%d", a);
+
     return 0;
 }
