@@ -236,12 +236,7 @@ class AST2LLVM(ASTVisitor):
             else:
                 value = value.text
 
-            if not isinstance(entry.getTypeObject(), SymbolTypeArray):
-                # Preset some values
-                llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(entry.getTypeObject()), value)
-                llvm_var.align = CTypesToLLVM.getBytesUse(entry.getTypeObject())
-            else:
-                llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(entry.getTypeObject()), [ir.Constant(ir.IntType(32), 0)]*entry.getTypeObject().size)
+            self.get_initializer_value(entry.getTypeObject(), llvm_var, value)
 
         else:
 
@@ -266,6 +261,19 @@ class AST2LLVM(ASTVisitor):
         """
         if node.getChildAmount() == 2:
             self.handleAssignment(node)
+
+    @staticmethod
+    def get_initializer_value(entry: SymbolType, llvm_var, value):
+        if not isinstance(entry, SymbolTypeArray):
+            # Preset some values
+            llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(entry), value)
+            llvm_var.align = CTypesToLLVM.getBytesUse(entry)
+        else:
+            llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(entry),
+                                   [AST2LLVM.get_initializer_value(entry.deReference(), llvm_var, 0)] * entry.size)
+
+        return llvm_var.initializer
+
 
     def handleFunction(self, node: ASTNode):
         function_name = node.getChild(0).text
