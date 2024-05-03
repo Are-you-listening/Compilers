@@ -1,9 +1,7 @@
+#include <stdio.h>
+
 int main(){
-    {
-        int x = 1;
-    }
-    {
-        int x = 2;
-    }
-    return 0;
+        printf("%d; ", 9++);
+        printf("%d; ", --11);
+        return 1;
 }

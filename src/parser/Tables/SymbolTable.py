@@ -80,7 +80,7 @@ class SymbolEntry(TableEntry):
 
         d_type = d_t.getType()
         if isinstance(d_t, FunctionSymbolType):
-            d_type = f"Func:{d_t.return_type.getType()}:{d_t.param_types}"
+            d_type = f"Func:{d_t.return_type.getType()}:{[]}"
 
         return d_type, ptr_string, const_list
 

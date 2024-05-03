@@ -19,6 +19,16 @@ from src.parser.BlacklistVisitor import BlacklistVisitor
 from src.parser.StructCleaner import StructCleaner
 from src.parser.StructCleanerAfter import StructCleanerAfter
 from src.parser.Preproccesing.preProcessor import PreProcessor
+from src.parser.PointerReformater import PointerReformater
+from src.parser.ASTLoopCleaner import ASTLoopCleaner
+from src.parser.EnumConverter import EnumConverter
+from src.parser.ASTIfCleaner import ASTIfCleaner
+from src.parser.SwitchConverter import SwitchConverter
+from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
+from src.parser.StringToArray import StringToArray
+from src.parser.ArrayCleaner import ArrayCleaner
+from src.parser.DynamicAllocation import DynamicAllocation
+from src.parser.Constraints.CheckRvalues import CheckRvalues
 
 input_file = "read_file.c"
 
@@ -37,33 +47,54 @@ toAST = ASTCreator(lexer)  # Create Actual AST
 toAST.visit(tree)
 ast = toAST.getAST()
 
-"""
-below add needed stuff
-"""
-virtualline = VirtualLineVisitor()
-virtualline.visit(ast)
+#DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
-black_list_visitor = BlacklistVisitor()
-black_list_visitor.visit(ast)
+parser.reset()
+lexer.reset()
+stream.reset()
+input_stream.reset()
 
-codegetter = CodeGetter()
+virtualLine = VirtualLineVisitor()
+virtualLine.visit(ast)
+
+codegetter = CodeGetter()  # Link each line of code to a line number
 codegetter.visit(ast)
+
+BlacklistVisitor().visit(ast)
+
+PointerReformater().visit(ast)
+
+ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
 StructCleaner().visit(ast)  # Massage the structs
 
-TypeMerger().visit(ast)
+EnumConverter().visit(ast)  # Convert enum to typedef & const bools
+TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
-astcleaner = ASTCleaner()  # Do a standard cleaning
-astcleaner.visit(ast)
+ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
 
+ASTCleaner().visit(ast)  # Do a standard cleaning
+
+SwitchConverter().visit(ast)  # convert switch statement to if else
+
+StringToArray().visit(ast)
+
+FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
+
+ArrayCleaner().visit(ast)
+
+#DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 ASTTableCreator().visit(ast)  # Create the symbol table
+
+DynamicAllocation.add_allocation(ast)
 
 StructCleanerAfter().visit(ast)
 
-astcleanerafter = ASTCleanerAfter()  # Do a standard cleaning
-astcleanerafter.visit(ast)
+ASTCleanerAfter().visit(ast)  # Clean even more :)
+
+CheckRvalues().visit(ast)
 
 """
 add needed stuff above

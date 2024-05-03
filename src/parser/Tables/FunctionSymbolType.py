@@ -6,6 +6,7 @@ class FunctionSymbolType(SymbolType):
         super().__init__("Function", False)
 
         self.return_type = return_type
+
         self.param_types = param_types
 
     def getType(self):
