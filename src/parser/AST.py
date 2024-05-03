@@ -225,6 +225,12 @@ class ASTNodeBlock(ASTNode):
         self.vertex = new_vertex
 
 
+class ASTNodeTypes(ASTNode):
+    def __init__(self, text, parent, symbol_table, symbol_type, position: Position, struct_table: StructTable):
+        super().__init__(text, parent, symbol_table, position, struct_table)
+        self.symbol_type = symbol_type
+
+
 class AST:
     """Base AST class"""
 
