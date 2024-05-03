@@ -22,3 +22,14 @@ class FunctionSymbolType(SymbolType):
 
     def getParameterTypes(self):
         return self.param_types
+
+    def __eq__(self, other):
+        if len(self.param_types) != len(other.param_types):
+            return False
+        for i in range(len(self.param_types)):
+            p1 = self.param_types[i]
+            p2 = other.param_types[i]
+            if p1 != p2:
+                return False
+
+        return self.return_type == other.return_type

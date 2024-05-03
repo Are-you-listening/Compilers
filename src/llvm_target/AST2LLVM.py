@@ -201,7 +201,7 @@ class AST2LLVM(ASTVisitor):
             self.llvm_map[node] = llvm_var
 
     def handleComment(self, node):
-        if node.position is None:
+        if node.position is None or node.symbol_table is None or node.symbol_table.isRoot():  # We can't add comments in the global scope of llvm
             return
 
         curr_line = node.position.linenr
@@ -236,12 +236,7 @@ class AST2LLVM(ASTVisitor):
             else:
                 value = value.text
 
-            if not isinstance(entry.getTypeObject(), SymbolTypeArray):
-                # Preset some values
-                llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(entry.getTypeObject()), value)
-                llvm_var.align = CTypesToLLVM.getBytesUse(entry.getTypeObject())
-            else:
-                llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(entry.getTypeObject()), [ir.Constant(ir.IntType(32), 0)]*entry.getTypeObject().size)
+            self.get_initializer_value(entry.getTypeObject(), llvm_var, value)
 
         else:
 
@@ -267,15 +262,38 @@ class AST2LLVM(ASTVisitor):
         if node.getChildAmount() == 2:
             self.handleAssignment(node)
 
+    @staticmethod
+    def get_initializer_value(entry: SymbolType, llvm_var, value):
+        if not isinstance(entry, SymbolTypeArray):
+            # Preset some values
+            llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(entry), value)
+            llvm_var.align = CTypesToLLVM.getBytesUse(entry)
+        else:
+            llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(entry),
+                                   [AST2LLVM.get_initializer_value(entry.deReference(), llvm_var, 0)] * entry.size)
+
+        return llvm_var.initializer
+
+
     def handleFunction(self, node: ASTNode):
         function_name = node.getChild(0).text
         function = LLVMSingleton.getInstance().getFunction(function_name)
         if function is None:
             function = LLVMSingleton.getInstance().getModule().get_global(function_name)
 
-        entry = node.getChild(0).getSymbolTable().getEntry(function_name)
+        symbol_entry = None
+        current_table = node.getSymbolTable()
+        while current_table is not None:
+            symbol_entry = current_table.getEntry(function_name, node.position.virtual_linenr)
+            if symbol_entry:
+                type_object = symbol_entry.getTypeObject()
+                while isinstance(type_object, SymbolTypePtr):
+                    type_object = type_object.pts_to
+                if isinstance(type_object, FunctionSymbolType):
+                    break
+            current_table = current_table.prev
 
-        self.map_table.addEntry(MapEntry(function_name, function), entry)
+        self.map_table.addEntry(MapEntry(function_name, function), symbol_entry)
 
     def handleParameterCalls(self, node: ASTNode):
         args = []
@@ -291,6 +309,7 @@ class AST2LLVM(ASTVisitor):
 
     def __del__(self):
         for comment in self.comments:  # Add any leftover comments
+            print(comment)
             Declaration.addComment(self.comments[comment])
 
         with open(self.fileName, 'w') as f:
@@ -392,7 +411,13 @@ class AST2LLVM(ASTVisitor):
                 super_child = child.getChild(0)
 
                 u = self.llvm_map[super_child]
-                Declaration.assignment(u, llvm_var, u.align)
+
+                if not isinstance(u, ir.GEPInstr):
+                    align = u.align
+                else:
+                    align = 4
+
+                Declaration.assignment(u, llvm_var, align)
 
             if post_incr:
                 llvm_var = child_llvm
@@ -502,6 +527,9 @@ class AST2LLVM(ASTVisitor):
         :param node: the node in the AST that we are currently handling
         :return:
         """
+
+        if node.symbol_table is None or node.symbol_table.isRoot():  # LLVM thing in which you can't properly place comments in the global scope
+            return
 
         code = self.codegetter.getLine(node)
         if code is not None:

@@ -46,7 +46,7 @@ class ASTTest(ABC):
                 continue
 
             index = int(file[4:-2])  # The index is used to refer to the files & other data belonging to this testfile
-            #print(index, file)  # Toggle for debug
+            print(index, file)  # Toggle for debug
 
             """
             Load the AST from the JSON file
@@ -131,9 +131,10 @@ class LLVMTest(unittest.TestCase, ABC):
             if not os.path.splitext(file)[-1] == '.c':  # We only run c files
                 continue
 
-            for fold in [True, False]:
+            for fold in ['True', 'False']:
                 index = file[4:-2]  # The index is used to refer to the files & other data belonging to this testfile
                 file_name = f"tests/test{index}.c"
+
                 #print(index, file_name, fold)  # Toggle for debug
 
                 """
@@ -155,13 +156,13 @@ class LLVMTest(unittest.TestCase, ABC):
                 error_buff = StringIO()
                 sys.stderr = error_buff
 
-                try:
-                    LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
+                LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
 
+                try:
                     #sys.stdout = original
 
                     # Run our llvm
-                    main([0, "--input", file_name, "--target_llvm", "temp/temp.ll", "--fold", fold])  # Run our compiler
+                    main([0, "--input", file_name, "--target_llvm", f"temp/temp.ll", "--fold", fold])  # Run our compiler
 
                     c_out = self.runC(file_name, inp)
 

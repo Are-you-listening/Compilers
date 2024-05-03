@@ -58,6 +58,13 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
+    parser.reset()
+    lexer.reset()
+    stream.reset()
+    input_stream.reset()
+
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)
 
@@ -89,6 +96,7 @@ def cleanGreen(input_file, symbol_file):
 
     ArrayCleaner().visit(ast)
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ASTTableCreator().visit(ast)  # Create the symbol table
 
     DynamicAllocation.add_allocation(ast)
@@ -130,6 +138,8 @@ def Processing(ast, dot_file, fold, includeSTDIO):
         ValueAdderVisitor().visit(ast)
 
     ConstantStatementFolding().visit(ast)
+
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     cfc = ControlFlowCreator()
     cfc.visit(ast)

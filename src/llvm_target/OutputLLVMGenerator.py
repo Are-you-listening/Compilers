@@ -248,11 +248,11 @@ class Declaration:
             removes "'" before and after character
             """
             value = value[1:-1]
-
             """
             support right interpretation special characters like \n
             """
-            value = value.encode('utf-8').decode('unicode-escape')
+            if len(value) != 1:
+                value = value.encode('utf-8').decode('unicode-escape')
 
             value = ord(value)  # Values are strings
 
@@ -548,6 +548,9 @@ class Conversion:
                            }
 
         llvm_to_type = CTypesToLLVM.getIRType(to_type)
+
+
+
         """
         make a simplified to type for checking the conversion dict
         """

@@ -1,20 +1,62 @@
 from src.parser.ASTVisitor import *
 from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
 from src.parser.IdentifierReplacerVisitor import IdentifierReplacerVisitor
-
+from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
+from src.parser.Tables.SymbolTypePtr import SymbolTypePtr
 
 class ValueAdderVisitor(ASTVisitor):
     """
     AST visitor that adds identifier values to the symbol table
     """
+
+    def __init__(self):
+        self.placeable_list = {}
+
+    def visit(self, ast: AST):
+        self.placeable_list = {}
+
+        self.postorder(ast.root)
+
     def visitNode(self, node: ASTNode):
 
-        if node.text in ("Declaration", "Assignment", "printf", "Conversion", "IF"):
+        placeable = True
+        for n in node.children:
+            if not self.placeable_list[n]:
+                placeable = False
+
+        self.placeable_list[node] = placeable
+
+        if node.text in ("Declaration", "Assignment", "printf", "Conversion", "IF", "Return") and placeable:
+
             # there are 2 children: identifier and value
+
+            """
+            When printf, return, ... has no children their is nothing to replace
+            """
+            if node.getChildAmount() == 0:
+                return
+
             ident = node.getChild(0)
+
+            self.handlePropagation(node, ident)
+
         else:
             return
 
+    def visitNodeTerminal(self, node: ASTNodeTerminal):
+
+        self.placeable_list[node] = True
+
+        if node.type == "IDENTIFIER":
+            # if it is a variable, and it is not the node where it is first declared -> update firstUsed if necessary
+            entry = node.getSymbolTable().getEntry(node.text)
+            if node != entry.firstDeclared:
+                entry.firstUsed = node
+
+            if isinstance(entry.getTypeObject(), FunctionSymbolType):
+                self.placeable_list[node] = False
+
+    def handlePropagation(self, node: ASTNode, ident):
         if ident.text == "Dereference":
             return
 
@@ -52,10 +94,3 @@ class ValueAdderVisitor(ASTVisitor):
         """
         if entry is not None:
             entry.value = val
-
-    def visitNodeTerminal(self, node: ASTNodeTerminal):
-        if node.type == "IDENTIFIER":
-            # if it is a variable, and it is not the node where it is first declared -> update firstUsed if necessary
-            entry = node.getSymbolTable().getEntry(node.text)
-            if node != entry.firstDeclared:
-                entry.firstUsed = node

@@ -223,7 +223,6 @@ class ASTConversion(ASTVisitor):
 
             to_type = parameterTypes[index]
 
-
         if operator in ("&&", "||"):
             """
             logical operators expect booleans so we convert the given entry into a boolean
@@ -243,12 +242,11 @@ class ASTConversion(ASTVisitor):
 
         for child in node.children:
             type_tup: SymbolType = self.type_mapping.get(child, None)
-
             if type_tup is None:
                 continue
 
             if type_tup != to_type:
-
+                #print("he", to_type.getPtrTuple())
                 if to_type.isBase() and to_type.getBaseType() == "BOOL":
                     """
                     logical operators expect booleans so we convert the given entry into a boolean
@@ -287,7 +285,12 @@ class ASTConversion(ASTVisitor):
 
                     if operator in ("==", "!=", "<=", ">=", "<", ">"):
                         ErrorExporter.IncompatibleComparison(child.position, to_type, type_tup)
-                        self.addConversion(child, to_type.getPtrTuple())
+
+                        to_type_tup = to_type.getPtrTuple()
+
+                        if isinstance(to_type, SymbolTypeArray):  # If it's an array, we should convert to a ptr
+                            to_type_tup = SymbolTypePtr(to_type.deReference(), False).getPtrTuple()  # Make it a ptr type
+                        self.addConversion(child, to_type_tup)
                         continue
 
                     """
@@ -305,7 +308,11 @@ class ASTConversion(ASTVisitor):
                     ErrorExporter().incorrectVoidFuncUse(node.position)
                 self.narrowing_warning_check(child.position, to_type, type_tup)
 
-                self.addConversion(child, to_type.getPtrTuple())
+                convert_override = None
+                if isinstance(to_type, SymbolTypePtr) and isinstance(to_type.deReference(), FunctionSymbolType):
+                    convert_override = to_type
+
+                self.addConversion(child, to_type.getPtrTuple(), convert_override)
 
         """
         equality operators give an integer back
@@ -432,7 +439,7 @@ class ASTConversion(ASTVisitor):
                      ("CHAR", "*", "PTR"), ("INT", "*", "PTR")]
         incompatible_ops = {  # Keep a list of absolutely incompatible types & operations
             "FLOAT": ["%", "|", "&", "~", "CHAR"],  # FLOAT & CHAR are always incompatible
-            "PTR": ["/", "^", ">>", "<<", "%", "|", "~"]
+            "PTR": ["/", "^", ">>", "<<", "%", "|", "~"]  # TODO should add unary - & +, binary &
         }
 
         incompatible = False
@@ -548,7 +555,7 @@ class ASTConversion(ASTVisitor):
         ErrorExporter.narrowingTypesWarning(position, to_tup, type_tup)
 
     @staticmethod
-    def addConversion(node: ASTNode, to_type: tuple):
+    def addConversion(node: ASTNode, to_type: tuple, override: SymbolType=None):
         """
         add a conversion to the provided type
 
@@ -558,15 +565,45 @@ class ASTConversion(ASTVisitor):
         """
 
         new_node = ASTNode("Conversion", node.parent, node.getSymbolTable(), node.position, node.structTable)
-        type_node = ASTNode("Type", new_node, new_node.getSymbolTable(), node.position, node.structTable)
-        new_node.addChildren(type_node)
+
+        if override is None:
+            type_node = ASTConversion.get_type_node(new_node, to_type)
+            new_node.addChildren(type_node)
+
+        else:
+            if isinstance(override, SymbolTypePtr) and isinstance(override.deReference(), FunctionSymbolType):
+                # TODO This code is waiting on Kasper
+                f_type = override.deReference()
+
+                func_ptr = ASTNode("FunctionPtr", new_node, new_node.getSymbolTable(), new_node.position,
+                                   node.structTable)
+
+                type_node = ASTConversion.get_type_node(func_ptr, f_type.return_type.getPtrTuple())
+                func_ptr.addChildren(type_node)
+
+                func_ptr_param = ASTNode("FunctionPtrParam", new_node, new_node.getSymbolTable(), new_node.position,
+                                         node.structTable)
+                func_ptr.addChildren(func_ptr_param)
+
+                for p in f_type.getParameterTypes():
+                    type_node = ASTConversion.get_type_node(func_ptr_param, p.getPtrTuple())
+                    func_ptr_param.addChildren(type_node)
+
+                new_node.addChildren(func_ptr)
+
+        node.addNodeParent(new_node)
+        return new_node
+
+    @staticmethod
+    def get_type_node(parent: ASTNode, to_type: tuple):
+        type_node = ASTNode("Type", parent, parent.getSymbolTable(), parent.position, parent.structTable)
 
         """
         add datatype
         """
         type_node.addChildren(
             ASTNodeTerminal(to_type[0][0], type_node, type_node.getSymbolTable(), "CASTING",
-                            node.position, node.structTable))
+                            parent.position, parent.structTable))
 
         for t_child in to_type[1]:
             conversion_ptr = t_child[0]
@@ -576,9 +613,9 @@ class ASTConversion(ASTVisitor):
                 t_type = f"ARRAY_{t_child[0]}"
 
             type_node.addChildren(ASTNodeTerminal(conversion_ptr, type_node, type_node.getSymbolTable(), t_type,
-                                  node.position, node.structTable))
-        node.addNodeParent(new_node)
-        return new_node
+                                                  parent.position, parent.structTable))
+        return type_node
+
 
     @staticmethod
     def subtree_to_text(node: ASTNode):

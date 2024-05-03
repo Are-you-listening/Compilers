@@ -10,6 +10,7 @@ def declaredPreviously(node: ASTNodeTerminal):
         if node.text in current_table.symbols:
             return True
         current_table = current_table.prev
+    return False
 
 
 class IdentifierReplacerVisitor(ASTVisitor):
@@ -26,7 +27,7 @@ class IdentifierReplacerVisitor(ASTVisitor):
             toReplace = node.text
 
             if toReplace not in node.getSymbolTable().symbols:
-                if node.inLoop() and declaredPreviously(node):
+                if node.inLoop() and declaredPreviously(node) and not node.getSymbolTable().getEntry(node.text).isConst():
                     return
 
             """
@@ -45,7 +46,10 @@ class IdentifierReplacerVisitor(ASTVisitor):
                 return
 
             # get the symbolTable entry of the identifier we are going to replace
+
             entry = node.getSymbolTable().getEntry(toReplace)
+
+
             if (not entry.isConst() and entry.firstUsed is not None) or entry.is_referenced() or \
                     isinstance(entry.getTypeObject(), FunctionSymbolType):
                 return

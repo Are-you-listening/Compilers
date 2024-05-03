@@ -12,7 +12,7 @@ int main() {
     int** b = &a;
     mul(b);
 
-    int** s = &z; /* TODO crash in to llvm */
+    int** s = &z;
 
     return 0;
 }

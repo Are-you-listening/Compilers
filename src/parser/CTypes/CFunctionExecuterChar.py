@@ -62,6 +62,46 @@ class _RelationalOperations(BaseRelationalOperations):
     Relation functions equivalent to the functionality of C
     """
 
+    @staticmethod
+    def LessThan(a, b):
+        if a > 127:
+            a -= 256
+
+        if b > 127:
+            b -= 256
+
+        return int(a < b)
+
+    @staticmethod
+    def GreaterThan(a, b):
+        if a > 127:
+            a -= 256
+
+        if b > 127:
+            b -= 256
+
+        return int(a > b)
+
+    @staticmethod
+    def LessThanOrEqualTo(a, b):
+        if a > 127:
+            a -= 256
+
+        if b > 127:
+            b -= 256
+
+        return int(a <= b)
+
+    @staticmethod
+    def GreaterThanOrEqualTo(a, b):
+        if a > 127:
+            a -= 256
+
+        if b > 127:
+            b -= 256
+
+        return int(a >= b)
+
 
 class _Conversions:
 
@@ -114,4 +154,6 @@ class CFunctionExecuterChar(CFunctionExecuter):
         return self.conversion_dict[to_type](data)
 
     def getString(self, data):
+        while data < 0:
+            data += 256
         return f"'{chr(data)}'"
