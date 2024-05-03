@@ -58,6 +58,8 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     parser.reset()
     lexer.reset()
     stream.reset()

@@ -285,7 +285,12 @@ class ASTConversion(ASTVisitor):
 
                     if operator in ("==", "!=", "<=", ">=", "<", ">"):
                         ErrorExporter.IncompatibleComparison(child.position, to_type, type_tup)
-                        self.addConversion(child, to_type.getPtrTuple())
+
+                        to_type_tup = to_type.getPtrTuple()
+
+                        if isinstance(to_type, SymbolTypeArray):  # If it's an array, we should convert to a ptr
+                            to_type_tup = SymbolTypePtr(to_type.deReference(), False).getPtrTuple()  # Make it a ptr type
+                        self.addConversion(child, to_type_tup)
                         continue
 
                     """
@@ -434,7 +439,7 @@ class ASTConversion(ASTVisitor):
                      ("CHAR", "*", "PTR"), ("INT", "*", "PTR")]
         incompatible_ops = {  # Keep a list of absolutely incompatible types & operations
             "FLOAT": ["%", "|", "&", "~", "CHAR"],  # FLOAT & CHAR are always incompatible
-            "PTR": ["/", "^", ">>", "<<", "%", "|", "~"]
+            "PTR": ["/", "^", ">>", "<<", "%", "|", "~"]  # TODO should add unary - & +, binary &
         }
 
         incompatible = False
