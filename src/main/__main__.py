@@ -58,8 +58,6 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-
     parser.reset()
     lexer.reset()
     stream.reset()
@@ -112,7 +110,10 @@ def cleanGreen(input_file, symbol_file):
 
     CheckRvalues().visit(ast)
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
+
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
@@ -122,13 +123,15 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold, includeSTDIO):
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     """
     It is vital that AST conversion occurs before constant folding
     """
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
+    #DotVisitor("output/debug08888").visit(ast)  # Export AST in Dot
 
     ASTConversion().visit(ast)
 
