@@ -1,13 +1,16 @@
 #include <stdio.h>
 
-const int *getPointer() {
-    const int value = 100;
-    return &value;
+#define NULL 0
+
+void func1() {
+    printf("d%", 1);
+}
+
+void func2() {
+    printf("d%", 2);
 }
 
 int main() {
-    const int *ptr = getPointer();
-    *ptr = 200;
-    printf("%d\n", *ptr);
+    void (*funcPtr)() = NULL;
     return 0;
 }
