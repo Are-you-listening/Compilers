@@ -146,7 +146,6 @@ class CFunctionExecuterChar(CFunctionExecuter):
     def convertTo(self, data, to_type):
         if to_type == "CHAR":
             return data
-
         return self.conversion_dict[to_type](data)
 
     def getString(self, data):

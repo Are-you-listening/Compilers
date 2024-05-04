@@ -44,7 +44,8 @@ class ASTIfCleaner(ASTVisitor):
         """
         Let the condition have a conversion to BOOl
         """
-        ASTConversion.addConversion(node.getChild(1), (("BOOL", False), []))
+
+        ASTConversion.addConversion(node.getChild(1), SymbolType("BOOL", False))
 
         """
         in case we have an 'Else' statement the 'else' terminal can be removed

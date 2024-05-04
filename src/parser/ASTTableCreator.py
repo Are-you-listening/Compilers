@@ -4,6 +4,9 @@ from src.parser.CTypes.COperationHandler import *
 from src.parser.ASTVisitor import *
 from src.parser.ASTTypedefReplacer import ASTTypedefReplacer
 from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
+from src.interal_tools.IntegrityChecks import PreConditions
+from src.parser.AST import ASTNodeTypes
+from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 
 
 class ASTTableCreator(ASTVisitor):
@@ -13,7 +16,7 @@ class ASTTableCreator(ASTVisitor):
 
     def __init__(self):
         self.table = None
-        self.structs = {}
+
         self.to_remove = set()
         self.param_list = []
         self.structTable = {}
@@ -100,13 +103,13 @@ class ASTTableCreator(ASTVisitor):
         """
         node.symbol_table = self.table
 
-        if node.text in ["Struct", "Union"]:
-            self.__make_struct_type(node)
-            return
-
         if node.text == "Declaration" or node.text == "Parameter":
             child = node.getChild(0)
 
+            PreConditions.assertInstanceOff(child, ASTNodeTypes)
+
+            """
+            
             if child.text == "FunctionPtr":
 
                 symbol_type = self.__get_func_ptr_type(child)
@@ -116,6 +119,8 @@ class ASTTableCreator(ASTVisitor):
 
             else:
                 symbol_type = self.__make_entry(node, child, SymbolType, node.text == "Parameter")
+            """
+            symbol_type = self.__make_entry(node, child, SymbolType, node.text == "Parameter")
 
             if node.text == "Parameter":
                 self.param_list.append(symbol_type)
@@ -131,10 +136,15 @@ class ASTTableCreator(ASTVisitor):
                 node.symbol_table = self.table
 
         if node.text == "Function":
-            param_types = self.param_list
-            self.param_list = []
 
             child = node.getChild(0)
+
+            PreConditions.assertInstanceOff(child, ASTNodeTypes)
+
+            param_types = self.param_list
+            self.param_list = []
+            # TODO remove this comment below depracted not in use anymore
+            """
             if child.text == "FunctionPtr":
 
                 return_type = self.__get_func_ptr_type(child)
@@ -143,11 +153,14 @@ class ASTTableCreator(ASTVisitor):
 
                 return_type = self.__get_data_type(child, SymbolType)
             self.__check_function_declarations(node, param_types, return_type)
+            """
 
             """
             Make func type
             """
+            return_type = child.symbol_type
             function_type = FunctionSymbolType(return_type, param_types)
+
             symbol_entry = SymbolEntry(function_type, node.children[1].text, None, node.children[1], None)
             node.symbol_table.add(symbol_entry)
 
@@ -159,6 +172,7 @@ class ASTTableCreator(ASTVisitor):
         node.symbol_table = self.table
 
     def __make_struct_type(self, node: ASTNode):
+        # TODO remove this function depracted not in use anymore
         structName = node.children[0].text  # First child is struct type
         pts_to = []
 
@@ -178,6 +192,7 @@ class ASTTableCreator(ASTVisitor):
 
         if node.text == "Union":  # For Unions, take the biggest type as type for all data members
             richest = self.getRichestType(pts_to)
+
 
             self.structs[structName] = SymbolTypeUnion(structName, richest, pts_to)
         else:
@@ -235,10 +250,13 @@ class ASTTableCreator(ASTVisitor):
 
                 latest_datatype = ASTTableCreator.__make_ptr_type(latest_datatype, is_const, grandchild.type)
             else:
+
                 if not ASTTypedefReplacer.isBaseType(grandchild):
-                    latest_datatype = symbol_type(grandchild.text, is_const)  # Keep the typedef name
-                elif self.structs.get(grandchild.text) is not None:
-                    latest_datatype = self.structs[grandchild.text]
+                    latest_datatype = symbol_type(grandchild.text, is_const)  # Keep the typedef name\
+
+                elif TypeNodeHandler.getInstance().getStruct(grandchild.text) is not None:
+
+                    latest_datatype = TypeNodeHandler.getInstance().getStruct(grandchild.text)
                 else:
                     latest_datatype = symbol_type(grandchild.text.upper(), is_const)
 
@@ -252,13 +270,19 @@ class ASTTableCreator(ASTVisitor):
         :param symbol_type:
         :return:
         """
-        latest_datatype = self.__get_data_type(child, symbol_type)
+
+        PreConditions.assertInstanceOff(child, ASTNodeTypes)
+
+        symbol_type = child.symbol_type
+
+        latest_datatype = symbol_type
         if latest_datatype.getBaseType() == "VOID":
             ErrorExporter.variableDeclaredVoid(node.position, node.children[1].text)
 
         """
         the value in the symbol table is initially empty
         """
+
         symbol_entry = SymbolEntry(latest_datatype, node.children[1].text, None, node.children[1], None)
         if referenced:
             symbol_entry.reference()

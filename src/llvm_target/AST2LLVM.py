@@ -4,7 +4,8 @@ from src.parser.Tables.SymbolTypeStruct import *
 
 from src.parser.CodeGetter import *
 from llvmlite import ir
-from src.parser.AST import ASTNodeBlock
+from src.parser.AST import ASTNodeBlock, ASTNodeTypes
+from src.interal_tools import PreConditions
 
 
 class AST2LLVM(ASTVisitor):
@@ -450,7 +451,10 @@ class AST2LLVM(ASTVisitor):
         :return:
         """
         to_type_node = node.getChild(0)
-        to_type = self.getConversionType(to_type_node)
+
+        PreConditions.assertInstanceOff(to_type_node, ASTNodeTypes)
+
+        to_type = to_type_node.symbol_type
 
         expr_node = node.getChild(1)
         llvm_var = self.llvm_map[expr_node]

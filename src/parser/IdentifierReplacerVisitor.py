@@ -105,7 +105,9 @@ class IdentifierReplacerVisitor(ASTVisitor):
             changes IDENTIFIER -> its type,
             We make an exact copy of the subtree its values
             """
+
             temp = SwitchConverter.createCopy(entry.value)
+
             temp.parent = node.parent
             temp.symbol_table = node.symbol_table
             node = temp

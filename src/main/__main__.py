@@ -31,6 +31,10 @@ from src.parser.Constraints.CheckRvalues import *
 from src.parser.UnarySaVisitor import *
 from src.parser.DynamicAllocation import DynamicAllocation
 from src.parser.FileIO import FileIO
+from src.parser.Tables.TypeNodehandler import TypeNodeHandler
+from src.parser.TypeCleaner import TypeCleaner
+from src.parser.TypeCleaner2 import TypeCleaner2
+
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -79,7 +83,10 @@ def cleanGreen(input_file, symbol_file):
 
     StructCleaner().visit(ast)  # Massage the structs
 
+    TypeCleaner().visit(ast)
+
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
+
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
@@ -97,8 +104,10 @@ def cleanGreen(input_file, symbol_file):
     FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
 
     ArrayCleaner().visit(ast)
+    TypeCleaner2().visit(ast)
 
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     ASTTableCreator().visit(ast)  # Create the symbol table
 
     DynamicAllocation.add_allocation(ast)
@@ -132,13 +141,13 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     #DotVisitor("output/debug08888").visit(ast)  # Export AST in Dot
-
+    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ASTConversion().visit(ast)
 
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     UnarySaVisitor().visit(ast)
-
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ConstantFoldingVisitor().visit(ast)
 
     if fold:
