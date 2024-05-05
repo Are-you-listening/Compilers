@@ -6,7 +6,7 @@ from src.parser.ASTTypedefReplacer import ASTTypedefReplacer
 from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
 from src.interal_tools.IntegrityChecks import PreConditions
 from src.parser.AST import ASTNodeTypes
-from src.parser.Tables.TypeNodehandler import TypeNodeHandler
+import typing
 
 
 class ASTTableCreator(ASTVisitor):
@@ -74,22 +74,49 @@ class ASTTableCreator(ASTVisitor):
                 return False
         return True
 
-    def __check_function_declarations(self, node: ASTNode, param_types_and_ptrs: list, return_type: SymbolType):
+    def __checkFunctionDeclarations(self, node: ASTNode, param_types_and_ptrs: list, return_type: SymbolType):
+        """
+        This function will check information about the function declaration, like
+        checking if it is already declared, if so, check matching parameter types, or check whether
+        a definition already exists
+
+        :param node:
+        :param param_types_and_ptrs:
+        :param return_type:
+        :return:
+        """
+
         function_node = node.children[1]
-        # check if the function is already declared
-        if function_node.symbol_table.exists(function_node.text) and isinstance(function_node.getSymbolTable().getEntry(function_node.text).getTypeObject(), FunctionSymbolType):
-            # check if the return types match, if not, throw an error
+        """
+        check if the function is already declared
+        """
+        if function_node.symbol_table.exists(function_node.text) and \
+                isinstance(function_node.getSymbolTable().getEntry(function_node.text).getTypeObject(),
+                           FunctionSymbolType):
+            """
+            check if the return types match, if not, throw an error
+            """
             if return_type.getPtrTuple() != node.symbol_table.getEntry(function_node.text).getPtrTuple():
                 ErrorExporter.conflictingFunctionReturnType(function_node.position, function_node.text)
-            # check if the parameter types match, if not, throw an error
+
+            """
+            check if the parameter types match, if not, throw an error
+            """
             if not self.__equalParamTypes(param_types_and_ptrs, node.symbol_table.getEntry(
                     function_node.text).getTypeObject().getParameterTypes()):
                 ErrorExporter.conflictingFunctionParameterTypes(function_node.position, function_node.text)
-            # check if the function is a declaration or a definition
+
+            """
+            check if the function is a declaration or a definition
+            """
+
             if node.getChildAmount() == 3:
                 return
             else:
-                # the function is a definition, check if it is already defined, if so, throw an error, else set it to defined
+                """
+                the function is a definition, check if it is already defined, if so, throw an error, 
+                else set it to defined
+                """
                 if node.symbol_table.getEntry(function_node.text).is_function_defined():
                     ErrorExporter.functionRedefinition(function_node.position, function_node.text)
                 else:
@@ -107,20 +134,9 @@ class ASTTableCreator(ASTVisitor):
             child = node.getChild(0)
 
             PreConditions.assertInstanceOff(child, ASTNodeTypes)
+            child = typing.cast(ASTNodeTypes, child)
 
-            """
-            
-            if child.text == "FunctionPtr":
-
-                symbol_type = self.__get_func_ptr_type(child)
-                symbol_entry = SymbolEntry(symbol_type, node.children[1].text, None, node.children[1], None)
-                symbol_entry.referenced = node.text == "Parameter"
-                node.symbol_table.add(symbol_entry)
-
-            else:
-                symbol_type = self.__make_entry(node, child, SymbolType, node.text == "Parameter")
-            """
-            symbol_type, symbol_entry = self.__make_entry(node, child, SymbolType, node.text == "Parameter")
+            symbol_type, symbol_entry = self.__makeEntry(node, child, node.text == "Parameter")
 
             if node.text == "Parameter":
                 self.param_list.append(symbol_type)
@@ -136,32 +152,32 @@ class ASTTableCreator(ASTVisitor):
                 node.symbol_table = self.table
 
         if node.text == "Function":
-
+            """
+            When coming across a function we need to make a symbol table entry for this function
+            """
             child = node.getChild(0)
 
             PreConditions.assertInstanceOff(child, ASTNodeTypes)
+            child = typing.cast(ASTNodeTypes, child)
 
+            PreConditions.assertInstanceOff(child, ASTNodeTypes)
+
+            """
+            retrieve the parameter types, created before using this visitor
+            """
             param_types = self.param_list
             self.param_list = []
-            # TODO remove this comment below depracted not in use anymore
-            """
-            if child.text == "FunctionPtr":
 
-                return_type = self.__get_func_ptr_type(child)
-
-            else:
-
-                return_type = self.__get_data_type(child, SymbolType)
-            self.__check_function_declarations(node, param_types, return_type)
-            """
-
-            """
-            Make func type
-            """
             return_type = child.symbol_type
 
-            self.__check_function_declarations(node, param_types, return_type)
+            """
+            Check if the declaration of this function is allowed
+            """
+            self.__checkFunctionDeclarations(node, param_types, return_type)
 
+            """
+            Create the function type
+            """
             function_type = FunctionSymbolType(return_type, param_types)
 
             symbol_entry = SymbolEntry(function_type, node.children[1].text, None, node.children[1], None)
@@ -169,18 +185,23 @@ class ASTTableCreator(ASTVisitor):
 
             function_node = node.children[1]
             if node.getChildAmount() == 4:
+                """
+                When the function has a definition we will flag this function as defined
+                """
                 node.symbol_table.getEntry(function_node.text).set_function_defined(True)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
+        """
+        Assign the symbol table to the node
+        """
         node.symbol_table = self.table
 
-
-    def __make_entry(self, node, child: ASTNode, symbol_type, referenced=False):
+    @staticmethod
+    def __makeEntry(node, child: ASTNodeTypes, referenced=False):
         """
         Make symbol table entry
         :param node:
         :param child: Type node
-        :param symbol_type:
         :return:
         """
 
@@ -188,24 +209,19 @@ class ASTTableCreator(ASTVisitor):
 
         symbol_type = child.symbol_type
 
+        """
+        Check that normal void Types are not allowed
+        """
         latest_datatype = symbol_type
         if latest_datatype.getBaseType() == "VOID":
             ErrorExporter.variableDeclaredVoid(node.position, node.children[1].text)
 
         """
+        Create the symbol table entry
         the value in the symbol table is initially empty
         """
-
         symbol_entry = SymbolEntry(latest_datatype, node.children[1].text, None, node.children[1], None)
         if referenced:
             symbol_entry.reference()
         node.symbol_table.add(symbol_entry)
         return latest_datatype, symbol_entry
-
-    @staticmethod
-    def isStructType(text: str):
-        """
-        Returns true if the type is a struct defined by the user
-        :param text:
-        """
-        return "struct" == text[0:6] or "union" == text[0:6]
