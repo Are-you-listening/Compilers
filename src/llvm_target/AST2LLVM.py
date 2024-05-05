@@ -18,7 +18,7 @@ class AST2LLVM(ASTVisitor):
         self.root = None
         self.last_vertex = None
         self.branch_needed = set()
-        self.special_func_calls = {"malloc", "calloc", "free", "realloc", "fgets"}
+        self.special_func_calls = {"malloc", "calloc", "free", "realloc", "fgets", "fopen"}
 
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
@@ -170,6 +170,7 @@ class AST2LLVM(ASTVisitor):
                     func = Declaration.function(node.text, function_type.return_type, args)
                     entry = MapEntry(node.text, func)
                     self.map_table.addEntry(entry, symbol_entry)
+
                 else:
                     return
 

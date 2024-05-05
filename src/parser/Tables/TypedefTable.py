@@ -87,6 +87,20 @@ class TypedefTable(AbstractTable):
         if isinstance(node.getChild(index), ASTNodeTerminal) and node.getChild(index).type == "CASTING":
             return
 
+        """
+        Translate to struct type
+        """
+        if identifier == "FILE":
+
+            struct = ASTNodeTerminal("struct", node, node.getSymbolTable(), "Not used",
+                                     node.position, node.structTable)
+            file_io = ASTNodeTerminal("_IO_FILE", node, node.getSymbolTable(), "Not used",
+                                      node.position, node.structTable)
+
+            translation = [struct, file_io]
+            node.typedefReplaceChildren(translation, index)
+            return
+
         translation = []
         args = [identifier, translation]
         self.traverse(lambda x, a: x.getTranslation(a), True, args)

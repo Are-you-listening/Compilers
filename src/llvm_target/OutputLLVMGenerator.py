@@ -95,6 +95,16 @@ class CTypesToLLVM:
             return llvm_type
 
         if isinstance(data_type, SymbolTypeStruct):
+
+            """
+            Exception for FILE support
+            """
+            if data_type.getBaseType() == "_IO_FILE":
+                context = LLVMSingleton.getInstance().getModule().context
+
+                struct_type = context.get_identified_type("_IO_FILE")
+                return struct_type
+
             types = []
             for v in data_type.pts_to:
                 types.append(CTypesToLLVM.getIRType(v))
@@ -146,8 +156,9 @@ class Declaration:
         :return:
         """
         context = LLVMSingleton.getInstance().getModule().context
-        
+
         struct_type = context.get_identified_type("my_struct")
+
         struct_type.set_body(ir.IntType(32), ir.FloatType())
 
         global_var = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), struct_type, "my_structs")
