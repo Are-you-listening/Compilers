@@ -35,11 +35,6 @@ int main()
     printf("%d", a2->b_ptr->a);
     printf("%d", (*a2->b_ptr).a);
 
-    printf("%d", (*a2).b_value.a);
-    printf("%d", (*a2).b_ptr->a);
-    printf("%d", (*(*a2).b_ptr).a);
-
-
     return 0;
 }
 

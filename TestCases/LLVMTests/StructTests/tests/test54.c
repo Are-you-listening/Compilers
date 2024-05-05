@@ -29,17 +29,6 @@ int main()
     printf("%d", a1.b_ptr->a);
     printf("%d", (*a1.b_ptr).a);
 
-    struct a* a2 = &a1;
-
-    printf("%d", a2->b_value.a);
-    printf("%d", a2->b_ptr->a);
-    printf("%d", (*a2->b_ptr).a);
-
-    printf("%d", (*a2).b_value.a);
-    printf("%d", (*a2).b_ptr->a);
-    printf("%d", (*(*a2).b_ptr).a);
-
-
     return 0;
 }
 
