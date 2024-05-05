@@ -157,7 +157,6 @@ class LLVMTest(unittest.TestCase, ABC):
                 sys.stderr = error_buff
 
                 LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
-
                 try:
                     #sys.stdout = original
 

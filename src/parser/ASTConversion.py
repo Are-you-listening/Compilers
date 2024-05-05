@@ -1,5 +1,6 @@
 from src.parser.ASTTableCreator import *
 from src.parser.Constraints.FunctionReturnConstraint import findFunction
+from src.parser.AST import ASTNodeTypes
 
 
 class ASTConversion(ASTVisitor):
@@ -148,11 +149,10 @@ class ASTConversion(ASTVisitor):
                     pointers cannot do operation together unless condition operations
                     """
 
-                    if operator not in ("==", "<=", ">=", "<", ">", "!=", "||", "&&", "!"):
+                    if operator not in ("==", "<=", ">=", "<", ">", "!=", "||", "&&", "!", "-"):
                         """
                         when the op is invalid for ptrs
                         """
-
                         ErrorExporter.invalidOperation(node.position, operator, to_type, check_type)
 
                 """
@@ -190,6 +190,7 @@ class ASTConversion(ASTVisitor):
             """
             be default 1 ptr is added, so remove it again, because assignment
             """
+
             to_type = assign_type.deReference()
 
             """
@@ -201,12 +202,6 @@ class ASTConversion(ASTVisitor):
                 """
                 Check if we assign to const assign node, if so throw an error
                 """
-                if assign_type.union:
-                    real_type = self.type_mapping[node.getChild(0)]
-
-                    self.addConversion(assign_node, SymbolTypePtr(real_type, False).getPtrTuple())
-                    self.type_mapping[assign_node] = real_type
-                    to_type = real_type
 
                 const_assign = to_type.isConst()
 
@@ -252,12 +247,13 @@ class ASTConversion(ASTVisitor):
                 continue
 
             if type_tup != to_type:
-                #print("he", to_type.getPtrTuple())
+
                 if to_type.isBase() and to_type.getBaseType() == "BOOL":
                     """
                     logical operators expect booleans so we convert the given entry into a boolean
                     """
-                    self.addConversion(child, (("BOOL", False), []))
+                    
+                    self.addConversion(child, SymbolType("BOOL", False))
 
                     """
                     use continue so we don't throw warnings/errors for booleans
@@ -275,27 +271,28 @@ class ASTConversion(ASTVisitor):
                         """
                         when no operator, it is an assignment
                         """
+
                         ErrorExporter.invalidAssignment(child.position, to_type, type_tup)
                     else:
-
                         ErrorExporter.invalidOperation(child.position, operator, to_type, type_tup)
                     continue
 
                 if operator is not None:
-                    if not self.compatible(type_tup, to_type, operator):
+                    if not self.compatible(type_tup, to_type, operator, node.findChild(child)):
                         """
                         in case we have incompatible type
                         """
+                        print("a")
                         ErrorExporter.invalidOperation(child.position, operator, to_type, type_tup)
                         continue
 
                     if operator in ("==", "!=", "<=", ">=", "<", ">"):
                         ErrorExporter.IncompatibleComparison(child.position, to_type, type_tup)
 
-                        to_type_tup = to_type.getPtrTuple()
+                        to_type_tup = to_type
 
                         if isinstance(to_type, SymbolTypeArray):  # If it's an array, we should convert to a ptr
-                            to_type_tup = SymbolTypePtr(to_type.deReference(), False).getPtrTuple()  # Make it a ptr type
+                            to_type_tup = SymbolTypePtr(to_type.deReference(), False)  # Make it a ptr type
                         self.addConversion(child, to_type_tup)
                         continue
 
@@ -318,10 +315,12 @@ class ASTConversion(ASTVisitor):
                 In case non matching func ptr types
                 """
                 if isinstance(to_type, SymbolTypePtr) and isinstance(to_type.deReference(), FunctionSymbolType):
-                    pass
-                    convert_override = to_type
 
-                self.addConversion(child, to_type.getPtrTuple(), )
+                    if isinstance(type_tup, SymbolTypePtr) and isinstance(type_tup.deReference(), FunctionSymbolType):
+                        pass
+                        ErrorExporter.invalidFunctionPtr(node.position, to_type, type_tup)
+
+                self.addConversion(child, to_type)
 
         """
         equality operators give an integer back
@@ -350,20 +349,8 @@ class ASTConversion(ASTVisitor):
             if the identifier is a function call,
             we make sure that we use the function and not a variable with the same name
             """
-            type_entry = None
-            if node.getSiblingNeighbour(1) and node.getSiblingNeighbour(1).text == "()":
-                current_table = node.getSymbolTable()
-                while current_table.prev is not None:
-                    type_entry = current_table.getEntry(node.text)
-                    if type_entry:
-                        type_object = type_entry.getTypeObject()
-                        while isinstance(type_object, SymbolTypePtr):
-                            type_object = type_object.pts_to
-                        if isinstance(type_object, FunctionSymbolType):
-                            break
-                    current_table = current_table.prev
-            else:
-                type_entry = node.getSymbolTable().getEntry(node.text)
+
+            type_entry = node.getSymbolTable().getEntry(node.text, node.position.virtual_linenr)
 
             type_object = type_entry.getTypeObject()
 
@@ -421,6 +408,8 @@ class ASTConversion(ASTVisitor):
         :param node:
         :return:
         """
+        if isinstance(node, ASTNodeTypes):
+            return node.symbol_type
 
         if node.text != "Type":
             raise Exception("wrong node type")
@@ -449,12 +438,11 @@ class ASTConversion(ASTVisitor):
             if operator in incompatible_ops[type_as_str]:
                 ErrorExporter.invalidOperation(node.position, operator, type , None)
 
-
-
     @staticmethod
-    def compatible(type_tup: SymbolType, to_type: SymbolType, operator: str):
+    def compatible(type_tup: SymbolType, to_type: SymbolType, operator: str, parent_index: int):
         """
         Check the blacklist for absolute incompatible operations or types
+        :param parent_index: which index the type_tup is corresponding to the parent
         :param operator:
         :param to_type:
         :param type_tup:
@@ -469,7 +457,27 @@ class ASTConversion(ASTVisitor):
 
         to_type_asStr = ASTConversion.to_string_type(to_type.getPtrTuple())
         type_tup_asStr = ASTConversion.to_string_type(type_tup.getPtrTuple())
-        if to_type_asStr == "PTR" and operator == '-':
+
+        """
+        This if statement takes into account the child position of the type_tup
+        only valid situations:
+        PTR-INT
+        PTR-PTR
+        INT-INT
+        
+        Not INT-PTR
+        """
+
+        to_ptr = to_type_asStr == "PTR"
+        type_ptr = type_tup_asStr == "PTR"
+
+        same_type = to_type == type_tup
+
+        if ((to_ptr and parent_index == 2) or
+            (type_ptr and parent_index == 0) or same_type) and operator == '-':
+            return True
+
+        elif to_ptr and operator == '-':
             return False
 
         incompatible = False
@@ -585,7 +593,7 @@ class ASTConversion(ASTVisitor):
         ErrorExporter.narrowingTypesWarning(position, to_tup, type_tup)
 
     @staticmethod
-    def addConversion(node: ASTNode, to_type: tuple):
+    def addConversion(node: ASTNode, to_type: SymbolType):
         """
         add a conversion to the provided type
 
@@ -596,7 +604,10 @@ class ASTConversion(ASTVisitor):
 
         new_node = ASTNode("Conversion", node.parent, node.getSymbolTable(), node.position, node.structTable)
 
-        type_node = ASTConversion.get_type_node(new_node, to_type)
+        type_node = ASTNodeTypes("Type", new_node, new_node.getSymbolTable(), to_type, 
+                                 new_node.position, new_node.structTable)
+
+        #type_node = ASTConversion.get_type_node(new_node, to_type)
         new_node.addChildren(type_node)
 
         node.addNodeParent(new_node)
@@ -624,9 +635,7 @@ class ASTConversion(ASTVisitor):
                                                   parent.position, parent.structTable))
         return type_node
 
-
-    @staticmethod
-    def subtree_to_text(node: ASTNode):
+    def subtree_to_text(self, node: ASTNode):
         text = ""
         if isinstance(node, ASTNodeTerminal):
 
@@ -645,7 +654,7 @@ class ASTConversion(ASTVisitor):
                 text += "("
 
         for child in node.children:
-            text += ASTConversion.subtree_to_text(child)
+            text += self.subtree_to_text(child)
 
         if brackets_needed:
             text += ")"
@@ -708,12 +717,12 @@ class ASTConversion(ASTVisitor):
 
         data_type3 = None
 
-        override = True
 
         """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was
                     before"""
         child = node.getChild(0)
         data_type: SymbolType = self.type_mapping[child]
+
 
         """
         We we do a [] access, we need to check that the value provided is an integer
@@ -735,7 +744,7 @@ class ASTConversion(ASTVisitor):
 
             is_struct = self.is_struct(node)
             if is_struct:
-                data_type3, override = self.handle_struct(node)
+                data_type3= self.handle_struct(node)
 
         """
         when trying to dereference a non-ptr, throw an error
@@ -749,10 +758,9 @@ class ASTConversion(ASTVisitor):
 
         data_type = data_type.deReference()
 
-        if override:
-            self.type_mapping[node] = data_type
-            if is_struct:
-                self.type_mapping[node] = data_type3
+        self.type_mapping[node] = data_type
+        if is_struct:
+            self.type_mapping[node] = data_type3
 
     def is_struct(self, node: ASTNode):
         """
@@ -766,7 +774,6 @@ class ASTConversion(ASTVisitor):
         return False
 
     def handle_struct(self, node: ASTNode):
-        override = True
 
         lchild = node.getChild(0)  # LHS of the '.' 'operator
         """
@@ -780,35 +787,27 @@ class ASTConversion(ASTVisitor):
         """
         data_type_index, union_assignment = self.replaceIdentifierWithIndex(node, struct_type)
 
-        if union_assignment:
+        """
+        In case we do not have a union assignment,we want to retrieve the value in his appropriate type
+        """
+        data_type = struct_type.getElementType(data_type_index)
+
+        if isinstance(struct_type, SymbolTypeUnion):
+            store_type = struct_type.getStoreType()
+
             """
-            In case we have a union assignment
+            When we retrieve a type that doesn't match the store type, we will do a conversion so we end up 
+            with reading the right type
             """
-            data_type = struct_type.getStoreType()
-            node.getChild(2).text = 0
+            if store_type != data_type:
+                self.addConversion(node, data_type)
 
-            store_data_type = struct_type.getElementType(data_type_index)
+            data_type = store_type
 
-            self.type_mapping[node] = store_data_type
-            override = False
-
-        else:
-            """
-            In case we do not have a union assignment,we want to retrieve the value in his appropriate type
-            """
-            data_type = struct_type.getElementType(data_type_index)
-            if isinstance(struct_type, SymbolTypeUnion):
-                store_type = struct_type.getStoreType()
-
-                """
-                When we retrieve a type that doesn't match the store type, we will do a conversion so we end up 
-                with reading the right type
-                """
-                if store_type != data_type:
-                    self.addConversion(node, data_type.getPtrTuple())
-                data_type = store_type
-
+        """
+        With unions we do are actions with the first entry
+        """
         if data_type.union:
             node.getChild(2).text = 0
 
-        return data_type, override
+        return data_type

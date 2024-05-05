@@ -4,7 +4,8 @@ from typing import List
 from src.llvm_target.ControlFlow.ControlFlowGraph import Vertex
 import ast
 from src.parser.ASTVisitor import *
-from src.parser.AST import ASTNodeBlock, Position
+from src.parser.AST import ASTNodeBlock, Position, ASTNodeTypes
+
 
 class AstLoader:
     """
@@ -86,6 +87,30 @@ class AstLoader:
         elif "is_block" in ast_node_entry and ast_node_entry["is_block"]:
             ast_node = ASTNodeBlock(text, parent, ast_node_entry["symbol_table_nr"], Vertex(None),Position(ast_node_entry["file"], ast_node_entry["linenr"], ast_node_entry["virtuallinenr"]), None)
 
+        elif "type_node_type" in ast_node_entry:
+            type_tup = ast_node_entry["type_node_type"]
+            base_type, ptrs, const_list = type_tup
+
+            func = False
+            if ":" in base_type:
+                func = True
+                base_type = base_type.split(":")
+
+                symbol_type = SymbolType(base_type[1], const_list[0])
+
+            else:
+                symbol_type = SymbolType(base_type, const_list[0])
+
+            for i in range(len(ptrs)):
+                const_list = const_list[1:]
+                symbol_type = SymbolTypePtr(symbol_type, const_list[0])
+
+            if func:
+                symbol_type = FunctionSymbolType(symbol_type, ast.literal_eval(base_type[2]))
+
+            ast_node = ASTNodeTypes(text, parent, ast_node_entry["symbol_table_nr"], symbol_type,
+                                       Position(ast_node_entry["file"], ast_node_entry["linenr"], ast_node_entry["virtuallinenr"]), None)
+
         else:
             ast_node = ASTNode(text, parent, ast_node_entry["symbol_table_nr"], Position(ast_node_entry["file"], ast_node_entry["linenr"], ast_node_entry["virtuallinenr"]), None)
 
@@ -148,6 +173,10 @@ class AstLoader:
         if isinstance(ast_node, ASTNodeBlock):
             ast_dict["is_block"] = True
 
+        if isinstance(ast_node, ASTNodeTypes):
+
+            ast_dict["type_node_type"] = AstLoader.getJsonDataType(ast_node.symbol_type)
+
         ast_node_list.append(ast_dict)
 
         ast_tree["children"] = []
@@ -187,3 +216,25 @@ class AstLoader:
 
             symbol_results.append({"prev": prev, "entries": symbol_entries})
         return symbol_results
+
+    @staticmethod
+    def getJsonDataType(symbol_type):
+        """
+        returns a tuple: (type, amount of * depending on how many ptrs there are in the chain)
+        """
+        ptr_string = ""
+        const_list = []
+        d_t = symbol_type
+        while isinstance(d_t, SymbolTypePtr):
+            ptr_string += "*"
+
+            const_list.insert(0, d_t.isConst())
+            d_t = d_t.deReference()
+
+        const_list.insert(0, d_t.isConst())
+
+        d_type = d_t.getType()
+        if isinstance(d_t, FunctionSymbolType):
+            d_type = f"Func:{d_t.return_type.getType()}:{[]}"
+
+        return d_type, ptr_string, const_list

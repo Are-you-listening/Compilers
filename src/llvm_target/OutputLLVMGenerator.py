@@ -7,6 +7,8 @@ from src.parser.Tables.SymbolTypePtr import SymbolTypePtr
 from src.parser.Tables.SymbolTypeArray import SymbolTypeArray
 from src.parser.Tables.SymbolTypeStruct import SymbolTypeStruct
 from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
+import math
+
 """
 This line is not because our lack of capabilities to avoid recursions, this line exist because LLVMLite itself
 uses recursions 
@@ -69,12 +71,11 @@ class CTypesToLLVM:
     @staticmethod
     def getBytesUse(data_type: SymbolType):
 
-        if isinstance(data_type, SymbolTypePtr):
-            return 8
+        byte_amount = data_type.getBytesUsed()
+        exp = math.ceil(math.log2(byte_amount))
+        byte_amount = 2**exp
 
-        convert_dict = {"INT": 4, "CHAR": 1, "FLOAT": 4, "BOOL": 1}
-
-        return convert_dict.get(data_type.getBaseType(), 8)
+        return byte_amount
 
     @staticmethod
     def getIRType(data_type: SymbolType, function_type=False):
@@ -234,6 +235,10 @@ class Declaration:
 
         if store_register.type.is_pointer and value.type.is_pointer and \
                 isinstance(value.type.pointee, ir.types.ArrayType):
+
+            value = block.bitcast(value, store_register.type.pointee)
+
+        if store_register.type.is_pointer and value.type.is_pointer and value.type.pointee is None:
             value = block.bitcast(value, store_register.type.pointee)
 
         llvm_val = block.store(value, store_register)
@@ -380,7 +385,10 @@ class Calculation:
         if pointer is not None or non_pointer is not None and operator in ["+", "-", "[]"]:
             if not isinstance(non_pointer,
                               ir.Constant):  # If it is not a constant, LLVM requires a sign extend to match the size
-                non_pointer = block.sext(non_pointer, ir.IntType(64))
+                if isinstance(non_pointer.type, ir.PointerType):
+                    non_pointer = block.ptrtoint(non_pointer, ir.IntType(64))
+                else:
+                    non_pointer = block.sext(non_pointer, ir.IntType(64))
 
             if operator == "-":  # Add subtract
                 non_pointer = Calculation.unary(non_pointer, "-")

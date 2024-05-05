@@ -42,9 +42,11 @@ class SymbolTypeStruct(SymbolType):
     def getPtrAmount(self):
         return 1
 
+    def getBytesUsed(self):
+        byte_amount = sum([f.getBytesUsed() for f in self.pts_to])
+
+        return byte_amount
+
     @staticmethod
     def isBase():
         return False
-
-    def getPtrAmount(self):
-        return 1

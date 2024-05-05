@@ -1,4 +1,5 @@
 from src.parser.Tables.SymbolTypePtr import SymbolTypePtr, SymbolType
+from src.interal_tools import PreConditions
 
 
 class SymbolTypeArray(SymbolTypePtr):
@@ -8,6 +9,9 @@ class SymbolTypeArray(SymbolTypePtr):
         """
         Store the ptr size 1, means single array size, when size > 1 => ptr to an array
         """
+
+        PreConditions.assertInstanceOff(size, int)
+
         self.size = size
 
     def getPtrTuple(self):
@@ -20,3 +24,10 @@ class SymbolTypeArray(SymbolTypePtr):
             return super().__eq__(other)
 
         return super().__eq__(other) and self.size == other.size and self.pts_to.isConst() == other.pts_to.isConst()
+
+    def getBytesUsed(self):
+
+        byte_amount = self.size * self.pts_to.getBytesUsed()
+
+        return byte_amount
+

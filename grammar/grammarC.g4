@@ -10,7 +10,7 @@ line: (declaration | expr | assignment | typedef | enum | structunion);
 parameters: ((parameter',')* parameter)?;
 parameter: (type IDENTIFIER array?) | functionPtrDeclaration;
 parameter_call: expr;
-block_line: (line | printscanf | 'break' | 'continue' | return);
+block_line: (line | printscanf | 'break' | 'continue' | return | sizeOf);
 block_code: ((block_line ';'+ | if | for | while | anonymous_scope | switch | include | define) (';'*) )* (';'*);
 typedef: 'typedef' type IDENTIFIER;
 define: '#define' IDENTIFIER ( ('-'? literal) | type );  // Remember, we can't allow Expressions here! (See project5.pdf)
@@ -23,6 +23,7 @@ case: 'case' (literal | IDENTIFIER) ':' block_code;
 default: 'default' ':' block_code;
 
 enum: 'enum' IDENTIFIER '{' (IDENTIFIER',')* IDENTIFIER? '}';
+sizeOf: 'sizeof' '(' type ')';
 printscanf: ('printf' | 'scanf') '(' expr (',' expr)* ')';
 type: ('const')? ('int' | 'char' | 'float' | 'void' | (('struct' | 'enum' |'union') IDENTIFIER) | IDENTIFIER) ('*' | 'const')*;
 return: 'return' expr?;
@@ -39,6 +40,7 @@ initialize_list: ((expr ',')* expr)?;
 expr : literal
      | conversion
      | expr '(' parameter_calls ')'
+     | sizeOf
      | printscanf
      | '{' initialize_list '}'
      | '(' expr ')'

@@ -39,6 +39,18 @@ class SymbolType:
     def getPtrAmount(self):
         return 0
 
+    def getBytesUsed(self):
+        bytes_used = {"INT": 4, "CHAR": 1, "FLOAT": 4, "BOOL": 1}
+
+        return bytes_used.get(self.data_type, 0)
+
+    def hasFunction(self):
+        """
+        Indicate if this type uses some function ptr/ function
+        """
+
+        return False
+
     @staticmethod
     def isBase():
         return True

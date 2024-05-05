@@ -1,3 +1,5 @@
+import copy
+
 from src.parser.ASTConversion import *
 
 
@@ -345,11 +347,16 @@ class SwitchConverter(ASTVisitor):
         Create a copy of this subtree, while keeping the same symbol table
         """
 
-        if not isinstance(node, ASTNodeTerminal):
-            new_node = ASTNode(node.text, node.parent, node.getSymbolTable(), node.position, node.structTable)
-        else:
+        if isinstance(node, ASTNodeTerminal):
             new_node = ASTNodeTerminal(node.text, node.parent, node.getSymbolTable(), node.type,
                                        node.position, node.structTable)
+
+        elif isinstance(node, ASTNodeTypes):
+            new_node = ASTNodeTypes(node.text, node.parent, node.getSymbolTable(),
+                                    copy.deepcopy(node.symbol_type), node.position, node.structTable)
+        else:
+            new_node = ASTNode(node.text, node.parent, node.getSymbolTable(), node.position, node.structTable)
+
 
         for child in node.children:
             copy_child = SwitchConverter.createCopy(child)

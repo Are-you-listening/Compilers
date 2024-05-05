@@ -8,5 +8,7 @@
   "33": ["[ Error ] tests/test33.c line 4: redefinition or redeclaration of INT x"],
   "34": ["[ Error ] tests/test34.c line 3: redefinition or redeclaration of INT x"],
   "35": ["[ Error ] tests/test35.c line 4: redefinition or redeclaration of INT x"],
-  "36": ["[ Error ] tests/test36.c line 3: redefinition or redeclaration of INT x"]
+  "36": ["[ Error ] tests/test36.c line 3: redefinition or redeclaration of INT x"],
+  "60": ["[ Error ] tests/test60.c line 8: Manipulation of variable '*(c)' is not allowed, because '*(c)' has type 'const INT'"]
+
 }

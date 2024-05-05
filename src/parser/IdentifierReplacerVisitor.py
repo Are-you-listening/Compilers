@@ -2,7 +2,8 @@ from src.parser.ASTVisitor import *
 from src.parser.ErrorExporter import *
 from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 from src.parser.SwitchConverter import SwitchConverter
-
+from src.parser.Tables.SymbolTypePtr import SymbolTypePtr
+from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 
 class CheckForFunction(ASTVisitor):
     def __init__(self):
@@ -67,9 +68,8 @@ class IdentifierReplacerVisitor(ASTVisitor):
 
             entry = node.getSymbolTable().getEntry(toReplace)
 
-
             if (not entry.isConst() and (entry.firstUsed is not None and entry.firstUsed != node)) or entry.is_referenced() or \
-                    isinstance(entry.getTypeObject(), FunctionSymbolType):
+                    entry.getTypeObject().hasFunction():
                 return
 
             # the variable is const, so we can replace it with its value
@@ -84,6 +84,7 @@ class IdentifierReplacerVisitor(ASTVisitor):
             """
             In case the value is None
             """
+
             if entry.value is None:
                 ErrorExporter.uninitializedVariable(toReplace, node.position)
                 return
@@ -105,7 +106,9 @@ class IdentifierReplacerVisitor(ASTVisitor):
             changes IDENTIFIER -> its type,
             We make an exact copy of the subtree its values
             """
+
             temp = SwitchConverter.createCopy(entry.value)
+
             temp.parent = node.parent
             temp.symbol_table = node.symbol_table
             node = temp

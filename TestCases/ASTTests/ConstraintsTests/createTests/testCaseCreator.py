@@ -21,6 +21,12 @@ from src.parser.ASTDereferencer import *
 from src.parser.StructCleaner import StructCleaner
 from src.parser.StructCleanerAfter import StructCleanerAfter
 from src.parser.Preproccesing.preProcessor import PreProcessor
+from src.parser.TypeCleaner import TypeCleaner
+from src.parser.PointerReformater import PointerReformater
+from src.parser.EnumConverter import EnumConverter
+from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
+from src.parser.StringToArray import StringToArray
+
 input_file = "read_file.c"
 
 input_stream = FileStream(input_file)  # Declare some variables
@@ -45,24 +51,35 @@ ast = toAST.getAST()
 virtualline = VirtualLineVisitor()
 virtualline.visit(ast)
 
-black_list_visitor = BlacklistVisitor()
-black_list_visitor.visit(ast)
+BlacklistVisitor().visit(ast)
 
-"""
-below add needed stuff
-"""
+PointerReformater().visit(ast)
 
-CodeGetter().visit(ast)
+ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
 StructCleaner().visit(ast)  # Massage the structs
 
-EnumConverter().visit(ast)
-TypeMerger().visit(ast)
-ASTTypedefReplacer().visit(ast)
-ASTIfCleaner().visit(ast)
-ASTLoopCleaner().visit(ast)
-ASTCleaner().visit(ast)
-SwitchConverter().visit(ast)
+EnumConverter().visit(ast)  # Convert enum to typedef & const bools
+
+TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
+
+ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
+
+FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
+
+TypeCleaner().visit(ast)
+
+
+ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
+
+ASTCleaner().visit(ast)  # Do a standard cleaning
+
+SwitchConverter().visit(ast)  # convert switch statement to if else
+
+StringToArray().visit(ast)
+
+
+
 ArrayCleaner().visit(ast)
 ASTTableCreator().visit(ast)
 StructCleanerAfter().visit(ast)

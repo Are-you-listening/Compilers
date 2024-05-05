@@ -34,7 +34,8 @@
   "50": ["[ Warning ] tests/test50.c line 1: 'return' with a value, in function returning void"],
   "60": ["[ Error ] tests/test60.c line 4: Manipulation of variable 'x' is not allowed, because 'x' has type 'const INT'"],
   "62": ["[ Error ] tests/test62.c line 10: Manipulation of variable '*(ptr)' is not allowed, because '*(ptr)' has type 'const INT'"],
-  "66": ["[ Error ] tests/test66.c line 14: main function initialised with an other type than int"]
+  "66": ["[ Error ] tests/test66.c line 14: main function initialised with an other type than int"],
+  "67": ["[ Error ] tests/test67.c line 7: you cannot do a function call for the non-function 'foo' which is of type INT"]
 
 
 }

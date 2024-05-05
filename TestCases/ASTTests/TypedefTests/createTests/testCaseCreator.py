@@ -12,6 +12,12 @@ from src.parser.BlacklistVisitor import BlacklistVisitor
 from src.parser.StructCleaner import StructCleaner
 from src.parser.StructCleanerAfter import StructCleanerAfter
 from src.parser.Preproccesing.preProcessor import PreProcessor
+from src.parser.TypeCleaner import TypeCleaner
+from src.parser.PointerReformater import PointerReformater
+from src.parser.EnumConverter import EnumConverter
+from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
+
+
 input_file = "read_file.c"
 
 input_stream = FileStream(input_file)  # Declare some variables
@@ -60,6 +66,11 @@ add check stuff
 """
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
+
+FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
+
+TypeCleaner().visit(ast)
+
 
 ASTCleaner().visit(ast)  # Do a standard cleaning
 

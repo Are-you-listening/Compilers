@@ -1,5 +1,5 @@
 from src.parser.ASTTypedefReplacer import *
-
+from src.parser.AST import ASTNodeTypes
 
 class TypeMerger(ASTVisitor):
     """
@@ -25,6 +25,9 @@ class TypeMerger(ASTVisitor):
         if node.text != "Type":
             return
 
+        if isinstance(node, ASTNodeTypes):
+            return
+
         if node.parent.text in ["Struct", "Union"] and node == node.parent.children[0]:   # The first type node is the struct its self
             return
 
@@ -45,7 +48,7 @@ class TypeMerger(ASTVisitor):
         if mergeType in ["struct", "union"]:
             newname = node.children[1].text
         else:
-            newname = mergeType + " " + node.children[1].text
+            newname = f"{mergeType} {node.children[1].text}"
 
         """
         Override the type children

@@ -44,7 +44,8 @@ class ASTLoopCleaner(ASTVisitor):
         self.to_remove.add(node.getChild(0))
 
         if node.text == "WHILE":
-            ASTConversion.addConversion(node.getChild(1), (("BOOL", False), []))
+
+            ASTConversion.addConversion(node.getChild(1), SymbolType("BOOL", False))
             return
 
         """
@@ -102,7 +103,7 @@ class ASTLoopCleaner(ASTVisitor):
             true_node = ASTNodeTerminal("1", node, node.getSymbolTable(), "INT", node.position, node.structTable)
             node.replaceChild(node.getChild(1), true_node)
 
-        ASTConversion.addConversion(node.getChild(1), (("BOOL", False), []))
+        ASTConversion.addConversion(node.getChild(1), SymbolType("BOOL", False))
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass

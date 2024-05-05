@@ -1,10 +1,15 @@
 #include <stdio.h>
 
+int m(int a){
+    return 5;
+}
 
 int main () {
 
-    const float arr[5] = {-10.20, -20.125, 31.26, 0.00, 15.2};
-    //arr[2] = 6;
+    int (*v)(float) = 0;
+
+    int b = v(5);
+    printf("%d", b);
 
     return 0;
 }

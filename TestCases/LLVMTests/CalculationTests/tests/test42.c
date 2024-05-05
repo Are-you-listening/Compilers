@@ -12,21 +12,14 @@ int main(){
     sa + ia;
 
     ia - ia;
-    //ia - sa; // Not allowed OK
-    sa - ia; // Not allowed OK
+    sa - ia;
 
-    //ia * sa; // Not allowed OK
 
     ia * ia;
-    //int b = sa * ia; // Not allowed OK
 
     ia / ia;
-    //ia / sa; // Not allowed OK
-    //sa / ia; // Not allowed OK
 
     ia % ia;
-    //ia % sa; // Not allowed OK
-    //sa % ia; // Not allowed OK
 
     return 0;
 }

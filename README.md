@@ -55,8 +55,9 @@ sudo apt install llvm
 - [X] ControlFlow and visualization
 - [X] Else If Statements
 - [X] Do not generate code for conditions that are always false
-- [x] Dynamic Arrays (stored on heap)
-
+- [x] Dynamic Arrays (stored on heap) (malloc, free, calloc, realloc)
+- [x] Dynamic Allocation of Structs (store structs on heap) (support by also supporting sizeof function)
+- [X] Struct that contains other structs
 - Conversion Warnings?
 
 ### Technical Functionality: 
@@ -125,7 +126,25 @@ python3 script.py
 This will run the provided examples from ``example_source_files``
 
 ### Unit Tests
+For our project we have lots of testcases, ...
+So if for some reason a situation occurs that is unexpected, please consolidate our testcases
+
+LLVM Tests are tests that run the entire compiler and cross-reference their output  (from prints) with the gcc output
+This Part of our testEnvironment is the best indicator of our compiler its capabilities.
+Currently we have around 550 tests in this directory. Some classification is made, but not every feature
+has its own testSuite. A lot of testfiles also have a combination of testcase features.
+
 Run our testcases using:
 ```bash
 python3 -m unittest discover -v
+```
+
+You can also run the tests in parallel
+Requires:
+```bash
+pip install unittest-parallel
+```
+
+```bash
+ unittest-parallel -t . -s TestCases
 ```

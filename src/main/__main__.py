@@ -31,6 +31,10 @@ from src.parser.Constraints.CheckRvalues import *
 from src.parser.UnarySaVisitor import *
 from src.parser.DynamicAllocation import DynamicAllocation
 from src.parser.FileIO import FileIO
+from src.parser.Tables.TypeNodehandler import TypeNodeHandler
+from src.parser.TypeCleaner import TypeCleaner
+from src.parser.SizeOfTranslater import SizeOfTranslater
+
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -80,25 +84,27 @@ def cleanGreen(input_file, symbol_file):
     StructCleaner().visit(ast)  # Massage the structs
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
+
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
+
+    FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
+    TypeCleaner().visit(ast)
+    SizeOfTranslater().visit(ast)
+
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
     StringToArray().visit(ast)
 
-    FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
-
     ArrayCleaner().visit(ast)
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     ASTTableCreator().visit(ast)  # Create the symbol table
 
     DynamicAllocation.add_allocation(ast)
@@ -113,6 +119,8 @@ def cleanGreen(input_file, symbol_file):
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     if symbol_file is not None:
@@ -123,7 +131,7 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold, includeSTDIO):
-
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     """
@@ -132,16 +140,17 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     #DotVisitor("output/debug08888").visit(ast)  # Export AST in Dot
-
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ASTConversion().visit(ast)
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     UnarySaVisitor().visit(ast)
-
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ConstantFoldingVisitor().visit(ast)
 
-    if fold:
+    if fold and False:
         ValueAdderVisitor().visit(ast)
 
     ConstantStatementFolding().visit(ast)

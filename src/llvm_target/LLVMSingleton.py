@@ -1,5 +1,5 @@
 from llvmlite import ir
-
+from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 
 class LLVMSingleton:
     __instance = None
@@ -22,6 +22,7 @@ class LLVMSingleton:
     def clear(self):
         self.__instance = None
         self.__init__()
+        TypeNodeHandler.getInstance().clear()
 
     @staticmethod
     def getInstance():

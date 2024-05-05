@@ -2,6 +2,7 @@ from src.parser.ASTConversion import *
 from src.parser.CTypes.CFunctionExecuterInt import *
 from src.parser.CTypes.CFunctionExecuterChar import *
 from src.parser.CTypes.CFunctionExecuterFloat import *
+from src.interal_tools.IntegrityChecks import PreConditions
 
 
 class ConstantFoldingVisitor(ASTVisitor):
@@ -38,15 +39,20 @@ class ConstantFoldingVisitor(ASTVisitor):
                                 "CHAR": CFunctionExecuterChar,
                                 "FLOAT": CFunctionExecuterFloat,
                                 "BOOL": CFunctionExecuterInt}
-            for child in node.getChild(0).getChildren():
-                if "*" in child.text:
-                    return
-            to_type = None
-            for child in node.getChild(0).getChildren():
-                if child.text in c_type_executors:
-                    to_type = child.text  # This scares me a little :( - Kars
+
+            """
+            Retrieve the convert to type based on the conversion
+            """
+            type_node = node.getChild(0)
+            PreConditions.assertInstanceOff(type_node, ASTNodeTypes)
+            symbol_type = type_node.symbol_type
+
+            if symbol_type.getPtrAmount() > 0:
+                return
+            to_type = symbol_type.getBaseType()
 
             from_type = node.getChild(1).type
+
             if from_type == "IDENTIFIER":
                 return
             c_type = c_type_executors[from_type]()
@@ -143,8 +149,9 @@ class ConstantFoldingVisitor(ASTVisitor):
 
         if logical_operator == "||":
             if operand.text == "0":
+
                 ASTConversion.addConversion(node.getChild(0) if operand == node.getChild(2) else node.getChild(2),
-                                            (("BOOL", False), []))
+                                            SymbolType("BOOL", False))
                 return None
             else:
                 return "1", "INT"
@@ -153,7 +160,7 @@ class ConstantFoldingVisitor(ASTVisitor):
                 return "0", "INT"
             else:
                 ASTConversion.addConversion(node.getChild(0) if operand == node.getChild(2) else node.getChild(2),
-                                            (("BOOL", False), []))
+                                            SymbolType("BOOL", False))
                 return None
 
         return None

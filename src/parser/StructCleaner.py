@@ -1,7 +1,8 @@
 from src.parser.Tables.StructTable import *
 from src.parser.ASTVisitor import *
 from src.parser.ASTTypedefReplacer import BaseTypes
-
+from src.parser.AST import ASTNodeTypes
+from src.interal_tools import *
 
 class StructCleaner(ASTVisitor):
     """
@@ -68,6 +69,8 @@ class StructCleaner(ASTVisitor):
                 self.table = self.table.prev
                 node.structTable = self.table
 
+        self.__checkType(node)
+
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         node.structTable = self.table
 
@@ -96,3 +99,30 @@ class StructCleaner(ASTVisitor):
             self.table.addDataMember(structName, "union")  # Extra info to later check if it's a union or struct
 
         BaseTypes.append(structName)
+
+    @staticmethod
+    def __checkType(node: ASTNode):
+        """
+        This function checks that a 'Type' node has a struct when needed, and same for union
+        """
+        if node.text != "Type":
+            return
+        if isinstance(node, ASTNodeTypes):
+            return
+
+        PreConditions.assertNOTEqual(node.getChildAmount(), 0)
+        PreConditions.assertInstanceOff(node, ASTNode)
+
+        is_struct = node.getChild(0).text == "struct"
+        is_union = node.getChild(0).text == "union"
+
+        if is_struct or is_union:
+
+            is_union2 = node.structTable.isUnion(node.getChild(1).text, node.position)
+            if is_union and not is_union2:
+                ErrorExporter.invalidStructUnionAssign(node.position, "Union", "Struct")
+
+            if is_struct and is_union2:
+                ErrorExporter.invalidStructUnionAssign(node.position, "Struct", "Union")
+
+

@@ -1,7 +1,12 @@
 from src.parser.ErrorExporter import *
 from src.parser.ASTVisitor import *
 from src.parser.SwitchConverter import SwitchConverter
+from src.interal_tools import PreConditions
+from src.parser.AST import ASTNodeTypes
+from src.parser.Tables.SymbolTypePtr import SymbolTypePtr
+from src.parser.Tables.SymbolTypeArray import SymbolTypeArray
 import copy
+from src.parser.Utils.ArraySizeReader import ArraySizeReader
 
 
 class ArrayCleaner(ASTVisitor):
@@ -64,19 +69,25 @@ class ArrayCleaner(ASTVisitor):
 
         type_node = node.getChild(0)
 
-        array_sizes = self.array_size(node.getChild(2), True)
+        PreConditions.assertEqual(type_node.text, "Type")
+        PreConditions.assertInstanceOff(type_node, ASTNodeTypes)
+
+        array_sizes = ArraySizeReader.readSize(node.getChild(2))
 
         self.array_map[node] = array_sizes
 
+        symbol_type = type_node.symbol_type
         for i, new_ptr_val in enumerate(reversed(array_sizes)):
             if i == 0 and node.text == "Parameter":
-                data_type = "PTR"
+                symbol_type = SymbolTypePtr(symbol_type, False)
             else:
-                data_type = f"ARRAY_{new_ptr_val}"
+                symbol_type = SymbolTypeArray(symbol_type, False, int(new_ptr_val))
 
-            new_ptr = ASTNodeTerminal("*", type_node.parent, type_node.getSymbolTable(), data_type,
-                                      type_node.position, type_node.structTable)
-            type_node.addChildren(new_ptr)
+            """
+            override the SymbolType stored in this ASTNodeTypes
+            """
+
+        type_node.symbol_type = symbol_type
 
         self.to_remove.add(node.getChild(2))
 
@@ -134,23 +145,6 @@ class ArrayCleaner(ASTVisitor):
             remove the literal node by replacing the literal node in the parent with the first literal child
             """
             node.parent.replaceChild(node, node.getChild(0))
-
-    @staticmethod
-    def array_size(array_node: ASTNode, check_int: bool = False):
-        array_sizes = []
-        for child in array_node.children:
-
-            if check_int:
-                if not isinstance(child, ASTNodeTerminal):
-                    ErrorExporter.invalidArraySize(array_node.position, array_node.parent.getChild(1).text,
-                                                   (("Expression", False), []))
-                if child.type != "INT":
-                    ErrorExporter.invalidArraySize(array_node.position, array_node.parent.getChild(1).text,
-                                                   ((child.type, False), []))
-
-            array_sizes.append(child.text)
-
-        return array_sizes
 
     def __check_init_list(self, node: ASTNode):
         if node.text != "InitList":
@@ -231,23 +225,23 @@ class ArrayCleaner(ASTVisitor):
         for indexing, v in value_list:
 
             type_node3 = SwitchConverter.createCopy(type_node2)
-            type_node3.addChildren(ASTNodeTerminal("*", type_node3, node.parent.getSymbolTable(), "Not used", node.parent.position,
-                                      node.parent.structTable))
+            type_node3.symbol_type = SymbolTypePtr(type_node3.symbol_type, False)
 
-            to_remove = set()
-            for i, t in enumerate(type_node3.children):
-                if t.text == "const":
-                    print("hwdw", t.text)
-                    to_remove.add(t)
+            """
+            Make value not const anymore
+            """
+            temp: SymbolType = type_node3.symbol_type
+            while isinstance(temp, SymbolTypePtr):
+                temp = temp.deReference()
 
-            for r in to_remove:
-                type_node3.removeChild(r)
+            was_const = temp.isConst()
+            temp.const = False
 
             assignment_node = ASTNode("Assignment", code_node, node.parent.getSymbolTable(), node.parent.position,
                                       node.parent.structTable)
 
             assign_to = assignment_node
-            if len(to_remove) > 0:
+            if was_const:
                 conversion = ASTNode("Conversion", assignment_node, node.parent.getSymbolTable(), node.parent.position,
                                      node.parent.structTable)
 
