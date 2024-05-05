@@ -2,6 +2,7 @@ from src.parser.ASTTableCreator import *
 from src.parser.Constraints.FunctionReturnConstraint import findFunction
 from src.parser.AST import ASTNodeTypes
 
+
 class ASTConversion(ASTVisitor):
     """
     Makes implicit conversions explicit
@@ -193,8 +194,6 @@ class ASTConversion(ASTVisitor):
 
             to_type = assign_type.deReference()
 
-
-
             """
             make sure assignment doesn't convert to a ptr less
             """
@@ -204,13 +203,6 @@ class ASTConversion(ASTVisitor):
                 """
                 Check if we assign to const assign node, if so throw an error
                 """
-                if assign_type.union:
-
-                    real_type = self.type_mapping[node.getChild(0)]
-
-                    self.addConversion(assign_node, SymbolTypePtr(real_type, False))
-                    self.type_mapping[assign_node] = real_type
-                    to_type = real_type
 
                 const_assign = to_type.isConst()
 
@@ -717,7 +709,6 @@ class ASTConversion(ASTVisitor):
 
         data_type3 = None
 
-        override = True
 
         """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was
                     before"""
@@ -745,8 +736,7 @@ class ASTConversion(ASTVisitor):
 
             is_struct = self.is_struct(node)
             if is_struct:
-                data_type3, override = self.handle_struct(node)
-
+                data_type3= self.handle_struct(node)
 
         """
         when trying to dereference a non-ptr, throw an error
@@ -760,12 +750,9 @@ class ASTConversion(ASTVisitor):
 
         data_type = data_type.deReference()
 
-        if override:
-            self.type_mapping[node] = data_type
-            if is_struct:
-                self.type_mapping[node] = data_type3
-
-
+        self.type_mapping[node] = data_type
+        if is_struct:
+            self.type_mapping[node] = data_type3
 
     def is_struct(self, node: ASTNode):
         """
@@ -779,7 +766,6 @@ class ASTConversion(ASTVisitor):
         return False
 
     def handle_struct(self, node: ASTNode):
-        override = True
 
         lchild = node.getChild(0)  # LHS of the '.' 'operator
         """
@@ -788,44 +774,32 @@ class ASTConversion(ASTVisitor):
         struct_ptr_type = self.type_mapping[lchild]
         struct_type = struct_ptr_type.pts_to
 
-
-
         """
         Use the struct type to translate 'struct'.'value' -> struct[index]
         """
         data_type_index, union_assignment = self.replaceIdentifierWithIndex(node, struct_type)
 
-        if union_assignment:
+        """
+        In case we do not have a union assignment,we want to retrieve the value in his appropriate type
+        """
+        data_type = struct_type.getElementType(data_type_index)
+
+        if isinstance(struct_type, SymbolTypeUnion):
+            store_type = struct_type.getStoreType()
+
             """
-            In case we have a union assignment
+            When we retrieve a type that doesn't match the store type, we will do a conversion so we end up 
+            with reading the right type
             """
-            data_type = struct_type.getStoreType()
-            node.getChild(2).text = 0
+            if store_type != data_type:
+                self.addConversion(node, data_type)
 
-            store_data_type = struct_type.getElementType(data_type_index)
-            self.type_mapping[node] = store_data_type
-            override = False
+            data_type = store_type
 
-        else:
-            """
-            In case we do not have a union assignment,we want to retrieve the value in his appropriate type
-            """
-            data_type = struct_type.getElementType(data_type_index)
-
-            if isinstance(struct_type, SymbolTypeUnion):
-                store_type = struct_type.getStoreType()
-
-                """
-                When we retrieve a type that doesn't match the store type, we will do a conversion so we end up 
-                with reading the right type
-                """
-                if store_type != data_type:
-                    self.addConversion(node, data_type)
-
-                data_type = store_type
-
-
+        """
+        With unions we do are actions with the first entry
+        """
         if data_type.union:
             node.getChild(2).text = 0
 
-        return data_type, override
+        return data_type
