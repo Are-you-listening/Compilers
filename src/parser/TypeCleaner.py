@@ -119,10 +119,10 @@ class TypeCleaner(ASTVisitor):
         node.parent.removeChild(node)
 
     @staticmethod
-    def getUnionType(union_types: list):
+    def getUnionType(union_types: list[SymbolType]):
         """
         For unions we want to retrieve the richest type, that we will use yo store our data in
-        :param pts_to: List of symbol types the union has
+        :param union_types: List of symbol types the union has
         """
 
         PreConditions.assertListInstanceOff(union_types, SymbolType)
@@ -170,6 +170,10 @@ class TypeCleaner(ASTVisitor):
         return richest
 
     def cleanFunctionPtr(self, node: ASTNode):
+        """
+        Convert FunctionPtrs to its type
+
+        """
         if node.text != "FunctionPtr":
             return
 

@@ -6,10 +6,8 @@ int m(int a){
 
 int main () {
 
-    int (*v)(float) = &m;
+    int (*v)(float) = 0;
 
-    int b = v(5);
-    printf("%d", b);
 
     return 0;
 }

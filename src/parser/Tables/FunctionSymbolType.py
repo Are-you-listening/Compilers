@@ -37,3 +37,10 @@ class FunctionSymbolType(SymbolType):
 
     def getPtrTuple(self):
         return [(f"{self.return_type.getPtrTuple()[0][0]} ({[p.getPtrTuple()[0][0] for p in self.param_types]})", False), []]
+
+    def hasFunction(self):
+        """
+        Indicate if this type uses some function ptr/ function
+        """
+
+        return True

@@ -1,5 +1,5 @@
 from src.parser.Tables.SymbolType import *
-
+from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 
 class SymbolTypePtr(SymbolType):
     def __init__(self, pts_to: SymbolType, const: bool):
@@ -43,6 +43,14 @@ class SymbolTypePtr(SymbolType):
 
     def getBytesUsed(self):
         return 8
+
+    def hasFunction(self):
+        """
+        Indicate if this type uses some function ptr/ function
+        """
+
+        return self.pts_to.hasFunction()
+
 
     @staticmethod
     def isBase():

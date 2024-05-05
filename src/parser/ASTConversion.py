@@ -317,6 +317,7 @@ class ASTConversion(ASTVisitor):
                 if isinstance(to_type, SymbolTypePtr) and isinstance(to_type.deReference(), FunctionSymbolType):
 
                     if isinstance(type_tup, SymbolTypePtr) and isinstance(type_tup.deReference(), FunctionSymbolType):
+                        pass
                         ErrorExporter.invalidFunctionPtr(node.position, to_type, type_tup)
 
                 self.addConversion(child, to_type)

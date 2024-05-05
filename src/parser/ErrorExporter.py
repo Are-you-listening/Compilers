@@ -447,9 +447,8 @@ class ErrorExporter:
         to_type = ErrorExporter.__to_output_type(to_type.getPtrTuple())
         from_type = ErrorExporter.__to_output_type(from_type.getPtrTuple())
 
-        print(f"[ Error ] {position.file} line {position.linenr}: invalid func ptr assigns "
-              f"{from_type} to {to_type}", file=sys.stderr)
-        exit()
+        print(f"[ Warning ] {position.file} line {position.linenr}: invalid func ptr assigns "
+              f"{from_type} to {to_type}")
 
 
     @staticmethod

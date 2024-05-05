@@ -44,6 +44,13 @@ class SymbolType:
 
         return bytes_used.get(self.data_type, 0)
 
+    def hasFunction(self):
+        """
+        Indicate if this type uses some function ptr/ function
+        """
+
+        return False
+
     @staticmethod
     def isBase():
         return True
