@@ -455,3 +455,10 @@ class ErrorExporter:
     def invalidMainType(position: Position):
         print(f"[ Error ] {position.file} line {position.linenr}: main function initialised with an other type than int", file=sys.stderr)
         exit()
+
+    @staticmethod
+    def invalidStructUnionAssign(position: Position, assign_to_type: str, assign_type: str):
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: can't assign '{assign_type}' type to '{assign_to_type}' type",
+            file=sys.stderr)
+        exit()

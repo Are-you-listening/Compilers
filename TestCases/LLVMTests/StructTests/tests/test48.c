@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 
 
@@ -10,12 +9,9 @@ union v{
 
 int main(){
 
-    union v* c = malloc(sizeof(union v));
-    c->a = 5;
+    struct v a;
 
-    printf("%d", c->a);
-
-    free(c);
+    union v* c = &a;
 
 
     return 0;

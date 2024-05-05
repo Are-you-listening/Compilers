@@ -48,7 +48,7 @@ class TypeMerger(ASTVisitor):
         if mergeType in ["struct", "union"]:
             newname = node.children[1].text
         else:
-            newname = mergeType + " " + node.children[1].text
+            newname = f"{mergeType} {node.children[1].text}"
 
         """
         Override the type children

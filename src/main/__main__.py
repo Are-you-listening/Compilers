@@ -87,6 +87,8 @@ def cleanGreen(input_file, symbol_file):
 
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
@@ -104,7 +106,6 @@ def cleanGreen(input_file, symbol_file):
 
     ArrayCleaner().visit(ast)
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 

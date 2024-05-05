@@ -1,6 +1,7 @@
 from src.parser.AST import ASTNode, ASTNodeTypes
 from src.interal_tools import *
 from src.parser.Tables import *
+from src.parser.ErrorExporter import ErrorExporter
 
 base_types = ["INT", "FLOAT", "CHAR", "VOID"]
 
@@ -98,8 +99,15 @@ class TypeNodeHandler:
 
                 latest_datatype = self.__make_ptr_type(latest_datatype, is_const, child.type)
             else:
+
                 if self.struct_types.get(child.text) is not None:
                     latest_datatype = self.struct_types[child.text]
+
+                    """
+                    Check if struct/union type matches 
+                    struct can only be assigned to struct type vars, same for union
+                    """
+
                 else:
                     latest_datatype = SymbolType(child.text, is_const)
 
