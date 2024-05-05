@@ -143,8 +143,19 @@ class TypeCleaner(ASTVisitor):
             if isinstance(union_type,
                           SymbolTypeArray):  # Utils are always the biggest since they contain 1 to multiple pointers
 
-                richest = SymbolTypeArray(union_type.deReference(), False, union_type.size)
-                break
+                temp_richest = SymbolTypeArray(union_type.deReference(), False, union_type.size)
+
+                more_ptrs = temp_richest.getPtrAmount() > richest.getPtrAmount()
+                richer_type = temp_richest.getPtrAmount() == richest.getPtrAmount() and \
+                              temp_richest.getBaseType() == check.get_richest(richest.getBaseType(),
+                                                                              temp_richest.getBaseType())
+
+                if more_ptrs or richer_type:
+                    richest = temp_richest
+
+            if isinstance(richest, SymbolTypeArray):
+                continue
+
             if isinstance(union_type, SymbolTypePtr):
                 richest = union_type
             else:

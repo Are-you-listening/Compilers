@@ -1,5 +1,6 @@
 import subprocess
 from src.parser.ASTVisitor import *
+from src.parser.AST import ASTNodeTypes
 
 
 class DotVisitor(ASTVisitor):
@@ -13,7 +14,11 @@ class DotVisitor(ASTVisitor):
         self.outfile.write("digraph AST {\n")
 
     def visitNode(self, node: ASTNode):
-        self.outfile.write(f'  "{id(node)}" [label="{node.text}"];\n')
+        text = node.text
+        if isinstance(node, ASTNodeTypes):
+            text = f"{node.text} type: {node.symbol_type.getPtrTuple()}"
+
+        self.outfile.write(f'  "{id(node)}" [label="{text}"];\n')
         for child in node.children:
             self.outfile.write(f'  "{id(node)}" -> "{id(child)}";\n')
 

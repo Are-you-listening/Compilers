@@ -234,6 +234,7 @@ class Declaration:
 
         if store_register.type.is_pointer and value.type.is_pointer and \
                 isinstance(value.type.pointee, ir.types.ArrayType):
+
             value = block.bitcast(value, store_register.type.pointee)
 
         if store_register.type.is_pointer and value.type.is_pointer and value.type.pointee is None:

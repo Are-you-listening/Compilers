@@ -93,7 +93,7 @@ def cleanGreen(input_file, symbol_file):
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     TypeCleaner().visit(ast)
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
@@ -139,6 +139,7 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     #DotVisitor("output/debug08888").visit(ast)  # Export AST in Dot
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ASTConversion().visit(ast)
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
