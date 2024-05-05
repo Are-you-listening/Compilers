@@ -120,7 +120,7 @@ class ASTTableCreator(ASTVisitor):
             else:
                 symbol_type = self.__make_entry(node, child, SymbolType, node.text == "Parameter")
             """
-            symbol_type = self.__make_entry(node, child, SymbolType, node.text == "Parameter")
+            symbol_type, symbol_entry = self.__make_entry(node, child, SymbolType, node.text == "Parameter")
 
             if node.text == "Parameter":
                 self.param_list.append(symbol_type)
@@ -290,7 +290,7 @@ class ASTTableCreator(ASTVisitor):
         if referenced:
             symbol_entry.reference()
         node.symbol_table.add(symbol_entry)
-        return latest_datatype
+        return latest_datatype, symbol_entry
 
     @staticmethod
     def isStructType(text: str):
@@ -301,7 +301,7 @@ class ASTTableCreator(ASTVisitor):
         return "struct" == text[0:6] or "union" == text[0:6]
 
     def __get_func_ptr_type(self, node: ASTNode):
-
+        # TODO remove this depracted here
         return_type_child = node.getChild(0)
 
         if return_type_child.text == "FunctionPtr":

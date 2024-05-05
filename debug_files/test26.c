@@ -1,15 +1,31 @@
 #include <stdio.h>
 
-int d(int a){
-    printf("%d", a);
-    return a;
+int a(int u) {
+    return u + 1;
 }
 
 
+
+
+int (*b())(int) {
+    int (*c)(int) = &a;
+    return c;
+}
+
+int (*(*c(int (*(*w)())(int)))())(int){
+    int (*(*q)())(int) = w;
+    return q;
+}
+
 int main() {
-    int c = 1;
-    int (*e)(int) = &d;
-    int u = (*e)(c);
-    printf("%d", u);
+
+    int (*(*u)())(int) = &b;
+
+    printf("%d", u()(4));
+
+    u = c(u);
+
+    printf("%d", u()(4));
+
     return 0;
 }

@@ -83,18 +83,16 @@ def cleanGreen(input_file, symbol_file):
 
     StructCleaner().visit(ast)  # Massage the structs
 
-
-
-
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
-
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
 
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
+    FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
+
     TypeCleaner().visit(ast)
+
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
 
@@ -104,7 +102,7 @@ def cleanGreen(input_file, symbol_file):
 
     StringToArray().visit(ast)
 
-    FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
+
 
     ArrayCleaner().visit(ast)
 

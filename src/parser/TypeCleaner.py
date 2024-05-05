@@ -7,6 +7,7 @@ from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
 from src.parser.CTypes.COperationHandler import RichnessChecker
 from src.parser.Tables.SymbolTypeArray import *
 from src.parser.ArrayCleaner import ArrayCleaner
+from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 
 types = ["BOOL", "CHAR", "INT", "FLOAT"]
 
@@ -23,6 +24,7 @@ class TypeCleaner(ASTVisitor):
         self.handleStruct(node)
 
         self.cleanConversions(node)
+        self.cleanFunctionPtr(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         pass
@@ -106,4 +108,46 @@ class TypeCleaner(ASTVisitor):
                     richest = pointee
         return richest
 
+    def cleanFunctionPtr(self, node: ASTNode):
+        if node.text != "FunctionPtr":
+            return
 
+        symbol_type = self.__get_func_ptr_type(node)
+
+        new_type_node = ASTNodeTypes("Type", node.parent, node.getSymbolTable(), symbol_type,
+                                     node.position, node.structTable)
+
+        node.parent.replaceChild(node, new_type_node)
+
+    def __get_func_ptr_type(self, node: ASTNode):
+        print("rec")
+        return_type_child = node.getChild(0)
+
+        if return_type_child.text == "FunctionPtr":
+
+            return_type = self.__get_func_ptr_type(return_type_child)
+        else:
+            print(type(return_type_child))
+            if isinstance(return_type_child, ASTNodeTypes):
+                return_type = return_type_child.symbol_type
+            else:
+                return_type = TypeNodeHandler.getInstance().typeToTypeNode(return_type_child).symbol_type
+
+
+        function_params = node.getChild(1)
+        print("funcparam", function_params.text)
+        param_type_list = []
+        for param in function_params.children:
+            print(param.text, "t", type(param))
+
+            if isinstance(param, ASTNodeTypes):
+                param_type = param.symbol_type
+            else:
+                param_type = TypeNodeHandler.getInstance().typeToTypeNode(param).symbol_type
+
+            param_type_list.append(param_type)
+
+        function_type = FunctionSymbolType(return_type, param_type_list)
+        func_ptr = SymbolTypePtr(function_type, False)
+
+        return func_ptr
