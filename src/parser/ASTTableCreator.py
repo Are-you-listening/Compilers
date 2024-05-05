@@ -159,6 +159,9 @@ class ASTTableCreator(ASTVisitor):
             Make func type
             """
             return_type = child.symbol_type
+
+            self.__check_function_declarations(node, param_types, return_type)
+
             function_type = FunctionSymbolType(return_type, param_types)
 
             symbol_entry = SymbolEntry(function_type, node.children[1].text, None, node.children[1], None)

@@ -377,7 +377,6 @@ class ASTConversion(ASTVisitor):
             The identifier itself is just a reference to the object, so we add another extra SymbolPtrType
             """
 
-            print("typeobj", type(type_object))
             type_object = SymbolTypePtr(type_object, False)
 
             self.type_mapping[node] = type_object
@@ -724,7 +723,6 @@ class ASTConversion(ASTVisitor):
                     before"""
         child = node.getChild(0)
         data_type: SymbolType = self.type_mapping[child]
-        print("datatypy", type(data_type.deReference()), type(data_type), child.text)
 
 
         """
@@ -743,13 +741,11 @@ class ASTConversion(ASTVisitor):
             The array has by default 1 ptr, but it it is the only 1, the array is not really an array
             """
             if data_type.getPtrAmount() <= 1 and not isinstance(data_type.deReference(), SymbolTypeStruct):
-                print("a")
                 ErrorExporter.invalidDereferenceNotPtr(node.position, data_type, True)
 
             is_struct = self.is_struct(node)
             if is_struct:
                 data_type3, override = self.handle_struct(node)
-                print("dt3", data_type3.getPtrTuple())
 
 
         """
@@ -806,9 +802,7 @@ class ASTConversion(ASTVisitor):
             data_type = struct_type.getStoreType()
             node.getChild(2).text = 0
 
-            print("wwwwwwwwww", type(data_type), data_type_index)
             store_data_type = struct_type.getElementType(data_type_index)
-            print("st", store_data_type.getPtrTuple())
             self.type_mapping[node] = store_data_type
             override = False
 

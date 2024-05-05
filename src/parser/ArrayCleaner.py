@@ -174,6 +174,7 @@ class ArrayCleaner(ASTVisitor):
         of arrays.
         """
 
+        print(node.parent.text, self.array_map)
         if node.parent not in self.array_map:
             ErrorExporter.lostInitializerList(node.position)
             return

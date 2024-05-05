@@ -1,19 +1,15 @@
 #include <stdio.h>
 
-union NotTypeSafe {
-int as_integer;
-char as_str[30];
-float as_float;
-};
+int d(int a){
+    printf("%d", a);
+    return a;
+}
+
 
 int main() {
-    union NotTypeSafe gouda;
-
-    gouda.as_integer = 5;
-    gouda.as_str[0] = 'a';
-
-    printf("gouda.as_integer: %c", gouda.as_integer);
-
-
+    int c = 1;
+    int (*e)(int) = &d;
+    int u = (*e)(c);
+    printf("%d", u);
     return 0;
 }

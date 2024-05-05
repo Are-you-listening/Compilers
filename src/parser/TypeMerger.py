@@ -1,7 +1,5 @@
 from src.parser.ASTTypedefReplacer import *
-from src.interal_tools.IntegrityChecks import PreConditions
 from src.parser.AST import ASTNodeTypes
-from src.parser.Tables.SymbolTypeStruct import SymbolTypeStruct
 
 class TypeMerger(ASTVisitor):
     """
@@ -27,23 +25,15 @@ class TypeMerger(ASTVisitor):
         if node.text != "Type":
             return
 
+        if isinstance(node, ASTNodeTypes):
+            return
+
         if node.parent.text in ["Struct", "Union"] and node == node.parent.children[0]:   # The first type node is the struct its self
             return
 
-        PreConditions.assertInstanceOff(node, ASTNodeTypes)
-
-        symbol_type = node.symbol_type
-
-        print(symbol_type)
-
-        """
-        ignore when coming across structs or unions
-        """
-        if isinstance(symbol_type, SymbolTypeStruct):
+        if node.children[0].type in ["STRUCTUNION"]:
             return
 
-        return
-        #  TO DO check later with enums
         mergeType = node.children[0].text[0:6]
 
         if mergeType not in ["enum", "struct", "union"]:

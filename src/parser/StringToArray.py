@@ -1,6 +1,6 @@
 from src.parser.ASTVisitor import *
-
-
+from src.interal_tools.IntegrityChecks import PreConditions
+from src.parser.AST import ASTNodeTypes
 class StringToArray(ASTVisitor):
     """
     This visitor will make it possible to represent strings as char arrays
@@ -36,13 +36,9 @@ class StringToArray(ASTVisitor):
             """
 
             type_node = node.parent.getChild(0)
+            PreConditions.assertInstanceOff(type_node, ASTNodeTypes)
 
-            is_pointer = False
-            for child in reversed(type_node.children):
-                if child.text == "*":
-                    if not child.type.startswith("ARRAY"):
-                        is_pointer = True
-                    break
+            is_pointer = type_node.symbol_type.getPtrAmount() > 0
 
             if not is_pointer:
                 self.__make_init_list(node)

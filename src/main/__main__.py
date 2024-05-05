@@ -33,7 +33,7 @@ from src.parser.DynamicAllocation import DynamicAllocation
 from src.parser.FileIO import FileIO
 from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 from src.parser.TypeCleaner import TypeCleaner
-from src.parser.TypeCleaner2 import TypeCleaner2
+
 
 
 def cleanGreen(input_file, symbol_file):
@@ -83,15 +83,18 @@ def cleanGreen(input_file, symbol_file):
 
     StructCleaner().visit(ast)  # Massage the structs
 
-    TypeCleaner().visit(ast)
+
+
+
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
 
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
+
+    TypeCleaner().visit(ast)
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
 
@@ -104,7 +107,6 @@ def cleanGreen(input_file, symbol_file):
     FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
 
     ArrayCleaner().visit(ast)
-    TypeCleaner2().visit(ast)
 
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
@@ -132,7 +134,7 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold, includeSTDIO):
-
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     """
@@ -141,7 +143,7 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     #DotVisitor("output/debug08888").visit(ast)  # Export AST in Dot
-    DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ASTConversion().visit(ast)
 
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
