@@ -41,9 +41,9 @@ class ASTTableCreator(ASTVisitor):
         while len(stack) > 0:
 
             current_index = len(stack) - 1
-            currentNode = stack[current_index]  # get top of stack without popping it
+            current_node = stack[current_index]  # get top of stack without popping it
 
-            if currentNode not in visited and currentNode.text in ("Function", "Code", "Scope"):
+            if current_node not in visited and current_node.text in ("Function", "Code", "Scope"):
                 """
                 Create a new scope for the children
                 """
@@ -53,17 +53,17 @@ class ASTTableCreator(ASTVisitor):
                 self.table = temp
 
             do_visit = True
-            for child in reversed(currentNode.getChildren()):
+            for child in reversed(current_node.getChildren()):
 
                 if child not in visited and child not in stack:
                     stack.append(child)
                     do_visit = False
 
             if do_visit:
-                currentNode.accept(self)
+                current_node.accept(self)
                 stack.pop(current_index)
 
-            visited.add(currentNode)
+            visited.add(current_node)
 
     @staticmethod
     def __equalParamTypes(param_types_and_ptrs: list, param_types: list):

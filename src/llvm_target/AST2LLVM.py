@@ -48,18 +48,18 @@ class AST2LLVM(ASTVisitor):
         stack = [root]
         visited = set()
         while len(stack) > 0:
-            currentNode = stack[-1]  # get top of stack without popping it
+            current_node = stack[-1]  # get top of stack without popping it
 
-            if currentNode.text == "Function" and currentNode not in visited:
-                visited.add(currentNode)
+            if current_node.text == "Function" and current_node not in visited:
+                visited.add(current_node)
 
-                self.handleFunction(currentNode)
+                self.handleFunction(current_node)
                 self.map_table = MapTable(self.map_table)
-                function = LLVMSingleton.getInstance().getFunction(currentNode.getChild(0).text)
+                function = LLVMSingleton.getInstance().getFunction(current_node.getChild(0).text)
                 LLVMSingleton.getInstance().setLastFunction(function)
 
-            if isinstance(currentNode, ASTNodeBlock) and currentNode.text == "Block" and currentNode not in visited:
-                node = currentNode
+            if isinstance(current_node, ASTNodeBlock) and current_node.text == "Block" and current_node not in visited:
+                node = current_node
 
                 if node.vertex.llvm is None:
                     node.vertex.llvm = LLVMSingleton.getInstance().addBlock()
@@ -67,18 +67,18 @@ class AST2LLVM(ASTVisitor):
                 LLVMSingleton.getInstance().setCurrentBlock(node.vertex.llvm)
                 self.last_vertex = node.vertex
 
-                self.addOriginalCodeAsComment(currentNode)
+                self.addOriginalCodeAsComment(current_node)
 
-            childNotVisited = False
-            for child in reversed(currentNode.getChildren()):
+            child_not_visited = False
+            for child in reversed(current_node.getChildren()):
                 if child not in visited:
                     stack.append(child)
-                    childNotVisited = True
-            if not childNotVisited:
-                currentNode.accept(self)
+                    child_not_visited = True
+            if not child_not_visited:
+                current_node.accept(self)
                 stack.pop()
 
-            visited.add(currentNode)
+            visited.add(current_node)
 
     def visitNode(self, node: ASTNode):
         """
@@ -152,25 +152,8 @@ class AST2LLVM(ASTVisitor):
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
-
-            symbol_entry = None
-            if node.getSiblingNeighbour(1) and node.getSiblingNeighbour(1).text == "()":
-                current_table = node.getSymbolTable()
-                while current_table.prev is not None:
-                    symbol_entry = current_table.getEntry(node.text, node.position.virtual_linenr)
-                    if symbol_entry:
-                        type_object = symbol_entry.getTypeObject()
-                        while isinstance(type_object, SymbolTypePtr):
-                            type_object = type_object.pts_to
-                        if isinstance(type_object, FunctionSymbolType):
-                            break
-                    current_table = current_table.prev
-            else:
-                #symbol_entry = node.getSymbolTable().getEntry(node.text)
-
-                symbol_entry = node.getSymbolTable().getEntry(node.text, node.position.virtual_linenr)
+            symbol_entry = node.getSymbolTable().getEntry(node.text, node.position.virtual_linenr)
             entry = self.map_table.getEntry(symbol_entry)
-            #print(node.text,entry, id(symbol_entry), id(node.symbol_table))
 
             """
             identifiers of declarations and functions are not yet defined

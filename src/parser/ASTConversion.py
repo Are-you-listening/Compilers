@@ -153,7 +153,6 @@ class ASTConversion(ASTVisitor):
                         """
                         when the op is invalid for ptrs
                         """
-
                         ErrorExporter.invalidOperation(node.position, operator, to_type, check_type)
 
                 """
@@ -272,17 +271,18 @@ class ASTConversion(ASTVisitor):
                         """
                         when no operator, it is an assignment
                         """
+
                         ErrorExporter.invalidAssignment(child.position, to_type, type_tup)
                     else:
-
                         ErrorExporter.invalidOperation(child.position, operator, to_type, type_tup)
                     continue
 
                 if operator is not None:
-                    if not self.compatible(type_tup, to_type, operator):
+                    if not self.compatible(type_tup, to_type, operator, node.findChild(child)):
                         """
                         in case we have incompatible type
                         """
+
                         ErrorExporter.invalidOperation(child.position, operator, to_type, type_tup)
                         continue
 
@@ -349,20 +349,8 @@ class ASTConversion(ASTVisitor):
             if the identifier is a function call,
             we make sure that we use the function and not a variable with the same name
             """
-            type_entry = None
-            if node.getSiblingNeighbour(1) and node.getSiblingNeighbour(1).text == "()":
-                current_table = node.getSymbolTable()
-                while current_table.prev is not None:
-                    type_entry = current_table.getEntry(node.text)
-                    if type_entry:
-                        type_object = type_entry.getTypeObject()
-                        while isinstance(type_object, SymbolTypePtr):
-                            type_object = type_object.pts_to
-                        if isinstance(type_object, FunctionSymbolType):
-                            break
-                    current_table = current_table.prev
-            else:
-                type_entry = node.getSymbolTable().getEntry(node.text)
+
+            type_entry = node.getSymbolTable().getEntry(node.text, node.position.virtual_linenr)
 
             type_object = type_entry.getTypeObject()
 
@@ -450,12 +438,11 @@ class ASTConversion(ASTVisitor):
             if operator in incompatible_ops[type_as_str]:
                 ErrorExporter.invalidOperation(node.position, operator, type , None)
 
-
-
     @staticmethod
-    def compatible(type_tup: SymbolType, to_type: SymbolType, operator: str):
+    def compatible(type_tup: SymbolType, to_type: SymbolType, operator: str, parent_index: int):
         """
         Check the blacklist for absolute incompatible operations or types
+        :param parent_index: which index the type_tup is corresponding to the parent
         :param operator:
         :param to_type:
         :param type_tup:
@@ -470,7 +457,22 @@ class ASTConversion(ASTVisitor):
 
         to_type_asStr = ASTConversion.to_string_type(to_type.getPtrTuple())
         type_tup_asStr = ASTConversion.to_string_type(type_tup.getPtrTuple())
-        if to_type_asStr == "PTR" and operator == '-':
+
+        """
+        This if statement takes into account the child position of the type_tup
+        only valid situations:
+        PTR-INT
+        PTR-PTR
+        INT-INT
+        
+        Not INT-PTR
+        """
+
+        if ((to_type_asStr == "PTR" and parent_index == 2) or
+            (type_tup_asStr == "PTR" and parent_index == 0)) and operator == '-':
+            return True
+
+        elif to_type_asStr == "PTR" and operator == '-':
             return False
 
         incompatible = False

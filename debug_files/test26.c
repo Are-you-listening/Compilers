@@ -1,15 +1,24 @@
 #include <stdio.h>
 
-int m(int a){
-    return 5;
-}
+int main(){
+    int a[4] = {1,2,3,4};
+    int* sa = a;
+    int ia = 3;
 
-int main () {
+    int* z;
 
-    int (*v)(float) = &m;
+    ia + ia;
+    ia + sa;
+    sa + ia;
 
-    int b = v(5);
-    printf("%d", b);
+    ia - ia;
+    sa - ia; // Not allowed OK
+
+    ia * ia;
+
+    ia / ia;
+
+    ia % ia;
 
     return 0;
 }
