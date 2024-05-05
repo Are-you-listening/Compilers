@@ -10,7 +10,7 @@ int main(){
         *(char_buff+j) = 'a' + (j % 100);
     }
 
-    FILE* fp = fopen("output/test7.txt", "w");
+    FILE* fp = fopen("files/test7.txt", "w");
 
     fputs(char_buff,fp);
 

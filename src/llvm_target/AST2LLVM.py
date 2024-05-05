@@ -160,6 +160,7 @@ class AST2LLVM(ASTVisitor):
             """
             if entry is None:
                 if node.text in self.special_func_calls and LLVMSingleton.getInstance().getFunction(node.text) is None:
+                    current_function = LLVMSingleton.getInstance().getLastFunction()
                     """
                     To support declaration of special function calls like 'malloc'
                     """
@@ -170,6 +171,8 @@ class AST2LLVM(ASTVisitor):
                     func = Declaration.function(node.text, function_type.return_type, args)
                     entry = MapEntry(node.text, func)
                     self.map_table.addEntry(entry, symbol_entry)
+
+                    LLVMSingleton.getInstance().setLastFunction(current_function)
 
                 else:
                     return
