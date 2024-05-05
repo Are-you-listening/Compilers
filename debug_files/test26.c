@@ -2,7 +2,8 @@
 
 union NotTypeSafe {
 int as_integer;
-char as_str[1];
+char as_str[30][2];
+float as_float2[3][5];
 float as_float;
 };
 
@@ -11,18 +12,16 @@ int main() {
 
     gouda.as_integer = 5;
 
-    int a = 5;
-    int b = 6;
 
-    a = 5;
-    b = 8792432;
+    int q = gouda.as_integer;
 
-    printf("%d", gouda.as_integer);
+    printf("%d", q);
 
-    gouda.as_str[0] = 'a';
+    gouda.as_str[1][1] = 'a';
+    printf("%c", gouda.as_str[1][1]);
 
-
-    printf("%c", gouda.as_str[0]);
+    gouda.as_float2[1][1] = 5.2;
+    printf("%f", gouda.as_float2[1][1]);
 
 
     return 0;

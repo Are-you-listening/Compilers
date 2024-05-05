@@ -43,7 +43,9 @@ class SymbolTypeStruct(SymbolType):
         return 1
 
     def getBytesUsed(self):
-        return sum([f.getBytesUsed() for f in self.pts_to])
+        byte_amount = sum([f.getBytesUsed() for f in self.pts_to])
+
+        return byte_amount
 
     @staticmethod
     def isBase():

@@ -7,6 +7,8 @@ from src.parser.Tables.SymbolTypePtr import SymbolTypePtr
 from src.parser.Tables.SymbolTypeArray import SymbolTypeArray
 from src.parser.Tables.SymbolTypeStruct import SymbolTypeStruct
 from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
+import math
+
 """
 This line is not because our lack of capabilities to avoid recursions, this line exist because LLVMLite itself
 uses recursions 
@@ -69,12 +71,11 @@ class CTypesToLLVM:
     @staticmethod
     def getBytesUse(data_type: SymbolType):
 
-        if isinstance(data_type, SymbolTypePtr):
-            return 8
+        byte_amount = data_type.getBytesUsed()
+        exp = math.ceil(math.log2(byte_amount))
+        byte_amount = 2**exp
 
-        convert_dict = {"INT": 4, "CHAR": 1, "FLOAT": 4, "BOOL": 1}
-
-        return convert_dict.get(data_type.getBaseType(), 8)
+        return byte_amount
 
     @staticmethod
     def getIRType(data_type: SymbolType, function_type=False):

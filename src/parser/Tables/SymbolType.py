@@ -40,7 +40,8 @@ class SymbolType:
         return 0
 
     def getBytesUsed(self):
-        bytes_used = {"INT": 4, "CHAR": 1, "FLOAT": 4}
+        bytes_used = {"INT": 4, "CHAR": 1, "FLOAT": 4, "BOOL": 1}
+
         return bytes_used.get(self.data_type, 0)
 
     @staticmethod
