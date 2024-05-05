@@ -9,9 +9,12 @@ struct v{
 
 int main(){
 
-    struct v a;
+    struct v* c = malloc(sizeof(struct v));
+    c->a = 5;
 
-    union v* c = &a;
+    printf("%d", c->a);
+
+    free(c);
 
 
     return 0;

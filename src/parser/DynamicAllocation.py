@@ -63,4 +63,3 @@ class DynamicAllocation:
         symbol_entry = SymbolEntry(function_type, "realloc", None, root, None)
         symbol_entry.function_is_defined = True
         root.getSymbolTable().add(symbol_entry)
-

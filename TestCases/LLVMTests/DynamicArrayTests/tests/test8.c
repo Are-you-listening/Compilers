@@ -4,14 +4,16 @@
 struct v{
     int a;
     float b;
-    int c;
 };
 
 int main(){
 
-    struct v a;
+    struct v* c = malloc(200);
+    c->a = 5;
 
-    union v* c = &a;
+    printf("%d", c->a);
+
+    free(c);
 
 
     return 0;

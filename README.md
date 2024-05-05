@@ -55,7 +55,8 @@ sudo apt install llvm
 - [X] ControlFlow and visualization
 - [X] Else If Statements
 - [X] Do not generate code for conditions that are always false
-- [x] Dynamic Arrays (stored on heap)
+- [x] Dynamic Arrays (stored on heap) (malloc, free, calloc, realloc)
+- [x] Dynamic Allocation of Structs (store structs on heap) (support by also supporting sizeof function)
 
 - Conversion Warnings?
 

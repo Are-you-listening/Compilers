@@ -1,4 +1,4 @@
-# Generated from /home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
+# Generated from /home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/grammar/grammarC.g4 by ANTLR 4.13.1
 from antlr4 import *
 if "." in __name__:
     from .grammarCParser import grammarCParser
@@ -203,6 +203,15 @@ class grammarCListener(ParseTreeListener):
 
     # Exit a parse tree produced by grammarCParser#enum.
     def exitEnum(self, ctx:grammarCParser.EnumContext):
+        pass
+
+
+    # Enter a parse tree produced by grammarCParser#sizeOf.
+    def enterSizeOf(self, ctx:grammarCParser.SizeOfContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#sizeOf.
+    def exitSizeOf(self, ctx:grammarCParser.SizeOfContext):
         pass
 
 

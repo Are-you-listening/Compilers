@@ -33,6 +33,7 @@ from src.parser.DynamicAllocation import DynamicAllocation
 from src.parser.FileIO import FileIO
 from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 from src.parser.TypeCleaner import TypeCleaner
+from src.parser.SizeOfTranslater import SizeOfTranslater
 
 
 def cleanGreen(input_file, symbol_file):
@@ -95,6 +96,7 @@ def cleanGreen(input_file, symbol_file):
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
     TypeCleaner().visit(ast)
+    SizeOfTranslater().visit(ast)
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
