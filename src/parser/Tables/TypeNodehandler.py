@@ -80,8 +80,6 @@ class TypeNodeHandler:
         """
         PreConditions.assertEqual(node.text, "Type")
 
-        print("t", node.getChild(0).text)
-
         is_const = False
         latest_datatype = None
 
@@ -96,7 +94,6 @@ class TypeNodeHandler:
 
                 is_const = True
             elif child.text == "*":
-                print("hello")
                 is_const = False
 
                 latest_datatype = self.__make_ptr_type(latest_datatype, is_const, child.type)

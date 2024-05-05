@@ -81,7 +81,6 @@ class TypeCleaner(ASTVisitor):
 
         if node.text == "Union":  # For Unions, take the biggest type as type for all data members
             richest = self.getRichestType(pts_to)
-            print("heoo")
             struct_type = SymbolTypeUnion(structName, richest, pts_to)
         else:
             struct_type = SymbolTypeStruct(structName, pts_to)
@@ -120,14 +119,12 @@ class TypeCleaner(ASTVisitor):
         node.parent.replaceChild(node, new_type_node)
 
     def __get_func_ptr_type(self, node: ASTNode):
-        print("rec")
         return_type_child = node.getChild(0)
 
         if return_type_child.text == "FunctionPtr":
 
             return_type = self.__get_func_ptr_type(return_type_child)
         else:
-            print(type(return_type_child))
             if isinstance(return_type_child, ASTNodeTypes):
                 return_type = return_type_child.symbol_type
             else:
@@ -135,10 +132,8 @@ class TypeCleaner(ASTVisitor):
 
 
         function_params = node.getChild(1)
-        print("funcparam", function_params.text)
         param_type_list = []
         for param in function_params.children:
-            print(param.text, "t", type(param))
 
             if isinstance(param, ASTNodeTypes):
                 param_type = param.symbol_type

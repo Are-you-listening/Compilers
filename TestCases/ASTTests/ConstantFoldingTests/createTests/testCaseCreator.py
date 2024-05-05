@@ -19,7 +19,10 @@ from src.parser.ASTIfCleaner import ASTIfCleaner
 from src.parser.ASTLoopCleaner import ASTLoopCleaner
 from src.parser.StructCleaner import StructCleaner
 from src.parser.StructCleanerAfter import StructCleanerAfter
-
+from src.parser.TypeCleaner import TypeCleaner
+from src.parser.PointerReformater import PointerReformater
+from src.parser.EnumConverter import EnumConverter
+from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
 
 input_file = "read_file.c"
 
@@ -43,23 +46,28 @@ below add needed stuff
 virtualline = VirtualLineVisitor()
 virtualline.visit(ast)
 
-black_list_visitor = BlacklistVisitor()
-black_list_visitor.visit(ast)
+BlacklistVisitor().visit(ast)
 
-codegetter = CodeGetter()  # Link each line of code to a line number
-codegetter.visit(ast)
+PointerReformater().visit(ast)
 
-structTable = StructCleaner().visit(ast)  # Massage the structs
+ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
-TypeMerger().visit(ast)  # Reformat enum declarations to our format
+StructCleaner().visit(ast)  # Massage the structs
+
+EnumConverter().visit(ast)  # Convert enum to typedef & const bools
+
+TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
+FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
+
+TypeCleaner().visit(ast)
+
+
 ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
-ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
 ASTCleaner().visit(ast)  # Do a standard cleaning
-
 
 ASTTableCreator().visit(ast)  # Create the symbol table
 

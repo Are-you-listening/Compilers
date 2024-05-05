@@ -29,6 +29,10 @@ from src.parser.StringToArray import StringToArray
 from src.parser.ArrayCleaner import ArrayCleaner
 from src.parser.DynamicAllocation import DynamicAllocation
 from src.parser.Constraints.CheckRvalues import CheckRvalues
+from src.parser.TypeCleaner import TypeCleaner
+from src.parser.PointerReformater import PointerReformater
+from src.parser.EnumConverter import EnumConverter
+from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
 
 input_file = "read_file.c"
 
@@ -69,9 +73,15 @@ ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 StructCleaner().visit(ast)  # Massage the structs
 
 EnumConverter().visit(ast)  # Convert enum to typedef & const bools
+
 TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
+
+FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
+
+TypeCleaner().visit(ast)
+
 
 ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
 
@@ -81,7 +91,7 @@ SwitchConverter().visit(ast)  # convert switch statement to if else
 
 StringToArray().visit(ast)
 
-FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
+
 
 ArrayCleaner().visit(ast)
 

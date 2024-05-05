@@ -22,6 +22,11 @@ from src.parser.VirtualLineNrVisitor import *
 from src.parser.BlacklistVisitor import *
 from src.parser.StructCleaner import StructCleaner
 from src.parser.StructCleanerAfter import StructCleanerAfter
+from src.parser.TypeCleaner import TypeCleaner
+from src.parser.PointerReformater import PointerReformater
+from src.parser.EnumConverter import EnumConverter
+from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
+from src.parser.StringToArray import StringToArray
 
 
 input_file = "read_file.c"

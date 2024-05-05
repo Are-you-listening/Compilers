@@ -21,6 +21,13 @@ from src.parser.StructCleanerAfter import *
 from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
 from TestCases.ABCTests.AstLoader import AstLoader
 from src.parser.Preproccesing.preProcessor import PreProcessor
+from src.parser.TypeCleaner import TypeCleaner
+from src.parser.PointerReformater import PointerReformater
+from src.parser.EnumConverter import EnumConverter
+from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
+
+
+
 input_file = "read_file.c"
 
 input_stream = FileStream(input_file)  # Declare some variables
@@ -47,18 +54,24 @@ virtualLine.visit(ast)
 
 BlacklistVisitor().visit(ast)
 
-codegetter = CodeGetter()  # Link each line of code to a line number
-codegetter.visit(ast)
+PointerReformater().visit(ast)
+
+ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
 StructCleaner().visit(ast)  # Massage the structs
 
 EnumConverter().visit(ast)  # Convert enum to typedef & const bools
+
 TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
+FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
+
+TypeCleaner().visit(ast)
+
+
 ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
-ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
 ASTCleaner().visit(ast)  # Do a standard cleaning
 
@@ -66,10 +79,9 @@ SwitchConverter().visit(ast)  # convert switch statement to if else
 
 StringToArray().visit(ast)
 
-FunctionPtrCleaner().visit(ast) #  cleans the function ptrs
+
 
 ArrayCleaner().visit(ast)
-
 ASTTableCreator().visit(ast)  # Create the symbol table
 
 StructCleanerAfter().visit(ast)
