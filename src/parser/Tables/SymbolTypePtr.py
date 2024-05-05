@@ -41,6 +41,9 @@ class SymbolTypePtr(SymbolType):
     def getPtrAmount(self):
         return self.pts_to.getPtrAmount()+1
 
+    def getBytesUsed(self):
+        return 8
+
     @staticmethod
     def isBase():
         return False

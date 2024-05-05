@@ -137,21 +137,25 @@ class TypeCleaner(ASTVisitor):
             """
             When our richest type is an array, we consider an array of floats/ other arrays the richest type
             When a value is stored to an Union it will be converted to the richest datatype,
-            When an array is present, The array will become the richest type
+            When an array is present, The array will become the richest type, Arrays will be just single character 
+            arrays (following they way Clang does it for situations of multidimensional arrays of multiple types)
+            The size of the array, will have enough bytes to suit the largest array possible
             This keeps the code regular
             """
             if isinstance(union_type,
                           SymbolTypeArray):  # Utils are always the biggest since they contain 1 to multiple pointers
 
-                temp_richest = SymbolTypeArray(union_type.deReference(), False, union_type.size)
+                new_array_size = max(union_type.getBytesUsed(), richest.getBytesUsed())
 
-                more_ptrs = temp_richest.getPtrAmount() > richest.getPtrAmount()
-                richer_type = temp_richest.getPtrAmount() == richest.getPtrAmount() and \
-                              temp_richest.getBaseType() == check.get_richest(richest.getBaseType(),
-                                                                              temp_richest.getBaseType())
+                """
+                Take 4 bytes if array is smaller, so a float can still fit inside the array
+                """
+                new_array_size = max(new_array_size, 4)
 
-                if more_ptrs or richer_type:
-                    richest = temp_richest
+                temp_richest = SymbolTypeArray(SymbolType("CHAR", False), False,
+                                               new_array_size)
+
+                richest = temp_richest
 
             if isinstance(richest, SymbolTypeArray):
                 continue

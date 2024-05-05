@@ -24,3 +24,6 @@ class SymbolTypeArray(SymbolTypePtr):
             return super().__eq__(other)
 
         return super().__eq__(other) and self.size == other.size and self.pts_to.isConst() == other.pts_to.isConst()
+
+    def getBytesUsed(self):
+        return self.size * self.pts_to.getBytesUsed()

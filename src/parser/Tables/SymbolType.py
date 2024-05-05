@@ -39,6 +39,10 @@ class SymbolType:
     def getPtrAmount(self):
         return 0
 
+    def getBytesUsed(self):
+        bytes_used = {"INT": 4, "CHAR": 1, "FLOAT": 4}
+        return bytes_used.get(self.data_type, 0)
+
     @staticmethod
     def isBase():
         return True
