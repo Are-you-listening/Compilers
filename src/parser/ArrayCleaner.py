@@ -6,6 +6,7 @@ from src.parser.AST import ASTNodeTypes
 from src.parser.Tables.SymbolTypePtr import SymbolTypePtr
 from src.parser.Tables.SymbolTypeArray import SymbolTypeArray
 import copy
+from src.parser.Utils.ArraySizeReader import ArraySizeReader
 
 
 class ArrayCleaner(ASTVisitor):
@@ -71,7 +72,7 @@ class ArrayCleaner(ASTVisitor):
         PreConditions.assertEqual(type_node.text, "Type")
         PreConditions.assertInstanceOff(type_node, ASTNodeTypes)
 
-        array_sizes = self.array_size(node.getChild(2), True)
+        array_sizes = ArraySizeReader.readSize(node.getChild(2))
 
         self.array_map[node] = array_sizes
 
@@ -144,23 +145,6 @@ class ArrayCleaner(ASTVisitor):
             remove the literal node by replacing the literal node in the parent with the first literal child
             """
             node.parent.replaceChild(node, node.getChild(0))
-
-    @staticmethod
-    def array_size(array_node: ASTNode, check_int: bool = False):
-        array_sizes = []
-        for child in array_node.children:
-
-            if check_int:
-                if not isinstance(child, ASTNodeTerminal):
-                    ErrorExporter.invalidArraySize(array_node.position, array_node.parent.getChild(1).text,
-                                                   (("Expression", False), []))
-                if child.type != "INT":
-                    ErrorExporter.invalidArraySize(array_node.position, array_node.parent.getChild(1).text,
-                                                   ((child.type, False), []))
-
-            array_sizes.append(child.text)
-
-        return array_sizes
 
     def __check_init_list(self, node: ASTNode):
         if node.text != "InitList":

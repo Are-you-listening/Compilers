@@ -35,7 +35,6 @@ from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 from src.parser.TypeCleaner import TypeCleaner
 
 
-
 def cleanGreen(input_file, symbol_file):
     """
     Standard function to generate parseTree & Export it to Dot
@@ -91,18 +90,15 @@ def cleanGreen(input_file, symbol_file):
 
     FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
 
-    TypeCleaner().visit(ast)
-
-
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+    TypeCleaner().visit(ast)
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
     StringToArray().visit(ast)
-
-
 
     ArrayCleaner().visit(ast)
 

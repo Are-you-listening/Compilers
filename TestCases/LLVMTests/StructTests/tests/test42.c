@@ -19,10 +19,5 @@ int main() {
     gouda.as_str[1][1] = 'a';
     printf("%c", gouda.as_str[1][1]);
 
-    gouda.as_float = 5.2;
-    float qr = gouda.as_float;
-
-    printf("%f", qr);
-
     return 0;
 }
