@@ -4,11 +4,13 @@ int main(){
 
     char buffer[50];
 
-    FILE* fp = fopen("files/test2.txt", "w");
+    FILE* fp = fopen("files/test1.txt", "r");
 
-    fputs("file content",fp);
+    fgets(buffer, 50, fp);
 
     printf("%s", buffer);
+
+    fclose(fp);
 
     return 0;
 
