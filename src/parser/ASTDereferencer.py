@@ -106,6 +106,17 @@ class ASTDereferencer(ASTVisitor):
 
         sibling_before = node.getSiblingNeighbour(-1)
 
+        """
+        When we have a function, we can assign a func ptr = func call, without a reference sign,
+        In that case we need to avoid adding a dereference
+        """
+        symbol_entry = node.getSymbolTable().getEntry(node.text)
+
+        if symbol_entry is not None and isinstance(symbol_entry.getTypeObject(), FunctionSymbolType):
+            sibling_after = node.getSiblingNeighbour(1)
+            if (sibling_after is None or sibling_after.text != "()") and node.parent.text not in ("Function", "Expr"):
+                return
+
         if sibling_before is None:
             self.addDereference(node)
             return

@@ -1,22 +1,31 @@
-
 #include <stdio.h>
 
+int a(int u) {
+    return u + 1;
+}
 
-union v{
-    int a;
-    float b;
-    int c;
-};
 
-int main(){
 
-    union v* c = malloc(sizeof(union v));
-    c->a = 5;
 
-    printf("%d", c->a);
+int (*b())(int) {
+    int (*c)(int) = &a;
+    return c;
+}
 
-    free(c);
+int (*(*c(int (*(*w)())(int)))())(int){
+    int (*(*q)())(int) = w;
+    return q;
+}
 
+int main() {
+
+    int (*(*u)())(int) = &b;
+
+    printf("%d", u()(4));
+
+    u = c(u);
+
+    printf("%d", u()(4));
 
     return 0;
 }

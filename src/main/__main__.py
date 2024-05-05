@@ -87,8 +87,6 @@ def cleanGreen(input_file, symbol_file):
 
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
@@ -121,6 +119,8 @@ def cleanGreen(input_file, symbol_file):
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     if symbol_file is not None:
@@ -150,7 +150,7 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ConstantFoldingVisitor().visit(ast)
 
-    if fold:
+    if fold and False:
         ValueAdderVisitor().visit(ast)
 
     ConstantStatementFolding().visit(ast)
