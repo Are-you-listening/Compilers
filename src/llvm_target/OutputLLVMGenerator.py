@@ -385,7 +385,10 @@ class Calculation:
         if pointer is not None or non_pointer is not None and operator in ["+", "-", "[]"]:
             if not isinstance(non_pointer,
                               ir.Constant):  # If it is not a constant, LLVM requires a sign extend to match the size
-                non_pointer = block.sext(non_pointer, ir.IntType(64))
+                if isinstance(non_pointer.type, ir.PointerType):
+                    non_pointer = block.ptrtoint(non_pointer, ir.IntType(64))
+                else:
+                    non_pointer = block.sext(non_pointer, ir.IntType(64))
 
             if operator == "-":  # Add subtract
                 non_pointer = Calculation.unary(non_pointer, "-")

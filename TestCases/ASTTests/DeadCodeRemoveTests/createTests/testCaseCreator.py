@@ -27,7 +27,12 @@ from src.parser.PointerReformater import PointerReformater
 from src.parser.EnumConverter import EnumConverter
 from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
 from src.parser.StringToArray import StringToArray
-
+from src.parser.TypeMerger import TypeMerger
+from src.parser.SwitchConverter import SwitchConverter
+from src.parser.ArrayCleaner import ArrayCleaner
+from src.parser.DynamicAllocation import DynamicAllocation
+from src.parser.FileIO import FileIO
+from src.parser.Constraints.CheckRvalues import CheckRvalues
 
 input_file = "read_file.c"
 
@@ -47,30 +52,61 @@ toAST = ASTCreator(lexer)  # Create Actual AST
 toAST.visit(tree)
 ast = toAST.getAST()
 
-virtualline = VirtualLineVisitor()
-virtualline.visit(ast)
+parser.reset()
+lexer.reset()
+stream.reset()
+input_stream.reset()
 
-black_list_visitor = BlacklistVisitor()
-black_list_visitor.visit(ast)
+#DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
+virtualLine = VirtualLineVisitor()
+virtualLine.visit(ast)
 
 codegetter = CodeGetter()  # Link each line of code to a line number
 codegetter.visit(ast)
 
+BlacklistVisitor().visit(ast)
+
+PointerReformater().visit(ast)
+
+ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
+
 StructCleaner().visit(ast)  # Massage the structs
+
+EnumConverter().visit(ast)  # Convert enum to typedef & const bools
+
+TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
 ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
+FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
+
 ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
-ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
 ASTCleaner().visit(ast)  # Do a standard cleaning
 
+TypeCleaner().visit(ast)
+
+SwitchConverter().visit(ast)  # convert switch statement to if else
+
+StringToArray().visit(ast)
+
+ArrayCleaner().visit(ast)
+
+#DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
 ASTTableCreator().visit(ast)  # Create the symbol table
+
+DynamicAllocation.add_allocation(ast)
+FileIO.add_io(ast)
 
 StructCleanerAfter().visit(ast)
 
 ASTCleanerAfter().visit(ast)  # Clean even more :)
 
+CheckRvalues().visit(ast)
+
+#DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
 ConstraintChecker(True).visit(ast)  # Checkup Semantic & Syntax Errors

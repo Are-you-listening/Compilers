@@ -149,7 +149,7 @@ class ASTConversion(ASTVisitor):
                     pointers cannot do operation together unless condition operations
                     """
 
-                    if operator not in ("==", "<=", ">=", "<", ">", "!=", "||", "&&", "!"):
+                    if operator not in ("==", "<=", ">=", "<", ">", "!=", "||", "&&", "!", "-"):
                         """
                         when the op is invalid for ptrs
                         """
@@ -282,7 +282,7 @@ class ASTConversion(ASTVisitor):
                         """
                         in case we have incompatible type
                         """
-
+                        print("a")
                         ErrorExporter.invalidOperation(child.position, operator, to_type, type_tup)
                         continue
 
@@ -468,11 +468,16 @@ class ASTConversion(ASTVisitor):
         Not INT-PTR
         """
 
-        if ((to_type_asStr == "PTR" and parent_index == 2) or
-            (type_tup_asStr == "PTR" and parent_index == 0)) and operator == '-':
+        to_ptr = to_type_asStr == "PTR"
+        type_ptr = type_tup_asStr == "PTR"
+
+        same_type = to_type == type_tup
+
+        if ((to_ptr and parent_index == 2) or
+            (type_ptr and parent_index == 0) or same_type) and operator == '-':
             return True
 
-        elif to_type_asStr == "PTR" and operator == '-':
+        elif to_ptr and operator == '-':
             return False
 
         incompatible = False
