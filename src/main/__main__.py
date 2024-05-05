@@ -87,6 +87,8 @@ def cleanGreen(input_file, symbol_file):
 
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
+    FileIO.add_file_type()
+
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
     FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
@@ -103,7 +105,6 @@ def cleanGreen(input_file, symbol_file):
     StringToArray().visit(ast)
 
     ArrayCleaner().visit(ast)
-
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 
