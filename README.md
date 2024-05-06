@@ -66,28 +66,28 @@ sudo apt install llvm
 - [X] [printf and scanf](./example_source_files/51_printf_and_scanf.c)
 - [X] [user Defined Structs](./example_source_files/52_user_defined_structs.c)
 
-- [X] Include Guards (mandatory because group of 4)
-- [X] Unions (mandatory because group of 4)
-- [X] Function Pointers (mandatory because group of 4)
+- [X] [Include Guards (mandatory because group of 4)](./example_source_files/a_include_guards.c)
+- [X] [Unions (mandatory because group of 4)](./example_source_files/b_unions.c)
+- [X] [Function Pointers (mandatory because group of 4)](./example_source_files/c_function_pointer.c)
 - [X] Code Generation: LLVM IR
 
 
 ### Optional Functionality: 
-- [X] [Include Guards (mandatory because group of 4)](./example_source_files/x_include_guards.c)
-- [X] [Unions (mandatory because group of 4)](./example_source_files/y_unions.c)
-- [X] Function Pointers (mandatory because group of 4)
+- [X] [Include Guards (mandatory because group of 4)](./example_source_files/a_include_guards.c)
+- [X] [Unions (mandatory because group of 4)](./example_source_files/b_unions.c)
+- [X] [Function Pointers (mandatory because group of 4)](./example_source_files/c_function_pointer.c)
 
-- [X] Const Casting
-- [X] ControlFlow and visualization (Extra optional)
-- [X] Else If Statements
-- [X] Optimisation: Do not generate code for conditions that are always false
-- [X] Semantic Error: Check for all paths in a function body whether a return statement is present
-- [X] Dynamic Arrays (stored on heap) (malloc, free, calloc, realloc)
-- [X] Structs that contain other structs as a value
-- [X] Dynamic Allocation of Structs (store structs on heap) (support by also supporting sizeof function)
-- [X] File reading using fgets (uses FILE* with fopen and fclose)
-- [X] File writing using fputs (uses FILE* with fopen and fclose)
-- [X] Dynamically allocated strings and character buffers (can be used for printf, fgets, fputs, ...)
+- [X] [Const Casting](./example_source_files/d_const_casting.c)
+- [X] [ControlFlow and visualization (Extra optional)](./example_source_files/e_cfg.c)
+- [X] [Else If Statements](./example_source_files/e_cfg.c)
+- [X] [Optimisation: Do not generate code for conditions that are always false](./example_source_files/f_remove_dead_conditions.c)
+- [X] [Semantic Error: Check for all paths in a function body whether a return statement is present](./example_source_files/g_valid_conditional_return.c)
+- [X] [Dynamic Arrays (stored on heap) (malloc, free, calloc, realloc)](./example_source_files/j_dynamic_allocation.c)
+- [X] [Structs that contain other structs as a value](./example_source_files/i_struct_in_struct.c)
+- [X] [Dynamic Allocation of Structs (store structs on heap) (support by also supporting sizeof function)](./example_source_files/j_dynamic_allocation.c)
+- [X] [File reading using fgets (uses FILE* with fopen and fclose)](./example_source_files/k_file_io.c)
+- [X] [File writing using fputs (uses FILE* with fopen and fclose)](./example_source_files/k_file_io.c)
+- [X] [Dynamically allocated strings and character buffers (can be used for printf, fgets, fputs, ...)](./example_source_files/k_file_io.c)
 
 ### Technical Functionality: 
 - [X] README

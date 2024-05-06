@@ -114,7 +114,11 @@ def cleanGreen(input_file, symbol_file):
 
     CheckRvalues().visit(ast)
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
+
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)

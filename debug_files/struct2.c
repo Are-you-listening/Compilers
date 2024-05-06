@@ -1,23 +1,17 @@
 #include <stdio.h>
 
-union NotTypeSafe {
-int as_integer;
-float as_float;
-char as_str[50][50];
-};
+int main(){    
+    char* buf = calloc(50, sizeof(char));
 
-int main() {
-    int k;
-    float s;
-    union NotTypeSafe safety;
-    union NotTypeSafe safety_ptr = &safety;
+    FILE* fp = fopen("includes/io.txt", "r");
 
-    safety.as_integer = 5;
-    k = safety.as_integer;
+    fgets(buf, 50, fp);
 
-    safety.as_float = 3.14;
+    fp = fopen("includes/io2.txt", "w");
 
-    printf("%f", (*safety_ptr).as_float);
+    fputs(buf,fp);
+
+    fclose(fp);
 
     return 0;
 }
