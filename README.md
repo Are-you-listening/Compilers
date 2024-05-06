@@ -12,19 +12,19 @@ sudo apt install llvm
 ```
 
 ### Mandatory Functionality:
-(In short we made all the mandatory features)
+(In short we made all the mandatory features) (Links are provided to an example file showing this feature)
 
 - [X] [Binary operations +, -,* and /](./example_source_files/1_binary_operations.c) 
-- [X] Binary operations >, <, and ==
-- [X] Unary operators + and -
-- [X] Parenthesis to overwrite the order of operations
-- [X] Logical operators &&, ||, and !
-- [X] Comparison operators >=, <=, and !=
-- [X] Binary operator %
-- [X] Shift operators <<, >>
-- [X] Bitwise operators &, |,~ and ^
-- [X] Use of Abstract Syntax Tree
-- [X] Constant Folding
+- [X] [Binary operations >, <, and ==](./example_source_files/1_binary_operations.c) 
+- [X] [Unary operators + and -](./example_source_files/2_unary_operators.c) 
+- [X] [Parenthesis to overwrite the order of operations](./example_source_files/3_parenthesis.c) 
+- [X] [Logical operators &&, ||, and !](./example_source_files/4_logical_operators.c) 
+- [X] [Comparison operators >=, <=, and !=](./example_source_files/1_binary_operations.c) 
+- [X] [Binary operator %](./example_source_files/1_binary_operations.c) 
+- [X] [Shift operators <<, >>](./example_source_files/1_binary_operations.c) 
+- [X] [Bitwise operators &, |,~ and ^](./example_source_files/4_logical_operators.c) 
+- [X] [Use of Abstract Syntax Tree](./example_source_files/1_binary_operations.c) 
+- [X] [Constant Folding](./example_source_files/5_constant_folding.c) 
 - [X] Visualisation of Abstract Syntax Tree (using dot)
 - [X] Mandatory main() Function 
 - [X] Keywords: 'const', 'char', 'int' and 'float'
