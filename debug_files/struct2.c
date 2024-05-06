@@ -1,22 +1,11 @@
-struct cheese{
-    int milk;
-};
+#include <stdio.h>
 
 int main(){
-    struct cheese gouda;
-    gouda.milk = 3;
+    int result[20] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+    int* passed = result;
+    passed++;
 
-    struct cheese* gouda_ptr = (struct cheese*) malloc(sizeof(struct cheese));
-
-    gouda_ptr = realloc(gouda_ptr, sizeof(struct cheese)*2);
-
-    free(gouda_ptr);
-
-    char* z = calloc(2, sizeof(char));
-    z[0] = 'O';
-    z[1] = 'Y';
-
-    free(z);
+    printf("%d", *passed);
 
     return 0;
 }
