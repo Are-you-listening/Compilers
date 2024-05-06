@@ -8,17 +8,23 @@ def script():
     os.chdir(directory)  # Change the dir to only focus on this test
     directory += "/example_source_files"  # Walk through the testfiles
 
-    print(directory)
-
     for file in os.listdir(directory):  # Loop through all files
-        if os.path.splitext(file)[-1] != '.c':  # We only run c files
-            continue
+        directory = directory+"/"+file+"/"
+        file_name = directory+file
 
-        print(file)
+        c = file_name+".c"
+        llvm = file_name+"_.ll"
+        cfg = file_name+"_cfg.dot"
+        ast = file_name+"_ast.dot"
+        table = file_name+"_table.dot"
 
-            #LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
+        print(c, llvm)
+        # Clean singleton
+        LLVMSingleton.getInstance().clear()
 
-            # Run our llvm
-            #main([0, "--input", file_name, "--target_llvm", f"{file_name[:-2]}.ll", "--fold", "True"])  # Run our compiler with folding
+        # Run our llvm
+        main([0, "--input", c, "--target_llvm", llvm, "--fold", "True", "--render_ast", ast, "--render_symb", table, "--target_control_flow", cfg])  # Run our compiler with folding
+        break
+
 
 script()

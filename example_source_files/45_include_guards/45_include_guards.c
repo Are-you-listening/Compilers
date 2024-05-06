@@ -5,17 +5,17 @@
 
 #ifndef appel
 #define appel
-#include "includes/apple1.c"
+#include "../includes/apple1.c"
 #endif
 
 #ifndef appel
 #define appel
-#include "includes/apple2.c"
+#include "../includes/apple2.c"
 #endif
 
 #ifndef appel
 #define appel
-#include "includes/apple3.c"
+#include "../includes/apple3.c"
 #endif
 
 int main(){
