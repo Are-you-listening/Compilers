@@ -36,5 +36,5 @@ define i32 @"main"()
   %".31" = load i32, i32* %".6", align 4
   %".32" = icmp slt i32 %".29", %".31"
   ret i32 0
-  ;  return 0 ;
+  ; a && b ; a || b ;  return 0 ;
 }

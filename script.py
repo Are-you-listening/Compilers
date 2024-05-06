@@ -17,12 +17,16 @@ def script():
         ast = file_name+"_ast.dot"
         table = file_name+"_table.dot"
 
-        print(c)
-        # Clean singleton
+        # Clear singleton
         LLVMSingleton.getInstance().clear()
 
         # Run our llvm
         try:
+            outfile = open(file_name+".sh", "w")  # Create a .sh file to execute files in the subdirectory
+            outfile.write("cd ../../\n")
+            outfile.write(f"python3 -m src.main --input {c} --target_llvm {llvm} --fold True --render_ast {ast} --render_symb {table} --target_control_flow {cfg}")
+            outfile.close()
+
             main([0, "--input", c, "--target_llvm", llvm, "--fold", "True", "--render_ast", ast, "--render_symb", table, "--target_control_flow", cfg])  # Run our compiler with folding
         except:
             continue

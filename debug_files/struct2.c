@@ -1,11 +1,15 @@
-#include <stdio.h>
-
-int main(){
-    int result[20] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-    int* passed = result;
-    passed++;
-
-    printf("%d", *passed);
+int main()
+{
+    int a = 5;
+    int b = 4;
+    a + b;
+    a - b;
+    a / b;
+    a * b;
+    a > b;
+    a < b;
+    a && b;
+    a || b;
 
     return 0;
 }
