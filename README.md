@@ -104,6 +104,7 @@ Find our demonstration [here](https://www.youtube.com)
 ```
 Compilers
 ├── administration - A list of the assigments
+├── debug_files - Files used for debugging
 ├── example_source_files - Files used in our demo
 ├── grammar - Directory containing grammar specifications
 │   └── grammarC.g4 - ANTLR file containing our grammar specification
