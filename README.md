@@ -99,49 +99,121 @@ sudo apt install llvm
 ### ProjectStructure:
 
 ```
-.
-└── src/
-    ├── antlr_files/
-    │   └── Grammar files created by ANTLR
-    ├── llvm_target/
-    │   ├── ControlFlow/
-    │   │   └── Code related to creating the Control Flow Graph
-    │   ├── MapTable/
-    │   │   └── Code to map a variable to the LLVM register that stores its allocation
-    │   ├── AST2LLVM.py - Convert our AST to LLVM output
-    │   ├── LLVMSingleton.py - Manages the LLVMLite Library to ease the work of our visitor
-    │   └── OutputLLVMGenerator.py - Contains methods to convert operations,assignments, ... to equivalent LLVM code
-    ├── mips_target/
-    │   └── Not yet needed for project 1-3
-    ├── main/
-    │   └── __main__ - Function to start execution of the program
-    └── parser/
-        ├── Constraints/
-        │   ├── ConstraintChecker.py - Applies the constrains
-        │   └── Constraints we want to check
-        ├── CTypes/
-        │   ├── COperationHandler.py - Simulates operations like it would behave in C
-        │   └── CFunctionExecuter - Makes sure that each C type has the right operation behaviour
-        ├── Tables/
-        │   ├── AbstractTable.py - Abstract Base Class
-        │   ├── SymbolTable.py 
-        │   ├── SymbolType.py - Object representing type of an SymbolTableEntry
-        │   ├── SymbolTypePtr.py - Specialisation of SymbolType
-        │   ├── TableDotVisitor.py - Visualizes the SymbolTable
-        │   └── TypeDefTable.py - Table to handle typedef translations
-        ├── AST.py - Datastructure for our Abstract Syntax Tree
-        ├── ASTVisitor.py - Abstract Base Class
-        ├── ASTCreator.py - Creates our datastructure from the ANTLR CST
-        ├── CodeGetter.py - Links each line of code to a line number
-        ├── ASTTypedefReplacer.py - Resolves typedefs to their actual type
-        ├── ASTCleaner.py - Massages our AST to a desired format
-        ├── ASTTableCreator.py - Creates the SymbolTables
-        ├── ASTCleanerAfter.py - Massages our AST to a desired format, after table creation
-        ├── ASTDereferencer.py - Alters the AST to ease the use of adressess
-        ├── ConstantFoldingVisitor.py - Applies Constant Folding
-        ├── ASTConversion.py - Reforms implicit conversions to explicits, also verifies semantics
-        ├── ValueAdderVisitor.py - Applies Constant Propagation; uses Constant Folding
-        └── DotVisitor.py - Create an dot image of our AST
+src
+├── antlr_files
+│   ├── grammarC.interp
+│   ├── grammarCLexer.interp
+│   ├── grammarCLexer.py
+│   ├── grammarCLexer.tokens
+│   ├── grammarCListener.py
+│   ├── grammarCParser.py
+│   ├── grammarC.tokens
+│   ├── grammarCVisitor.py
+│   ├── __init__.py
+├── __init__.py
+├── internal_tools
+│   ├── __init__.py
+│   ├── IntegrityChecks.py
+├── llvm_target
+│   ├── AST2LLVM.py
+│   ├── ControlFlow
+│   │   ├── ControlFlowDotVisitor.py
+│   │   ├── ControlFlowGraph.py
+│   │   ├── __init__.py
+│   ├── ControlFlowCreator.py
+│   ├── __init__.py
+│   ├── LLVMSingleton.py
+│   ├── MapTable
+│   │   ├── __init__.py
+│   │   ├── MapTable.py
+│   ├── OutputLLVMGenerator.py
+│   └── VoidReturnAdder.py
+├── main
+│   ├── __init__.py
+│   ├── __main__.py
+├── parser
+│   ├── ArrayCleaner.py
+│   ├── ASTCleanerAfter.py
+│   ├── ASTCleaner.py
+│   ├── ASTConversion.py
+│   ├── ASTCreator.py
+│   ├── ASTDereferencer.py
+│   ├── ASTIfCleaner.py
+│   ├── ASTLoopCleaner.py
+│   ├── AST.py
+│   ├── ASTTableCreator.py
+│   ├── ASTTypedefReplacer.py
+│   ├── ASTVisitor.py
+│   ├── BlacklistVisitor.py
+│   ├── CodeGetter.py
+│   ├── ConstantFoldingVisitor.py
+│   ├── ConstantStatementFolding.py
+│   ├── Constraints
+│   │   ├── AmpersandConstraint.py
+│   │   ├── CheckRvalues.py
+│   │   ├── CheckUnaryOps.py
+│   │   ├── CleanGlobalScopeConstraint.py
+│   │   ├── ConstraintChecker.py
+│   │   ├── Constraint.py
+│   │   ├── FunctionReturnConstraint.py
+│   │   ├── GlobalsConstrained.py
+│   │   ├── __init__.py
+│   │   ├── IOConstraint.py
+│   │   ├── MainFoundConstraint.py
+│   │   ├── RedefinitionConstrained.py
+│   │   ├── UndeclaredConstrained.py
+│   │   ├── UndefinedReferenceConstraint.py
+│   │   └── VoidReturnConstraint.py
+│   ├── CTypes
+│   │   ├── CFunctionExecuterChar.py
+│   │   ├── CFunctionExecuterFloat.py
+│   │   ├── CFunctionExecuterInt.py
+│   │   ├── CFunctionExecuterPtr.py
+│   │   ├── CFunctionExecuter.py
+│   │   ├── COperationHandler.py
+│   │   ├── __init__.py
+│   │   ├── InvalidOperatorFloatError.py
+│   │   ├── InvalidOperatorPtrError.py
+│   ├── DeadCodeRemover.py
+│   ├── DotVisitor.py
+│   ├── DynamicAllocation.py
+│   ├── EnumConverter.py
+│   ├── ErrorExporter.py
+│   ├── FileIO.py
+│   ├── FunctionPtrCleaner.py
+│   ├── IdentifierReplacerVisitor.py
+│   ├── __init__.py
+│   ├── PointerReformater.py
+│   ├── Preproccesing
+│   │   ├── __init__.py
+│   │   ├── preProcessor.py
+│   ├── SizeOfTranslater.py
+│   ├── StringToArray.py
+│   ├── StructCleanerAfter.py
+│   ├── StructCleaner.py
+│   ├── SwitchConverter.py
+│   ├── Tables
+│   │   ├── AbstractTable.py
+│   │   ├── FunctionSymbolType.py
+│   │   ├── __init__.py
+│   │   ├── StructTable.py
+│   │   ├── SymbolTable.py
+│   │   ├── SymbolTypeArray.py
+│   │   ├── SymbolTypePtr.py
+│   │   ├── SymbolType.py
+│   │   ├── SymbolTypeStruct.py
+│   │   ├── SymbolTypeUnion.py
+│   │   ├── TableDotVisitor.py
+│   │   ├── TypedefTable.py
+│   │   └── TypeNodehandler.py
+│   ├── TypeCleaner.py
+│   ├── TypeMerger.py
+│   ├── UnarySaVisitor.py
+│   ├── Utils
+│   │   ├── ArraySizeReader.py
+│   │   ├── __init__.py
+│   ├── ValueAdderVisitor.py
+│   └── VirtualLineNrVisitor.py
 ```
 
 ### Tests
