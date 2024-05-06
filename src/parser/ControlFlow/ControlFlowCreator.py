@@ -74,6 +74,15 @@ class ControlFlowCreator(ASTVisitor):
 
             if currentNode.text == "Expr" and currentNode.getChildAmount() == 3 and currentNode.getChild(1).text in (
                     "&&", "||"):
+
+                """
+                Operations of a && b, ... that are not used, will not be generated
+                """
+                if currentNode.parent.text in ("Code", "Scope"):
+                    currentNode.parent.removeChild(currentNode)
+                    stack.pop(current_index)
+                    continue
+
                 if self.eval_scope_node is None:
                     self.eval_scope_node = currentNode
 
@@ -366,6 +375,7 @@ class ControlFlowCreator(ASTVisitor):
         Search for most recent parent Code/Block
         """
         target_node = node
+
         while target_node.parent.text not in ("Code", "Block"):
             target_node = target_node.parent
 

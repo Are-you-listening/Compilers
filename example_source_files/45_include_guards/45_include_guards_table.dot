@@ -1,0 +1,70 @@
+digraph AST {
+  "128505524028704" [label="printAppel: type: VOID False  False  
+                   name: printAppel
+                   const: False
+                   value: None
+                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x74e0061c9360>
+                   first used: None)
+main: type: INT False  False  
+                   name: main
+                   const: False
+                   value: None
+                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x74e0060b0bb0>
+                   first used: None)
+malloc: type: PTR False CHAR False  False  
+                   name: malloc
+                   const: False
+                   value: None
+                   first declared: <src.parser.AST.ASTNode object at 0x74e0061f7f40>
+                   first used: None)
+calloc: type: PTR False CHAR False  False  
+                   name: calloc
+                   const: False
+                   value: None
+                   first declared: <src.parser.AST.ASTNode object at 0x74e0061f7f40>
+                   first used: None)
+free: type: VOID False  False  
+                   name: free
+                   const: False
+                   value: None
+                   first declared: <src.parser.AST.ASTNode object at 0x74e0061f7f40>
+                   first used: None)
+realloc: type: PTR False CHAR False  False  
+                   name: realloc
+                   const: False
+                   value: None
+                   first declared: <src.parser.AST.ASTNode object at 0x74e0061f7f40>
+                   first used: None)
+fopen: type: PTR False _IO_FILE False  False  
+                   name: fopen
+                   const: False
+                   value: None
+                   first declared: <src.parser.AST.ASTNode object at 0x74e0061f7f40>
+                   first used: None)
+fgets: type: PTR False CHAR False  False  
+                   name: fgets
+                   const: False
+                   value: None
+                   first declared: <src.parser.AST.ASTNode object at 0x74e0061f7f40>
+                   first used: None)
+fputs: type: CHAR False  False  
+                   name: fputs
+                   const: False
+                   value: None
+                   first declared: <src.parser.AST.ASTNode object at 0x74e0061f7f40>
+                   first used: None)
+fclose: type: VOID False  False  
+                   name: fclose
+                   const: False
+                   value: None
+                   first declared: <src.parser.AST.ASTNode object at 0x74e0061f7f40>
+                   first used: None)"];
+  "128505524028704" -> "128505524031872";
+  "128505524028704" -> "128505522885712";
+  "128505524031872" [label=""];
+  "128505524031872" -> "128505524034656";
+  "128505524034656" [label=""];
+  "128505522885712" [label=""];
+  "128505522885712" -> "128505522892768";
+  "128505522892768" [label=""];
+}

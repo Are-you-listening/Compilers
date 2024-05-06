@@ -17,10 +17,12 @@ class SizeOfTranslater(ASTVisitor):
         PreConditions.assertEqual(node.getChildAmount(), 2)
 
         richt_child = node.getChild(1)
-        PreConditions.assertInstanceOff(richt_child, ASTNodeTypes)
 
-        richt_type = typing.cast(ASTNodeTypes, richt_child)
-        symbol_type = richt_type.symbol_type
+        if isinstance(richt_child, ASTNodeTypes):
+            richt_type = typing.cast(ASTNodeTypes, richt_child)
+            symbol_type = richt_type.symbol_type
+        else:
+            symbol_type = richt_child.getSymbolTable().getEntry(richt_child.text).getTypeObject()
 
         byte_amount = symbol_type.getBytesUsed()
 

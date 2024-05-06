@@ -174,6 +174,11 @@ class AST2LLVM(ASTVisitor):
                     LLVMSingleton.getInstance().setLastFunction(current_function)
 
                 else:
+                    if node.parent.text != "Declaration":
+                        block = LLVMSingleton.getInstance().getCurrentBlock()
+                        d = block.alloca(CTypesToLLVM.getIRType(symbol_entry.getTypeObject()))
+                        self.llvm_map[node] = d
+
                     return
 
             self.llvm_map[node] = entry.llvm

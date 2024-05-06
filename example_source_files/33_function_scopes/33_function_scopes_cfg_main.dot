@@ -1,0 +1,7 @@
+digraph AST {
+  "128505521136848" [label="%\\\".2\\\" = .2:
+  %\\\".3\\\" = alloca i32, align 4
+  ; }   INT main ( ) { INT x ;
+  ret i32 0
+  ; return 0 ;"];
+}

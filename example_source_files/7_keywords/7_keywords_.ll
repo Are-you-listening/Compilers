@@ -1,0 +1,28 @@
+; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/example_source_files/7_keywords/7_keywords.c"
+target triple = "x86_64-pc-linux-gnu"
+target datalayout = ""
+
+define i32 @"main"()
+{
+.2:
+  %".3" = alloca float, align 4
+  store float 0x4014000000000000, float* %".3", align 4
+  ;  INT main ( ) { FLOAT a = 5.0 ;
+  %".6" = alloca i32, align 4
+  store i32 5, i32* %".6", align 4
+  ; INT b = 5 ;
+  %".9" = alloca i8, align 1
+  store i8 101, i8* %".9", align 1
+  ; CHAR c = 'e' ;
+  %".12" = alloca float, align 4
+  store float 0x4024051ec0000000, float* %".12", align 4
+  ; const FLOAT d = 10.01 ;
+  %".15" = alloca i32, align 4
+  store i32 2, i32* %".15", align 4
+  ; const INT e = 2 ;
+  %".18" = alloca i8, align 1
+  store i8 98, i8* %".18", align 1
+  ; const CHAR f = 'b' ;
+  ret i32 0
+  ; return 0 ;
+}

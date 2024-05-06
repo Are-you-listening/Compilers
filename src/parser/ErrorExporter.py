@@ -462,3 +462,11 @@ class ErrorExporter:
             f"[ Error ] {position.file} line {position.linenr}: can't assign '{assign_type}' type to '{assign_to_type}' type",
             file=sys.stderr)
         exit()
+
+    @staticmethod
+    def warningAssignStringToWrongType(position: Position, assign_type: SymbolType):
+
+        to_type = ErrorExporter.__to_output_type(assign_type.getPtrTuple())
+
+        print(
+            f"[ Warning ] {position.file} line {position.linenr}: assignment of STRING to '{to_type}'")
