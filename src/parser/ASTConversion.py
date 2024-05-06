@@ -297,7 +297,6 @@ class ASTConversion(ASTVisitor):
                         """
                         in case we have incompatible type
                         """
-                        print("a")
                         ErrorExporter.invalidOperation(child.position, operator, to_type, type_tup)
                         continue
 
