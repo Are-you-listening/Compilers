@@ -1,5 +1,5 @@
 from src.parser.AST import ASTNode, ASTNodeTypes
-from src.interal_tools import *
+from src.internal_tools import *
 from src.parser.Tables import *
 from src.parser.ErrorExporter import ErrorExporter
 

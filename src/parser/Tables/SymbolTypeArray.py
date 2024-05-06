@@ -1,5 +1,5 @@
 from src.parser.Tables.SymbolTypePtr import SymbolTypePtr, SymbolType
-from src.interal_tools import PreConditions
+from src.internal_tools import PreConditions
 
 
 class SymbolTypeArray(SymbolTypePtr):

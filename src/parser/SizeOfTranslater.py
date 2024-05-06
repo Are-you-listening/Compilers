@@ -1,7 +1,7 @@
 
 from src.parser.ASTVisitor import ASTVisitor
 from src.parser.AST import ASTNode, ASTNodeTerminal, ASTNodeTypes
-from src.interal_tools import *
+from src.internal_tools import *
 import typing
 
 

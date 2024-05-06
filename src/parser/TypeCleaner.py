@@ -8,7 +8,7 @@ from src.parser.CTypes.COperationHandler import RichnessChecker
 from src.parser.Tables.SymbolTypeArray import *
 from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 from src.parser.Utils.ArraySizeReader import ArraySizeReader
-from src.interal_tools import *
+from src.internal_tools import *
 
 types = ["BOOL", "CHAR", "INT", "FLOAT"]
 

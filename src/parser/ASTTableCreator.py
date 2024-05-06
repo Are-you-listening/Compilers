@@ -4,7 +4,7 @@ from src.parser.CTypes.COperationHandler import *
 from src.parser.ASTVisitor import *
 from src.parser.ASTTypedefReplacer import ASTTypedefReplacer
 from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
-from src.interal_tools.IntegrityChecks import PreConditions
+from src.internal_tools.IntegrityChecks import PreConditions
 from src.parser.AST import ASTNodeTypes
 import typing
 

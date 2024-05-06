@@ -2,7 +2,7 @@ from src.parser.ASTConversion import *
 from src.parser.CTypes.CFunctionExecuterInt import *
 from src.parser.CTypes.CFunctionExecuterChar import *
 from src.parser.CTypes.CFunctionExecuterFloat import *
-from src.interal_tools.IntegrityChecks import PreConditions
+from src.internal_tools.IntegrityChecks import PreConditions
 
 
 class ConstantFoldingVisitor(ASTVisitor):

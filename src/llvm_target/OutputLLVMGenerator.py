@@ -284,30 +284,30 @@ class Declaration:
         text = text.replace("\n", "")  # Comments in LLVM cannot contain new lines
         block.comment(text)
 
-    @staticmethod
-    def string(text: str):
-        """
-        Create LLVM strings
-        """
 
-        """
-        Support escape characters
-        """
-        text = text.encode('utf-8').decode('unicode-escape')
+def string(text: str):
+    """
+    Create LLVM strings
+    """
 
-        index = LLVMSingleton.getInstance().getStringIndex(text)
-        builder = LLVMSingleton.getInstance().getCurrentBlock()
-        format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(text)),
-                                       bytearray(text.encode("utf8")))
-        format_str_global = builder.module.globals.get(f".str.{index}")
+    """
+    Support escape characters
+    """
+    text = text.encode('utf-8').decode('unicode-escape')
 
-        if not format_str_global:
-            format_str_global = ir.GlobalVariable(builder.module, format_str_const.type, f".str.{index}")
-            format_str_global.linkage = "internal"
-            format_str_global.global_constant = True
-            format_str_global.initializer = format_str_const
+    index = LLVMSingleton.getInstance().getStringIndex(text)
+    format_str_const = ir.Constant(ir.ArrayType(ir.IntType(8), len(text)),
+                                   bytearray(text.encode("utf8")))
 
-        return format_str_global
+    format_str_global = LLVMSingleton.getInstance().getModule().globals.get(f".str.{index}")
+
+    if not format_str_global:
+        format_str_global = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), format_str_const.type, f".str.{index}")
+        format_str_global.linkage = "internal"
+        format_str_global.global_constant = True
+        format_str_global.initializer = format_str_const
+
+    return format_str_global
 
 
 class Load:
@@ -549,15 +549,13 @@ class Scanf(Printf):
 class Conversion:
 
     @staticmethod
-    def intToInt(x: ir.Instruction, x_to:ir.types):
+    def intToInt(x: ir.Instruction, x_to: ir.types):
         block = LLVMSingleton.getInstance().getCurrentBlock()
         if x.type.width == 8 and x_to.width == 32:
             v = block.sext(x, x_to)
         else:
             v = block.zext(x, x_to)
         return v
-
-
 
     @staticmethod
     def performConversion(llvm_var, to_type: SymbolType):
@@ -585,8 +583,6 @@ class Conversion:
                            }  # todo add ptr/toint bool
 
         llvm_to_type = CTypesToLLVM.getIRType(to_type)
-
-
 
         """
         make a simplified to type for checking the conversion dict

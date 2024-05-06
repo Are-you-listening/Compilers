@@ -1,5 +1,5 @@
 from src.parser.ASTVisitor import *
-from src.interal_tools.IntegrityChecks import PreConditions
+from src.internal_tools.IntegrityChecks import PreConditions
 from src.parser.AST import ASTNodeTypes
 class StringToArray(ASTVisitor):
     """

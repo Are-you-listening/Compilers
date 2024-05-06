@@ -5,7 +5,7 @@ from src.parser.Tables.SymbolTypeStruct import *
 from src.parser.CodeGetter import *
 from llvmlite import ir
 from src.parser.AST import ASTNodeBlock, ASTNodeTypes
-from src.interal_tools import PreConditions
+from src.internal_tools import PreConditions
 
 
 class AST2LLVM(ASTVisitor):
@@ -185,7 +185,7 @@ class AST2LLVM(ASTVisitor):
             self.llvm_map[node] = llvm_var
 
         if node.type == "STRING":
-            llvm_var = Declaration.string(node.text)
+            llvm_var = string(node.text)
             self.llvm_map[node] = llvm_var
 
     def handleComment(self, node):

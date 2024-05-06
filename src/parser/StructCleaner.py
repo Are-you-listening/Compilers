@@ -2,7 +2,7 @@ from src.parser.Tables.StructTable import *
 from src.parser.ASTVisitor import *
 from src.parser.ASTTypedefReplacer import BaseTypes
 from src.parser.AST import ASTNodeTypes
-from src.interal_tools import *
+from src.internal_tools import *
 
 class StructCleaner(ASTVisitor):
     """
