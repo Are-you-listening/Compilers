@@ -37,11 +37,6 @@ class ControlFlowDotVisitor:
             label = label.replace('\\', '\\\\')
             label = label.replace('"', '\\\"')
 
-            label = label.replace("\00", "\\\\00")
-
-            label = label.replace('\\', '\\\\')
-            label = label.replace('"', '\\\"')
-
             if label == "'\x00'" or label == "'\00'":
                 label = "'\\\\00'"
             label = label.replace("\00", "\\\\00")
