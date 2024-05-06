@@ -2,7 +2,7 @@
 
 int forLoopCheck(int toCheck, int range)
 {
-    for (int i; i <= range; i ++)
+    for (int i = 0; i <= range; i ++)
     {
         if ( i == toCheck)
         {
