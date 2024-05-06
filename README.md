@@ -79,6 +79,7 @@ sudo apt install llvm
 - [X] ControlFlow and visualization (Extra optional)
 - [X] Else If Statements
 - [X] Optimisation: Do not generate code for conditions that are always false
+- [X] Semantic Error: Check for all paths in a function body whether a return statement is present
 - [X] Dynamic Arrays (stored on heap) (malloc, free, calloc, realloc)
 - [X] Structs that contain other structs as a value
 - [X] Dynamic Allocation of Structs (store structs on heap) (support by also supporting sizeof function)
