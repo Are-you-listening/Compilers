@@ -244,10 +244,10 @@ This will run the provided examples from ``example_source_files``
 
 ### Unit Tests
 For our project we have lots of testcases, ...
-So if for some reason a situation occurs that is unexpected, please consolidate our testcases
+So if for some reason a situation occurs that is unexpected, please consolidate our testcases.
 
-LLVM Tests are tests that run the entire compiler and cross-reference their output  (from prints) with the gcc output
-This Part of our testEnvironment is the best indicator of our compiler its capabilities.
+LLVM Tests are tests that run the entire compiler and cross-reference their output  (from prints) with the gcc output.
+This Part of our testEnvironment is the best indicator of our compiler's capabilities.
 Currently, we have around 550 tests in this directory. Some classification is made, but not every feature
 has its own testSuite. A lot of testfiles also have a combination of testcase features.
 
