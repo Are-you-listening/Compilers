@@ -1,9 +1,12 @@
-int main(){
-    float a = 5.0;
-    int b = 5;
-    char c = 'e';
-    float* d = &5.0;
-    int* e = &4;
-    char* f = &'a';
+#include <stdio.h>
+
+struct MyStruct {
+    int a;
+    float b;
+};
+
+int main() {
+    int intValue = 12345;
+    (struct MyStruct) intValue;
     return 0;
 }
