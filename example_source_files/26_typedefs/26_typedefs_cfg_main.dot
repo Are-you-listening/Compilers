@@ -1,5 +1,5 @@
 digraph AST {
-  "139300271184560" [label="%\".2\" = .2:
+  "135113266092720" [label="%\".2\" = .2:
   %\".3\" = alloca i32, align 4
   store i32 1, i32* %\".3\", align 4
   ;  typedef INT bool ; typedef CHAR appel ; typedef const CHAR peer ; typedef const bool Cbool ;  INT main ( ) { bool x = 1 ;

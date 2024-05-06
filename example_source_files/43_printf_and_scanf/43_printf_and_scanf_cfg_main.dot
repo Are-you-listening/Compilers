@@ -1,5 +1,5 @@
 digraph AST {
-  "139300269820656" [label="%\".2\" = .2:
+  "135113264726464" [label="%\".2\" = .2:
   %\".3\" = alloca i32, align 4
   ;    INT main ( ) { INT x ;
   %\".5\" = alloca i32, align 4
