@@ -15,7 +15,7 @@ int main()
 void upAndDown(const int upTo)
 {
     int to = upTo;
-    for (int i; i <= upTo; i++)
+    for (int i=0; i <= upTo; i++)
     {
      printf("%d\n", i);
 

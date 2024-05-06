@@ -12,21 +12,21 @@ sudo apt install llvm
 ```
 
 ### Mandatory Functionality:
-(In short we made all the mandatory features)
+(In short we made all the mandatory features) (Links are provided to an example file showing this feature)
 
-- [X] Binary operations +, -,* and /
-- [X] Binary operations >, <, and ==
-- [X] Unary operators + and -
-- [X] Parenthesis to overwrite the order of operations
-- [X] Logical operators &&, ||, and !
-- [X] Comparison operators >=, <=, and !=
-- [X] Binary operator %
-- [X] Shift operators <<, >>
-- [X] Bitwise operators &, |,~ and ^
-- [X] Use of Abstract Syntax Tree
-- [X] Constant Folding
-- [X] Visualisation of Abstract Syntax Tree (using dot)
-- [X] Mandatory main() Function 
+- [X] [Binary operations +, -,* and /](./example_source_files/1_binary_operations.c) 
+- [X] [Binary operations >, <, and ==](./example_source_files/1_binary_operations.c) 
+- [X] [Unary operators + and -](./example_source_files/2_unary_operators.c) 
+- [X] [Parenthesis to overwrite the order of operations](./example_source_files/3_parenthesis.c) 
+- [X] [Logical operators &&, ||, and !](./example_source_files/4_logical_operators.c) 
+- [X] [Comparison operators >=, <=, and !=](./example_source_files/1_binary_operations.c) 
+- [X] [Binary operator %](./example_source_files/1_binary_operations.c) 
+- [X] [Shift operators <<, >>](./example_source_files/1_binary_operations.c) 
+- [X] [Bitwise operators &, |,~ and ^](./example_source_files/4_logical_operators.c) 
+- [X] [Use of Abstract Syntax Tree](./example_source_files/1_binary_operations.c) 
+- [X] [Constant Folding](./example_source_files/5_constant_folding.c) 
+- [X] [Visualisation of Abstract Syntax Tree (using dot)](./example_source_files/5_constant_folding.c) 
+- [X] [Mandatory main() Function](./example_source_files/6_main.c)
 - [X] Keywords: 'const', 'char', 'int' and 'float'
 - [X] Expressions
 - [X] Literals of types: 'char', 'int', 'float' and pointers for these types
@@ -34,12 +34,12 @@ sudo apt install llvm
 - [X] Pointers:(Declaration, definition)  & Unary Operations: '*' (dereference) and '&' (address)
 - [X] Pointer to const Values (We also support Const ptrs btw)
 - [X] Constants
-- [X] Implicit Conversions (Warnings when going to poorer type)
+- [X] Implicit Conversions (Warnings when going to poorer type) 
 - [X] Explicit Conversions
 - [X] Pointer Arithmetic
 - [X] Increment/Decrement Operations
-- [X] Constant propagation
-- [X] Error Analysis: Syntax Errors
+- [X] Constant propagation 
+- [X] Error Analysis: Syntax Errors /s1
 - [X] Error Analysis: Semantic Errors (all Semantic error features)
 - [X] SymbolTable and Visualization of the symbol table
 - [X] Singleline Comments
@@ -52,7 +52,7 @@ sudo apt install llvm
 - [X] Scoping: if-else, for, while, anonymous
 - [X] Switch statements: switch, break, case
 - [X] Enumerations
-- [X] Support Scopes in symbol Table
+- [X] Support Scopes in symbol Table /s2
 - [X] Function scopes
 - [X] Local & Global variables
 - [X] Functions: definitions; declarations; calling, recursive calls
