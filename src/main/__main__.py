@@ -82,15 +82,20 @@ def cleanGreen(input_file, symbol_file):
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
 
+
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
+
 
     FileIO.add_file_type()
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
+
     FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
 
+
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
+
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
@@ -129,7 +134,6 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     """
     It is vital that AST conversion occurs before constant folding
     """
-    #DotVisitor("output/debug66.dot").visit(ast)
     ASTConversion().visit(ast)
 
     UnarySaVisitor().visit(ast)

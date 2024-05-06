@@ -72,7 +72,6 @@ class TypeNodeHandler:
         """
         new_type_node = ASTNodeTypes("Type", node.parent, node.getSymbolTable(),
                                      symbol_type, node.position, node.structTable)
-
         return new_type_node
 
     def __getSymbolType(self, node: ASTNode):
@@ -99,7 +98,6 @@ class TypeNodeHandler:
 
                 latest_datatype = self.__make_ptr_type(latest_datatype, is_const, child.type)
             else:
-
                 if self.struct_types.get(child.text) is not None:
                     latest_datatype = self.struct_types[child.text]
 
