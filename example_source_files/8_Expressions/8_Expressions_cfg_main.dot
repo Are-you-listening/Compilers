@@ -1,5 +1,5 @@
 digraph AST {
-  "136550726729840" [label="%\\\".2\\\" = .2:
+  "125363368130448" [label="%\\\".2\\\" = .2:
   %\\\".3\\\" = alloca i32, align 4
   store i32 5, i32* %\\\".3\\\", align 4
   ;  INT main ( ) { INT a = 5 ;
@@ -31,5 +31,5 @@ digraph AST {
   %\\\".31\\\" = load i32, i32* %\\\".6\\\", align 4
   %\\\".32\\\" = icmp slt i32 %\\\".29\\\", %\\\".31\\\"
   ret i32 0
-  ;  return 0 ;"];
+  ; a && b ; a || b ;  return 0 ;"];
 }
