@@ -24,7 +24,7 @@ class ValueAdderVisitor(ASTVisitor):
 
         self.placeable_list[node] = placeable
 
-        if node.text in ("Declaration", "Assignment", "printf", "Conversion", "IF", "Return") and placeable:
+        if node.text in ("Declaration", "Assignment", "printf", "Conversion", "IF", "Return"):
 
             # there are 2 children: identifier and value
 
