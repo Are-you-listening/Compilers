@@ -247,6 +247,12 @@ class Declaration:
         if store_register.type.is_pointer and value.type.is_pointer and \
                 isinstance(value.type.pointee, ir.types.ArrayType):
 
+            if isinstance(store_register.type.pointee, ir.IntType):
+                """
+                Following the clang reference, we h=give a weird constant this these kind of situations
+                """
+                value = ir.Constant(ir.IntType(8), 79)
+
             value = block.bitcast(value, store_register.type.pointee)
 
         if store_register.type.is_pointer and value.type.is_pointer and value.type.pointee is None:
@@ -519,7 +525,6 @@ class Printf:
     @staticmethod
     def makeArguments(format_specifier: ir.Constant, args):
         builder = LLVMSingleton.getInstance().getCurrentBlock()
-
         format_str_ptr = builder.bitcast(format_specifier, ir.IntType(8).as_pointer())
 
         """
@@ -595,7 +600,7 @@ class Conversion:
                            (ir.PointerType, "CHAR"): lambda x, x_to: block.ptrtoint(x, x_to),
                            (ir.PointerType, "PTR"): lambda x, x_to: block.bitcast(x, x_to),
                            (ir.IntType, "ARRAY"): lambda x, x_to: block.bitcast(x, x_to),
-                           (ir.PointerType, "BOOL"): lambda x, x_to: block.icmp_signed("!=", x, ir.Constant(x.type, None)),
+                           (ir.PointerType, "BOOL"): lambda x, x_to: block.icmp_signed("!=", x, ir.Constant(x.type, None))
 
                            }  # todo add ptr/toint bool
 

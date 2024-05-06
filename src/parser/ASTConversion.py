@@ -186,6 +186,7 @@ class ASTConversion(ASTVisitor):
                 to_type = temp_to
 
         if node.text in ("Declaration", "Assignment"):
+
             assign_node = node.getChild(0)
             assign_type = self.type_mapping[assign_node]
             """
@@ -203,6 +204,7 @@ class ASTConversion(ASTVisitor):
             self.type_mapping[assign_node] = to_type
 
             if node.text == "Assignment":
+
                 """
                 Check if we assign to const assign node, if so throw an error
                 """
@@ -212,6 +214,15 @@ class ASTConversion(ASTVisitor):
                 if const_assign:
                     ErrorExporter.constComplaint(node.position, self.subtree_to_text(assign_node),
                                                  self.subtree_to_text(assign_node), self.format_type(to_type))
+
+            """
+            Check if the assign node is by any chance a string
+            """
+            if node.getChildAmount() >= 2:
+                right_child = node.getChild(1)
+                if isinstance(right_child, ASTNodeTerminal) and right_child.type == "STRING" and to_type.isBase():
+                    ErrorExporter.warningAssignStringToWrongType(right_child.position, assign_type)
+
 
         if node.text == "ParameterCall":
             """
