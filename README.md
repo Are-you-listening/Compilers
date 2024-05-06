@@ -19,7 +19,7 @@ Find our demonstration [here](https://www.youtube.com)
 
 - [X] [Binary operations +, -,* and /](./example_source_files/1_binary_operations/1_binary_operations.c) 
 - [X] [Binary operations >, <, and ==](./example_source_files/1_binary_operations/1_binary_operations.c) 
-- [X] [Unary operators + and -](./example_source_files/2_unary_operators.c) 
+- [X] [Unary operators + and -](./example_source_files/2_unary_operators/2_unary_operators.c) 
 - [X] [Parenthesis to overwrite the order of operations](./example_source_files/3_parenthesis/3_parenthesis.c) 
 - [X] [Logical operators &&, ||, and !](./example_source_files/4_logical_operators/4_logical_operators.c) 
 - [X] [Comparison operators >=, <=, and !=](./example_source_files/1_binary_operations/1_binary_operations.c) 
