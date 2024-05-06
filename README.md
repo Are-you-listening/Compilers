@@ -14,7 +14,7 @@ sudo apt install llvm
 ### Mandatory Functionality:
 (In short we made all the mandatory features)
 
-- [X] Binary operations +, -,* and /
+- [X] [Binary operations +, -,* and /](./example_source_files/1_binary_operations.c) 
 - [X] Binary operations >, <, and ==
 - [X] Unary operators + and -
 - [X] Parenthesis to overwrite the order of operations
@@ -34,12 +34,12 @@ sudo apt install llvm
 - [X] Pointers:(Declaration, definition)  & Unary Operations: '*' (dereference) and '&' (address)
 - [X] Pointer to const Values (We also support Const ptrs btw)
 - [X] Constants
-- [X] Implicit Conversions (Warnings when going to poorer type)
+- [X] Implicit Conversions (Warnings when going to poorer type) 
 - [X] Explicit Conversions
 - [X] Pointer Arithmetic
 - [X] Increment/Decrement Operations
-- [X] Constant propagation
-- [X] Error Analysis: Syntax Errors
+- [X] Constant propagation 
+- [X] Error Analysis: Syntax Errors /s1
 - [X] Error Analysis: Semantic Errors (all Semantic error features)
 - [X] SymbolTable and Visualization of the symbol table
 - [X] Singleline Comments
@@ -52,7 +52,7 @@ sudo apt install llvm
 - [X] Scoping: if-else, for, while, anonymous
 - [X] Switch statements: switch, break, case
 - [X] Enumerations
-- [X] Support Scopes in symbol Table
+- [X] Support Scopes in symbol Table /s2
 - [X] Function scopes
 - [X] Local & Global variables
 - [X] Functions: definitions; declarations; calling, recursive calls
