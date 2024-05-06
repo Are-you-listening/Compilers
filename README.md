@@ -73,8 +73,8 @@ sudo apt install llvm
 
 
 ### Optional Functionality: 
-- [X] Include Guards (mandatory because group of 4)
-- [X] Unions (mandatory because group of 4)
+- [X] [Include Guards (mandatory because group of 4)](./example_source_files/x_include_guards.c)
+- [X] [Unions (mandatory because group of 4)](./example_source_files/y_unions.c)
 - [X] Function Pointers (mandatory because group of 4)
 
 - [X] Const Casting
