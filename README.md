@@ -52,19 +52,19 @@ sudo apt install llvm
 - [X] Scoping: if-else, for, while, anonymous
 - [X] Switch statements: switch, break, case
 - [X] Enumerations
-- [X] Support Scopes in symbol Table /s2
-- [X] Function scopes
-- [X] Local & Global variables
-- [X] Functions: definitions; declarations; calling, recursive calls
-- [X] Pre-processor: #define
-- [X] Pre-processor: #include
-- [X] Optimisations: no code after break, continue, or return
-- [X] Arrays both simple & multidimensional arrays
-- [X] Array initialization using initializer list
-- [X] Operations on array elements
-- [X] Strings encoded as zero-terminated char-arrays (both supported as char str[size] and char* str)
-- [X] printf and scanf
-- [X] user Defined Structs
+- [X] [Support Scopes in symbol Table /s2](./example_source_files/40_suppport_scopes_in_symbol_table.c)
+- [X] [Function scopes](./example_source_files/41_function_scopes.c)
+- [X] [Local & Global variables](./example_source_files/42_local_and_global_variables.c)
+- [X] [Functions: definitions; declarations; calling, recursive calls](./example_source_files/43_functions.c)
+- [X] [Pre-processor: #define](./example_source_files/44_pre-processor_define.c)
+- [X] [Pre-processor: #include](./example_source_files/45_pre-processor_include.c)
+- [X] [Optimisations: no code after break, continue, or return](./example_source_files/46_optimisation.c)
+- [X] [Arrays both simple & multidimensional arrays](./example_source_files/47_arrays.c)
+- [X] [Array initialization using initializer list](./example_source_files/48_array_initialization.c)
+- [X] [Operations on array elements](./example_source_files/49_operations_on_array_elements.c)
+- [X] [Strings encoded as zero-terminated char-arrays (both supported as char str[size] and char* str)](./example_source_files/50_strings.c)
+- [X] [printf and scanf](./example_source_files/51_printf_and_scanf.c)
+- [X] [user Defined Structs](./example_source_files/52_user_defined_structs.c)
 
 - [X] Include Guards (mandatory because group of 4)
 - [X] Unions (mandatory because group of 4)
