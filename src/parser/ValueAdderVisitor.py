@@ -31,8 +31,8 @@ class ValueAdderVisitor(ASTVisitor):
                 return
 
             if node.text == "printf":
-                for child in range(1, len(node.children) - 1):
-                    IdentifierReplacerVisitor(False).preorder(node.getChild(1))
+                for i in range(1, len(node.children)):
+                    IdentifierReplacerVisitor(False).preorder(node.getChild(i))
                 return
 
             ident = node.getChild(0)
@@ -43,7 +43,12 @@ class ValueAdderVisitor(ASTVisitor):
             return
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-        pass
+        if node.type != "IDENTIFIER":
+            return
+        if node.getSymbolTable().getEntry(node.text):
+            entry = node.getSymbolTable().getEntry(node.text)
+        if entry.firstUsed is None and node != entry.firstDeclared:
+            entry.firstUsed = node
 
     def handlePropagation(self, node: ASTNode, ident):
         if ident.text == "Dereference":
