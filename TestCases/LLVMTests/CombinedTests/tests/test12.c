@@ -2,7 +2,7 @@
 
 void printArr(int * arr, int length)
 {
-    int i;
+    int i = 0;
     for (; i < length; i++)
     {
         printf("%d", *(arr++));
