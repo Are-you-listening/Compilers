@@ -63,6 +63,7 @@ sudo apt install llvm
 - [X] Strings encoded as zero-terminated char-arrays (both supported as char str[size] and char* str)
 - [X] printf and scanf
 - [X] user Defined Structs
+- [X] Switch statements: switch, break, case
 
 - [X] Include Guards (mandatory because group of 4)
 - [X] Unions (mandatory because group of 4)
