@@ -16,15 +16,7 @@ class ValueAdderVisitor(ASTVisitor):
         self.postorder(ast.root)
 
     def visitNode(self, node: ASTNode):
-
-        placeable = True
-        for n in node.children:
-            if not self.placeable_list[n]:
-                placeable = False
-
-        self.placeable_list[node] = placeable
-
-        if node.text in ("Declaration", "Assignment", "printf", "Conversion", "IF", "Return"):
+        if node.text in ("Declaration", "Assignment", "printf", "Conversion", "IF", "Return", "WHILE"):
 
             # there are 2 children: identifier and value
 
@@ -32,6 +24,15 @@ class ValueAdderVisitor(ASTVisitor):
             When printf, return, ... has no children their is nothing to replace
             """
             if node.getChildAmount() == 0:
+                return
+
+            if node.inLoop():
+                IdentifierReplacerVisitor(True).preorder(node.getChild(0))
+                return
+
+            if node.text == "printf":
+                for child in range(1, len(node.children)-1):
+                    IdentifierReplacerVisitor(False).preorder(node.getChild(1))
                 return
 
             ident = node.getChild(0)
@@ -42,17 +43,7 @@ class ValueAdderVisitor(ASTVisitor):
             return
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
-
-        self.placeable_list[node] = True
-
-        if node.type == "IDENTIFIER":
-            # if it is a variable, and it is not the node where it is first declared -> update firstUsed if necessary
-            entry = node.getSymbolTable().getEntry(node.text)
-            if node != entry.firstDeclared and entry.firstUsed is None:
-                entry.firstUsed = node
-
-            if isinstance(entry.getTypeObject(), FunctionSymbolType):
-                self.placeable_list[node] = False
+        pass
 
     def handlePropagation(self, node: ASTNode, ident):
         if ident.text == "Dereference":
@@ -77,7 +68,7 @@ class ValueAdderVisitor(ASTVisitor):
         because these situation cannot occur
         """
         # replace all the identifiers in the RHS with their symbol table value
-        replacer = IdentifierReplacerVisitor()
+        replacer = IdentifierReplacerVisitor(False)
         replacer.preorder(val)
 
         # it is possible that some identifiers have been replaced with their values,

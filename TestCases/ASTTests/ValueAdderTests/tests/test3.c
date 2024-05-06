@@ -7,4 +7,5 @@ int main() {
     int d;
 
     d = c + 3;
+    return 0;
 }
