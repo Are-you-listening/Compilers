@@ -6,7 +6,7 @@ int main(){
     struct cheese gouda;
     gouda.milk = 3;
 
-    struct cheese* gouda_ptr = malloc(sizeof(struct cheese));
+    struct cheese* gouda_ptr = (struct cheese*) malloc(sizeof(struct cheese));
 
     gouda_ptr = realloc(gouda_ptr, sizeof(struct cheese)*2);
 

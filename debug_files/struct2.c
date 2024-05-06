@@ -1,17 +1,22 @@
-#include <stdio.h>
+struct cheese{
+    int milk;
+};
 
-int main(){    
-    char* buf = calloc(50, sizeof(char));
+int main(){
+    struct cheese gouda;
+    gouda.milk = 3;
 
-    FILE* fp = fopen("includes/io.txt", "r");
+    struct cheese* gouda_ptr = (struct cheese*) malloc(sizeof(struct cheese));
 
-    fgets(buf, 50, fp);
+    gouda_ptr = realloc(gouda_ptr, sizeof(struct cheese)*2);
 
-    fp = fopen("includes/io2.txt", "w");
+    free(gouda_ptr);
 
-    fputs(buf,fp);
+    char* z = calloc(2, sizeof(char));
+    z[0] = 'O';
+    z[1] = 'Y';
 
-    fclose(fp);
+    free(z);
 
     return 0;
 }
