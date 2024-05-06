@@ -399,7 +399,6 @@ class ASTConversion(ASTVisitor):
             data_type_index = index
 
         index_node.text = index
-
         return data_type_index, union_assignment
 
     @staticmethod
@@ -810,5 +809,4 @@ class ASTConversion(ASTVisitor):
         """
         if data_type.union:
             node.getChild(2).text = 0
-
         return data_type

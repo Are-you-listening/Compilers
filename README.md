@@ -27,18 +27,18 @@ sudo apt install llvm
 - [X] [Constant Folding](./example_source_files/5_constant_folding.c) 
 - [X] [Visualisation of Abstract Syntax Tree (using dot)](./example_source_files/5_constant_folding.c) 
 - [X] [Mandatory main() Function](./example_source_files/6_main.c)
-- [X] Keywords: 'const', 'char', 'int' and 'float'
-- [X] Expressions
-- [X] Literals of types: 'char', 'int', 'float' and pointers for these types
-- [X] Variables: variable declarations, variable definitions, assignment statements, and identifiers
-- [X] Pointers:(Declaration, definition)  & Unary Operations: '*' (dereference) and '&' (address)
-- [X] Pointer to const Values (We also support Const ptrs btw)
-- [X] Constants
-- [X] Implicit Conversions (Warnings when going to poorer type) 
-- [X] Explicit Conversions
-- [X] Pointer Arithmetic
-- [X] Increment/Decrement Operations
-- [X] Constant propagation 
+- [X] [Keywords: 'const', 'char', 'int' and 'float'](./example_source_files/7_keywords.c)
+- [X] [Expressions](./example_source_files/8_Expressions.c)
+- [X] [Literals of types: 'char', 'int', 'float' and pointers for these types](./example_source_files/9_literals.c)
+- [X] [Variables: variable declarations, variable definitions, assignment statements, and identifiers](./example_source_files/10_variables.c)
+- [X] [Pointers:(Declaration, definition)  & Unary Operations: '*' (dereference) and '&' (address)](./example_source_files/11_pointers.c)
+- [X] [Pointer to const Values (We also support Const ptrs btw)](./example_source_files/12_pointers_to_const_values.c)
+- [X] [Constants](./example_source_files/13_constants.c)
+- [X] [Implicit Conversions (Warnings when going to poorer type)](./example_source_files/14_implicit_conversions.c)
+- [X] [Explicit Conversions](./example_source_files/15_explicit_conversions.c)
+- [X] [Pointer Arithmetic](./example_source_files/16_pointer_arithmetic.c)
+- [X] [Increment/Decrement Operations](./example_source_files/17_increment_decrement.c)
+- [X] [Constant propagation](./example_source_files/18_constant_propagation.c)
 - [X] [Error Analysis: Syntax Errors](example_source_files/20_1_Syntax_Errors.c)
 - [X] [Error Analysis: Semantic Errors (all Semantic error features)](example_source_files/21_1_Semantic_Errors.c)
 - [X] [SymbolTable and Visualization of the symbol table](example_source_files/22_SymbolTable_and_Visualization.c)
