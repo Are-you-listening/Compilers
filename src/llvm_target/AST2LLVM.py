@@ -382,7 +382,6 @@ class AST2LLVM(ASTVisitor):
         load part of printf statement we want to print
         """
         for child in node.children[1:]:
-            print("child", child.text)
             llvm_var = self.llvm_map.get(child, None)
             if llvm_var is not None:
                 args.append(llvm_var)
