@@ -79,7 +79,6 @@ def cleanGreen(input_file, symbol_file):
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
     StructCleaner().visit(ast)  # Massage the structs
-
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
 
 
@@ -100,7 +99,7 @@ def cleanGreen(input_file, symbol_file):
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
     TypeCleaner().visit(ast)
-    SizeOfTranslater().visit(ast)
+
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
@@ -109,6 +108,8 @@ def cleanGreen(input_file, symbol_file):
     ArrayCleaner().visit(ast)
 
     ASTTableCreator().visit(ast)  # Create the symbol table
+
+    SizeOfTranslater().visit(ast)
 
     DynamicAllocation.add_allocation(ast)
     FileIO.add_io(ast)
@@ -151,8 +152,6 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     cfc.visit(ast)
 
     DeadCodeRemover().visit(ast, cfc.getControlFlowGraph())  # removes dead code inside a block coming after a return/continue or break
-
-    #DotVisitor("output/patap").visit(ast)
 
     VoidReturnAdder().addReturn(cfc.getControlFlowGraph())
 
