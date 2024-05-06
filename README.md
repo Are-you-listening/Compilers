@@ -38,6 +38,7 @@ sudo apt install llvm
 - [X] Explicit Conversions
 - [X] Pointer Arithmetic
 - [X] Increment/Decrement Operations
+- [X] Constant propagation
 - [X] Error Analysis: Syntax Errors
 - [X] Error Analysis: Semantic Errors (all Semantic error features)
 - [X] SymbolTable and Visualization of the symbol table
@@ -49,7 +50,8 @@ sudo apt install llvm
 - [X] 'if' and 'else' statements
 - [X] Loops: 'while' and 'for', also support keywords 'break' & 'continue'
 - [X] Scoping: if-else, for, while, anonymous
-- [X] enumerations
+- [X] Switch statements: switch, break, case
+- [X] Enumerations
 - [X] Support Scopes in symbol Table
 - [X] Function scopes
 - [X] Local & Global variables
@@ -57,13 +59,12 @@ sudo apt install llvm
 - [X] Pre-processor: #define
 - [X] Pre-processor: #include
 - [X] Optimisations: no code after break, continue, or return
-- [X] Arrays both simple & multi-dimensional arrays
+- [X] Arrays both simple & multidimensional arrays
 - [X] Array initialization using initializer list
 - [X] Operations on array elements
 - [X] Strings encoded as zero-terminated char-arrays (both supported as char str[size] and char* str)
 - [X] printf and scanf
 - [X] user Defined Structs
-- [X] Switch statements: switch, break, case
 
 - [X] Include Guards (mandatory because group of 4)
 - [X] Unions (mandatory because group of 4)
@@ -85,7 +86,7 @@ sudo apt install llvm
 - [X] Structs that contain other structs as a value
 - [X] Dynamic Allocation of Structs (store structs on heap) (support by also supporting sizeof function)
 - [X] File reading using fgets (uses FILE* with fopen and fclose)
-- [X] File reading using fputs (uses FILE* with fopen and fclose)
+- [X] File writing using fputs (uses FILE* with fopen and fclose)
 - [X] Dynamically allocated strings and character buffers (can be used for printf, fgets, fputs, ...)
 
 ### Technical Functionality: 
@@ -159,7 +160,7 @@ So if for some reason a situation occurs that is unexpected, please consolidate 
 
 LLVM Tests are tests that run the entire compiler and cross-reference their output  (from prints) with the gcc output
 This Part of our testEnvironment is the best indicator of our compiler its capabilities.
-Currently we have around 550 tests in this directory. Some classification is made, but not every feature
+Currently, we have around 550 tests in this directory. Some classification is made, but not every feature
 has its own testSuite. A lot of testfiles also have a combination of testcase features.
 
 Run our testcases using:
