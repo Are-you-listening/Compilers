@@ -25,8 +25,8 @@ sudo apt install llvm
 - [X] [Bitwise operators &, |,~ and ^](./example_source_files/4_logical_operators.c) 
 - [X] [Use of Abstract Syntax Tree](./example_source_files/1_binary_operations.c) 
 - [X] [Constant Folding](./example_source_files/5_constant_folding.c) 
-- [X] Visualisation of Abstract Syntax Tree (using dot)
-- [X] Mandatory main() Function 
+- [X] [Visualisation of Abstract Syntax Tree (using dot)](./example_source_files/5_constant_folding.c) 
+- [X] [Mandatory main() Function](./example_source_files/6_main.c)
 - [X] Keywords: 'const', 'char', 'int' and 'float'
 - [X] Expressions
 - [X] Literals of types: 'char', 'int', 'float' and pointers for these types
