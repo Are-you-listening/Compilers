@@ -1,7 +1,7 @@
 import json
 from src.parser.Tables.SymbolTable import *
 from typing import List
-from src.llvm_target.ControlFlow.ControlFlowGraph import Vertex
+from src.parser.ControlFlow.ControlFlowGraph import Vertex
 import ast
 from src.parser.ASTVisitor import *
 from src.parser.AST import ASTNodeBlock, Position, ASTNodeTypes

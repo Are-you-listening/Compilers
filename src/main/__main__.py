@@ -8,9 +8,7 @@ from src.parser.ASTCleaner import *
 from src.parser.ASTCleanerAfter import *
 from src.parser.Tables.TableDotVisitor import *
 from src.llvm_target.AST2LLVM import *
-from src.llvm_target.ControlFlow.ControlFlowDotVisitor import *
 from src.parser.ASTIfCleaner import ASTIfCleaner
-from src.llvm_target.ControlFlowCreator import *
 from src.parser.ASTLoopCleaner import *
 from src.parser.ConstantStatementFolding import *
 from src.parser.DeadCodeRemover import *
@@ -25,15 +23,16 @@ from src.parser.StringToArray import *
 from src.parser.StructCleaner import *
 from src.parser.StructCleanerAfter import *
 from src.parser.FunctionPtrCleaner import FunctionPtrCleaner
-from src.llvm_target.VoidReturnAdder import *
+from src.parser.VoidReturnAdder import *
 from src.parser.PointerReformater import *
 from src.parser.Constraints.CheckRvalues import *
 from src.parser.UnarySaVisitor import *
 from src.parser.DynamicAllocation import DynamicAllocation
 from src.parser.FileIO import FileIO
-from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 from src.parser.TypeCleaner import TypeCleaner
 from src.parser.SizeOfTranslater import SizeOfTranslater
+from src.parser.ControlFlow.ControlFlowCreator import *
+from src.parser.ControlFlow.ControlFlowDotVisitor import *
 
 
 def cleanGreen(input_file, symbol_file):
@@ -66,8 +65,6 @@ def cleanGreen(input_file, symbol_file):
     lexer.reset()
     stream.reset()
     input_stream.reset()
-
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
 
     virtualLine = VirtualLineVisitor()
     virtualLine.visit(ast)
@@ -117,12 +114,7 @@ def cleanGreen(input_file, symbol_file):
 
     CheckRvalues().visit(ast)
 
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
-
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
@@ -132,31 +124,19 @@ def cleanGreen(input_file, symbol_file):
 
 
 def Processing(ast, dot_file, fold, includeSTDIO):
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     """
     It is vital that AST conversion occurs before constant folding
     """
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-
-    #DotVisitor("output/debug08888").visit(ast)  # Export AST in Dot
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ASTConversion().visit(ast)
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
-
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     UnarySaVisitor().visit(ast)
-    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
-    ConstantFoldingVisitor().visit(ast)
 
+    ConstantFoldingVisitor().visit(ast)
     if fold:
         ValueAdderVisitor().visit(ast)
-
     ConstantStatementFolding().visit(ast)
-
-    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     cfc = ControlFlowCreator()
     cfc.visit(ast)

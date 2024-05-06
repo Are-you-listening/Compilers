@@ -1,7 +1,6 @@
 from src.llvm_target.OutputLLVMGenerator import *
-from src.llvm_target.MapTable.MapTable import *
 from src.parser.Tables.SymbolTypeStruct import *
-
+from src.llvm_target.MapTable import *
 from src.parser.CodeGetter import *
 from llvmlite import ir
 from src.parser.AST import ASTNodeBlock, ASTNodeTypes

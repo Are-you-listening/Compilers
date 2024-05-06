@@ -2,17 +2,12 @@ from src.antlr_files.grammarCParser import grammarCParser
 from src.parser.ASTCreator import ASTCreator
 from src.parser.DotVisitor import *
 from src.parser.Constraints.ConstraintChecker import *
-from src.parser.ValueAdderVisitor import *
 from src.parser.ASTDereferencer import *
 from src.parser.ASTCleaner import *
 from src.parser.ASTCleanerAfter import *
-from src.parser.ASTTableCreator import *
 from src.llvm_target.AST2LLVM import *
 from src.parser.ASTIfCleaner import ASTIfCleaner
-from src.llvm_target.ControlFlowCreator import *
 from src.parser.ASTLoopCleaner import *
-from src.parser.ConstantStatementFolding import *
-from src.parser.DeadCodeRemover import *
 from src.parser.BlacklistVisitor import *
 from src.parser.SwitchConverter import *
 from src.parser.EnumTypeMerger import *

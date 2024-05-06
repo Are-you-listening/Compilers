@@ -1,6 +1,5 @@
-from src.llvm_target.ControlFlow.ControlFlowGraph import *
 import subprocess
-
+from src.parser.ControlFlow.ControlFlowGraph import *
 
 class ControlFlowDotVisitor:
     def __init__(self, function_name, outfile="ControlFlow", ):

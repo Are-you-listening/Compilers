@@ -2,7 +2,7 @@ from src.parser.AST import *
 from src.parser.ErrorExporter import ErrorExporter
 
 
-class VoidReturnAdder():
+class VoidReturnAdder:
     def addReturn(self, cfg: map):
         for key, value in cfg.items():
             final_vertices = self.get_final_vertices(value)

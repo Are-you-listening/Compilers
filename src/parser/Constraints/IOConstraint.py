@@ -13,7 +13,7 @@ class IOConstraint(Constraint):
         self.includeSTDIO = includeSTDIO
 
     def checkNode(self, node: ASTNode):
-        if node.text in ["printf", "scanf", "fgets", "fopen", "fclose", "fputs"]:
+        if node.text in ["printf", "scanf"]:
             if not self.includeSTDIO:  # Check if stdio is included
                 ErrorExporter.undeclaredVariable(node.text, node.position, "function")
             else:

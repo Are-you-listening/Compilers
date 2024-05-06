@@ -1,9 +1,8 @@
-from src.parser.Tables.SymbolTable import *
 from src.llvm_target.OutputLLVMGenerator import *
-from src.llvm_target.ControlFlow.ControlFlowGraph import *
 from src.parser.AST import ASTNodeBlock
 from src.parser.ASTVisitor import *
 from src.parser.ErrorExporter import ErrorExporter
+from src.parser.ControlFlow.ControlFlowGraph import *
 
 
 class ControlFlowCreator(ASTVisitor):

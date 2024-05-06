@@ -48,7 +48,6 @@ class SymbolType:
         """
         Indicate if this type uses some function ptr/ function
         """
-
         return False
 
     @staticmethod

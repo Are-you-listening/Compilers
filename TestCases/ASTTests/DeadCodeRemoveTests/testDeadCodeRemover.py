@@ -1,6 +1,6 @@
 from TestCases.ABCTests.abcTest import *
 from src.parser.DeadCodeRemover import *
-from src.llvm_target.ControlFlowCreator import *
+from src.parser.ControlFlow.ControlFlowCreator import *
 
 
 class TestDeadCodeRemover(ASTTest, unittest.TestCase):

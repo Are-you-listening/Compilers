@@ -96,124 +96,140 @@ sudo apt install llvm
 - [X] Start Script
 - [X] PNG Creation from .dot-files
 
-### ProjectStructure:
+### Project Structure:
 
 ```
-src
-├── antlr_files
-│   ├── grammarC.interp
-│   ├── grammarCLexer.interp
-│   ├── grammarCLexer.py
-│   ├── grammarCLexer.tokens
-│   ├── grammarCListener.py
-│   ├── grammarCParser.py
-│   ├── grammarC.tokens
-│   ├── grammarCVisitor.py
-│   ├── __init__.py
-├── __init__.py
-├── internal_tools
-│   ├── __init__.py
-│   ├── IntegrityChecks.py
-├── llvm_target
-│   ├── AST2LLVM.py
-│   ├── ControlFlow
-│   │   ├── ControlFlowDotVisitor.py
-│   │   ├── ControlFlowGraph.py
-│   │   ├── __init__.py
-│   ├── ControlFlowCreator.py
-│   ├── __init__.py
-│   ├── LLVMSingleton.py
-│   ├── MapTable
-│   │   ├── __init__.py
-│   │   ├── MapTable.py
-│   ├── OutputLLVMGenerator.py
-│   └── VoidReturnAdder.py
-├── main
-│   ├── __init__.py
-│   ├── __main__.py
-├── parser
-│   ├── ArrayCleaner.py
-│   ├── ASTCleanerAfter.py
-│   ├── ASTCleaner.py
-│   ├── ASTConversion.py
-│   ├── ASTCreator.py
-│   ├── ASTDereferencer.py
-│   ├── ASTIfCleaner.py
-│   ├── ASTLoopCleaner.py
-│   ├── AST.py
-│   ├── ASTTableCreator.py
-│   ├── ASTTypedefReplacer.py
-│   ├── ASTVisitor.py
-│   ├── BlacklistVisitor.py
-│   ├── CodeGetter.py
-│   ├── ConstantFoldingVisitor.py
-│   ├── ConstantStatementFolding.py
-│   ├── Constraints
-│   │   ├── AmpersandConstraint.py
-│   │   ├── CheckRvalues.py
-│   │   ├── CheckUnaryOps.py
-│   │   ├── CleanGlobalScopeConstraint.py
-│   │   ├── ConstraintChecker.py
-│   │   ├── Constraint.py
-│   │   ├── FunctionReturnConstraint.py
-│   │   ├── GlobalsConstrained.py
-│   │   ├── __init__.py
-│   │   ├── IOConstraint.py
-│   │   ├── MainFoundConstraint.py
-│   │   ├── RedefinitionConstrained.py
-│   │   ├── UndeclaredConstrained.py
-│   │   ├── UndefinedReferenceConstraint.py
-│   │   └── VoidReturnConstraint.py
-│   ├── CTypes
-│   │   ├── CFunctionExecuterChar.py
-│   │   ├── CFunctionExecuterFloat.py
-│   │   ├── CFunctionExecuterInt.py
-│   │   ├── CFunctionExecuterPtr.py
-│   │   ├── CFunctionExecuter.py
-│   │   ├── COperationHandler.py
-│   │   ├── __init__.py
-│   │   ├── InvalidOperatorFloatError.py
-│   │   ├── InvalidOperatorPtrError.py
-│   ├── DeadCodeRemover.py
-│   ├── DotVisitor.py
-│   ├── DynamicAllocation.py
-│   ├── EnumConverter.py
-│   ├── ErrorExporter.py
-│   ├── FileIO.py
-│   ├── FunctionPtrCleaner.py
-│   ├── IdentifierReplacerVisitor.py
-│   ├── __init__.py
-│   ├── PointerReformater.py
-│   ├── Preproccesing
-│   │   ├── __init__.py
-│   │   ├── preProcessor.py
-│   ├── SizeOfTranslater.py
-│   ├── StringToArray.py
-│   ├── StructCleanerAfter.py
-│   ├── StructCleaner.py
-│   ├── SwitchConverter.py
-│   ├── Tables
-│   │   ├── AbstractTable.py
-│   │   ├── FunctionSymbolType.py
-│   │   ├── __init__.py
-│   │   ├── StructTable.py
-│   │   ├── SymbolTable.py
-│   │   ├── SymbolTypeArray.py
-│   │   ├── SymbolTypePtr.py
-│   │   ├── SymbolType.py
-│   │   ├── SymbolTypeStruct.py
-│   │   ├── SymbolTypeUnion.py
-│   │   ├── TableDotVisitor.py
-│   │   ├── TypedefTable.py
-│   │   └── TypeNodehandler.py
-│   ├── TypeCleaner.py
-│   ├── TypeMerger.py
-│   ├── UnarySaVisitor.py
-│   ├── Utils
-│   │   ├── ArraySizeReader.py
-│   │   ├── __init__.py
-│   ├── ValueAdderVisitor.py
-│   └── VirtualLineNrVisitor.py
+Compilers
+├── administration - A list of the assigments
+├── example_source_files - Files used in our demo
+├── grammar - Directory containing grammar specifications
+│   └── grammarC.g4 - ANTLR file containing our grammar specification
+├── output - Default directory used to generate files in
+├── README.md - This file
+├── requirements.txt - Python dependencies
+├── run_tests_profiler.sh - Script to run profile our test environment
+├── run_tests.sh - Script to run all our testcases at once
+├── script.py - Run all example_source_files
+├── src - Directory containing our source doe
+│   ├── antlr_files - Grammar files created by ANTLR
+│   ├── internal_tools - Directory containing internal tools
+│   │   └── IntegrityChecks.py - PreConditions Functions
+│   ├── llvm_target - Directory containing code to translate the AST & table data towards LLVM
+│   │   ├── AST2LLVM.py - Main visitor to convert to LLVM
+│   │   ├── LLVMSingleton.py - Manages the LLVMLite Library to ease the work of our visitor
+│   │   ├── MapTable.py - Map variables to a LLVM register
+│   │   └── OutputLLVMGenerator.py - Contains methods to convert parts of the tree to LLVM code
+│   ├── main - Directory containing the main function
+│   │   └──__main__.py - Main file 
+│   ├── mips_target
+│   ├── parser - Directory containing code to parse an input file, create & massage the tree
+│   │   ├── ArrayCleaner.py - Massage the tree, specificly for arrays
+│   │   ├── ASTCleanerAfter.py - Clean the AST after table creation
+│   │   ├── ASTCleaner.py - Clean the AST before table creation
+│   │   ├── ASTConversion.py - Reform implicit conversions to explicits and verify semantics
+│   │   ├── ASTCreator.py - Create the initial AST from the ANTLR tree
+│   │   ├── ASTDereferencer.py - Alters the AST to ease the use of adressess
+│   │   ├── ASTIfCleaner.py - Massage If Statements to our format
+│   │   ├── ASTLoopCleaner.py - Convert & Clean loop statements to While loops in a desired format
+│   │   ├── AST.py - Contains class definitions of our AST Objects & some methods for easy manipulation
+│   │   ├── ASTTableCreator.py - Creates symbol tables
+│   │   ├── ASTTypedefReplacer.py - Resolves typedefs to their actual type
+│   │   ├── ASTVisitor.py - Base class visitor for our AST
+│   │   ├── BlacklistVisitor.py - Remove nodes that contain black listed text
+│   │   ├── CodeGetter.py - Maps all source code to their respective linenumber & file
+│   │   ├── ConstantFoldingVisitor.py - Apply constant folding
+│   │   ├── ConstantStatementFolding.py - Apply constant folding for conditional statements
+│   │   ├── Constraints - Directory containing semantic checks
+│   │   │   ├── AmpersandConstraint.py - Verifies the integrity of the & operator
+│   │   │   ├── CheckRvalues.py - Check for invalid Rvalues
+│   │   │   ├── CheckUnaryOps.py - Verify consistency of unary operators
+│   │   │   ├── CleanGlobalScopeConstraint.py - Verify that all statements in the global scope are allowed
+│   │   │   ├── ConstraintChecker.py - Actual visitor that applies all constraints
+│   │   │   ├── Constraint.py - Abstract Base Class
+│   │   │   ├── FunctionReturnConstraint.py - Verify that every (non-void) function has a return statement
+│   │   │   ├── GlobalsConstrained.py - Verify global variable syntax
+│   │   │   ├── IOConstraint.py - Check when printf or scanf is used, stdio.h is included
+│   │   │   ├── MainFoundConstraint.py - Check if the code to compile, contains a main function
+│   │   │   ├── RedefinitionConstrained.py - Check for redefinitions
+│   │   │   ├── UndeclaredConstrained.py - Verify if all used variables are declared
+│   │   │   ├── UndefinedReferenceConstraint.py - Check for function calls to undefined functions
+│   │   │   └── VoidReturnConstraint.py - Check that every void function has no non-empty return statement
+│   │   ├── ControlFlow - Directory containing ControlFlow Code
+│   │   │   ├── ControlFlowDotVisitor.py - Visualise the CFG
+│   │   │   ├── ControlFlowGraph.py - Contains CFG Classes & manipulation methods
+│   │   │   └── ControlFlowCreator.py - Creates the actual CFG
+│   │   ├── CTypes - 
+│   │   │   ├── CFunctionExecuterChar.py - Makes sure that each C type has the right operation behaviour
+│   │   │   ├── CFunctionExecuterFloat.py - Makes sure that each C type has the right operation behaviour
+│   │   │   ├── CFunctionExecuterInt.py - Makes sure that each C type has the right operation behaviour
+│   │   │   ├── CFunctionExecuterPtr.py - Makes sure that each C type has the right operation behaviour
+│   │   │   ├── CFunctionExecuter.py - Makes sure that each C type has the right operation behaviour
+│   │   │   ├── COperationHandler.py - Simulates operations like it would behave in C
+│   │   │   ├── InvalidOperatorFloatError.py - Error used in COperationHandler & -Executer
+│   │   │   └── InvalidOperatorPtrError.py - Error used in COperationHandler & -Executer
+│   │   ├── DeadCodeRemover.py - Remove unreachable code
+│   │   ├── DotVisitor.py - Export the AST to a .dot file
+│   │   ├── DynamicAllocation.py - Add dynamic allocation functionality
+│   │   ├── EnumConverter.py - Convert enum nodes to our format
+│   │   ├── ErrorExporter.py - File containing methods to throw errors
+│   │   ├── FileIO.py - - Add FileIO functionality
+│   │   ├── FunctionPtrCleaner.py - Cleanup Function Pointer declaration to our declration format
+│   │   ├── IdentifierReplacerVisitor.py - Replace variables with known values at compile time
+│   │   ├── PointerReformater.py - Reformat the '->' pointer operator towards (* ). operators
+│   │   ├── Preproccesing - Directory containing preprocessor code
+│   │   │   └── preProcessor.py - Execute preprocessing; remove comments & resolve #directives
+│   │   ├── SizeOfTranslater.py - Convert SizeOf expressions, to an integer indicating the size of this type
+│   │   ├── StringToArray.py - Make it possible to represent strings as char arrays
+│   │   ├── StructCleanerAfter.py - Clean Struct Nodes after Table creation
+│   │   ├── StructCleaner.py - Cleanup struct nodes & insert info into the Struct Table
+│   │   ├── SwitchConverter.py - Convert switch stamenets to if statements
+│   │   ├── Tables - Directory containing tables & type objects
+│   │   │   ├── AbstractTable.py - Abstract Base Class for our Tables
+│   │   │   ├── FunctionSymbolType.py - Type that holds data about Functions
+│   │   │   ├── StructTable.py - Table to map structs info to scopes
+│   │   │   ├── SymbolTable.py - Should be clear
+│   │   │   ├── SymbolTypeArray.py - Type holding array info
+│   │   │   ├── SymbolTypePtr.py - Type holding ptr info
+│   │   │   ├── SymbolType.py - Simple type for base types, also used as base class for others
+│   │   │   ├── SymbolTypeStruct.py - Type holding struct info
+│   │   │   ├── SymbolTypeUnion.py - Type holding union info
+│   │   │   ├── TableDotVisitor.py - Exports the symboltable to a .dot file
+│   │   │   ├── TypedefTable.py - Table containing info about typedefs
+│   │   │   └── TypeNodehandler.py - Tools with regard to creating and retrieving AST TypeNode types
+│   │   ├── TypeCleaner.py - Convert 'Type' subtrees to a ASTTypeNode containing the type
+│   │   ├── TypeMerger.py - Formats declarations with enums, structs to our format.
+│   │   ├── UnarySaVisitor.py - Semantic Analyses for Unary operations
+│   │   ├── Utils - Directory containing helper functions
+│   │   │   └── ArraySizeReader.py - Help reading array sizes
+│   │   ├── ValueAdderVisitor.py - Constant Propagation
+│   │   ├── VirtualLineNrVisitor.py - Map code to a virtual linenr (needed instead of linenr by using multiple files)
+│   │   └── VoidReturnAdder.py - Add void returns to void functions
+└── TestCases - Directory containing our test system
+    ├── ABCTests - DIrectory containing the abstract base class test & examples
+    │   ├── abcTest.py - Abstract Base Test (from unitTest)
+    │   ├── AstLoader.py - Can load & export an AST to .json files
+    │   ├── createTests - Directory to create a new test file
+    │   │   ├── file_read_json.json - .json upon file read
+    │   │   ├── file_read_json_result.json - .json after applied actions
+    │   │   ├── read_file_after.dot - .dot file after applied actions
+    │   │   ├── read_file_after.png - .png file after applied actions
+    │   │   ├── read_file_before.dot - initial AST
+    │   │   ├── read_file_before.png - initial AST in png
+    │   │   ├── read_file.c - Test input file
+    │   │   └── testCaseCreator.py - Action applyer
+    │   ├── ReCalibrateTestCases.py - Script to automaticly remake all .json files
+    │   ├── temp - Temp directory in which any output files are generated
+    │   │   └── temp.txt - File to ensure the directory exists
+    │   └── tests - Directory containing test files corresponding to a unittest
+    │       ├── error_dict.json - Predefine expected errors for each file
+    │       ├── input_dict.json - If exists, predefined input for scanf
+    │       ├── test1.c - A test file
+    │       ├── test1.json - Generated .json after AST test
+    │       └── test1_result.json - Expected .json result
+    ├── ASTTests - Directory containing AST unit tests
+    └── LLVMTests - Directory containing LLVM unit tests
+
+169 directories, 1714 files
 ```
 
 ### Tests
