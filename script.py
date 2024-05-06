@@ -9,8 +9,7 @@ def script():
     directory += "/example_source_files"  # Walk through the testfiles
 
     for file in os.listdir(directory):  # Loop through all files
-        directory = directory+"/"+file+"/"
-        file_name = directory+file
+        file_name = directory+"/"+file+"/"+file
 
         c = file_name+".c"
         llvm = file_name+"_.ll"
@@ -18,13 +17,14 @@ def script():
         ast = file_name+"_ast.dot"
         table = file_name+"_table.dot"
 
-        print(c, llvm)
+        print(c)
         # Clean singleton
         LLVMSingleton.getInstance().clear()
 
         # Run our llvm
-        main([0, "--input", c, "--target_llvm", llvm, "--fold", "True", "--render_ast", ast, "--render_symb", table, "--target_control_flow", cfg])  # Run our compiler with folding
-        break
-
+        try:
+            main([0, "--input", c, "--target_llvm", llvm, "--fold", "True", "--render_ast", ast, "--render_symb", table, "--target_control_flow", cfg])  # Run our compiler with folding
+        except:
+            continue
 
 script()
