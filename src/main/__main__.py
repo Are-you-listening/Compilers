@@ -152,6 +152,8 @@ def Processing(ast, dot_file, fold, includeSTDIO):
 
     DeadCodeRemover().visit(ast, cfc.getControlFlowGraph())  # removes dead code inside a block coming after a return/continue or break
 
+    #DotVisitor("output/patap").visit(ast)
+
     VoidReturnAdder().addReturn(cfc.getControlFlowGraph())
 
     if dot_file is not None:
