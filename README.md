@@ -39,20 +39,20 @@ sudo apt install llvm
 - [X] Pointer Arithmetic
 - [X] Increment/Decrement Operations
 - [X] Constant propagation 
-- [X] [Error Analysis: Syntax Errors](example_source_files/20_1_Syntax_Errors.c) /s1
+- [X] [Error Analysis: Syntax Errors](example_source_files/20_1_Syntax_Errors.c)
 - [X] [Error Analysis: Semantic Errors (all Semantic error features)](example_source_files/21_1_Semantic_Errors.c)
 - [X] [SymbolTable and Visualization of the symbol table](example_source_files/22_SymbolTable_and_Visualization.c)
 - [X] [Singleline Comments](example_source_files/23_SingleLine_Comment.c)
 - [X] [Multiline Comments](example_source_files/24_MultiLine_Comment.c)
-- [X] Original Code as Comments
-- [X] Outputting to the standard output using printf
-- [X] Typedefs
-- [X] 'if' and 'else' statements
-- [X] Loops: 'while' and 'for', also support keywords 'break' & 'continue'
-- [X] Scoping: if-else, for, while, anonymous
-- [X] Switch statements: switch, break, case
-- [X] Enumerations
-- [X] [Support Scopes in symbol Table /s2](./example_source_files/40_suppport_scopes_in_symbol_table.c)
+- [X] [Original Code as Comments](example_source_files/25_Original_Code_Comment.c)
+- [X] [Outputting to the standard output using printf](example_source_files/26_Printf.c)
+- [X] [Typedefs](example_source_files/27_Typedefs.c)
+- [X] ['if' and 'else' statements](example_source_files/28_If_Else.c)
+- [X] [Loops: 'while' and 'for', also support keywords 'break' & 'continue'](example_source_files/29_Loops.c)
+- [X] [Scoping: if-else, for, while, anonymous](example_source_files/30_Scoping.c)
+- [X] [Switch statements: switch, break, case](example_source_files/31_Switch.c)
+- [X] [Enumerations](example_source_files/32_Enumeration.c)
+- [X] [Support Scopes in symbol Table](./example_source_files/40_suppport_scopes_in_symbol_table.c)
 - [X] [Function scopes](./example_source_files/41_function_scopes.c)
 - [X] [Local & Global variables](./example_source_files/42_local_and_global_variables.c)
 - [X] [Functions: definitions; declarations; calling, recursive calls](./example_source_files/43_functions.c)

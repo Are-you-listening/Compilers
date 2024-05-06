@@ -1,3 +1,5 @@
+
+/* show symbol table visualization */
 int main(){
     int x = 3;
     {
