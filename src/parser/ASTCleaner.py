@@ -27,7 +27,6 @@ class ASTCleaner(ASTVisitor):
         self.cleanDereferenceAssignments(node)
         self.formatFunctionCall(node)
         self.clean_anonymous_scope(node)
-        self.cleanConversions(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         self.cleanEqualSign(node)
@@ -228,21 +227,4 @@ class ASTCleaner(ASTVisitor):
 
         if node.text == "Code" and node.parent.text == "Code":
             node.text = "Scope"
-
-    def cleanConversions(self, node: ASTNode):
-        # TODO REMOVE REDUANT THIS AT LEAST SHOULD BE
-        """
-        Check if the conversion to type, is already a ASTTypeNode, if not, we will convert it to such a type node
-        """
-        if node.text != "Conversion":
-            return
-
-        type_node = node.getChild(0)
-        if isinstance(type_node, ASTNodeTypes):
-            return
-
-        new_type_node = TypeNodeHandler.getInstance().typeToTypeNode(type_node)
-
-        node.replaceChild(type_node, new_type_node)
-
 

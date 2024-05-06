@@ -31,8 +31,8 @@ class ValueAdderVisitor(ASTVisitor):
                 return
 
             if node.text == "printf":
-                for i in range(1, len(node.children)):
-                    IdentifierReplacerVisitor(False).preorder(node.getChild(i))
+                for child in range(1, len(node.children) - 1):
+                    IdentifierReplacerVisitor(False).preorder(node.getChild(1))
                 return
 
             ident = node.getChild(0)
