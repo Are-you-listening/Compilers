@@ -34,8 +34,9 @@ def declaredPreviously(node: ASTNodeTerminal):
 
 
 class IdentifierReplacerVisitor(ASTVisitor):
-    def __init__(self):
+    def __init__(self, is_strict: bool):
         self.previousNode = None
+        self.is_strict = is_strict
 
     def visitNode(self, node: ASTNode):
         pass
@@ -69,6 +70,9 @@ class IdentifierReplacerVisitor(ASTVisitor):
 
             entry = node.getSymbolTable().getEntry(toReplace)
 
+            if self.is_strict and not entry.isConst():
+                return
+
             if (not entry.isConst() and (entry.firstUsed is not None and entry.firstUsed != node)) or entry.is_referenced() or \
                     entry.getTypeObject().hasFunction():
                 return
@@ -90,7 +94,7 @@ class IdentifierReplacerVisitor(ASTVisitor):
                 ErrorExporter.uninitializedVariable(toReplace, node.position)
                 return
 
-            if entry.value.text in ("Expr", "Dereference"):
+            if entry.value.text in ("Expr", "Dereference", "InitList"):
                 return
 
             checker = CheckForFunction()

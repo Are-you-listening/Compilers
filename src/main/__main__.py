@@ -82,15 +82,20 @@ def cleanGreen(input_file, symbol_file):
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
 
+
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
+
 
     FileIO.add_file_type()
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
+
     FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
 
+
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
+
 
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
@@ -114,7 +119,11 @@ def cleanGreen(input_file, symbol_file):
 
     CheckRvalues().visit(ast)
 
+    #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
+
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
+
+    #DotVisitor("output/debug1").visit(ast)  # Export AST in Dot
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)

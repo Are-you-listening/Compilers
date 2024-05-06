@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-int e[3] = {1, 2, 3};
+char e[6] = "hello";
 
 int main(){
-    printf("%d", *e);
+    printf("%s", e);
     return 0;
 }
