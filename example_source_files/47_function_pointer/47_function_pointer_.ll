@@ -6,22 +6,23 @@ define i32 @"factorial"(i32 %".1")
 {
 .3:
   %".4" = alloca i32
-  store i32 %".1", i32* %".4"
-  %".6" = load i32, i32* %".4"
+  %".5" = alloca i32
+  store i32 %".1", i32* %".5"
+  %".7" = load i32, i32* %".5"
   ; }  INT factorial ( INT n ) { if ( n == 0 ) {
-  %".8" = icmp eq i32 %".6", 0
-  br i1 %".8", label %".9", label %".12"
-.9:
+  %".9" = icmp eq i32 %".7", 0
+  br i1 %".9", label %".10", label %".13"
+.10:
   ret i32 1
   ; return 1 ;
-.12:
-  %".13" = load i32, i32* %".4"
+.13:
+  %".14" = load i32, i32* %".5"
   ; } else { return n * factorial ( n - 1 ) ;
-  %".15" = load i32, i32* %".4"
-  %".16" = sub i32 %".15", 1
-  %".17" = call i32 @"factorial"(i32 %".16")
-  %".18" = mul i32 %".13", %".17"
-  ret i32 %".18"
+  %".16" = load i32, i32* %".5"
+  %".17" = sub i32 %".16", 1
+  %".18" = call i32 @"factorial"(i32 %".17")
+  %".19" = mul i32 %".14", %".18"
+  ret i32 %".19"
 }
 
 define i32 @"main"()

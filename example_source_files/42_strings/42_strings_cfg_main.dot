@@ -1,5 +1,5 @@
 digraph AST {
-  "128505523060208" [label="%\\\".2\\\" = .2:
+  "136550725467920" [label="%\\\".2\\\" = .2:
   %\\\".3\\\" = alloca [10 x i8], align 16
   ;  INT main ( ) { CHAR s [ 10 ] = \\\"string\\\\nhe\\\" ;
   %\\\".5\\\" = getelementptr inbounds [10 x i8], [10 x i8]* %\\\".3\\\", i64 0, i32 9
