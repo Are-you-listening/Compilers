@@ -1,5 +1,5 @@
 digraph AST {
-  "126527936408848" [label="%\\\".2\\\" = .2:
+  "139300270533808" [label="%\".2\" = .2:
   ; // global comment
   ret i32 0
   ;   INT main ( ) {  return 0 ;

@@ -1,81 +1,21 @@
 digraph AST {
-  "126527934269376" [label="main: type: INT False  False  
-                   name: main
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x731394938f70>
-                   first used: None)
-malloc: type: PTR False CHAR False  False  
-                   name: malloc
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313948e9930>
-                   first used: None)
-calloc: type: PTR False CHAR False  False  
-                   name: calloc
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313948e9930>
-                   first used: None)
-free: type: VOID False  False  
-                   name: free
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313948e9930>
-                   first used: None)
-realloc: type: PTR False CHAR False  False  
-                   name: realloc
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313948e9930>
-                   first used: None)
-fopen: type: PTR False _IO_FILE False  False  
-                   name: fopen
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313948e9930>
-                   first used: None)
-fgets: type: PTR False CHAR False  False  
-                   name: fgets
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313948e9930>
-                   first used: None)
-fputs: type: CHAR False  False  
-                   name: fputs
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313948e9930>
-                   first used: None)
-fclose: type: VOID False  False  
-                   name: fclose
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313948e9930>
-                   first used: None)"];
-  "126527934269376" -> "126527934270960";
-  "126527934270960" [label=""];
-  "126527934270960" -> "126527934273264";
-  "126527934273264" [label="x: type: INT False  
-                   name: x
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x731394939330>
-                   first used: None)"];
-  "126527934273264" -> "126527934272208";
-  "126527934273264" -> "126527934270048";
-  "126527934272208" [label="x: type: INT False  
-                   name: x
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x731394939c90>
-                   first used: None)"];
-  "126527934272208" -> "126527934268704";
-  "126527934268704" [label="x: type: INT False  
-                   name: x
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x73139493bc70>
-                   first used: None)"];
-  "126527934270048" [label=""];
+  "139300269643600" [label="main:  INT
+malloc:  CHAR*
+calloc:  CHAR*
+free:  VOID
+realloc:  CHAR*
+fopen:  _IO_FILE*
+fgets:  CHAR*
+fputs:  CHAR
+fclose:  VOID"];
+  "139300269643600" -> "139300269647248";
+  "139300269647248" [label=""];
+  "139300269647248" -> "139300269643216";
+  "139300269643216" [label="x:  INT"];
+  "139300269643216" -> "139300269647104";
+  "139300269643216" -> "139300269651904";
+  "139300269647104" [label="x:  INT"];
+  "139300269647104" -> "139300269644752";
+  "139300269644752" [label="x:  INT"];
+  "139300269651904" [label=""];
 }

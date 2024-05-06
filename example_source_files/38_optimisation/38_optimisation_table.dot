@@ -1,81 +1,21 @@
 digraph AST {
-  "126527934840544" [label="main: type: INT False  False  
-                   name: main
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7313949c3e20>
-                   first used: None)
-malloc: type: PTR False CHAR False  False  
-                   name: malloc
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313949bb880>
-                   first used: None)
-calloc: type: PTR False CHAR False  False  
-                   name: calloc
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313949bb880>
-                   first used: None)
-free: type: VOID False  False  
-                   name: free
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313949bb880>
-                   first used: None)
-realloc: type: PTR False CHAR False  False  
-                   name: realloc
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313949bb880>
-                   first used: None)
-fopen: type: PTR False _IO_FILE False  False  
-                   name: fopen
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313949bb880>
-                   first used: None)
-fgets: type: PTR False CHAR False  False  
-                   name: fgets
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313949bb880>
-                   first used: None)
-fputs: type: CHAR False  False  
-                   name: fputs
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313949bb880>
-                   first used: None)
-fclose: type: VOID False  False  
-                   name: fclose
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7313949bb880>
-                   first used: None)"];
-  "126527934840544" -> "126527934840784";
-  "126527934840784" [label=""];
-  "126527934840784" -> "126527934825184";
-  "126527934825184" [label=""];
-  "126527934825184" -> "126527934838960";
-  "126527934838960" [label="a: type: INT False  
-                   name: a
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7313949c39a0>
-                   first used: None)"];
-  "126527934838960" -> "126527934838336";
-  "126527934838960" -> "126527935081840";
-  "126527934838336" [label="c: type: INT False  
-                   name: c
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7313949fd1b0>
-                   first used: None)"];
-  "126527935081840" [label="g: type: INT False  
-                   name: g
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7313949fe200>
-                   first used: None)"];
+  "139300270257632" [label="main:  INT
+malloc:  CHAR*
+calloc:  CHAR*
+free:  VOID
+realloc:  CHAR*
+fopen:  _IO_FILE*
+fgets:  CHAR*
+fputs:  CHAR
+fclose:  VOID"];
+  "139300270257632" -> "139300270256432";
+  "139300270256432" [label=""];
+  "139300270256432" -> "139300270256384";
+  "139300270256384" [label=""];
+  "139300270256384" -> "139300270258736";
+  "139300270258736" [label="a:  INT"];
+  "139300270258736" -> "139300270259696";
+  "139300270258736" -> "139300270259072";
+  "139300270259696" [label="c:  INT"];
+  "139300270259072" [label="g:  INT"];
 }

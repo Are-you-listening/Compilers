@@ -12,7 +12,7 @@ define i32 @"main"()
   %".7" = call i32 (i8*, ...) @"printf"(i8* %".6")
   ;  if ( 0 == 0 ) { printf ( "Rico, kaboom!" ) ;
   ret i32 0
-  ; } else if ( 0 != 0 ) { printf ( "kowalski analysis!" ) ; } return 0 ;
+  ; } else if ( 0 != 0 ) { printf ( "Kowalski analysis!" ) ; } return 0 ;
 }
 
 @".str.0" = internal constant [14 x i8] c"Rico, kaboom!\00"

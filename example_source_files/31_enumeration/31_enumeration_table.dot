@@ -1,107 +1,22 @@
 digraph AST {
-  "126527935129600" [label="Sun: type: INT True  
-                   name: Sun
-                   const: True
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x731394a0a230>
-                   first used: None)
-Sat: type: INT True  
-                   name: Sat
-                   const: True
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x731394a092a0>
-                   first used: None)
-Fri: type: INT True  
-                   name: Fri
-                   const: True
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x731394a09cc0>
-                   first used: None)
-Thur: type: INT True  
-                   name: Thur
-                   const: True
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x731394a0a6e0>
-                   first used: None)
-Wed: type: INT True  
-                   name: Wed
-                   const: True
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x731394a09de0>
-                   first used: None)
-Tue: type: INT True  
-                   name: Tue
-                   const: True
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x731394a0ad70>
-                   first used: None)
-Mon: type: INT True  
-                   name: Mon
-                   const: True
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x731394a09870>
-                   first used: None)
-main: type: INT False  False  
-                   name: main
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x731394a0b790>
-                   first used: None)
-malloc: type: PTR False CHAR False  False  
-                   name: malloc
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x731394a0a9b0>
-                   first used: None)
-calloc: type: PTR False CHAR False  False  
-                   name: calloc
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x731394a0a9b0>
-                   first used: None)
-free: type: VOID False  False  
-                   name: free
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x731394a0a9b0>
-                   first used: None)
-realloc: type: PTR False CHAR False  False  
-                   name: realloc
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x731394a0a9b0>
-                   first used: None)
-fopen: type: PTR False _IO_FILE False  False  
-                   name: fopen
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x731394a0a9b0>
-                   first used: None)
-fgets: type: PTR False CHAR False  False  
-                   name: fgets
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x731394a0a9b0>
-                   first used: None)
-fputs: type: CHAR False  False  
-                   name: fputs
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x731394a0a9b0>
-                   first used: None)
-fclose: type: VOID False  False  
-                   name: fclose
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x731394a0a9b0>
-                   first used: None)"];
-  "126527935129600" -> "126527935121200";
-  "126527935121200" [label=""];
-  "126527935121200" -> "126527935128832";
-  "126527935128832" [label="day: type: INT False  
-                   name: day
-                   const: False
-                   value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x731394a0a260>
-                   first used: None)"];
+  "139300270534576" [label="Sun: const INT
+Sat: const INT
+Fri: const INT
+Thur: const INT
+Wed: const INT
+Tue: const INT
+Mon: const INT
+main:  INT
+malloc:  CHAR*
+calloc:  CHAR*
+free:  VOID
+realloc:  CHAR*
+fopen:  _IO_FILE*
+fgets:  CHAR*
+fputs:  CHAR
+fclose:  VOID"];
+  "139300270534576" -> "139300270538032";
+  "139300270538032" [label=""];
+  "139300270538032" -> "139300270534432";
+  "139300270534432" [label="day:  INT"];
 }

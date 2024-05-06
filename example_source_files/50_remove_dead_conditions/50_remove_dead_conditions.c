@@ -6,7 +6,7 @@ int main(){
 	if ( 0==0 ){
 		printf("Rico, kaboom!");
 	} else if (0!=0) {
-		printf("kowalski analysis!");
+		printf("Kowalski analysis!");
 	}
 	return 0;
 }

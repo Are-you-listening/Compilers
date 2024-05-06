@@ -124,7 +124,7 @@ def cleanGreen(input_file, symbol_file):
 
     if symbol_file is not None:
         s = TableDotVisitor(symbol_file)
-        s.visit(ast.root.getSymbolTable(), True)
+        s.visit(ast.root.getSymbolTable(), False)
 
     return ast, codegetter, includeSTDIO, comments
 
@@ -206,7 +206,7 @@ def main(argv):
 
         if control_flow_file is not None:
             for function_name, cfg in cfgs.items():
-                control_dot = ControlFlowDotVisitor(function_name,control_flow_file)  # Create a CFG
+                control_dot = ControlFlowDotVisitor(function_name, control_flow_file)  # Create a CFG
                 control_dot.visit(cfg.root)
 
 

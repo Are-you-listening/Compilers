@@ -1,28 +1,28 @@
 digraph AST {
-  "126527934825808" [label="%\\\".2\\\" = .2:
-  %\\\".3\\\" = alloca i32, align 4
-  store i32 5, i32* %\\\".3\\\", align 4
+  "139300270248368" [label="%\".2\" = .2:
+  %\".3\" = alloca i32, align 4
+  store i32 5, i32* %\".3\", align 4
   ;   INT main ( ) {  INT a = 5 ;
-  store i32 5, i32* %\\\".3\\\", align 4
+  store i32 5, i32* %\".3\", align 4
   ; a = 5 ;
-  %\\\".8\\\" = alloca i32, align 4
-  store i32 6, i32* %\\\".8\\\", align 4
+  %\".8\" = alloca i32, align 4
+  store i32 6, i32* %\".8\", align 4
   ;  INT b = 6 ;
-  store i32 6, i32* %\\\".8\\\", align 4
+  store i32 6, i32* %\".8\", align 4
   ; b = 6 ;
-  %\\\".13\\\" = alloca i32, align 4
-  store i32 3, i32* %\\\".13\\\", align 4
+  %\".13\" = alloca i32, align 4
+  store i32 3, i32* %\".13\", align 4
   ;  INT c = 3 ;
-  store i32 3, i32* %\\\".13\\\", align 4
+  store i32 3, i32* %\".13\", align 4
   ; c = 3 ;
-  %\\\".18\\\" = load i32, i32* %\\\".3\\\", align 4
+  %\".18\" = load i32, i32* %\".3\", align 4
   ;  INT d = ( a + b ) * c ;
-  %\\\".20\\\" = load i32, i32* %\\\".8\\\", align 4
-  %\\\".21\\\" = add i32 %\\\".18\\\", %\\\".20\\\"
-  %\\\".22\\\" = load i32, i32* %\\\".13\\\", align 4
-  %\\\".23\\\" = mul i32 %\\\".21\\\", %\\\".22\\\"
-  %\\\".24\\\" = alloca i32, align 4
-  store i32 %\\\".23\\\", i32* %\\\".24\\\", align 4
+  %\".20\" = load i32, i32* %\".8\", align 4
+  %\".21\" = add i32 %\".18\", %\".20\"
+  %\".22\" = load i32, i32* %\".13\", align 4
+  %\".23\" = mul i32 %\".21\", %\".22\"
+  %\".24\" = alloca i32, align 4
+  store i32 %\".23\", i32* %\".24\", align 4
   ret i32 0
   ;  return 0 ;"];
 }

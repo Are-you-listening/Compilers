@@ -1,6 +1,6 @@
 digraph AST {
-  "126527935506864" [label="%\\\".2\\\" = .2:
-  %\\\".3\\\" = alloca i32, align 4
+  "139300270909872" [label="%\".2\" = .2:
+  %\".3\" = alloca i32, align 4
   ; }   INT main ( ) { INT x ;
   ret i32 0
   ; return 0 ;"];
