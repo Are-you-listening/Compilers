@@ -4,9 +4,9 @@ import os
 
 
 def script():
-    directory = os.path.dirname(os.path.abspath(__file__))  # Get directory file is in
-    os.chdir(directory)  # Change the dir to only focus on this test
-    directory += "/example_source_files"  # Walk through the testfiles
+    curr_dir = os.path.dirname(os.path.abspath(__file__))# Get directory file is in
+    os.chdir(curr_dir)  # Change the dir to only focus on this test
+    directory = "./example_source_files"  # Walk through the testfiles
 
     for file in os.listdir(directory):  # Loop through all files
         file_name = directory+"/"+file+"/"+file
@@ -20,6 +20,8 @@ def script():
         # Clear singleton
         LLVMSingleton.getInstance().clear()
 
+
+
         # Run our llvm
         try:
             outfile = open(file_name+".sh", "w")  # Create a .sh file to execute files in the subdirectory
@@ -27,7 +29,9 @@ def script():
             outfile.write(f"python3 -m src.main --input {c} --target_llvm {llvm} --fold True --render_ast {ast} --render_symb {table} --target_control_flow {cfg}")
             outfile.close()
 
-            main([0, "--input", c, "--target_llvm", llvm, "--fold", "True", "--render_ast", ast, "--render_symb", table, "--target_control_flow", cfg])  # Run our compiler with folding
+
+
+            main([0, "--input", f"{curr_dir}{c[1:]}", "--target_llvm", f"{curr_dir}{llvm[1:]}", "--fold", "True", "--render_ast", f"{curr_dir}{ast[1:]}", "--render_symb", f"{curr_dir}{table[1:]}", "--target_control_flow", f"{curr_dir}{cfg[1:]}"])  # Run our compiler with folding
         except:
             continue
 

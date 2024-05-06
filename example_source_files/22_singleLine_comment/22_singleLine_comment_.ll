@@ -1,4 +1,4 @@
-; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/example_source_files/22_singleLine_comment/22_singleLine_comment.c"
+; ModuleID = "/home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/example_source_files/22_singleLine_comment/22_singleLine_comment.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
