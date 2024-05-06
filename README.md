@@ -39,11 +39,11 @@ sudo apt install llvm
 - [X] Pointer Arithmetic
 - [X] Increment/Decrement Operations
 - [X] Constant propagation 
-- [X] Error Analysis: Syntax Errors /s1
-- [X] Error Analysis: Semantic Errors (all Semantic error features)
-- [X] SymbolTable and Visualization of the symbol table
-- [X] Singleline Comments
-- [X] Multiline Comments
+- [X] [Error Analysis: Syntax Errors](example_source_files/20_1_Syntax_Errors.c) /s1
+- [X] [Error Analysis: Semantic Errors (all Semantic error features)](example_source_files/21_1_Semantic_Errors.c)
+- [X] [SymbolTable and Visualization of the symbol table](example_source_files/22_SymbolTable_and_Visualization.c)
+- [X] [Singleline Comments](example_source_files/23_SingleLine_Comment.c)
+- [X] [Multiline Comments](example_source_files/24_MultiLine_Comment.c)
 - [X] Original Code as Comments
 - [X] Outputting to the standard output using printf
 - [X] Typedefs
@@ -73,8 +73,8 @@ sudo apt install llvm
 
 
 ### Optional Functionality: 
-- [X] Include Guards (mandatory because group of 4)
-- [X] Unions (mandatory because group of 4)
+- [X] [Include Guards (mandatory because group of 4)](./example_source_files/x_include_guards.c)
+- [X] [Unions (mandatory because group of 4)](./example_source_files/y_unions.c)
 - [X] Function Pointers (mandatory because group of 4)
 
 - [X] Const Casting
