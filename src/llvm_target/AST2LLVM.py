@@ -217,13 +217,13 @@ class AST2LLVM(ASTVisitor):
         if var_child.symbol_table.isRoot():  # Globals; extra stuff needs to be done
             llvm_var = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(),
                                          CTypesToLLVM.getIRType(entry.getTypeObject()), var_child.text)  # Declare a global variable
-            value = var_child.getSiblingNeighbour(1)  # Get the value
-            if value is None:
+            value_node = var_child.getSiblingNeighbour(1)  # Get the value
+            if value_node is None:
                 value = 0
             else:
-                value = value.text
+                value = value_node.text
 
-            self.get_initializer_value(entry.getTypeObject(), llvm_var, value)
+            self.get_initializer_value(entry.getTypeObject(), llvm_var, value, value_node)
 
         else:
 
@@ -246,11 +246,29 @@ class AST2LLVM(ASTVisitor):
         """
         see assignment to declaration as assignment
         """
-        if node.getChildAmount() == 2:
+        if node.getChildAmount() == 2 and not var_child.symbol_table.isRoot():
             self.handleAssignment(node)
 
     @staticmethod
-    def get_initializer_value(entry: SymbolType, llvm_var, value):
+    def get_initializer_value(entry: SymbolType, llvm_var, value, value_node: ASTNodeTerminal = None):
+
+        if value_node is not None and value_node.text == "InitList":
+
+            array_val = initList(entry, value_node)
+
+            llvm_var.initializer = array_val
+            return llvm_var.initializer
+
+
+        if value_node is not None and isinstance(value_node, ASTNodeTerminal) and value_node.type == "STRING":
+            s = string(value)
+
+            s2 = s.gep([ir.Constant(ir.IntType(64), 0), ir.Constant(ir.IntType(64), 0)])
+
+            llvm_var.initializer = s2
+
+            return llvm_var.initializer
+
         if not isinstance(entry, SymbolTypeArray):
             # Preset some values
             llvm_var.initializer = ir.Constant(CTypesToLLVM.getIRType(entry), value)
@@ -364,6 +382,7 @@ class AST2LLVM(ASTVisitor):
         load part of printf statement we want to print
         """
         for child in node.children[1:]:
+            print("child", child.text)
             llvm_var = self.llvm_map.get(child, None)
             if llvm_var is not None:
                 args.append(llvm_var)

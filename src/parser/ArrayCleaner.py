@@ -150,6 +150,9 @@ class ArrayCleaner(ASTVisitor):
         if node.text != "InitList":
             return
 
+        if not self.__inFunction(node):
+            return
+
         if node.parent.text == "InitList":
             return
 
@@ -290,3 +293,12 @@ class ArrayCleaner(ASTVisitor):
         remove the initialization list from the tree
         """
         self.to_remove.add(node)
+
+    @staticmethod
+    def __inFunction(node):
+        temp = node
+        while temp is not None and temp.text not in ("Function", "Start"):
+            temp = temp.parent
+
+
+        return temp.text == "Function"
