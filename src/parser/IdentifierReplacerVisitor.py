@@ -5,6 +5,7 @@ from src.parser.SwitchConverter import SwitchConverter
 from src.parser.Tables.SymbolTypePtr import SymbolTypePtr
 from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 
+
 class CheckForFunction(ASTVisitor):
     def __init__(self):
         self.found = False

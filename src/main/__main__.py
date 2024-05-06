@@ -151,7 +151,7 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     #DotVisitor("output/debug0").visit(ast)  # Export AST in Dot
     ConstantFoldingVisitor().visit(ast)
 
-    if fold and False:
+    if fold:
         ValueAdderVisitor().visit(ast)
 
     ConstantStatementFolding().visit(ast)
