@@ -129,6 +129,7 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     """
     It is vital that AST conversion occurs before constant folding
     """
+    #DotVisitor("output/debug66.dot").visit(ast)
     ASTConversion().visit(ast)
 
     UnarySaVisitor().visit(ast)

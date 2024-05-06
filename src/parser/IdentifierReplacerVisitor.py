@@ -94,7 +94,7 @@ class IdentifierReplacerVisitor(ASTVisitor):
                 ErrorExporter.uninitializedVariable(toReplace, node.position)
                 return
 
-            if entry.value.text in ("Expr", "Dereference"):
+            if entry.value.text in ("Expr", "Dereference", "InitList"):
                 return
 
             checker = CheckForFunction()

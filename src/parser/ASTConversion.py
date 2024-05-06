@@ -192,6 +192,9 @@ class ASTConversion(ASTVisitor):
             be default 1 ptr is added, so remove it again, because assignment
             """
 
+            if assign_type.isBase():
+                ErrorExporter.invalidDereferenceNotPtr(node.position, assign_type)
+
             to_type = assign_type.deReference()
 
             """
@@ -717,7 +720,6 @@ class ASTConversion(ASTVisitor):
 
         data_type3 = None
 
-
         """when we have a 'Dereference' node, the type after executing this node, will be 1 ptr less, than it was
                     before"""
         child = node.getChild(0)
@@ -727,6 +729,12 @@ class ASTConversion(ASTVisitor):
         """
         We we do a [] access, we need to check that the value provided is an integer
         """
+
+        """
+        when trying to dereference a non-ptr, throw an error
+        """
+        if not isinstance(data_type, SymbolTypePtr):
+            ErrorExporter.invalidDereferenceNotPtr(node.position, data_type)
 
         is_struct = False
         if is_array:
@@ -745,12 +753,6 @@ class ASTConversion(ASTVisitor):
             is_struct = self.is_struct(node)
             if is_struct:
                 data_type3= self.handle_struct(node)
-
-        """
-        when trying to dereference a non-ptr, throw an error
-        """
-        if data_type.isBase():
-            ErrorExporter.invalidDereferenceNotPtr(node.position, data_type)
 
         if isinstance(data_type,
                       SymbolTypeStruct):  # Can't further dereference; '.'/'[]' operator is used on the wrong type

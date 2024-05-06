@@ -310,6 +310,23 @@ def string(text: str):
     return format_str_global
 
 
+def initList(entry_bef, node):
+    entry = entry_bef.deReference()
+    elements = []
+    for child in node.children:
+        if child.text == "InitList":
+            llvm_element = initList(entry, child)
+        else:
+            text = child.text
+            if child.type == "CHAR":
+                text = ord(child.text[1:-1])
+
+            llvm_element = ir.Constant(CTypesToLLVM.getIRType(entry), text)
+        elements.append(llvm_element)
+
+    return ir.Constant(CTypesToLLVM.getIRType(entry_bef), elements)
+
+
 class Load:
     @staticmethod
     def identifier(load_llvm):
