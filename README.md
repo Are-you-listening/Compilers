@@ -12,7 +12,7 @@ sudo apt install llvm
 ```
 
 ### Mandatory Functionality:
-
+(In short we made all the mandatory features)
 
 - [X] Binary operations +, -,* and /
 - [X] Binary operations >, <, and ==
@@ -31,34 +31,62 @@ sudo apt install llvm
 - [X] Expressions
 - [X] Literals of types: 'char', 'int', 'float' and pointers for these types
 - [X] Variables: variable declarations, variable definitions, assignment statements, and identifiers
-- [X] Pointers & Unary Operations: '*' (dereference) and '&' (address)
+- [X] Pointers:(Declaration, definition)  & Unary Operations: '*' (dereference) and '&' (address)
+- [X] Pointer to const Values (We also support Const ptrs btw)
 - [X] Constants
-- [X] Implicit Conversions
+- [X] Implicit Conversions (Warnings when going to poorer type)
 - [X] Explicit Conversions
 - [X] Pointer Arithmetic
 - [X] Increment/Decrement Operations
 - [X] Error Analysis: Syntax Errors
-- [X] Error Analysis: Semantic Errors
+- [X] Error Analysis: Semantic Errors (all Semantic error features)
+- [X] SymbolTable and Visualization of the symbol table
 - [X] Singleline Comments
 - [X] Multiline Comments
 - [X] Original Code as Comments
 - [X] Outputting to the standard output using printf
 - [X] Typedefs
+- [X] 'if' and 'else' statements
+- [X] Loops: 'while' and 'for', also support keywords 'break' & 'continue'
+- [X] Scoping: if-else, for, while, anonymous
+- [X] enumerations
+- [X] Support Scopes in symbol Table
+- [X] Function scopes
+- [X] Local & Global variables
+- [X] Functions: definitions; declarations; calling, recursive calls
+- [X] Pre-processor: #define
+- [X] Pre-processor: #include
+- [X] Optimisations: no code after break, continue, or return
+- [X] Arrays both simple & multi-dimensional arrays
+- [X] Array initialization using initializer list
+- [X] Operations on array elements
+- [X] Strings encoded as zero-terminated char-arrays (both supported as char str[size] and char* str)
+- [X] printf and scanf
+- [X] user Defined Structs
+- [X] Switch statements: switch, break, case
+
+- [X] Include Guards (mandatory because group of 4)
+- [X] Unions (mandatory because group of 4)
+- [X] Function Pointers (mandatory because group of 4)
 - [X] Code Generation: LLVM IR
-- [X] Include Guards 
-- [X] Unions
-- [X] Function Pointers
 
 
 ### Optional Functionality: 
+- [X] Include Guards (mandatory because group of 4)
+- [X] Unions (mandatory because group of 4)
+- [X] Function Pointers (mandatory because group of 4)
+
 - [X] Const Casting
-- [X] ControlFlow and visualization
+- [X] ControlFlow and visualization (Extra optional)
 - [X] Else If Statements
-- [X] Do not generate code for conditions that are always false
-- [x] Dynamic Arrays (stored on heap) (malloc, free, calloc, realloc)
-- [x] Dynamic Allocation of Structs (store structs on heap) (support by also supporting sizeof function)
-- [X] Struct that contains other structs
-- Conversion Warnings?
+- [X] Optimisation: Do not generate code for conditions that are always false
+- [X] Semantic Error: Check for all paths in a function body whether a return statement is present
+- [X] Dynamic Arrays (stored on heap) (malloc, free, calloc, realloc)
+- [X] Structs that contain other structs as a value
+- [X] Dynamic Allocation of Structs (store structs on heap) (support by also supporting sizeof function)
+- [X] File reading using fgets (uses FILE* with fopen and fclose)
+- [X] File reading using fputs (uses FILE* with fopen and fclose)
+- [X] Dynamically allocated strings and character buffers (can be used for printf, fgets, fputs, ...)
 
 ### Technical Functionality: 
 - [X] README

@@ -161,11 +161,6 @@ class ASTConversion(ASTVisitor):
 
                 if to_type.getBaseType() == "VOID" or check_type.getBaseType() == "VOID":
                     ErrorExporter().incorrectVoidFuncUse(node.position)
-                richest_native_type = self.rc.get_richest(to_type.getBaseType(), check_type.getBaseType())
-                if richest_native_type == "CHAR":
-                    richest_native_type = "INT"
-
-                richest_native_type = SymbolType(richest_native_type, False)
 
                 """
                 when 2 conflicting ptr types choose the one with the most ptrs: '*'
@@ -177,6 +172,12 @@ class ASTConversion(ASTVisitor):
                 elif check_type.getPtrAmount() < to_type.getPtrAmount():
                     temp_to = to_type
                 else:
+                    richest_native_type = self.rc.get_richest(to_type.getBaseType(), check_type.getBaseType())
+
+                    if richest_native_type == "CHAR":
+                        richest_native_type = "INT"
+
+                    richest_native_type = SymbolType(richest_native_type, False)
                     temp_to = richest_native_type
 
                     for i in range(check_type.getPtrAmount()):

@@ -10,6 +10,8 @@ class FileIO:
 
         FileIO.__add_fopen(ast.root)
         FileIO.__add_fgets(ast.root)
+        FileIO.__add_fputs(ast.root)
+        FileIO.__add_fclose(ast.root)
 
     @staticmethod
     def add_file_type():
@@ -31,6 +33,20 @@ class FileIO:
         root.getSymbolTable().add(symbol_entry)
 
     @staticmethod
+    def __add_fclose(root):
+        param_list = [SymbolTypePtr(TypeNodeHandler.getInstance().getStruct("_IO_FILE"), False)]
+
+        """
+        Make func type
+        """
+        return_type = SymbolType("VOID", False)
+
+        function_type = FunctionSymbolType(return_type, param_list)
+        symbol_entry = SymbolEntry(function_type, "fclose", None, root, None)
+        symbol_entry.function_is_defined = True
+        root.getSymbolTable().add(symbol_entry)
+
+    @staticmethod
     def __add_fgets(root):
         param_list = [SymbolTypePtr(SymbolType("CHAR", False), False), SymbolType("INT", False),
                       SymbolTypePtr(TypeNodeHandler.getInstance().getStruct("_IO_FILE"), False)]
@@ -44,6 +60,22 @@ class FileIO:
         symbol_entry = SymbolEntry(function_type, "fgets", None, root, None)
         symbol_entry.function_is_defined = True
         root.getSymbolTable().add(symbol_entry)
+
+    @staticmethod
+    def __add_fputs(root):
+        param_list = [SymbolTypePtr(SymbolType("CHAR", False), False),
+                      SymbolTypePtr(TypeNodeHandler.getInstance().getStruct("_IO_FILE"), False)]
+
+        """
+        Make func type
+        """
+        int_type = SymbolType("CHAR", False)
+
+        function_type = FunctionSymbolType(int_type, param_list)
+        symbol_entry = SymbolEntry(function_type, "fputs", None, root, None)
+        symbol_entry.function_is_defined = True
+        root.getSymbolTable().add(symbol_entry)
+
 
     @staticmethod
     def __add_IO_file():

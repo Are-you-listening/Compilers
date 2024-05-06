@@ -410,9 +410,9 @@ class Calculation:
             When we come across an array we need to define a value 0 followed by the index we want to access
             """
 
-            if isinstance(pointer.type.pointee, ir.ArrayType):
+            if isinstance(pointer.type.pointee, ir.ArrayType) and operator == "[]":
                 index_list.insert(0, ir.Constant(ir.types.IntType(64), 0))
-            elif isinstance(pointer.type.pointee, ir.LiteralStructType):
+            elif isinstance(pointer.type.pointee, ir.LiteralStructType) and operator == "[]":
                 index_list.insert(0, ir.Constant(ir.types.IntType(32), 0))
             elif operator == "[]":
                 pointer = block.load(pointer)
