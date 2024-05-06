@@ -17,8 +17,8 @@ Find our demonstration [here](https://www.youtube.com)
 ### Mandatory Functionality:
 (In short we made all the mandatory features) (Links are provided to an example file showing this feature)
 
-- [X] [Binary operations +, -,* and /](./example_source_files/1_binary_operations.c) 
-- [X] [Binary operations >, <, and ==](./example_source_files/1_binary_operations.c) 
+- [X] [Binary operations +, -,* and /](./example_source_files/1_binary_operations/1_binary_operations.c) 
+- [X] [Binary operations >, <, and ==](./example_source_files/1_binary_operations/1_binary_operations.c) 
 - [X] [Unary operators + and -](./example_source_files/2_unary_operators.c) 
 - [X] [Parenthesis to overwrite the order of operations](./example_source_files/3_parenthesis.c) 
 - [X] [Logical operators &&, ||, and !](./example_source_files/4_logical_operators.c) 

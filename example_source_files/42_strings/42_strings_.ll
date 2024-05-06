@@ -1,4 +1,4 @@
-; ModuleID = "./example_source_files/42_strings/42_strings.c"
+; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/example_source_files/42_strings/42_strings.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 

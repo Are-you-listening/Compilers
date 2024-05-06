@@ -1,60 +1,60 @@
 digraph AST {
-  "135765455607488" [label="main: type: INT False  False  
+  "135754681907472" [label="main: type: INT False  False  
                    name: main
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7b7a5bc12530>
+                   first declared: <src.parser.AST.ASTNodeTerminal object at 0x7b77d99772b0>
                    first used: None)
 malloc: type: PTR False CHAR False  False  
                    name: malloc
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7b7a5bd386d0>
+                   first declared: <src.parser.AST.ASTNode object at 0x7b77d9976bc0>
                    first used: None)
 calloc: type: PTR False CHAR False  False  
                    name: calloc
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7b7a5bd386d0>
+                   first declared: <src.parser.AST.ASTNode object at 0x7b77d9976bc0>
                    first used: None)
 free: type: VOID False  False  
                    name: free
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7b7a5bd386d0>
+                   first declared: <src.parser.AST.ASTNode object at 0x7b77d9976bc0>
                    first used: None)
 realloc: type: PTR False CHAR False  False  
                    name: realloc
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7b7a5bd386d0>
+                   first declared: <src.parser.AST.ASTNode object at 0x7b77d9976bc0>
                    first used: None)
 fopen: type: PTR False _IO_FILE False  False  
                    name: fopen
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7b7a5bd386d0>
+                   first declared: <src.parser.AST.ASTNode object at 0x7b77d9976bc0>
                    first used: None)
 fgets: type: PTR False CHAR False  False  
                    name: fgets
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7b7a5bd386d0>
+                   first declared: <src.parser.AST.ASTNode object at 0x7b77d9976bc0>
                    first used: None)
 fputs: type: CHAR False  False  
                    name: fputs
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7b7a5bd386d0>
+                   first declared: <src.parser.AST.ASTNode object at 0x7b77d9976bc0>
                    first used: None)
 fclose: type: VOID False  False  
                    name: fclose
                    const: False
                    value: None
-                   first declared: <src.parser.AST.ASTNode object at 0x7b7a5bd386d0>
+                   first declared: <src.parser.AST.ASTNode object at 0x7b77d9976bc0>
                    first used: None)"];
-  "135765455607488" -> "135765455608448";
-  "135765455608448" [label=""];
-  "135765455608448" -> "135765455616080";
-  "135765455616080" [label=""];
+  "135754681907472" -> "135754681899024";
+  "135754681899024" [label=""];
+  "135754681899024" -> "135754681904544";
+  "135754681904544" [label=""];
 }

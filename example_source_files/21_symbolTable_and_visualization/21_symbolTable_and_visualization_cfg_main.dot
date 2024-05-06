@@ -1,5 +1,5 @@
 digraph AST {
-  "135765456821008" [label="%\\\".2\\\" = .2:
+  "135754682012512" [label="%\\\".2\\\" = .2:
   ; /* show symbol table visualization */
   %\\\".4\\\" = alloca i32, align 4
   store i32 3, i32* %\\\".4\\\", align 4
