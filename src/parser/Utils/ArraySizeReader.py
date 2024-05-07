@@ -24,13 +24,19 @@ class ArraySizeReader:
         """
         array_sizes = []
         for child in array_node.children:
-            if not isinstance(child, ASTNodeTerminal):
+            if child.getChildAmount() == 0:
+                array_sizes.append("-1")
+                continue
+
+            size_child = child.getChild(0)
+
+            if not isinstance(size_child, ASTNodeTerminal):
                 ErrorExporter.invalidArraySize(array_node.position, array_node.parent.getChild(1).text,
                                                (("Expression", False), []))
-            if child.type != "INT":
+            if size_child.type != "INT":
                 ErrorExporter.invalidArraySize(array_node.position, array_node.parent.getChild(1).text,
-                                               ((child.type, False), []))
+                                               ((size_child.type, False), []))
 
-            array_sizes.append(child.text)
+            array_sizes.append(size_child.text)
 
         return array_sizes

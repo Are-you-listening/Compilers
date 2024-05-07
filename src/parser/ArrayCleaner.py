@@ -118,6 +118,11 @@ class ArrayCleaner(ASTVisitor):
         left_child.parent = None
 
         for new_ptr_val in array_node.children:
+            if new_ptr_val.getChildAmount() == 0 and new_ptr_val.text == "ArrayIndex":
+                ErrorExporter.arrayIndexRequired(node.position)
+
+            if new_ptr_val.text == "ArrayIndex":
+                new_ptr_val = new_ptr_val.getChild(0)
             """
             Create a new parent: 'Expr', with children left hand side the identifier and right hand side the + index
             """
@@ -189,6 +194,30 @@ class ArrayCleaner(ASTVisitor):
             size = int(array_size)
             for current_node_tup in current_check_nodes:
                 node_index, current_node = current_node_tup
+
+                """
+                Dynamically determining array size
+                """
+                if size == -1:
+
+                    size = current_node.getChildAmount()
+                    var = node.parent.getChild(0)
+
+                    var_type = var.symbol_type
+                    """
+                    go to the ith array
+                    """
+
+                    if len(array_sizes) > 1:
+                        ErrorExporter.arrayAutoSize(node.position, var_type)
+
+                    """
+                    Change size to just discovered size
+                    """
+
+                    var_type.size = size
+                    array_sizes[i] = size
+
                 if size != current_node.getChildAmount():
                     ErrorExporter.wrongInitializationListSize(node.position, declared_variable)
 

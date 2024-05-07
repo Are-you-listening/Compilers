@@ -1,5 +1,5 @@
 digraph AST {
-  "135113265835088" [label="%\".2\" = .2:
+  "135951641192928" [label="%\".2\" = .2:
   %\".3\" = alloca {i32}, align 4
   ;  struct cheese { INT milk ; } ;  INT main ( ) { struct cheese gouda ;
   %\".5\" = getelementptr inbounds {i32}, {i32}* %\".3\", i32 0, i32 0

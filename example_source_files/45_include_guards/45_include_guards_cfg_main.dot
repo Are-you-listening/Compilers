@@ -1,5 +1,5 @@
 digraph AST {
-  "135113264450384" [label="%\".2\" = .2:
+  "135951639387664" [label="%\".2\" = .2:
   ;                      INT main ( ) { printAppel ( ) ;
   call void @\"printAppel\"()
   ret i32 0

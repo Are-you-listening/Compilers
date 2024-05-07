@@ -332,6 +332,15 @@ class grammarCListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by grammarCParser#arrayIndex.
+    def enterArrayIndex(self, ctx:grammarCParser.ArrayIndexContext):
+        pass
+
+    # Exit a parse tree produced by grammarCParser#arrayIndex.
+    def exitArrayIndex(self, ctx:grammarCParser.ArrayIndexContext):
+        pass
+
+
     # Enter a parse tree produced by grammarCParser#array.
     def enterArray(self, ctx:grammarCParser.ArrayContext):
         pass

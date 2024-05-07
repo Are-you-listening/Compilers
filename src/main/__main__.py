@@ -100,7 +100,6 @@ def cleanGreen(input_file, symbol_file):
 
     TypeCleaner().visit(ast)
 
-
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
     StringToArray().visit(ast)

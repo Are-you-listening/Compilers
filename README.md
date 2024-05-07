@@ -92,6 +92,9 @@ Find our demonstration [here](https://youtu.be/qsvZYACBH_o)
 - [X] [File writing using fputs (uses FILE* with fopen and fclose)](./example_source_files/54_file_io/54_file_io.c)
 - [X] [Dynamically allocated strings and character buffers (can be used for printf, fgets, fputs, ...)](./example_source_files/54_file_io/54_file_io.c)
 
+- [X] [Array that automatically inferred array size int a[] = {1, 2, 3}](./example_source_files/55_auto_array_size/55_auto_array_size.c)
+
+
 ### Technical Functionality: 
 - [X] README
 - [X] Documentation

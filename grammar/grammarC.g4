@@ -60,8 +60,8 @@ expr : literal
      | expr '|' expr
      | expr '&&' expr
      | expr '||' expr;
-
-array: ('[' expr ']')+ ;
+arrayIndex: expr?;
+array: ('[' arrayIndex ']')+ ;
 literal : (INT | FLOAT | CHAR | STRING | IDENTIFIER) ;
 
 COMMENT: ('//' (~[\n])*) | ('/*' (.)*?  '*/');

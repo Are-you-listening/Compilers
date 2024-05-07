@@ -189,6 +189,11 @@ class grammarCVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by grammarCParser#arrayIndex.
+    def visitArrayIndex(self, ctx:grammarCParser.ArrayIndexContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by grammarCParser#array.
     def visitArray(self, ctx:grammarCParser.ArrayContext):
         return self.visitChildren(ctx)

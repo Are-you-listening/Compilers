@@ -350,7 +350,10 @@ class ErrorExporter:
             if v[0] == "*":
                 out_type += "*"
             else:
-                out_type += f"[{v[0]}]"
+                v = v[0]
+                if str(v) == "-1":
+                    v = ""
+                out_type += f"[{v}]"
 
         return out_type
 
@@ -470,3 +473,20 @@ class ErrorExporter:
 
         print(
             f"[ Warning ] {position.file} line {position.linenr}: assignment of STRING to '{to_type}'")
+
+    @staticmethod
+    def arrayIndexRequired(position: Position):
+
+        print(
+            f"[ Syntax Error ] {position.file} line {position.linenr}: array index is required")
+        exit()
+
+    @staticmethod
+    def arrayAutoSize(position: Position, assign_type: SymbolType):
+
+        to_type = ErrorExporter.__to_output_type(assign_type.getPtrTuple())
+
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: array auto size is only allowed for 1 dimensional arrays (not '{to_type}') (like GCC)", file=sys.stderr)
+        exit()
+

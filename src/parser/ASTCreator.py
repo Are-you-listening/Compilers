@@ -167,6 +167,9 @@ class ASTCreator(grammarCVisitor):
     def visitSizeOf(self, ctx:grammarCParser.SizeOfContext):
         self.__makeNode(ctx, "SizeOf")
 
+    def visitArrayIndex(self, ctx:grammarCParser.ArrayIndexContext):
+        self.__makeNode(ctx, "ArrayIndex")
+
     def __makeNode(self, ctx, terminal_type: str, dovisitChildren: bool = True):
         """
         Function to create our own ASTNode based on the given parse tree Node
