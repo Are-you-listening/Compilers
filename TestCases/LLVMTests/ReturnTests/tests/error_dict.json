@@ -4,5 +4,6 @@
   "14": ["[ Error ] tests/test14.c line 4: function with return type INT is missing a valid return statement"],
   "15": ["[ Error ] tests/test15.c line 4: function with return type INT is missing a valid return statement"],
   "16": ["[ Error ] tests/test16.c line 4: function with return type INT is missing a valid return statement"],
-  "18": ["[ Error ] tests/test18.c line 4: function with return type INT is missing a valid return statement"]
+  "18": ["[ Error ] tests/test18.c line 4: function with return type INT is missing a valid return statement"],
+  "19": ["[ Error ] tests/test19.c line 4: function with return type INT is missing a valid return statement"]
 }
