@@ -33,6 +33,7 @@ from src.parser.TypeCleaner import TypeCleaner
 from src.parser.SizeOfTranslater import SizeOfTranslater
 from src.parser.ControlFlow.ControlFlowCreator import *
 from src.parser.ControlFlow.ControlFlowDotVisitor import *
+from src.llvm_target.LivenessOptimimization import LivenessOptimization
 
 
 def cleanGreen(input_file, symbol_file):
