@@ -478,7 +478,7 @@ class ErrorExporter:
     def arrayIndexRequired(position: Position):
 
         print(
-            f"[ Syntax Error ] {position.file} line {position.linenr}: array index is required")
+            f"[ Syntax Error ] {position.file} line {position.linenr}: array index is required", file=sys.stderr)
         exit()
 
     @staticmethod
