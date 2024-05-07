@@ -1,5 +1,5 @@
 digraph AST {
-  "139136231984432" [label="Sun: const INT
+  "138081630939856" [label="Sun: const INT
 Sat: const INT
 Fri: const INT
 Thur: const INT
@@ -15,8 +15,8 @@ fopen:  _IO_FILE*
 fgets:  CHAR*
 fputs:  CHAR
 fclose:  VOID"];
-  "139136231984432" -> "139136231985920";
-  "139136231985920" [label=""];
-  "139136231985920" -> "139136231986352";
-  "139136231986352" [label="day:  INT"];
+  "138081630939856" -> "138081630938128";
+  "138081630938128" [label=""];
+  "138081630938128" -> "138081630941536";
+  "138081630941536" [label="day:  INT"];
 }

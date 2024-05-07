@@ -1,5 +1,5 @@
 digraph AST {
-  "139136230925088" [label="%\".2\" = .2:
+  "138081629205888" [label="%\".2\" = .2:
   ret i32 0
   ;    INT factorial ( INT c ) ;  INT main ( ) { INT n = 5 ; INT fact = factorial ( n ) ; return 0 ;"];
 }

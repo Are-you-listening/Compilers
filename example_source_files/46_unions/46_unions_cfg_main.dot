@@ -1,5 +1,5 @@
 digraph AST {
-  "139136231868496" [label="%\".2\" = .2:
+  "138081629728784" [label="%\".2\" = .2:
   %\".3\" = alloca {[2500 x i8]}, align 4096
   ;    union NotTypeSafe { INT as_integer ; FLOAT as_float ; CHAR as_str [ 50 ] [ 50 ] ; } ;  INT main ( ) { INT k ; FLOAT s ; union NotTypeSafe safety ;
   %\".5\" = alloca {[2500 x i8]}*, align 8

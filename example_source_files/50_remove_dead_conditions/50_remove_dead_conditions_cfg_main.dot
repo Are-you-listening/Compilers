@@ -1,5 +1,5 @@
 digraph AST {
-  "139136232035072" [label="%\".2\" = .2:
+  "138081630372480" [label="%\".2\" = .2:
   %\".3\" = bitcast [14 x i8]* @\".str.0\" to i8*
   %\".4\" = call i32 (i8*, ...) @\"printf\"(i8* %\".3\")
   ;    INT main ( ) { INT x = 5 ;  if ( 0 == 0 ) { printf ( \"Rico, kaboom!\" ) ;
