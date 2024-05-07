@@ -28,12 +28,9 @@ define i32 @"factorial"(i32 %".1")
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 5, i32* %".3", align 4
-  ;    INT factorial ( INT c ) ;  INT main ( ) { INT n = 5 ;
-  %".6" = alloca i32 (i32)*, align 8
-  store i32 (i32)* @"factorial", i32 (i32)** %".6", align 8
-  ; INT ( * factorial_ptr ) ( INT ) = & factorial ;
+  %".3" = alloca i32 (i32)*, align 8
+  store i32 (i32)* @"factorial", i32 (i32)** %".3", align 8
+  ;    INT factorial ( INT c ) ;  INT main ( ) { INT n = 5 ; INT ( * factorial_ptr ) ( INT ) = & factorial ;
   ret i32 0
   ; INT fact = factorial_ptr ( n ) ; return 0 ;
 }

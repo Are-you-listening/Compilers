@@ -1,8 +1,5 @@
 digraph AST {
-  "134789730432960" [label="%\".2\" = .2:
-  %\".3\" = alloca i32, align 4
-  store i32 5, i32* %\".3\", align 4
-  ;    INT factorial ( INT c ) ;  INT main ( ) { INT n = 5 ;
+  "139136230925088" [label="%\".2\" = .2:
   ret i32 0
-  ; INT fact = factorial ( n ) ; return 0 ;"];
+  ;    INT factorial ( INT c ) ;  INT main ( ) { INT n = 5 ; INT fact = factorial ( n ) ; return 0 ;"];
 }

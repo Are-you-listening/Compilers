@@ -1,11 +1,18 @@
 digraph AST {
-  "134789731932512" [label="%\".2\" = .2:
-  %\".3\" = bitcast [3 x i8]* @\".str.0\" to i8*
-  %\".4\" = alloca i32
-  store i32 5, i32* %\".4\"
-  %\".6\" = load i32, i32* %\".4\"
-  %\".7\" = call i32 (i8*, ...) @\"printf\"(i8* %\".3\", i32 %\".6\")
-  ;    INT main ( ) { INT a = 3 ; INT b = 4 ;  INT c = 5 ; printf ( \"%d\" , c ) ;
+  "139136232437552" [label="%\".2\" = .2:
+  ; /** use param --unused_var True* To get the expected results*/
+  %\".4\" = alloca i32, align 4
+  store i32 5, i32* %\".4\", align 4
+  ;         INT main ( ) { INT a = 3 ; INT b = a ; INT q = 5 ;  INT c = 5 ;
+  store i32 5, i32* %\".4\", align 4
+  ; c = 5 ;
+  %\".9\" = load i32, i32* %\".4\", align 4
+  ; printf ( \"%d\" , c ) ;
+  %\".11\" = bitcast [3 x i8]* @\".str.0\" to i8*
+  %\".12\" = alloca i32
+  store i32 %\".9\", i32* %\".12\"
+  %\".14\" = load i32, i32* %\".12\"
+  %\".15\" = call i32 (i8*, ...) @\"printf\"(i8* %\".11\", i32 %\".14\")
   ret i32 0
   ; return 0 ;"];
 }

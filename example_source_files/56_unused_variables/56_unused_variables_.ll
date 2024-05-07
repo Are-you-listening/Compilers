@@ -1,4 +1,4 @@
-; ModuleID = "./example_source_files/56_unused_variables/56_unused_variables.c"
+; ModuleID = "/home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/example_source_files/56_unused_variables/56_unused_variables.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
@@ -8,7 +8,7 @@ define i32 @"main"()
   ; /** use param --unused_var True* To get the expected results*/
   %".4" = alloca i32, align 4
   store i32 5, i32* %".4", align 4
-  ;         INT main ( ) { INT a = 3 ; INT b = a ;  INT c = 5 ;
+  ;         INT main ( ) { INT a = 3 ; INT b = a ; INT q = 5 ;  INT c = 5 ;
   store i32 5, i32* %".4", align 4
   ; c = 5 ;
   %".9" = load i32, i32* %".4", align 4

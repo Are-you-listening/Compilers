@@ -1,5 +1,5 @@
 digraph AST {
-  "134789731634144" [label="%\".2\" = .2:
+  "139136231988128" [label="%\".2\" = .2:
   ret i32 0
   ;    enum week { Mon , Tue , Wed , Thur , Fri , Sat , Sun } ;  INT main ( ) { enum week day ; day = Wed ; return 0 ;"];
 }

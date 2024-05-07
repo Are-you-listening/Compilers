@@ -175,7 +175,7 @@ def main(argv):
     mips_file = None
     fold = True
     control_flow_file = None
-    unused_var = False
+    unused_var = True
 
     for arg_index in range(1, len(argv), 2):  # Retrieve correct arguments
         param = argv[arg_index]
@@ -196,8 +196,8 @@ def main(argv):
             if arg != 'True':
                 fold = False
         elif param == "--unused_var":
-            if arg == 'True':
-                unused_var = True
+            if arg != 'True':
+                unused_var = False
 
     if input_file is None:
         ErrorExporter.StupidUser()

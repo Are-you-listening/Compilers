@@ -1,5 +1,5 @@
 digraph AST {
-  "134789730425952" [label="main:  INT
+  "139136230801024" [label="main:  INT
 malloc:  CHAR*
 calloc:  CHAR*
 free:  VOID
@@ -8,10 +8,10 @@ fopen:  _IO_FILE*
 fgets:  CHAR*
 fputs:  CHAR
 fclose:  VOID"];
-  "134789730425952" -> "134789730426480";
-  "134789730426480" [label=""];
-  "134789730426480" -> "134789730427056";
-  "134789730427056" [label="a:  FLOAT
+  "139136230801024" -> "139136230788448";
+  "139136230788448" [label=""];
+  "139136230788448" -> "139136230799632";
+  "139136230799632" [label="a:  FLOAT
 b:  INT
 c:  CHAR
 d:  FLOAT*

@@ -1,14 +1,16 @@
 #include<stdio.h>
 
-int f(){
-    int b = 6;
-    return 0;
-}
+/*
+* use param --unused_var True
+* To get the expected results
+*/
 
 int main() {
+    int a = 3;
+    int b = a;
 
-    int b = 5;
-    int c = b;
+    int c = 5;
+    c = 5;
     printf("%d", c);
     return 0;
 }
