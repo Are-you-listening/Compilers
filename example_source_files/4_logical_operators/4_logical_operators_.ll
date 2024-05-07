@@ -20,54 +20,7 @@ define i32 @"main"()
   ;  INT c = 3 ;
   store i32 3, i32* %".13", align 4
   ; c = 3 ;
-  ;  INT d = ( a || b ) && c ;
-  %".19" = load i32, i32* %".3", align 4
-  %".20" = icmp ne i32 %".19", 0
-  br i1 %".20", label %".24", label %".21"
-.21:
-  %".22" = load i32, i32* %".8", align 4
-  %".23" = icmp ne i32 %".22", 0
-  br i1 %".23", label %".24", label %".27"
-.24:
-  %".25" = load i32, i32* %".13", align 4
-  %".26" = icmp ne i32 %".25", 0
-  br label %".27"
-.27:
-  %".28" = phi  i1 [0, %".21"], [%".26", %".24"]
-  %".29" = zext i1 %".28" to i32
-  %".30" = alloca i32, align 4
-  store i32 %".29", i32* %".30", align 4
-  ;  INT e = ! a ;
-  ; /*Explain using CFG*/
-  %".34" = load i32, i32* %".3", align 4
-  %".35" = icmp ne i32 %".34", 0
-  %".36" = xor i1 %".35", 1
-  %".37" = zext i1 %".36" to i32
-  %".38" = alloca i32, align 4
-  store i32 %".37", i32* %".38", align 4
-  %".40" = load i32, i32* %".3", align 4
-  ;  INT f = a & b ;
-  %".42" = load i32, i32* %".8", align 4
-  %".43" = and i32 %".40", %".42"
-  %".44" = alloca i32, align 4
-  store i32 %".43", i32* %".44", align 4
-  %".46" = load i32, i32* %".3", align 4
-  ; INT g = a | b ;
-  %".48" = load i32, i32* %".8", align 4
-  %".49" = or i32 %".46", %".48"
-  %".50" = alloca i32, align 4
-  store i32 %".49", i32* %".50", align 4
-  %".52" = load i32, i32* %".3", align 4
-  ; INT h = a ^ b ;
-  %".54" = load i32, i32* %".8", align 4
-  %".55" = xor i32 %".52", %".54"
-  %".56" = alloca i32, align 4
-  store i32 %".55", i32* %".56", align 4
-  %".58" = load i32, i32* %".3", align 4
-  ; INT i = ~ a ;
-  %".60" = xor i32 %".58", -1
-  %".61" = alloca i32, align 4
-  store i32 %".60", i32* %".61", align 4
   ret i32 0
-  ;  return 0 ;
+  ;  INT d = ( a || b ) && c ;  INT e = ! a ;  INT f = a & b ; INT g = a | b ; INT h = a ^ b ; INT i = ~ a ;  return 0 ;
+  ; /*Explain using CFG*/
 }

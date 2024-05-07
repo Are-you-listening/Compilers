@@ -161,7 +161,7 @@ class LLVMTest(unittest.TestCase, ABC):
                     #sys.stdout = original
 
                     # Run our llvm
-                    main([0, "--input", file_name, "--target_llvm", f"temp/temp.ll", "--fold", fold])  # Run our compiler
+                    main([0, "--input", file_name, "--target_llvm", f"temp/temp.ll", "--fold", fold, "--unused_var", "True"])  # Run our compiler
 
                     c_out = self.runC(file_name, inp, fold)
 

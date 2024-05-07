@@ -28,10 +28,6 @@ define i32 @"main"()
   ; return 0 ;
 }
 
-@"peer" = global i32 8, align 4
-@"x" = global i32 1, align 4
-@"z" = global i32 3, align 4
-@"y" = global i32 3, align 4
 @".str.0" = internal constant [3 x i8] c"%d\00"
 declare i32 @"printf"(i8* %".1", ...)
 

@@ -5,16 +5,13 @@ target datalayout = ""
 define void @"otherFunc"()
 {
 .2:
-  %".3" = alloca i8, align 1
-  ;  VOID otherFunc ( ) { CHAR x ;
   ret void
+  ;  VOID otherFunc ( ) { CHAR x ;
 }
 
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  ; }   INT main ( ) { INT x ;
   ret i32 0
-  ; return 0 ;
+  ; }   INT main ( ) { INT x ; return 0 ;
 }

@@ -34,11 +34,6 @@ define i32 @"main"()
   %".6" = alloca i32 (i32)*, align 8
   store i32 (i32)* @"factorial", i32 (i32)** %".6", align 8
   ; INT ( * factorial_ptr ) ( INT ) = & factorial ;
-  %".9" = load i32 (i32)*, i32 (i32)** %".6", align 8
-  ; INT fact = factorial_ptr ( n ) ;
-  %".11" = call i32 %".9"(i32 5)
-  %".12" = alloca i32, align 4
-  store i32 %".11", i32* %".12", align 4
   ret i32 0
-  ; return 0 ;
+  ; INT fact = factorial_ptr ( n ) ; return 0 ;
 }

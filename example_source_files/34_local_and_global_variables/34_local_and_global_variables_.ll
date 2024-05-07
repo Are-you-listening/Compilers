@@ -5,14 +5,6 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca i32, align 4
-  store i32 -20, i32* %".3", align 4
-  ;  INT True = 1 ;  INT main ( ) { INT True = - 20 ;
-  %".6" = alloca i32, align 4
-  store i32 -20, i32* %".6", align 4
-  ; INT success = True ;
   ret i32 0
-  ; return 0 ;
+  ;  INT True = 1 ;  INT main ( ) { INT True = - 20 ; INT success = True ; return 0 ;
 }
-
-@"True" = global i32 1, align 4

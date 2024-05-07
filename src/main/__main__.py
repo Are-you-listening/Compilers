@@ -33,7 +33,7 @@ from src.parser.TypeCleaner import TypeCleaner
 from src.parser.SizeOfTranslater import SizeOfTranslater
 from src.parser.ControlFlow.ControlFlowCreator import *
 from src.parser.ControlFlow.ControlFlowDotVisitor import *
-from src.llvm_target.LivenessOptimimization import LivenessOptimization
+from src.parser.UnusedCleaner import UnusedCleaner
 
 
 def cleanGreen(input_file, symbol_file):
@@ -129,7 +129,7 @@ def cleanGreen(input_file, symbol_file):
     return ast, codegetter, includeSTDIO, comments
 
 
-def Processing(ast, dot_file, fold, includeSTDIO):
+def Processing(ast, dot_file, fold, includeSTDIO, unused_var):
     ConstraintChecker(includeSTDIO).visit(ast)  # Checkup Semantic & Syntax Errors
 
     """
@@ -143,6 +143,9 @@ def Processing(ast, dot_file, fold, includeSTDIO):
     if fold:
         ValueAdderVisitor().visit(ast)
     ConstantStatementFolding().visit(ast)
+
+    if unused_var:
+        UnusedCleaner().visit(ast)
 
     cfc = ControlFlowCreator()
     cfc.visit(ast)
@@ -172,6 +175,7 @@ def main(argv):
     mips_file = None
     fold = True
     control_flow_file = None
+    unused_var = False
 
     for arg_index in range(1, len(argv), 2):  # Retrieve correct arguments
         param = argv[arg_index]
@@ -191,12 +195,15 @@ def main(argv):
         elif param == "--fold":
             if arg != 'True':
                 fold = False
+        elif param == "--unused_var":
+            if arg == 'True':
+                unused_var = True
 
     if input_file is None:
         ErrorExporter.StupidUser()
 
     ast, codegetter, includeSTDIO, comments = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
-    ast, cfgs = Processing(ast, dot_file, fold, includeSTDIO)  # Check for Errors , Apply Folding Techniques , ...
+    ast, cfgs = Processing(ast, dot_file, fold, includeSTDIO, unused_var)  # Check for Errors , Apply Folding Techniques , ...
 
     if llvm_file is not None:
         LLVMSingleton.setName(input_file)

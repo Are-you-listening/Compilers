@@ -14,15 +14,6 @@ define i32 @"main"()
   %".9" = alloca i8, align 1
   store i8 101, i8* %".9", align 1
   ; CHAR c = 'e' ;
-  %".12" = alloca float*, align 8
-  store float* %".3", float** %".12", align 8
-  ; FLOAT * d = & a ;
-  %".15" = alloca i32*, align 8
-  store i32* %".6", i32** %".15", align 8
-  ; INT * e = & b ;
-  %".18" = alloca i8*, align 8
-  store i8* %".9", i8** %".18", align 8
-  ; CHAR * f = & c ;
   ret i32 0
-  ; return 0 ;
+  ; FLOAT * d = & a ; INT * e = & b ; CHAR * f = & c ; return 0 ;
 }

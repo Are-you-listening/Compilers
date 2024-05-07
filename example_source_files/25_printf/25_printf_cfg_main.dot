@@ -1,40 +1,24 @@
 digraph AST {
-  "125007878125504" [label="%\".2\" = .2:
-  %\".3\" = alloca i32, align 4
-  store i32 3, i32* %\".3\", align 4
-  ;    INT main ( ) { INT a = 3 ;
-  %\".6\" = alloca i8*, align 8
-  %\".7\" = bitcast [6 x i8]* @\".str.0\" to i8*
-  store i8* %\".7\", i8** %\".6\", align 8
-  ; CHAR * b = \"hello\" ;
-  %\".10\" = alloca i32, align 4
-  store i32 255, i32* %\".10\", align 4
-  ; INT c = 255 ;
-  %\".13\" = alloca float, align 4
-  store float 0x40091eb860000000, float* %\".13\", align 4
-  ; FLOAT d = 3.14 ;
-  %\".16\" = alloca i8, align 1
-  store i8 99, i8* %\".16\", align 1
-  ; CHAR e = 'c' ;
-  %\".19\" = bitcast [24 x i8]* @\".str.1\" to i8*
-  %\".20\" = alloca i32
-  %\".21\" = alloca [6 x i8]*
-  %\".22\" = alloca i32
-  %\".23\" = alloca float
-  %\".24\" = alloca i8
-  store i32 3, i32* %\".20\"
-  store [6 x i8]* @\".str.0\", [6 x i8]** %\".21\"
-  store i32 255, i32* %\".22\"
-  store float 0x40091eb860000000, float* %\".23\"
-  store i8 99, i8* %\".24\"
-  %\".30\" = load i32, i32* %\".20\"
-  %\".31\" = load [6 x i8]*, [6 x i8]** %\".21\"
-  %\".32\" = load i32, i32* %\".22\"
-  %\".33\" = load float, float* %\".23\"
-  %\".34\" = fpext float %\".33\" to double
-  %\".35\" = load i8, i8* %\".24\"
-  %\".36\" = call i32 (i8*, ...) @\"printf\"(i8* %\".19\", i32 %\".30\", [6 x i8]* %\".31\", i32 %\".32\", double %\".34\", i8 %\".35\")
-  ; printf ( \" %d \\n %s \\n %x \\n %f \\n %c\" , a , b , c , d , e ) ;
+  "134789733474480" [label="%\".2\" = .2:
+  %\".3\" = bitcast [24 x i8]* @\".str.0\" to i8*
+  %\".4\" = alloca i32
+  %\".5\" = alloca [6 x i8]*
+  %\".6\" = alloca i32
+  %\".7\" = alloca float
+  %\".8\" = alloca i8
+  store i32 3, i32* %\".4\"
+  store [6 x i8]* @\".str.1\", [6 x i8]** %\".5\"
+  store i32 255, i32* %\".6\"
+  store float 0x40091eb860000000, float* %\".7\"
+  store i8 99, i8* %\".8\"
+  %\".14\" = load i32, i32* %\".4\"
+  %\".15\" = load [6 x i8]*, [6 x i8]** %\".5\"
+  %\".16\" = load i32, i32* %\".6\"
+  %\".17\" = load float, float* %\".7\"
+  %\".18\" = fpext float %\".17\" to double
+  %\".19\" = load i8, i8* %\".8\"
+  %\".20\" = call i32 (i8*, ...) @\"printf\"(i8* %\".3\", i32 %\".14\", [6 x i8]* %\".15\", i32 %\".16\", double %\".18\", i8 %\".19\")
+  ;    INT main ( ) { INT a = 3 ; CHAR * b = \"hello\" ; INT c = 255 ; FLOAT d = 3.14 ; CHAR e = 'c' ; printf ( \" %d \\n %s \\n %x \\n %f \\n %c\" , a , b , c , d , e ) ;
   ret i32 0
   ; return 0 ;"];
 }
