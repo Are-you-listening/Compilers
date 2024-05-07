@@ -8,7 +8,7 @@ define i32 @"main"()
   ; /** use param --unused_var True* To get the expected results*/
   %".4" = alloca i32, align 4
   store i32 5, i32* %".4", align 4
-  ;         INT main ( ) { INT a = 3 ; INT b = 4 ;  INT c = 5 ;
+  ;         INT main ( ) { INT a = 3 ; INT b = a ;  INT c = 5 ;
   store i32 5, i32* %".4", align 4
   ; c = 5 ;
   %".9" = load i32, i32* %".4", align 4
