@@ -81,6 +81,10 @@ def cleanGreen(input_file, symbol_file):
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
     StructCleaner().visit(ast)  # Massage the structs
+
+    print("he")
+    #DotVisitor("output/d1").visit(ast)
+
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
 
 

@@ -34,7 +34,7 @@ class StructTable(AbstractTable):
         except:
             ErrorExporter.undeclaredVariable(data_member, position)
 
-    def isUnion(self, struct_name: str, position: Position):
+    def isUnion(self, struct_name: str, position: Position, error: bool = True):
         """
         :param position:
         :param struct_name: Name of the struct
@@ -42,9 +42,11 @@ class StructTable(AbstractTable):
         """
         if self.structTable.get(struct_name) is None:
             if self.prev is None:
-                ErrorExporter.undeclaredTypedef(position, struct_name)
+                if error:
+                    ErrorExporter.undeclaredTypedef(position, struct_name)
+                return None
             else:
-                return self.prev.isUnion(struct_name, position)
+                return self.prev.isUnion(struct_name, position, error)
 
         return self.structTable[struct_name][-1:][0] == "union"
 

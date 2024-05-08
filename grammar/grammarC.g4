@@ -27,7 +27,7 @@ sizeOf: 'sizeof' '(' (IDENTIFIER | type) ')';
 printscanf: ('printf' | 'scanf') '(' expr (',' expr)* ')';
 type: ('const')? ('int' | 'char' | 'float' | 'void' | (('struct' | 'enum' |'union') IDENTIFIER) | IDENTIFIER) ('*' | 'const')*;
 return: 'return' expr?;
-structunion: ('struct' | 'union') IDENTIFIER '{' ( declaration* ';'+)+ '}';
+structunion: ('struct' | 'union') IDENTIFIER '{' ( declaration? ';'+)* '}';
 functionPtrDeclaration: (type) function_ptr_2 ;
 function_ptr_2: '(' '*' (function_ptr_2 | IDENTIFIER) ')' '(' function_ptr_params ')';
 function_ptr_params: ((type',')* type)?;

@@ -4,6 +4,7 @@ from src.parser.ASTTypedefReplacer import BaseTypes
 from src.parser.AST import ASTNodeTypes
 from src.internal_tools import *
 
+
 class StructCleaner(ASTVisitor):
     """
     This class will massage the struct node into our format
@@ -12,6 +13,7 @@ class StructCleaner(ASTVisitor):
     def __init__(self):
         self.to_remove = set()
         self.table = StructTable(None)
+        self.waiting_structs = {}
 
     def postorder(self, root: ASTNode):
         """for child in root.children:
@@ -50,7 +52,7 @@ class StructCleaner(ASTVisitor):
 
     def visit(self, ast: AST):
         self.to_remove = set()
-
+        self.waiting_structs = {}
         self.postorder(ast.root)
 
         for n in self.to_remove:
@@ -65,6 +67,11 @@ class StructCleaner(ASTVisitor):
             Go 1 scope back, and make sure the node its scope is recalibrated
             Because function definition needs to be in a global scope
             """
+            for k, v in self.waiting_structs.items():
+                ErrorExporter.undeclaredTypedef(v[1], k)
+
+            self.waiting_structs = {}
+
             if self.table.prev is not None:
                 self.table = self.table.prev
                 node.structTable = self.table
@@ -83,6 +90,7 @@ class StructCleaner(ASTVisitor):
         node.children[0].type = ""
         self.table.add(structName)
 
+
         index = 1
         while index < len(node.children):
             child = node.children[index]
@@ -100,8 +108,7 @@ class StructCleaner(ASTVisitor):
 
         BaseTypes.append(structName)
 
-    @staticmethod
-    def __checkType(node: ASTNode):
+    def __checkType(self, node: ASTNode):
         """
         This function checks that a 'Type' node has a struct when needed, and same for union
         """
@@ -118,7 +125,15 @@ class StructCleaner(ASTVisitor):
 
         if is_struct or is_union:
 
-            is_union2 = node.structTable.isUnion(node.getChild(1).text, node.position)
+            is_union2 = node.structTable.isUnion(node.getChild(1).text, node.position, False)
+            if is_union2 is None:
+                """
+                We can have a ptr inside a struct to a struct that is later declared, so if we do not yet have this 
+                struct. we will store this for later checks
+                """
+                self.waiting_struct[node.getChild(1).text] = (is_struct, node.position)
+                return
+
             if is_union and not is_union2:
                 ErrorExporter.invalidStructUnionAssign(node.position, "Union", "Struct")
 
