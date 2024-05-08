@@ -34,6 +34,7 @@ from src.parser.SizeOfTranslater import SizeOfTranslater
 from src.parser.ControlFlow.ControlFlowCreator import *
 from src.parser.ControlFlow.ControlFlowDotVisitor import *
 from src.parser.UnusedCleaner import UnusedCleaner
+from src.parser.ArrayPreProcessor import ArrayPreProcessor
 
 
 def cleanGreen(input_file, symbol_file):
@@ -104,6 +105,8 @@ def cleanGreen(input_file, symbol_file):
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
     StringToArray().visit(ast)
+
+    ArrayPreProcessor().visit(ast)
 
     ArrayCleaner().visit(ast)
 

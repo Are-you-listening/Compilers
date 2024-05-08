@@ -329,5 +329,5 @@ class ArrayCleaner(ASTVisitor):
         while temp is not None and temp.text not in ("Function", "Start"):
             temp = temp.parent
 
-
         return temp.text == "Function"
+
