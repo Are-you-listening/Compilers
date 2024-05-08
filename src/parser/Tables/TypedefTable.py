@@ -94,7 +94,7 @@ class TypedefTable(AbstractTable):
 
             struct = ASTNodeTerminal("struct", node, node.getSymbolTable(), "Not used",
                                      node.position, node.structTable)
-            file_io = ASTNodeTerminal("_IO_FILE", node, node.getSymbolTable(), "Not used",
+            file_io = ASTNodeTerminal("0_IO_FILE", node, node.getSymbolTable(), "Not used",
                                       node.position, node.structTable)
 
             translation = [struct, file_io]

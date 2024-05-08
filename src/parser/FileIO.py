@@ -25,7 +25,7 @@ class FileIO:
         """
         Make func type
         """
-        return_type = SymbolTypePtr(TypeNodeHandler.getInstance().getStruct("_IO_FILE"), False)
+        return_type = SymbolTypePtr(TypeNodeHandler.getInstance().getStruct("0_IO_FILE"), False)
 
         function_type = FunctionSymbolType(return_type, param_list)
         symbol_entry = SymbolEntry(function_type, "fopen", None, root, None)
@@ -34,7 +34,7 @@ class FileIO:
 
     @staticmethod
     def __add_fclose(root):
-        param_list = [SymbolTypePtr(TypeNodeHandler.getInstance().getStruct("_IO_FILE"), False)]
+        param_list = [SymbolTypePtr(TypeNodeHandler.getInstance().getStruct("0_IO_FILE"), False)]
 
         """
         Make func type
@@ -49,7 +49,7 @@ class FileIO:
     @staticmethod
     def __add_fgets(root):
         param_list = [SymbolTypePtr(SymbolType("CHAR", False), False), SymbolType("INT", False),
-                      SymbolTypePtr(TypeNodeHandler.getInstance().getStruct("_IO_FILE"), False)]
+                      SymbolTypePtr(TypeNodeHandler.getInstance().getStruct("0_IO_FILE"), False)]
 
         """
         Make func type
@@ -64,7 +64,7 @@ class FileIO:
     @staticmethod
     def __add_fputs(root):
         param_list = [SymbolTypePtr(SymbolType("CHAR", False), False),
-                      SymbolTypePtr(TypeNodeHandler.getInstance().getStruct("_IO_FILE"), False)]
+                      SymbolTypePtr(TypeNodeHandler.getInstance().getStruct("0_IO_FILE"), False)]
 
         """
         Make func type
@@ -90,6 +90,6 @@ class FileIO:
         file_struct_param.append(SymbolTypePtr(SymbolType("CHAR", False), False))
         file_struct_param.append(SymbolTypePtr(SymbolType("CHAR", False), False))
 
-        file_struct = SymbolTypeStruct("_IO_FILE", file_struct_param)
+        file_struct = SymbolTypeStruct("0_IO_FILE", file_struct_param)
 
-        TypeNodeHandler.getInstance().addStructType("_IO_FILE", file_struct)
+        TypeNodeHandler.getInstance().addStructType("0_IO_FILE", file_struct)
