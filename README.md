@@ -76,6 +76,7 @@ Find our demonstration [here](https://youtu.be/HygwHcQxuHY)
 
 
 ### Optional Functionality: 
+(In short we did all the optionals except 'Function overloading' and we did 2 extra optionals ('CFG' and 'array[] automatic size' )')
 - [X] [Include Guards (mandatory because group of 4)](./example_source_files/45_include_guards/45_include_guards.c)
 - [X] [Unions (mandatory because group of 4)](./example_source_files/46_unions/46_unions.c)
 - [X] [Function Pointers (mandatory because group of 4)](./example_source_files/47_function_pointer/47_function_pointer.c)
