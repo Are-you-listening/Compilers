@@ -14,7 +14,7 @@ int f(int a) {
 int main(){
 	int n;
     printf("Enter a number:");
-	scanf("%d",&n);
+	n = 20;
 	int i = 1;
 	while(i++ <= n){
 		printf("fib(%d)\t= %d;\n", i, f(i));

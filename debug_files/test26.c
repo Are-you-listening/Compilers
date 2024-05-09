@@ -1,36 +1,23 @@
+
 #include <stdio.h>
 
-int main()
-{
-   int n;
-   int i = 3;
-   int count;
-   int c;
+int f(int a) {
+	if (a<2) {
+		return a;
+	}
+	else {
+		return f(a-1) + f(a-2);
+	}
+}
 
-   printf("Enter the number of prime numbers required\n");
-   n = 5;
 
-   if ( n >= 1 )
-   {
-      printf("First %d prime numbers are :\n",n);
-      printf("2\n");
-   }
-
-   count = 2;
-   while(count <= n){
-      c = 2;
-      while(c <= i - 1) {
-         if ( i%c == 0 ){
-            break;
-         }
-	c++;
-      }
-      if(c == i){
-         printf("%d\n",i);
-         count++;
-      }
-      i++;
-   }
-
-   return 0;
+int main(){
+	int n;
+    printf("Enter a number:");
+	n = 20;
+	int i = 1;
+	while(i++ <= n){
+		printf("fib(%d)\t= %d;\n", i, f(i));
+	}
+	return 0;
 }
