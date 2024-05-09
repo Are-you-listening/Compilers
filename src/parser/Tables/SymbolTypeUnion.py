@@ -1,10 +1,11 @@
 from src.parser.Tables.SymbolTypeStruct import *
 
+class TypeNodeHandler:
+    pass
 
 class SymbolTypeUnion(SymbolTypeStruct):
-    def __init__(self, struct_name, union_type: SymbolType):
+    def __init__(self, struct_name):
         super().__init__(struct_name)
-        self.union_type = union_type
 
     def getElementType(self, index: int):
         """
@@ -19,7 +20,9 @@ class SymbolTypeUnion(SymbolTypeStruct):
         return symbol_type
 
     def getStoreType(self):
-        symbol_type = self.union_type
+        symbol_type = TypeNodeHandler.getInstance().union_store[self.data_type]
         s = SymbolTypePtr(symbol_type, False)
         s.union = True
         return s
+
+from src.parser.Tables.TypeNodehandler import TypeNodeHandler

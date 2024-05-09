@@ -104,7 +104,8 @@ class TypeCleaner(ASTVisitor):
         """
         if node.text == "Union":  # For Unions, take the biggest type as type for all data members
             richest = self.getUnionType(pts_to)
-            struct_type = SymbolTypeUnion(struct_name, richest)
+            struct_type = SymbolTypeUnion(struct_name)
+            TypeNodeHandler.getInstance().union_store[struct_name] = richest
         else:
             struct_type = SymbolTypeStruct(struct_name)
 

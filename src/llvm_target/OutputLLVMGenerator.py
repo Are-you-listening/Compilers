@@ -173,7 +173,7 @@ class Declaration:
         data_type = TypeNodeHandler.getInstance().struct_param[symbol_type.data_type]
 
         if isinstance(symbol_type, SymbolTypeUnion):
-            data_type = [symbol_type.union_type]
+            data_type = [symbol_type.getStoreType().deReference()]
 
         for d in data_type:
             irType = CTypesToLLVM.getIRType(d)

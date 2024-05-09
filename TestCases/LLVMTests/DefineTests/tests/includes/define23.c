@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifndef MAP
+#define MAP
+
 struct mapEntry{
     char* map_key;
     int map_value;
@@ -68,27 +71,4 @@ struct map* create_map(){
     return m;
 }
 
-
-int main() {
-
-    struct map* m = create_map();
-    addEntry(m, "lala", 5);
-    printf("%d", m->size);
-
-    printf("%d", equal("aaa", "aa"));
-    printf("%d", equal("aaa", "abb"));
-    printf("%d", equal("aaa", "aaa"));
-    printf("%d", equal("aaa", ""));
-
-
-    int v = getEntry(m, "lala");
-    printf("%d", v);
-
-
-
-
-    free(m);
-
-
-    return 0;
-}
+#endif

@@ -2,7 +2,7 @@ grammar grammarC;
 start_ : code EOF;
 code: ((';'*) (function | line ';'+ | include | define | include_guard) (';'*))* (';'*);
 include_guard: '#ifndef' IDENTIFIER code '#endif';
-include: '#include' ('<stdio.h>' | STRING );
+include: '#include' ('<stdio.h>' | '<stdlib.h>' | STRING );
 
 function_signature: ('(' '*' function_signature ')' '(' function_ptr_params ')') | (IDENTIFIER '(' parameters ')');
 function : type function_signature ('{' block_code '}')? ';'*;

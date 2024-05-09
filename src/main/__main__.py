@@ -35,7 +35,7 @@ from src.parser.ControlFlow.ControlFlowCreator import *
 from src.parser.ControlFlow.ControlFlowDotVisitor import *
 from src.parser.UnusedCleaner import UnusedCleaner
 from src.parser.ArrayPreProcessor import ArrayPreProcessor
-
+from TestCases.ABCTests.AstLoader import AstLoader
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -52,7 +52,9 @@ def cleanGreen(input_file, symbol_file):
 
     stream = CommonTokenStream(lexer)  # Extract tokens
 
-    includeSTDIO, stream, comments = PreProcessor(stream, lexer, input_file).preProcess()  # Apply preprocessing
+    p = PreProcessor(stream, lexer, input_file)
+    includeSTDIO, stream, comments = p.preProcess()  # Apply preprocessing
+    includeSTLIB = p.stdlib
 
     parser = grammarCParser(stream)  # Do actual parse
     parser.removeErrorListeners()  # Add our own error Listener
@@ -87,7 +89,6 @@ def cleanGreen(input_file, symbol_file):
 
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
-
     FileIO.add_file_type()
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
@@ -117,7 +118,8 @@ def cleanGreen(input_file, symbol_file):
 
     SizeOfTranslater().visit(ast)
 
-    DynamicAllocation.add_allocation(ast)
+    if includeSTLIB:
+        DynamicAllocation.add_allocation(ast)
     FileIO.add_io(ast)
 
     StructCleanerAfter().visit(ast)
@@ -141,9 +143,8 @@ def Processing(ast, dot_file, fold, includeSTDIO, unused_var):
     """
     It is vital that AST conversion occurs before constant folding
     """
-    ASTConversion().visit(ast)
 
-    #DotVisitor("output/d1").visit(ast)
+    ASTConversion().visit(ast)
 
     UnarySaVisitor().visit(ast)
 

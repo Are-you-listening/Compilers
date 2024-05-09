@@ -31,7 +31,7 @@ class ASTNode:
         self.parent = parent
         self.symbol_table = symbol_table
         self.position = position
-        self.structTable = structTable
+        self.structTable: StructTable = structTable
 
     def __hash__(self):
         return id(self)

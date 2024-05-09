@@ -10,6 +10,7 @@ class PreProcessor:
         self.lexer = lexer
         self.defined = {}
         self.stdio = False
+        self.stdlib = False
         self.files = [input_file]
         self.comments = {}  # Map (linenr, filename) to a list of comments ["lolol", "apappap"]
         self.cycles = {}
@@ -141,7 +142,10 @@ class PreProcessor:
                                   1:len(identifier) - 1]  # Remove the '"' char before and after + add the path
                     k = i
 
-                    if identifier != "<stdio.h>" and \
+                    if identifier == "<stdlib.h>":
+                        self.stdlib = True
+
+                    elif identifier != "<stdio.h>" and \
                             not self.__isDefined(
                                 file):  # 'not self.ifndef[-1]' is important, so we make sure that we don't double define or have circular includes
                         try:

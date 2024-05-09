@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define OOPS struct a
+#define OOPS union a
 
 OOPS{
     OOPS* b;
@@ -11,8 +11,8 @@ OOPS{
 
 int main() {
 
-    struct a* v = (OOPS*) malloc(sizeof(OOPS));
-    struct a* w = (OOPS*) malloc(sizeof(OOPS));
+    union a* v = (OOPS*) malloc(sizeof(OOPS));
+    union a* w = (OOPS*) malloc(sizeof(OOPS));
     w->v = 5;
 
     v->b = w;
