@@ -490,3 +490,9 @@ class ErrorExporter:
             f"[ Error ] {position.file} line {position.linenr}: array auto size is only allowed for 1 dimensional arrays (not '{to_type}') (like GCC)", file=sys.stderr)
         exit()
 
+    @staticmethod
+    def structConversion(position: Position):
+
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: used type 'struct' where arithmetic or pointer type is required", file=sys.stderr)
+        exit()

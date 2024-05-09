@@ -56,12 +56,19 @@ class ASTConversion(ASTVisitor):
                 ErrorExporter().conflictingFunctionParameterTypes(node.position, node.text)
 
         if node.text == "Conversion":
+
             """
             When we have a conversion node, the new type will be the type defined in the conversion
             """
 
             type_value = node.getChild(0)
             data_type = self.calculateType(type_value)
+
+            """
+            If we do conversions with structs, we need to throw an error
+            """
+            if isinstance(data_type ,SymbolTypeStruct) or isinstance(self.type_mapping[node.getChild(1)], SymbolTypeStruct):
+                ErrorExporter.structConversion(node.position)
 
             """
             check first is the conversion is redundant (float) of float
@@ -71,6 +78,7 @@ class ASTConversion(ASTVisitor):
                 this case the conversion is redundant
                 """
                 node.parent.replaceChild(node, node.getChild(1))
+
 
             self.type_mapping[node] = data_type
             return
@@ -619,7 +627,6 @@ class ASTConversion(ASTVisitor):
 
         type_node = ASTNodeTypes("Type", new_node, new_node.getSymbolTable(), to_type, 
                                  new_node.position, new_node.structTable)
-
         #type_node = ASTConversion.get_type_node(new_node, to_type)
         new_node.addChildren(type_node)
 
