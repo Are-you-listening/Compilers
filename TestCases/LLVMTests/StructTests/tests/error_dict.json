@@ -10,13 +10,9 @@
   "49": ["[ Error ] tests/test49.c line 12: can't assign 'Struct' type to 'Union' type"],
   "50": ["[ Error ] tests/test50.c line 14: can't assign 'Struct' type to 'Union' type"],
   "52": ["[ Error ] tests/test52.c line 4: unknown type name '( c )'"],
-  "62": ["[ Error ] tests/test62.c line 6: unknown type name '( a )'"]
-  "52": ["[ Error ] tests/test52.c line 4: unknown type name '( c )'"],
-  "61": ["[ Error ] tests/test61.c line 10: used type 'struct' where arithmetic or pointer type is required"],
-  "62": ["[ Error ] tests/test62.c line 10: used type 'struct' where arithmetic or pointer type is required"],
+  "62": ["[ Error ] tests/test62.c line 6: unknown type name '( a )'"],
   "63": ["[ Error ] tests/test63.c line 10: used type 'struct' where arithmetic or pointer type is required"],
-  "64": ["[ Error ] tests/test64.c line 10: used type 'struct' where arithmetic or pointer type is required"]
-
-
-
+  "64": ["[ Error ] tests/test64.c line 10: used type 'struct' where arithmetic or pointer type is required"],
+  "67": ["[ Error ] tests/test67.c line 10: used type 'struct' where arithmetic or pointer type is required"],
+  "68": ["[ Error ] tests/test68.c line 10: used type 'struct' where arithmetic or pointer type is required"]
 }
