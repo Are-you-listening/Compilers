@@ -1,25 +1,22 @@
 #include <stdio.h>
 
-
-union grammar_rule_production{
-    struct grammar_rule* production;
-    char terminal;
+union kaas{
+    int melk;
+    float yoghurt;
 };
 
-struct grammar_rule{
-    struct grammar_rule* productions;
-    int production_size;
-    int is_terminal;
-};
 
-struct grammar{
-
-};
 
 
 int main() {
+    union kaas gouda;
 
-    union grammar_rule_production v;
+    gouda.melk = 5;
+    printf("%d\n", gouda.melk);
+    gouda.yoghurt = 3.14;
+
+    printf("%f\n", gouda.yoghurt);
+    printf("%f\n", gouda.melk);
 
     return 0;
 }

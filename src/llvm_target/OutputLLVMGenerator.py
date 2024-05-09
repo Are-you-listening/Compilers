@@ -106,15 +106,7 @@ class CTypesToLLVM:
                 struct_type = context.get_identified_type("_IO_FILE")
                 return struct_type
 
-            types = []
-
-            params = TypeNodeHandler.getInstance().struct_param[data_type.data_type]
-            if isinstance(data_type, SymbolTypeUnion):
-                params = [data_type.union_type]
-            for v in params:
-                types.append(CTypesToLLVM.getIRType(v))
-
-            llvm_type = ir.LiteralStructType(types)
+            llvm_type = Declaration.makeStructType(data_type)
             return llvm_type
 
         if isinstance(data_type, SymbolTypePtr):
@@ -166,8 +158,32 @@ class Declaration:
 
         struct_type.set_body(ir.IntType(32), ir.FloatType())
 
-        global_var = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), struct_type, "my_structs")
-        global_var.initializer = ir.Constant(struct_type, None)
+    @staticmethod
+    def makeStructType(symbol_type: SymbolTypeStruct):
+        context = LLVMSingleton.getInstance().getModule().context
+
+        if symbol_type.data_type in context.identified_types.keys():
+            return context.get_identified_type(symbol_type.data_type)
+
+        struct_type = context.get_identified_type(symbol_type.data_type)
+
+        types = []
+        align = 0
+
+        data_type = TypeNodeHandler.getInstance().struct_param[symbol_type.data_type]
+
+        if isinstance(symbol_type, SymbolTypeUnion):
+            data_type = [symbol_type.union_type]
+
+        for d in data_type:
+            irType = CTypesToLLVM.getIRType(d)
+            align += CTypesToLLVM.getBytesUse(d)
+            types.append(irType)
+
+        struct_type.elements = tuple(types)
+
+        return struct_type
+
 
     @staticmethod
     def struct_ptr(data_type: SymbolType):
@@ -189,7 +205,7 @@ class Declaration:
         return llvm_var
 
     @staticmethod
-    def struct(data_type: SymbolType, var_name: str):
+    def struct(data_type: SymbolTypeStruct, var_name: str):
         """
         Create a global struct type
         :param var_name:
@@ -202,17 +218,12 @@ class Declaration:
 
         struct_name = data_type.getPtrTuple()[0][0]
 
-        data_type = data_type.pts_to
-        for d in data_type:
-            irType = CTypesToLLVM.getIRType(d)
-            align += CTypesToLLVM.getBytesUse(d)
-            types.append(irType)
-
-        struct_type = ir.LiteralStructType(types)
+        struct_type = Declaration.makeStructType(data_type)
         LLVMSingleton.getInstance().addStruct(struct_name, struct_type)
         # if LLVMSingleton.getInstance().getModule().globals.get(data_type[0]) is None:
         #     struct = ir.GlobalVariable(LLVMSingleton.getInstance().getModule(), struct_type, data_type[0])
         #     struct.align = align
+
 
         llvm_var = block.alloca(struct_type)
         llvm_var.align = max(align % 2, (align+1) % 2)  # In LLVM align must be a power of 2
@@ -437,10 +448,10 @@ class Calculation:
             """
             When we come across an array we need to define a value 0 followed by the index we want to access
             """
-
+            #print(type(pointer.type.pointee))
             if isinstance(pointer.type.pointee, ir.ArrayType) and operator == "[]":
                 index_list.insert(0, ir.Constant(ir.types.IntType(64), 0))
-            elif isinstance(pointer.type.pointee, ir.LiteralStructType) and operator == "[]":
+            elif (isinstance(pointer.type.pointee, ir.LiteralStructType) or isinstance(pointer.type.pointee, ir.IdentifiedStructType)) and operator == "[]":
                 index_list.insert(0, ir.Constant(ir.types.IntType(32), 0))
             elif operator == "[]":
                 pointer = block.load(pointer)
