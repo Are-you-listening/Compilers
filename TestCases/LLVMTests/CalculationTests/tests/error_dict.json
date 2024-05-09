@@ -12,5 +12,6 @@
   "46": ["[ Error ] tests/test46.c line 25: invalid operation / on type(s): INT* INT"],
   "47": ["[ Error ] tests/test47.c line 24: invalid operation / on type(s): INT* INT"],
   "48": ["[ Error ] tests/test48.c line 25: invalid operation / on type(s): INT* INT"],
-  "49": ["[ Error ] tests/test49.c line 29: invalid operation % on type(s): INT* INT"]
+  "49": ["[ Error ] tests/test49.c line 29: invalid operation % on type(s): INT* INT"],
+  "61": ["[ Syntax Error ] tests/test61.c line 2:22 invalid symbol: '45475689841321'"]
 }

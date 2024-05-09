@@ -53,7 +53,9 @@ class ArrayPreProcessor(ASTVisitor):
         Replace array identifiers
 
         """
-        if node.text != "Declaration" or node.getChildAmount() != 4:
+        if node.text != "Declaration" or node.getChildAmount() < 3:
+            return
+        if node.getChild(2).text != "ARRAY":
             return
 
         for c in node.getChild(2).children:

@@ -496,3 +496,11 @@ class ErrorExporter:
         print(
             f"[ Error ] {position.file} line {position.linenr}: used type 'struct' where arithmetic or pointer type is required", file=sys.stderr)
         exit()
+
+    @staticmethod
+    def ArraySizeNegative(position: Position, array_identifier: str):
+
+        print(
+            f"[ Error ] {position.file} line {position.linenr}: the size of the array '{array_identifier}' cannot be negative",
+            file=sys.stderr)
+        exit()

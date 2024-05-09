@@ -37,6 +37,9 @@ class ArraySizeReader:
                 ErrorExporter.invalidArraySize(array_node.position, array_node.parent.getChild(1).text,
                                                ((size_child.type, False), []))
 
+            if int(size_child.text) < 0:
+                ErrorExporter.ArraySizeNegative(array_node.position, array_node.parent.getChild(1).text)
+
             array_sizes.append(size_child.text)
 
         return array_sizes

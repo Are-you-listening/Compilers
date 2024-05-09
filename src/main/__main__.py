@@ -119,6 +119,8 @@ def cleanGreen(input_file, symbol_file):
 
     StringToArray().visit(ast)
 
+    #DotVisitor("output/v").visit(ast)
+
     ArrayPreProcessor().visit(ast)
 
     ArrayCleaner().visit(ast)

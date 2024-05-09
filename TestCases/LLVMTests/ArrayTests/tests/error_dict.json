@@ -14,5 +14,6 @@
   "51": ["[ Error ] tests/test51.c line 7: Manipulation of variable 'arr[]2' is not allowed, because 'arr[]2' has type 'const FLOAT'"],
   "54": ["[ Error ] tests/test54.c line 6: array auto size is only allowed for 1 dimensional arrays (not 'INT[][]') (like GCC)"],
   "55": ["[ Error ] tests/test55.c line 6: array auto size is only allowed for 1 dimensional arrays (not 'INT[][]') (like GCC)"],
-  "56": ["[ Syntax Error ] tests/test56.c line 8: array index is required"]
+  "56": ["[ Syntax Error ] tests/test56.c line 8: array index is required"],
+  "59": ["[ Error ] tests/test59.c line 6: the size of the array 'a' cannot be negative"]
 }
