@@ -52,7 +52,9 @@ def cleanGreen(input_file, symbol_file):
 
     stream = CommonTokenStream(lexer)  # Extract tokens
 
-    includeSTDIO, stream, comments = PreProcessor(stream, lexer, input_file).preProcess()  # Apply preprocessing
+    p = PreProcessor(stream, lexer, input_file)
+    includeSTDIO, stream, comments = p.preProcess()  # Apply preprocessing
+    includeSTLIB = p.stdlib
 
     parser = grammarCParser(stream)  # Do actual parse
     parser.removeErrorListeners()  # Add our own error Listener
@@ -117,7 +119,8 @@ def cleanGreen(input_file, symbol_file):
 
     SizeOfTranslater().visit(ast)
 
-    DynamicAllocation.add_allocation(ast)
+    if includeSTLIB:
+        DynamicAllocation.add_allocation(ast)
     FileIO.add_io(ast)
 
     StructCleanerAfter().visit(ast)

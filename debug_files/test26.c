@@ -1,25 +1,13 @@
 #include <stdio.h>
+#include <stdlib.h>
 
+int main(){
 
-union grammar_rule_production{
-    struct grammar_rule* production;
-    char terminal;
-};
+    char* ptr = (char*) malloc(5);
+    *(ptr+4) = 'a';
 
-struct grammar_rule{
-    struct grammar_rule* productions;
-    int production_size;
-    int is_terminal;
-};
-
-struct grammar{
-
-};
-
-
-int main() {
-
-    union grammar_rule_production v;
+    printf("%c", *(ptr+4));
 
     return 0;
+
 }
