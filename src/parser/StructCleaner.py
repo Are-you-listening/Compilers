@@ -53,6 +53,8 @@ class StructCleaner(ASTVisitor):
     def visit(self, ast: AST):
         self.to_remove = set()
         self.waiting_structs = {}
+        self.table = StructTable(None)
+
         self.postorder(ast.root)
 
         for n in self.to_remove:

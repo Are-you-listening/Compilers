@@ -8,6 +8,10 @@ base_types = ["INT", "FLOAT", "CHAR", "VOID"]
 class SymbolTypeStruct:
     pass
 
+class SymbolTypeUnion:
+    pass
+
+
 class TypeNodeHandler:
     """
     Tools with regard to creating and retrieving AST TypeNode types
@@ -24,9 +28,13 @@ class TypeNodeHandler:
         """
         self.struct_types = {}
         self.struct_param = {}
+        self.union_store = {}
 
     def clear(self):
         self.__instance = None
+        self.struct_types = {}
+        self.struct_param = {}
+        self.union_store = {}
 
     @staticmethod
     def getInstance():
@@ -114,7 +122,19 @@ class TypeNodeHandler:
                     latest_datatype = SymbolType(child.text, is_const)
 
                 elif self.struct_types.get(child.text) is None:
-                    self.struct_types[child.text] = SymbolTypeStruct(child.text)
+                    if child.text in ("struct", "union"):
+                        continue
+
+                    if child.text == "0_IO_FILE":
+                        self.struct_types[child.text] = SymbolTypeStruct(child.text)
+                        continue
+
+                    is_union = node.structTable.isUnion(child.text, node.position)
+                    if is_union:
+                        self.struct_types[child.text] = SymbolTypeUnion(child.text)
+
+                    else:
+                        self.struct_types[child.text] = SymbolTypeStruct(child.text)
 
                     latest_datatype = self.struct_types[child.text]
                 else:
@@ -138,3 +158,4 @@ class TypeNodeHandler:
         return self.struct_types.get(key, default)
 
 from src.parser.Tables.SymbolTypeStruct import SymbolTypeStruct
+from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
