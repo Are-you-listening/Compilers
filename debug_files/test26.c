@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 
-union grammer_rule_production{
+union grammar_rule_production{
     struct grammar_rule* production;
     char terminal;
 };
@@ -19,7 +19,7 @@ struct grammar{
 
 int main() {
 
-
+    union grammar_rule_production v;
 
     return 0;
 }

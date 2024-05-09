@@ -1,10 +1,12 @@
 from src.parser.AST import ASTNode, ASTNodeTypes
 from src.internal_tools import *
-from src.parser.Tables import *
-from src.parser.ErrorExporter import ErrorExporter
+
+from src.parser.Tables.SymbolTypeArray import SymbolTypeArray, SymbolTypePtr, SymbolType
 
 base_types = ["INT", "FLOAT", "CHAR", "VOID"]
 
+class SymbolTypeStruct:
+    pass
 
 class TypeNodeHandler:
     """
@@ -21,6 +23,7 @@ class TypeNodeHandler:
         Store all struct and union type mappings
         """
         self.struct_types = {}
+        self.struct_param = {}
 
     def clear(self):
         self.__instance = None
@@ -41,6 +44,15 @@ class TypeNodeHandler:
         """
         PreConditions.assertInstanceOff(struct_type, SymbolTypeStruct)
         self.struct_types[key] = struct_type
+
+    def addStructParam(self, key: str, struct_param_list: list[SymbolType]):
+        """
+        Add a struct param to the the struct in singleton
+        """
+        self.struct_param[key] = struct_param_list
+
+    def getStructParam(self, key: str, index: int):
+        return self.struct_param[key][index]
 
     def typeToTypeNode(self, node: ASTNode):
         """
@@ -98,16 +110,15 @@ class TypeNodeHandler:
 
                 latest_datatype = self.__make_ptr_type(latest_datatype, is_const, child.type)
             else:
-                if self.struct_types.get(child.text) is not None:
-                    latest_datatype = self.struct_types[child.text]
-
-                    """
-                    Check if struct/union type matches 
-                    struct can only be assigned to struct type vars, same for union
-                    """
-
-                else:
+                if child.text in base_types:
                     latest_datatype = SymbolType(child.text, is_const)
+
+                elif self.struct_types.get(child.text) is None:
+                    self.struct_types[child.text] = SymbolTypeStruct(child.text)
+
+                    latest_datatype = self.struct_types[child.text]
+                else:
+                    latest_datatype = self.struct_types[child.text]
 
         return latest_datatype
 
@@ -126,3 +137,4 @@ class TypeNodeHandler:
     def getStruct(self, key, default=None):
         return self.struct_types.get(key, default)
 
+from src.parser.Tables.SymbolTypeStruct import SymbolTypeStruct

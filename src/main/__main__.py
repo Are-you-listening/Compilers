@@ -82,9 +82,6 @@ def cleanGreen(input_file, symbol_file):
 
     StructCleaner().visit(ast)  # Massage the structs
 
-    print("he")
-    #DotVisitor("output/d1").visit(ast)
-
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
 
 
@@ -105,6 +102,8 @@ def cleanGreen(input_file, symbol_file):
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
     TypeCleaner().visit(ast)
+
+
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
@@ -143,6 +142,8 @@ def Processing(ast, dot_file, fold, includeSTDIO, unused_var):
     It is vital that AST conversion occurs before constant folding
     """
     ASTConversion().visit(ast)
+
+    #DotVisitor("output/d1").visit(ast)
 
     UnarySaVisitor().visit(ast)
 

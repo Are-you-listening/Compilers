@@ -8,7 +8,8 @@ from src.parser.Tables.SymbolTypeArray import SymbolTypeArray
 from src.parser.Tables.SymbolTypeStruct import SymbolTypeStruct
 from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 import math
-
+from src.parser.Tables.TypeNodehandler import TypeNodeHandler
+from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
 """
 This line is not because our lack of capabilities to avoid recursions, this line exist because LLVMLite itself
 uses recursions 
@@ -106,7 +107,11 @@ class CTypesToLLVM:
                 return struct_type
 
             types = []
-            for v in data_type.pts_to:
+
+            params = TypeNodeHandler.getInstance().struct_param[data_type.data_type]
+            if isinstance(data_type, SymbolTypeUnion):
+                params = [data_type.union_type]
+            for v in params:
                 types.append(CTypesToLLVM.getIRType(v))
 
             llvm_type = ir.LiteralStructType(types)

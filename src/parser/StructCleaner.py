@@ -90,7 +90,6 @@ class StructCleaner(ASTVisitor):
         node.children[0].type = ""
         self.table.add(structName)
 
-
         index = 1
         while index < len(node.children):
             child = node.children[index]
@@ -103,8 +102,20 @@ class StructCleaner(ASTVisitor):
         for child in node.children:
             child.type = "STRUCTUNION"
 
-        if node.text == "Union":
+        is_union = node.text == "Union"
+        if is_union:
             self.table.addDataMember(structName, "union")  # Extra info to later check if it's a union or struct
+
+        if structName in self.waiting_structs:
+            v = self.waiting_structs[structName]
+
+            self.waiting_structs.pop(structName)
+
+            if not v[0] and not is_union:
+                ErrorExporter.invalidStructUnionAssign(node.position, "Union", "Struct")
+
+            if v[0] and is_union:
+                ErrorExporter.invalidStructUnionAssign(node.position, "Struct", "Union")
 
         BaseTypes.append(structName)
 
@@ -124,14 +135,13 @@ class StructCleaner(ASTVisitor):
         is_union = node.getChild(0).text == "union"
 
         if is_struct or is_union:
-
-            is_union2 = node.structTable.isUnion(node.getChild(1).text, node.position, False)
+            is_union2 = node.structTable.isUnion(node.getChild(1).text, node.position, not self.has_ptr(node))
             if is_union2 is None:
                 """
                 We can have a ptr inside a struct to a struct that is later declared, so if we do not yet have this 
                 struct. we will store this for later checks
                 """
-                self.waiting_struct[node.getChild(1).text] = (is_struct, node.position)
+                self.waiting_structs[node.getChild(1).text] = (is_struct, node.position)
                 return
 
             if is_union and not is_union2:
@@ -139,5 +149,17 @@ class StructCleaner(ASTVisitor):
 
             if is_struct and is_union2:
                 ErrorExporter.invalidStructUnionAssign(node.position, "Struct", "Union")
+
+    @staticmethod
+    def has_ptr(node: ASTNode):
+        """
+        Check if a type node is a ptr
+        """
+
+        for c in node.children:
+            if c.text == "*":
+                return True
+
+        return False
 
 

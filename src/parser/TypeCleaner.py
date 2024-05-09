@@ -104,14 +104,15 @@ class TypeCleaner(ASTVisitor):
         """
         if node.text == "Union":  # For Unions, take the biggest type as type for all data members
             richest = self.getUnionType(pts_to)
-            struct_type = SymbolTypeUnion(struct_name, richest, pts_to)
+            struct_type = SymbolTypeUnion(struct_name, richest)
         else:
-            struct_type = SymbolTypeStruct(struct_name, pts_to)
+            struct_type = SymbolTypeStruct(struct_name)
 
         """
         Add the struct to the struct type dict
         """
         TypeNodeHandler.getInstance().addStructType(struct_name, struct_type)
+        TypeNodeHandler.getInstance().addStructParam(struct_name, pts_to)
 
         """
         Remove the struct form the AST
@@ -162,6 +163,9 @@ class TypeCleaner(ASTVisitor):
 
             if isinstance(union_type, SymbolTypePtr):
                 richest = union_type
+            elif isinstance(richest, SymbolTypePtr):
+                continue
+
             else:
                 data_type, ptrs = richest.getPtrTuple()
                 data_type2, ptrs2 = union_type.getPtrTuple()

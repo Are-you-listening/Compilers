@@ -1,10 +1,10 @@
 from src.parser.Tables.SymbolTypeArray import *
 
 
+
 class SymbolTypeStruct(SymbolType):
-    def __init__(self, struct_name, pts_to: [SymbolType]):
+    def __init__(self, struct_name):
         super().__init__(struct_name, False)
-        self.pts_to = pts_to
 
     def getElementType(self, index: int):
         """
@@ -12,41 +12,27 @@ class SymbolTypeStruct(SymbolType):
         :param index:
         :return:
         """
-        symbol_type = SymbolTypePtr(self.pts_to[index], False)
+        symbol_type = TypeNodeHandler.getInstance().getInstance().getStructParam(self.data_type, index)
+
+        symbol_type = SymbolTypePtr(symbol_type, False)
         return symbol_type
 
     def getPtrTuple(self):
         ptrs = [('*', self.isConst())]
         return (self.data_type, self.isConst()), ptrs
 
-    def getFullType(self):
-        ptr_list = []
-        temp = []
-        for item in self.pts_to:
-            while isinstance(item, SymbolTypePtr):
-                if isinstance(item, SymbolTypeArray):
-                    temp.append((str(item.size), item.isConst()))
-                else:
-                    temp.append(("*", item.isConst()))
-                item = item.deReference()
-
-            if temp == []:
-                temp = (item.getType(), item.isConst()), []
-            else:
-                temp = (item.getType(), item.isConst()), temp
-
-            ptr_list.append(temp)
-            temp = []
-        return (self.getType(), self.isConst()), ptr_list
-
     def getPtrAmount(self):
         return 1
 
     def getBytesUsed(self):
-        byte_amount = sum([f.getBytesUsed() for f in self.pts_to])
+        pts_to = TypeNodeHandler.getInstance().getInstance().struct_param[self.data_type]
+
+        byte_amount = sum([f.getBytesUsed() for f in pts_to])
 
         return byte_amount
 
     @staticmethod
     def isBase():
         return False
+
+from src.parser.Tables.TypeNodehandler import TypeNodeHandler

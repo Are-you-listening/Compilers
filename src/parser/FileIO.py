@@ -90,6 +90,7 @@ class FileIO:
         file_struct_param.append(SymbolTypePtr(SymbolType("CHAR", False), False))
         file_struct_param.append(SymbolTypePtr(SymbolType("CHAR", False), False))
 
-        file_struct = SymbolTypeStruct("0_IO_FILE", file_struct_param)
+        file_struct = SymbolTypeStruct("0_IO_FILE")
 
         TypeNodeHandler.getInstance().addStructType("0_IO_FILE", file_struct)
+        TypeNodeHandler.getInstance().addStructParam("0_IO_FILE", file_struct_param)

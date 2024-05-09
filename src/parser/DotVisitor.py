@@ -16,6 +16,9 @@ class DotVisitor(ASTVisitor):
     def visitNode(self, node: ASTNode):
         text = node.text
 
+        if isinstance(node, ASTNodeTypes):
+            text += str(node.symbol_type.getPtrTuple())
+
         self.outfile.write(f'  "{id(node)}" [label="{text}"];\n')
         for child in node.children:
             self.outfile.write(f'  "{id(node)}" -> "{id(child)}";\n')
