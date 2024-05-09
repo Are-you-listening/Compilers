@@ -1,6 +1,5 @@
 from src.parser.ASTVisitor import *
-
-BaseTypes = ["INT", "FLOAT", "CHAR", "VOID"]
+from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 
 
 class TypedefTable:  # Prevent circular inclusion
@@ -94,7 +93,8 @@ class ASTTypedefReplacer(ASTVisitor):
         :param child: ASTNode
         :return:
         """
-        if child.text in BaseTypes:
+
+        if child.text in TypeNodeHandler.getInstance().BaseTypes:
             return True
         return False
 

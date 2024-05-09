@@ -13,6 +13,7 @@ class BlacklistVisitor(ASTVisitor):
 
     def visit(self, ast: AST):
         self.to_remove = set()
+        self.add = set()
         self.preorder(ast.root)
 
         for before, node in self.add:

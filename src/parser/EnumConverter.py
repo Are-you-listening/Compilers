@@ -16,6 +16,8 @@ class EnumConverter(ASTVisitor):
         instead of directly adding children. Currently, it is a preorder which is fine for everything it currently
         needs to do.
         """
+        self.to_remove = set()
+
         self.preorder(ast.root)
 
         for node in self.to_remove:  # Delete the older nodes

@@ -36,6 +36,8 @@ from src.parser.ControlFlow.ControlFlowDotVisitor import *
 from src.parser.UnusedCleaner import UnusedCleaner
 from src.parser.ArrayPreProcessor import ArrayPreProcessor
 from TestCases.ABCTests.AstLoader import AstLoader
+from src.parser.Tables.TypeNodehandler import TypeNodeHandler
+
 
 def cleanGreen(input_file, symbol_file):
     """
@@ -44,6 +46,13 @@ def cleanGreen(input_file, symbol_file):
     :param symbol_file:
     :return:
     """
+
+    """
+    clear singletons for testcases
+    """
+    TypeNodeHandler.getInstance().clear()
+    LLVMSingleton.getInstance().clear()
+
     input_stream = FileStream(input_file)  # Create input stream
     lexer = grammarCLexer(input_stream)
 

@@ -29,12 +29,15 @@ class TypeNodeHandler:
         self.struct_types = {}
         self.struct_param = {}
         self.union_store = {}
+        self.BaseTypes = ["INT", "FLOAT", "CHAR", "VOID"]
 
     def clear(self):
-        self.__instance = None
+
         self.struct_types = {}
         self.struct_param = {}
         self.union_store = {}
+        self.BaseTypes = ["INT", "FLOAT", "CHAR", "VOID"]
+        self.__instance = None
 
     @staticmethod
     def getInstance():

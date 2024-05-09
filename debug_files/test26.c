@@ -1,29 +1,12 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-#define OOPS struct a
+typedef int appel;
+typedef const appel const kaas;
 
-OOPS{
-    OOPS* b;
-    int v;
-};
-
-
-int main() {
-
-    struct a* v = (OOPS*) malloc(sizeof(OOPS));
-    struct a* w = (OOPS*) malloc(sizeof(OOPS));
-    w->v = 5;
-
-    v->b = w;
-
-    printf("%d", w->v);
-    printf("%d", v->b->v);
-
-
-    free((char*) v);
-    free((char*) w);
-
-
+int main(){
+    kaas k = 3;
+    appel z;
+    appel z = k;
+    printf("%d %d", k, z);
     return 0;
-}
+};

@@ -8,6 +8,10 @@ class VirtualLineVisitor(ASTVisitor):
         """
         self.virtual_line = 1
 
+    def visit(self, ast: AST):
+        self.virtual_line = 1
+        self.preorder(ast.root)
+
     def visitNode(self, node: ASTNode):
         """
         Assign virtual line nr

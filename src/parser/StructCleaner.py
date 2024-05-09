@@ -1,6 +1,6 @@
 from src.parser.Tables.StructTable import *
 from src.parser.ASTVisitor import *
-from src.parser.ASTTypedefReplacer import BaseTypes
+from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 from src.parser.AST import ASTNodeTypes
 from src.internal_tools import *
 
@@ -119,7 +119,7 @@ class StructCleaner(ASTVisitor):
             if v[0] and is_union:
                 ErrorExporter.invalidStructUnionAssign(node.position, "Struct", "Union")
 
-        BaseTypes.append(structName)
+        TypeNodeHandler.getInstance().BaseTypes.append(structName)
 
     def __checkType(self, node: ASTNode):
         """
