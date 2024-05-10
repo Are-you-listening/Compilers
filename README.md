@@ -14,7 +14,6 @@ sudo apt install llvm
 ### Video Explanation
 Find our demonstration [here](https://youtu.be/HygwHcQxuHY) 
 
-###
 ```--unused_var False``` Disables the optimization to remove unused variables. This might help to better
 understand the LLVM output
 
@@ -111,16 +110,11 @@ understand the LLVM output
 
 ```
 Compilers
-├── administration - A list of the assigments
-├── debug_files - Files used for debugging
 ├── example_source_files - Files used in our demo
 ├── grammar - Directory containing grammar specifications
 │   └── grammarC.g4 - ANTLR file containing our grammar specification
-├── output - Default directory used to generate files in
 ├── README.md - This file
 ├── requirements.txt - Python dependencies
-├── run_tests_profiler.sh - Script to run profile our test environment
-├── run_tests.sh - Script to run all our testcases at once
 ├── script.py - Run all example_source_files
 ├── src - Directory containing our source doe
 │   ├── antlr_files - Grammar files created by ANTLR
@@ -136,6 +130,7 @@ Compilers
 │   ├── mips_target
 │   ├── parser - Directory containing code to parse an input file, create & massage the tree
 │   │   ├── ArrayCleaner.py - Massage the tree, specificly for arrays
+│   │   ├── ArrayPreProcessor.py - Makes sure const values are propagted inside the array size
 │   │   ├── ASTCleanerAfter.py - Clean the AST after table creation
 │   │   ├── ASTCleaner.py - Clean the AST before table creation
 │   │   ├── ASTConversion.py - Reform implicit conversions to explicits and verify semantics
@@ -215,7 +210,9 @@ Compilers
 │   │   │   └── ArraySizeReader.py - Help reading array sizes
 │   │   ├── ValueAdderVisitor.py - Constant Propagation
 │   │   ├── VirtualLineNrVisitor.py - Map code to a virtual linenr (needed instead of linenr by using multiple files)
-│   │   └── VoidReturnAdder.py - Add void returns to void functions
+│   │   ├── VoidReturnAdder.py - Add void returns to void functions
+│   │   ├── ScopeCleaner.py - Removes 'Scope' Nodes
+│   │   └── UnusedCleaner.py - Removes Code for unused varaibles
 └── TestCases - Directory containing our test system
     ├── ABCTests - DIrectory containing the abstract base class test & examples
     │   ├── abcTest.py - Abstract Base Test (from unitTest)
