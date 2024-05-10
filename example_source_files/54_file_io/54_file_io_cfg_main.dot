@@ -1,5 +1,5 @@
 digraph AST {
-  "131879694773760" [label="%\".2\" = .2:
+  "138280901826768" [label="%\".2\" = .2:
   ;    INT main ( ) { CHAR * buf = calloc ( 50 , sizeof ( CHAR ) ) ;
   %\".4\" = call i8* @\"calloc\"(i32 50, i32 1)
   %\".5\" = alloca i8*, align 8

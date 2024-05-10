@@ -47,5 +47,6 @@
   "53": ["[ Syntax Error ] tests/test53.c line 5:8 invalid symbol: '['"],
   "54": ["[ Error ] tests/test54.c line 5: invalid unary operation"],
   "55": ["[ Error ] tests/test55.c line 5: invalid unary operation"],
-  "56": ["[ Error ] tests/test56.c line 4: invalid unary operation"]
+  "56": ["[ Error ] tests/test56.c line 4: invalid unary operation"],
+  "57": ["[ Error ]  main function not found"]
 }

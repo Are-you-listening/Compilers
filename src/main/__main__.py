@@ -37,6 +37,7 @@ from src.parser.UnusedCleaner import UnusedCleaner
 from src.parser.ArrayPreProcessor import ArrayPreProcessor
 from TestCases.ABCTests.AstLoader import AstLoader
 from src.parser.Tables.TypeNodehandler import TypeNodeHandler
+from src.parser.ScopeCleaner import ScopeCleaner
 
 
 def cleanGreen(input_file, symbol_file):
@@ -166,6 +167,8 @@ def Processing(ast, dot_file, fold, includeSTDIO, unused_var):
 
     if unused_var:
         UnusedCleaner().visit(ast)
+
+    ScopeCleaner().visit(ast)
 
     cfc = ControlFlowCreator()
     cfc.visit(ast)
