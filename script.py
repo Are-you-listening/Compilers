@@ -22,18 +22,18 @@ def script():
         # Clear singleton
         LLVMSingleton.getInstance().clear()
 
-
+        unused_var = "False"
+        if file_name.endswith("56_unused_variables"):
+            unused_var = "True"
 
         # Run our llvm
         try:
             outfile = open(file_name+".sh", "w")  # Create a .sh file to execute files in the subdirectory
             outfile.write("cd ../../\n")
-            outfile.write(f"python3 -m src.main --input {c} --target_llvm {llvm} --fold True --render_ast {ast} --render_symb {table} --target_control_flow {cfg}")
+            outfile.write(f"python3 -m src.main --input {c} --target_llvm {llvm} --fold True --render_ast {ast} --render_symb {table} --target_control_flow {cfg} --unused_var {unused_var}")
             outfile.close()
 
-
-
-            main([0, "--input", f"{curr_dir}{c[1:]}", "--target_llvm", f"{curr_dir}{llvm[1:]}", "--fold", "True", "--render_ast", f"{curr_dir}{ast[1:]}", "--render_symb", f"{curr_dir}{table[1:]}", "--target_control_flow", f"{curr_dir}{cfg[1:]}"])  # Run our compiler with folding
+            main([0, "--input", f"{curr_dir}{c[1:]}", "--target_llvm", f"{curr_dir}{llvm[1:]}", "--fold", "True", "--render_ast", f"{curr_dir}{ast[1:]}", "--render_symb", f"{curr_dir}{table[1:]}", "--target_control_flow", f"{curr_dir}{cfg[1:]}", "--unused_var", unused_var])  # Run our compiler with folding
         except:
 
             """
@@ -46,8 +46,7 @@ def script():
             if "error" not in file_name:
                 if index == "in":
                     pass
-                if index not in ["51", "6", "13"]:
-                    raise Exception("ayayay")
+
 
             continue
 

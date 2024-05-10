@@ -1,2 +1,2 @@
 cd ../../
-python3 -m src.main --input ./example_source_files/39_arrays/39_arrays.c --target_llvm ./example_source_files/39_arrays/39_arrays_.ll --fold True --render_ast ./example_source_files/39_arrays/39_arrays_ast.dot --render_symb ./example_source_files/39_arrays/39_arrays_table.dot --target_control_flow ./example_source_files/39_arrays/39_arrays_cfg.dot
+python3 -m src.main --input ./example_source_files/39_arrays/39_arrays.c --target_llvm ./example_source_files/39_arrays/39_arrays_.ll --fold True --render_ast ./example_source_files/39_arrays/39_arrays_ast.dot --render_symb ./example_source_files/39_arrays/39_arrays_table.dot --target_control_flow ./example_source_files/39_arrays/39_arrays_cfg.dot --unused_var False

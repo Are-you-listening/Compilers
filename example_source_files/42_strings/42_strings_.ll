@@ -33,6 +33,12 @@ define i32 @"main"()
   %".28" = getelementptr inbounds [10 x i8], [10 x i8]* %".3", i64 0, i32 1
   ; s [ 1 ] = 101 ;
   store i8 101, i8* %".28", align 4
+  %".31" = alloca i8*, align 8
+  %".32" = bitcast [10 x i8]* @".str.0" to i8*
+  store i8* %".32", i8** %".31", align 8
+  ;  CHAR * str = "string he" ;
   ret i32 0
-  ;  CHAR * str = "string he" ; return 0 ;
+  ; return 0 ;
 }
+
+@".str.0" = internal constant [10 x i8] c"string he\00"

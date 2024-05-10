@@ -1,2 +1,2 @@
 cd ../../
-python3 -m src.main --input ./example_source_files/42_strings/42_strings.c --target_llvm ./example_source_files/42_strings/42_strings_.ll --fold True --render_ast ./example_source_files/42_strings/42_strings_ast.dot --render_symb ./example_source_files/42_strings/42_strings_table.dot --target_control_flow ./example_source_files/42_strings/42_strings_cfg.dot
+python3 -m src.main --input ./example_source_files/42_strings/42_strings.c --target_llvm ./example_source_files/42_strings/42_strings_.ll --fold True --render_ast ./example_source_files/42_strings/42_strings_ast.dot --render_symb ./example_source_files/42_strings/42_strings_table.dot --target_control_flow ./example_source_files/42_strings/42_strings_cfg.dot --unused_var False

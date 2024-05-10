@@ -5,6 +5,9 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
+  %".3" = alloca i32, align 4
+  store i32 35, i32* %".3", align 4
+  ;   INT main ( ) {  INT a = 5 * ( 4 + 3 ) ;
   ret i32 0
-  ;   INT main ( ) {  INT a = 5 * ( 4 + 3 ) ;  return 0 ;
+  ;  return 0 ;
 }

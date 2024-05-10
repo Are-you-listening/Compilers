@@ -14,6 +14,10 @@ sudo apt install llvm
 ### Video Explanation
 Find our demonstration [here](https://youtu.be/HygwHcQxuHY) 
 
+###
+```--unused_var False``` Disables the optimization te remove unused variables. This might help to better
+understand the LLVM output
+
 ### Mandatory Functionality:
 (In short we made all the mandatory features) (Links are provided to an example file showing this feature)
 

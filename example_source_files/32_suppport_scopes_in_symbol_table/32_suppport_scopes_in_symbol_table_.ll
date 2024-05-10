@@ -15,14 +15,16 @@ define i32 @"main"()
   ; if ( x == y )
   %".11" = load i32, i32* %".6", align 4
   %".12" = icmp eq i32 %".9", %".11"
-  br i1 %".12", label %".13", label %".15"
+  br i1 %".12", label %".13", label %".16"
 .13:
+  %".14" = alloca i8, align 1
   ; { CHAR z ;
-  br label %".17"
-.15:
+  br label %".19"
+.16:
+  %".17" = alloca i32, align 4
   ; } else { INT z ;
-  br label %".17"
-.17:
+  br label %".19"
+.19:
   ret i32 0
   ; } return 0 ;
 }

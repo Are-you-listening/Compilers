@@ -1,17 +1,13 @@
 digraph AST {
-  "138081629408800" [label="main:  INT
-malloc:  CHAR*
-calloc:  CHAR*
-free:  VOID
-realloc:  CHAR*
-fopen:  _IO_FILE*
+  "131879694618576" [label="main:  INT
+fopen:  0_IO_FILE*
 fgets:  CHAR*
 fputs:  CHAR
 fclose:  VOID"];
-  "138081629408800" -> "138081629418208";
-  "138081629418208" [label=""];
-  "138081629418208" -> "138081629416816";
-  "138081629416816" [label="a:  FLOAT
+  "131879694618576" -> "131879694623856";
+  "131879694623856" [label=""];
+  "131879694623856" -> "131879694617424";
+  "131879694617424" [label="a:  FLOAT
 b: const INT
 c:  CHAR
 d:  FLOAT*

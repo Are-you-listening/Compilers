@@ -20,6 +20,14 @@ define i32 @"main"()
   ;  INT c = 3 ;
   store i32 3, i32* %".13", align 4
   ; c = 3 ;
+  %".18" = load i32, i32* %".3", align 4
+  ;  INT d = ( a + b ) * c ;
+  %".20" = load i32, i32* %".8", align 4
+  %".21" = add i32 %".18", %".20"
+  %".22" = load i32, i32* %".13", align 4
+  %".23" = mul i32 %".21", %".22"
+  %".24" = alloca i32, align 4
+  store i32 %".23", i32* %".24", align 4
   ret i32 0
-  ;  INT d = ( a + b ) * c ;  return 0 ;
+  ;  return 0 ;
 }

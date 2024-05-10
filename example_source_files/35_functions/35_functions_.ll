@@ -28,6 +28,13 @@ define i32 @"factorial"(i32 %".1")
 define i32 @"main"()
 {
 .2:
+  %".3" = alloca i32, align 4
+  store i32 5, i32* %".3", align 4
+  ;    INT factorial ( INT c ) ;  INT main ( ) { INT n = 5 ;
+  ; INT fact = factorial ( n ) ;
+  %".7" = call i32 @"factorial"(i32 5)
+  %".8" = alloca i32, align 4
+  store i32 %".7", i32* %".8", align 4
   ret i32 0
-  ;    INT factorial ( INT c ) ;  INT main ( ) { INT n = 5 ; INT fact = factorial ( n ) ; return 0 ;
+  ; return 0 ;
 }

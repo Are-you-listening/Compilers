@@ -14,13 +14,19 @@ define i32 @"main"()
   %".9" = alloca i8, align 1
   store i8 101, i8* %".9", align 1
   ; CHAR c = 'e' ;
-  %".12" = alloca i8*, align 8
-  store i8* %".9", i8** %".12", align 8
-  ; FLOAT * d = & a ; INT * e = & b ; const CHAR * f = & c ;
-  %".15" = load i8*, i8** %".12", align 8
+  %".12" = alloca float*, align 8
+  store float* %".3", float** %".12", align 8
+  ; FLOAT * d = & a ;
+  %".15" = alloca i32*, align 8
+  store i32* %".6", i32** %".15", align 8
+  ; INT * e = & b ;
+  %".18" = alloca i8*, align 8
+  store i8* %".9", i8** %".18", align 8
+  ; const CHAR * f = & c ;
+  %".21" = load i8*, i8** %".18", align 8
   ; f ++ ;
-  %".17" = getelementptr inbounds i8, i8* %".15", i64 1
-  store i8* %".17", i8** %".12", align 8
+  %".23" = getelementptr inbounds i8, i8* %".21", i64 1
+  store i8* %".23", i8** %".18", align 8
   ret i32 0
   ; return 0 ;
 }

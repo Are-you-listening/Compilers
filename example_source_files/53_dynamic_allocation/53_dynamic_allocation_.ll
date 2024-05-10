@@ -2,28 +2,29 @@
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
+%"cheese" = type {i32}
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca {i32}, align 4
-  ;  struct cheese { INT milk ; } ;  INT main ( ) { struct cheese gouda ;
-  %".5" = getelementptr inbounds {i32}, {i32}* %".3", i32 0, i32 0
+  %".3" = alloca %"cheese", align 4
+  ;    struct cheese { INT milk ; } ;  INT main ( ) { struct cheese gouda ;
+  %".5" = getelementptr inbounds %"cheese", %"cheese"* %".3", i32 0, i32 0
   ; gouda . milk = 3 ;
   store i32 3, i32* %".5", align 4
   ;  struct cheese * gouda_ptr = ( struct cheese * ) malloc ( sizeof ( struct cheese ) ) ;
   %".9" = call i8* @"malloc"(i32 4)
-  %".10" = bitcast i8* %".9" to {i32}*
-  %".11" = alloca {i32}*, align 8
-  store {i32}* %".10", {i32}** %".11", align 8
+  %".10" = bitcast i8* %".9" to %"cheese"*
+  %".11" = alloca %"cheese"*, align 8
+  store %"cheese"* %".10", %"cheese"** %".11", align 8
   ;  gouda_ptr = realloc ( gouda_ptr , sizeof ( struct cheese ) * 2 ) ;
-  %".14" = load {i32}*, {i32}** %".11", align 8
-  %".15" = bitcast {i32}* %".14" to i8*
+  %".14" = load %"cheese"*, %"cheese"** %".11", align 8
+  %".15" = bitcast %"cheese"* %".14" to i8*
   %".16" = call i8* @"realloc"(i8* %".15", i32 8)
-  %".17" = bitcast i8* %".16" to {i32}*
-  store {i32}* %".17", {i32}** %".11", align 8
+  %".17" = bitcast i8* %".16" to %"cheese"*
+  store %"cheese"* %".17", %"cheese"** %".11", align 8
   ;  free ( gouda_ptr ) ;
-  %".20" = load {i32}*, {i32}** %".11", align 8
-  %".21" = bitcast {i32}* %".20" to i8*
+  %".20" = load %"cheese"*, %"cheese"** %".11", align 8
+  %".21" = bitcast %"cheese"* %".20" to i8*
   call void @"free"(i8* %".21")
   ;  CHAR * z = calloc ( 2 , sizeof ( CHAR ) ) ;
   %".24" = call i8* @"calloc"(i32 2, i32 1)

@@ -5,12 +5,15 @@ target datalayout = ""
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca [11 x [20 x i32]], align 1024
-  ;  INT main ( ) { INT q = 5 ; INT x [ 11 ] [ 20 ] ;
-  %".5" = getelementptr inbounds [11 x [20 x i32]], [11 x [20 x i32]]* %".3", i64 0, i32 10
+  %".3" = alloca i32, align 4
+  store i32 5, i32* %".3", align 4
+  ;  INT main ( ) { INT q = 5 ;
+  %".6" = alloca [11 x [20 x i32]], align 1024
+  ; INT x [ 11 ] [ 20 ] ;
+  %".8" = getelementptr inbounds [11 x [20 x i32]], [11 x [20 x i32]]* %".6", i64 0, i32 10
   ;  x [ 10 ] [ 19 ] = 1 + 5 ;
-  %".7" = getelementptr inbounds [20 x i32], [20 x i32]* %".5", i64 0, i32 19
-  store i32 6, i32* %".7", align 4
+  %".10" = getelementptr inbounds [20 x i32], [20 x i32]* %".8", i64 0, i32 19
+  store i32 6, i32* %".10", align 4
   ret i32 0
   ; return 0 ;
 }

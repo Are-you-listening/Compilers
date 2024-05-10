@@ -1,19 +1,19 @@
 digraph AST {
-  "138081629592720" [label="%\".2\" = .2:
-  %\".3\" = alloca {i32, i32}, align 8
+  "131879693281856" [label="%\".2\" = .2:
+  %\".3\" = alloca %\"kaas\", align 8
   ;  struct kaas { INT melk ; INT fermtented ; } ;  INT main ( ) { struct kaas ementaler ;
-  %\".5\" = getelementptr inbounds {i32, i32}, {i32, i32}* %\".3\", i32 0, i32 0
+  %\".5\" = getelementptr inbounds %\"kaas\", %\"kaas\"* %\".3\", i32 0, i32 0
   ; ementaler . melk = 1 ;
   store i32 1, i32* %\".5\", align 4
-  %\".8\" = getelementptr inbounds {i32, i32}, {i32, i32}* %\".3\", i32 0, i32 1
+  %\".8\" = getelementptr inbounds %\"kaas\", %\"kaas\"* %\".3\", i32 0, i32 1
   ; ementaler . fermtented = 18 ;
   store i32 18, i32* %\".8\", align 4
-  %\".11\" = alloca {i32, i32}, align 8
+  %\".11\" = alloca %\"kaas\", align 8
   ;  struct kaas gouda ;
-  %\".13\" = getelementptr inbounds {i32, i32}, {i32, i32}* %\".11\", i32 0, i32 0
+  %\".13\" = getelementptr inbounds %\"kaas\", %\"kaas\"* %\".11\", i32 0, i32 0
   ; gouda . melk = 7 ;
   store i32 7, i32* %\".13\", align 4
-  %\".16\" = getelementptr inbounds {i32, i32}, {i32, i32}* %\".11\", i32 0, i32 1
+  %\".16\" = getelementptr inbounds %\"kaas\", %\"kaas\"* %\".11\", i32 0, i32 1
   ; gouda . fermtented = 9 ;
   store i32 9, i32* %\".16\", align 4
   ret i32 0
