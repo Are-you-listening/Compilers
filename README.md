@@ -130,7 +130,7 @@ Compilers
 │   ├── mips_target
 │   ├── parser - Directory containing code to parse an input file, create & massage the tree
 │   │   ├── ArrayCleaner.py - Massage the tree, specificly for arrays
-│   │   ├── ArrayPreProcessor.py - Makes sure const values are propagted inside the array size
+│   │   ├── ArrayPreProcessor.py - Makes sure const values are propagated inside the array size
 │   │   ├── ASTCleanerAfter.py - Clean the AST after table creation
 │   │   ├── ASTCleaner.py - Clean the AST before table creation
 │   │   ├── ASTConversion.py - Reform implicit conversions to explicits and verify semantics
