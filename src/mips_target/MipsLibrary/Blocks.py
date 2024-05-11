@@ -1,4 +1,4 @@
-from Instructions import *
+from .Instructions import *
 
 
 class Block:
@@ -17,3 +17,10 @@ class Block:
             s += "\n"
 
         return s
+
+    def alloca(self):
+        """
+        Get a register for a variable
+        """
+
+        return 1

@@ -1,5 +1,5 @@
-from Instructions import Load
-from Function import Function
+from .Instructions import Load
+from .Function import Function
 
 
 class Mips:

@@ -1,4 +1,5 @@
-from MipsLibrary import *
+
+from .MipsLibrary import *
 
 
 class MipsSingleton:

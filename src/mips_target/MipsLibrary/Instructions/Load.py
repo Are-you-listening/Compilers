@@ -1,4 +1,4 @@
-from MipsInstruction import MipsInstructions, Register
+from .MipsInstruction import MipsInstructions, Register
 
 
 class Load(MipsInstructions):

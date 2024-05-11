@@ -38,6 +38,8 @@ from src.parser.ArrayPreProcessor import ArrayPreProcessor
 from TestCases.ABCTests.AstLoader import AstLoader
 from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 from src.parser.ScopeCleaner import ScopeCleaner
+from src.mips_target.MipsSingleton import MipsSingleton
+from src.mips_target.AST2MIPS import AST2MIPS
 
 
 def cleanGreen(input_file, symbol_file):
@@ -238,6 +240,11 @@ def main(argv):
             for function_name, cfg in cfgs.items():
                 control_dot = ControlFlowDotVisitor(function_name, control_flow_file)  # Create a CFG
                 control_dot.visit(cfg.root)
+
+    if mips_file is not None:
+        to_mips = AST2MIPS(codegetter, llvm_file,
+                           comments)  # The codegetter is used to add the original code as comments
+        to_mips.visit(ast)
 
 
 if __name__ == '__main__':

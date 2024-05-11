@@ -1,5 +1,5 @@
-from Blocks import Block
-from MipsManager import MipsManager
+from .Blocks import Block
+from .MipsManager import MipsManager
 
 
 class Function:

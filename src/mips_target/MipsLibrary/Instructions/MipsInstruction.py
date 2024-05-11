@@ -1,4 +1,4 @@
-from Register import Register
+from .Register import Register
 from abc import abstractmethod
 
 
