@@ -176,7 +176,7 @@ class AST2LLVM(ASTVisitor):
                 else:
                     if node.parent.text != "Declaration":
                         block = LLVMSingleton.getInstance().getCurrentBlock()
-                        d = block.alloca(CTypesToLLVM.getIRType(symbol_entry.getTypeObject()))
+                        d = block.getRegister(CTypesToLLVM.getIRType(symbol_entry.getTypeObject()))
                         self.llvm_map[node] = d
 
                     return
@@ -488,7 +488,7 @@ class AST2LLVM(ASTVisitor):
             arg_type = arg.type
 
             # Create an alloca instruction
-            alloca = builder.alloca(arg_type)
+            alloca = builder.getRegister(arg_type)
 
             # Store the argument value in the alloca instruction
             store = builder.store(arg, alloca)

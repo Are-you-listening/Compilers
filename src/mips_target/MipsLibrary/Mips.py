@@ -8,8 +8,11 @@ class Mips:
 
     def toString(self):
         string = ""
-        string += ".globl main"
-        string += ".text"
+        string += ".global main\n"
+        string += ".text\n"
+
+        for f in self.functions:
+            string += f.toString()
 
         return string
 

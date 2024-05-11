@@ -14,3 +14,11 @@ class Function:
         self.blocks.append(block)
 
         return block
+
+    def toString(self):
+        string = f"{self.function_name}:"
+        for b in self.blocks:
+            string += b.toString()
+            string += "\n"
+
+        return string

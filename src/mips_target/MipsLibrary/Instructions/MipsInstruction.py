@@ -11,3 +11,6 @@ class MipsInstructions:
     def toString(self):
         pass
 
+    @staticmethod
+    def assignment(store_register: Register, value, align: int):
+        pass

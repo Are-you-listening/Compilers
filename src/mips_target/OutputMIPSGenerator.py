@@ -27,7 +27,18 @@ class Declaration:
     @staticmethod
     def declare(data_type: SymbolType, var_name: str):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        register = block.alloca()
+        register = block.getRegister()
 
         return register
+
+    @staticmethod
+    def assignment(store_reg, to_store, offset: int = 0):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        if isinstance(to_store, int):
+            instr = block.li(store_reg, to_store)
+        else:
+            instr = block.lw(store_reg, to_store, offset)
+
+        return instr
+
 

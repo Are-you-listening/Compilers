@@ -44,7 +44,7 @@ class MipsSingleton:
 
     def getFunction(self, function_name: Function):
         for function in self.__functions:
-            if function.name == function_name:
+            if function.function_name == function_name:
                 return function
         return None
 
