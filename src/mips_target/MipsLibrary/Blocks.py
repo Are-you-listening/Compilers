@@ -102,6 +102,16 @@ class Block:
         self.instructions.append(instr)
         return instr
 
+    def systemCall(self):
+        instr = Systemcall()
+        self.instructions.append(instr)
+        return instr
+
+    def comment(self, text: str):
+        instr = Comment(text)
+        self.instructions.append(instr)
+        return instr
+
     def toString(self):
         s = ""
         for i in self.instructions:

@@ -108,26 +108,11 @@ class AST2MIPS(ASTVisitor):
             pass
 
     def handleDeclaration(self, node):
-        """
-        ask the var type, and search its value in the symbol table
-        """
-        var_child: ASTNode = node.getChild(0)
-        entry = var_child.getSymbolTable().getEntry(var_child.text)
-
-        register = Declaration.declare(entry.getTypeObject(), var_child.text)
-
-        if node.getChildAmount() == 2:
-            self.handleAssignment(node)
-
-    def handleAssignment(self, node):
-        store_reg = 1
-        to_store = 5
-
-        Declaration.assignment(store_reg, to_store, 4)
+        pass
 
     def __del__(self):
-        #for comment in self.comments:  # Add any leftover comments
-        #    Declaration.addComment(self.comments[comment])
+        for text in self.comments:  # Add any leftover comments
+            MipsSingleton.getInstance().getCurrentBlock().comment(self.comments[text])
 
         with open(self.fileName, 'w') as f:
             f.write(str(MipsSingleton.getInstance().getModule().toString()))
@@ -145,7 +130,20 @@ class AST2MIPS(ASTVisitor):
         self.map_table.addEntry(MapEntry(function_name, function), symbol_entry)
 
     def handleComment(self, node):
-        pass
+        if node.position is None or node.symbol_table is None or node.symbol_table.isRoot():  # We can't add comments in the global scope of llvm
+            return
+
+        curr_line = node.position.linenr
+        file = node.position.file
+        to_delete = []
+
+        for text in self.comments.keys():
+            if text[1] < curr_line and file == text[0]:  # Insert all comments before this line (since some comments might not have code on the same line)
+                Comment.comment(self.comments[text])
+                to_delete.append(text)
+
+        for text in to_delete:
+            del self.comments[text]
 
     def handleParameterCalls(self, node: ASTNode):
         pass

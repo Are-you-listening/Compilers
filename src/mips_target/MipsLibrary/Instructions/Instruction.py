@@ -7,5 +7,3 @@ class Instruction:
     @abstractmethod
     def toString(self):
         pass
-
-

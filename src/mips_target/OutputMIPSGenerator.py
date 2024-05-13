@@ -42,3 +42,7 @@ class Declaration:
         return instr
 
 
+class Comment:
+    @staticmethod
+    def comment(text):
+        MipsSingleton.getInstance().getCurrentBlock().comment(text)
