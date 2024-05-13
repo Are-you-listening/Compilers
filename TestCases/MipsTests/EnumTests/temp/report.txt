@@ -1,0 +1,1 @@
+file tests/test6.c ['[ Error ] tests/test6.c line 10: invalid unary operation']

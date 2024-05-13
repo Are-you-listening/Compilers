@@ -1,0 +1,1 @@
+file tests/test20.c ["[ Error ] tests/test20.c line 2: 'break' statement not in loop or switch statement"]

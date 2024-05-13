@@ -19,10 +19,10 @@ from TestCases.ABCTests.AstLoader import AstLoader
 
 
 """
-This is a file used to created AST.JSON testdata with, which we can use to create ASTTests. We create a JSON before and after applying certain visitors we want to test. 
+This is a file used to created AST.JSON testdata with, which we can use to create ASTTests. We create a JSON before and after applying certain visitors we want to tests. 
 Both results will be stored in a JSON format and can then be reused to make reproducible tests.
 
-The functionality below is quit literally a copy of our __main__.py, however, to make certain testcases different visitor can be moved or exlcuded depending on the test you want to create.
+The functionality below is quit literally a copy of our __main__.py, however, to make certain testcases different visitor can be moved or exlcuded depending on the tests you want to create.
 """
 
 input_file = "read_file.c"

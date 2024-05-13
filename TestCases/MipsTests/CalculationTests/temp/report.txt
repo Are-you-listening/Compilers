@@ -1,0 +1,1 @@
+file tests/test30.c ['[ Error ] tests/test30.c line 34: invalid operation + on type(s): INT* INT*']

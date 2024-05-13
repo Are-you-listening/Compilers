@@ -1,0 +1,1 @@
+file tests/test16.c ["[ Error ] tests/test16.c line 8: the array size definition of x should be an integer instead of 'IDENTIFIER'"]

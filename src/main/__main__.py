@@ -227,6 +227,8 @@ def main(argv):
     if input_file is None:
         ErrorExporter.StupidUser()
 
+    print(input_file)
+
     ast, codegetter, includeSTDIO, comments = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
     ast, cfgs = Processing(ast, dot_file, fold, includeSTDIO, unused_var)  # Check for Errors , Apply Folding Techniques , ...
 
@@ -242,7 +244,8 @@ def main(argv):
                 control_dot.visit(cfg.root)
 
     if mips_file is not None:
-        to_mips = AST2MIPS(codegetter, llvm_file,
+        print(comments)
+        to_mips = AST2MIPS(codegetter, mips_file,
                            comments)  # The codegetter is used to add the original code as comments
         to_mips.visit(ast)
 

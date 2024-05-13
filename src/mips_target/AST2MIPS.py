@@ -116,8 +116,11 @@ class AST2MIPS(ASTVisitor):
         for text in self.comments:  # Add any leftover comments
             MipsSingleton.getInstance().getCurrentBlock().comment(self.comments[text])
 
+        print(self.fileName)
+
         with open(self.fileName, 'w') as f:
-            f.write(str(MipsSingleton.getInstance().getModule().toString()))
+            f.write("")
+            #f.write(str(MipsSingleton.getInstance().getModule().toString()))  # TODO
         print(MipsSingleton.getInstance().getModule().toString())
 
     def handleFunction(self, node: ASTNode):

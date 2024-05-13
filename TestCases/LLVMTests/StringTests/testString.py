@@ -16,4 +16,4 @@ class StringTests(LLVMTest, unittest.TestCase):
     """
 
     def test(self):
-        LLVMTest.LLVM_test(self, os.path.abspath(__file__), False)  # Call the base class test function
+        LLVMTest.LLVM_test(self, os.path.abspath(__file__), False)  # Call the base class tests function

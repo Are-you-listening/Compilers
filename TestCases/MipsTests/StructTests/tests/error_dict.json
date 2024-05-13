@@ -1,0 +1,18 @@
+{
+  "17": ["[ Error ] tests/test17.c line 22: use of undeclared variable kaas_ptr"],
+  "18": ["[ Error ] tests/test18.c line 10: use of undeclared variable kaas"],
+  "23": ["[ Error ] tests/test23.c line 24:  indirection requires pointer operand ('kaas' invalid)"],
+  "24": ["[ Error ] tests/test24.c line 26:  indirection requires pointer operand ('kaas' invalid)"],
+  "32": ["[ Error ] tests/test32.c line 19: use of undeclared variable melk"],
+  "40": ["[ Error ] tests/test40.c line 12:  indirection requires array operand ('INT' invalid)"],
+  "41": ["[ Error ] tests/test41.c line 12:  indirection requires array operand ('INT' invalid)"],
+  "48": ["[ Error ] tests/test48.c line 12: can't assign 'Union' type to 'Struct' type"],
+  "49": ["[ Error ] tests/test49.c line 12: can't assign 'Struct' type to 'Union' type"],
+  "50": ["[ Error ] tests/test50.c line 14: can't assign 'Struct' type to 'Union' type"],
+  "52": ["[ Error ] tests/test52.c line 4: unknown type name '( c )'"],
+  "62": ["[ Error ] tests/test62.c line 6: unknown type name '( a )'"],
+  "63": ["[ Error ] tests/test63.c line 10: used type 'struct' where arithmetic or pointer type is required"],
+  "64": ["[ Error ] tests/test64.c line 10: used type 'struct' where arithmetic or pointer type is required"],
+  "67": ["[ Error ] tests/test67.c line 10: used type 'struct' where arithmetic or pointer type is required"],
+  "68": ["[ Error ] tests/test68.c line 10: used type 'struct' where arithmetic or pointer type is required"]
+}

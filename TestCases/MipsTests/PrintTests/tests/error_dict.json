@@ -1,0 +1,6 @@
+{
+  "10": ["[ Error ] tests/test10.c line 8: use of undeclared function printf"],
+  "39": ["[ Error ]  main function not found"],
+  "45": ["[ Error ] tests/test45.c line 8: conflicting parameter types for function printf"],
+  "46": ["[ Error ] tests/test46.c line 8: conflicting parameter types for function printf"]
+}

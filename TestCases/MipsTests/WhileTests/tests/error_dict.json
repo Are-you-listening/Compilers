@@ -1,0 +1,4 @@
+{
+  "19":  ["[ Error ] tests/test19.c line 2: 'continue' statement not in loop"],
+  "20":  ["[ Error ] tests/test20.c line 2: 'break' statement not in loop or switch statement"]
+}

@@ -1,0 +1,4 @@
+{
+  "1": ["[ Error ] tests/test1.c line 8: use of undeclared function scanf"],
+  "16": ["[ Error ] tests/test16.c line 7: conflicting parameter types for function scanf"]
+}
