@@ -58,13 +58,50 @@ class AST2MIPS(ASTVisitor):
 
     def visitNode(self, node: ASTNode):
         """
-        Visit function to construct LLVM
+        Visit function to construct Mips code
         :param node:
         :return:
         """
-
         if node.text == "Declaration":
             self.handleDeclaration(node)
+
+        if node.text == "Parameters":
+            self.handleParameters(node)
+
+        if node.text == "Function":
+            self.map_table = self.map_table.prev
+
+        if node.text == "Dereference":
+            self.handleDereference(node)
+
+        if node.text == "Assignment":
+            self.handleAssignment(node)
+
+        if node.text == "printf":
+            self.handlePrintScanf(node, True)
+
+        if node.text == "scanf":
+            self.handlePrintScanf(node, False)
+
+        if node.text == "Expr":
+            self.handleOperations(node)
+
+        if node.text == "Conversion":
+            self.handleConversions(node)
+
+        if node.text == "Return":
+            self.handleReturn(node)
+
+        if node.text == "ParameterCalls":
+            self.handleParameterCalls(node)
+
+        if node.text == "ParameterCall":
+            self.llvm_map[node] = self.llvm_map[node.getChild(0)]
+
+        if node.text not in ("Parameters"):
+            self.addOriginalCodeAsComment(node)
+
+        self.handleComment(node)
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
@@ -89,6 +126,11 @@ class AST2MIPS(ASTVisitor):
         Declaration.assignment(store_reg, to_store, 4)
 
     def __del__(self):
+        #for comment in self.comments:  # Add any leftover comments
+        #    Declaration.addComment(self.comments[comment])
+
+        with open(self.fileName, 'w') as f:
+            f.write(str(MipsSingleton.getInstance().getModule().toString()))
         print(MipsSingleton.getInstance().getModule().toString())
 
     def handleFunction(self, node: ASTNode):
@@ -101,3 +143,36 @@ class AST2MIPS(ASTVisitor):
         symbol_entry = current_table.getEntry(function_name, node.position.virtual_linenr)
 
         self.map_table.addEntry(MapEntry(function_name, function), symbol_entry)
+
+    def handleComment(self, node):
+        pass
+
+    def handleParameterCalls(self, node: ASTNode):
+        pass
+
+    def handleAssignment(self, node: ASTNode):
+        pass
+
+    def handleDereference(self, node: ASTNode):
+        pass
+
+    def handleReturn(self, node: ASTNode):
+        pass
+
+    def handlePrintScanf(self, node: ASTNode, printf):
+        pass
+
+    def handleOperations(self, node: ASTNode):
+        pass
+
+    def handleConversions(self, node: ASTNode):
+        pass
+
+    def handleParameters(self, node: ASTNode):
+        pass
+
+    def addOriginalCodeAsComment(self, node: ASTNode):
+        pass
+
+    def handle_IO(self):
+        pass

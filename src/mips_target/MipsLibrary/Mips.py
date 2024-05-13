@@ -1,4 +1,3 @@
-from .Instructions import Load
 from .Function import Function
 
 
