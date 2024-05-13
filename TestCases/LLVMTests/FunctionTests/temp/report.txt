@@ -1,0 +1,1 @@
+file tests/test30.c ["[ Error ] tests/test30.c line 4: too few arguments to function 'f': expected 2, got 1"]

@@ -1,0 +1,1 @@
+file tests/test16.c ['[ Error ] tests/test16.c line 7: conflicting parameter types for function scanf']

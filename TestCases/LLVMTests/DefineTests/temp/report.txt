@@ -1,0 +1,1 @@
+file tests/test15.c ["[ Syntax Error ]  line 2:0 invalid symbol: '##'"]

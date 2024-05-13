@@ -1,0 +1,11 @@
+digraph AST {
+  "129502534156736" [label="main:  INT
+fopen:  0_IO_FILE*
+fgets:  CHAR*
+fputs:  CHAR
+fclose:  VOID"];
+  "129502534156736" -> "129502534159856";
+  "129502534159856" [label=""];
+  "129502534159856" -> "129502534164992";
+  "129502534164992" [label="array:  INT*"];
+}
