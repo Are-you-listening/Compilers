@@ -5,7 +5,7 @@ from .Memory import Memory
 class Block:
     def __init__(self, label: str):
         self.label = label
-        self.instructions: list[MipsInstructions] = []
+        self.instructions: list[Instruction] = []
 
     def lw(self, rt: Memory, rs: Memory, load_value: int):
         instr = Lw(rt, rs, load_value)
