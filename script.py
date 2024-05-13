@@ -4,7 +4,7 @@ import os
 
 
 def script():
-    curr_dir = os.path.dirname(os.path.abspath(__file__))# Get directory file is in
+    curr_dir = os.path.dirname(os.path.abspath(__file__))  # Get directory file is in
     os.chdir(curr_dir)  # Change the dir to only focus on this test
     directory = "./example_source_files"  # Walk through the testfiles
 

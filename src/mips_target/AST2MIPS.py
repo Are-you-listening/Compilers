@@ -1,4 +1,3 @@
-
 from src.parser.Tables.SymbolTypeStruct import *
 from src.llvm_target.MapTable import *
 from src.parser.CodeGetter import *
@@ -14,6 +13,9 @@ class AST2MIPS(ASTVisitor):
         self.map_table = MapTable(None)
         self.mips_map = {}
         self.root = None
+        self.codegetter = codegetter
+        self.fileName = fileName
+        self.comments = comments
 
     def visit(self, ast: AST):
         self.map_table = MapTable(None)
@@ -170,7 +172,12 @@ class AST2MIPS(ASTVisitor):
         pass
 
     def addOriginalCodeAsComment(self, node: ASTNode):
-        pass
+        if node.symbol_table is None or node.symbol_table.isRoot():  # LLVM thing in which you can't properly place comments in the global scope
+            return
+
+        code = self.codegetter.getLine(node)
+        if code is not None:
+            Comment.comment(code)
 
     def handle_IO(self):
         pass
