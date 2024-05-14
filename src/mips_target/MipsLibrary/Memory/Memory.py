@@ -1,9 +1,6 @@
 class Memory:
-    def __init__(self, register_number: int, is_loaded: bool):
-        self.register_number = register_number
+    def __init__(self, address: int, is_loaded: bool, live: bool, next_use):
         self.is_loaded = is_loaded
-
-    def getNumber(self):
-        return self.register_number
-
-
+        self.address = address
+        self.live = live
+        self.next_use = next_use
