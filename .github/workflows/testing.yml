@@ -15,4 +15,6 @@ jobs:
       - run: pip install -r requirements.txt
       - run: sudo apt install build-essential
       - run: sudo apt install llvm
+      - run: sudo apt install default-jre -y
+      - run: sudo apt install default-jdk -y
       - run: python3 -m unittest discover -v

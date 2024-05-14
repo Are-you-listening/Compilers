@@ -148,9 +148,9 @@ class LLVMTest(unittest.TestCase, ABC):
                 """
                 Redirect error & output buffs
                 """
-                # original = sys.stdout
-                # buff = StringIO()
-                # sys.stdout = buff
+                original = sys.stdout
+                buff = StringIO()
+                sys.stdout = buff
 
                 original_error = sys.stderr
                 error_buff = StringIO()
@@ -204,7 +204,7 @@ class LLVMTest(unittest.TestCase, ABC):
                     print("error", errors, expected_errors)  # Print any errors we didn't expect
                     assert errors == expected_errors
 
-                #sys.stdout = original
+                sys.stdout = original
                 sys.stderr = original_error
 
     def compileGCC(self, file_name):
