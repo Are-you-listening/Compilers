@@ -21,13 +21,13 @@ class RegisterManager:
             RegisterManager.__instance = RegisterManager()
         return RegisterManager.__instance
 
-    def spill(self, register: Memory):
+    def spill(self, var: Memory, reg: str):
         """
         Spill a register to memory
         :return:
         """
         # Code
-        register.is_loaded = False
+        var.is_loaded = False
         pass
 
     def load(self, var: Memory, reg: str):
@@ -46,7 +46,7 @@ class RegisterManager:
         """
         for key in self.registers.keys():
             if self.getMemoryObject(key) == var:
-                return
+                return key
         return None
 
     def getMemoryObject(self, register: str):
@@ -59,20 +59,43 @@ class RegisterManager:
     def __inUse(self, reg: str):
         return self.registers.get(reg, None) is not None
 
-    def registerAllocation(self, var: Memory, reg: str):
+    def __getFirstFree(self):
+        for key in self.registers.keys():
+            if self.getMemoryObject(key) is None:
+                return key
+        return None
+
+    def __getFirstNotLive(self):
+        for key in self.registers.keys():
+            if self.getMemoryObject(key).live:
+                return None
+        return None
+
+    def registerAllocation(self, x: Memory, y: Memory, z: Memory):
         """
         Handles register assignment and follows the algorithm from the slides
-        :param var: Variable or object we want to load in reg
+        :param x: Variable or object we want to load in reg
         :param reg: Register name we want to load in
-        :return:
+        :return: reg name x is loaded into
         """
+        curr_reg = self.getRegister(y)  # Fill in param here
 
-
-        if self.getRegister(var) is not None:  # 1. If y is currently in a register r then Ry = r .
-            return self.getRegister(var)
-        elif not self.__inUse(reg):  # 2. If y is not in a register but the register r is currently empty then Ry = r .
-            self.load(var, reg)
+        # This will be an other routine
+        if curr_reg is not None:  # 1. If y is currently in a register r then Ry = r .
+            return curr_reg
+        elif self.__getFirstFree() is not None:  # 2. If y is not in a register but the register r is currently empty then Ry = r .
+            return self.__getFirstFree()
         else:  # 3. The remaining case is the difficult one. Let r be a candidate register
+            # 3.1 is not implemented
+            if self.getRegister(x) is not None:  # 3.2
+                return self.getRegister(x)
+            # if self.__getFirstNotLive() is not None:  # 3.3
+            #     return self.__getFirstNotLive()
+            else:  # 3.4
+                for key in self.registers.keys():
+                    self.spill(self.registers[key], key)
+                return self.__getFirstFree()
+
 
             # TODO Need an isLive and isUsed variable
             pass
