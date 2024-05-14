@@ -17,6 +17,8 @@ jobs:
           java-version: '21'
 
       - run: java -version
+      - run: pwd
+      - run: java -jar 
       - run: pip install -r requirements.txt
       - run: sudo apt install build-essential
       - run: sudo apt install llvm
