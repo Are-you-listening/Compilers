@@ -1,7 +1,7 @@
 from TestCases.ABCTests.abcTest import *
 
 
-class WhileTests(LLVMTest,unittest.TestCase):
+class WhileTests(LLVMTest, unittest.TestCase):
     """
     Test case to run all created llvm output
     """

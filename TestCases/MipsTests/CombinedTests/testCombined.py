@@ -1,7 +1,7 @@
 from TestCases.ABCTests.abcTest import *
 
 
-# class CombinedTests(LLVMTest,unittest.TestCase):
+# class CombinedTests(MipsTest):
 #     """
 #     Test case to run all created llvm output
 #     """
@@ -11,4 +11,4 @@ from TestCases.ABCTests.abcTest import *
 #         return c_out
 #
 #     def test(self):
-#         LLVMTest.LLVM_test(self, os.path.abspath(__file__), False)   # Call the base class tests function
+#         MipsTest.LLVM_test(self, os.path.abspath(__file__), False)   # Call the base class tests function

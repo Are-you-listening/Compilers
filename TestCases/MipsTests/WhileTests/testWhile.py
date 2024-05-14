@@ -1,10 +1,10 @@
 from TestCases.ABCTests.abcTest import *
 
 
-# class WhileTests(MipsTest, unittest.TestCase):
+# class WhileTests(MipsTest):
 #     """
 #     Test case to run all created MIPS output
 #     """
 #
 #     def test(self):
-#         MipsTest.MIPS_test(self, os.path.abspath(__file__), False)  # Call the base class tests function
+#         MipsTest.LLVM_test(self, os.path.abspath(__file__), False)  # Call the base class tests function

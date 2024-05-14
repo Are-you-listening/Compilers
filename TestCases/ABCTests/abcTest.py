@@ -161,12 +161,11 @@ class LLVMTest(unittest.TestCase, ABC):
                     #sys.stdout = original
 
                     # Run our llvm
-                    main([0, "--input", file_name, "--target_llvm", f"temp/temp.ll", "--fold", fold, "--unused_var", "True"])  # Run our compiler
+                    out = self.run_compiler(inp, file_name, fold)
 
                     c_out = self.runC(file_name, inp, fold)
 
-                    # Run our llvm
-                    out = subprocess.run(f"""lli temp/temp.ll""", shell=True, capture_output=True, input=inp, text=True)
+
 
                     """
                     assert for same output
@@ -240,99 +239,23 @@ class LLVMTest(unittest.TestCase, ABC):
 
         return c_out
 
+    @staticmethod
+    def run_compiler(inp: str, file_name: str , fold: str):
+        main([0, "--input", file_name, "--target_llvm", f"temp/temp.ll", "--fold", fold, "--unused_var",
+              "True"])  # Run our compiler
+        return subprocess.run(f"""lli temp/temp.ll""", shell=True, capture_output=True, input=inp, text=True)
 
-class MipsTest(unittest.TestCase, ABC):
+
+class MipsTest(LLVMTest):
     """
     Test to execute Mips and compare the output with an expect output
     """
 
     def MIPS_test(self, abspath, useSTDIN=False):
-        """
-        Base function
-        :param abspath: Absolute Path to run from
-        :param useSTDIN: Specifies if an input value should be used
-        """
-        directory = os.path.dirname(abspath)  # Get directory file is in
-        os.chdir(directory)  # Change the dir to only focus on this tests
-        directory += "/tests"  # Walk through the testfiles
-
-        with open("tests/error_dict.json", "rt") as f:
-            error_dict = json.loads(f.read())
-
-        with open("tests/output_dict.json", "rt") as f:  # Dictionary to list expected output
-            output_dict = json.loads(f.read())
-
-        if useSTDIN:
-            with open("tests/input_dict.json", "rt") as f:
-                input_dict = json.loads(f.read())
-
-        for file in os.listdir(directory):  # Loop through all files
-            if not os.path.splitext(file)[-1] == '.c':  # We only run c files
-                continue
-
-            for fold in ['True', 'False']:
-                index = file[4:-2]  # The index is used to refer to the files & other data belonging to this testfile
-                file_name = f"tests/test{index}.c"
-
-                #print(index, file_name, fold)  # Toggle for debug
-
-                """
-                If input will be read, it needs to be retrieved
-                """
-                if useSTDIN:
-                    inp = (input_dict.get(str(index), []))
-                else:
-                    inp = ""
-
-                outp = """MARS 4.5  Copyright 2003-2014 Pete Sanderson and Kenneth Vollmar\n\n\n""" + (output_dict.get(str(index), []))
-
-                """
-                Redirect error & output buffs
-                """
-                original = sys.stdout
-                buff = StringIO()
-                sys.stdout = buff
-
-                original_error = sys.stderr
-                error_buff = StringIO()
-                sys.stderr = error_buff
-
-                LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
-                try:
-                    # Run our llvm
-                    print(file_name)
-                    main([0, "--input", file_name, "--target_mips", f"temp/temp.asm", "--fold", fold, "--unused_var", "True"])  # Run our compiler
-
-                    mips_out = self.runMips("temp/temp.asm", inp)
-
-                    print("mip" , mips_out.stdout)
-                    print("we" , outp)
-
-                    assert mips_out.stdout == outp  # Compare with expected output
-
-                    """
-                    Double check that errors are as expected
-                    """
-                    errors = str(error_buff.getvalue().splitlines())
-                    expected_errors = str(error_dict.get(str(index), []))
-                    if "[ Warning ]" not in expected_errors:  # If we don't expect any warnings, we can ignore them
-                        print("error", errors, expected_errors)  # Print any errors we didn't expect
-                        assert errors == expected_errors
-
-                except SystemExit:
-                    """
-                    In case of a failure, verify expected errors
-                    """
-                    errors = str(error_buff.getvalue().splitlines())
-                    expected_errors = str(error_dict.get(str(index), []))
-                    print("error", errors, expected_errors)  # Print any errors we didn't expect
-                    assert errors == expected_errors
-
-                sys.stdout = original
-                sys.stderr = original_error
+        self.LLVM_test(abspath,useSTDIN)
 
     @staticmethod
-    def runMips(file_name, inp):
+    def run_compiler(inp: str, file_name: str , fold: str):
         """
         Run our mips file
         :param file_name: Name of the file
@@ -340,9 +263,17 @@ class MipsTest(unittest.TestCase, ABC):
         :return:
         """
 
-        print(os.path.abspath(__file__)[:-10]+"Mars4_5.jar")
+        main([0, "--input", file_name, "--target_mips", f"temp/temp.asm", "--fold", fold, "--unused_var",
+              "True"])  # Run our compiler
+
         mars = os.path.abspath(__file__)[:-10]+"Mars4_5.jar"
 
-        c_out = subprocess.run(f"java -jar {mars} {file_name}", shell=True, capture_output=True, text=True, input=inp)
+        c_out = subprocess.run(f"java -jar {mars} temp/temp.asm", shell=True, capture_output=True, text=True, input=inp)
+
+        output = str(c_out.stdout)
+        if output == "":
+            c_out.stdout = ""
+        else:
+            c_out.stdout = output[:-67]
 
         return c_out

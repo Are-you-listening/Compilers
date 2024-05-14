@@ -1,10 +1,10 @@
 from TestCases.ABCTests.abcTest import *
 
 
-# class DynamicStructTests(LLVMTest,unittest.TestCase):
+# class DynamicStructTests(MipsTest):
 #     """
 #     Test arrays
 #     """
 #
 #     def test(self):
-#         LLVMTest.LLVM_test(self, os.path.abspath(__file__), False)  # Call the base class tests function
+#         MipsTest.LLVM_test(self, os.path.abspath(__file__), False)  # Call the base class tests function
