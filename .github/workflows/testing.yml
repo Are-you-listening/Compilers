@@ -19,7 +19,9 @@ jobs:
       - run: java -version
       - run: pwd
       - run: java -jar /home/runner/work/Compilers/Compilers/TestCases/ABCTests/Mars4_5.jar /home/runner/work/Compilers/Compilers/TestCases/ABCTests/test.asm
+
       - run: pip install -r requirements.txt
       - run: sudo apt install build-essential
       - run: sudo apt install llvm
+      - run: pytest TestCases/MipsTests/CommentTests/testComment.py
       - run: python3 -m unittest discover -v
