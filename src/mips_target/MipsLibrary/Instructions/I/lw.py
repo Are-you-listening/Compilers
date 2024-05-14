@@ -6,4 +6,4 @@ class Lw(IMipsInstruction):
         super().__init__(rs, rt, load_value)
 
     def toString(self):
-        return f"lw ${self.rt} {self.immediate}({self.rs})"
+        return f"lw ${self.rt.register_number}, {self.immediate.real}(${self.rs.register_number})"

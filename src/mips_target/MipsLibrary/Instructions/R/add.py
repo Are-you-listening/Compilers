@@ -6,4 +6,4 @@ class Add(RMipsInstruction):
         super().__init__(rd=rd, rs=rs, rt=rt)
 
     def toString(self):
-        return f"add ${self.rd} {self.rs} {self.rt}"
+        return f"add ${self.rd.register_number}, {self.rs.register_number}, {self.rt.register_number}"

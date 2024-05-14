@@ -17,6 +17,11 @@ class Block:
         self.instructions.append(instr)
         return instr
 
+    def addui(self, rt: Memory, rs: Memory, load_value: int):
+        instr = Addui(rt, rs, load_value)
+        self.instructions.append(instr)
+        return instr
+
     def andi(self, rt: Memory, rs: Memory, load_value: int):
         instr = Andi(rt, rs, load_value)
         self.instructions.append(instr)
