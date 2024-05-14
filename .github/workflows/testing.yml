@@ -16,9 +16,9 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
 
-      #- run: java -version
-      #- run: pwd
-      #- run: java -jar /home/runner/work/Compilers/Compilers/TestCases/ABCTests/Mars4_5.jar /home/runner/work/Compilers/Compilers/TestCases/ABCTests/test.asm
+      - run: java -version
+      - run: pwd
+      - run: java -jar /home/runner/work/Compilers/Compilers/TestCases/ABCTests/Mars4_5.jar /home/runner/work/Compilers/Compilers/TestCases/ABCTests/test.asm
 
       - run: pip install -r requirements.txt
       - run: sudo apt install build-essential
