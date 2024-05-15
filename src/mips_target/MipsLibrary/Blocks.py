@@ -132,7 +132,7 @@ class Block:
 
         return s
 
-    def geParameter(self, index):
+    def getParameter(self, index):
         """
         Get a specific parameter provided base on the parameter index
         """

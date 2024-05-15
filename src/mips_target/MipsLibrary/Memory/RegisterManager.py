@@ -47,32 +47,33 @@ class RegisterManager:
                 return key
         return None
 
-    def spill(self, var: Memory, reg: str):
+    def spill(self, reg: str):
         """
         Spill a register to memory
         :return:
         """
-        # Code
-        var.is_loaded = False
-
         sp = self.getMemoryObject("sp")
+        var = self.getMemoryObject(reg)
 
-        MipsSingleton.getInstance().getCurrentBlock().addui(sp, sp, -4)
-        MipsSingleton.getInstance().getCurrentBlock().sw()
-        #addui sp, sp, -4
-        #sw
-
-        pass
+        MipsSingleton.getInstance().getCurrentBlock().addui(sp, sp, -4)  # Adjust frame/stack ptr
+        MipsSingleton.getInstance().getCurrentBlock().sw(var, sp, 0)  # Store to new ptr
+        var.is_loaded = False
+        var.address = sp.address  # TODO How to get the address of the stack ptr? (since sp is always in a register;
 
     def load(self, var: Memory, reg: str):
         """
-        Load value from a memory location into a register
+        Load value from a memory location into a register with name reg
         """
-        self.registers[reg] = var
+        if self.registers(reg , None) is not None:
+            self.registers[reg] = var
+            var.address = reg
+        else:
+            self.special_registers[reg] = var
+            var.address = reg
         var.is_loaded = True
 
-
-        pass
+        old_var = var # TODO How can we even do this operation?
+        MipsSingleton.getInstance().getCurrentBlock().lw(var, old_var, None)  # TODO How can we determine the offset here?
 
     def getRegister(self, var: Memory):
         """
@@ -123,5 +124,5 @@ class RegisterManager:
                 # 3.3 is not implemented because we applied the liveness algorithm before (removing unused variables)
                 else:  # 3.4
                     for key in self.registers.keys():
-                        self.spill(self.registers[key], key)
+                        self.spill(key)
                     self.load(var, self.__getFirstFree())

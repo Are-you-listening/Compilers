@@ -26,6 +26,7 @@ class Function:
         store_frame_block = Block()
 
         # TODO replace this list with all loaded registers that are usable (s & t)
+        # TODO : From Kars: Is this not what is also in the RegisterManager?
         registers = [Memory(8, True), Memory(9, True), Memory(10, True), Memory(11, True), Memory(12, True)]
         zero_register = Memory(0, True)
 
