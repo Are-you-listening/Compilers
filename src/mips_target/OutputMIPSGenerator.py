@@ -8,6 +8,7 @@ import math
 from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
 from src.mips_target.MipsLibrary import *
+from .MipsSingleton import MipsSingleton
 
 
 class Declaration:
@@ -39,6 +40,31 @@ class Declaration:
             instr = block.lw(store_reg, to_store, offset)
 
         return instr
+
+    @staticmethod
+    def mipsLiteral(value, symbol_type: SymbolType):
+        if symbol_type.getBaseType() == "FLOAT":
+            value = float(value)
+        if symbol_type.getBaseType() == "INT":
+            value = int(value)
+        if symbol_type.getBaseType() == "CHAR":
+            """
+            removes "'" before and after character
+            """
+            value = value[1:-1]
+            """
+            support right interpretation special characters like \n
+            """
+            if len(value) != 1:
+                value = value.encode('utf-8').decode('unicode-escape')
+
+            value = ord(value)  # Values are strings
+
+        block = MipsSingleton.getInstance().getCurrentBlock()
+
+        store_reg = RegisterManager.getInstance().getFreeRegister()
+        mips = block.addui(store_reg, Memory(0, True), value)
+        return mips
 
 
 class Printf:
@@ -196,8 +222,21 @@ class Calculation:
         mips_op = op_translate.get(operator, None)
         instr = mips_op(store_reg, left, right)
 
-
         return instr
+
+
+class Function:
+    @staticmethod
+    def function_call(func_name: str, params: list[Memory | int]):
+        """
+        Handle a function call
+        """
+
+        """
+        store all the parameters on the stack so, the callee can access these later on
+        """
+        pass
+
 
 class Comment:
     @staticmethod

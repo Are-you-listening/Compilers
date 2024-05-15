@@ -1,19 +1,8 @@
 
-from .Blocks import Block
 
-
-class MipsModule:
-    """
-    Forward declaration
-    """
-    pass
-
-
-class Function:
-    """
-    Forward declaration
-    """
-    pass
+from src.mips_target.MipsLibrary.Function import Function
+from src.mips_target.MipsLibrary.MipsModule import MipsModule
+from src.mips_target.MipsLibrary.Blocks import Block
 
 
 class MipsSingleton:
@@ -23,7 +12,6 @@ class MipsSingleton:
         if self.__instance is not None:
             raise Exception("This class is a singleton!")
 
-        self.label_counter = 1
         self.__last_function: Function = None
         self.__functions: list[Function] = []
         self.__current_block: Block = Block("globals")
@@ -38,11 +26,6 @@ class MipsSingleton:
         if MipsSingleton.__instance is None:
             MipsSingleton.__instance = MipsSingleton()
         return MipsSingleton.__instance
-
-    def useLabel(self):
-        label_nr = self.label_counter
-        self.label_counter += 1
-        return f"L{label_nr}"
 
     def getModule(self) -> MipsModule:
         return self.__module
@@ -75,5 +58,3 @@ class MipsSingleton:
         self.__current_block = block
 
 
-from .Function import Function
-from .MipsModule import MipsModule

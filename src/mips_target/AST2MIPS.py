@@ -5,7 +5,7 @@ from src.parser.CodeGetter import *
 from src.parser.AST import ASTNodeBlock, ASTNodeTypes
 from src.internal_tools import PreConditions
 from src.mips_target.OutputMIPSGenerator import *
-
+from .MipsSingleton import MipsSingleton
 
 class AST2MIPS(ASTVisitor):
     def __init__(self, codegetter: CodeGetter, fileName, comments):
@@ -15,8 +15,10 @@ class AST2MIPS(ASTVisitor):
         self.codegetter = codegetter
         self.fileName = fileName
         self.comments = comments
+        self.special_functions_declared = set()
 
     def visit(self, ast: AST):
+        self.special_functions_declared = set()
         self.map_table = MapTable(None)
         self.mips_map = {}
 
@@ -108,6 +110,15 @@ class AST2MIPS(ASTVisitor):
         if node.type == "IDENTIFIER":
             pass
 
+        if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
+            mips_var = Declaration.mipsLiteral(node.text, SymbolType(node.type, False))
+            self.mips_map[node] = mips_var
+
+        if node.type == "STRING":
+            return
+            llvm_var = string(node.text)
+            self.llvm_map[node] = llvm_var
+
     def handleDeclaration(self, node):
         pass
 
@@ -162,7 +173,20 @@ class AST2MIPS(ASTVisitor):
         pass
 
     def handlePrintScanf(self, node: ASTNode, printf):
-        Printf.printf()
+        """
+        Create printf function
+        """
+        if "printf" not in self.special_functions_declared:
+            Printf.printf()
+            self.special_functions_declared.add("printf")
+
+        params = []
+        for c in node.children:
+            mips = self.mips_map.get(c)
+            print(mips)
+
+
+        Function.function_call("printf", params)
 
     def handleOperations(self, node: ASTNode):
         """

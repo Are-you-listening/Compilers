@@ -1,8 +1,7 @@
-from .Blocks import Block, Memory
 
-
-class MipsSingleton:
-    pass  # Forward Declaration
+from .Memory import Memory
+from .MipsManager import MipsManager
+from .Blocks import Block
 
 
 class Function:
@@ -14,7 +13,7 @@ class Function:
         self.load_block: Block = self.__loadBlock()
 
     def createBlock(self) -> Block:
-        block_label = MipsSingleton.getInstance().useLabel()
+        block_label = MipsManager.getInstance().useLabel()
         block = Block(block_label)
 
         self.blocks.append(block)
@@ -94,4 +93,4 @@ class Function:
         return string
 
 
-from .MipsSingleton import MipsSingleton
+

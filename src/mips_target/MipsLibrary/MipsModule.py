@@ -1,10 +1,7 @@
 
 
-class Function:
-    """
-    Forward declaration
-    """
-    pass
+from .Function import Function
+
 
 class MipsModule:
     def __init__(self):
@@ -29,4 +26,4 @@ class MipsModule:
 
         return function
 
-from .Function import Function
+

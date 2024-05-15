@@ -1,6 +1,4 @@
-from Memory import Memory
-from src.mips_target.MipsLibrary.MipsSingleton import MipsSingleton
-
+from .Memory import Memory
 
 class RegisterManager:
     __instance = None
@@ -47,7 +45,7 @@ class RegisterManager:
                 return key
         return None
 
-    def spill(self, reg: str):
+    def spill(self, block, reg: str):
         """
         Spill a register to memory
         :return:
@@ -55,16 +53,16 @@ class RegisterManager:
         sp = self.getMemoryObject("sp")
         var = self.getMemoryObject(reg)
 
-        MipsSingleton.getInstance().getCurrentBlock().addui(sp, sp, -4)  # Adjust frame/stack ptr
-        MipsSingleton.getInstance().getCurrentBlock().sw(var, sp, 0)  # Store to new ptr
+        block.addui(sp, sp, -4)  # Adjust frame/stack ptr
+        block.sw(var, sp, 0)  # Store to new ptr
         var.is_loaded = False
         var.address = sp.address  # TODO How to get the address of the stack ptr? (since sp is always in a register;
 
-    def load(self, var: Memory, reg: str):
+    def load(self, block, var: Memory, reg: str):
         """
         Load value from a memory location into a register with name reg
         """
-        if self.registers(reg , None) is not None:
+        if self.registers.get(reg , None) is not None:
             self.registers[reg] = var
             var.address = reg
         else:
@@ -73,13 +71,14 @@ class RegisterManager:
         var.is_loaded = True
 
         old_var = var # TODO How can we even do this operation?
-        MipsSingleton.getInstance().getCurrentBlock().lw(var, old_var, None)  # TODO How can we determine the offset here?
+        block.lw(var, old_var, None)  # TODO How can we determine the offset here?
 
     def getRegister(self, var: Memory):
         """
         Retrieve the register number for an object
         :return:
         """
+
         for key in self.registers.keys():
             if self.getMemoryObject(key) == var:
                 return key
@@ -126,3 +125,10 @@ class RegisterManager:
                     for key in self.registers.keys():
                         self.spill(key)
                     self.load(var, self.__getFirstFree())
+
+    def getFreeRegister(self):
+        """
+        get a register that is available
+        :return:
+        """
+        return Memory(1, True)
