@@ -14,9 +14,12 @@ class Function:
 
         self.createBlock()
 
+    def getOffset(self):
+        return 8
+
     def createBlock(self) -> Block:
         block_label = MipsManager.getInstance().useLabel()
-        block = Block(block_label)
+        block = Block(block_label, self)
 
         self.blocks.append(block)
 

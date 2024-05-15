@@ -3,9 +3,10 @@ from .Memory import Memory
 
 
 class Block:
-    def __init__(self, label: str = None):
+    def __init__(self, label: str = None, function= None):
         self.label = label
         self.instructions: list[Instruction] = []
+        self.function = function
 
     def lw(self, rt: Memory, rs: Memory, load_value: int):
         instr = Lw(rt, rs, load_value)
