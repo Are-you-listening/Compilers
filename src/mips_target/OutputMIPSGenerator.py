@@ -44,6 +44,7 @@ class Declaration:
 class Printf:
     @staticmethod
     def printf():
+
         """
         Implementation of ReferenceAssembly>printf.asm
         :return:
@@ -67,6 +68,7 @@ class Printf:
         t4 = Memory(12, True)
         fp_register = Memory(30, True)
         v0 = Memory(2, True)
+        a0 = Memory(4, True)
 
         """
         Point to first parameter
@@ -99,10 +101,84 @@ class Printf:
         print_char_loop.addui(v0, zero, 11)
 
         """
-        In case our char is a '%' (37 decimal), we see it as a special token, and we will check what we need to print instead
+        In case our char is a '%' (37 decimal), we see it as a special token, and we will check what we need to 
+        print instead
         """
         print_char_loop.addui(t4, zero, 37)
         print_char_loop.beq(t1, t4, print_char_special_token.label)
+
+        """
+        store $t1, char value in $a0 for system call
+        """
+        print_char_special_token_after.add(a0, zero, t1)
+
+        """
+        Execute the print system call
+        """
+        print_char_special_token_after.systemCall()
+
+        """
+        Increase the format string ptr by 1
+        """
+        print_char_special_token_after.addui(t0, t0, 1)
+
+        print_char_special_token_after.j(print_char_loop.label)
+
+        """
+        In case of a special tokens we look at the next character
+        """
+        print_char_special_token.addui(t0, t0, 1)
+
+        """
+        Load this next characters
+        """
+        print_char_special_token.lb(t2, t0, 0)
+
+        print_char_special_token.addui(t4, zero, 100)
+        print_char_special_token.beq(t2, t4, print_char_special_token_d.label)
+
+        print_char_special_token.addui(t4, zero, 99)
+        print_char_special_token.beq(t2, t4, print_char_special_token_c.label)
+
+        """
+        move $t1, $t2
+        """
+        print_char_special_token_after.add(t1, zero, t2)
+
+        """
+        After checking special character, go to block to do the print
+        """
+        print_char_special_token_end_if.j(print_char_special_token_after.label)
+
+        """
+        Load the latest parameter value for %d special case
+        """
+        """
+        When special character == 'd', we will print an integer, that corresponds with next parameter
+        """
+        print_char_special_token_d.addui(v0, zero, 1)
+
+        print_char_special_token_d.lw(t1, t3, 0)
+        print_char_special_token_d.addui(t3, t3, 4)
+        print_char_special_token_d.j(print_char_special_token_end_if.label)
+
+        """
+        Load the latest parameter value for %c special case
+        """
+
+        """
+        When special character == 'c', we will print an char, that corresponds with next parameter
+        """
+        print_char_special_token_d.addui(v0, zero, 11)
+
+        print_char_special_token_c.lb(t1, t3, 0)
+        print_char_special_token_c.addui(t3, t3, 4)
+        print_char_special_token_c.j(print_char_special_token_end_if.label)
+
+        """
+        Set return value to 0
+        """
+        printf_char_loop_end.addui(v0, zero, 0)
 
         return function
 

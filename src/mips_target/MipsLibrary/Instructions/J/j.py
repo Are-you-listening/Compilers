@@ -6,4 +6,4 @@ class J(JMipsInstruction):
         super().__init__(label)
 
     def toString(self):
-        return f"j ${self.label}"
+        return f"j {self.label}"

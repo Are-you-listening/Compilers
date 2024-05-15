@@ -6,5 +6,5 @@ from .lw import Lw
 from .ori import Ori
 from .slti import Slti
 from .sw import Sw
-from .addui import Addui
+from .addiu import Addiu
 from .lb import Lb

@@ -1,5 +1,19 @@
-from .MipsModule import MipsModule, Function
+
 from .Blocks import Block
+
+
+class MipsModule:
+    """
+    Forward declaration
+    """
+    pass
+
+
+class Function:
+    """
+    Forward declaration
+    """
+    pass
 
 
 class MipsSingleton:
@@ -59,3 +73,7 @@ class MipsSingleton:
 
     def setCurrentBlock(self, block: Block):
         self.__current_block = block
+
+
+from .Function import Function
+from .MipsModule import MipsModule
