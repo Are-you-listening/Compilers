@@ -1,5 +1,5 @@
 from .Blocks import Block
-from .MipsManager import MipsManager
+from .MipsSingleton import MipsSingleton
 from .Memory.Memory import Memory
 
 
@@ -12,7 +12,7 @@ class Function:
         self.load_block: Block = self.__loadBlock()
 
     def createBlock(self) -> Block:
-        block_label = MipsManager.getInstance().useLabel()
+        block_label = MipsSingleton.getInstance().useLabel()
         block = Block(block_label)
 
         self.blocks.append(block)

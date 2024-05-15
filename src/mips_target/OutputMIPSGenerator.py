@@ -7,7 +7,6 @@ from src.parser.Tables.FunctionSymbolType import FunctionSymbolType
 import math
 from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
-from src.mips_target.MipsSingleton import MipsSingleton
 from src.mips_target.MipsLibrary import *
 
 
@@ -27,7 +26,7 @@ class Declaration:
     @staticmethod
     def declare(data_type: SymbolType, var_name: str):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        register = block.getRegister()
+        register = block.__getRegister()
 
         return register
 

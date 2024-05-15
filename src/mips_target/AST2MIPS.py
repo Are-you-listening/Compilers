@@ -4,7 +4,6 @@ from src.parser.CodeGetter import *
 
 from src.parser.AST import ASTNodeBlock, ASTNodeTypes
 from src.internal_tools import PreConditions
-from src.mips_target.MipsSingleton import MipsSingleton
 from src.mips_target.OutputMIPSGenerator import *
 
 

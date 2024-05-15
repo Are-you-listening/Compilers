@@ -1,5 +1,7 @@
-
-from .MipsLibrary import *
+from .MipsModule import *
+from src.mips_target.MipsLibrary.Instructions import *
+from .Blocks import *
+from .Function import *
 
 
 class MipsSingleton:
@@ -9,10 +11,11 @@ class MipsSingleton:
         if self.__instance is not None:
             raise Exception("This class is a singleton!")
 
+        self.label_counter = 1
         self.__last_function: Function = None
         self.__functions: list[Function] = []
         self.__current_block: Block = Block("globals")
-        self.__module: Mips = Mips()
+        self.__module: MipsModule = MipsModule()
 
     def clear(self):
         self.__instance = None
@@ -24,7 +27,12 @@ class MipsSingleton:
             MipsSingleton.__instance = MipsSingleton()
         return MipsSingleton.__instance
 
-    def getModule(self) -> Mips:
+    def useLabel(self):
+        label_nr = self.label_counter
+        self.label_counter += 1
+        return f"L{label_nr}"
+
+    def getModule(self) -> MipsModule:
         return self.__module
 
     def getCurrentBlock(self) -> Block:

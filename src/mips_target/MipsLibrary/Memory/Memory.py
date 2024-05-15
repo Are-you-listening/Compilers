@@ -1,5 +1,7 @@
 class Memory:
-    def __init__(self, address: int, live: bool, next_use):
+    def __init__(self, address: int, is_loaded: bool):
         self.address = address
-        self.live = live
-        self.next_use = next_use
+        self.is_loaded = is_loaded
+
+    def __str__(self):
+        return str(self.address)
