@@ -260,7 +260,7 @@ class MipsTest(LLVMTest):
         self.LLVM_test(abspath,useSTDIN)
 
     @staticmethod
-    def run_compiler(inp: str, file_name: str , fold: str):
+    def run_compiler(inp: str, file_name: str, fold: str):
         """
         Run our mips file
         :param file_name: Name of the file

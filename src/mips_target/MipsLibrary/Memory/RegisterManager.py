@@ -17,6 +17,9 @@ class RegisterManager:
         for i in range(0, 8):  # Insert registers
             self.registers[f"s{i}"] = None
 
+        self.curr_function = None
+        self.counter = 0
+
     def clear(self):
         self.__instance = None
         self.__init__()
@@ -51,19 +54,24 @@ class RegisterManager:
         Spill a register to memory
         :return:
         """
+        if block.function != self.curr_function:
+            self.counter = 0
+        self.counter += 4
+
         sp = self.getMemoryObject("sp")
         var = self.getMemoryObject(reg)
 
         block.addui(sp, sp, -4)  # Adjust frame/stack ptr
         block.sw(var, sp, 0)  # Store to new ptr
         var.is_loaded = False
-        var.address = sp.address  # TODO How to get the address of the stack ptr? (since sp is always in a register;
+        var.address = block.function.getOffset()+self.counter
 
     def load(self, block, var: Memory, reg: str):
         """
         Load value from a memory location into a register with name reg
         """
-        if self.registers.get(reg , None) is not None:
+        offset = var.address
+        if self.registers.get(reg, None) is not None:
             self.registers[reg] = var
             var.address = reg
         else:
@@ -71,15 +79,13 @@ class RegisterManager:
             var.address = reg
         var.is_loaded = True
 
-        old_var = var # TODO How can we even do this operation?
-        block.lw(var, old_var, None)  # TODO How can we determine the offset here?
+        block.lw(var, self.getMemoryObject("fp"), offset)
 
     def getRegister(self, var: Memory):
         """
         Retrieve the register number for an object
         :return:
         """
-
         for key in self.registers.keys():
             if self.getMemoryObject(key) == var:
                 return key
@@ -103,11 +109,19 @@ class RegisterManager:
         Handles register assignment and follows the algorithm from the slides
         x := y op z
         :param x:
-        :param y:
-        :param z:
+        :param y: May be None
+        :param z: May be None
         :return:
         """
-        for var in [x, y, z]:
+        assert x is not None
+
+        lst = [x]
+        if y is not None:
+            lst.append(y)
+        if z is not None:
+            lst.append(z)
+
+        for var in lst:
             curr_reg = self.__getRegister(var)  # Fill in param here
 
             if curr_reg is not None:  # 1. If y is currently in a register r then Ry = r .
@@ -126,17 +140,3 @@ class RegisterManager:
                     for key in self.registers.keys():
                         self.spill(block, key)
                     self.load(block, var, self.__getFirstFree())
-
-    def getFreeRegister(self):
-        """
-        get a register that is available
-        :return:
-        """
-
-        free_reg = self.__getFirstFree()
-
-        new_mem = Memory(free_reg, True)
-
-        self.registers[free_reg] = new_mem
-
-        return new_mem
