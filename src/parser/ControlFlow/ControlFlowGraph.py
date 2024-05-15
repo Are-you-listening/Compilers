@@ -12,6 +12,7 @@ class Vertex:
         :param llvm_block: The llvm block that corresponds to this vertex
         """
         self.llvm = llvm_block
+        self.mips = None
         self.node_link = None
 
         """

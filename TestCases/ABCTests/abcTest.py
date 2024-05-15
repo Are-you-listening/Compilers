@@ -9,6 +9,8 @@ from src.parser.AST import *
 from src.main.__main__ import main
 from src.llvm_target.LLVMSingleton import *
 from TestCases.ABCTests.AstLoader import AstLoader
+from src.mips_target.MipsSingleton import MipsSingleton
+from src.mips_target.MipsLibrary.MipsManager import MipsManager
 
 
 class ASTTest(ABC):
@@ -157,6 +159,9 @@ class LLVMTest(unittest.TestCase, ABC):
                 sys.stderr = error_buff
 
                 LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
+                MipsSingleton.getInstance().clear()
+                MipsManager.getInstance().clear()
+
                 try:
                     #sys.stdout = original
 
@@ -270,10 +275,11 @@ class MipsTest(LLVMTest):
 
         c_out = subprocess.run(f"java -jar {mars} temp/temp.asm", shell=True, capture_output=True, text=True, input=inp)
 
-        output = str(c_out.stdout)
+        output = c_out.stdout
         if output == "":
             c_out.stdout = ""
         else:
-            c_out.stdout = output[:-67]
-
+            output = output[output.find("\n\n")+2:]
+            output = output[:-1]
+            c_out.stdout = output
         return c_out

@@ -102,6 +102,11 @@ class Block:
         self.instructions.append(instr)
         return instr
 
+    def la(self, rt: Memory, label: str):
+        instr = La(rt, label)
+        self.instructions.append(instr)
+        return instr
+
     def j(self, label: str):
         instr = J(label)
         self.instructions.append(instr)

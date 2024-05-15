@@ -7,6 +7,7 @@ from src.internal_tools import PreConditions
 from src.mips_target.OutputMIPSGenerator import *
 from .MipsSingleton import MipsSingleton
 
+
 class AST2MIPS(ASTVisitor):
     def __init__(self, codegetter: CodeGetter, fileName, comments):
         self.map_table = MapTable(None)
@@ -45,8 +46,14 @@ class AST2MIPS(ASTVisitor):
                 self.handleFunction(current_node)
                 self.map_table = MapTable(self.map_table)
 
-                function = MipsSingleton.getInstance().getFunction(current_node.getChild(0).text)
-                MipsSingleton.getInstance().setLastFunction(function)
+            if isinstance(current_node, ASTNodeBlock) and current_node.text == "Block" and current_node not in visited:
+                node = current_node
+                if node.vertex.mips is None:
+                    node.vertex.mips = MipsSingleton.getInstance().addBlock()
+
+                MipsSingleton.getInstance().setCurrentBlock(node.vertex.mips)
+
+                self.addOriginalCodeAsComment(current_node)
 
             child_not_visited = False
             for child in reversed(current_node.getChildren()):
@@ -115,9 +122,8 @@ class AST2MIPS(ASTVisitor):
             self.mips_map[node] = mips_var
 
         if node.type == "STRING":
-            return
-            llvm_var = string(node.text)
-            self.llvm_map[node] = llvm_var
+            mips_var = Declaration.string(node.text)
+            self.mips_map[node] = mips_var
 
     def handleDeclaration(self, node):
         pass
@@ -126,19 +132,17 @@ class AST2MIPS(ASTVisitor):
         for text in self.comments:  # Add any leftover comments
             MipsSingleton.getInstance().getCurrentBlock().comment(self.comments[text])
 
-        print(self.fileName)
-
         with open(self.fileName, 'w') as f:
             f.write("")
-            #f.write(str(MipsSingleton.getInstance().getModule().toString()))  # TODO
-        print(MipsSingleton.getInstance().getModule().toString())
+            f.write(str(MipsSingleton.getInstance().getModule().toString()))
+        #print(MipsSingleton.getInstance().getModule().toString())
 
     def handleFunction(self, node: ASTNode):
         function_name = node.getChild(0).text
 
         mips_module = MipsSingleton.getInstance().getModule()
         function = mips_module.createFunction(function_name)
-
+        MipsSingleton.getInstance().setLastFunction(function)
         current_table = node.getSymbolTable()
         symbol_entry = current_table.getEntry(function_name, node.position.virtual_linenr)
 
@@ -183,10 +187,9 @@ class AST2MIPS(ASTVisitor):
         params = []
         for c in node.children:
             mips = self.mips_map.get(c)
-            print(mips)
+            params.append(mips)
 
-
-        Function.function_call("printf", params)
+        Function.functionCall("printf", params)
 
     def handleOperations(self, node: ASTNode):
         """

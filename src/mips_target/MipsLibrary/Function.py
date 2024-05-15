@@ -12,6 +12,8 @@ class Function:
         self.store_block: Block = self.__storeFrame()
         self.load_block: Block = self.__loadBlock()
 
+        self.createBlock()
+
     def createBlock(self) -> Block:
         block_label = MipsManager.getInstance().useLabel()
         block = Block(block_label)

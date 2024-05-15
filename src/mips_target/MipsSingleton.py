@@ -14,8 +14,10 @@ class MipsSingleton:
 
         self.__last_function: Function = None
         self.__functions: list[Function] = []
-        self.__current_block: Block = Block("globals")
+
+        self.__current_block: Block = None
         self.__module: MipsModule = MipsModule()
+        self.__strings = []
 
     def clear(self):
         self.__instance = None
@@ -56,5 +58,19 @@ class MipsSingleton:
 
     def setCurrentBlock(self, block: Block):
         self.__current_block = block
+
+    def getStringIndex(self, format_specifier: str):
+        """
+        Gives the index for a global string;
+        If it doesn't yet exist, a new index will be created
+        :param format_specifier:
+        :return:
+        """
+
+        if format_specifier in self.__strings:
+            return self.__strings.index(format_specifier)
+        else:
+            self.__strings.append(format_specifier)
+            return len(self.__strings) - 1
 
 

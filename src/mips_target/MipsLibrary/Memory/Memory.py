@@ -1,5 +1,5 @@
 class Memory:
-    def __init__(self, address: int, is_loaded: bool):
+    def __init__(self, address: int | str, is_loaded: bool):
         self.address = address
         self.is_loaded = is_loaded
 

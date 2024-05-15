@@ -63,8 +63,26 @@ class Declaration:
         block = MipsSingleton.getInstance().getCurrentBlock()
 
         store_reg = RegisterManager.getInstance().getFreeRegister()
-        mips = block.addui(store_reg, Memory(0, True), value)
-        return mips
+        block.addui(store_reg, Memory(0, True), value)
+        return store_reg
+
+    @staticmethod
+    def string(text: str):
+        """
+        Take text but remove 'zero' byte
+        """
+        text = text.encode('utf-8').decode('unicode-escape')[:-1]
+
+        index = MipsSingleton.getInstance().getStringIndex(text)
+        label = f"str{index}"
+        MipsSingleton.getInstance().getModule().addDataSegment(label, f""" "{text}" """, ".asciiz")
+
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        store_reg = RegisterManager.getInstance().getFreeRegister()
+
+        block.la(store_reg, label)
+
+        return store_reg
 
 
 class Printf:
@@ -227,7 +245,7 @@ class Calculation:
 
 class Function:
     @staticmethod
-    def function_call(func_name: str, params: list[Memory | int]):
+    def functionCall(func_name: str, params: list[Memory]):
         """
         Handle a function call
         """
@@ -235,7 +253,27 @@ class Function:
         """
         store all the parameters on the stack so, the callee can access these later on
         """
-        pass
+        Function.storeParameters(params)
+
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        block.jal(func_name)
+
+    @staticmethod
+    def storeParameters(params: list[Memory]):
+        """
+        Store parameters on the stack for later use
+        """
+
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        """
+        allocate stack memory
+        """
+        alloc_size = (len(params)+1)*4
+        sp_frame = Memory(29, True)
+
+        block.addui(sp_frame, sp_frame, -alloc_size)
+        for i, p in enumerate(params):
+            block.sw(p, sp_frame, (i+1)*4)
 
 
 class Comment:

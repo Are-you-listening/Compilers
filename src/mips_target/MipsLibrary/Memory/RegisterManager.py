@@ -1,5 +1,6 @@
 from .Memory import Memory
 
+
 class RegisterManager:
     __instance = None
 
@@ -13,8 +14,8 @@ class RegisterManager:
 
         for i in range(0, 10):  # Insert registers
             self.registers[f"t{i}"] = None
-            if i <= 6:
-                self.registers[f"v{i}"] = None
+        for i in range(0, 8):  # Insert registers
+            self.registers[f"s{i}"] = None
 
     def clear(self):
         self.__instance = None
@@ -97,7 +98,7 @@ class RegisterManager:
         else:
             return self.special_registers.get(register, None)
 
-    def allocate(self, x: Memory, y: Memory, z: Memory):
+    def allocate(self, block, x: Memory, y: Memory, z: Memory):
         """
         Handles register assignment and follows the algorithm from the slides
         x := y op z
@@ -110,25 +111,32 @@ class RegisterManager:
             curr_reg = self.__getRegister(var)  # Fill in param here
 
             if curr_reg is not None:  # 1. If y is currently in a register r then Ry = r .
-                self.load(var, curr_reg)
+                self.load(block, var, curr_reg)
                 continue
             elif self.__getFirstFree() is not None:  # 2. If y is not in a register but the register r is currently empty then Ry = r .
-                self.load(var, self.__getFirstFree())
+                self.load(block, var, self.__getFirstFree())
                 continue
             else:  # 3. The remaining case is the difficult one. Let r be a candidate register
                 # 3.1 is not implemented
                 if self.__getRegister(x) is not None and x not in [y, z]:  # 3.2
-                    self.load(var, self.__getRegister(x))
+                    self.load(block, var, self.__getRegister(x))
                     continue
                 # 3.3 is not implemented because we applied the liveness algorithm before (removing unused variables)
                 else:  # 3.4
                     for key in self.registers.keys():
-                        self.spill(key)
-                    self.load(var, self.__getFirstFree())
+                        self.spill(block, key)
+                    self.load(block, var, self.__getFirstFree())
 
     def getFreeRegister(self):
         """
         get a register that is available
         :return:
         """
-        return Memory(1, True)
+
+        free_reg = self.__getFirstFree()
+
+        new_mem = Memory(free_reg, True)
+
+        self.registers[free_reg] = new_mem
+
+        return new_mem
