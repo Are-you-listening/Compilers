@@ -108,6 +108,22 @@ class Printf:
         return function
 
 
+class Calculation:
+
+    @staticmethod
+    def operation(left, right, operator, store_reg):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        op_translate = {"+": block.add,
+                        "-": block.sub,
+                        "*": block.mul,
+                        "/": block.div,
+                        }
+        mips_op = op_translate.get(operator, None)
+        instr = mips_op(store_reg, left, right)
+
+
+        return instr
+
 class Comment:
     @staticmethod
     def comment(text):

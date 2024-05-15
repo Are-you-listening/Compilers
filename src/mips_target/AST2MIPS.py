@@ -166,7 +166,24 @@ class AST2MIPS(ASTVisitor):
         Printf.printf()
 
     def handleOperations(self, node: ASTNode):
-        pass
+        """
+        Handle Arithmetic operations
+        :param node:
+        :return:
+        """
+        if node.getChildAmount() == 3:
+
+            operator_child = node.getChild(1)
+            operator = operator_child.text
+
+            left = self.mips_map.get(node.getChild(0))
+            right = self.mips_map.get(node.getChild(2))
+
+            store_reg = MipsSingleton.getInstance().getRegister()
+
+            mips_var = Calculation.operation(left, right, operator, store_reg)
+
+        self.mips_map[node] = mips_var
 
     def handleConversions(self, node: ASTNode):
         pass
