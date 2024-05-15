@@ -3,7 +3,7 @@ from .Memory import Memory
 
 
 class Block:
-    def __init__(self, label: str):
+    def __init__(self, label: str = None):
         self.label = label
         self.instructions: list[Instruction] = []
 
@@ -12,8 +12,18 @@ class Block:
         self.instructions.append(instr)
         return instr
 
+    def lb(self, rt: Memory, rs: Memory, load_value: int):
+        instr = Lb(rt, rs, load_value)
+        self.instructions.append(instr)
+        return instr
+
     def addi(self, rt: Memory, rs: Memory, load_value: int):
         instr = Addi(rt, rs, load_value)
+        self.instructions.append(instr)
+        return instr
+
+    def addui(self, rt: Memory, rs: Memory, load_value: int):
+        instr = Addui(rt, rs, load_value)
         self.instructions.append(instr)
         return instr
 
@@ -22,8 +32,8 @@ class Block:
         self.instructions.append(instr)
         return instr
 
-    def beq(self, rt: Memory, rs: Memory):
-        instr = Beq(rt, rs)
+    def beq(self, rt: Memory, rs: Memory, label: str):
+        instr = Beq(rt, rs, label)
         self.instructions.append(instr)
         return instr
 
@@ -114,15 +124,42 @@ class Block:
 
     def toString(self):
         s = ""
+        if self.label is not None:
+            s += f"{self.label}:\n"
         for i in self.instructions:
             s += i.toString()
             s += "\n"
 
         return s
 
+    def geParameter(self, index):
+        """
+        Get a specific parameter provided base on the parameter index
+        """
+        fp_register = Memory(30, True)
+
+        instr = self.lw(self.getRegister(), fp_register, 4*(index+1))
+        return instr
+
+    def createParameters(self, parameter_list: list[Memory]):
+        bytes_needed = (len(parameter_list)+1)*4
+
+        sp_register = Memory(31, True)
+
+        """
+        Allocate stack space for the parameters
+        """
+        self.addui(sp_register, sp_register, -bytes_needed)
+
+        """
+        Store parameters on the stack
+        """
+        for i, p in enumerate(parameter_list):
+            self.sw(p, sp_register, (i+1)*4)
+
     def getRegister(self):
         """
         Get a register for a variable
         """
 
-        return 1
+        return Memory(1, True)

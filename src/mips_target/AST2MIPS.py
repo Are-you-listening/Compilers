@@ -163,7 +163,7 @@ class AST2MIPS(ASTVisitor):
         pass
 
     def handlePrintScanf(self, node: ASTNode, printf):
-        pass
+        Printf.printf()
 
     def handleOperations(self, node: ASTNode):
         pass

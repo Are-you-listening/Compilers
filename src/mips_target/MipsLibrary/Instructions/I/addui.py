@@ -1,9 +1,10 @@
+
 from .IMipsInstruction import IMipsInstruction, Memory
 
 
-class Sw(IMipsInstruction):
+class Addui(IMipsInstruction):
     def __init__(self, rt: Memory, rs: Memory, load_value: int):
         super().__init__(rs, rt, load_value)
 
     def toString(self):
-        return f"sw ${self.rt}, {self.immediate}(${self.rs})"
+        return f"addui ${self.rt}, ${self.rs}, {self.immediate}"

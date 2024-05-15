@@ -24,7 +24,7 @@ class MipsSingleton:
             MipsSingleton.__instance = MipsSingleton()
         return MipsSingleton.__instance
 
-    def getModule(self):
+    def getModule(self) -> Mips:
         return self.__module
 
     def getCurrentBlock(self) -> Block:
