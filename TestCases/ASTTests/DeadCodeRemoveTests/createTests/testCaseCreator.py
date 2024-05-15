@@ -29,6 +29,7 @@ from src.parser.ArrayCleaner import ArrayCleaner
 from src.parser.DynamicAllocation import DynamicAllocation
 from src.parser.FileIO import FileIO
 from src.parser.Constraints.CheckRvalues import CheckRvalues
+from src.parser.ControlFlow.ControlFlowCreator import *
 
 input_file = "read_file.c"
 

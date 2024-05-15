@@ -10,7 +10,7 @@ from src.parser.ASTIfCleaner import ASTIfCleaner
 from src.parser.ASTLoopCleaner import *
 from src.parser.BlacklistVisitor import *
 from src.parser.SwitchConverter import *
-from src.parser.EnumTypeMerger import *
+from src.parser.TypeMerger import *
 from src.parser.VirtualLineNrVisitor import *
 from src.parser.ArrayCleaner import ArrayCleaner
 from src.parser.EnumConverter import *
@@ -57,7 +57,7 @@ CodeGetter().visit(ast)
 
 EnumConverter().visit(ast)
 
-EnumTypeMerger().visit(ast)
+TypeMerger().visit(ast)
 
 ASTTypedefReplacer().visit(ast)
 

@@ -54,7 +54,9 @@ class RegisterManager:
         # Code
         var.is_loaded = False
 
-        MipsSingleton.getInstance().getCurrentBlock().addui()
+        sp = self.getMemoryObject("sp")
+
+        MipsSingleton.getInstance().getCurrentBlock().addui(sp, sp, -4)
         MipsSingleton.getInstance().getCurrentBlock().sw()
         #addui sp, sp, -4
         #sw

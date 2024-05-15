@@ -38,7 +38,6 @@ from src.parser.ArrayPreProcessor import ArrayPreProcessor
 from TestCases.ABCTests.AstLoader import AstLoader
 from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 from src.parser.ScopeCleaner import ScopeCleaner
-from src.mips_target.MipsSingleton import MipsSingleton
 from src.mips_target.AST2MIPS import AST2MIPS
 
 
