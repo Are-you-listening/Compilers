@@ -42,6 +42,52 @@ class Declaration:
         return instr
 
 
+class Printf:
+    @staticmethod
+    def printf():
+        """
+        Implementation of ReferenceAssembly>printf.asm
+        :return:
+        """
+
+        function: Function = MipsSingleton.getInstance().getModule().createFunction("printf")
+        print_base_block = function.createBlock()
+        print_char_loop = function.createBlock()
+        print_char_special_token_after = function.createBlock()
+        print_char_special_token = function.createBlock()
+        print_char_special_token_end_if = function.createBlock()
+        print_char_special_token_d = function.createBlock()
+        print_char_special_token_c = function.createBlock()
+        printf_char_loop_end = function.createBlock()
+
+        zero = Memory(0, True)
+        t0 = Memory(8, True)
+        t1 = Memory(9, True)
+        t2 = Memory(10, True)
+        t3 = Memory(11, True)
+        fp_register = Memory(30, True)
+
+        """
+        Point to first parameter
+        """
+        print_base_block.addui(t3, fp_register, 4)
+
+        """
+        Load format string in t0
+        """
+        print_base_block.lw(t0, t3, 0)
+
+        """
+        Increase the parameter counter by 1 param
+        """
+        print_base_block.addui(t3, t3, 4)
+
+        print_char_loop.lb(t1, t0, 0)
+        print_char_loop.beq(t1, zero, printf_char_loop_end.label)
+
+        return function
+
+
 class Comment:
     @staticmethod
     def comment(text):

@@ -7,4 +7,4 @@ class Addui(IMipsInstruction):
         super().__init__(rs, rt, load_value)
 
     def toString(self):
-        return f"addui ${self.rt.register_number}, ${self.rs.register_number}, {self.immediate}"
+        return f"addui ${self.rt}, ${self.rs}, {self.immediate}"

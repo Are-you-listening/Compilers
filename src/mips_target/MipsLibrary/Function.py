@@ -8,10 +8,10 @@ class Function:
         self.function_name = function_name
         self.blocks = []
 
-        self.store_block: Block = self.__store_frame()
-        self.load_block: Block = self.__load_block()
+        self.store_block: Block = self.__storeFrame()
+        self.load_block: Block = self.__loadBlock()
 
-    def createBlock(self):
+    def createBlock(self) -> Block:
         block_label = MipsManager.getInstance().useLabel()
         block = Block(block_label)
 
@@ -20,11 +20,11 @@ class Function:
         return block
 
     @staticmethod
-    def __store_frame():
-        store_frame_block = Block("")
+    def __storeFrame():
+        store_frame_block = Block()
 
         #TODO replace this list with all loaded registers that are usable (s & t)
-        registers = [Memory(1, True), Memory(2, True), Memory(3, True)]
+        registers = [Memory(8, True), Memory(9, True), Memory(10, True), Memory(11, True), Memory(12, True)]
         zero_register = Memory(0, True)
 
         sp_register = Memory(31, True)
@@ -54,11 +54,11 @@ class Function:
         return store_frame_block
 
     @staticmethod
-    def __load_block():
-        load_frame_block = Block("")
+    def __loadBlock():
+        load_frame_block = Block()
 
         # TODO replace this list with all loaded registers that are usable (s & t)
-        registers = [Memory(1, True), Memory(2, True), Memory(3, True)]
+        registers = [Memory(8, True), Memory(9, True), Memory(10, True), Memory(11, True), Memory(12, True)]
         zero_register = Memory(0, True)
 
         sp_register = Memory(31, True)
@@ -81,11 +81,12 @@ class Function:
     def toString(self):
         string = f"{self.function_name}:\n"
 
-        string += f"{self.store_block.toString()}\n"
+        string += f"{self.store_block.toString()}"
         for b in self.blocks:
             string += b.toString()
             string += "\n"
 
-        string += f"{self.load_block.toString()}\n"
+        string += f"{self.load_block.toString()}"
+        string += "jr $ra\n"
 
         return string
