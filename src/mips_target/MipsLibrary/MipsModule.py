@@ -1,7 +1,7 @@
 from .Function import Function
 
 
-class Mips:
+class MipsModule:
     def __init__(self):
         self.functions = []
 
@@ -23,4 +23,3 @@ class Mips:
         self.functions.append(function)
 
         return function
-
