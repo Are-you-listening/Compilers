@@ -1,7 +1,5 @@
-from .MipsModule import *
-from src.mips_target.MipsLibrary.Instructions import *
-from .Blocks import *
-from .Function import *
+from .MipsModule import MipsModule, Function
+from .Blocks import Block
 
 
 class MipsSingleton:

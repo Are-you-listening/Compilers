@@ -1,6 +1,7 @@
 from Memory import Memory
 from src.mips_target.MipsLibrary.MipsSingleton import MipsSingleton
 
+
 class RegisterManager:
     __instance = None
 

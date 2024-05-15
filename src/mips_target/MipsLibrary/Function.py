@@ -1,6 +1,8 @@
-from .Blocks import Block
-from .MipsSingleton import MipsSingleton
-from .Memory.Memory import Memory
+from .Blocks import Block, Memory
+
+
+class MipsSingleton:
+    pass  # Forward Declaration
 
 
 class Function:
@@ -23,7 +25,7 @@ class Function:
     def __storeFrame():
         store_frame_block = Block()
 
-        #TODO replace this list with all loaded registers that are usable (s & t)
+        # TODO replace this list with all loaded registers that are usable (s & t)
         registers = [Memory(8, True), Memory(9, True), Memory(10, True), Memory(11, True), Memory(12, True)]
         zero_register = Memory(0, True)
 
@@ -43,13 +45,13 @@ class Function:
         """
         Allocate the needed stack space
         """
-        store_frame_block.addui(sp_register, sp_register, -(len(registers)+1)*4)
+        store_frame_block.addui(sp_register, sp_register, -(len(registers) + 1) * 4)
 
         for i, r in enumerate(registers):
             """
             Store the registers on the frame ptr stack space (code scoping)
             """
-            store_frame_block.sw(r, sp_register, -(i+1)*4)
+            store_frame_block.sw(r, sp_register, -(i + 1) * 4)
 
         return store_frame_block
 
@@ -68,7 +70,7 @@ class Function:
             """
             Store the registers on the frame ptr stack space (code scoping)
             """
-            load_frame_block.lw(r, sp_register, -(i+1)*4)
+            load_frame_block.lw(r, sp_register, -(i + 1) * 4)
 
         """
         Equivalent to move $fp, $sp

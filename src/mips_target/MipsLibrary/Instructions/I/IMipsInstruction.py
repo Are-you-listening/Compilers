@@ -5,8 +5,8 @@ from ..Instruction import Instruction
 
 class IMipsInstruction(Instruction):
     def __init__(self, rs: Memory, rt: Memory, immediate: int=0):
-        self.rs = rs.register_number
-        self.rt = rt.register_number
+        self.rs = rs.address
+        self.rt = rt.address
         self.immediate = immediate
 
     @abstractmethod
