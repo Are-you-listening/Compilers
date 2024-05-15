@@ -7,4 +7,4 @@ class Beq(IMipsInstruction):
         self.label = label
 
     def toString(self):
-        return f"beq ${self.rt}, {self.rs}, {self.label}"
+        return f"beq ${self.rt}, ${self.rs}, {self.label}"
