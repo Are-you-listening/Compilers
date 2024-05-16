@@ -8,6 +8,20 @@ class Block:
         self.instructions: list[Instruction] = []
         self.function = function
 
+    def li(self, rt: Memory, immediate: int):
+        if -32768 <= immediate <= 32767:
+            instr = Addi(rt, Memory(0, True), immediate)
+            self.instructions.append(instr)
+        else:
+            upper = (immediate >> 16) & 0xFFFF
+            lower = immediate & 0xFFFF
+            if upper:
+                self.instructions.append(Lui(rt, upper))
+                if lower:
+                    self.instructions.append(Ori(rt, rt, lower))
+            else:
+                self.instructions.append(Ori(rt, Memory(0, True), lower))
+
     def lw(self, rt: Memory, rs: Memory, load_value: int):
         instr = Lw(rt, rs, load_value)
         self.instructions.append(instr)
