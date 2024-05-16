@@ -62,7 +62,7 @@ class Declaration:
 
         block = MipsSingleton.getInstance().getCurrentBlock()
 
-        store_reg = RegisterManager.getInstance().allocate(block, Memory(0, False), None, None)
+        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False), None, None)
         block.addui(store_reg, Memory(0, True), value)
         return store_reg
 

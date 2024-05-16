@@ -49,6 +49,14 @@ class RegisterManager:
                 return key
         return None
 
+    def __claimRegister(self, var: Memory, reg: str):
+        if reg in self.registers.keys():
+            self.registers[reg] = var
+        else:
+            self.special_registers[reg] = var
+        var.address = reg
+        var.is_loaded = True  # TODO Unsure if this needs to be done?
+
     def spill(self, block, reg: str):
         """
         Spill a register to memory
@@ -118,24 +126,24 @@ class RegisterManager:
             if var is None:
                 break
             if self.__getRegister(var) is not None:  # 1. If y is currently in a register r then Ry = r .
-                var.address = self.__getRegister(var)
+                self.__claimRegister(var, self.__getRegister(var))
                 continue
             elif self.__getFirstFree() is not None:  # 2. If y is not in a register but the register r is currently empty then Ry = r .
                 #self.load(block, var, self.__getFirstFree())
-                var.address = self.__getFirstFree()
+                self.__claimRegister(var, self.__getFirstFree())
                 continue
             else:  # 3. The remaining case is the difficult one. Let r be a candidate register
                 # 3.1 is not implemented
                 if self.__getRegister(x) is not None and x not in [y, z]:  # 3.2
                     #self.load(block, var, self.__getRegister(x))
-                    var.address = self.__getRegister(x)
+                    self.__claimRegister(var, self.__getRegister(x))
                     continue
                 # 3.3 is not implemented because we applied the liveness algorithm before (removing unused variables)
                 else:  # 3.4
                     for key in self.registers.keys():
                         self.spill(block, key)
                     #self.load(block, var, self.__getFirstFree())
-                    var.address = self.__getFirstFree()
+                    self.__claimRegister(var, self.__getFirstFree())
 
         if y is None:
             return x
