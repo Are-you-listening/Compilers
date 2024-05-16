@@ -126,7 +126,21 @@ class AST2MIPS(ASTVisitor):
             self.mips_map[node] = mips_var
 
     def handleDeclaration(self, node):
-        pass
+        var_node: ASTNode = node.getChild(0)
+        entry = var_node.getSymbolTable().getEntry(var_node.text)
+
+        if var_node.getSymbolTable().isRoot():
+            # Handle global variable (add to .data segment)
+            Declaration.declare(entry.getTypeObject(), var_node.text, is_global=True)
+        else:
+            # Handle non-global variable (reserve space on the stack)
+            mips_var = Declaration.declare(entry.getTypeObject(), var_node.text)
+            self.mips_map[node] = mips_var
+            self.mips_map[node.getChild(0)] = mips_var
+            self.map_table.addEntry(MapEntry(var_node.text, mips_var), entry)
+
+        if node.getChildAmount() == 2 and not var_node.getSymbolTable().isRoot():
+            self.handleAssignment(node)
 
     def __del__(self):
         for text in self.comments:  # Add any leftover comments

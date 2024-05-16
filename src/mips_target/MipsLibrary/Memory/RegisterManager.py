@@ -11,6 +11,7 @@ class RegisterManager:
         self.stack = []
         self.registers = {}  # Maps register names to Memory Objects e.g "v0" : Memory Object
         self.special_registers = {"v0": None, "v1": None, "a0": None, "a1": None, "a2": None, "a3": None, "fp": Memory(30, True), "sp": None, "ra": None, "zero": None}  # Same as special registers but these may not be regularly used
+        self.variable_map = {}  # maps variable names to Memory Objects
 
         for i in range(0, 10):  # Insert registers
             self.registers[f"t{i}"] = None

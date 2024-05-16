@@ -25,11 +25,27 @@ class Declaration:
         return new_function
 
     @staticmethod
-    def declare(data_type: SymbolType, var_name: str):
+    def declare(data_type: SymbolType, var_name: str, is_global=False):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        register = block.__getRegister()
+        sp = RegisterManager.getInstance().getMemoryObject("sp")
+        register_manager = RegisterManager.getInstance()
+        var_memory = Memory(0, False)
+        instr = None
 
-        return register
+        if is_global:
+            # Add global variable to the .data section
+            pass
+
+        else:
+            # Allocate space on the stack
+            instr = block.addui(sp, sp, -4)
+
+        # Register the variable in a separate dictionary
+        register_manager.variable_map[var_name] = var_memory
+
+        if instr is not None:
+            return instr
+
 
     @staticmethod
     def assignment(store_reg, to_store, offset: int = 0):
