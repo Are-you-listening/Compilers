@@ -62,7 +62,7 @@ class Declaration:
 
         block = MipsSingleton.getInstance().getCurrentBlock()
 
-        store_reg = RegisterManager.getInstance().allocate(Memory(None, False), block)
+        store_reg = RegisterManager.getInstance().allocate(block, Memory(0, False), None, None)
         block.addui(store_reg, Memory(0, True), value)
         return store_reg
 
@@ -78,7 +78,7 @@ class Declaration:
         MipsSingleton.getInstance().getModule().addDataSegment(label, f""" "{text}" """, ".asciiz")
 
         block = MipsSingleton.getInstance().getCurrentBlock()
-        store_reg = RegisterManager.getInstance().getFreeRegister()
+        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False), None, None)
 
         block.la(store_reg, label)
 

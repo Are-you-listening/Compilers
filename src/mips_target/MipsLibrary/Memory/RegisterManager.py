@@ -10,7 +10,7 @@ class RegisterManager:
 
         self.stack = []
         self.registers = {}  # Maps register names to Memory Objects e.g "v0" : Memory Object
-        self.special_registers = {"v0": None, "v1": None, "a0": None, "a1": None, "a2": None, "a3": None, "fp": None, "sp": None, "ra": None, "zero": None}  # Same as special registers but these may not be regularly used
+        self.special_registers = {"v0": None, "v1": None, "a0": None, "a1": None, "a2": None, "a3": None, "fp": Memory(30, True), "sp": None, "ra": None, "zero": None}  # Same as special registers but these may not be regularly used
 
         for i in range(0, 10):  # Insert registers
             self.registers[f"t{i}"] = None
@@ -78,7 +78,6 @@ class RegisterManager:
             self.special_registers[reg] = var
             var.address = reg
         var.is_loaded = True
-
         block.lw(var, self.getMemoryObject("fp"), offset)
 
     def getRegister(self, var: Memory):
@@ -140,3 +139,4 @@ class RegisterManager:
                     for key in self.registers.keys():
                         self.spill(block, key)
                     self.load(block, var, self.__getFirstFree())
+        return x
