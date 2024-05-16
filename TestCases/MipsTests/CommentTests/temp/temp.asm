@@ -16,7 +16,7 @@ sw $12, -24($30)
 L1:
 
 L2:
-addiu $t1, $0, 0
+addiu $t0, $0, 0
 # INT main ( ) { return 0 ; } 
 #/* Very nice comment */
 

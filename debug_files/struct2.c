@@ -1,3 +1,6 @@
-int main(){return 0;}
+#include <stdio.h>
 
-// Very nice comment
+int main(){
+    printf("hello world");
+    return 0;
+}

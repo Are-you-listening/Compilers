@@ -133,9 +133,7 @@ class AST2MIPS(ASTVisitor):
             MipsSingleton.getInstance().getCurrentBlock().comment(self.comments[text])
 
         with open(self.fileName, 'w') as f:
-            f.write("")
             f.write(str(MipsSingleton.getInstance().getModule().toString()))
-        #print(MipsSingleton.getInstance().getModule().toString())
 
     def handleFunction(self, node: ASTNode):
         function_name = node.getChild(0).text

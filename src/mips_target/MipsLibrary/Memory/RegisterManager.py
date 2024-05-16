@@ -114,29 +114,32 @@ class RegisterManager:
         """
         assert x is not None
 
-        lst = [x]
-        if y is not None:
-            lst.append(y)
-        if z is not None:
-            lst.append(z)
-
-        for var in lst:
-            curr_reg = self.__getRegister(var)  # Fill in param here
-
-            if curr_reg is not None:  # 1. If y is currently in a register r then Ry = r .
-                self.load(block, var, curr_reg)
+        for var in [x, y, z]:
+            if var is None:
+                break
+            if self.__getRegister(var) is not None:  # 1. If y is currently in a register r then Ry = r .
+                var.address = self.__getRegister(var)
                 continue
             elif self.__getFirstFree() is not None:  # 2. If y is not in a register but the register r is currently empty then Ry = r .
-                self.load(block, var, self.__getFirstFree())
+                #self.load(block, var, self.__getFirstFree())
+                var.address = self.__getFirstFree()
                 continue
             else:  # 3. The remaining case is the difficult one. Let r be a candidate register
                 # 3.1 is not implemented
                 if self.__getRegister(x) is not None and x not in [y, z]:  # 3.2
-                    self.load(block, var, self.__getRegister(x))
+                    #self.load(block, var, self.__getRegister(x))
+                    var.address = self.__getRegister(x)
                     continue
                 # 3.3 is not implemented because we applied the liveness algorithm before (removing unused variables)
                 else:  # 3.4
                     for key in self.registers.keys():
                         self.spill(block, key)
-                    self.load(block, var, self.__getFirstFree())
-        return x
+                    #self.load(block, var, self.__getFirstFree())
+                    var.address = self.__getFirstFree()
+
+        if y is None:
+            return x
+        elif z is None:
+            return x, y
+        else:
+            return x, y, z
