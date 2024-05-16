@@ -6,4 +6,4 @@ class Addi(IMipsInstruction):
         super().__init__(rs, rt, load_value)
 
     def toString(self):
-        return f"addi ${self.rt} {self.rs} {self.immediate}"
+        return f"addi ${self.rt} ${self.rs} {self.immediate}"

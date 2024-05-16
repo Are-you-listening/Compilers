@@ -7,4 +7,4 @@ class Andi(IMipsInstruction):
         super().__init__(rs, rt, load_value)
 
     def toString(self):
-        return f"andi ${self.rt} {self.rs} {self.immediate}"
+        return f"andi ${self.rt}, ${self.rs}, {self.immediate}"

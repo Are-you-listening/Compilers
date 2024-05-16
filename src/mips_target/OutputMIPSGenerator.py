@@ -88,7 +88,7 @@ class Declaration:
         """
         Take text but remove 'zero' byte
         """
-        text = text.encode('utf-8').decode('unicode-escape')[:-1]
+        text = text[:-1]
 
         index = MipsSingleton.getInstance().getStringIndex(text)
         label = f"str{index}"
@@ -208,7 +208,7 @@ class Printf:
         print_char_special_token.beq(t2, t4, print_char_special_token_s.label)
 
         print_char_special_token.addui(t4, zero, 120)
-        #print_char_special_token.beq(t2, t4, print_char_special_token_x.label)
+        print_char_special_token.beq(t2, t4, print_char_special_token_x.label)
 
         """
         move $t1, $t2
@@ -287,7 +287,44 @@ class Printf:
         print_char_special_token_x.addui(t5, zero, 58)
         print_char_special_token_x.div(t4, t1, t5)
         print_char_special_token_x.mflo(t4)
+        print_char_special_token_x.andi(t5, t4, 1)
+        print_char_special_token_x.addi(t4, t4, 38)
         print_char_special_token_x.mul(t5, t5, t4)
+        print_char_special_token_x.add(t1, t5, t1)
+
+        """
+        Display first 4 bits as hex
+        """
+        print_char_special_token_x.addui(v0, zero, 11)
+        print_char_special_token_x.add(a0, zero, t1)
+        print_char_special_token_x.systemCall()
+
+        """
+        Display the second part (last 4 bits)
+        No seperate syscall will occur, but just the default syscall
+        """
+        print_char_special_token_x.lb(t1, t3, 0)
+
+        """
+        Wipe all expect last 4 bites
+        """
+        print_char_special_token_x.sll(t1, t1, 28)
+        print_char_special_token_x.srl(t1, t1, 28)
+
+        """
+        Print it to ascii character range starting with '0'
+        """
+        print_char_special_token_x.addui(t1, t1, 48)
+
+        print_char_special_token_x.addui(t5, zero, 58)
+        print_char_special_token_x.div(t4, t1, t5)
+        print_char_special_token_x.mflo(t4)
+        print_char_special_token_x.andi(t5, t4, 1)
+        print_char_special_token_x.addi(t4, t4, 38)
+        print_char_special_token_x.mul(t5, t5, t4)
+        print_char_special_token_x.add(t1, t5, t1)
+
+
 
         print_char_special_token_x.addui(t3, t3, 4)
         print_char_special_token_x.j(print_char_special_token_end_if.label)
