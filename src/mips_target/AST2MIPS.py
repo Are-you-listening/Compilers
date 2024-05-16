@@ -16,10 +16,10 @@ class AST2MIPS(ASTVisitor):
         self.codegetter = codegetter
         self.fileName = fileName
         self.comments = comments
-        self.special_functions_declared = set()
+        self.special_functions_declared = {}
 
     def visit(self, ast: AST):
-        self.special_functions_declared = set()
+        self.special_functions_declared = {}
         self.map_table = MapTable(None)
         self.mips_map = {}
 
@@ -42,6 +42,7 @@ class AST2MIPS(ASTVisitor):
 
             if current_node.text == "Function" and current_node not in visited:
                 visited.add(current_node)
+                print("fffffffff", current_node.getChild(0).text)
 
                 self.handleFunction(current_node)
                 self.map_table = MapTable(self.map_table)
@@ -80,6 +81,7 @@ class AST2MIPS(ASTVisitor):
 
         if node.text == "Function":
             self.map_table = self.map_table.prev
+            MipsSingleton.getInstance().getLastFunction().endFunction()
 
         if node.text == "Dereference":
             self.handleDereference(node)
@@ -115,8 +117,13 @@ class AST2MIPS(ASTVisitor):
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
-            pass
-            self.mips_map[node] = node.text
+            entry = node.getSymbolTable().getEntry(node.text)
+            entry = self.map_table.getEntry(entry)
+            if entry is None:
+                self.mips_map[node] = node.text
+            else:
+                mips_var = entry.llvm
+                self.mips_map[node] = mips_var
 
         if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
             mips_var = Declaration.mipsLiteral(node.text, SymbolType(node.type, False))
@@ -188,28 +195,38 @@ class AST2MIPS(ASTVisitor):
         self.mips_map[node] = args
 
     def handleAssignment(self, node: ASTNode):
-        pass
+        assign_target = self.mips_map[node.getChild(0)]
+        assign_value = self.mips_map[node.getChild(1)]
+
+        mips_var = Declaration.assignment(assign_target, assign_value)
+        self.mips_map[node] = mips_var
 
     def handleDereference(self, node: ASTNode):
-        pass
+
+        if isinstance(node.getChild(0), ASTNodeTerminal) and node.getChild(0).type == "IDENTIFIER":
+            self.mips_map[node] = self.mips_map[node.getChild(0)]
 
     def handleReturn(self, node: ASTNode):
-        pass
+        mips_var = self.mips_map[node.getChild(0)]
+        Function.handleReturn(mips_var)
 
     def handlePrintScanf(self, node: ASTNode, printf):
         """
         Create printf function
         """
         if "printf" not in self.special_functions_declared:
-            Printf.printf()
-            self.special_functions_declared.add("printf")
+            function = Printf.printf()
+            self.special_functions_declared["printf"] = function
+        else:
+            function = self.special_functions_declared["printf"]
 
         params = []
         for c in node.children:
             mips = self.mips_map.get(c)
             params.append(mips)
+            print("param", c.text, mips, mips.getAddress())
 
-        Function.functionCall(None, "printf", params)
+        Function.functionCall(None, function, params)
 
     def handleOperations(self, node: ASTNode):
         """

@@ -16,11 +16,15 @@ class Block:
             upper = (immediate >> 16) & 0xFFFF
             lower = immediate & 0xFFFF
             if upper:
-                self.instructions.append(Lui(rt, upper))
+                instr = Lui(rt, upper)
+                self.instructions.append(instr)
                 if lower:
-                    self.instructions.append(Ori(rt, rt, lower))
+                    instr = Ori(rt, rt, lower)
+                    self.instructions.append(instr)
             else:
-                self.instructions.append(Ori(rt, Memory(0, True), lower))
+                instr = Ori(rt, Memory(0, True), lower)
+                self.instructions.append(instr)
+        return instr
 
     def lw(self, rt: Memory, rs: Memory, load_value: int):
         instr = Lw(rt, rs, load_value)

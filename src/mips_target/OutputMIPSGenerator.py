@@ -41,20 +41,16 @@ class Declaration:
             store_reg = RegisterManager.getInstance().allocate(block, var_memory)
             instr = block.li(store_reg, value)
 
+
         # Register the variable in a separate dictionary
         register_manager.variable_map[var_name] = var_memory
 
-        if instr is not None:
-            return instr
-
+        return instr
 
     @staticmethod
-    def assignment(store_reg, to_store, offset: int = 0):
+    def assignment(store_location: Memory, to_store: Memory):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        if isinstance(to_store, int):
-            instr = block.li(store_reg, to_store)
-        else:
-            instr = block.lw(store_reg, to_store, offset)
+        instr = block.add(store_location, to_store, Memory(0, True))
 
         return instr
 
@@ -78,8 +74,10 @@ class Declaration:
             value = ord(value)  # Values are strings
 
         block = MipsSingleton.getInstance().getCurrentBlock()
-
+        print("v")
+        print("v3", RegisterManager.getInstance().registers)
         store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False), None, None)
+        print("v2")
         block.addui(store_reg, Memory(0, True), value)
         return store_reg
 
@@ -324,8 +322,6 @@ class Printf:
         print_char_special_token_x.mul(t5, t5, t4)
         print_char_special_token_x.add(t1, t5, t1)
 
-
-
         print_char_special_token_x.addui(t3, t3, 4)
         print_char_special_token_x.j(print_char_special_token_end_if.label)
 
@@ -333,6 +329,8 @@ class Printf:
         Set return value to 0
         """
         printf_char_loop_end.addui(v0, zero, 0)
+
+        function.endFunction()
 
         return function
 
@@ -356,7 +354,7 @@ class Calculation:
 
 class Function:
     @staticmethod
-    def functionCall(return_register: Memory, func_name: str, params: list[Memory]):
+    def functionCall(return_register: Memory, func_name, params: list[Memory]):
         """
         Handle a function call
         """
@@ -367,8 +365,7 @@ class Function:
         Function.storeParameters(params)
 
         block = MipsSingleton.getInstance().getCurrentBlock()
-
-        block.jal(func_name)
+        block.jal(f"function_{func_name.getFunctionName()}")
 
     @staticmethod
     def storeParameters(params: list[Memory]):
@@ -386,6 +383,19 @@ class Function:
         block.addui(sp_frame, sp_frame, -alloc_size)
         for i, p in enumerate(params):
             block.sw(p, sp_frame, (i+1)*4)
+
+    @staticmethod
+    def handleReturn(return_value: Memory):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+
+        v0 = Memory("v0", True)
+        zero = Memory("zero", True)
+
+        """
+        Store return value in return register
+        """
+        block.add(v0, zero, return_value)
+        block.j(f"function_{block.function.getFunctionName()}_load")
 
 
 class Comment:

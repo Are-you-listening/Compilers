@@ -1,9 +1,9 @@
 .data
 .text
-jal main
+jal function_main
 li 	$v0, 10 #exit system call
 syscall
-main:
+function_main:
 sw $30, 0($29)
 add $30, $29, $0
 addiu $29, $29, -104
@@ -35,46 +35,13 @@ sw $ra, -100($30)
 L1:
 
 L2:
-addiu $29, $29, -4
-sw $t0, 0($29)
-addiu $29, $29, -4
-sw $t1, 0($29)
-addiu $29, $29, -4
-sw $t2, 0($29)
-addiu $29, $29, -4
-sw $t3, 0($29)
-addiu $29, $29, -4
-sw $t4, 0($29)
-addiu $29, $29, -4
-sw $t5, 0($29)
-addiu $29, $29, -4
-sw $t6, 0($29)
-addiu $29, $29, -4
-sw $t7, 0($29)
-addiu $29, $29, -4
-sw $t8, 0($29)
-addiu $29, $29, -4
-sw $t9, 0($29)
-addiu $29, $29, -4
-sw $s0, 0($29)
-addiu $29, $29, -4
-sw $s1, 0($29)
-addiu $29, $29, -4
-sw $s2, 0($29)
-addiu $29, $29, -4
-sw $s3, 0($29)
-addiu $29, $29, -4
-sw $s4, 0($29)
-addiu $29, $29, -4
-sw $s5, 0($29)
-addiu $29, $29, -4
-sw $s6, 0($29)
-addiu $29, $29, -4
-sw $s7, 0($29)
 addiu $t0, $0, 0
+add $v0, $zero, $t0
+j function_main_load
 # INT main ( ) { return 0 ; } 
 #/* Very nice comment */
 
+function_main_load:
 lw $t0, -4($30)
 lw $t1, -8($30)
 lw $t2, -12($30)

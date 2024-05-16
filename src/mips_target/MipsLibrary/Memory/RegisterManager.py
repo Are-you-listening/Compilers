@@ -70,7 +70,7 @@ class RegisterManager:
         sp = self.getMemoryObject("sp")
         var = self.getMemoryObject(reg)
         block.addui(sp, sp, -4)  # Adjust frame/stack ptr
-        block.sw(var, sp, 0)  # Store to new ptr
+        block.sw(var, sp, 4)  # Store to new ptr
         var.is_loaded = False
         var.address = block.function.getOffset()+self.counter
         self.registers[reg] = None
@@ -113,6 +113,8 @@ class RegisterManager:
             return self.special_registers.get(register, None)
 
     def allocate(self, block, x: Memory, y: Memory = None, z: Memory = None):
+
+
         """
         Handles register assignment and follows the algorithm from the slides
         x := y op z
@@ -142,6 +144,7 @@ class RegisterManager:
                 # 3.3 is not implemented because we applied the liveness algorithm before (removing unused variables)
                 else:  # 3.4
                     for key in self.registers.keys():
+                        print("key", key)
                         self.spill(block, key)
                     #self.load(block, var, self.__getFirstFree())
                     self.__claimRegister(var, self.__getFirstFree())
@@ -154,6 +157,7 @@ class RegisterManager:
             return x, y, z
 
     def framePtrStore(self, mem_object: Memory):
+
         """
         When we store our value on the frame stack, as far as the child blocks of this frame know
         these register had never values
@@ -161,9 +165,6 @@ class RegisterManager:
 
         PreConditions.assertInstanceOff(mem_object, Memory)
         PreConditions.assertTrue(mem_object.is_loaded)
-
-
-
         reg = mem_object.address
         if reg in self.registers:
             self.registers[reg] = None
@@ -174,6 +175,7 @@ class RegisterManager:
         mem_object.is_loaded = False
 
     def framePtrLoad(self, mem_object: Memory):
+
         """
         Reverse the effects of framePtrStore after a function
         """

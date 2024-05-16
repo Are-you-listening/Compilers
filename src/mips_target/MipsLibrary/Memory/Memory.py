@@ -5,3 +5,6 @@ class Memory:
 
     def __str__(self):
         return str(self.address)
+
+    def getAddress(self):
+        return self.address

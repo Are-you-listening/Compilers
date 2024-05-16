@@ -12,12 +12,17 @@ class Function:
         self.frame_registers = RegisterManager.getInstance().getFramePtrRegisters()
 
         self.store_block: Block = self.__storeFrame(self.frame_registers)
-        self.load_block: Block = self.__loadBlock(self.frame_registers)
+        self.load_block: Block = None
 
         self.createBlock()
 
     def getOffset(self):
         return len(self.frame_registers)
+
+    def endFunction(self):
+
+        self.load_block: Block = self.__loadBlock(self.frame_registers)
+
 
     def createBlock(self) -> Block:
         block_label = MipsManager.getInstance().useLabel()
@@ -29,6 +34,7 @@ class Function:
 
     @staticmethod
     def __storeFrame(frame_registers):
+        print("store")
         store_frame_block = Block()
 
         registers = frame_registers
@@ -61,9 +67,8 @@ class Function:
 
         return store_frame_block
 
-    @staticmethod
-    def __loadBlock(frame_registers):
-        load_frame_block = Block()
+    def __loadBlock(self, frame_registers):
+        load_frame_block = Block(f"function_{self.function_name}_load")
 
         registers = frame_registers
         zero_register = Memory(0, True)
@@ -87,7 +92,7 @@ class Function:
         return load_frame_block
 
     def toString(self):
-        string = f"{self.function_name}:\n"
+        string = f"function_{self.function_name}:\n"
 
         string += f"{self.store_block.toString()}"
         for b in self.blocks:
@@ -98,6 +103,9 @@ class Function:
         string += "jr $ra\n"
 
         return string
+
+    def getFunctionName(self):
+        return self.function_name
 
 
 

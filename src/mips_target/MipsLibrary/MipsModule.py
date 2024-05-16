@@ -14,7 +14,7 @@ class MipsModule:
         for d in self.data_segment:
             string += f"{d}\n"
         string += ".text\n"
-        string += "jal main\n"
+        string += "jal function_main\n"
         string += "li 	$v0, 10 #exit system call\n"
         string += "syscall\n"
 

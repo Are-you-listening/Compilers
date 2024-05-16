@@ -14,3 +14,6 @@ class JMipsInstruction(Instruction):
     @abstractmethod
     def toString(self):
         pass
+
+    def getAddress(self):
+        return self.label
