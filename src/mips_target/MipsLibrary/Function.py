@@ -1,5 +1,5 @@
 
-from .Memory import Memory
+from .Memory import *
 from .MipsManager import MipsManager
 from .Blocks import Block
 
@@ -9,13 +9,15 @@ class Function:
         self.function_name = function_name
         self.blocks = []
 
-        self.store_block: Block = self.__storeFrame()
-        self.load_block: Block = self.__loadBlock()
+        self.frame_registers = RegisterManager.getInstance().getFramePtrRegisters()
+
+        self.store_block: Block = self.__storeFrame(self.frame_registers)
+        self.load_block: Block = self.__loadBlock(self.frame_registers)
 
         self.createBlock()
 
     def getOffset(self):
-        return 8
+        return len(self.frame_registers)
 
     def createBlock(self) -> Block:
         block_label = MipsManager.getInstance().useLabel()
@@ -26,11 +28,10 @@ class Function:
         return block
 
     @staticmethod
-    def __storeFrame():
+    def __storeFrame(frame_registers):
         store_frame_block = Block()
 
-        #TODO replace this list with all loaded registers that are usable (s & t)
-        registers = [Memory(31, True), Memory(8, True), Memory(9, True), Memory(10, True), Memory(11, True), Memory(12, True)]
+        registers = frame_registers
         zero_register = Memory(0, True)
 
         sp_register = Memory(29, True)
@@ -56,15 +57,15 @@ class Function:
             Store the registers on the frame ptr stack space (code scoping)
             """
             store_frame_block.sw(r, fp_register, -(i+1)*4)
+            RegisterManager.getInstance().framePtrStore(r)
 
         return store_frame_block
 
     @staticmethod
-    def __loadBlock():
+    def __loadBlock(frame_registers):
         load_frame_block = Block()
 
-        # TODO replace this list with all loaded registers that are usable (s & t)
-        registers = [Memory(31, True), Memory(8, True), Memory(9, True), Memory(10, True), Memory(11, True), Memory(12, True)]
+        registers = frame_registers
         zero_register = Memory(0, True)
 
         sp_register = Memory(29, True)
@@ -75,6 +76,7 @@ class Function:
             Store the registers on the frame ptr stack space (code scoping)
             """
             load_frame_block.lw(r, fp_register, -(i+1)*4)
+            RegisterManager.getInstance().framePtrLoad(r)
 
         """
         Equivalent to move $fp, $sp

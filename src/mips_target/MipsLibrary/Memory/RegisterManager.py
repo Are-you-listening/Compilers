@@ -1,5 +1,5 @@
 from .Memory import Memory
-
+from src.internal_tools.IntegrityChecks import PreConditions
 
 class RegisterManager:
     __instance = None
@@ -9,8 +9,8 @@ class RegisterManager:
             raise Exception("This class is a singleton!")
 
         self.stack = []
-        self.registers = {}  # Maps register names to Memory Objects e.g "v0" : Memory Object
-        self.special_registers = {"v0": None, "v1": None, "a0": None, "a1": None, "a2": None, "a3": None, "fp": Memory(30, True), "sp": None, "ra": None, "zero": None}  # Same as special registers but these may not be regularly used
+        self.registers: dict[str, Memory | None] = {}  # Maps register names to Memory Objects e.g "v0" : Memory Object
+        self.special_registers = {"v0": None, "v1": None, "a0": None, "a1": None, "a2": None, "a3": None, "fp": Memory(30, True), "sp": Memory(29, True), "ra": None, "zero": None}  # Same as special registers but these may not be regularly used
         self.variable_map = {}  # maps variable names to Memory Objects
 
         for i in range(0, 10):  # Insert registers
@@ -69,11 +69,11 @@ class RegisterManager:
 
         sp = self.getMemoryObject("sp")
         var = self.getMemoryObject(reg)
-
         block.addui(sp, sp, -4)  # Adjust frame/stack ptr
         block.sw(var, sp, 0)  # Store to new ptr
         var.is_loaded = False
         var.address = block.function.getOffset()+self.counter
+        self.registers[reg] = None
 
     def load(self, block, var: Memory, reg: str):
         """
@@ -112,7 +112,7 @@ class RegisterManager:
         else:
             return self.special_registers.get(register, None)
 
-    def allocate(self, block, x: Memory, y: Memory, z: Memory):
+    def allocate(self, block, x: Memory, y: Memory = None, z: Memory = None):
         """
         Handles register assignment and follows the algorithm from the slides
         x := y op z
@@ -152,3 +152,65 @@ class RegisterManager:
             return x, y
         else:
             return x, y, z
+
+    def framePtrStore(self, mem_object: Memory):
+        """
+        When we store our value on the frame stack, as far as the child blocks of this frame know
+        these register had never values
+        """
+
+        PreConditions.assertInstanceOff(mem_object, Memory)
+        PreConditions.assertTrue(mem_object.is_loaded)
+
+
+
+        reg = mem_object.address
+        if reg in self.registers:
+            self.registers[reg] = None
+
+        if reg in self.special_registers:
+            self.special_registers[reg] = None
+
+        mem_object.is_loaded = False
+
+    def framePtrLoad(self, mem_object: Memory):
+        """
+        Reverse the effects of framePtrStore after a function
+        """
+
+        PreConditions.assertInstanceOff(mem_object, Memory)
+        PreConditions.assertTrue(not mem_object.is_loaded)
+
+        reg = mem_object.address
+        if reg in self.registers:
+            self.registers[reg] = mem_object
+
+        if reg in self.special_registers:
+            self.special_registers[reg] = mem_object
+
+        mem_object.is_loaded = True
+
+    def getFramePtrRegisters(self):
+        """
+        Get all registers corresponding to its current MemoryObject that needs to be stored on the stack
+        """
+
+        registers = []
+        for register, mem in self.registers.items():
+            if mem is None:
+                mem = Memory(register, True)
+            registers.append(mem)
+
+        for register, mem in self.special_registers.items():
+
+            if register in ("fp", "sp", "zero"):
+                continue
+
+            if mem is None:
+                mem = Memory(register, True)
+
+            registers.append(mem)
+        return registers
+
+
+

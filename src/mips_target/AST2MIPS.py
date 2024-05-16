@@ -106,7 +106,7 @@ class AST2MIPS(ASTVisitor):
             self.handleParameterCalls(node)
 
         if node.text == "ParameterCall":
-            self.llvm_map[node] = self.llvm_map[node.getChild(0)]
+            self.mips_map[node] = self.mips_map[node.getChild(0)]
 
         if node.text not in ("Parameters"):
             self.addOriginalCodeAsComment(node)
@@ -116,6 +116,7 @@ class AST2MIPS(ASTVisitor):
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
             pass
+            self.mips_map[node] = node.text
 
         if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
             mips_var = Declaration.mipsLiteral(node.text, SymbolType(node.type, False))
@@ -177,7 +178,13 @@ class AST2MIPS(ASTVisitor):
             del self.comments[text]
 
     def handleParameterCalls(self, node: ASTNode):
-        pass
+        args = []
+        for child in node.children:
+            mips_var = self.mips_map.get(child)
+            if mips_var is not None:
+                args.append(mips_var)
+
+        self.mips_map[node] = args
 
     def handleAssignment(self, node: ASTNode):
         pass
@@ -201,7 +208,7 @@ class AST2MIPS(ASTVisitor):
             mips = self.mips_map.get(c)
             params.append(mips)
 
-        Function.functionCall("printf", params)
+        Function.functionCall(None, "printf", params)
 
     def handleOperations(self, node: ASTNode):
         """
@@ -217,9 +224,7 @@ class AST2MIPS(ASTVisitor):
             left = self.mips_map.get(node.getChild(0))
             right = self.mips_map.get(node.getChild(2))
 
-            store_reg = MipsSingleton.getInstance().getRegister()
-
-            mips_var = Calculation.operation(left, right, operator, store_reg)
+            mips_var = Calculation.operation(left, right, operator)
 
         self.mips_map[node] = mips_var
 

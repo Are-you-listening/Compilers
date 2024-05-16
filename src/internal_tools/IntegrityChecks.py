@@ -31,5 +31,4 @@ class PreConditions:
         """
         It being an internal tool, Preconditions will not be checked when handing in the assignment :)
         """
-        pass
-        #assert value
+        assert value

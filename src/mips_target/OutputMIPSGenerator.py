@@ -25,27 +25,11 @@ class Declaration:
         return new_function
 
     @staticmethod
-    def declare(data_type: SymbolType, var_name: str, is_global=False):
+    def declare(data_type: SymbolType, var_name: str):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        sp = RegisterManager.getInstance().getMemoryObject("sp")
-        register_manager = RegisterManager.getInstance()
-        var_memory = Memory(0, False)
-        instr = None
+        register = block.__getRegister()
 
-        if is_global:
-            # Add global variable to the .data section
-            pass
-
-        else:
-            # Allocate space on the stack
-            instr = block.addui(sp, sp, -4)
-
-        # Register the variable in a separate dictionary
-        register_manager.variable_map[var_name] = var_memory
-
-        if instr is not None:
-            return instr
-
+        return register
 
     @staticmethod
     def assignment(store_reg, to_store, offset: int = 0):
@@ -94,8 +78,8 @@ class Declaration:
         MipsSingleton.getInstance().getModule().addDataSegment(label, f""" "{text}" """, ".asciiz")
 
         block = MipsSingleton.getInstance().getCurrentBlock()
-        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False), None, None)
 
+        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
         block.la(store_reg, label)
 
         return store_reg
@@ -246,12 +230,13 @@ class Printf:
 class Calculation:
 
     @staticmethod
-    def operation(left, right, operator, store_reg):
+    def operation(left, right, operator):
         block = MipsSingleton.getInstance().getCurrentBlock()
+
+        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
         op_translate = {"+": block.add,
                         "-": block.sub,
-                        "*": block.mul,
-                        "/": block.div,
+                        "()": Function.functionCall
                         }
         mips_op = op_translate.get(operator, None)
         instr = mips_op(store_reg, left, right)
@@ -261,7 +246,7 @@ class Calculation:
 
 class Function:
     @staticmethod
-    def functionCall(func_name: str, params: list[Memory]):
+    def functionCall(return_register: Memory, func_name: str, params: list[Memory]):
         """
         Handle a function call
         """
@@ -272,6 +257,7 @@ class Function:
         Function.storeParameters(params)
 
         block = MipsSingleton.getInstance().getCurrentBlock()
+
         block.jal(func_name)
 
     @staticmethod
