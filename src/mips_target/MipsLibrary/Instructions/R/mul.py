@@ -6,4 +6,4 @@ class Mul(RMipsInstruction):
         super().__init__(rd=rd, rs=rs, rt=rt)
 
     def toString(self):
-        return f"mul ${self.rd} {self.rs} {self.rt}"
+        return f"mul ${self.rd}, ${self.rs}, ${self.rt}"

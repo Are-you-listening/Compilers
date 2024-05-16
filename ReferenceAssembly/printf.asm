@@ -13,10 +13,10 @@ main:
 	li $t0, 5
 	sw	$t0, 8($sp)	# push old frame pointer (dynamic link)
 
-	li $t0, 65
+	li $t0, 69
 	sw	$t0, 12($sp)	# push old frame pointer (dynamic link)
 
-	li $t0, 65
+	li $t0, 64
 	sw	$t0, 16($sp)	# push old frame pointer (dynamic link)
 
 
@@ -71,6 +71,7 @@ printf_char_special_token:
 	beq $t2, 120, printf_char_special_token_x
 	beq $t2, 115, printf_char_special_token_s
 	move $t1, $t2
+
 printf_char_special_token_end_if:
 	j printf_char_special_token_after
 
@@ -85,18 +86,52 @@ printf_char_special_token_c:
 	addi $t3, $t3, 4
 	j printf_char_special_token_end_if
 printf_char_special_token_x:
-	li 	$v0, 34
-	lb $t1, ($t3)
+	li 	$v0, 11
+	lb $t1, ($t3) #transate both halfs of the byte into hex
+
+	#first one
+	srl $t1, $t1, 4
+	addiu $t1, $t1, 48
+	div $t4, $t1, 58
+	mflo $t4
+	and $t5, $t4, 1
+	mflo $t4
+	mul $t5, $t5, $t4
+
+	add $t4, $t4, 38
+	mul $t5, $t5, $t4
+
+	add $t1, $t5, $t1
+	move $a0, $t1
+	syscall
+
+	lb $t1, ($t3) #transate both halfs of the byte into hex
+
+	#second one
+	sll $t1, $t1, 28
+	srl $t1, $t1, 28
+	addiu $t1, $t1, 48
+
+	#Sequence of calcualtions to translate values to 'a',...'f' if needed
+	div $t4, $t1, 58
+	mflo $t4
+	and $t5, $t4, 1
+	mflo $t4
+	mul $t5, $t5, $t4
+
+	add $t4, $t4, 38
+	mul $t5, $t5, $t4
+
+	add $t1, $t5, $t1
+
+
 	addi $t3, $t3, 4
 	j printf_char_special_token_end_if
 printf_char_special_token_s:
-	li 	$v0, 8
-	lb $t1, ($t3)
+	li 	$v0, 4
+	lw $t1, ($t3)
 	addi $t3, $t3, 4
 	j printf_char_special_token_end_if
-
-
-
 
 
 

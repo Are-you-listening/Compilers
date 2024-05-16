@@ -9,3 +9,6 @@ from .srl import Srl
 from .slt import Slt
 from .srl import Srl
 from .sub import Sub
+from .mul import Mul
+from .div import Div
+from .mflo import Mflo

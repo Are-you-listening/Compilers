@@ -127,6 +127,21 @@ class Block:
         self.instructions.append(instr)
         return instr
 
+    def div(self, rd: Memory, rs: Memory, rt: Memory):
+        instr = Div(rd, rs, rt)
+        self.instructions.append(instr)
+        return instr
+
+    def mul(self, rd: Memory, rs: Memory, rt: Memory):
+        instr =Mul(rd, rs, rt)
+        self.instructions.append(instr)
+        return instr
+
+    def mflo(self, rd: Memory):
+        instr = Mflo(rd)
+        self.instructions.append(instr)
+        return instr
+
     def jal(self, label: str):
         instr = Jal(label)
         self.instructions.append(instr)

@@ -119,6 +119,8 @@ class Printf:
         print_char_special_token_end_if = function.createBlock()
         print_char_special_token_d = function.createBlock()
         print_char_special_token_c = function.createBlock()
+        print_char_special_token_s = function.createBlock()
+        print_char_special_token_x = function.createBlock()
         printf_char_loop_end = function.createBlock()
 
         zero = Memory(0, True)
@@ -127,6 +129,7 @@ class Printf:
         t2 = Memory(10, True)
         t3 = Memory(11, True)
         t4 = Memory(12, True)
+        t5 = Memory(13, True)
         fp_register = Memory(30, True)
         v0 = Memory(2, True)
         a0 = Memory(4, True)
@@ -201,6 +204,12 @@ class Printf:
         print_char_special_token.addui(t4, zero, 99)
         print_char_special_token.beq(t2, t4, print_char_special_token_c.label)
 
+        print_char_special_token.addui(t4, zero, 115)
+        print_char_special_token.beq(t2, t4, print_char_special_token_s.label)
+
+        print_char_special_token.addui(t4, zero, 120)
+        #print_char_special_token.beq(t2, t4, print_char_special_token_x.label)
+
         """
         move $t1, $t2
         """
@@ -230,11 +239,58 @@ class Printf:
         """
         When special character == 'c', we will print an char, that corresponds with next parameter
         """
-        print_char_special_token_d.addui(v0, zero, 11)
+        print_char_special_token_c.addui(v0, zero, 11)
 
         print_char_special_token_c.lb(t1, t3, 0)
         print_char_special_token_c.addui(t3, t3, 4)
         print_char_special_token_c.j(print_char_special_token_end_if.label)
+
+        """
+        Load the latest parameter value for %s special case
+        """
+
+        """
+        When special character == 's', we will print a string, that corresponds with next parameter
+        """
+        print_char_special_token_s.addui(v0, zero, 4)
+
+        print_char_special_token_s.lw(t1, t3, 0)
+        print_char_special_token_s.addui(t3, t3, 4)
+        print_char_special_token_s.j(print_char_special_token_end_if.label)
+
+        """
+        Load the latest parameter value for %x special case
+        """
+
+        """
+        When special character == 'x', we will print a string, that corresponds with next parameter
+        """
+        print_char_special_token_x.addui(v0, zero, 4)
+
+        print_char_special_token_x.lb(t1, t3, 0)
+
+        """
+        Display the first 4 bits as hex
+        Using a mathematical formula we can make sure to display 'a-f', without need for any branches
+        """
+
+        """
+        Take last 4 bytes
+        """
+        print_char_special_token_x.srl(t1, t1, 4)
+
+        """
+        Print it to ascii character range starting with '0'
+        """
+        print_char_special_token_x.addui(t1, t1, 48)
+
+        print_char_special_token_x.addui(t5, zero, 58)
+        print_char_special_token_x.div(t4, t1, t5)
+        print_char_special_token_x.mflo(t4)
+        print_char_special_token_x.mul(t5, t5, t4)
+
+        print_char_special_token_x.addui(t3, t3, 4)
+        print_char_special_token_x.j(print_char_special_token_end_if.label)
 
         """
         Set return value to 0
