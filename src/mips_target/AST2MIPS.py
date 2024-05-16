@@ -42,7 +42,6 @@ class AST2MIPS(ASTVisitor):
 
             if current_node.text == "Function" and current_node not in visited:
                 visited.add(current_node)
-                print("fffffffff", current_node.getChild(0).text)
 
                 self.handleFunction(current_node)
                 self.map_table = MapTable(self.map_table)
@@ -223,10 +222,12 @@ class AST2MIPS(ASTVisitor):
         params = []
         for c in node.children:
             mips = self.mips_map.get(c)
+            print("mips", c.text, mips.getAddress())
             params.append(mips)
-            print("param", c.text, mips, mips.getAddress())
 
-        Function.functionCall(None, function, params)
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
+        Function.functionCall(store_reg, function, params)
 
     def handleOperations(self, node: ASTNode):
         """

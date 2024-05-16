@@ -34,7 +34,6 @@ class Function:
 
     @staticmethod
     def __storeFrame(frame_registers):
-        print("store")
         store_frame_block = Block()
 
         registers = frame_registers

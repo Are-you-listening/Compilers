@@ -144,7 +144,6 @@ class RegisterManager:
                 # 3.3 is not implemented because we applied the liveness algorithm before (removing unused variables)
                 else:  # 3.4
                     for key in self.registers.keys():
-                        print("key", key)
                         self.spill(block, key)
                     #self.load(block, var, self.__getFirstFree())
                     self.__claimRegister(var, self.__getFirstFree())
@@ -205,7 +204,7 @@ class RegisterManager:
 
         for register, mem in self.special_registers.items():
 
-            if register in ("fp", "sp", "zero"):
+            if register in ("fp", "sp", "zero", "v0"):
                 continue
 
             if mem is None:

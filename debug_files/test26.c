@@ -1,9 +1,11 @@
 #include <stdio.h>
 
-
+int a(){
+    return 5;
+}
 
 int main(){
-    int b = 5;
+    int b = a();
     printf("%d", b);
     return 0;
 }

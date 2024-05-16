@@ -74,10 +74,8 @@ class Declaration:
             value = ord(value)  # Values are strings
 
         block = MipsSingleton.getInstance().getCurrentBlock()
-        print("v")
-        print("v3", RegisterManager.getInstance().registers)
         store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False), None, None)
-        print("v2")
+
         block.addui(store_reg, Memory(0, True), value)
         return store_reg
 
@@ -362,10 +360,19 @@ class Function:
         """
         store all the parameters on the stack so, the callee can access these later on
         """
+        for p in params:
+            print(p.getAddress(), p.is_loaded)
+
         Function.storeParameters(params)
 
         block = MipsSingleton.getInstance().getCurrentBlock()
         block.jal(f"function_{func_name.getFunctionName()}")
+
+        """
+        Store the return value in a specific register
+        """
+        instr = block.add(return_register, Memory("zero", True), Memory("v0", True))
+        return instr
 
     @staticmethod
     def storeParameters(params: list[Memory]):
