@@ -35,7 +35,7 @@ class Declaration:
             # Add global variable to the .data section
             module = MipsSingleton.getInstance().getModule()
             # if no initial value -> initialize to zero
-            module.addDataSegment(var_name, value)
+            module.addDataSegment(var_name, value, special_info=".word")
 
         else:
             store_reg = RegisterManager.getInstance().allocate(block, var_memory)
