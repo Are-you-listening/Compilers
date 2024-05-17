@@ -16,3 +16,6 @@ class RMipsInstruction(Instruction):
 
     def getAddress(self):
         return self.rd
+
+    def overrideMemory(self, other: "Memory"):
+        self.rd = other.getAddress()

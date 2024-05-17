@@ -55,7 +55,7 @@ class Function:
         """
         Allocate the needed stack space
         """
-        store_frame_block.addui(sp_register, sp_register, -(len(registers)+1)*4)
+        store_frame_block.addui(sp_register, -(len(registers)+1)*4, sp_register)
 
         for i, r in enumerate(registers):
             """
@@ -79,14 +79,14 @@ class Function:
             """
             Store the registers on the frame ptr stack space (code scoping)
             """
-            load_frame_block.lw(r, fp_register, -(i+1)*4)
+            load_frame_block.lw(fp_register, -(i+1)*4, r)
             RegisterManager.getInstance().framePtrLoad(r)
 
         """
         Equivalent to move $fp, $sp
         """
         load_frame_block.add(sp_register, fp_register, zero_register)
-        load_frame_block.lw(fp_register, sp_register, 0)
+        load_frame_block.lw(sp_register, 0, fp_register)
 
         return load_frame_block
 

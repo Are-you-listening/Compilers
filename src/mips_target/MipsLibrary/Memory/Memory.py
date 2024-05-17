@@ -8,3 +8,7 @@ class Memory:
 
     def getAddress(self):
         return self.address
+
+    def overrideMemory(self, other: "Memory"):
+        self.address = other.address
+        self.is_loaded = other.is_loaded

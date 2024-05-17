@@ -17,3 +17,5 @@ class JMipsInstruction(Instruction):
 
     def getAddress(self):
         return self.label
+
+

@@ -69,7 +69,7 @@ class RegisterManager:
 
         sp = self.getMemoryObject("sp")
         var = self.getMemoryObject(reg)
-        block.addui(sp, sp, -4)  # Adjust frame/stack ptr
+        block.addui(sp, -4, sp)  # Adjust frame/stack ptr
         block.sw(var, sp, 4)  # Store to new ptr
         var.is_loaded = False
         var.address = block.function.getOffset()+self.counter
@@ -87,7 +87,7 @@ class RegisterManager:
             self.special_registers[reg] = var
             var.address = reg
         var.is_loaded = True
-        block.lw(var, self.getMemoryObject("fp"), offset)
+        block.lw(self.getMemoryObject("fp"), offset, var)
 
     def getRegister(self, var: Memory):
         """
@@ -112,47 +112,29 @@ class RegisterManager:
         else:
             return self.special_registers.get(register, None)
 
-    def allocate(self, block, x: Memory, y: Memory = None, z: Memory = None):
+    def allocate(self, block, y: Memory = None, z: Memory = None):
 
         """
         Handles register assignment and follows the algorithm from the slides
         x := y op z
-        :param x:
+
         :param y: May be None
         :param z: May be None
         :return:
         """
-        assert x is not None
+        """
+        Following the  'Registers for result' 'Register Allocation' rules
+        """
 
-        for var in [x, y, z]:
-            if var is None:
-                break
-            if self.__getRegister(var) is not None:  # 1. If y is currently in a register r then Ry = r .
-                self.__claimRegister(var, self.__getRegister(var))
-                continue
-            elif self.__getFirstFree() is not None:  # 2. If y is not in a register but the register r is currently empty then Ry = r .
-                #self.load(block, var, self.__getFirstFree())
-                self.__claimRegister(var, self.__getFirstFree())
-                continue
-            else:  # 3. The remaining case is the difficult one. Let r be a candidate register
-                # 3.1 is not implemented
-                if self.__getRegister(x) is not None and x not in [y, z]:  # 3.2
-                    #self.load(block, var, self.__getRegister(x))
-                    self.__claimRegister(var, self.__getRegister(x))
-                    continue
-                # 3.3 is not implemented because we applied the liveness algorithm before (removing unused variables)
-                else:  # 3.4
-                    for key in self.registers.keys():
-                        self.spill(block, key)
-                    #self.load(block, var, self.__getFirstFree())
-                    self.__claimRegister(var, self.__getFirstFree())
+        store_register = Memory(None, False)
+        free_register = self.__getFirstFree()
+        if free_register is None:
+            for key in self.registers.keys():
+                self.spill(block, key)
+            free_register = self.__getFirstFree()
 
-        if y is None:
-            return x
-        elif z is None:
-            return x, y
-        else:
-            return x, y, z
+        self.__claimRegister(store_register, free_register)
+        return store_register
 
     def framePtrStore(self, mem_object: Memory):
 

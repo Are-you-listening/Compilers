@@ -15,3 +15,6 @@ class IMipsInstruction(Instruction):
 
     def getAddress(self):
         return self.rt
+
+    def overrideMemory(self, other: "Memory"):
+        self.rt = other.getAddress()

@@ -76,8 +76,7 @@ class Declaration:
             module.addDataSegment(var_name, value, special_info=".word")
 
         else:
-            store_reg = RegisterManager.getInstance().allocate(block, var_memory)
-            instr = block.li(store_reg, value)
+            instr = block.li(value)
 
 
         # Register the variable in a separate dictionary
@@ -115,9 +114,8 @@ class Declaration:
             value = ord(value)  # Values are strings
 
         block = MipsSingleton.getInstance().getCurrentBlock()
-        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False), None, None)
 
-        block.addui(store_reg, Memory(0, True), value)
+        store_reg = block.addui(Memory(0, True), value)
         return store_reg
 
     @staticmethod
@@ -132,7 +130,7 @@ class Declaration:
         MipsSingleton.getInstance().getModule().addDataSegment(label, f""" "{text}" """, ".asciiz")
 
         block = MipsSingleton.getInstance().getCurrentBlock()
-        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
+        store_reg = RegisterManager.getInstance().allocate(block)
         block.la(store_reg, label)
 
         return store_reg
@@ -173,22 +171,25 @@ class Printf:
         """
         Point to first parameter
         """
-        print_base_block.addui(t3, fp_register, 4)
+        temp_reg = print_base_block.addui(fp_register, 4)
+        temp_reg.overrideMemory(t3)
 
         """
         Load format string in t0
         """
-        print_base_block.lw(t0, t3, 0)
+        print_base_block.lw(t3, 0, t0)
 
         """
         Increase the parameter counter by 1 param
         """
-        print_base_block.addui(t3, t3, 4)
+        temp_reg = print_base_block.addui(t3, 4)
+        temp_reg.overrideMemory(t3)
 
         """
         Read the next byte of the format string
         """
-        print_char_loop.lb(t1, t0, 0)
+        lb_instr = print_char_loop.lb(t0, 0)
+        lb_instr.overrideMemory(t1)
 
         """
         When coming across a 'zero' byte stop with the looping
@@ -198,13 +199,16 @@ class Printf:
         """
         load value 11, to register v0, so the system call prints a char
         """
-        print_char_loop.addui(v0, zero, 11)
+        temp_reg = print_char_loop.addui(zero, 11)
+        temp_reg.overrideMemory(v0)
 
         """
         In case our char is a '%' (37 decimal), we see it as a special token, and we will check what we need to 
         print instead
         """
-        print_char_loop.addui(t4, zero, 37)
+        temp_reg = print_char_loop.addui(zero, 37)
+        temp_reg.overrideMemory(t4)
+
         print_char_loop.beq(t1, t4, print_char_special_token.label)
 
         """
@@ -220,36 +224,47 @@ class Printf:
         """
         Increase the format string ptr by 1
         """
-        print_char_special_token_after.addui(t0, t0, 1)
+        temp_reg = print_char_special_token_after.addui(t0, 1)
+        temp_reg.overrideMemory(t0)
 
         print_char_special_token_after.j(print_char_loop.label)
 
         """
         In case of a special tokens we look at the next character
         """
-        print_char_special_token.addui(t0, t0, 1)
+        temp_reg = print_char_special_token.addui(t0, 1)
+        temp_reg.overrideMemory(t0)
 
         """
         Load this next characters
         """
-        print_char_special_token.lb(t2, t0, 0)
+        special_token = print_char_special_token.lb(t0, 0)
+        special_token.overrideMemory(t2)
 
-        print_char_special_token.addui(t4, zero, 100)
+        temp_reg = print_char_special_token.addui(zero, 100)
+        temp_reg.overrideMemory(t4)
+
         print_char_special_token.beq(t2, t4, print_char_special_token_d.label)
 
-        print_char_special_token.addui(t4, zero, 99)
+        temp_reg = print_char_special_token.addui(zero, 99)
+        temp_reg.overrideMemory(t4)
+
         print_char_special_token.beq(t2, t4, print_char_special_token_c.label)
 
-        print_char_special_token.addui(t4, zero, 115)
+        temp_reg = print_char_special_token.addui(zero, 115)
+        temp_reg.overrideMemory(t4)
+
         print_char_special_token.beq(t2, t4, print_char_special_token_s.label)
 
-        print_char_special_token.addui(t4, zero, 120)
+        temp_reg = print_char_special_token.addui(zero, 120)
+        temp_reg.overrideMemory(t4)
+
         print_char_special_token.beq(t2, t4, print_char_special_token_x.label)
 
         """
         move $t1, $t2
         """
-        print_char_special_token_after.add(t1, zero, t2)
+        print_char_special_token_after.add(lb_instr, zero, t2)
 
         """
         After checking special character, go to block to do the print
@@ -262,10 +277,13 @@ class Printf:
         """
         When special character == 'd', we will print an integer, that corresponds with next parameter
         """
-        print_char_special_token_d.addui(v0, zero, 1)
+        temp_reg = print_char_special_token_d.addui(zero, 1)
+        temp_reg.overrideMemory(v0)
 
-        print_char_special_token_d.lw(t1, t3, 0)
-        print_char_special_token_d.addui(t3, t3, 4)
+        print_char_special_token_d.lw(t3, 0, t1)
+        temp_reg = print_char_special_token_d.addui(t3, 4)
+        temp_reg.overrideMemory(t3)
+
         print_char_special_token_d.j(print_char_special_token_end_if.label)
 
         """
@@ -275,10 +293,15 @@ class Printf:
         """
         When special character == 'c', we will print an char, that corresponds with next parameter
         """
-        print_char_special_token_c.addui(v0, zero, 11)
+        temp_reg = print_char_special_token_c.addui(zero, 11)
+        temp_reg.overrideMemory(v0)
 
-        print_char_special_token_c.lb(t1, t3, 0)
-        print_char_special_token_c.addui(t3, t3, 4)
+        c_char = print_char_special_token_c.lb(t3, 0)
+        c_char.overrideMemory(t1)
+
+        temp_reg = print_char_special_token_c.addui(t3, 4)
+        temp_reg.overrideMemory(t3)
+
         print_char_special_token_c.j(print_char_special_token_end_if.label)
 
         """
@@ -288,10 +311,12 @@ class Printf:
         """
         When special character == 's', we will print a string, that corresponds with next parameter
         """
-        print_char_special_token_s.addui(v0, zero, 4)
+        temp_reg = print_char_special_token_s.addui(zero, 4)
+        temp_reg.overrideMemory(v0)
 
-        print_char_special_token_s.lw(t1, t3, 0)
-        print_char_special_token_s.addui(t3, t3, 4)
+        print_char_special_token_s.lw(t3, 0, t1)
+        temp_reg = print_char_special_token_s.addui(t3, 4)
+        temp_reg.overrideMemory(t3)
         print_char_special_token_s.j(print_char_special_token_end_if.label)
 
         """
@@ -301,9 +326,12 @@ class Printf:
         """
         When special character == 'x', we will print a string, that corresponds with next parameter
         """
-        print_char_special_token_x.addui(v0, zero, 4)
 
-        print_char_special_token_x.lb(t1, t3, 0)
+        temp_reg = print_char_special_token_x.addui(zero, 4)
+        temp_reg.overrideMemory(v0)
+
+        x_char = print_char_special_token_x.lb(t3, 0)
+        x_char.overrideMemory(t1)
 
         """
         Display the first 4 bits as hex
@@ -318,20 +346,26 @@ class Printf:
         """
         Print it to ascii character range starting with '0'
         """
-        print_char_special_token_x.addui(t1, t1, 48)
+        temp_reg = print_char_special_token_x.addui(t1, 48)
+        temp_reg.overrideMemory(t1)
 
-        print_char_special_token_x.addui(t5, zero, 58)
+        temp_reg = print_char_special_token_x.addui(zero, 58)
+        temp_reg.overrideMemory(t5)
+
         print_char_special_token_x.div(t4, t1, t5)
         print_char_special_token_x.mflo(t4)
         print_char_special_token_x.andi(t5, t4, 1)
-        print_char_special_token_x.addi(t4, t4, 38)
+        temp_reg = print_char_special_token_x.addi(t4, 38)
+        temp_reg.overrideMemory(t4)
         print_char_special_token_x.mul(t5, t5, t4)
         print_char_special_token_x.add(t1, t5, t1)
 
         """
         Display first 4 bits as hex
         """
-        print_char_special_token_x.addui(v0, zero, 11)
+        temp_reg = print_char_special_token_x.addui(zero, 11)
+        temp_reg.overrideMemory(v0)
+
         print_char_special_token_x.add(a0, zero, t1)
         print_char_special_token_x.systemCall()
 
@@ -339,7 +373,8 @@ class Printf:
         Display the second part (last 4 bits)
         No seperate syscall will occur, but just the default syscall
         """
-        print_char_special_token_x.lb(t1, t3, 0)
+        x_char = print_char_special_token_x.lb(t3, 0)
+        x_char.overrideMemory(t1)
 
         """
         Wipe all expect last 4 bites
@@ -350,23 +385,30 @@ class Printf:
         """
         Print it to ascii character range starting with '0'
         """
-        print_char_special_token_x.addui(t1, t1, 48)
+        temp_reg = print_char_special_token_x.addui(t1, 48)
+        temp_reg.overrideMemory(t1)
 
-        print_char_special_token_x.addui(t5, zero, 58)
+        temp_reg = print_char_special_token_x.addui(zero, 58)
+        temp_reg.overrideMemory(t5)
+
         print_char_special_token_x.div(t4, t1, t5)
         print_char_special_token_x.mflo(t4)
         print_char_special_token_x.andi(t5, t4, 1)
-        print_char_special_token_x.addi(t4, t4, 38)
+        temp_reg = print_char_special_token_x.addi(t4, 38)
+        temp_reg.overrideMemory(t4)
         print_char_special_token_x.mul(t5, t5, t4)
         print_char_special_token_x.add(t1, t5, t1)
 
-        print_char_special_token_x.addui(t3, t3, 4)
+        temp_reg = print_char_special_token_x.addui(t3, 4)
+        temp_reg.overrideMemory(t3)
+
         print_char_special_token_x.j(print_char_special_token_end_if.label)
 
         """
         Set return value to 0
         """
-        printf_char_loop_end.addui(v0, zero, 0)
+        temp_reg = printf_char_loop_end.addui(zero, 0)
+        temp_reg.overrideMemory(v0)
 
         function.endFunction()
 
@@ -388,7 +430,7 @@ class Calculation:
         block = MipsSingleton.getInstance().getCurrentBlock()
 
         if operator != "()":
-            store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
+            store_reg = RegisterManager.getInstance().allocate(block)
         else:
             store_reg = Memory(None, True)
 
@@ -460,7 +502,7 @@ class Function:
         alloc_size = (len(params)+1)*4
         sp_frame = Memory(29, True)
 
-        block.addui(sp_frame, sp_frame, -alloc_size)
+        block.addui(sp_frame, -alloc_size, sp_frame)
         for i, p in enumerate(params):
             block.sw(p, sp_frame, (i+1)*4)
 

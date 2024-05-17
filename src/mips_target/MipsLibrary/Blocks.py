@@ -1,5 +1,5 @@
 from .Instructions import *
-from .Memory import Memory
+from .Memory import Memory, RegisterManager
 
 
 class Block:
@@ -8,27 +8,38 @@ class Block:
         self.instructions: list[Instruction] = []
         self.function = function
 
-    def li(self, rt: Memory, immediate: int):
+    def li(self, immediate: int):
+        rt = RegisterManager.getInstance().allocate(self)
         instr = Li(rt, immediate)
         self.instructions.append(instr)
         return instr
 
-    def lw(self, rt: Memory, rs: Memory, load_value: int, load_global=False, global_name=""):
+
+    def lw(self, rs: Memory, load_value: int, rt: Memory = None, load_global=False, global_name=""):
+
+        if rt is None:
+            rt = RegisterManager.getInstance().allocate(self)
         instr = Lw(rt, rs, load_value, load_global, global_name)
         self.instructions.append(instr)
         return instr
 
-    def lb(self, rt: Memory, rs: Memory, load_value: int):
+    def lb(self, rs: Memory, load_value: int):
+
+        rt = RegisterManager.getInstance().allocate(self)
         instr = Lb(rt, rs, load_value)
         self.instructions.append(instr)
         return instr
 
-    def addi(self, rt: Memory, rs: Memory, load_value: int):
+    def addi(self, rs: Memory, load_value: int):
+
+        rt = RegisterManager.getInstance().allocate(self)
         instr = Addi(rt, rs, load_value)
         self.instructions.append(instr)
         return instr
 
-    def addui(self, rt: Memory, rs: Memory, load_value: int):
+    def addui(self, rs: Memory, load_value: int, rt: Memory = None):
+        if rt is None:
+            rt = RegisterManager.getInstance().allocate(self)
         instr = Addiu(rt, rs, load_value)
         self.instructions.append(instr)
         return instr
@@ -186,7 +197,7 @@ class Block:
         """
         fp_register = Memory(30, True)
 
-        instr = self.lw(self.getRegister(), fp_register, 4*(index+1))
+        instr = self.lw(fp_register, 4*(index+1))
         return instr
 
     def createParameters(self, parameter_list: list[Memory]):
@@ -197,17 +208,11 @@ class Block:
         """
         Allocate stack space for the parameters
         """
-        self.addui(sp_register, sp_register, -bytes_needed)
+        temp_reg = self.addui(sp_register, -bytes_needed)
+        temp_reg.overrideMemory(sp_register)
 
         """
         Store parameters on the stack
         """
         for i, p in enumerate(parameter_list):
             self.sw(p, sp_register, (i+1)*4)
-
-    def getRegister(self):
-        """
-        Get a register for a variable
-        """
-
-        return Memory(1, True)
