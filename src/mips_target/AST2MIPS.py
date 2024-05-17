@@ -271,7 +271,30 @@ class AST2MIPS(ASTVisitor):
         self.mips_map[node] = mips_var
 
     def handleConversions(self, node: ASTNode):
-        pass
+        """
+        Handle a dereference
+        :param node:
+        :return:
+        """
+        mips_data = self.mips_map.get(node.getChild(0))
+
+        type = node.getChild(0).getSymbolTable().getEntry(node.getChild(0).text)
+
+        """
+        get the var register
+        """
+        if isinstance(type, SymbolTypeArray):
+            pass # TODO
+            # index_list = []
+            # index_list.insert(0, ir.Constant(ir.types.IntType(32), 0))
+            # index_list.insert(0, ir.Constant(ir.types.IntType(32), 0))
+            #
+            # var = block.gep(mips_data, index_list, True)  # Create the gep instruction
+        else:
+            var = MipsSingleton.getInstance().getCurrentBlock().load(mips_data) # TODO
+
+
+        self.mips_map[node] = var
 
     def handleParameters(self, node: ASTNode):
         pass

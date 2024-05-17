@@ -368,7 +368,6 @@ class Load:
         elif not isinstance(load_llvm, ir.GEPInstr) and not isinstance(load_llvm, ir.CastInstr):
             llvm_var.align = load_llvm.align
         else:
-
             llvm_var.align = CTypesToLLVM.getBytesUse(SymbolType("INT", False))
         return llvm_var
 
