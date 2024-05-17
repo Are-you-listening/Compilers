@@ -1,11 +1,11 @@
 #include <stdio.h>
 
-int a(){
-    return 5;
+int a(int b){
+    printf("%d", 4);
+    return 0;
 }
 
 int main(){
-    int b = a();
-    printf("%d", b);
+    a(4);
     return 0;
 }

@@ -91,7 +91,6 @@ class Declaration:
         MipsSingleton.getInstance().getModule().addDataSegment(label, f""" "{text}" """, ".asciiz")
 
         block = MipsSingleton.getInstance().getCurrentBlock()
-
         store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
         block.la(store_reg, label)
 
@@ -339,7 +338,11 @@ class Calculation:
     def operation(left, right, operator):
         block = MipsSingleton.getInstance().getCurrentBlock()
 
-        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
+        if operator != "()":
+            store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
+        else:
+            store_reg = Memory(None, True)
+
         op_translate = {"+": block.add,
                         "-": block.sub,
                         "()": Function.functionCall
@@ -360,8 +363,6 @@ class Function:
         """
         store all the parameters on the stack so, the callee can access these later on
         """
-        for p in params:
-            print(p.getAddress(), p.is_loaded)
 
         Function.storeParameters(params)
 
@@ -371,8 +372,7 @@ class Function:
         """
         Store the return value in a specific register
         """
-        instr = block.add(return_register, Memory("zero", True), Memory("v0", True))
-        return instr
+        return Memory("v0", True)
 
     @staticmethod
     def storeParameters(params: list[Memory]):

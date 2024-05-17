@@ -222,11 +222,10 @@ class AST2MIPS(ASTVisitor):
         params = []
         for c in node.children:
             mips = self.mips_map.get(c)
-            print("mips", c.text, mips.getAddress())
             params.append(mips)
 
         block = MipsSingleton.getInstance().getCurrentBlock()
-        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
+        store_reg = Memory(None, False)
         Function.functionCall(store_reg, function, params)
 
     def handleOperations(self, node: ASTNode):

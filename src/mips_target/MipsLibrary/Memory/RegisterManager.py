@@ -114,7 +114,6 @@ class RegisterManager:
 
     def allocate(self, block, x: Memory, y: Memory = None, z: Memory = None):
 
-
         """
         Handles register assignment and follows the algorithm from the slides
         x := y op z
