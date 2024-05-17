@@ -202,20 +202,23 @@ class Printf:
         """
         load value 11, to register v0, so the system call prints a char
         """
-        temp_reg = print_char_loop.addui(zero, 11, v0)
+        temp_reg = print_char_loop.addui(zero, 11)
+        temp_reg.overrideMemory(v0)
 
         """
         In case our char is a '%' (37 decimal), we see it as a special token, and we will check what we need to 
         print instead
         """
-        temp_reg = print_char_loop.addui(zero, 37, t4)
+        temp_reg = print_char_loop.addui(zero, 37)
+        temp_reg.overrideMemory(t4)
 
         print_char_loop.beq(t1, t4, print_char_special_token.label)
 
         """
         store $t1, char value in $a0 for system call
         """
-        temp_reg = print_char_special_token_after.add(zero, t1, a0)
+        temp_reg = print_char_special_token_after.add(zero, t1)
+        temp_reg.overrideMemory(a0)
 
         """
         Execute the print system call
@@ -225,7 +228,8 @@ class Printf:
         """
         Increase the format string ptr by 1
         """
-        temp_reg = print_char_special_token_after.addui(t0, 1, t0)
+        temp_reg = print_char_special_token_after.addui(t0, 1)
+        temp_reg.overrideMemory(t0)
 
         print_char_special_token_after.j(print_char_loop.label)
 
@@ -241,19 +245,23 @@ class Printf:
         special_token = print_char_special_token.lb(t0, 0)
         special_token.overrideMemory(t2)
 
-        temp_reg = print_char_special_token.addui(zero, 100, t4)
+        temp_reg = print_char_special_token.addui(zero, 100)
+        temp_reg.overrideMemory(t4)
 
         print_char_special_token.beq(t2, t4, print_char_special_token_d.label)
 
-        temp_reg = print_char_special_token.addui(zero, 99, t4)
+        temp_reg = print_char_special_token.addui(zero, 99)
+        temp_reg.overrideMemory(t4)
 
         print_char_special_token.beq(t2, t4, print_char_special_token_c.label)
 
-        temp_reg = print_char_special_token.addui(zero, 115, t4)
+        temp_reg = print_char_special_token.addui(zero, 115)
+        temp_reg.overrideMemory(t4)
 
         print_char_special_token.beq(t2, t4, print_char_special_token_s.label)
 
-        temp_reg = print_char_special_token.addui(zero, 120, t4)
+        temp_reg = print_char_special_token.addui(zero, 120)
+        temp_reg.overrideMemory(t4)
 
         print_char_special_token.beq(t2, t4, print_char_special_token_x.label)
 
@@ -511,7 +519,7 @@ class Function:
 
         RegisterManager.getInstance().loadIfNeeded(block, params)
 
-        block.addui(sp_frame, -alloc_size, sp_frame)
+        block.addui_function(sp_frame, -alloc_size, sp_frame)
         for i, p in enumerate(params):
             block.sw(p, sp_frame, (i+1)*4)
 
@@ -531,7 +539,7 @@ class Function:
         for i, p in enumerate(params):
             block.lw_function(sp_frame, (i + 1) * 4, p)
 
-        block.addui(sp_frame, alloc_size, sp_frame)
+        block.addui_function(sp_frame, alloc_size, sp_frame)
 
     @staticmethod
     def handleReturn(return_value: Memory):

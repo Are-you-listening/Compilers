@@ -34,7 +34,7 @@ class Block:
 
     def lw_function(self, rs: Memory, load_value: int, rt: Memory):
         """
-        This LW function is used for function frame ptr and RegisterManager, and LoadParameters overhead ONLY.
+        This Lw function is used for function frame ptr and RegisterManager, and LoadParameters overhead ONLY.
         The reason it is, is because we cannot have any spill overhead during this procedure
 
         """
@@ -62,9 +62,20 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
-    def addui(self, rs: Memory, load_value: int, rt: Memory = None):
-        if rt is None:
-            rt = RegisterManager.getInstance().allocate(self)
+    def addui(self, rs: Memory, load_value: int):
+        rt = RegisterManager.getInstance().allocate(self)
+
+        RegisterManager.getInstance().loadIfNeeded(self, [rs, rt])
+
+        instr = Addiu(rt, rs, load_value)
+        self.instructions.append(instr)
+        return instr.getAddress()
+
+    def addui_function(self, rs: Memory, load_value: int, rt: Memory):
+        """
+        This addUI function is used for function frame ptr and RegisterManager, and LoadParameters overhead ONLY.
+        :return:
+        """
 
         RegisterManager.getInstance().loadIfNeeded(self, [rs, rt])
 
@@ -117,7 +128,6 @@ class Block:
         instr = Sltiu(rt, rs, immediate)
         self.instructions.append(instr)
         return instr.getAddress()
-
 
     def sw(self, rt: Memory, rs: Memory, immediate: int, loadable: bool = True):
 
@@ -300,8 +310,7 @@ class Block:
         """
         Allocate stack space for the parameters
         """
-        temp_reg = self.addui(sp_register, -bytes_needed)
-        temp_reg.overrideMemory(sp_register)
+        self.addui_function(sp_register, -bytes_needed, sp_register)
 
         """
         Store parameters on the stack

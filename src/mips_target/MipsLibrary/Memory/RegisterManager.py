@@ -73,7 +73,7 @@ class RegisterManager:
 
         sp = self.getMemoryObject("sp")
         var = self.getMemoryObject(reg)
-        block.addui(sp, -4, sp)  # Adjust frame/stack ptr
+        block.addui_function(sp, -4, sp)  # Adjust frame/stack ptr
         block.sw(var, sp, 4, False)  # Store to new ptr
         var.is_loaded = False
         var.address = block.function.getOffset()+self.counter

@@ -55,7 +55,7 @@ class Function:
         """
         Allocate the needed stack space
         """
-        store_frame_block.addui(sp_register, -(len(registers)+1)*4, sp_register)
+        store_frame_block.addui_function(sp_register, -(len(registers)+1)*4, sp_register)
 
         for i, r in enumerate(registers):
             """
