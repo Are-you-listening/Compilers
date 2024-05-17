@@ -9,3 +9,4 @@ from .sw import Sw
 from .addiu import Addiu
 from .lb import Lb
 from .lui import Lui
+from .sltiu import Sltiu

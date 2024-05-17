@@ -71,6 +71,12 @@ class Block:
         self.instructions.append(instr)
         return instr
 
+    def sltiu(self, rt: Memory, rs: Memory, immediate: int):
+        instr = Sltiu(rt, rs, immediate)
+        self.instructions.append(instr)
+        return instr
+
+
     def sw(self, rt: Memory, rs: Memory, immediate: int):
         instr = Sw(rt, rs, immediate)
         self.instructions.append(instr)
