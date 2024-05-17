@@ -101,6 +101,11 @@ class Block:
         self.instructions.append(instr)
         return instr
 
+    def xor(self, rd: Memory, rs: Memory, rt: Memory):
+        instr = Xor(rd, rs, rt)
+        self.instructions.append(instr)
+        return instr
+
     def sll(self, rd: Memory, rt: Memory, shamt: int):
         instr = Sll(rd, rt, shamt)
         self.instructions.append(instr)

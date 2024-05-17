@@ -349,6 +349,11 @@ class Calculation:
                         "*": block.mul,
                         "/": block.div,
                         "%": Calculation.modulo,
+                        "<<": block.sll,
+                        ">>": block.srl,
+                        "&": block.mips_and,
+                        "|": block.mips_or,
+                        "^": block.xor
                         }
         mips_op = op_translate.get(operator, None)
         instr = mips_op(store_reg, left, right)
