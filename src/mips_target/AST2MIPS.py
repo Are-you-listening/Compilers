@@ -124,6 +124,9 @@ class AST2MIPS(ASTVisitor):
                 mips_var = entry.llvm
                 self.mips_map[node] = mips_var
 
+        if node.getSymbolTable().isRoot():
+            return
+
         if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
             mips_var = Declaration.mipsLiteral(node.text, SymbolType(node.type, False))
             self.mips_map[node] = mips_var

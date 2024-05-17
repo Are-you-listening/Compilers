@@ -88,7 +88,9 @@ class Declaration:
     @staticmethod
     def assignment(store_location: Memory, to_store: Memory):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        instr = block.add(store_location, to_store, Memory(0, True))
+        if isinstance(to_store, str):
+            block.lw(store_location, store_location, 0, load_global=True, global_name=to_store)
+        instr = block.add(store_location, store_location, Memory(0, True))
 
         return instr
 

@@ -13,8 +13,8 @@ class Block:
         self.instructions.append(instr)
         return instr
 
-    def lw(self, rt: Memory, rs: Memory, load_value: int):
-        instr = Lw(rt, rs, load_value)
+    def lw(self, rt: Memory, rs: Memory, load_value: int, load_global=False, global_name=""):
+        instr = Lw(rt, rs, load_value, load_global, global_name)
         self.instructions.append(instr)
         return instr
 
