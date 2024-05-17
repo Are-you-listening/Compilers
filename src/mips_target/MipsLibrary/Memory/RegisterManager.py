@@ -1,6 +1,7 @@
 from .Memory import Memory
 from src.internal_tools.IntegrityChecks import PreConditions
 
+
 class RegisterManager:
     __instance = None
 
@@ -10,12 +11,13 @@ class RegisterManager:
 
         self.stack = []
         self.registers: dict[str, Memory | None] = {}  # Maps register names to Memory Objects e.g "v0" : Memory Object
-        self.special_registers = {"v0": None, "v1": None, "a0": None, "a1": None, "a2": None, "a3": None, "fp": Memory(30, True), "sp": Memory(29, True), "ra": None, "zero": None}  # Same as special registers but these may not be regularly used
+        self.special_registers = {"v0": None, "v1": None, "a0": None, "a1": None, "a2": None, "a3": None,
+                                  "fp": Memory(30, True), "sp": Memory(29, True), "ra": None, "zero": None}  # Same as special registers but these may not be regularly used
         self.variable_map = {}  # maps variable names to Memory Objects
 
-        for i in range(0, 2):  # Insert registers
+        for i in range(0, 10):  # Insert registers
             self.registers[f"t{i}"] = None
-        for i in range(0, 2):  # Insert registers
+        for i in range(0, 8):  # Insert registers
             self.registers[f"s{i}"] = None
 
         self.curr_function = None
@@ -195,20 +197,36 @@ class RegisterManager:
 
     def loadIfNeeded(self, block, load_list: list[Memory]):
         """
-        Load a value if it is not loaded on a register
+        Load a values if it is not loaded on a register
+
+        We make sure that the entire list at the end is loaded
+        """
+
+        """
+        If we just loaded a value into a register, it would be a shame we would override it again, so
+        we have a list of everything we just laoded
         """
         loaded = []
 
         for load_mem in load_list:
 
+            """
+            When something is not loaded, we are going to load it
+            """
             if not load_mem.is_loaded:
+                """
+                If no registers are available, we are going to spill everything, that we do not yet need,
+                after spilling at least 1 register will be free
+                """
                 if self.__getFirstFree() is None:
                     for k, v in self.registers.items():
                         if v in loaded or v in load_list:
                             continue
-                        print("spilling", k)
                         self.spill(block, k)
 
+                """
+                Get the free register
+                """
                 f = self.__getFirstFree()
 
                 self.load(block, load_mem, f)
