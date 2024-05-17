@@ -68,9 +68,9 @@ class MipsSingleton:
         """
 
         if format_specifier in self.__strings:
-            return self.__strings.index(format_specifier)
+            return self.__strings.index(format_specifier), True
         else:
             self.__strings.append(format_specifier)
-            return len(self.__strings) - 1
+            return len(self.__strings) - 1, False
 
 

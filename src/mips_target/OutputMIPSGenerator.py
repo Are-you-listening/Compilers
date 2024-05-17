@@ -10,7 +10,9 @@ from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
 from src.mips_target.MipsLibrary import *
 from .MipsSingleton import MipsSingleton
 
+
 class UnaryWrapper:
+
     @staticmethod
     def Plus(mips_val):
         return mips_val
@@ -21,6 +23,8 @@ class UnaryWrapper:
         store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
         instr = block.neg(store_reg, mips_val)
         return instr
+
+
 
     @staticmethod
     def BitNot(mips_val):
@@ -87,11 +91,9 @@ class Declaration:
     @staticmethod
     def assignment(store_location: Memory, to_store: Memory):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        if isinstance(to_store, str):
-            block.lw(store_location, store_location, 0, load_global=True, global_name=to_store)
-            instr = block.add(store_location, store_location, Memory(0, True))
-        else:
-            instr = block.add(store_location, to_store, Memory(0, True))
+
+        instr = block.add(to_store, Memory(0, True), store_location)
+
         return instr
 
     @staticmethod
@@ -125,9 +127,12 @@ class Declaration:
         """
         text = text[:-1]
 
-        index = MipsSingleton.getInstance().getStringIndex(text)
+        index, found = MipsSingleton.getInstance().getStringIndex(text)
+
         label = f"str{index}"
-        MipsSingleton.getInstance().getModule().addDataSegment(label, f""" "{text}" """, ".asciiz")
+        if not found:
+
+            MipsSingleton.getInstance().getModule().addDataSegment(label, f""" "{text}" """, ".asciiz")
 
         block = MipsSingleton.getInstance().getCurrentBlock()
         store_reg = RegisterManager.getInstance().allocate(block)
@@ -199,22 +204,20 @@ class Printf:
         """
         load value 11, to register v0, so the system call prints a char
         """
-        temp_reg = print_char_loop.addui(zero, 11)
-        temp_reg.overrideMemory(v0)
+        temp_reg = print_char_loop.addui(zero, 11, v0)
 
         """
         In case our char is a '%' (37 decimal), we see it as a special token, and we will check what we need to 
         print instead
         """
-        temp_reg = print_char_loop.addui(zero, 37)
-        temp_reg.overrideMemory(t4)
+        temp_reg = print_char_loop.addui(zero, 37, t4)
 
         print_char_loop.beq(t1, t4, print_char_special_token.label)
 
         """
         store $t1, char value in $a0 for system call
         """
-        print_char_special_token_after.add(a0, zero, t1)
+        temp_reg = print_char_special_token_after.add(zero, t1, a0)
 
         """
         Execute the print system call
@@ -224,8 +227,7 @@ class Printf:
         """
         Increase the format string ptr by 1
         """
-        temp_reg = print_char_special_token_after.addui(t0, 1)
-        temp_reg.overrideMemory(t0)
+        temp_reg = print_char_special_token_after.addui(t0, 1, t0)
 
         print_char_special_token_after.j(print_char_loop.label)
 
@@ -241,30 +243,26 @@ class Printf:
         special_token = print_char_special_token.lb(t0, 0)
         special_token.overrideMemory(t2)
 
-        temp_reg = print_char_special_token.addui(zero, 100)
-        temp_reg.overrideMemory(t4)
+        temp_reg = print_char_special_token.addui(zero, 100, t4)
 
         print_char_special_token.beq(t2, t4, print_char_special_token_d.label)
 
-        temp_reg = print_char_special_token.addui(zero, 99)
-        temp_reg.overrideMemory(t4)
+        temp_reg = print_char_special_token.addui(zero, 99, t4)
 
         print_char_special_token.beq(t2, t4, print_char_special_token_c.label)
 
-        temp_reg = print_char_special_token.addui(zero, 115)
-        temp_reg.overrideMemory(t4)
+        temp_reg = print_char_special_token.addui(zero, 115, t4)
 
         print_char_special_token.beq(t2, t4, print_char_special_token_s.label)
 
-        temp_reg = print_char_special_token.addui(zero, 120)
-        temp_reg.overrideMemory(t4)
+        temp_reg = print_char_special_token.addui(zero, 120, t4)
 
         print_char_special_token.beq(t2, t4, print_char_special_token_x.label)
 
         """
         move $t1, $t2
         """
-        print_char_special_token_after.add(lb_instr, zero, t2)
+        print_char_special_token_after.add(zero, t2, t1)
 
         """
         After checking special character, go to block to do the print
@@ -341,7 +339,8 @@ class Printf:
         """
         Take last 4 bytes
         """
-        print_char_special_token_x.srl(t1, t1, 4)
+        temp_reg = print_char_special_token_x.srl(t1, 4)
+        temp_reg.overrideMemory(t1)
 
         """
         Print it to ascii character range starting with '0'
@@ -352,13 +351,16 @@ class Printf:
         temp_reg = print_char_special_token_x.addui(zero, 58)
         temp_reg.overrideMemory(t5)
 
-        print_char_special_token_x.div(t4, t1, t5)
+        temp_reg = print_char_special_token_x.div(t1, t5)
+        temp_reg.overrideMemory(t4)
         print_char_special_token_x.mflo(t4)
-        print_char_special_token_x.andi(t5, t4, 1)
+        temp_reg = print_char_special_token_x.andi(t4, 1)
+        temp_reg.overrideMemory(t5)
         temp_reg = print_char_special_token_x.addi(t4, 38)
         temp_reg.overrideMemory(t4)
-        print_char_special_token_x.mul(t5, t5, t4)
-        print_char_special_token_x.add(t1, t5, t1)
+        temp_reg = print_char_special_token_x.mul(t5, t4)
+        temp_reg.overrideMemory(t5)
+        print_char_special_token_x.add(t5, t1, t1)
 
         """
         Display first 4 bits as hex
@@ -366,7 +368,8 @@ class Printf:
         temp_reg = print_char_special_token_x.addui(zero, 11)
         temp_reg.overrideMemory(v0)
 
-        print_char_special_token_x.add(a0, zero, t1)
+        print_char_special_token_x.add(zero, t1, a0)
+
         print_char_special_token_x.systemCall()
 
         """
@@ -379,8 +382,10 @@ class Printf:
         """
         Wipe all expect last 4 bites
         """
-        print_char_special_token_x.sll(t1, t1, 28)
-        print_char_special_token_x.srl(t1, t1, 28)
+        temp_reg = print_char_special_token_x.sll(t1, 28)
+        temp_reg.overrideMemory(t1)
+        temp_reg = print_char_special_token_x.srl(t1, 28)
+        temp_reg.overrideMemory(t1)
 
         """
         Print it to ascii character range starting with '0'
@@ -391,13 +396,16 @@ class Printf:
         temp_reg = print_char_special_token_x.addui(zero, 58)
         temp_reg.overrideMemory(t5)
 
-        print_char_special_token_x.div(t4, t1, t5)
+        temp_reg = print_char_special_token_x.div(t1, t5)
+        temp_reg.overrideMemory(t4)
         print_char_special_token_x.mflo(t4)
-        print_char_special_token_x.andi(t5, t4, 1)
+        temp_reg = print_char_special_token_x.andi(t4, 1)
+        temp_reg.overrideMemory(t5)
         temp_reg = print_char_special_token_x.addi(t4, 38)
         temp_reg.overrideMemory(t4)
-        print_char_special_token_x.mul(t5, t5, t4)
-        print_char_special_token_x.add(t1, t5, t1)
+        temp_reg = print_char_special_token_x.mul(t5, t4)
+        temp_reg.overrideMemory(t5)
+        print_char_special_token_x.add(t5, t1, t1)
 
         temp_reg = print_char_special_token_x.addui(t3, 4)
         temp_reg.overrideMemory(t3)
@@ -411,17 +419,15 @@ class Printf:
         temp_reg.overrideMemory(v0)
 
         function.endFunction()
-
         return function
 
 
 class Calculation:
     @staticmethod
-    def modulo(store_reg, left, right):
+    def modulo(left, right):
         block = MipsSingleton.getInstance().getCurrentBlock()
-
-        block.div(store_reg, left, right)
-        instr = block.mfhi(store_reg)
+        div_var = block.div(left, right)
+        instr = block.mfhi(div_var)
 
         return instr
 
@@ -446,8 +452,9 @@ class Calculation:
                         "|": block.mips_or,
                         "^": block.xor
                         }
+
         mips_op = op_translate.get(operator, None)
-        instr = mips_op(store_reg, left, right)
+        instr = mips_op(left, right)
 
         return instr
 
@@ -465,12 +472,9 @@ class Calculation:
         return mips_var
 
 
-
-
-
 class Function:
     @staticmethod
-    def functionCall(return_register: Memory, func_name, params: list[Memory]):
+    def functionCall(func_name, params: list[Memory]):
         """
         Handle a function call
         """
@@ -483,6 +487,8 @@ class Function:
 
         block = MipsSingleton.getInstance().getCurrentBlock()
         block.jal(f"function_{func_name.getFunctionName()}")
+
+        Function.loadParameters(params)
 
         """
         Store the return value in a specific register
@@ -502,9 +508,31 @@ class Function:
         alloc_size = (len(params)+1)*4
         sp_frame = Memory(29, True)
 
+        RegisterManager.getInstance().loadIfNeeded(block, params)
+
         block.addui(sp_frame, -alloc_size, sp_frame)
         for i, p in enumerate(params):
             block.sw(p, sp_frame, (i+1)*4)
+
+    @staticmethod
+    def loadParameters(params: list[Memory]):
+        """
+        Load parameters on the stack for later use
+        """
+
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        """
+        allocate stack memory
+        """
+        alloc_size = (len(params) + 1) * 4
+        sp_frame = Memory(29, True)
+
+        for i, p in enumerate(params):
+            print(p.address, p.is_loaded)
+            print(sp_frame)
+            block.lw(sp_frame, (i + 1) * 4, p)
+
+        block.addui(sp_frame, alloc_size, sp_frame)
 
     @staticmethod
     def handleReturn(return_value: Memory):

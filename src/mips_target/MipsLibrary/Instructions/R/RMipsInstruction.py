@@ -1,4 +1,4 @@
-from src.mips_target.MipsLibrary.Memory.Memory import Memory
+from src.mips_target.MipsLibrary.Memory import Memory, RegisterManager
 from abc import abstractmethod
 from ..Instruction import Instruction
 
@@ -8,6 +8,8 @@ class RMipsInstruction(Instruction):
         self.rs = rs.getAddress()
         self.rt = rt.getAddress()
         self.rd = rd.getAddress()
+        self.return_value = rd
+        self.return_value.from_block = self
         self.shamt = shamt
 
     @abstractmethod
@@ -15,7 +17,9 @@ class RMipsInstruction(Instruction):
         pass
 
     def getAddress(self):
-        return self.rd
+        return self.return_value
 
     def overrideMemory(self, other: "Memory"):
+
         self.rd = other.getAddress()
+        self.return_value = Memory(other.getAddress(), other.is_loaded)

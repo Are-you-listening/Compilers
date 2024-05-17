@@ -227,9 +227,7 @@ class AST2MIPS(ASTVisitor):
             mips = self.mips_map.get(c)
             params.append(mips)
 
-        block = MipsSingleton.getInstance().getCurrentBlock()
-        store_reg = Memory(None, False)
-        Function.functionCall(store_reg, function, params)
+        Function.functionCall(function, params)
 
     def handleOperations(self, node: ASTNode):
         """

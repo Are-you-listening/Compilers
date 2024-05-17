@@ -17,7 +17,7 @@ class Function:
         self.createBlock()
 
     def getOffset(self):
-        return len(self.frame_registers)
+        return len(self.frame_registers)*4
 
     def endFunction(self):
 
@@ -50,7 +50,7 @@ class Function:
         """
         Equivalent to move $fp, $sp
         """
-        store_frame_block.add(fp_register, sp_register, zero_register)
+        store_frame_block.add(sp_register, zero_register, fp_register, False)
 
         """
         Allocate the needed stack space
@@ -85,7 +85,7 @@ class Function:
         """
         Equivalent to move $fp, $sp
         """
-        load_frame_block.add(sp_register, fp_register, zero_register)
+        load_frame_block.add(fp_register, zero_register, sp_register, False)
         load_frame_block.lw(sp_register, 0, fp_register)
 
         return load_frame_block

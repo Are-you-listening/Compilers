@@ -13,9 +13,9 @@ class RegisterManager:
         self.special_registers = {"v0": None, "v1": None, "a0": None, "a1": None, "a2": None, "a3": None, "fp": Memory(30, True), "sp": Memory(29, True), "ra": None, "zero": None}  # Same as special registers but these may not be regularly used
         self.variable_map = {}  # maps variable names to Memory Objects
 
-        for i in range(0, 10):  # Insert registers
+        for i in range(0, 2):  # Insert registers
             self.registers[f"t{i}"] = None
-        for i in range(0, 8):  # Insert registers
+        for i in range(0, 2):  # Insert registers
             self.registers[f"s{i}"] = None
 
         self.curr_function = None
@@ -63,14 +63,16 @@ class RegisterManager:
         Spill a register to memory
         :return:
         """
+
         if block.function != self.curr_function:
+            self.curr_function = block.function
             self.counter = 0
         self.counter += 4
 
         sp = self.getMemoryObject("sp")
         var = self.getMemoryObject(reg)
         block.addui(sp, -4, sp)  # Adjust frame/stack ptr
-        block.sw(var, sp, 4)  # Store to new ptr
+        block.sw(var, sp, 4, False)  # Store to new ptr
         var.is_loaded = False
         var.address = block.function.getOffset()+self.counter
         self.registers[reg] = None
@@ -80,14 +82,11 @@ class RegisterManager:
         Load value from a memory location into a register with name reg
         """
         offset = var.address
-        if self.registers.get(reg, None) is not None:
-            self.registers[reg] = var
-            var.address = reg
-        else:
-            self.special_registers[reg] = var
-            var.address = reg
+        self.registers[reg] = var
+        var.address = reg
         var.is_loaded = True
-        block.lw(self.getMemoryObject("fp"), offset, var)
+
+        block.lw(self.getMemoryObject("fp"), -offset, var)
 
     def getRegister(self, var: Memory):
         """
@@ -128,6 +127,7 @@ class RegisterManager:
 
         store_register = Memory(None, False)
         free_register = self.__getFirstFree()
+
         if free_register is None:
             for key in self.registers.keys():
                 self.spill(block, key)
@@ -159,7 +159,6 @@ class RegisterManager:
         """
         Reverse the effects of framePtrStore after a function
         """
-
         PreConditions.assertInstanceOff(mem_object, Memory)
         PreConditions.assertTrue(not mem_object.is_loaded)
 
@@ -193,6 +192,31 @@ class RegisterManager:
 
             registers.append(mem)
         return registers
+
+    def loadIfNeeded(self, block, load_list: list[Memory]):
+        """
+        Load a value if it is not loaded on a register
+        """
+        loaded = []
+
+        for load_mem in load_list:
+
+            if not load_mem.is_loaded:
+                if self.__getFirstFree() is None:
+                    for k, v in self.registers.items():
+                        if v in loaded or v in load_list:
+                            continue
+                        print("spilling", k)
+                        self.spill(block, k)
+
+                f = self.__getFirstFree()
+
+                self.load(block, load_mem, f)
+
+                self.registers[f] = load_mem
+
+            loaded.append(load_mem)
+
 
 
 
