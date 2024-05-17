@@ -179,7 +179,8 @@ class Printf:
         """
         Load format string in t0
         """
-        print_base_block.lw(t3, 0, t0)
+        temp_reg = print_base_block.lw(t3, 0)
+        temp_reg.overrideMemory(t0)
 
         """
         Increase the parameter counter by 1 param
@@ -275,7 +276,8 @@ class Printf:
         temp_reg = print_char_special_token_d.addui(zero, 1)
         temp_reg.overrideMemory(v0)
 
-        print_char_special_token_d.lw(t3, 0, t1)
+        temp_reg = print_char_special_token_d.lw(t3, 0)
+        temp_reg.overrideMemory(t1)
         temp_reg = print_char_special_token_d.addui(t3, 4)
         temp_reg.overrideMemory(t3)
 
@@ -309,7 +311,9 @@ class Printf:
         temp_reg = print_char_special_token_s.addui(zero, 4)
         temp_reg.overrideMemory(v0)
 
-        print_char_special_token_s.lw(t3, 0, t1)
+        temp_reg = print_char_special_token_s.lw(t3, 0)
+        temp_reg.overrideMemory(t1)
+
         temp_reg = print_char_special_token_s.addui(t3, 4)
         temp_reg.overrideMemory(t3)
         print_char_special_token_s.j(print_char_special_token_end_if.label)
@@ -525,9 +529,7 @@ class Function:
         sp_frame = Memory(29, True)
 
         for i, p in enumerate(params):
-            print(p.address, p.is_loaded)
-            print(sp_frame)
-            block.lw(sp_frame, (i + 1) * 4, p)
+            block.lw_function(sp_frame, (i + 1) * 4, p)
 
         block.addui(sp_frame, alloc_size, sp_frame)
 

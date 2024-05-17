@@ -14,11 +14,31 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
-    def lw(self, rs: Memory, load_value: int, rt: Memory = None, load_global=False, global_name=""):
+    def lw(self, rs: Memory, load_value: int, load_global=False, global_name=""):
+        """
+        load word function
 
-        if rt is None:
-            rt = RegisterManager.getInstance().allocate(self)
+        :param rs:
+        :param load_value:
+        :param rt:
+        :param load_global:
+        :param global_name:
+        :return:
+        """
+        rt = RegisterManager.getInstance().allocate(self)
+        RegisterManager.getInstance().loadIfNeeded(self, [rs])
+
         instr = Lw(rt, rs, load_value, load_global, global_name)
+        self.instructions.append(instr)
+        return instr.getAddress()
+
+    def lw_function(self, rs: Memory, load_value: int, rt: Memory):
+        """
+        This LW function is used for function frame ptr and RegisterManager, and LoadParameters overhead ONLY.
+        The reason it is, is because we cannot have any spill overhead during this procedure
+
+        """
+        instr = Lw(rt, rs, load_value, False, "")
         self.instructions.append(instr)
         return instr.getAddress()
 

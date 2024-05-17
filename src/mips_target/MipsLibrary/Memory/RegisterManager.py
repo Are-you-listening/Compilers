@@ -88,7 +88,7 @@ class RegisterManager:
         var.address = reg
         var.is_loaded = True
 
-        block.lw(self.getMemoryObject("fp"), -offset, var)
+        block.lw_function(self.getMemoryObject("fp"), -offset, var)
 
     def getRegister(self, var: Memory):
         """
@@ -204,7 +204,7 @@ class RegisterManager:
 
         """
         If we just loaded a value into a register, it would be a shame we would override it again, so
-        we have a list of everything we just laoded
+        we have a list of everything we just loaded
         """
         loaded = []
 
@@ -220,6 +220,10 @@ class RegisterManager:
                 """
                 if self.__getFirstFree() is None:
                     for k, v in self.registers.items():
+                        """
+                        Skip all loaded registers, and registers in the load list (because we don't want to override)
+                        those
+                        """
                         if v in loaded or v in load_list:
                             continue
                         self.spill(block, k)
@@ -229,10 +233,19 @@ class RegisterManager:
                 """
                 f = self.__getFirstFree()
 
+                """
+                Load the value from the stack onto the free register
+                """
                 self.load(block, load_mem, f)
 
+                """
+                Add the register to loaded, without any overhead
+                """
                 self.registers[f] = load_mem
 
+            """
+            Store this register among the loaded
+            """
             loaded.append(load_mem)
 
 

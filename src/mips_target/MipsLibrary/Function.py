@@ -79,14 +79,14 @@ class Function:
             """
             Store the registers on the frame ptr stack space (code scoping)
             """
-            load_frame_block.lw(fp_register, -(i+1)*4, r)
+            load_frame_block.lw_function(fp_register, -(i+1)*4, r)
             RegisterManager.getInstance().framePtrLoad(r)
 
         """
         Equivalent to move $fp, $sp
         """
         load_frame_block.add(fp_register, zero_register, sp_register, False)
-        load_frame_block.lw(sp_register, 0, fp_register)
+        load_frame_block.lw_function(sp_register, 0, fp_register)
 
         return load_frame_block
 
