@@ -90,8 +90,9 @@ class Declaration:
         block = MipsSingleton.getInstance().getCurrentBlock()
         if isinstance(to_store, str):
             block.lw(store_location, store_location, 0, load_global=True, global_name=to_store)
-        instr = block.add(store_location, store_location, Memory(0, True))
-
+            instr = block.add(store_location, store_location, Memory(0, True))
+        else:
+            instr = block.add(store_location, to_store, Memory(0, True))
         return instr
 
     @staticmethod

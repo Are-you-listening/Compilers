@@ -6,4 +6,4 @@ class Li(IMipsInstruction):
         super().__init__(rt=rt,rs=rt,  immediate=load_value)
 
     def toString(self):
-        return f"li ${self.rt} {self.immediate}"
+        return f"li ${self.rt}, {self.immediate}"
