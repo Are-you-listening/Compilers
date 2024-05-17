@@ -6,4 +6,4 @@ class Sll(RMipsInstruction):
         super().__init__(rd=rd, rt=rt, shamt=shamt, rs=rd)
 
     def toString(self):
-        return f"sll ${self.rd}, ${self.rt} ,{self.shamt}"
+        return f"sll ${self.rd}, ${self.rt}, {self.shamt}"

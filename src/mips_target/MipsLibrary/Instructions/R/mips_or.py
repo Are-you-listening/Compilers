@@ -6,5 +6,5 @@ class Or(RMipsInstruction):
         super().__init__(rd=rd, rs=rs, rt=rt)
 
     def toString(self):
-        return f"or ${self.rd} {self.rs} {self.rt}"
+        return f"or ${self.rd}, ${self.rs}, ${self.rt}"
 

@@ -6,4 +6,4 @@ class And(RMipsInstruction):
         super().__init__(rd=rd, rs=rs, rt=rt)
 
     def toString(self):
-        return f"and ${self.rd} {self.rs} {self.rt}"
+        return f"and ${self.rd}, ${self.rs}, ${self.rt}"

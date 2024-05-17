@@ -6,4 +6,4 @@ class Nor(RMipsInstruction):
         super().__init__(rd=rd, rs=rs, rt=rt)
 
     def toString(self):
-        return f"nor ${self.rd} {self.rs} {self.rt}"
+        return f"nor ${self.rd}, ${self.rs}, ${self.rt}"

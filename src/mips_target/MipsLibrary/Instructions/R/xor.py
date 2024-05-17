@@ -6,4 +6,4 @@ class Xor(RMipsInstruction):
         super().__init__(rd=rd, rs=rs, rt=rt)
 
     def toString(self):
-        return f"xor ${self.rd} {self.rs} {self.rt}"
+        return f"xor ${self.rd}, ${self.rs}, ${self.rt}"

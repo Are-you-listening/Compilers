@@ -10,8 +10,17 @@ from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
 from src.mips_target.MipsLibrary import *
 from .MipsSingleton import MipsSingleton
 
+class UnaryWrapper:
+    def Plus(mips_val):
+        return mips_val
 
+    def Min(mips_val):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
+        instr = block.neg(store_reg, mips_val)
+        return instr
 class Declaration:
+
 
     @staticmethod
     def function(func_name: str, return_type: SymbolType, args: list):
@@ -333,6 +342,14 @@ class Printf:
 
 
 class Calculation:
+    @staticmethod
+    def modulo(store_reg, left, right):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+
+        block.div(store_reg, left, right)
+        instr = block.mfhi(store_reg)
+
+        return instr
 
     @staticmethod
     def operation(left, right, operator):
@@ -361,13 +378,20 @@ class Calculation:
         return instr
 
     @staticmethod
-    def modulo(store_reg, left, right):
-        block = MipsSingleton.getInstance().getCurrentBlock()
+    def unary(mips_val, op: str):
+        op_translate = {"-": UnaryWrapper.Min,
+                        "+": UnaryWrapper.Plus,
+                        "~": UnaryWrapper.BitNot,
+                        "!": UnaryWrapper.LogicalNot,
+                        "++": UnaryWrapper.Incr,
+                        "--": UnaryWrapper.Decr
+                        }
+        mips_op = op_translate.get(op, None)
+        mips_var = mips_op(mips_val)
+        return mips_var
 
-        block.div(store_reg, left, right)
-        instr = block.mfhi(store_reg)
 
-        return instr
+
 
 
 class Function:

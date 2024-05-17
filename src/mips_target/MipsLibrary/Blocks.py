@@ -146,6 +146,11 @@ class Block:
         self.instructions.append(instr)
         return instr
 
+    def neg(self, rd: Memory, rs: Memory):
+        instr =Neg(rd, rs)
+        self.instructions.append(instr)
+        return instr
+
     def mflo(self, rd: Memory):
         instr = Mflo(rd)
         self.instructions.append(instr)
@@ -170,6 +175,7 @@ class Block:
         instr = Comment(text)
         self.instructions.append(instr)
         return instr
+
 
     def toString(self):
         s = ""
