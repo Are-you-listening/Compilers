@@ -234,6 +234,30 @@ class AST2MIPS(ASTVisitor):
         :param node:
         :return:
         """
+        if node.getChildAmount() == 2:
+            operator = node.getChild(0).text
+            child = node.getChild(1)
+            post_incr = False
+
+            if child.text in ("++", "--"):
+                operator = child.text
+                child = node.getChild(0)
+                post_incr = True
+
+            child_mips = self.mips_map[child]
+            mips_var = Calculation.unary(child_mips, operator)
+
+            if operator in ("++", "--"):
+                super_child = child.getChild(0)
+
+                u = self.mips_map[super_child]
+
+                Declaration.assignment(u, mips_var)
+
+            if post_incr:
+                mips_var = child_mips
+
+
         if node.getChildAmount() == 3:
 
             operator_child = node.getChild(1)
@@ -244,7 +268,7 @@ class AST2MIPS(ASTVisitor):
 
             mips_var = Calculation.operation(left, right, operator)
 
-            self.mips_map[node] = mips_var
+        self.mips_map[node] = mips_var
 
     def handleConversions(self, node: ASTNode):
         pass

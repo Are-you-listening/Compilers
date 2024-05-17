@@ -11,13 +11,42 @@ from src.mips_target.MipsLibrary import *
 from .MipsSingleton import MipsSingleton
 
 class UnaryWrapper:
+    @staticmethod
     def Plus(mips_val):
         return mips_val
 
+    @staticmethod
     def Min(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
         store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
         instr = block.neg(store_reg, mips_val)
+        return instr
+
+    @staticmethod
+    def BitNot(mips_val):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
+        instr = block.nor(store_reg, mips_val, Memory(0, True))
+        return instr
+
+    @staticmethod
+    def LogicalNot(mips_val):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
+        instr = block.sltiu(store_reg, mips_val, 1)
+        return instr
+
+    @staticmethod
+    def Incr(mips_val):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
+        instr = block.addi(store_reg, mips_val, 1)
+        return instr
+    @staticmethod
+    def Decr(mips_val):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
+        instr = block.addi(store_reg, mips_val, -1)
         return instr
 class Declaration:
 
