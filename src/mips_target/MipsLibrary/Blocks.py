@@ -148,7 +148,8 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
-    def nor(self, rd: Memory, rs: Memory, rt: Memory):
+    def nor(self, rs: Memory, rt: Memory):
+        rd = RegisterManager.getInstance().allocate(self)
         RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
         instr = Nor(rd, rs, rt)
         self.instructions.append(instr)
@@ -217,8 +218,12 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
-    def neg(self, rd: Memory, rs: Memory):
-        instr =Neg(rd, rs)
+    def neg(self, rs: Memory):
+        rd = RegisterManager.getInstance().allocate(self)
+
+        RegisterManager.getInstance().loadIfNeeded(self, [rd, rs])
+
+        instr = Neg(rd, rs)
         self.instructions.append(instr)
         return instr.getAddress()
 

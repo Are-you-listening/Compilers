@@ -20,8 +20,7 @@ class UnaryWrapper:
     @staticmethod
     def Min(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
-        instr = block.neg(store_reg, mips_val)
+        instr = block.neg(mips_val)
         return instr
 
 
@@ -29,29 +28,27 @@ class UnaryWrapper:
     @staticmethod
     def BitNot(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
-        instr = block.nor(store_reg, mips_val, Memory(0, True))
+        instr = block.nor(mips_val, Memory(0, True))
         return instr
 
     @staticmethod
     def LogicalNot(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
-        instr = block.sltiu(store_reg, mips_val, 1)
+        instr = block.sltiu(mips_val, 1)
         return instr
 
     @staticmethod
     def Incr(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
-        instr = block.addi(store_reg, mips_val, 1)
+        instr = block.addi(mips_val, 1)
         return instr
     @staticmethod
     def Decr(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        store_reg = RegisterManager.getInstance().allocate(block, Memory(None, False))
-        instr = block.addi(store_reg, mips_val, -1)
+        instr = block.addi(mips_val, -1)
         return instr
+
+
 class Declaration:
 
 
