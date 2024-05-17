@@ -38,7 +38,7 @@ from src.parser.ArrayPreProcessor import ArrayPreProcessor
 from TestCases.ABCTests.AstLoader import AstLoader
 from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 from src.parser.ScopeCleaner import ScopeCleaner
-from src.mips_target.AST2MIPS import AST2MIPS
+from src.mips_target.AST2MIPS import AST2MIPS, MipsSingleton
 
 
 def cleanGreen(input_file, symbol_file):
@@ -249,4 +249,5 @@ def main(argv):
 if __name__ == '__main__':
     main(sys.argv)
     LLVMSingleton.getInstance().clear()
+    MipsSingleton.getInstance().clear()
 

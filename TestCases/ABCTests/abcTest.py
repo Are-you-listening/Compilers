@@ -188,7 +188,7 @@ class LLVMTest(unittest.TestCase, ABC):
                     """
                     Remove generated llvm file again
                     """
-                    subprocess.run(f"rm temp/temp.ll", shell=True, capture_output=True)
+                    self.cleanup()
 
                     """
                     Double check that errors are as expected
@@ -244,6 +244,9 @@ class LLVMTest(unittest.TestCase, ABC):
 
         return c_out
 
+    def cleanup(self):
+        subprocess.run(f"rm temp/temp.ll", shell=True, capture_output=True)
+
     @staticmethod
     def run_compiler(inp: str, file_name: str , fold: str):
         main([0, "--input", file_name, "--target_llvm", f"temp/temp.ll", "--fold", fold, "--unused_var",
@@ -255,10 +258,6 @@ class MipsTest(LLVMTest):
     """
     Test to execute Mips and compare the output with an expect output
     """
-
-    def MIPS_test(self, abspath, useSTDIN=False):
-        self.LLVM_test(abspath,useSTDIN)
-
     @staticmethod
     def run_compiler(inp: str, file_name: str, fold: str):
         """
@@ -271,15 +270,17 @@ class MipsTest(LLVMTest):
         main([0, "--input", file_name, "--target_mips", f"temp/temp.asm", "--fold", fold, "--unused_var",
               "True"])  # Run our compiler
 
-        mars = os.path.abspath(__file__)[:-10]+"Mars4_5.jar"
-
-        c_out = subprocess.run(f"java -jar {mars} temp/temp.asm", shell=True, capture_output=True, text=True, input=inp)
+        c_out = subprocess.run(f"spim -file temp/temp.asm", shell=True, capture_output=True, text=True, input=inp)
 
         output = c_out.stdout
         if output == "":
             c_out.stdout = ""
         else:
-            output = output[output.find("\n\n")+2:]
-            output = output[:-1]
+            #to_remove = "SPIM Version 8.0 of January 8, 2010\nCopyright 1990-2010, James R. Larus.\nAll Rights Reserved.\nSee the file README for a full copyright notice.\nLoaded: /usr/lib/spim/exceptions.s\n"
+            #a = len(to_remove)
+            output = output[178:]
             c_out.stdout = output
         return c_out
+
+    def cleanup(self):
+        subprocess.run(f"rm temp/temp.asm", shell=True, capture_output=True)
