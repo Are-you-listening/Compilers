@@ -9,21 +9,8 @@ class Block:
         self.function = function
 
     def li(self, rt: Memory, immediate: int):
-        if -32768 <= immediate <= 32767:
-            instr = Addi(rt, Memory(0, True), immediate)
-            self.instructions.append(instr)
-        else:
-            upper = (immediate >> 16) & 0xFFFF
-            lower = immediate & 0xFFFF
-            if upper:
-                instr = Lui(rt, upper)
-                self.instructions.append(instr)
-                if lower:
-                    instr = Ori(rt, rt, lower)
-                    self.instructions.append(instr)
-            else:
-                instr = Ori(rt, Memory(0, True), lower)
-                self.instructions.append(instr)
+        instr = Li(rt, immediate)
+        self.instructions.append(instr)
         return instr
 
     def lw(self, rt: Memory, rs: Memory, load_value: int):
@@ -56,8 +43,8 @@ class Block:
         self.instructions.append(instr)
         return instr
 
-    def bne(self, rt: Memory, rs: Memory):
-        instr = Bne(rt, rs)
+    def bne(self, rt: Memory, rs: Memory, label: str):
+        instr = Bne(rt, rs, label)
         self.instructions.append(instr)
         return instr
 
