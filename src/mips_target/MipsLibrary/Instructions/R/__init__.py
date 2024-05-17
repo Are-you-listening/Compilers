@@ -12,3 +12,4 @@ from .sub import Sub
 from .mul import Mul
 from .div import Div
 from .mflo import Mflo
+from .mfhi import Mfhi

@@ -244,7 +244,7 @@ class AST2MIPS(ASTVisitor):
 
             mips_var = Calculation.operation(left, right, operator)
 
-        self.mips_map[node] = mips_var
+            self.mips_map[node] = mips_var
 
     def handleConversions(self, node: ASTNode):
         pass

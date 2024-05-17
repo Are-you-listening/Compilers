@@ -146,6 +146,11 @@ class Block:
         self.instructions.append(instr)
         return instr
 
+    def mfhi(self, rd: Memory):
+        instr = Mfhi(rd)
+        self.instructions.append(instr)
+        return instr
+
     def jal(self, label: str):
         instr = Jal(label)
         self.instructions.append(instr)

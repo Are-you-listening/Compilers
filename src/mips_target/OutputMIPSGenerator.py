@@ -345,10 +345,22 @@ class Calculation:
 
         op_translate = {"+": block.add,
                         "-": block.sub,
-                        "()": Function.functionCall
+                        "()": Function.functionCall,
+                        "*": block.mul,
+                        "/": block.div,
+                        "%": Calculation.modulo,
                         }
         mips_op = op_translate.get(operator, None)
         instr = mips_op(store_reg, left, right)
+
+        return instr
+
+    @staticmethod
+    def modulo(store_reg, left, right):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+
+        block.div(store_reg, left, right)
+        instr = block.mfhi(store_reg)
 
         return instr
 
