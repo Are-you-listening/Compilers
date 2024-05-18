@@ -10,10 +10,7 @@ int main() {
     struct a c;
     c.d = 5;
 
-    struct a* e = &c;
-
-
-    printf("%d", e->d);
+    printf("%d", c.d);
 
     return 0;
 }

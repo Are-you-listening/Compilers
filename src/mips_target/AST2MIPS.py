@@ -160,6 +160,8 @@ class AST2MIPS(ASTVisitor):
         if node.type in ("INT", "FLOAT", "CHAR", "BOOL"):
             mips_var = Declaration.mipsLiteral(node.text, SymbolType(node.type, False))
             self.mips_map[node] = mips_var
+            if node.type == "INT":
+                mips_var.const_value = int(node.text)
 
         if node.type == "STRING":
             mips_var = Declaration.string(node.text)

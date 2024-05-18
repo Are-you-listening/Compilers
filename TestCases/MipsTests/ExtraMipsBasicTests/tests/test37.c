@@ -1,19 +1,20 @@
 #include <stdio.h>
 
-struct a{
+union a{
     int b[20];
     int d;
 
 };
 
 int main() {
-    struct a c;
+    union a c;
     c.d = 5;
 
-    struct a* e = &c;
+    printf("%d", c.d);
 
+    c.b[2] = 5;
 
-    printf("%d", e->d);
+    printf("%d", c.b[2]);
 
     return 0;
 }

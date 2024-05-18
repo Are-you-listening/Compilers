@@ -14,21 +14,42 @@ from .MipsSingleton import MipsSingleton
 class AccessWrapper:
 
     @staticmethod
-    def access(location: Memory, index):
+    def access(location: Memory, index: Memory):
 
         block = MipsSingleton.getInstance().getCurrentBlock()
 
         symbol_type = location.symbol_type
 
         offset = 4
+        is_struct = False
         if isinstance(symbol_type, SymbolTypePtr):
-            if isinstance(symbol_type.deReference(), SymbolTypeArray):
-                offset = max(symbol_type.pts_to.pts_to.getBytesUsed(), 4)
+            target = symbol_type.deReference()
+            if isinstance(target, SymbolTypeArray):
+                offset = max(target.pts_to.getBytesUsed(), 4)
+                symbol_type = target
 
-        multiplier = block.li(offset)
-        real_index = block.mul(index, multiplier)
-        instr = block.addu(location, real_index)
-        instr.symbol_type = symbol_type.deReference()
+            if isinstance(target, SymbolTypeStruct):
+
+                """
+                Special case, where the terminal int is encoded into a SymbolType
+                """
+                i = index.const_value
+                offset = 0
+                for i in range(0, i+1):
+                    symbol_type = target.getElementType(i)
+                    temp_offset = max(symbol_type.getBytesUsed(), 4)
+                    offset += temp_offset
+                is_struct = True
+
+        if not is_struct:
+            multiplier = block.li(offset)
+            real_index = block.mul(index, multiplier)
+            instr = block.addu(location, real_index)
+        else:
+            real_index = block.li(offset)
+            instr = block.addu(location, real_index)
+
+        instr.symbol_type = symbol_type
 
         return instr
 

@@ -7,6 +7,10 @@ class Memory:
         self.is_loaded = is_loaded
         self.from_block = None
         self.symbol_type: SymbolType = None
+        """
+        encode consts that we need at runtime
+        """
+        self.const_value: int = None
 
     def __str__(self):
         return str(self.address)
