@@ -1,6 +1,6 @@
 from .Memory import Memory
 from src.internal_tools.IntegrityChecks import PreConditions
-
+import math
 
 class RegisterManager:
     __instance = None
@@ -276,7 +276,7 @@ class RegisterManager:
             """
             loaded.append(load_mem)
 
-    def storeVariable(self, block, value: Memory):
+    def storeVariable(self, block, value: Memory, byte_size: int):
         self.loadIfNeeded(block, [value])
 
         if block.function.getFunctionName() not in self.curr_function:
@@ -284,12 +284,14 @@ class RegisterManager:
 
         counter = self.curr_function[block.function.getFunctionName()]
 
-        counter += 4
+        needed = math.ceil(byte_size/4)*4
+
+        counter += needed
         self.curr_function[block.function.getFunctionName()] = counter
 
         sp = self.getMemoryObject("sp")
 
-        block.addui_function(sp, -4, sp)  # Adjust frame/stack ptr
+        block.addui_function(sp, -needed, sp)  # Adjust frame/stack ptr
         block.sw_spill(value, sp, 4)  # Store to new ptr
 
         store_ptr = block.addui(sp, 4)

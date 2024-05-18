@@ -11,6 +11,17 @@ from src.mips_target.MipsLibrary import *
 from .MipsSingleton import MipsSingleton
 
 
+class AccessWrapper:
+
+    @staticmethod
+    def access(location, index):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        multiplier = block.li(4)
+        real_index = block.mul(index, multiplier)
+        instr = block.addu(location, real_index)
+        return instr
+
+
 class UnaryWrapper:
 
     @staticmethod
@@ -64,7 +75,7 @@ class Declaration:
         return new_function
 
     @staticmethod
-    def declare(var_name: str, value=0, is_global=False):
+    def declare(var_name: str, symbol_type: SymbolType, value=0, is_global=False):
         block = MipsSingleton.getInstance().getCurrentBlock()
         register_manager = RegisterManager.getInstance()
         instr = None
@@ -77,7 +88,7 @@ class Declaration:
 
         else:
             instr = block.li(value)
-            instr = register_manager.getInstance().storeVariable(block, instr)
+            instr = register_manager.getInstance().storeVariable(block, instr, symbol_type.getBytesUsed())
 
         return instr
 
@@ -450,10 +461,14 @@ class Calculation:
                         ">>": block.srl,
                         "&": block.mips_and,
                         "|": block.mips_or,
-                        "^": block.xor
+                        "^": block.xor,
+                        "[]": AccessWrapper.access
                         }
 
         mips_op = op_translate.get(operator, None)
+
+        print(operator)
+
         instr = mips_op(left, right)
 
         return instr

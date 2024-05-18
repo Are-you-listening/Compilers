@@ -137,6 +137,7 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
+
     def sw_spill(self, rt: Memory, rs: Memory, immediate: int):
         """
         Store function that only be used in spill, because it will not load
@@ -155,9 +156,16 @@ class Block:
         if loadable:
             RegisterManager.getInstance().loadIfNeeded(self, [rs, rt, rd])
 
-
-
         instr = Add(rd, rs, rt)
+        self.instructions.append(instr)
+        return instr.getAddress()
+
+    def addu(self, rs: Memory, rt: Memory):
+
+        rd = RegisterManager.getInstance().allocate(self)
+        RegisterManager.getInstance().loadIfNeeded(self, [rs, rt, rd])
+
+        instr = Addu(rd, rs, rt)
         self.instructions.append(instr)
         return instr.getAddress()
 

@@ -1,5 +1,6 @@
 from src.parser.Tables.SymbolTypePtr import SymbolTypePtr, SymbolType
 from src.internal_tools import PreConditions
+import math
 
 
 class SymbolTypeArray(SymbolTypePtr):
@@ -27,7 +28,7 @@ class SymbolTypeArray(SymbolTypePtr):
 
     def getBytesUsed(self):
 
-        byte_amount = self.size * self.pts_to.getBytesUsed()
+        byte_amount = self.size * math.ceil(self.pts_to.getBytesUsed()/4)*4
 
         return byte_amount
 

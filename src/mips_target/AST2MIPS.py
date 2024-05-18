@@ -172,10 +172,10 @@ class AST2MIPS(ASTVisitor):
         if var_node.getSymbolTable().isRoot():
             # Handle global variable (add to .data segment)
             if node.getChild(1):
-                Declaration.declare(var_node.text, node.getChild(1).text, is_global=True)
+                Declaration.declare(var_node.text, entry.getTypeObject(), node.getChild(1).text, is_global=True)
         else:
             # Handle non-global variable (reserve space on the stack)
-            mips_var = Declaration.declare(var_node.text)
+            mips_var = Declaration.declare(var_node.text, entry.getTypeObject())
             self.mips_map[node] = mips_var
             self.mips_map[node.getChild(0)] = mips_var
             self.map_table.addEntry(MapEntry(var_node.text, mips_var), entry)
