@@ -8,3 +8,4 @@ from .mfc1 import Mfc1
 from .mtc1 import Mtc1
 from .cvt_s_w import Cvt_s_w
 from .cvt_w_s import Cvt_w_s
+from .mips_not import Not

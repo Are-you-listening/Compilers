@@ -218,6 +218,15 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
+    def mips_not(self, rs: Memory):
+        rd = RegisterManager.getInstance().allocate(self)
+
+        RegisterManager.getInstance().loadIfNeeded(self, [rd, rs])
+
+        instr = Not(rd, rs)
+        self.instructions.append(instr)
+        return instr.getAddress()
+
     def sll(self, rt: Memory, shamt: int):
         rd = RegisterManager.getInstance().allocate(self)
         instr = Sll(rd, rt, shamt)

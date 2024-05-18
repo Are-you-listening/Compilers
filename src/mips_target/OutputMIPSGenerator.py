@@ -77,7 +77,7 @@ class UnaryWrapper:
     @staticmethod
     def LogicalNot(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        instr = block.sltiu(mips_val, 1)
+        instr = block.mips_not(mips_val)
         return instr
 
     @staticmethod
