@@ -24,6 +24,9 @@ class AccessWrapper:
         is_struct = False
         if isinstance(symbol_type, SymbolTypePtr):
             target = symbol_type.deReference()
+
+            offset = target.getBytesUsed()
+
             if isinstance(target, SymbolTypeArray):
                 offset = max(target.pts_to.getBytesUsed(), 4)
                 symbol_type = target
@@ -130,7 +133,6 @@ class Declaration:
     def assignment(store_location: Memory, to_store: Memory | Function):
         block = MipsSingleton.getInstance().getCurrentBlock()
 
-        print(type(to_store))
         if isinstance(to_store, Function):
             to_store = block.la(f"function_{to_store.getFunctionName()}")
 

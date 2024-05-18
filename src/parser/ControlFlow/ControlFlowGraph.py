@@ -122,12 +122,11 @@ class Vertex:
             """
 
             if mips:
-                last_instruction = self.mips.instructions[-1]
                 """
                 Branches are created after all is done, so we do not know the register information anymore,
                 but we know that we need to check the last store register of the last instruction 
                 """
-                r = last_instruction.getRealRegister()
+                r = Memory("v0", True)
 
                 """
                 If false
@@ -141,7 +140,7 @@ class Vertex:
                 last_instruction = ControlFlowGraph.makeBool(self.llvm)
                 self.llvm.cbranch(last_instruction, true_edge.to_vertex.llvm.block, false_edge.to_vertex.llvm.block)
 
-    def create_phi(self):
+    def create_phi(self, mips: bool= False):
         """
         last block needs a phi
         calculate the phi
@@ -162,28 +161,50 @@ class Vertex:
         if both -> phi will take the value at the end of this block
         """
         bool_type = ir.IntType(1)
-        phi: ir.PhiInstr = self.llvm.phi(bool_type)
+        if mips:
+            phi: Memory = RegisterManager.getInstance().allocate(self.mips)
+
+
+        else:
+            phi: ir.PhiInstr = self.llvm.phi(bool_type)
 
         """
         The sorted is so, every run the order of phi labels stays the same
         """
-        for vertex in sorted(list(edge_true_list.union(edge_false_list)), key=lambda x: x.llvm.block.name):
+
+        if mips:
+            sort_lambda = lambda x: x.mips.label
+        else:
+            sort_lambda = lambda x: x.llvm.block.name
+
+
+        for vertex in sorted(list(edge_true_list.union(edge_false_list)), key=sort_lambda):
             in_true = vertex in edge_true_list
             in_false = vertex in edge_false_list
 
             if in_true and in_false:
 
-                last_instruction = vertex.llvm.block.instructions[-1]
-                """
-                make bool if not a bool type
-                """
-
-                phi.add_incoming(last_instruction, vertex.llvm.block)
+                if mips:
+                    vertex.mips.move(phi, vertex.mips.instructions[-1].getAddress())
+                else:
+                    last_instruction = vertex.llvm.block.instructions[-1]
+                    """
+                    make bool if not a bool type
+                    """
+                    phi.add_incoming(last_instruction, vertex.llvm.block)
 
             elif in_true:
-                phi.add_incoming(ir.Constant(bool_type, 1), vertex.llvm.block)
+                if mips:
+                    loaded_const = vertex.mips.li(1)
+                    vertex.mips.move(phi, loaded_const)
+                else:
+                    phi.add_incoming(ir.Constant(bool_type, 1), vertex.llvm.block)
             elif in_false:
-                phi.add_incoming(ir.Constant(bool_type, 0), vertex.llvm.block)
+                if mips:
+                    loaded_const = vertex.mips.li(0)
+                    vertex.mips.move(phi, loaded_const)
+                else:
+                    phi.add_incoming(ir.Constant(bool_type, 0), vertex.llvm.block)
 
         return phi
 

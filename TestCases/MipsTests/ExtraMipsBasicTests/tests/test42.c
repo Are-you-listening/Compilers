@@ -4,8 +4,8 @@
 
 
 int main() {
-    int a = 1;
-    a = 1;
+    int a = 0;
+    a = 0;
     int b = 1;
     b = 1;
 
