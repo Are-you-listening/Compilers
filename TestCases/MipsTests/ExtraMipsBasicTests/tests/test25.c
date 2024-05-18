@@ -6,6 +6,6 @@ int a (int b){
 }
 
 int main(){
-    a(a(4));
+    a(5);
     return 0;
 }

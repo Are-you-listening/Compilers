@@ -514,6 +514,7 @@ class Function:
         alloc_size = (len(params)+1)*4
         sp_frame = Memory(29, True)
 
+        print(params)
         RegisterManager.getInstance().loadIfNeeded(block, params)
 
         block.addui_function(sp_frame, -alloc_size, sp_frame)

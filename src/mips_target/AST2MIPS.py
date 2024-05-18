@@ -298,7 +298,20 @@ class AST2MIPS(ASTVisitor):
         self.mips_map[node] = var
 
     def handleParameters(self, node: ASTNode):
-        pass
+
+        params = []
+        for i, p in enumerate(node.children):
+
+            mem_obj = Memory(-(i+1)*4, False)
+            params.append(mem_obj)
+            self.mips_map[p] = mem_obj
+
+            param_identifier = p.getChild(0)
+
+            entry = param_identifier.getSymbolTable().getEntry(param_identifier.text)
+            self.map_table.addEntry(MapEntry(param_identifier, mem_obj), entry)
+
+        self.mips_map[node] = params
 
     def addOriginalCodeAsComment(self, node: ASTNode):
         if node.symbol_table is None or node.symbol_table.isRoot():  # LLVM thing in which you can't properly place comments in the global scope

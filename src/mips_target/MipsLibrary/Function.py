@@ -15,6 +15,7 @@ class Function:
         self.load_block: Block = None
 
         self.createBlock()
+        self.parameters = None
 
     def getOffset(self):
         return len(self.frame_registers)*4
