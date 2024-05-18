@@ -239,6 +239,7 @@ class AST2MIPS(ASTVisitor):
         child_mips = self.mips_map[node.getChild(0)]
         RegisterManager.getInstance().loadIfNeeded(block, [child_mips])
         mips_var = block.lw(child_mips, 0)
+        mips_var.symbol_type = child_mips.symbol_type.deReference()
 
         self.mips_map[node] = mips_var
 
@@ -333,6 +334,8 @@ class AST2MIPS(ASTVisitor):
             param_identifier = p.getChild(0)
 
             entry = param_identifier.getSymbolTable().getEntry(param_identifier.text)
+
+            mem_obj.symbol_type = SymbolTypePtr(entry.getTypeObject(), False)
             self.map_table.addEntry(MapEntry(param_identifier, mem_obj), entry)
 
         self.mips_map[node] = params

@@ -21,9 +21,9 @@ class AccessWrapper:
         symbol_type = location.symbol_type
 
         offset = 4
+
         if isinstance(symbol_type, SymbolTypeArray):
             offset = max(symbol_type.pts_to.getBytesUsed(), 4)
-
 
         multiplier = block.li(offset)
         real_index = block.mul(index, multiplier)
@@ -100,7 +100,8 @@ class Declaration:
         else:
             instr = block.li(value)
             instr = register_manager.getInstance().storeVariable(block, instr, symbol_type.getBytesUsed())
-            instr.symbol_type = symbol_type
+
+            instr.symbol_type = SymbolTypePtr(symbol_type, False)
 
         return instr
 
