@@ -64,18 +64,20 @@ class RegisterManager:
         :return:
         """
 
-        if block.function not in self.curr_function:
-            self.curr_function[block.function] = 0
+        if block.function.getFunctionName() not in self.curr_function:
+            self.curr_function[block.function.getFunctionName()] = 0
 
-        counter = self.curr_function[block.function]
+        counter = self.curr_function[block.function.getFunctionName()]
 
         counter += 4
-        self.curr_function[block.function] = counter
+
+        self.curr_function[block.function.getFunctionName()] = counter
 
         sp = self.getMemoryObject("sp")
+        fp = self.getMemoryObject("fp")
         var = self.getMemoryObject(reg)
         block.addui_function(sp, -4, sp)  # Adjust frame/stack ptr
-        block.sw_spill(var, sp, 4)  # Store to new ptr
+        block.sw_spill(var, fp, -(block.function.getOffset()+counter))  # Store to new ptr
         var.is_loaded = False
         var.address = block.function.getOffset()+counter
         self.registers[reg] = None
@@ -253,13 +255,13 @@ class RegisterManager:
     def storeVariable(self, block, value: Memory):
         self.loadIfNeeded(block, [value])
 
-        if block.function not in self.curr_function:
-            self.curr_function[block.function] = 0
+        if block.function.getFunctionName() not in self.curr_function:
+            self.curr_function[block.function.getFunctionName()] = 0
 
-        counter = self.curr_function[block.function]
+        counter = self.curr_function[block.function.getFunctionName()]
 
         counter += 4
-        self.curr_function[block.function] = counter
+        self.curr_function[block.function.getFunctionName()] = counter
 
         sp = self.getMemoryObject("sp")
 

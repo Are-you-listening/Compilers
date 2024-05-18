@@ -1,6 +1,7 @@
 from llvmlite import ir
 import copy
-
+from typing import cast
+from src.mips_target.MipsLibrary import *
 
 class Vertex:
     """
@@ -12,7 +13,7 @@ class Vertex:
         :param llvm_block: The llvm block that corresponds to this vertex
         """
         self.llvm = llvm_block
-        self.mips = None
+        self.mips: Block = None
         self.node_link = None
 
         """
@@ -84,7 +85,7 @@ class Vertex:
             last_instruction = self.llvm.block.instructions[-1]
             self.llvm.xor(last_instruction, ir.Constant(last_instruction.type, 1))
 
-    def create_branch(self):
+    def create_branch(self, mips: bool= False):
         if len(self.edges) != 2:
             return
 
@@ -110,14 +111,36 @@ class Vertex:
             """
             make branch statement a boolean
             """
-            self.llvm.branch(true_edge.to_vertex.llvm.block)
+            if mips:
+                self.mips.j(true_edge.to_vertex.mips.label)
+            else:
+                self.llvm.branch(true_edge.to_vertex.llvm.block)
 
         else:
             """
             when different endpoints for true and false, we make a conditional branch
             """
-            last_instruction = ControlFlowGraph.makeBool(self.llvm)
-            self.llvm.cbranch(last_instruction, true_edge.to_vertex.llvm.block, false_edge.to_vertex.llvm.block)
+
+            if mips:
+                pass
+                last_instruction = self.mips.instructions[-1]
+                """
+                Branches are created after all is done, so we do not know the register information anymore,
+                but we know that we need to check the last store register of the last instruction 
+                """
+                r = last_instruction.getRealRegister()
+
+                """
+                If false
+                """
+                self.mips.beq(Memory(r, True), Memory("zero", True), false_edge.to_vertex.mips.label)
+                """
+                If True, just do a jump
+                """
+                self.mips.j(true_edge.to_vertex.mips.label)
+            else:
+                last_instruction = ControlFlowGraph.makeBool(self.llvm)
+                self.llvm.cbranch(last_instruction, true_edge.to_vertex.llvm.block, false_edge.to_vertex.llvm.block)
 
     def create_phi(self):
         """

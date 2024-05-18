@@ -18,6 +18,10 @@ class IMipsInstruction(Instruction):
     def getAddress(self):
         return self.return_value
 
+    @abstractmethod
+    def getRealRegister(self):
+        return self.rt
+
     def overrideMemory(self, other: "Memory"):
         self.rt = other.getAddress()
         self.return_value = Memory(other.getAddress(), other.is_loaded)

@@ -19,6 +19,10 @@ class RMipsInstruction(Instruction):
     def getAddress(self):
         return self.return_value
 
+    @abstractmethod
+    def getRealRegister(self):
+        return self.rd
+
     def overrideMemory(self, other: "Memory"):
 
         self.rd = other.getAddress()

@@ -14,3 +14,4 @@ from .div import Div
 from .mflo import Mflo
 from .mfhi import Mfhi
 from .xor import Xor
+from .RMipsInstruction import RMipsInstruction

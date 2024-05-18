@@ -17,14 +17,21 @@ class AST2MIPS(ASTVisitor):
         self.fileName = fileName
         self.comments = comments
         self.special_functions_declared = {}
+        self.branch_needed = set()
+        self.last_vertex = None
 
     def visit(self, ast: AST):
         self.special_functions_declared = {}
         self.map_table = MapTable(None)
         self.mips_map = {}
+        self.branch_needed = set()
+        self.last_vertex = None
 
         self.root = ast.root
         self.postorder(self.root)
+
+        for b in self.branch_needed:
+            b.create_branch(True)
 
     def postorder(self, root: ASTNode):
         """
@@ -48,12 +55,18 @@ class AST2MIPS(ASTVisitor):
 
             if isinstance(current_node, ASTNodeBlock) and current_node.text == "Block" and current_node not in visited:
                 node = current_node
+
                 if node.vertex.mips is None:
                     node.vertex.mips = MipsSingleton.getInstance().addBlock()
 
                 MipsSingleton.getInstance().setCurrentBlock(node.vertex.mips)
 
                 self.addOriginalCodeAsComment(current_node)
+
+                self.last_vertex = node.vertex
+
+                self.addOriginalCodeAsComment(current_node)
+
 
             child_not_visited = False
             for child in reversed(current_node.getChildren()):
@@ -72,8 +85,22 @@ class AST2MIPS(ASTVisitor):
         :param node:
         :return:
         """
+
+        if isinstance(node, ASTNodeBlock) and node.text == "Block":
+            if self.last_vertex is not None:
+                self.last_vertex.check_flipped()
+
+                """
+                When we have instructions for our statement, their is no problem, but IR constants are not considered
+                an instruction, so in those cases we need to pass it to the create branch, in case it needs to create 
+                a conditional branch
+                """
+
+                self.branch_needed.add(self.last_vertex)
+            return
+
         if node.text == "Declaration":
-            print("d")
+
             self.handleDeclaration(node)
 
         if node.text == "Parameters":
@@ -90,7 +117,6 @@ class AST2MIPS(ASTVisitor):
             self.handleAssignment(node)
 
         if node.text == "printf":
-            print("f")
             self.handlePrintScanf(node, True)
 
         if node.text == "scanf":
@@ -290,9 +316,12 @@ class AST2MIPS(ASTVisitor):
 
         type = node.getChild(0).getSymbolTable().getEntry(node.getChild(0).text)
 
+        self.mips_map[node] = self.mips_map[node.getChild(1)]
+
         """
         get the var register
         """
+        return
         if isinstance(type, SymbolTypeArray):
             pass # TODO
             # index_list = []

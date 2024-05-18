@@ -9,3 +9,7 @@ class Instruction:
     @abstractmethod
     def getAddress(self):
         pass
+
+    @abstractmethod
+    def getRealRegister(self):
+        pass
