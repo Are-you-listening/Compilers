@@ -444,11 +444,6 @@ class Calculation:
     def operation(left, right, operator):
         block = MipsSingleton.getInstance().getCurrentBlock()
 
-        if operator != "()":
-            store_reg = RegisterManager.getInstance().allocate(block)
-        else:
-            store_reg = Memory(None, True)
-
         op_translate = {"+": block.add,
                         "-": block.sub,
                         "()": Function.functionCall,
@@ -546,12 +541,11 @@ class Function:
         block = MipsSingleton.getInstance().getCurrentBlock()
 
         v0 = Memory("v0", True)
-        zero = Memory("zero", True)
 
         """
         Store return value in return register
         """
-        block.add(v0, zero, return_value)
+        block.move(v0, return_value)
         block.j(f"function_{block.function.getFunctionName()}_load")
 
 

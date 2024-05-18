@@ -129,10 +129,19 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
-    def sw(self, rt: Memory, rs: Memory, immediate: int, loadable: bool = True):
+    def sw(self, rt: Memory, rs: Memory, immediate: int):
 
-        if loadable:
-            RegisterManager.getInstance().loadIfNeeded(self, [rt, rs])
+        RegisterManager.getInstance().loadIfNeeded(self, [rt, rs])
+
+        instr = Sw(rt, rs, immediate)
+        self.instructions.append(instr)
+        return instr.getAddress()
+
+    def sw_spill(self, rt: Memory, rs: Memory, immediate: int):
+        """
+        Store function that only be used in spill, because it will not load
+        the variable it needs to store
+        """
 
         instr = Sw(rt, rs, immediate)
         self.instructions.append(instr)
@@ -156,6 +165,13 @@ class Block:
         RegisterManager.getInstance().loadIfNeeded(self, [rd])
 
         instr = Jr(rd)
+        self.instructions.append(instr)
+        return instr.getAddress()
+
+    def move(self, rt: Memory, rs: Memory):
+        RegisterManager.getInstance().loadIfNeeded(self, [rs, rt])
+
+        instr = Move(rt, rs)
         self.instructions.append(instr)
         return instr.getAddress()
 
