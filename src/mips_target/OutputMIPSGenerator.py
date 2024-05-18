@@ -100,7 +100,7 @@ class Declaration:
         """
         change the current latest function
         """
-        new_function = Function(func_name)
+        new_function = FunctionMet(func_name)
 
         MipsSingleton.getInstance().addFunction(new_function)
 
@@ -127,8 +127,13 @@ class Declaration:
         return instr
 
     @staticmethod
-    def assignment(store_location: Memory, to_store: Memory):
+    def assignment(store_location: Memory, to_store: Memory | Function):
         block = MipsSingleton.getInstance().getCurrentBlock()
+
+        print(type(to_store))
+        if isinstance(to_store, Function):
+            to_store = block.la(f"function_{to_store.getFunctionName()}")
+
         RegisterManager.getInstance().loadIfNeeded(block, [store_location, to_store])
         instr = block.sw(to_store, store_location, 0)
 
@@ -173,8 +178,7 @@ class Declaration:
             MipsSingleton.getInstance().getModule().addDataSegment(label, f""" "{text}" """, ".asciiz")
 
         block = MipsSingleton.getInstance().getCurrentBlock()
-        store_reg = RegisterManager.getInstance().allocate(block)
-        block.la(store_reg, label)
+        store_reg = block.la(label)
 
         return store_reg
 
@@ -188,7 +192,7 @@ class Printf:
         :return:
         """
 
-        function: Function = MipsSingleton.getInstance().getModule().createFunction("printf")
+        function: FunctionMet = MipsSingleton.getInstance().getModule().createFunction("printf")
         print_base_block = function.createBlock()
         print_char_loop = function.createBlock()
         print_char_special_token_after = function.createBlock()
@@ -487,7 +491,7 @@ class Calculation:
 
         op_translate = {"+": block.add,
                         "-": block.sub,
-                        "()": Function.functionCall,
+                        "()": FunctionMet.functionCall,
                         "*": block.mul,
                         "/": block.div,
                         "%": Calculation.modulo,
@@ -519,7 +523,7 @@ class Calculation:
         return mips_var
 
 
-class Function:
+class FunctionMet:
     @staticmethod
     def functionCall(func_name, params: list[Memory]):
         """
@@ -530,12 +534,19 @@ class Function:
         store all the parameters on the stack so, the callee can access these later on
         """
 
-        Function.storeParameters(params)
+        FunctionMet.storeParameters(params)
 
         block = MipsSingleton.getInstance().getCurrentBlock()
-        block.jal(f"function_{func_name.getFunctionName()}")
 
-        Function.loadParameters(params)
+        """
+        Func ptrs have a register with the func name
+        """
+        if isinstance(func_name, Memory):
+            block.jalr(func_name)
+        else:
+            block.jal(f"function_{func_name.getFunctionName()}")
+
+        FunctionMet.loadParameters(params)
 
         """
         Store the return value in a specific register

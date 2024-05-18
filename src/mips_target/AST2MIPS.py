@@ -151,7 +151,10 @@ class AST2MIPS(ASTVisitor):
             if entry is None:
                 self.mips_map[node] = node.text
             else:
+                print(entry.llvm, node.text)
+
                 mips_var = entry.llvm
+
                 self.mips_map[node] = mips_var
 
         if node.getSymbolTable().isRoot():
@@ -247,7 +250,7 @@ class AST2MIPS(ASTVisitor):
 
     def handleReturn(self, node: ASTNode):
         mips_var = self.mips_map[node.getChild(0)]
-        Function.handleReturn(mips_var)
+        FunctionMet.handleReturn(mips_var)
 
     def handlePrintScanf(self, node: ASTNode, printf):
         """
@@ -264,7 +267,7 @@ class AST2MIPS(ASTVisitor):
             mips = self.mips_map.get(c)
             params.append(mips)
 
-        Function.functionCall(function, params)
+        FunctionMet.functionCall(function, params)
 
     def handleOperations(self, node: ASTNode):
         """

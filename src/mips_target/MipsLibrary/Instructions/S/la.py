@@ -9,3 +9,5 @@ class La(SpecialInstruction):
 
     def toString(self):
         return f"la ${self.rt}, {self.label}"
+
+

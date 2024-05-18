@@ -244,10 +244,11 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
-    def la(self, rt: Memory, label: str):
+    def la(self, label: str):
+        rt = RegisterManager.getInstance().allocate(self)
         instr = La(rt, label)
         self.instructions.append(instr)
-        return instr.getAddress()
+        return rt
 
     def j(self, label: str):
         instr = J(label)
@@ -293,6 +294,12 @@ class Block:
 
     def jal(self, label: str):
         instr = Jal(label)
+        self.instructions.append(instr)
+        return instr.getAddress()
+
+    def jalr(self, rt: Memory):
+        RegisterManager.getInstance().loadIfNeeded(self, [rt])
+        instr = Jalr(rt)
         self.instructions.append(instr)
         return instr.getAddress()
 
