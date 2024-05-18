@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-float mul(int** b){
+int mul(int** b){
     printf("%d", (*b)[0]);
-    return 0.0;
+    return 0;
 }
 
 int main() {

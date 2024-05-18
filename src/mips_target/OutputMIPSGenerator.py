@@ -21,7 +21,6 @@ class AccessWrapper:
         symbol_type = location.symbol_type
 
         offset = 4
-
         if isinstance(symbol_type, SymbolTypePtr):
             if isinstance(symbol_type.deReference(), SymbolTypeArray):
                 offset = max(symbol_type.pts_to.pts_to.getBytesUsed(), 4)
