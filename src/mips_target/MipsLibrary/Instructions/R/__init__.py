@@ -15,4 +15,5 @@ from .mflo import Mflo
 from .mfhi import Mfhi
 from .xor import Xor
 from .addu import Addu
+from .sgt import Sgt
 from .RMipsInstruction import RMipsInstruction

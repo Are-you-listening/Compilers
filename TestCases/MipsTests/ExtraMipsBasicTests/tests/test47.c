@@ -3,6 +3,7 @@
 
 int main(){
     int a = 1;
-    printf("%d", !a);
+    int b = 1;
+    printf("%d", a > b);
     return 0;
 }

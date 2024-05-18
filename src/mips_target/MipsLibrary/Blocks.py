@@ -233,8 +233,19 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
-    def slt(self, rd: Memory, rt: Memory, shamt: int):
-        instr = Slt(rd, rt, shamt)
+    def slt(self, rs: Memory, rt: Memory):
+        rd = RegisterManager.getInstance().allocate(self)
+        RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
+
+        instr = Slt(rd, rs, rt)
+        self.instructions.append(instr)
+        return instr.getAddress()
+
+    def sgt(self, rs: Memory, rt: Memory):
+        rd = RegisterManager.getInstance().allocate(self)
+        RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
+
+        instr = Sgt(rd, rs, rt)
         self.instructions.append(instr)
         return instr.getAddress()
 

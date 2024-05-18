@@ -80,7 +80,7 @@ class UnaryWrapper:
     @staticmethod
     def LogicalNot(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        instr = block.sltiu(mips_val, 0)
+        instr = block.sltiu(mips_val, 1)
         return instr
 
     @staticmethod
@@ -92,6 +92,35 @@ class UnaryWrapper:
     def Decr(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
         instr = block.addi(mips_val, -1)
+        return instr
+
+
+class BinaryWrapper:
+    @staticmethod
+    def lessEqual(mips_val1, mips_val2):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        greater = block.sgt(mips_val1, mips_val2)
+        instr = block.sltiu(greater, 1)
+        return instr
+
+    @staticmethod
+    def greaterEqual(mips_val1, mips_val2):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        less = block.slt(mips_val1, mips_val2)
+        instr = block.sltiu(less, 1)
+        return instr
+
+    @staticmethod
+    def equal(mips_val1, mips_val2):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        instr = block.xor(mips_val1, mips_val2)
+        instr = block.sltiu(instr, 1)
+        return instr
+
+    @staticmethod
+    def notEqual(mips_val1, mips_val2):
+        block = MipsSingleton.getInstance().getCurrentBlock()
+        instr = block.xor(mips_val1, mips_val2)
         return instr
 
 
@@ -502,7 +531,13 @@ class Calculation:
                         "&": block.mips_and,
                         "|": block.mips_or,
                         "^": block.xor,
-                        "[]": AccessWrapper.access
+                        "[]": AccessWrapper.access,
+                        "<": block.slt,
+                        ">": block.sgt,
+                        "<=": BinaryWrapper.lessEqual,
+                        ">=": BinaryWrapper.greaterEqual,
+                        "==": BinaryWrapper.equal,
+                        "!=": BinaryWrapper.notEqual
                         }
 
         mips_op = op_translate.get(operator, None)
