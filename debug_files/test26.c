@@ -1,16 +1,8 @@
 #include <stdio.h>
 
 
-
-
-int main() {
+int main(){
     int a = 1;
-    a = 1;
-    int b = 1;
-    b = 1;
-
-    int c = a && b;
-    printf("%d", c);
-
+    printf("%d", !a);
     return 0;
 }

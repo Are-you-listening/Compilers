@@ -80,7 +80,7 @@ class UnaryWrapper:
     @staticmethod
     def LogicalNot(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        instr = block.mips_not(mips_val)
+        instr = block.sltiu(mips_val, 0)
         return instr
 
     @staticmethod
@@ -194,7 +194,7 @@ class Printf:
         :return:
         """
 
-        function: FunctionMet = MipsSingleton.getInstance().getModule().createFunction("printf")
+        function: Function = MipsSingleton.getInstance().getModule().createFunction("printf")
         print_base_block = function.createBlock()
         print_char_loop = function.createBlock()
         print_char_special_token_after = function.createBlock()
