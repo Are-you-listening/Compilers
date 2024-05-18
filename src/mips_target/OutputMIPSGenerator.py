@@ -22,7 +22,8 @@ class AccessWrapper:
 
         offset = 4
         if isinstance(symbol_type, SymbolTypeArray):
-            offset = symbol_type.pts_to.getBytesUsed()
+            offset = max(symbol_type.pts_to.getBytesUsed(), 4)
+
 
         multiplier = block.li(offset)
         real_index = block.mul(index, multiplier)
