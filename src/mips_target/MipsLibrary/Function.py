@@ -23,7 +23,6 @@ class Function:
 
         self.load_block: Block = self.__loadBlock(self.frame_registers)
 
-
     def createBlock(self) -> Block:
         block_label = MipsManager.getInstance().useLabel()
         block = Block(block_label, self)

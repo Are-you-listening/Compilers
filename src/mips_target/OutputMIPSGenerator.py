@@ -497,7 +497,9 @@ class Function:
         """
         Store the return value in a specific register
         """
-        return Memory("v0", True)
+        free_register = RegisterManager.getInstance().allocate(block)
+        block.move(free_register, Memory("v0", True))
+        return free_register
 
     @staticmethod
     def storeParameters(params: list[Memory]):
