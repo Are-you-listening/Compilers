@@ -292,7 +292,12 @@ class RegisterManager:
         sp = self.getMemoryObject("sp")
 
         block.addui_function(sp, -needed, sp)  # Adjust frame/stack ptr
-        block.sw_spill(value, sp, 4)  # Store to new ptr
+
+        for i in range(0, needed, 4):
+            """
+            Let a registers be zero intialized
+            """
+            block.sw_spill(value, sp, i+4)  # Store to new ptr
 
         store_ptr = block.addui(sp, 4)
 

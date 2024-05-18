@@ -14,11 +14,21 @@ from .MipsSingleton import MipsSingleton
 class AccessWrapper:
 
     @staticmethod
-    def access(location, index):
+    def access(location: Memory, index):
+
         block = MipsSingleton.getInstance().getCurrentBlock()
-        multiplier = block.li(4)
+
+        symbol_type = location.symbol_type
+
+        offset = 4
+        if isinstance(symbol_type, SymbolTypeArray):
+            offset = symbol_type.pts_to.getBytesUsed()
+
+        multiplier = block.li(offset)
         real_index = block.mul(index, multiplier)
         instr = block.addu(location, real_index)
+        instr.symbol_type = symbol_type.deReference()
+
         return instr
 
 
@@ -89,6 +99,7 @@ class Declaration:
         else:
             instr = block.li(value)
             instr = register_manager.getInstance().storeVariable(block, instr, symbol_type.getBytesUsed())
+            instr.symbol_type = symbol_type
 
         return instr
 

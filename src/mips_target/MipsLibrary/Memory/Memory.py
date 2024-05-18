@@ -1,14 +1,21 @@
+from src.parser.Tables.SymbolType import SymbolType
+
+
 class Memory:
     def __init__(self, address: int | str, is_loaded: bool):
         self.address = address
         self.is_loaded = is_loaded
         self.from_block = None
+        self.symbol_type: SymbolType = None
 
     def __str__(self):
         return str(self.address)
 
     def getAddress(self):
         return self.address
+
+    def setSize(self, new_size: int):
+        self.size = new_size
 
     def overrideMemory(self, other: "Memory"):
 
