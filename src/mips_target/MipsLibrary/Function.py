@@ -105,6 +105,3 @@ class Function:
 
     def getFunctionName(self):
         return self.function_name
-
-
-

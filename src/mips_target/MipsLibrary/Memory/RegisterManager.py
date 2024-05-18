@@ -62,7 +62,7 @@ class RegisterManager:
         else:
             self.special_registers[reg] = var
         var.address = reg
-        var.is_loaded = True  # TODO Unsure if this needs to be done?
+        var.is_loaded = True
 
     def spill(self, block, reg: str):
         """
@@ -312,7 +312,3 @@ class RegisterManager:
                 continue
 
             self.spill(block, k)
-
-
-
-

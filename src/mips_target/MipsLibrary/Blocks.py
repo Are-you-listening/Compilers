@@ -306,6 +306,37 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
+    def sitofp(self, general: Memory, Float: Memory):
+        RegisterManager.getInstance().loadIfNeeded(self, [general, Float])
+
+        instr = self.mtc1(general, Float)
+        self.instructions.append(instr)
+        instr = Cvt_s_w(instr.getAddress())
+        self.instructions.append(instr)
+        return instr
+
+    def fptosi(self, Float: Memory, general: Memory):
+        RegisterManager.getInstance().loadIfNeeded(self, [Float, general])
+
+        instr = Cvt_w_s(Float)
+        self.instructions.append(instr)
+
+        instr = self.mfc1(instr.getAddress(), general)
+        self.instructions.append(instr)
+
+        return instr
+
+    def mtc1(self, general: Memory, Float: Memory):
+        RegisterManager.getInstance().loadIfNeeded(self, [general, Float])
+        instr = Mtc1(general, Float)
+        self.instructions.append(instr)
+        return instr.getAddress()
+
+    def mfc1(self, Float: Memory, general: Memory):
+        RegisterManager.getInstance().loadIfNeeded(self, [Float, general])
+        instr = Mfc1(Float, general)
+        self.instructions.append(instr)
+        return instr.getAddress()
 
     def toString(self):
         s = ""

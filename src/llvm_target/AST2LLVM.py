@@ -467,7 +467,6 @@ class AST2LLVM(ASTVisitor):
 
         self.llvm_map[node] = converted_var
 
-
     def handleParameters(self, node: ASTNode):
         """
         param node:

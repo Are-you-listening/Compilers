@@ -479,8 +479,6 @@ class Calculation:
 
         mips_op = op_translate.get(operator, None)
 
-        print(operator)
-
         instr = mips_op(left, right)
 
         return instr
@@ -578,3 +576,29 @@ class Comment:
     @staticmethod
     def comment(text):
         MipsSingleton.getInstance().getCurrentBlock().comment(text)
+
+
+class Conversion:
+    @staticmethod
+    def convert(var, to_type, from_type):
+        """
+        dict we use to retrieve which conversion command to call
+        """
+        block = MipsSingleton.getInstance().getCurrentBlock()  # Get the current block
+        conversion_dict = {("INT", "FLOAT"): lambda x: block.sitofp(x),
+                           ("CHAR", "FLOAT"): lambda x: block.sitofp(x),
+                           ("PTR", "FLOAT"): lambda x: block.sitofp(x),
+                           ("BOOL", "FLOAT"): lambda x: block.sitofp(x),
+                           ("FLOAT", "INT"): lambda x: block.fptosi(x),
+                           ("FLOAT", "CHAR"): lambda x: block.slr(block.sll(block.fptosi(x), 24), 24),  # First convert to int, then to char
+                           ("FLOAT", "PTR"): lambda x: block.fptosi(x),
+                           # ("FLOAT", "BOOL"): lambda x: block.fptosi(x), # TODO same
+                           # ("INT", "BOOL"): lambda x: block.icmp_signed(x),  # TODO use neq from Lucas
+                           # ("PTR", "BOOL"): lambda x: block.icmp_signed(x),  # TODO neq 0 x from Lucas
+                           ("INT", "CHAR"): lambda x: block.slr(block.sll(x, 24), 24),
+                           ("CHAR", "INT"): lambda x: x,
+                           }
+        print(from_type, to_type)
+        c = conversion_dict.get(from_type, to_type)
+        var = c(var)
+        return var

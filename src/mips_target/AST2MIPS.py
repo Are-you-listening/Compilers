@@ -234,7 +234,6 @@ class AST2MIPS(ASTVisitor):
         self.mips_map[node] = mips_var
 
     def handleDereference(self, node: ASTNode):
-
         block = MipsSingleton.getInstance().getCurrentBlock()
 
         child_mips = self.mips_map[node.getChild(0)]
@@ -242,8 +241,6 @@ class AST2MIPS(ASTVisitor):
         mips_var = block.lw(child_mips, 0)
 
         self.mips_map[node] = mips_var
-
-
 
     def handleReturn(self, node: ASTNode):
         mips_var = self.mips_map[node.getChild(0)]
@@ -314,26 +311,11 @@ class AST2MIPS(ASTVisitor):
         :param node:
         :return:
         """
-        mips_data = self.mips_map.get(node.getChild(0))
-
-        type = node.getChild(0).getSymbolTable().getEntry(node.getChild(0).text)
-
-        self.mips_map[node] = self.mips_map[node.getChild(1)]
-
-        """
-        get the var register
-        """
-        return
-        if isinstance(type, SymbolTypeArray):
-            pass # TODO
-            # index_list = []
-            # index_list.insert(0, ir.Constant(ir.types.IntType(32), 0))
-            # index_list.insert(0, ir.Constant(ir.types.IntType(32), 0))
-            #
-            # var = block.gep(mips_data, index_list, True)  # Create the gep instruction
-        else:
-            var = MipsSingleton.getInstance().getCurrentBlock().load(mips_data) # TODO
-
+        var = self.mips_map.get(node.getChild(1))
+        # from_type = node.getChild(0).getSymbolTable().getEntry(node.getChild(0).text) # TODO get from type map
+        # to_type = node.getChild(0).symbol_type
+        # converted_var = Conversion.convert(var, to_type, from_type)
+        # self.mips_map[node] = converted_var
         self.mips_map[node] = var
 
     def handleParameters(self, node: ASTNode):
