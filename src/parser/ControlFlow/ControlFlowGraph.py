@@ -122,7 +122,6 @@ class Vertex:
             """
 
             if mips:
-                pass
                 last_instruction = self.mips.instructions[-1]
                 """
                 Branches are created after all is done, so we do not know the register information anymore,
