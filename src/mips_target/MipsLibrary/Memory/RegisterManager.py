@@ -13,15 +13,13 @@ class RegisterManager:
         self.registers: dict[str, Memory | None] = {}  # Maps register names to Memory Objects e.g "v0" : Memory Object
         self.special_registers = {"v0": None, "v1": None, "a0": None, "a1": None, "a2": None, "a3": None,
                                   "fp": Memory(30, True), "sp": Memory(29, True), "ra": None, "zero": None}  # Same as special registers but these may not be regularly used
-        self.variable_map = {}  # maps variable names to Memory Objects
 
         for i in range(0, 10):  # Insert registers
             self.registers[f"t{i}"] = None
         for i in range(0, 8):  # Insert registers
             self.registers[f"s{i}"] = None
 
-        self.curr_function = None
-        self.counter = 0
+        self.curr_function = {}
 
     def clear(self):
         self.__instance = None
@@ -66,18 +64,22 @@ class RegisterManager:
         :return:
         """
 
-        if block.function != self.curr_function:
-            self.curr_function = block.function
-            self.counter = 0
-        self.counter += 4
+        if block.function not in self.curr_function:
+            self.curr_function[block.function] = 0
+
+        counter = self.curr_function[block.function]
+
+        counter += 4
+        self.curr_function[block.function] = counter
 
         sp = self.getMemoryObject("sp")
         var = self.getMemoryObject(reg)
         block.addui_function(sp, -4, sp)  # Adjust frame/stack ptr
         block.sw_spill(var, sp, 4)  # Store to new ptr
         var.is_loaded = False
-        var.address = block.function.getOffset()+self.counter
+        var.address = block.function.getOffset()+counter
         self.registers[reg] = None
+
 
     def load(self, block, var: Memory, reg: str):
         """
@@ -247,6 +249,27 @@ class RegisterManager:
             Store this register among the loaded
             """
             loaded.append(load_mem)
+
+    def storeVariable(self, block, value: Memory):
+        self.loadIfNeeded(block, [value])
+
+        if block.function not in self.curr_function:
+            self.curr_function[block.function] = 0
+
+        counter = self.curr_function[block.function]
+
+        counter += 4
+        self.curr_function[block.function] = counter
+
+        sp = self.getMemoryObject("sp")
+
+        block.addui_function(sp, -4, sp)  # Adjust frame/stack ptr
+        block.sw_spill(value, sp, 4)  # Store to new ptr
+
+        store_ptr = block.addui(sp, 4)
+
+        return store_ptr
+
 
 
 

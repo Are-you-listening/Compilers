@@ -67,7 +67,6 @@ class Declaration:
     def declare(var_name: str, value=0, is_global=False):
         block = MipsSingleton.getInstance().getCurrentBlock()
         register_manager = RegisterManager.getInstance()
-        var_memory = Memory(0, False)
         instr = None
 
         if is_global:
@@ -78,18 +77,15 @@ class Declaration:
 
         else:
             instr = block.li(value)
-
-
-        # Register the variable in a separate dictionary
-        register_manager.variable_map[var_name] = var_memory
+            instr = register_manager.getInstance().storeVariable(block, instr)
 
         return instr
 
     @staticmethod
     def assignment(store_location: Memory, to_store: Memory):
         block = MipsSingleton.getInstance().getCurrentBlock()
-
-        instr = block.add(to_store, Memory(0, True), store_location)
+        RegisterManager.getInstance().loadIfNeeded(block, [store_location, to_store])
+        instr = block.sw(to_store, store_location, 0)
 
         return instr
 
@@ -511,7 +507,7 @@ class Function:
         """
         allocate stack memory
         """
-        alloc_size = (len(params)+1)*4
+        alloc_size = (len(params))*4
         sp_frame = Memory(29, True)
 
         print(params)
@@ -531,7 +527,7 @@ class Function:
         """
         allocate stack memory
         """
-        alloc_size = (len(params) + 1) * 4
+        alloc_size = (len(params)) * 4
         sp_frame = Memory(29, True)
 
         for i, p in enumerate(params):

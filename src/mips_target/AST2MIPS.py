@@ -73,6 +73,7 @@ class AST2MIPS(ASTVisitor):
         :return:
         """
         if node.text == "Declaration":
+            print("d")
             self.handleDeclaration(node)
 
         if node.text == "Parameters":
@@ -89,6 +90,7 @@ class AST2MIPS(ASTVisitor):
             self.handleAssignment(node)
 
         if node.text == "printf":
+            print("f")
             self.handlePrintScanf(node, True)
 
         if node.text == "scanf":
@@ -205,8 +207,15 @@ class AST2MIPS(ASTVisitor):
 
     def handleDereference(self, node: ASTNode):
 
-        if isinstance(node.getChild(0), ASTNodeTerminal) and node.getChild(0).type == "IDENTIFIER":
-            self.mips_map[node] = self.mips_map[node.getChild(0)]
+        block = MipsSingleton.getInstance().getCurrentBlock()
+
+        child_mips = self.mips_map[node.getChild(0)]
+        RegisterManager.getInstance().loadIfNeeded(block, [child_mips])
+        mips_var = block.lw(child_mips, 0)
+
+        self.mips_map[node] = mips_var
+
+
 
     def handleReturn(self, node: ASTNode):
         mips_var = self.mips_map[node.getChild(0)]
@@ -294,7 +303,6 @@ class AST2MIPS(ASTVisitor):
         else:
             var = MipsSingleton.getInstance().getCurrentBlock().load(mips_data) # TODO
 
-
         self.mips_map[node] = var
 
     def handleParameters(self, node: ASTNode):
@@ -302,7 +310,10 @@ class AST2MIPS(ASTVisitor):
         params = []
         for i, p in enumerate(node.children):
 
-            mem_obj = Memory(-(i+1)*4, False)
+            block = MipsSingleton.getInstance().getCurrentBlock()
+            fp = Memory("fp", True)
+            mem_obj = block.addui(fp, (i+1)*4)
+
             params.append(mem_obj)
             self.mips_map[p] = mem_obj
 
