@@ -171,7 +171,14 @@ class Vertex:
         """
         The sorted is so, every run the order of phi labels stays the same
         """
-        for vertex in sorted(list(edge_true_list.union(edge_false_list)), key=lambda x: x.llvm.block.name):
+
+        if mips:
+            sort_lambda = lambda x: x.mips.label
+        else:
+            sort_lambda = lambda x: x.llvm.block.name
+
+
+        for vertex in sorted(list(edge_true_list.union(edge_false_list)), key=sort_lambda):
             in_true = vertex in edge_true_list
             in_false = vertex in edge_false_list
 
