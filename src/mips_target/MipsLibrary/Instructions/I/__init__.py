@@ -12,4 +12,5 @@ from .lui import Lui
 from .sltiu import Sltiu
 from .li import Li
 from .mips_not import Not
+from .neg import Neg
 from .IMipsInstruction import IMipsInstruction
