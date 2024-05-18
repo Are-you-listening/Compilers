@@ -21,6 +21,12 @@ class RegisterManager:
 
         self.curr_function = {}
 
+        """
+        Stores in case we spill something, to memory, the memory location, in those cases, we might be able to reuse
+        some space (which also emans that we can refer to same memory locations)
+        """
+        self.register_spill_map: dict[str, dict[Memory, int] | None] = {}
+
     def clear(self):
         self.__instance = None
         self.__init__()
@@ -63,25 +69,43 @@ class RegisterManager:
         Spill a register to memory
         :return:
         """
-
         if block.function.getFunctionName() not in self.curr_function:
             self.curr_function[block.function.getFunctionName()] = 0
 
         counter = self.curr_function[block.function.getFunctionName()]
 
-        counter += 4
-
-        self.curr_function[block.function.getFunctionName()] = counter
-
-        sp = self.getMemoryObject("sp")
-        fp = self.getMemoryObject("fp")
         var = self.getMemoryObject(reg)
-        block.addui_function(sp, -4, sp)  # Adjust frame/stack ptr
-        block.sw_spill(var, fp, -(block.function.getOffset()+counter))  # Store to new ptr
-        var.is_loaded = False
-        var.address = block.function.getOffset()+counter
-        self.registers[reg] = None
 
+        function_spill_map = self.register_spill_map.get(block.function.getFunctionName(), {})
+
+        used_mem_loc = function_spill_map.get(var)
+
+        fp = self.getMemoryObject("fp")
+        if used_mem_loc is None:
+            counter += 4
+            self.curr_function[block.function.getFunctionName()] = counter
+
+            sp = self.getMemoryObject("sp")
+
+            block.addui_function(sp, -4, sp)  # Adjust frame/stack ptr
+            block.sw_spill(var, fp, -(block.function.getOffset()+counter))  # Store to new ptr
+            function_spill_map[var] = -(block.function.getOffset()+counter)
+            self.register_spill_map[block.function.getFunctionName()] = function_spill_map
+
+            var.is_loaded = False
+            var.address = block.function.getOffset() + counter
+            self.registers[reg] = None
+
+
+        else:
+            """
+            Reuse spill location
+            """
+            block.sw_spill(var, fp, used_mem_loc)
+
+            var.is_loaded = False
+            var.address = -used_mem_loc
+            self.registers[reg] = None
 
     def load(self, block, var: Memory, reg: str):
         """
@@ -272,6 +296,15 @@ class RegisterManager:
 
         return store_ptr
 
+    def spillAll(self, block):
+        """
+        Spill all registers to memory, usefull at end of block in case of a loop
+        """
+        for k, v in self.registers.items():
+            if v is None:
+                continue
+
+            self.spill(block, k)
 
 
 

@@ -97,6 +97,7 @@ class AST2MIPS(ASTVisitor):
                 """
 
                 self.branch_needed.add(self.last_vertex)
+                RegisterManager.getInstance().spillAll(self.last_vertex.mips)
             return
 
         if node.text == "Declaration":
