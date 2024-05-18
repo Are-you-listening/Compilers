@@ -1,15 +1,14 @@
 #include <stdio.h>
 
-int d(int a){
-    printf("%d", a);
-    return a;
-}
+
 
 
 int main() {
-    int c = 1;
-    int (*e)(int) = &d;
-    int u = (*e)(c);
-    printf("%d", u);
+    int a = 2;
+    int b = 5;
+
+    int c = a && b;
+    printf("%d", c);
+
     return 0;
 }

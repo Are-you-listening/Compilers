@@ -7,3 +7,8 @@ class SpecialInstruction(Instruction):
     @abstractmethod
     def toString(self):
         pass
+
+    @abstractmethod
+    def getAddress(self):
+        pass
+

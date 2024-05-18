@@ -98,7 +98,29 @@ class AST2MIPS(ASTVisitor):
 
                 self.branch_needed.add(self.last_vertex)
                 if len(self.last_vertex.edges) == 2:
+                    block = MipsSingleton.getInstance().getCurrentBlock()
+
+                    if len(block.instructions) > 0 and self.last_vertex.edges[0].to_vertex and self.last_vertex.edges[1].to_vertex:
+                        index = -1
+                        while True:
+                            t = block.instructions[index].getAddress()
+                            if t is not None:
+                                break
+                            index -= 1
+
+                        block.move(Memory("v0", True), block.instructions[index].getAddress())
+
                     RegisterManager.getInstance().spillAll(self.last_vertex.mips)
+            return
+
+        if isinstance(node, ASTNodeBlock) and node.text == "PHI":
+            """
+            When coming across a PHI, node, we know that we need the LLVM phi
+            instruction to continue, so we generate the phi of the last (current) vertex
+            """
+            phi = self.last_vertex.create_phi(True)
+            self.mips_map[node] = phi
+
             return
 
         if node.text == "Declaration":
@@ -298,7 +320,6 @@ class AST2MIPS(ASTVisitor):
             if post_incr:
                 mips_var = child_mips
 
-
         if node.getChildAmount() == 3:
 
             operator_child = node.getChild(1)
@@ -306,6 +327,11 @@ class AST2MIPS(ASTVisitor):
 
             left = self.mips_map.get(node.getChild(0))
             right = self.mips_map.get(node.getChild(2))
+
+            if operator in ("&&", "||"):
+                llvm_var = Calculation.unary(left, "+")
+                self.mips_map[node] = llvm_var
+                return
 
             mips_var = Calculation.operation(left, right, operator)
 
