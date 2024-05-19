@@ -19,6 +19,7 @@ class AccessWrapper:
         block = MipsSingleton.getInstance().getCurrentBlock()
 
         symbol_type = location.symbol_type
+        print(type(symbol_type.pts_to), type(symbol_type))
         if not isinstance(symbol_type, SymbolTypeArray):
             print("kwkww", type(symbol_type))
             location = block.lw(location, 0)
@@ -40,9 +41,14 @@ class AccessWrapper:
                 """
                 i = index.const_value
                 offset = 0
-                for i in range(0, i+1):
-                    symbol_type = target.getElementType(i)
+                for i in range(0, i):
+                    symbol_type = target.getElementType(i).deReference()
+                    """
+                    Weird hot fix
+                    """
+
                     temp_offset = max(symbol_type.getBytesUsed(), 4)
+                    symbol_type = target.getElementType(i)
                     offset += temp_offset
                 is_struct = True
 

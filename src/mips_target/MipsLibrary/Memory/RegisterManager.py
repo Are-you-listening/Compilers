@@ -335,6 +335,8 @@ class RegisterManager:
                 needed += symbol_type.getElementType(v).deReference().getBytesUsed()
                 values.append(v2)
 
+
+
             counter = self.curr_function[block.function.getFunctionName()]
             counter += needed
             self.curr_function[block.function.getFunctionName()] = counter
