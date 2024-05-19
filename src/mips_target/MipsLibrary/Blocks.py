@@ -148,16 +148,29 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
-    def add(self, rs: Memory, rt: Memory, rd: Memory = None, loadable: bool = True):
+    def __moveToC1(self, lst: list[Memory]):
+        temp = []
+        for i in range(0, len(lst)-1):
+            fi = Memory(f"f{i}", True)
+            instr = self.mtc1(lst[i], fi)
+            self.instructions.append(instr)
+            temp.append(fi)
+        return temp
 
+    def add(self, rs: Memory, rt: Memory, rd: Memory = None, loadable: bool = True):
         if rd is None:
             rd = RegisterManager.getInstance().allocate(self)
 
         if loadable:
             RegisterManager.getInstance().loadIfNeeded(self, [rs, rt, rd])
 
-        instr = Add(rd, rs, rt)
-        self.instructions.append(instr)
+        if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
+            instr = Add_s(self.__moveToC1([rd, rs, rs]))
+            self.instructions.append(instr)
+        else:
+            instr = Add(rd, rs, rt)
+            self.instructions.append(instr)
+
         return instr.getAddress()
 
     def addu(self, rs: Memory, rt: Memory):
@@ -260,8 +273,13 @@ class Block:
 
         RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
 
-        instr = Sub(rd, rs, rt)
-        self.instructions.append(instr)
+        if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
+            instr = Div_s(self.__moveToC1([rd, rs, rs]))
+            self.instructions.append(instr)
+        else:
+            instr = Sub(rd, rs, rt)
+            self.instructions.append(instr)
+
         return instr.getAddress()
 
     def la(self, label: str):
@@ -280,8 +298,13 @@ class Block:
 
         RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
 
-        instr = Div(rd, rs, rt)
-        self.instructions.append(instr)
+        if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
+            instr = Div_s(self.__moveToC1([rd, rs, rs]))
+            self.instructions.append(instr)
+        else:
+            instr = Div(rd, rs, rt)
+            self.instructions.append(instr)
+
         return instr.getAddress()
 
     def mul(self, rs: Memory, rt: Memory):
@@ -289,8 +312,12 @@ class Block:
 
         RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
 
-        instr = Mul(rd, rs, rt)
-        self.instructions.append(instr)
+        if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
+            instr = Div_s(self.__moveToC1([rd, rs, rs]))
+            self.instructions.append(instr)
+        else:
+            instr = Mul(rd, rs, rt)
+            self.instructions.append(instr)
         return instr.getAddress()
 
     def neg(self, rs: Memory):
