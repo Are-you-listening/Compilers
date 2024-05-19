@@ -1,20 +1,18 @@
 #include <stdio.h>
 
-union a{
-    int b[20];
-    int d;
-
-};
+int mul(int** b){
+    printf("%d", (*b)[0]);
+    return 0;
+}
 
 int main() {
-    union a c;
-    c.d = 5;
+    int z[5] = {1,2,3,4,5};
 
-    printf("%d", c.d);
+    int* a = z;
+    int** b = &a;
+    mul(b);
 
-    c.b[2] = 5;
-
-    printf("%d", c.b[2]);
+    int** s = &z;
 
     return 0;
 }

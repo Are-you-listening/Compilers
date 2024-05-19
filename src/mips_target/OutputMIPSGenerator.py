@@ -698,6 +698,9 @@ class Conversion:
                            ("BOOL", "INT"): lambda x: x,
                            ("BOOL", "CHAR"): lambda x: x
                            }
-        c = conversion_dict.get((from_type, to_type))
+
+
+        c = conversion_dict.get((from_type.getType(), to_type.getType()))
         var = c(var)
+        var.symbol_type = to_type
         return var

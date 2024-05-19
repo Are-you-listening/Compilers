@@ -269,6 +269,7 @@ class AST2MIPS(ASTVisitor):
         child_mips = self.mips_map[node.getChild(0)]
         RegisterManager.getInstance().loadIfNeeded(block, [child_mips])
         if isinstance(child_mips.symbol_type, SymbolTypePtr) and isinstance(child_mips.symbol_type.pts_to, SymbolTypeArray):
+            print("hey", node.getChild(0).text)
             mips_var = child_mips
         else:
             mips_var = block.lw(child_mips, 0)
@@ -351,14 +352,20 @@ class AST2MIPS(ASTVisitor):
         """
         var = self.mips_map.get(node.getChild(1))
         if node.getChild(1).text == "PHI":
-            from_type = "BOOL"
+            from_type = SymbolType("BOOL", False)
         else:
-            from_type = var.symbol_type.data_type
-        to_type = node.getChild(0).symbol_type.data_type
-        if to_type == from_type:
-            self.mips_map[node] = var
+            from_type = var.symbol_type
+
+        to_type = node.getChild(0).symbol_type
+        print("totype", type(to_type))
+
+        if to_type.getType() == from_type.getType():
+            other_mem = Memory(var.getAddress(), var.is_loaded)
+            other_mem.symbol_type = to_type
+            self.mips_map[node] = other_mem
         else:
             converted_var = Conversion.convert(var, to_type, from_type)
+            print("t", type(converted_var.symbol_type))
             self.mips_map[node] = converted_var
         #self.mips_map[node] = var
 
