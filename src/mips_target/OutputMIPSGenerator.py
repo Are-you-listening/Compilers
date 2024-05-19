@@ -129,18 +129,6 @@ class BinaryWrapper:
 
 class Declaration:
 
-
-    @staticmethod
-    def function(func_name: str, return_type: SymbolType, args: list):
-        """
-        change the current latest function
-        """
-        new_function = FunctionMet(func_name)
-
-        MipsSingleton.getInstance().addFunction(new_function)
-
-        return new_function
-
     @staticmethod
     def declare(var_name: str, symbol_type: SymbolType, value=0, is_global=False):
         block = MipsSingleton.getInstance().getCurrentBlock()
@@ -526,8 +514,36 @@ class Calculation:
         return instr
 
     @staticmethod
-    def operation(left, right, operator):
+    def operation(left: Memory, right: Memory, operator):
         block = MipsSingleton.getInstance().getCurrentBlock()
+
+        to_type = None
+
+        is_ptr = False
+        ptr = None
+        not_ptr = None
+        if isinstance(left, Memory) and isinstance(left.symbol_type, SymbolTypePtr) and operator in ["+", "-"]:
+            is_ptr = True
+            ptr = left
+            not_ptr = right
+            to_type = left.symbol_type
+
+        if isinstance(right, Memory) and isinstance(right.symbol_type, SymbolTypePtr) and operator in ["+", "-"]:
+            is_ptr = True
+            ptr = right
+            not_ptr = left
+            to_type = right.symbol_type
+
+        if is_ptr:
+            li = block.li(ptr.symbol_type.deReference().getBytesUsed())
+            mul = block.mul(not_ptr, li)
+            if operator == "+":
+                instr = block.addu(ptr, mul)
+            else:
+                instr = block.subu(ptr, mul)
+            instr.symbol_type = to_type
+            return instr
+
 
         op_translate = {"+": block.add,
                         "-": block.sub,
@@ -552,6 +568,9 @@ class Calculation:
         mips_op = op_translate.get(operator, None)
 
         instr = mips_op(left, right)
+
+        if instr.symbol_type is None:
+            instr.symbol_type = to_type
 
         return instr
 

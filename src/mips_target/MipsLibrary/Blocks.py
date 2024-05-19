@@ -38,6 +38,8 @@ class Block:
         The reason it is, is because we cannot have any spill overhead during this procedure
 
         """
+
+
         instr = Lw(rt, rs, load_value, False, "")
         self.instructions.append(instr)
         return instr.getAddress()
@@ -261,6 +263,15 @@ class Block:
         RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
 
         instr = Sub(rd, rs, rt)
+        self.instructions.append(instr)
+        return instr.getAddress()
+
+    def subu(self, rs: Memory, rt: Memory):
+        rd = RegisterManager.getInstance().allocate(self)
+
+        RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
+
+        instr = Subu(rd, rs, rt)
         self.instructions.append(instr)
         return instr.getAddress()
 
