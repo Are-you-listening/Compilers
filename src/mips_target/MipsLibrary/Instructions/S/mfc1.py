@@ -2,13 +2,13 @@ from .SpecialInstruction import SpecialInstruction, Memory
 
 
 class Mfc1(SpecialInstruction):
-    def __init__(self, rd: Memory, rs: Memory):
+    def __init__(self, normal: Memory, float: Memory):
         super().__init__()
-        self.rd = rd
-        self.rs = rs
+        self.normal = normal.getAddress()
+        self.float = float.getAddress()
 
     def toString(self):
-        return f"mfc1 ${self.rd.getAddress()}, ${self.rs.getAddress()}"
+        return f"mfc1 ${self.normal}, ${self.float}"
 
     def getAddress(self):
-        return self.rd
+        return "you can't do this here"

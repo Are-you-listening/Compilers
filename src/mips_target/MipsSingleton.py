@@ -18,6 +18,7 @@ class MipsSingleton:
         self.__current_block: Block = None
         self.__module: MipsModule = MipsModule()
         self.__strings = []
+        self.__floatData = []
 
     def clear(self):
         self.__instance = None
@@ -73,4 +74,7 @@ class MipsSingleton:
             self.__strings.append(format_specifier)
             return len(self.__strings) - 1, False
 
-
+    def getFloatName(self):
+        name = "float...index_"+str(len(self.__floatData))  # Our compiler doesn't support dots in its name so this is safe to use
+        self.__floatData.append(name)
+        return name

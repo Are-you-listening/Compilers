@@ -198,8 +198,12 @@ class Declaration:
             value = ord(value)  # Values are strings
 
         block = MipsSingleton.getInstance().getCurrentBlock()
-
-        store_reg = block.addui(Memory(0, True), value)
+        if isinstance(value, float):
+            var_name = MipsSingleton.getInstance().getFloatName()
+            MipsSingleton.getInstance().getModule().addDataSegment(var_name, value, special_info=".float")
+            store_reg = MipsSingleton.getInstance().getCurrentBlock().l_s(var_name)  # Load float
+        else:
+            store_reg = block.addui(Memory(0, True), value)
         return store_reg
 
     @staticmethod

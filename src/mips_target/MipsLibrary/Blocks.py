@@ -1,5 +1,6 @@
 from .Instructions import *
 from .Memory import Memory, RegisterManager
+from src.parser.Tables.SymbolType import SymbolType
 
 
 class Block:
@@ -138,7 +139,6 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
-
     def sw_spill(self, rt: Memory, rs: Memory, immediate: int):
         """
         Store function that only be used in spill, because it will not load
@@ -148,16 +148,29 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
-    def add(self, rs: Memory, rt: Memory, rd: Memory = None, loadable: bool = True):
+    def __moveToC1(self, lst: list[Memory]):
+        temp = []
+        for i in range(0, len(lst)-1):
+            fi = Memory(f"f{i}", True)
+            instr = self.mtc1(lst[i], fi)
+            self.instructions.append(instr)
+            temp.append(fi)
+        return temp
 
+    def add(self, rs: Memory, rt: Memory, rd: Memory = None, loadable: bool = True):
         if rd is None:
             rd = RegisterManager.getInstance().allocate(self)
 
         if loadable:
             RegisterManager.getInstance().loadIfNeeded(self, [rs, rt, rd])
 
-        instr = Add(rd, rs, rt)
-        self.instructions.append(instr)
+        if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
+            instr = Add_s(self.__moveToC1([rd, rs, rs]))
+            self.instructions.append(instr)
+        else:
+            instr = Add(rd, rs, rt)
+            self.instructions.append(instr)
+
         return instr.getAddress()
 
     def addu(self, rs: Memory, rt: Memory):
@@ -260,8 +273,13 @@ class Block:
 
         RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
 
-        instr = Sub(rd, rs, rt)
-        self.instructions.append(instr)
+        if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
+            instr = Div_s(self.__moveToC1([rd, rs, rs]))
+            self.instructions.append(instr)
+        else:
+            instr = Sub(rd, rs, rt)
+            self.instructions.append(instr)
+
         return instr.getAddress()
 
     def subu(self, rs: Memory, rt: Memory):
@@ -289,8 +307,13 @@ class Block:
 
         RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
 
-        instr = Div(rd, rs, rt)
-        self.instructions.append(instr)
+        if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
+            instr = Div_s(self.__moveToC1([rd, rs, rs]))
+            self.instructions.append(instr)
+        else:
+            instr = Div(rd, rs, rt)
+            self.instructions.append(instr)
+
         return instr.getAddress()
 
     def mul(self, rs: Memory, rt: Memory):
@@ -298,8 +321,12 @@ class Block:
 
         RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
 
-        instr = Mul(rd, rs, rt)
-        self.instructions.append(instr)
+        if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
+            instr = Div_s(self.__moveToC1([rd, rs, rs]))
+            self.instructions.append(instr)
+        else:
+            instr = Mul(rd, rs, rt)
+            self.instructions.append(instr)
         return instr.getAddress()
 
     def neg(self, rs: Memory):
@@ -345,26 +372,36 @@ class Block:
     def sitofp(self, general: Memory, Float: Memory):
         RegisterManager.getInstance().loadIfNeeded(self, [general, Float])
 
-        instr = self.mtc1(general, Float)
-        self.instructions.append(instr)
-        instr = Cvt_s_w(instr.getAddress())
+        instr = Mtc1(general, Float)
         self.instructions.append(instr)
 
-        instr = self.mfc1(instr.getAddress(), general)
+        instr = Cvt_s_w(Float)
         self.instructions.append(instr)
 
-        return instr.getAddress()
+        instr = Mfc1(general, Float)
+        self.instructions.append(instr)
+
+        general.symbol_type = SymbolType("FLOAT", None)
+
+        return general
 
     def fptosi(self, Float: Memory):
         RegisterManager.getInstance().loadIfNeeded(self, [Float])
 
-        instr = Cvt_w_s(Float)
+        assert Float.symbol_type.getBaseType() == "FLOAT"  # TODO Remove later
+        f0 = Memory("f0", True)
+        instr = Mtc1(Float, f0)
         self.instructions.append(instr)
 
-        #instr = self.mfc1(instr.getAddress(), general)
-        #self.instructions.append(instr)
+        instr = Cvt_w_s(f0)
+        self.instructions.append(instr)
 
-        return instr.getAddress()
+        instr = Mfc1(Float, f0)
+        self.instructions.append(instr)
+
+        Float.symbol_type = SymbolType("INT", None)
+
+        return Float
 
     def mtc1(self, general: Memory, Float: Memory):
         RegisterManager.getInstance().loadIfNeeded(self, [general, Float])
@@ -373,10 +410,23 @@ class Block:
         return instr.getAddress()
 
     def mfc1(self, Float: Memory, general: Memory):
-        RegisterManager.getInstance().loadIfNeeded(self, [Float, general])
-        instr = Mfc1(Float, general)
+        RegisterManager.getInstance().loadIfNeeded(self, [general, Float])
+        instr = Mfc1(general, Float)
         self.instructions.append(instr)
-        return instr.getAddress()
+        return general
+
+    def l_s(self, var_name: str):
+        # Load a float value
+        instr = L_s(Memory("f0", True), var_name)
+        self.instructions.append(instr)
+
+        rd = RegisterManager.getInstance().allocate(self)
+        RegisterManager.getInstance().loadIfNeeded(self, [rd])
+
+        instr = Mfc1(rd, instr.rd)  # Move to normal registers
+        rd.symbol_type = SymbolType("FLOAT", None)
+        self.instructions.append(instr)
+        return rd
 
     def toString(self):
         s = ""

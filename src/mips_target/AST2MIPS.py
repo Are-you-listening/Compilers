@@ -19,7 +19,6 @@ class AST2MIPS(ASTVisitor):
         self.special_functions_declared = {}
         self.branch_needed = set()
         self.last_vertex = None
-        self.typing = {}
 
     def visit(self, ast: AST):
         self.special_functions_declared = {}
@@ -27,7 +26,6 @@ class AST2MIPS(ASTVisitor):
         self.mips_map = {}
         self.branch_needed = set()
         self.last_vertex = None
-        self.typing = {}
 
         self.root = ast.root
         self.postorder(self.root)
@@ -368,13 +366,10 @@ class AST2MIPS(ASTVisitor):
             converted_var = Conversion.convert(var, to_type, from_type)
             print("t", type(converted_var.symbol_type))
             self.mips_map[node] = converted_var
-        #self.mips_map[node] = var
 
     def handleParameters(self, node: ASTNode):
-
         params = []
         for i, p in enumerate(node.children):
-
             block = MipsSingleton.getInstance().getCurrentBlock()
             fp = Memory("fp", True)
             mem_obj = block.addui(fp, (i+1)*4)

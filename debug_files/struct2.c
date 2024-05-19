@@ -1,16 +1,13 @@
 #include <stdio.h>
 
 
+float fyi = 5.32;
 
+int main(){
+    float f = 3.14;
+    int x = f;
+    f = x;
 
-int main() {
-    int a = 1;
-    a = 1;
-    int b = 1;
-    b = 1;
-
-    int c = a && b;
-    printf("%d", c);
-
+    printf("hello%dworld%c", x, x);
     return 0;
 }
