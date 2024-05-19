@@ -11,4 +11,4 @@ class Mfc1(SpecialInstruction):
         return f"mfc1 ${self.normal}, ${self.float}"
 
     def getAddress(self):
-        return "you can't do this here"
+        return "you can't do this here Mfc1"

@@ -150,9 +150,9 @@ class Block:
 
     def __moveToC1(self, lst: list[Memory]):
         temp = []
-        for i in range(0, len(lst)-1):
+        for i in range(0, len(lst)):
             fi = Memory(f"f{i}", True)
-            instr = self.mtc1(lst[i], fi)
+            instr = Mtc1(lst[i], fi)
             self.instructions.append(instr)
             temp.append(fi)
         return temp
@@ -167,6 +167,10 @@ class Block:
         if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
             instr = Add_s(self.__moveToC1([rd, rs, rs]))
             self.instructions.append(instr)
+
+            rd = self.mfc1(instr.return_value, rd)
+            rd.symbol_type = SymbolType("FLOAT", None)
+            return rd
         else:
             instr = Add(rd, rs, rt)
             self.instructions.append(instr)
@@ -276,6 +280,10 @@ class Block:
         if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
             instr = Div_s(self.__moveToC1([rd, rs, rs]))
             self.instructions.append(instr)
+
+            self.mfc1(instr.return_value, rd)
+            rd.symbol_type = SymbolType("FLOAT", None)
+            return rd
         else:
             instr = Sub(rd, rs, rt)
             self.instructions.append(instr)
@@ -301,6 +309,9 @@ class Block:
         if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
             instr = Div_s(self.__moveToC1([rd, rs, rs]))
             self.instructions.append(instr)
+            self.mfc1(instr.return_value, rd)
+            rd.symbol_type = SymbolType("FLOAT", None)
+            return rd
         else:
             instr = Div(rd, rs, rt)
             self.instructions.append(instr)
@@ -315,6 +326,9 @@ class Block:
         if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
             instr = Div_s(self.__moveToC1([rd, rs, rs]))
             self.instructions.append(instr)
+            self.mfc1(instr.return_value, rd)
+            rd.symbol_type = SymbolType("FLOAT", None)
+            return rd
         else:
             instr = Mul(rd, rs, rt)
             self.instructions.append(instr)
@@ -398,7 +412,7 @@ class Block:
         RegisterManager.getInstance().loadIfNeeded(self, [general, Float])
         instr = Mtc1(general, Float)
         self.instructions.append(instr)
-        return instr.getAddress()
+        return Float
 
     def mfc1(self, Float: Memory, general: Memory):
         RegisterManager.getInstance().loadIfNeeded(self, [general, Float])
@@ -424,6 +438,8 @@ class Block:
         if self.label is not None:
             s += f"{self.label}:\n"
         for i in self.instructions:
+            if isinstance(i, str):
+                pass
             s += i.toString()
             s += "\n"
 

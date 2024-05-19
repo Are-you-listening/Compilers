@@ -6,4 +6,4 @@ class Div_s(FloatMipsInstruction):
         super().__init__(lst[0], lst[1], lst[2])
 
     def toString(self):
-        return f"div.s ${self.fd}, ${self.fs}, {self.ft}"
+        return f"div.s ${self.fd}, ${self.fs}, ${self.ft}"

@@ -1,13 +1,20 @@
 #include <stdio.h>
 
+union a{
+    int b[20];
+    int d;
 
-float fyi = 5.32;
+};
 
-int main(){
-    float f = 3.14;
-    int x = f;
-    f = x;
+int main() {
+    union a c;
+    c.d = 5;
 
-    printf("hello%dworld%c", x, x);
+    printf("%d", c.d);
+
+    c.b[2] = 5;
+
+    printf("%d", c.b[2]);
+
     return 0;
 }

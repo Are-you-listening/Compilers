@@ -19,6 +19,7 @@ class AST2MIPS(ASTVisitor):
         self.special_functions_declared = {}
         self.branch_needed = set()
         self.last_vertex = None
+        self.globals = {}
 
     def visit(self, ast: AST):
         self.special_functions_declared = {}
@@ -26,6 +27,7 @@ class AST2MIPS(ASTVisitor):
         self.mips_map = {}
         self.branch_needed = set()
         self.last_vertex = None
+        self.globals = {}
 
         self.root = ast.root
         self.postorder(self.root)
@@ -167,10 +169,27 @@ class AST2MIPS(ASTVisitor):
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
-            entry = node.getSymbolTable().getEntry(node.text)
-            entry = self.map_table.getEntry(entry)
+            entry_sym = node.getSymbolTable().getEntry(node.text)
+            entry = self.map_table.getEntry(entry_sym)
             if entry is None:
-                self.mips_map[node] = node.text
+                mips_var = RegisterManager.getInstance().allocate(MipsSingleton.getInstance().getCurrentBlock(), False)
+                mips_var.symbol_type = SymbolTypePtr(entry_sym.typeObject, False)
+                self.mips_map[node] = mips_var
+
+                if not node.getSymbolTable().isRoot() and entry_sym.firstDeclared.getSymbolTable().isRoot():  # First use of the global value 'outside' of the global scope
+                    register_manager = RegisterManager.getInstance()
+                    block = MipsSingleton.getInstance().getCurrentBlock()
+                    label = self.globals[node.text].address
+                    symbol_type = self.globals[node.text].symbol_type
+
+                    # if mips_var.symbol_type.getBaseType() == "FLOAT":
+                    #     mips_var = block.l_s(label)
+                    # else:
+                    mips_var = block.la(label)
+                        #mips_var = register_manager.getInstance().storeVariable(block, mips_var, symbol_type.getBytesUsed())
+                    self.mips_map[node] = mips_var
+                    mips_var.symbol_type = SymbolTypePtr(entry_sym.typeObject, False)
+                    self.map_table.addEntry(MapEntry(node.text, mips_var), entry_sym)
             else:
                 print(entry.llvm, node.text)
 
@@ -189,6 +208,7 @@ class AST2MIPS(ASTVisitor):
 
         if node.type == "STRING":
             mips_var = Declaration.string(node.text)
+            mips_var.symbol_type = SymbolType(node.type, None)
             self.mips_map[node] = mips_var
 
     def handleDeclaration(self, node):
@@ -197,8 +217,9 @@ class AST2MIPS(ASTVisitor):
 
         if var_node.getSymbolTable().isRoot():
             # Handle global variable (add to .data segment)
-            if node.getChild(1):
-                Declaration.declare(var_node.text, entry.getTypeObject(), node.getChild(1).text, is_global=True)
+            mips_var = Declaration.declare(var_node.text, entry.getTypeObject(), node.getChild(1).text, is_global=True)
+            self.mips_map[node] = mips_var
+            self.globals[var_node.text] = mips_var
         else:
             # Handle non-global variable (reserve space on the stack)
             mips_var = Declaration.declare(var_node.text, entry.getTypeObject())
@@ -318,9 +339,11 @@ class AST2MIPS(ASTVisitor):
 
             if post_incr:
                 mips_var = child_mips
+            if child_mips.symbol_type is None and child.text == "PHI":
+                child_mips.symbol_type = SymbolType("BOOL", None)
+            mips_var.symbol_type = child_mips.symbol_type
 
         if node.getChildAmount() == 3:
-
             operator_child = node.getChild(1)
             operator = operator_child.text
 
@@ -333,7 +356,14 @@ class AST2MIPS(ASTVisitor):
                 return
 
             mips_var = Calculation.operation(left, right, operator)
+            if isinstance(left, Function):  # Take the return value for function calls
+                mips_var.symbol_type = node.getSymbolTable().getEntry(left.function_name).typeObject
+            elif operator == "[]":
+                pass
+            else:
+                mips_var.symbol_type = left.symbol_type
 
+        #mips_var.symbol_type = node.getSymbolTable().getEntry()
         self.mips_map[node] = mips_var
 
     def handleConversions(self, node: ASTNode):

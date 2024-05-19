@@ -11,4 +11,4 @@ class Mtc1(SpecialInstruction):
         return f"mtc1 ${self.rd}, ${self.rs}"
 
     def getAddress(self):
-        return "you can't do this!"
+        return "you can't do this! Mtc1"

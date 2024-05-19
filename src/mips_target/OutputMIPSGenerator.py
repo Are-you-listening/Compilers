@@ -153,16 +153,21 @@ class Declaration:
             # if no initial value -> initialize to zero
             if symbol_type.getBaseType() == "FLOAT":
                 special_info = ".float"
+                #mem = block.l_s(var_name)
             else:
                 special_info = ".word"
+                #mem = register_manager.allocate(block)
             module.addDataSegment(var_name, value, special_info=special_info)
 
-        else:
-            #if symbol_type.getBaseType() == "FLOAT":
 
+            #instr = block.lw(mem, None, True, var_name)
+            #instr = register_manager.getInstance().storeVariable(block, instr, symbol_type.getBytesUsed())
+            instr = Memory(var_name, False)
+            instr.symbol_type = SymbolTypePtr(symbol_type, False)
+
+        else:
             instr = block.li(value)
             instr = register_manager.getInstance().storeVariable(block, instr, symbol_type.getBytesUsed())
-
             instr.symbol_type = SymbolTypePtr(symbol_type, False)
 
         return instr
@@ -205,6 +210,7 @@ class Declaration:
             store_reg = MipsSingleton.getInstance().getCurrentBlock().l_s(var_name)  # Load float
         else:
             store_reg = block.addui(Memory(0, True), value)
+        store_reg.symbol_type = symbol_type
         return store_reg
 
     @staticmethod
@@ -246,6 +252,7 @@ class Printf:
         print_char_special_token_c = function.createBlock()
         print_char_special_token_s = function.createBlock()
         print_char_special_token_x = function.createBlock()
+        print_char_special_token_f = function.createBlock()
         printf_char_loop_end = function.createBlock()
 
         zero = Memory(0, True)
@@ -397,6 +404,21 @@ class Printf:
         temp_reg.overrideMemory(t3)
 
         print_char_special_token_c.j(print_char_special_token_end_if.label)
+
+        """
+        When special character == 'f', we will print a float, that corresponds with next parameter
+        """
+        # temp_reg = print_char_special_token_f.addui(zero, 11)
+        # temp_reg.overrideMemory(v0)
+        #
+        # c_char = print_char_special_token_f.lb(t3, 0)
+        # c_char.overrideMemory(t1)
+        #
+        # temp_reg = print_char_special_token_f.addui(t3, 4)
+        # temp_reg.overrideMemory(t3)
+        #
+        # print_char_special_token_f.j(print_char_special_token_end_if.label)
+
 
         """
         Load the latest parameter value for %s special case
@@ -678,11 +700,13 @@ class Conversion:
                            ("FLOAT", "BOOL"): lambda x: BinaryWrapper.notEqual(block.fptosi(x), block.li(0)),
                            ("INT", "BOOL"): lambda x: BinaryWrapper.notEqual(x, block.li(0)),
                            ("PTR", "BOOL"): lambda x: BinaryWrapper.notEqual(x, block.li(0)),
-                           ("INT", "CHAR"): lambda x: block.slr(block.sll(x, 24), 24),
+                           ("INT", "CHAR"): lambda x: block.sll(block.srl(x, 24), 24),
                            ("CHAR", "INT"): lambda x: x,
                            ("BOOL", "INT"): lambda x: x,
                            ("BOOL", "CHAR"): lambda x: x
                            }
         c = conversion_dict.get((from_type, to_type))
         var = c(var)
+        if var.symbol_type is None:
+            var.symbol_type = SymbolType(to_type, None)
         return var
