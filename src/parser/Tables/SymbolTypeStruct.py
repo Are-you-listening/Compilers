@@ -31,6 +31,12 @@ class SymbolTypeStruct(SymbolType):
 
         return byte_amount
 
+    def getElementCount(self):
+        pts_to = TypeNodeHandler.getInstance().getInstance().struct_param[self.data_type]
+
+        return len(pts_to)
+
+
     @staticmethod
     def isBase():
         return False

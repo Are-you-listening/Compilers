@@ -174,7 +174,6 @@ class AST2MIPS(ASTVisitor):
             if entry is None:
                 self.mips_map[node] = node.text
             else:
-                print(entry.llvm, node.text)
 
                 mips_var = entry.llvm
 
@@ -202,10 +201,13 @@ class AST2MIPS(ASTVisitor):
         if var_node.getSymbolTable().isRoot():
             # Handle global variable (add to .data segment)
             if node.getChild(1):
-                Declaration.declare(var_node.text, entry.getTypeObject(), node.getChild(1).text, is_global=True)
+
+                Declaration.declare(var_node.text, SymbolTypePtr(entry.getTypeObject(), False),
+                                    node.getChild(1).text, is_global=True)
         else:
             # Handle non-global variable (reserve space on the stack)
-            mips_var = Declaration.declare(var_node.text, entry.getTypeObject())
+            mips_var = Declaration.declare(var_node.text, SymbolTypePtr(entry.getTypeObject(), False))
+
             self.mips_map[node] = mips_var
             self.mips_map[node.getChild(0)] = mips_var
             self.map_table.addEntry(MapEntry(var_node.text, mips_var), entry)
@@ -268,12 +270,9 @@ class AST2MIPS(ASTVisitor):
 
         child_mips = self.mips_map[node.getChild(0)]
         RegisterManager.getInstance().loadIfNeeded(block, [child_mips])
-        if isinstance(child_mips.symbol_type, SymbolTypePtr) and isinstance(child_mips.symbol_type.pts_to, SymbolTypeArray):
-            print("hey", node.getChild(0).text)
-            mips_var = child_mips
-        else:
-            mips_var = block.lw(child_mips, 0)
-            mips_var.symbol_type = child_mips.symbol_type.deReference()
+
+        mips_var = block.lw(child_mips, 0)
+        mips_var.symbol_type = child_mips.symbol_type.deReference()
 
         self.mips_map[node] = mips_var
 

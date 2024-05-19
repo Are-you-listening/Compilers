@@ -1,6 +1,11 @@
 from .Memory import Memory
 from src.internal_tools.IntegrityChecks import PreConditions
 import math
+from src.parser.Tables.SymbolType import SymbolType
+from src.parser.Tables.SymbolTypeArray import SymbolTypeArray
+from src.parser.Tables.SymbolTypePtr import SymbolTypePtr
+from src.parser.Tables.SymbolTypeStruct import SymbolTypeStruct
+
 
 class RegisterManager:
     __instance = None
@@ -276,30 +281,72 @@ class RegisterManager:
             """
             loaded.append(load_mem)
 
-    def storeVariable(self, block, value: Memory, byte_size: int):
+    def storeVariable(self, block, value: Memory, symbol_type: SymbolType):
+        if symbol_type.getPtrAmount() == 0:
+            return value
+
         self.loadIfNeeded(block, [value])
 
         if block.function.getFunctionName() not in self.curr_function:
             self.curr_function[block.function.getFunctionName()] = 0
 
-        counter = self.curr_function[block.function.getFunctionName()]
-
+        byte_size = symbol_type.getBytesUsed()
         needed = math.ceil(byte_size/4)*4
-
-        counter += needed
-        self.curr_function[block.function.getFunctionName()] = counter
 
         sp = self.getMemoryObject("sp")
 
-        block.addui_function(sp, -needed, sp)  # Adjust frame/stack ptr
+        if isinstance(symbol_type, SymbolTypeArray):
+            values = []
+            for v in range(symbol_type.size):
+                v2 = self.storeVariable(block, value, symbol_type.deReference())
+                values.append(v2)
 
-        for i in range(0, needed, 4):
-            """
-            Let a registers be zero intialized
-            """
-            block.sw_spill(value, sp, i+4)  # Store to new ptr
+            counter = self.curr_function[block.function.getFunctionName()]
+            counter += needed
+            self.curr_function[block.function.getFunctionName()] = counter
 
-        store_ptr = block.addui(sp, 4)
+            block.addui_function(sp, -len(values)*4, sp)
+            for i, v in enumerate(values):
+
+                self.loadIfNeeded(block, [v])
+                block.sw_spill(v, sp, (i*4) + 4)  # Store to new ptr
+
+            store_ptr = block.addui(sp, 4)
+            print("s", store_ptr)
+
+        elif isinstance(symbol_type, SymbolTypePtr):
+
+            value = self.storeVariable(block, value, symbol_type.deReference())
+
+            counter = self.curr_function[block.function.getFunctionName()]
+            counter += 4
+            self.curr_function[block.function.getFunctionName()] = counter
+
+            block.addui_function(sp, -4, sp)  # Adjust frame/stack ptr
+            block.sw_spill(value, sp, 4)  # Store to new ptr
+
+            store_ptr = block.addui(sp, 4)
+
+        elif isinstance(symbol_type, SymbolTypeStruct):
+            values = []
+            needed = 0
+            for v in range(symbol_type.getElementCount()):
+                v2 = self.storeVariable(block, value, symbol_type.getElementType(v).deReference())
+                needed += symbol_type.getElementType(v).deReference().getBytesUsed()
+                values.append(v2)
+
+            counter = self.curr_function[block.function.getFunctionName()]
+            counter += needed
+            self.curr_function[block.function.getFunctionName()] = counter
+
+            block.addui_function(sp, -needed, sp)
+            for i, v in enumerate(values):
+                self.loadIfNeeded(block, [v])
+                block.sw_spill(v, sp, (i * 4) + 4)  # Store to new ptr
+
+            store_ptr = block.addui(sp, 4)
+
+        store_ptr.symbol_type = symbol_type
 
         return store_ptr
 

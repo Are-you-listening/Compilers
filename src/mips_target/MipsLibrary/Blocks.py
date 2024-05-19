@@ -132,7 +132,6 @@ class Block:
         return instr.getAddress()
 
     def sw(self, rt: Memory, rs: Memory, immediate: int):
-
         RegisterManager.getInstance().loadIfNeeded(self, [rt, rs])
 
         instr = Sw(rt, rs, immediate)
@@ -145,7 +144,6 @@ class Block:
         Store function that only be used in spill, because it will not load
         the variable it needs to store
         """
-
         instr = Sw(rt, rs, immediate)
         self.instructions.append(instr)
         return instr.getAddress()

@@ -19,7 +19,9 @@ class AccessWrapper:
         block = MipsSingleton.getInstance().getCurrentBlock()
 
         symbol_type = location.symbol_type
-
+        if not isinstance(symbol_type, SymbolTypeArray):
+            print("kwkww", type(symbol_type))
+            location = block.lw(location, 0)
         offset = 4
         is_struct = False
         if isinstance(symbol_type, SymbolTypePtr):
@@ -48,12 +50,13 @@ class AccessWrapper:
             multiplier = block.li(offset)
             real_index = block.mul(index, multiplier)
             instr = block.addu(location, real_index)
+
         else:
             real_index = block.li(offset)
             instr = block.addu(location, real_index)
 
         instr.symbol_type = symbol_type
-
+        print("ww", type(symbol_type))
         return instr
 
 
@@ -147,11 +150,13 @@ class Declaration:
 
         else:
             #if symbol_type.getBaseType() == "FLOAT":
-
+            print("st", type(symbol_type))
             instr = block.li(value)
-            instr = register_manager.getInstance().storeVariable(block, instr, symbol_type.getBytesUsed())
 
-            instr.symbol_type = SymbolTypePtr(symbol_type, False)
+            instr = register_manager.getInstance().storeVariable(block, instr, symbol_type)
+            print("declared", instr, instr.symbol_type.getPtrTuple())
+
+            instr.symbol_type = symbol_type
 
         return instr
 
