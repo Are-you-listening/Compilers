@@ -14,13 +14,13 @@ from .MipsSingleton import MipsSingleton
 class AccessWrapper:
 
     @staticmethod
-    def access(location: Memory, index: Memory):
+    def access(location: Memory, index: Memory, first=True):
 
         block = MipsSingleton.getInstance().getCurrentBlock()
 
         symbol_type = location.symbol_type
         print(type(symbol_type.pts_to), type(symbol_type))
-        if not isinstance(symbol_type, SymbolTypeArray):
+        if not isinstance(symbol_type, SymbolTypeArray) and first:
             print("kwkww", type(symbol_type))
             location = block.lw(location, 0)
         offset = 4
@@ -39,9 +39,9 @@ class AccessWrapper:
                 """
                 Special case, where the terminal int is encoded into a SymbolType
                 """
-                i = index.const_value
+                j = index.const_value
                 offset = 0
-                for i in range(0, i):
+                for i in range(0, j):
                     symbol_type = target.getElementType(i).deReference()
                     """
                     Weird hot fix

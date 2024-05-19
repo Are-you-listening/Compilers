@@ -339,6 +339,8 @@ class AST2MIPS(ASTVisitor):
                 self.mips_map[node] = llvm_var
                 return
 
+            first = False
+
             mips_var = Calculation.operation(left, right, operator)
 
         self.mips_map[node] = mips_var

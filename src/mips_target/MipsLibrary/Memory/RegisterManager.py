@@ -291,6 +291,9 @@ class RegisterManager:
             self.curr_function[block.function.getFunctionName()] = 0
 
         byte_size = symbol_type.getBytesUsed()
+        if isinstance(symbol_type, SymbolTypeArray):
+            byte_size = 4
+
         needed = math.ceil(byte_size/4)*4
 
         sp = self.getMemoryObject("sp")
@@ -332,10 +335,11 @@ class RegisterManager:
             needed = 0
             for v in range(symbol_type.getElementCount()):
                 v2 = self.storeVariable(block, value, symbol_type.getElementType(v).deReference())
-                needed += symbol_type.getElementType(v).deReference().getBytesUsed()
+                byte_size = symbol_type.getElementType(v).deReference().getBytesUsed()
+                if isinstance(symbol_type.getElementType(v).deReference(), SymbolTypeArray):
+                    byte_size = 4
+                needed += byte_size
                 values.append(v2)
-
-
 
             counter = self.curr_function[block.function.getFunctionName()]
             counter += needed
