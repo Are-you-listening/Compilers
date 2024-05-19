@@ -355,13 +355,10 @@ class AST2MIPS(ASTVisitor):
         else:
             converted_var = Conversion.convert(var, to_type, from_type)
             self.mips_map[node] = converted_var
-        #self.mips_map[node] = var
 
     def handleParameters(self, node: ASTNode):
-
         params = []
         for i, p in enumerate(node.children):
-
             block = MipsSingleton.getInstance().getCurrentBlock()
             fp = Memory("fp", True)
             mem_obj = block.addui(fp, (i+1)*4)
