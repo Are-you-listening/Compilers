@@ -88,6 +88,7 @@ class UnaryWrapper:
         block = MipsSingleton.getInstance().getCurrentBlock()
         instr = block.addi(mips_val, 1)
         return instr
+
     @staticmethod
     def Decr(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
@@ -121,6 +122,8 @@ class BinaryWrapper:
     def notEqual(mips_val1, mips_val2):
         block = MipsSingleton.getInstance().getCurrentBlock()
         instr = block.xor(mips_val1, mips_val2)
+        instr = block.sltiu(instr, 1)
+        instr = block.sltiu(instr, 1)
         return instr
 
 
@@ -148,9 +151,15 @@ class Declaration:
             # Add global variable to the .data section
             module = MipsSingleton.getInstance().getModule()
             # if no initial value -> initialize to zero
-            module.addDataSegment(var_name, value, special_info=".word")
+            if symbol_type.getBaseType() == "FLOAT":
+                special_info = ".float"
+            else:
+                special_info = ".word"
+            module.addDataSegment(var_name, value, special_info=special_info)
 
         else:
+            #if symbol_type.getBaseType() == "FLOAT":
+
             instr = block.li(value)
             instr = register_manager.getInstance().storeVariable(block, instr, symbol_type.getBytesUsed())
 
@@ -655,20 +664,21 @@ class Conversion:
         dict we use to retrieve which conversion command to call
         """
         block = MipsSingleton.getInstance().getCurrentBlock()  # Get the current block
-        conversion_dict = {("INT", "FLOAT"): lambda x: block.sitofp(x),
-                           ("CHAR", "FLOAT"): lambda x: block.sitofp(x),
-                           ("PTR", "FLOAT"): lambda x: block.sitofp(x),
-                           ("BOOL", "FLOAT"): lambda x: block.sitofp(x),
+        conversion_dict = {("INT", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
+                           ("CHAR", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
+                           ("PTR", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
+                           ("BOOL", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
                            ("FLOAT", "INT"): lambda x: block.fptosi(x),
                            ("FLOAT", "CHAR"): lambda x: block.slr(block.sll(block.fptosi(x), 24), 24),  # First convert to int, then to char
                            ("FLOAT", "PTR"): lambda x: block.fptosi(x),
-                           # ("FLOAT", "BOOL"): lambda x: block.fptosi(x), # TODO same
-                           # ("INT", "BOOL"): lambda x: block.icmp_signed(x),  # TODO use neq from Lucas
-                           # ("PTR", "BOOL"): lambda x: block.icmp_signed(x),  # TODO neq 0 x from Lucas
+                           ("FLOAT", "BOOL"): lambda x: BinaryWrapper.notEqual(block.fptosi(x), block.li(0)),
+                           ("INT", "BOOL"): lambda x: BinaryWrapper.notEqual(x, block.li(0)),
+                           ("PTR", "BOOL"): lambda x: BinaryWrapper.notEqual(x, block.li(0)),
                            ("INT", "CHAR"): lambda x: block.slr(block.sll(x, 24), 24),
                            ("CHAR", "INT"): lambda x: x,
+                           ("BOOL", "INT"): lambda x: x,
+                           ("BOOL", "CHAR"): lambda x: x
                            }
-        print(from_type, to_type)
-        c = conversion_dict.get(from_type, to_type)
+        c = conversion_dict.get((from_type, to_type))
         var = c(var)
         return var

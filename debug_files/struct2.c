@@ -2,11 +2,15 @@
 
 
 
-int main(){
-    int a[2][2] = {{'a', 'b'}, {'c', 'd'}};
-    printf("%c", a[0][0]);
-    printf("%c", a[0][1]);
-    printf("%c", a[1][0]);
-    printf("%c", a[1][1]);
+
+int main() {
+    int a = 1;
+    a = 1;
+    int b = 1;
+    b = 1;
+
+    int c = a && b;
+    printf("%d", c);
+
     return 0;
 }

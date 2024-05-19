@@ -19,6 +19,7 @@ class AST2MIPS(ASTVisitor):
         self.special_functions_declared = {}
         self.branch_needed = set()
         self.last_vertex = None
+        self.typing = {}
 
     def visit(self, ast: AST):
         self.special_functions_declared = {}
@@ -26,6 +27,7 @@ class AST2MIPS(ASTVisitor):
         self.mips_map = {}
         self.branch_needed = set()
         self.last_vertex = None
+        self.typing = {}
 
         self.root = ast.root
         self.postorder(self.root)
@@ -124,7 +126,6 @@ class AST2MIPS(ASTVisitor):
             return
 
         if node.text == "Declaration":
-
             self.handleDeclaration(node)
 
         if node.text == "Parameters":
@@ -344,11 +345,17 @@ class AST2MIPS(ASTVisitor):
         :return:
         """
         var = self.mips_map.get(node.getChild(1))
-        # from_type = node.getChild(0).getSymbolTable().getEntry(node.getChild(0).text) # TODO get from type map
-        # to_type = node.getChild(0).symbol_type
-        # converted_var = Conversion.convert(var, to_type, from_type)
-        # self.mips_map[node] = converted_var
-        self.mips_map[node] = var
+        if node.getChild(1).text == "PHI":
+            from_type = "BOOL"
+        else:
+            from_type = var.symbol_type.data_type
+        to_type = node.getChild(0).symbol_type.data_type
+        if to_type == from_type:
+            self.mips_map[node] = var
+        else:
+            converted_var = Conversion.convert(var, to_type, from_type)
+            self.mips_map[node] = converted_var
+        #self.mips_map[node] = var
 
     def handleParameters(self, node: ASTNode):
 
