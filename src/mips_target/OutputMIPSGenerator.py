@@ -163,7 +163,18 @@ class Declaration:
                 #mem = block.l_s(var_name)
 
             elif isinstance(symbol_type, SymbolTypeArray):
-                module.addDataSegment(f".{var_name}", f"{'0, '*(symbol_type.size-1)} 0", special_info=".word")
+                """
+                make global array
+                """
+                values = [str(value) for i in range(symbol_type.size)]
+                if isinstance(symbol_type.deReference(), SymbolTypeArray):
+                    values = []
+                    for i in range(symbol_type.size):
+                        val = Declaration.declare(f".{i}.{var_name}", symbol_type.deReference(), value, is_global)
+                        print("val", val)
+                        values.append(str(val))
+
+                module.addDataSegment(f".{var_name}", f"{','.join(values)}", special_info=".word")
                 special_info = f".word"
                 value = f".{var_name}"
             else:
