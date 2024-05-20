@@ -102,7 +102,7 @@ class AST2MIPS(ASTVisitor):
                 if len(self.last_vertex.edges) == 2:
                     block = MipsSingleton.getInstance().getCurrentBlock()
 
-                    if len(block.instructions) > 0 and self.last_vertex.edges[0].to_vertex and self.last_vertex.edges[1].to_vertex:
+                    if len(block.instructions) > 0 and self.last_vertex.edges[0].to_vertex != self.last_vertex.edges[1].to_vertex:
                         index = -1
                         while True:
                             t = block.instructions[index].getAddress()
