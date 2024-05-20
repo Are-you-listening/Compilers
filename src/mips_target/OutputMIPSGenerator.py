@@ -363,6 +363,11 @@ class Printf:
 
         print_char_special_token.beq(t2, t4, print_char_special_token_x.label)
 
+        temp_reg = print_char_special_token.addui(zero, 102)
+        temp_reg.overrideMemory(t4)
+
+        print_char_special_token.beq(t2, t4, print_char_special_token_f.label)
+
         """
         move $t1, $t2
         """
@@ -408,18 +413,23 @@ class Printf:
         print_char_special_token_c.j(print_char_special_token_end_if.label)
 
         """
-        When special character == 'f', we will print a float, that corresponds with next parameter
+        Load the latest parameter value for %s special case
         """
-        # temp_reg = print_char_special_token_f.addui(zero, 11)
-        # temp_reg.overrideMemory(v0)
-        #
-        # c_char = print_char_special_token_f.lb(t3, 0)
-        # c_char.overrideMemory(t1)
-        #
-        # temp_reg = print_char_special_token_f.addui(t3, 4)
-        # temp_reg.overrideMemory(t3)
-        #
-        # print_char_special_token_f.j(print_char_special_token_end_if.label)
+
+        """
+        When special character == 'f', we will print a string, that corresponds with next parameter
+        """
+        temp_reg = print_char_special_token_f.addui(zero, 2)
+        temp_reg.overrideMemory(v0)
+
+        temp_reg = print_char_special_token_f.lw(t3, 0)
+        temp_reg.overrideMemory(t1)
+        f12 = Memory("f12", True)
+        print_char_special_token_f.mtc1(t1, f12)
+
+        temp_reg = print_char_special_token_f.addui(t3, 4)
+        temp_reg.overrideMemory(t3)
+        print_char_special_token_f.j(print_char_special_token_end_if.label)
 
 
         """
