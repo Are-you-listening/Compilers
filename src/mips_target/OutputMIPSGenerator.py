@@ -629,9 +629,7 @@ class Calculation:
                         }
 
         mips_op = op_translate.get(operator, None)
-
         instr = mips_op(left, right)
-
         if instr.symbol_type is None:
             instr.symbol_type = to_type
 
@@ -777,10 +775,12 @@ class Conversion:
                            ("BOOL", "INT"): lambda x: x,
                            ("BOOL", "CHAR"): lambda x: x,
                            ("INT", "PTR"): lambda x: x,
-                           ("PTR", "INT"): lambda x: x
+                           ("PTR", "INT"): lambda x: x,
+                           ("CHAR", "BOOL"): lambda x: BinaryWrapper.notEqual(x, block.li(0))
                            }
 
         c = conversion_dict.get((from_type.getType(), to_type.getType()))
+        print(from_type.getType(), to_type.getType())
         var = c(var)
         var.symbol_type = to_type
         return var
