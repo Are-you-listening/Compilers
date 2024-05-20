@@ -1,16 +1,10 @@
 #include <stdio.h>
 
 int main(){
-int b[2];
-    int a[4] = {1,2,3,4};
-    int* k = a;
-    k = k + 2;
-    printf("%d ", *k);
-    int e = 5 == a;
-    int t = a != 5;
-    int p = k != a;
-
-    printf("%d %d %d", e,t,p);
-
+    const float f = 0.789;
+    const float* f_ptr = &f;
+    float* non_const_f_ptr = f_ptr;
+    *non_const_f_ptr = 3.1492;
+    printf("%f", *non_const_f_ptr);
     return 0;
 }

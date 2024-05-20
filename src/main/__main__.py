@@ -238,7 +238,7 @@ def main(argv):
             for function_name, cfg in cfgs.items():
                 control_dot = ControlFlowDotVisitor(function_name, control_flow_file)  # Create a CFG
                 control_dot.visit(cfg.root)
-
+    codegetter.reset()
     if mips_file is not None:
         to_mips = AST2MIPS(codegetter, mips_file,
                            comments)  # The codegetter is used to add the original code as comments
