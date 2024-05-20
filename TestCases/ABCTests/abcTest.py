@@ -136,7 +136,7 @@ class LLVMTest(unittest.TestCase, ABC):
                 index = file[4:-2]  # The index is used to refer to the files & other data belonging to this testfile
                 file_name = f"tests/test{index}.c"
 
-                print(index, file_name, fold)  # Toggle for debug
+                #print(index, file_name, fold)  # Toggle for debug
 
                 """
                 If input will be read, it needs to be retrieved
@@ -149,9 +149,9 @@ class LLVMTest(unittest.TestCase, ABC):
                 """
                 Redirect error & output buffs
                 """
-                # original = sys.stdout
-                # buff = StringIO()
-                # sys.stdout = buff
+                original = sys.stdout
+                buff = StringIO()
+                sys.stdout = buff
 
                 original_error = sys.stderr
                 error_buff = StringIO()
