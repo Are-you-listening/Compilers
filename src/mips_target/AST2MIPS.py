@@ -293,6 +293,8 @@ class AST2MIPS(ASTVisitor):
         self.mips_map[node] = mips_var
 
     def handleReturn(self, node: ASTNode):
+        if node.getChildAmount() == 0:
+            return
         mips_var = self.mips_map[node.getChild(0)]
         FunctionMet.handleReturn(mips_var)
 
@@ -382,15 +384,13 @@ class AST2MIPS(ASTVisitor):
             from_type = var.symbol_type
 
         to_type = node.getChild(0).symbol_type
-        print("totype", type(to_type))
 
-        if to_type.getType() == from_type.getType():
+        if (to_type.getType() == from_type.getType()) and (to_type.getPtrAmount() == from_type.getPtrAmount()):
             other_mem = Memory(var.getAddress(), var.is_loaded)
             other_mem.symbol_type = to_type
             self.mips_map[node] = other_mem
         else:
             converted_var = Conversion.convert(var, to_type, from_type)
-            print("t", type(converted_var.symbol_type))
             self.mips_map[node] = converted_var
 
     def handleParameters(self, node: ASTNode):

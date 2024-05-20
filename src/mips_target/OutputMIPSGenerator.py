@@ -95,13 +95,23 @@ class UnaryWrapper:
     @staticmethod
     def Incr(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        instr = block.addi(mips_val, 1)
+
+        value = 1
+        if isinstance(mips_val.symbol_type, SymbolTypePtr):
+            value = 4
+
+        instr = block.addi(mips_val, value)
         return instr
 
     @staticmethod
     def Decr(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        instr = block.addi(mips_val, -1)
+
+        value = 1
+        if isinstance(mips_val.symbol_type, SymbolTypePtr):
+            value = 4
+
+        instr = block.addi(mips_val, -value)
         return instr
 
 
@@ -211,7 +221,10 @@ class Declaration:
             MipsSingleton.getInstance().getModule().addDataSegment(var_name, value, special_info=".float")
             store_reg = MipsSingleton.getInstance().getCurrentBlock().l_s(var_name)  # Load float
         else:
-            store_reg = block.addui(Memory(0, True), value)
+            if isinstance(value, str) or -32768 <= value <= 32767:
+                store_reg = block.addui(Memory(0, True), value)
+            else:
+                store_reg = block.ori(Memory(0, True), value)
         store_reg.symbol_type = symbol_type
         return store_reg
 
@@ -616,9 +629,7 @@ class Calculation:
                         }
 
         mips_op = op_translate.get(operator, None)
-
         instr = mips_op(left, right)
-
         if instr.symbol_type is None:
             instr.symbol_type = to_type
 
@@ -635,6 +646,7 @@ class Calculation:
                         }
         mips_op = op_translate.get(op, None)
         mips_var = mips_op(mips_val)
+
         return mips_var
 
 
@@ -733,6 +745,21 @@ class Conversion:
         dict we use to retrieve which conversion command to call
         """
         block = MipsSingleton.getInstance().getCurrentBlock()  # Get the current block
+
+        """
+        Special cases of casting between ptrs
+        """
+
+        if to_type.getPtrAmount() != from_type.getPtrAmount() and min(to_type.getPtrAmount(), from_type.getPtrAmount()) != 0:
+
+            ptr_difference = from_type.getPtrAmount() - to_type.getPtrAmount()
+            for t in range(max(ptr_difference, 0)):
+                var = block.lw(var, 0)
+
+            var.symbol_type = to_type
+            return var
+
+
         conversion_dict = {("INT", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
                            ("CHAR", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
                            ("PTR", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
@@ -748,11 +775,12 @@ class Conversion:
                            ("BOOL", "INT"): lambda x: x,
                            ("BOOL", "CHAR"): lambda x: x,
                            ("INT", "PTR"): lambda x: x,
-                           ("PTR", "INT"): lambda x: x
+                           ("PTR", "INT"): lambda x: x,
+                           ("CHAR", "BOOL"): lambda x: BinaryWrapper.notEqual(x, block.li(0))
                            }
 
-        print(from_type.getType(), to_type.getType())
         c = conversion_dict.get((from_type.getType(), to_type.getType()))
+        print(from_type.getType(), to_type.getType())
         var = c(var)
         var.symbol_type = to_type
         return var
