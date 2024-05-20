@@ -164,7 +164,7 @@ class Block:
         if loadable:
             RegisterManager.getInstance().loadIfNeeded(self, [rs, rt, rd])
 
-        if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
+        if rs.symbol_type is not None and rs.symbol_type.getBaseType() == "FLOAT" and rs.symbol_type.isBase():
             instr = Add_s(self.__moveToC1([rd, rs, rs]))
             self.instructions.append(instr)
         else:

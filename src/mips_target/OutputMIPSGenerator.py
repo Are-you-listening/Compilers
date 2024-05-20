@@ -14,13 +14,13 @@ from .MipsSingleton import MipsSingleton
 class AccessWrapper:
 
     @staticmethod
-    def access(location: Memory, index: Memory, first=True):
+    def access(location: Memory, index: Memory):
 
         block = MipsSingleton.getInstance().getCurrentBlock()
 
         symbol_type = location.symbol_type
         print(type(symbol_type.pts_to), type(symbol_type))
-        if not isinstance(symbol_type, SymbolTypeArray) and first:
+        if not isinstance(symbol_type, SymbolTypeArray):
             print("kwkww", type(symbol_type))
             location = block.lw(location, 0)
         offset = 4
@@ -550,7 +550,7 @@ class Calculation:
             to_type = right.symbol_type
 
         if is_ptr:
-            li = block.li(ptr.symbol_type.deReference().getBytesUsed())
+            li = block.li(max(ptr.symbol_type.deReference().getBytesUsed(), 4))
             mul = block.mul(not_ptr, li)
             if operator == "+":
                 instr = block.addu(ptr, mul)
