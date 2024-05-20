@@ -746,10 +746,12 @@ class Conversion:
                            ("INT", "CHAR"): lambda x: block.sll(block.srl(x, 24), 24),
                            ("CHAR", "INT"): lambda x: x,
                            ("BOOL", "INT"): lambda x: x,
-                           ("BOOL", "CHAR"): lambda x: x
+                           ("BOOL", "CHAR"): lambda x: x,
+                           ("INT", "PTR"): lambda x: x,
+                           ("PTR", "INT"): lambda x: x
                            }
 
-
+        print(from_type.getType(), to_type.getType())
         c = conversion_dict.get((from_type.getType(), to_type.getType()))
         var = c(var)
         var.symbol_type = to_type

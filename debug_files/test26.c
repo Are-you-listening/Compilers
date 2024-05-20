@@ -1,25 +1,16 @@
 #include <stdio.h>
 
-int main() {
-    int x[2][3];
+int main(){
+int b[2];
+    int a[4] = {1,2,3,4};
+    int* k = a;
+    k = k + 2;
+    printf("%d ", *k);
+    int e = 5 == a;
+    int t = a != 5;
+    int p = k != a;
 
-    x[0][0] = 0;
-    x[0][1] = 1;
-    x[0][2] = 2;
-    x[1][0] = 3;
-    x[1][1] = 4;
-    x[1][2] = 5;
-    printf("%d", x[0][0]);
-    printf("%d", x[0][1]);
-    printf("%d", x[0][2]);
-    printf("%d", x[1][0]);
-    printf("%d", x[1][1]);
-    printf("%d", x[1][2]);
+    printf("%d %d %d", e,t,p);
 
-    x[0][2] = x[1][2] + x[1][0];
-
-    printf("%d", x[0][2]);
-    printf("%d", x[1][2]);
-    printf("%d", x[1][0]);
     return 0;
 }
