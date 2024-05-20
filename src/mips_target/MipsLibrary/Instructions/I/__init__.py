@@ -14,3 +14,4 @@ from .li import Li
 from .mips_not import Not
 from .neg import Neg
 from .IMipsInstruction import IMipsInstruction
+from .sb import Sb
