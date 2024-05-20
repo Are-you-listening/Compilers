@@ -1,10 +1,12 @@
 #include <stdio.h>
 
-int main() {
+int a[2][3];
 
-    int x[2][3];
 
-    x[1][2] = 1;
-    printf("%d", x[1][2]);
-    return 0;
+int main(){
+	int x = 3;
+	a[0][0] = 1;
+	a[1][0] = 2;
+	printf("%d; %d; %d;", a[0][0], a[1][0], x);
+	return 0;
 }

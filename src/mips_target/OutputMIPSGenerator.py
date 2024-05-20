@@ -161,8 +161,15 @@ class Declaration:
             if symbol_type.getBaseType() == "FLOAT":
                 special_info = ".float"
                 #mem = block.l_s(var_name)
+
+            elif isinstance(symbol_type, SymbolTypeArray):
+                module.addDataSegment(f".{var_name}", f"{'0, '*(symbol_type.size-1)} 0", special_info=".word")
+                special_info = f".word"
+                value = f".{var_name}"
             else:
                 special_info = ".word"
+
+
                 #mem = register_manager.allocate(block)
             module.addDataSegment(var_name, value, special_info=special_info)
 
