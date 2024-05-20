@@ -184,7 +184,7 @@ class Block:
             RegisterManager.getInstance().loadIfNeeded(self, [rs, rt, rd])
 
         if rs.symbol_type is not None and rs.symbol_type.getBaseType() == "FLOAT" and rs.symbol_type.isBase():
-            instr = Add_s(self.__moveToC1([rd, rs, rs]))
+            instr = Add_s(self.__moveToC1([rd, rs, rt]))
             self.instructions.append(instr)
 
             rd = self.mfc1(instr.return_value, rd)
@@ -193,7 +193,6 @@ class Block:
         else:
             instr = Add(rd, rs, rt)
             self.instructions.append(instr)
-
         return instr.getAddress()
 
     def addu(self, rs: Memory, rt: Memory):
@@ -297,7 +296,7 @@ class Block:
         RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
 
         if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
-            instr = Div_s(self.__moveToC1([rd, rs, rs]))
+            instr = Sub_s(self.__moveToC1([rd, rs, rt]))
             self.instructions.append(instr)
 
             self.mfc1(instr.return_value, rd)
@@ -335,7 +334,7 @@ class Block:
         RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
 
         if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
-            instr = Div_s(self.__moveToC1([rd, rs, rs]))
+            instr = Div_s(self.__moveToC1([rd, rs, rt]))
             self.instructions.append(instr)
             self.mfc1(instr.return_value, rd)
             rd.symbol_type = SymbolType("FLOAT", None)
@@ -352,7 +351,7 @@ class Block:
         RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
 
         if rs.symbol_type is not None and rs.symbol_type.data_type == "FLOAT":
-            instr = Div_s(self.__moveToC1([rd, rs, rs]))
+            instr = Mul_s(self.__moveToC1([rd, rs, rt]))
             self.instructions.append(instr)
             self.mfc1(instr.return_value, rd)
             rd.symbol_type = SymbolType("FLOAT", None)
