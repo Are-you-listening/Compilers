@@ -20,9 +20,9 @@ class AccessWrapper:
 
         symbol_type = location.symbol_type
         print(type(symbol_type.pts_to), type(symbol_type))
-        if not isinstance(symbol_type, SymbolTypeArray):
-            print("kwkww", type(symbol_type))
-            location = block.lw(location, 0)
+
+        location = block.lw(location, 0)
+
         offset = 4
         is_struct = False
         if isinstance(symbol_type, SymbolTypePtr):
@@ -31,9 +31,9 @@ class AccessWrapper:
             offset = target.getBytesUsed()
 
             if isinstance(target, SymbolTypeArray):
-                offset = max(target.pts_to.getBytesUsed(), 4)
+                offset = 4
                 symbol_type = target
-
+                print(offset)
             if isinstance(target, SymbolTypeStruct):
 
                 """
