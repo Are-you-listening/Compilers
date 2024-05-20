@@ -420,7 +420,6 @@ class Block:
     def fptosi(self, Float: Memory):
         RegisterManager.getInstance().loadIfNeeded(self, [Float])
 
-        assert Float.symbol_type.getBaseType() == "FLOAT"  # TODO Remove later
         f0 = Memory("f0", True)
         instr = Mtc1(Float, f0)
         self.instructions.append(instr)
