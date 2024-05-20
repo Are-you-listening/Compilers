@@ -1,12 +1,13 @@
 #include <stdio.h>
 
-int main() {
+int main(){
+    char array[12] = {'h','e','l','l','o',' ','w','o','r','l','d','!'};
+    char* ptr = &array;
 
-    char x[2] = {'a', 'b'};
+    int length = 12;
+    for (int i=0; i<length; i++){
+        printf("%c", *(ptr++));
+    }
 
-    char* c = &x;
-    *c = 'c';
-    printf("%c", *c);
-    printf("%c", x[0]);
     return 0;
 }

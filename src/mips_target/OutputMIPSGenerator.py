@@ -95,13 +95,23 @@ class UnaryWrapper:
     @staticmethod
     def Incr(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        instr = block.addi(mips_val, 1)
+
+        value = 1
+        if isinstance(mips_val.symbol_type, SymbolTypePtr):
+            value = 4
+
+        instr = block.addi(mips_val, value)
         return instr
 
     @staticmethod
     def Decr(mips_val):
         block = MipsSingleton.getInstance().getCurrentBlock()
-        instr = block.addi(mips_val, -1)
+
+        value = 1
+        if isinstance(mips_val.symbol_type, SymbolTypePtr):
+            value = 4
+
+        instr = block.addi(mips_val, -value)
         return instr
 
 
@@ -635,6 +645,7 @@ class Calculation:
                         }
         mips_op = op_translate.get(op, None)
         mips_var = mips_op(mips_val)
+
         return mips_var
 
 
