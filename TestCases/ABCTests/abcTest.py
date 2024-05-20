@@ -128,7 +128,6 @@ class LLVMTest(unittest.TestCase, ABC):
             with open("tests/input_dict.json", "rt") as f:
                 input_dict = json.loads(f.read())
 
-
         for file in os.listdir(directory):  # Loop through all files
             if not os.path.splitext(file)[-1] == '.c':  # We only run c files
                 continue
@@ -150,9 +149,9 @@ class LLVMTest(unittest.TestCase, ABC):
                 """
                 Redirect error & output buffs
                 """
-                original = sys.stdout
-                buff = StringIO()
-                sys.stdout = buff
+                # original = sys.stdout
+                # buff = StringIO()
+                # sys.stdout = buff
 
                 original_error = sys.stderr
                 error_buff = StringIO()
@@ -210,7 +209,7 @@ class LLVMTest(unittest.TestCase, ABC):
                     print("error", errors, expected_errors)  # Print any errors we didn't expect
                     assert errors == expected_errors
 
-                sys.stdout = original
+                #sys.stdout = original
                 sys.stderr = original_error
 
     def compileGCC(self, file_name):

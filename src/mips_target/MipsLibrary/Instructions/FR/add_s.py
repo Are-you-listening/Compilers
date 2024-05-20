@@ -6,4 +6,4 @@ class Add_s(FloatMipsInstruction):
         super().__init__(lst[0], lst[1], lst[2])
 
     def toString(self):
-        return f"add.s ${self.fd}, ${self.fs}, {self.ft}"
+        return f"add.s ${self.fd}, ${self.fs}, ${self.ft}"
