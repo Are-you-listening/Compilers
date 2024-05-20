@@ -7,4 +7,7 @@ class Comment(SpecialInstruction):
         super().__init__()
 
     def toString(self):
-        return f"#{self.text}"
+        text = ""
+        for t in self.text.split("\n"):
+            text += f"#{t}\n"
+        return text

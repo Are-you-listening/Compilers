@@ -238,6 +238,7 @@ class AST2MIPS(ASTVisitor):
         with open(self.fileName, 'w') as f:
             f.write(str(MipsSingleton.getInstance().getModule().toString()))
 
+
     def handleFunction(self, node: ASTNode):
         function_name = node.getChild(0).text
 
