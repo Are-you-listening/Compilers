@@ -780,7 +780,6 @@ class Conversion:
                            }
 
         c = conversion_dict.get((from_type.getType(), to_type.getType()))
-        print(from_type.getType(), to_type.getType())
         var = c(var)
         var.symbol_type = to_type
         return var

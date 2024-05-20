@@ -51,9 +51,10 @@ class AST2MIPS(ASTVisitor):
 
             if current_node.text == "Function" and current_node not in visited:
                 visited.add(current_node)
+                if current_node.children[1].text == "Code":
+                    self.handleFunction(current_node)
+                    self.map_table = MapTable(self.map_table)
 
-                self.handleFunction(current_node)
-                self.map_table = MapTable(self.map_table)
 
             if isinstance(current_node, ASTNodeBlock) and current_node.text == "Block" and current_node not in visited:
                 node = current_node
@@ -132,8 +133,9 @@ class AST2MIPS(ASTVisitor):
             self.handleParameters(node)
 
         if node.text == "Function":
-            self.map_table = self.map_table.prev
-            MipsSingleton.getInstance().getLastFunction().endFunction()
+            if node.getChild(1).text == "Code":
+                self.map_table = self.map_table.prev
+                MipsSingleton.getInstance().getLastFunction().endFunction()
 
         if node.text == "Dereference":
             self.handleDereference(node)
@@ -241,9 +243,9 @@ class AST2MIPS(ASTVisitor):
 
     def handleFunction(self, node: ASTNode):
         function_name = node.getChild(0).text
-
         mips_module = MipsSingleton.getInstance().getModule()
         function = mips_module.createFunction(function_name)
+
         MipsSingleton.getInstance().setLastFunction(function)
         current_table = node.getSymbolTable()
         symbol_entry = current_table.getEntry(function_name, node.position.virtual_linenr)
@@ -396,6 +398,8 @@ class AST2MIPS(ASTVisitor):
 
     def handleParameters(self, node: ASTNode):
         params = []
+        if node.parent.text == "Function":
+            return
         for i, p in enumerate(node.children):
             block = MipsSingleton.getInstance().getCurrentBlock()
             fp = Memory("fp", True)
@@ -405,6 +409,7 @@ class AST2MIPS(ASTVisitor):
             self.mips_map[p] = mem_obj
 
             param_identifier = p.getChild(0)
+
 
             entry = param_identifier.getSymbolTable().getEntry(param_identifier.text)
 
