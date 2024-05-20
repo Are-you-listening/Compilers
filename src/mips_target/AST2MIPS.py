@@ -93,7 +93,7 @@ class AST2MIPS(ASTVisitor):
                 self.last_vertex.check_flipped()
 
                 """
-                When we have instructions for our statement, their is no problem, but IR constants are not considered
+                When we have instructions for our statement, there is no problem, but IR constants are not considered
                 an instruction, so in those cases we need to pass it to the create branch, in case it needs to create 
                 a conditional branch
                 """
