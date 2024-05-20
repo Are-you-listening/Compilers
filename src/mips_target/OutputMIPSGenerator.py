@@ -250,8 +250,372 @@ class Declaration:
 
 class Printf:
     @staticmethod
-    def printf():
+    def scanf():
+        function: Function = MipsSingleton.getInstance().getModule().createFunction("scanf")
+        function_function_scanf = function.createBlock()
+        scanf_char_loop = function.createBlock()
+        scanf_char_special_token = function.createBlock()
+        scanf_char_special_token_d = function.createBlock()
+        scanf_char_special_token_c = function.createBlock()
+        scanf_char_special_token_f = function.createBlock()
+        scanf_char_special_token_s = function.createBlock()
+        scanf_char_special_token_x = function.createBlock()
+        scanf_char_special_token_x_return_7 = function.createBlock()
+        scanf_char_special_token_x_return_6 = function.createBlock()
+        scanf_char_special_token_x_return_5 = function.createBlock()
+        scanf_char_special_token_x_return_4 = function.createBlock()
+        scanf_char_special_token_x_return_3 = function.createBlock()
+        scanf_char_special_token_x_return_2 = function.createBlock()
+        scanf_char_special_token_x_return_1 = function.createBlock()
+        scanf_char_special_token_x_return_0 = function.createBlock()
+        scanf_translate_hexCharToInt = function.createBlock()
+        scanf_translate_hexCharToInt_0 = function.createBlock()
+        scanf_translate_hexCharToInt_1 = function.createBlock()
+        scanf_translate_hexCharToInt_2 = function.createBlock()
+        scanf_translate_hexCharToInt_3 = function.createBlock()
+        scanf_translate_hexCharToInt_4 = function.createBlock()
+        scanf_translate_hexCharToInt_5 = function.createBlock()
+        scanf_translate_hexCharToInt_6 = function.createBlock()
+        scanf_translate_hexCharToInt_7 = function.createBlock()
+        scanf_translate_hexCharToInt_8 = function.createBlock()
+        scanf_translate_hexCharToInt_9 = function.createBlock()
+        scanf_translate_hexCharToInt_a = function.createBlock()
+        scanf_translate_hexCharToInt_b = function.createBlock()
+        scanf_translate_hexCharToInt_c = function.createBlock()
+        scanf_translate_hexCharToInt_d = function.createBlock()
+        scanf_translate_hexCharToInt_e = function.createBlock()
+        scanf_translate_hexCharToInt_f = function.createBlock()
+        scanf_power_16 = function.createBlock()
+        scanf_power_16_while = function.createBlock()
+        scanf_power_16_exit_pow = function.createBlock()
+        scanf_char_loop_end = function.createBlock()
 
+        zero = Memory(0, True)
+        v0 = Memory("v0", True)
+        v1 = Memory("v1", True)
+        a0 = Memory("a0", True)
+        a1 = Memory("a1", True)
+        a2 = Memory("a2", True)
+        a3 = Memory("a3", True)
+        fp = Memory("fp", True)
+        sp = Memory("sp", True)
+        t0 = Memory("t0", True)
+        t1 = Memory("t1", True)
+        t2 = Memory("t2", True)
+        t3 = Memory("t3", True)
+        t4 = Memory("t4", True)
+        t5 = Memory("t5", True)
+        t6 = Memory("t6", True)
+        s0 = Memory("s0", True)
+        f0 = Memory("f0", True)
+
+        """
+        Point to first parameter
+        """
+        temp_reg = function_function_scanf.addui(fp, 4)
+        temp_reg.overrideMemory(t3)
+
+        """
+        Load format string in t0
+        """
+        temp_reg = function_function_scanf.lw(t3, 0)
+        temp_reg.overrideMemory(t0)
+
+        """
+        Increase the parameter counter by 1 param
+        """
+        temp_reg = function_function_scanf.addui(t3, 4)
+        temp_reg.overrideMemory(t3)
+
+        """
+        Read the next byte of the format string
+        """
+        lb_instr = scanf_char_loop.lb(t0, 0)
+        lb_instr.overrideMemory(t1)
+
+        """
+        When coming across a 'zero' byte stop with the looping
+        """
+        scanf_char_loop.beq(t1, zero, scanf_char_loop_end.label)
+
+        temp_reg = scanf_char_loop.li(37)
+        scanf_char_loop.beq(t1, temp_reg, scanf_char_special_token.label)
+
+        temp_reg = scanf_char_loop.li(11)
+        temp_reg.overrideMemory(v0)
+        scanf_char_loop.move(a0, t1)
+        scanf_char_loop.systemCall()
+        temp_reg = scanf_char_loop.addi(t0, 1)
+        temp_reg.overrideMemory(t0)
+        scanf_char_loop.j(scanf_char_loop.label)
+
+        """scanf_char_special_token"""
+        temp_reg = scanf_char_special_token.addi(t0, 1)
+        temp_reg.overrideMemory(t0)
+        temp_reg = scanf_char_special_token.lb(t0, 0)
+        temp_reg.overrideMemory(t2)
+        scanf_char_special_token.beq(t2, 100, scanf_char_special_token_d.label)
+        scanf_char_special_token.beq(t2, 99, scanf_char_special_token_c.label)
+        scanf_char_special_token.beq(t2, 120, scanf_char_special_token_x.label)
+        scanf_char_special_token.beq(t2, 115, scanf_char_special_token_s.label)
+        scanf_char_special_token.beq(t2, 102, scanf_char_special_token_f.label)
+        scanf_char_special_token.move(t1, t2)
+
+        """scanf_char_special_token_d"""
+        temp_reg = scanf_char_special_token_d.li(5)
+        temp_reg.overrideMemory(v0)
+        scanf_char_special_token_d.systemCall()
+        temp_reg = scanf_char_special_token_d.addi(t3, 4)
+        temp_reg.overrideMemory(t3)
+        scanf_char_special_token_d.sw(v0, t3, 0)
+        temp_reg = scanf_char_special_token_d.addi(t0, 1)
+        temp_reg.overrideMemory(t0)
+        scanf_char_special_token_d.j(scanf_char_loop.label)
+
+        """scanf_char_special_token_c"""
+        temp_reg = scanf_char_special_token_c.li(12)
+        temp_reg.overrideMemory(v0)
+        scanf_char_special_token_c.systemCall()
+        temp_reg = scanf_char_special_token_c.addi(t3, 4)
+        temp_reg.overrideMemory(t3)
+        scanf_char_special_token_c.sb(v0, t3)
+        temp_reg = scanf_char_special_token_c.addi(t0, 1)
+        temp_reg.overrideMemory(t0)
+        scanf_char_special_token_c.j(scanf_char_loop.label)
+
+        """scanf_char_special_token_x"""
+        scanf_char_special_token_x.move(a0, sp)
+        temp_reg = scanf_char_special_token_x.li(9)
+        temp_reg.overrideMemory(a1)
+        temp_reg = scanf_char_special_token_x.li(8)
+        temp_reg.overrideMemory(v0)
+        scanf_char_special_token_x.systemCall()
+
+        temp_reg = scanf_char_special_token_x.li(0)
+        temp_reg.overrideMemory(v0)
+
+        temp_reg = scanf_char_special_token_x.lb(sp, 7)
+        temp_reg.overrideMemory(a0)
+        temp_reg = scanf_char_special_token_x.li(0)
+        temp_reg.overrideMemory(a1)
+        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_7.label)
+        temp_reg.overrideMemory(v1)
+        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
+        temp_reg = scanf_char_special_token_x.addi(a1, -1)
+        temp_reg.overrideMemory(a1)
+
+        temp_reg = scanf_char_special_token_x.lb(sp, 6)
+        temp_reg.overrideMemory(a0)
+        temp_reg = scanf_char_special_token_x.addi(a1, 1)
+        temp_reg.overrideMemory(a1)
+        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_6.label)
+        temp_reg.overrideMemory(v1)
+        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
+        temp_reg = scanf_char_special_token_x.addi(a1, -1)
+        temp_reg.overrideMemory(a1)
+
+        temp_reg = scanf_char_special_token_x.lb(sp, 5)
+        temp_reg.overrideMemory(a0)
+        temp_reg = scanf_char_special_token_x.addi(a1, 1)
+        temp_reg.overrideMemory(a1)
+        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_5.label)
+        temp_reg.overrideMemory(v1)
+        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
+        temp_reg = scanf_char_special_token_x.addi(a1, -1)
+        temp_reg.overrideMemory(a1)
+
+        temp_reg = scanf_char_special_token_x.lb(sp, 4)
+        temp_reg.overrideMemory(a0)
+        temp_reg = scanf_char_special_token_x.addi(a1, 1)
+        temp_reg.overrideMemory(a1)
+        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_4.label)
+        temp_reg.overrideMemory(v1)
+        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
+        temp_reg = scanf_char_special_token_x.addi(a1, -1)
+        temp_reg.overrideMemory(a1)
+
+        temp_reg = scanf_char_special_token_x.lb(sp, 3)
+        temp_reg.overrideMemory(a0)
+        temp_reg = scanf_char_special_token_x.addi(a1, 1)
+        temp_reg.overrideMemory(a1)
+        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_3.label)
+        temp_reg.overrideMemory(v1)
+        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
+        temp_reg = scanf_char_special_token_x.addi(a1, -1)
+        temp_reg.overrideMemory(a1)
+
+        temp_reg = scanf_char_special_token_x.lb(sp, 2)
+        temp_reg.overrideMemory(a0)
+        temp_reg = scanf_char_special_token_x.addi(a1, 1)
+        temp_reg.overrideMemory(a1)
+        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_2.label)
+        temp_reg.overrideMemory(v1)
+        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
+        temp_reg = scanf_char_special_token_x.addi(a1, -1)
+        temp_reg.overrideMemory(a1)
+
+        temp_reg = scanf_char_special_token_x.lb(sp, 1)
+        temp_reg.overrideMemory(a0)
+        temp_reg = scanf_char_special_token_x.addi(a1, 1)
+        temp_reg.overrideMemory(a1)
+        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_1.label)
+        temp_reg.overrideMemory(v1)
+        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
+        temp_reg = scanf_char_special_token_x.addi(a1, -1)
+        temp_reg.overrideMemory(a1)
+
+        temp_reg = scanf_char_special_token_x.lb(sp, 0)
+        temp_reg.overrideMemory(a0)
+        temp_reg = scanf_char_special_token_x.addi(a1, 1)
+        temp_reg.overrideMemory(a1)
+        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_0.label)
+        temp_reg.overrideMemory(v1)
+        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
+        temp_reg = scanf_char_special_token_x.addi(a1, -1)
+        temp_reg.overrideMemory(a1)
+
+        temp_reg = scanf_char_special_token_x.addi(t3, 4)
+        temp_reg.overrideMemory(t3)
+        scanf_char_special_token_x.sw(v0, t3, 0)
+        temp_reg = scanf_char_special_token_x.addi(t0, 1)
+        temp_reg.overrideMemory(t0)
+        scanf_char_special_token_x.j(scanf_char_loop.label)
+
+        """scanf_char_special_token_s"""
+        temp_reg = scanf_char_special_token_s.li(12)
+        temp_reg.overrideMemory(v0)
+        temp_reg = scanf_char_special_token_s.li(512)
+        temp_reg.overrideMemory(a1)
+        scanf_char_special_token_s.systemCall()
+        temp_reg = scanf_char_special_token_s.addi(t3, 4)
+        temp_reg.overrideMemory(t3)
+        scanf_char_special_token_s.j(scanf_char_loop.label)
+
+        """scanf_char_special_token_f"""
+        temp_reg = scanf_char_special_token_f.li(6)
+        temp_reg.overrideMemory(v0)
+        scanf_char_special_token_f.systemCall()
+
+        temp_reg = scanf_char_special_token_f.addi(t3, 4)
+        temp_reg.overrideMemory(t3)
+        scanf_char_special_token_f.mfc1(f0, v0)
+        scanf_char_special_token_f.sw(v0, t3, 0)
+        temp_reg = scanf_char_special_token_f.addi(t0, 1)
+        temp_reg.overrideMemory(t0)
+        scanf_char_special_token_f.j(scanf_char_loop.label)
+
+        """scanf_translate_hexCharToInt"""
+        scanf_translate_hexCharToInt.beq(a0, 48, scanf_translate_hexCharToInt_0.label)
+        scanf_translate_hexCharToInt.beq(a0, 49, scanf_translate_hexCharToInt_1.label)
+        scanf_translate_hexCharToInt.beq(a0, 50, scanf_translate_hexCharToInt_2.label)
+        scanf_translate_hexCharToInt.beq(a0, 51, scanf_translate_hexCharToInt_3.label)
+        scanf_translate_hexCharToInt.beq(a0, 52, scanf_translate_hexCharToInt_4.label)
+        scanf_translate_hexCharToInt.beq(a0, 53, scanf_translate_hexCharToInt_5.label)
+        scanf_translate_hexCharToInt.beq(a0, 54, scanf_translate_hexCharToInt_6.label)
+        scanf_translate_hexCharToInt.beq(a0, 55, scanf_translate_hexCharToInt_7.label)
+        scanf_translate_hexCharToInt.beq(a0, 56, scanf_translate_hexCharToInt_8.label)
+        scanf_translate_hexCharToInt.beq(a0, 57, scanf_translate_hexCharToInt_9.label)
+        scanf_translate_hexCharToInt.beq(a0, 97, scanf_translate_hexCharToInt_a.label)
+        scanf_translate_hexCharToInt.beq(a0, 98, scanf_translate_hexCharToInt_b.label)
+        scanf_translate_hexCharToInt.beq(a0, 99, scanf_translate_hexCharToInt_c.label)
+        scanf_translate_hexCharToInt.beq(a0, 100, scanf_translate_hexCharToInt_d.label)
+        scanf_translate_hexCharToInt.beq(a0, 101, scanf_translate_hexCharToInt_e.label)
+        scanf_translate_hexCharToInt.beq(a0, 102, scanf_translate_hexCharToInt_f.label)
+        """scanf_translate_hexCharToInt_0"""
+        temp_reg = scanf_translate_hexCharToInt_0.li(0)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_0.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_1"""
+        temp_reg = scanf_translate_hexCharToInt_1.li(1)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_1.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_2"""
+        temp_reg = scanf_translate_hexCharToInt_2.li(2)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_2.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_3"""
+        temp_reg = scanf_translate_hexCharToInt_3.li(3)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_3.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_4"""
+        temp_reg = scanf_translate_hexCharToInt_4.li(4)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_4.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_5"""
+        temp_reg = scanf_translate_hexCharToInt_5.li(5)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_5.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_6"""
+        temp_reg = scanf_translate_hexCharToInt_6.li(6)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_6.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_7"""
+        temp_reg = scanf_translate_hexCharToInt_7.li(7)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_7.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_8"""
+        temp_reg = scanf_translate_hexCharToInt_8.li(8)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_8.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_9"""
+        temp_reg = scanf_translate_hexCharToInt_9.li(9)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_9.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_a"""
+        temp_reg = scanf_translate_hexCharToInt_a.li(10)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_a.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_b"""
+        temp_reg = scanf_translate_hexCharToInt_b.li(11)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_b.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_c"""
+        temp_reg = scanf_translate_hexCharToInt_c.li(12)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_c.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_d"""
+        temp_reg = scanf_translate_hexCharToInt_d.li(13)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_d.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_e"""
+        temp_reg = scanf_translate_hexCharToInt_e.li(14)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_e.j(scanf_power_16.label)
+        """scanf_translate_hexCharToInt_f"""
+        temp_reg = scanf_translate_hexCharToInt_f.li(15)
+        temp_reg.overrideMemory(a0)
+        scanf_translate_hexCharToInt_f.j(scanf_power_16.label)
+
+        """scanf_power_16"""
+        scanf_power_16.move(a2, a1)
+        temp_reg = scanf_power_16.li(1)
+        temp_reg.overrideMemory(a3)
+        scanf_power_16.beq(a2, zero, scanf_power_16_exit_pow.label)
+        """scanf_power_16_while"""
+        temp_reg = scanf_power_16_while.li(16)
+        temp_reg = scanf_power_16_while.mul(a3, temp_reg)
+        temp_reg.overrideMemory(a3)
+        temp_reg = scanf_power_16_while.addi(a2, -1)
+        temp_reg.overrideMemory(a2)
+        scanf_power_16_while.bne(a2, zero, scanf_power_16_while.label)
+        """scanf_power_16_exit_pow"""
+        temp_reg = scanf_power_16_exit_pow.mul(a3, a0)
+        temp_reg.overrideMemory(a3)
+        scanf_power_16_exit_pow.add(v0, v0, a3)
+        scanf_power_16_exit_pow.jr(v1)
+
+
+        """
+        Set return value to 0
+        """
+        temp_reg = scanf_char_loop_end.addui(zero, 0)
+        temp_reg.overrideMemory(v0)
+
+        function.endFunction()
+        return function
+
+    @staticmethod
+    def printf():
         """
         Implementation of ReferenceAssembly>printf.asm
         :return:
@@ -443,7 +807,6 @@ class Printf:
         temp_reg = print_char_special_token_f.addui(t3, 4)
         temp_reg.overrideMemory(t3)
         print_char_special_token_f.j(print_char_special_token_end_if.label)
-
 
         """
         Load the latest parameter value for %s special case

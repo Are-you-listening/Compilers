@@ -126,8 +126,11 @@ class Block:
         RegisterManager.getInstance().loadIfNeeded(self, [rs, rt])
         return self.__handle_large_immediate(rt, rs, load_value, Andi)
 
-    def beq(self, rt: Memory, rs: Memory, label: str):
-        RegisterManager.getInstance().loadIfNeeded(self, [rs, rt])
+    def beq(self, rt: Memory, rs: Memory | int, label: str):
+        if isinstance(rs, int):
+            RegisterManager.getInstance().loadIfNeeded(self, [rt])
+        else:
+            RegisterManager.getInstance().loadIfNeeded(self, [rs, rt])
         instr = Beq(rt, rs, label)
         self.instructions.append(instr)
         return instr.getAddress()
@@ -314,6 +317,12 @@ class Block:
         RegisterManager.getInstance().loadIfNeeded(self, [rd, rs, rt])
 
         instr = Subu(rd, rs, rt)
+        self.instructions.append(instr)
+        return instr.getAddress()
+
+    def sb(self, v0, t3, load_value=0):
+        RegisterManager.getInstance().loadIfNeeded(self, [v0,t3])
+        instr = Sb(v0, t3, load_value)
         self.instructions.append(instr)
         return instr.getAddress()
 

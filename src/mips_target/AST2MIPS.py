@@ -305,11 +305,19 @@ class AST2MIPS(ASTVisitor):
         """
         Create printf function
         """
-        if "printf" not in self.special_functions_declared:
-            function = Printf.printf()
-            self.special_functions_declared["printf"] = function
+        if printf:
+            name = "printf"
         else:
-            function = self.special_functions_declared["printf"]
+            name = "scanf"
+
+        if name not in self.special_functions_declared:
+            if printf:
+                function = Printf.printf()
+            else:
+                function = Printf.scanf()
+            self.special_functions_declared[name] = function
+        else:
+            function = self.special_functions_declared[name]
 
         params = []
         for c in node.children:

@@ -1,21 +1,33 @@
-	.data
-scan_format:		.asciiz "%x"
-var_int: .word 0
-	.text
+function_function_scanf:
+    sw $30, 0($29)
+    add $30, $29, $0
+    addiu $29, $29, -100
 
-main:
+    sw $t0, -4($30)
+    sw $t1, -8($30)
+    sw $t2, -12($30)
+    sw $t3, -16($30)
+    sw $t4, -20($30)
+    sw $t5, -24($30)
+    sw $t6, -28($30)
+    sw $t7, -32($30)
+    sw $t8, -36($30)
+    sw $t9, -40($30)
+    sw $s0, -44($30)
+    sw $s1, -48($30)
+    sw $s2, -52($30)
+    sw $s3, -56($30)
+    sw $s4, -60($30)
+    sw $s5, -64($30)
+    sw $s6, -68($30)
+    sw $s7, -72($30)
+    sw $v1, -76($30)
+    sw $a0, -80($30)
+    sw $a1, -84($30)
+    sw $a2, -88($30)
+    sw $a3, -92($30)
+    sw $ra, -96($30)
 
-
-	la $fp, scan_format
-	la $t0, var_int
-	sw $t0, 16($fp)	# push old frame pointer (dynamic link)
-
-	jal scanf
-
-	li $v0, 10
-	syscall
-
-scanf:
 	# First var is at fp + 4
 	add $t3, $fp, 4 # store param counter
 	move $t0, $fp
@@ -142,6 +154,7 @@ scanf_char_special_token_x:
 scanf_char_special_token_s:
 	li $v0, 8
 	li $a1, 512
+	syscall
 	addi $t3, $t3, 4
 	j scanf_char_loop
 
@@ -155,44 +168,53 @@ scanf_char_special_token_f:
 	j scanf_char_loop
 
 scanf_char_loop_end:
-jr $ra
+    lw $t0, -4($30)
+    lw $t1, -8($30)
+    lw $t2, -12($30)
+    lw $t3, -16($30)
+    lw $t4, -20($30)
+    lw $t5, -24($30)
+    lw $t6, -28($30)
+    lw $t7, -32($30)
+    lw $t8, -36($30)
+    lw $t9, -40($30)
+    lw $s0, -44($30)
+    lw $s1, -48($30)
+    lw $s2, -52($30)
+    lw $s3, -56($30)
+    lw $s4, -60($30)
+    lw $s5, -64($30)
+    lw $s6, -68($30)
+    lw $s7, -72($30)
+    lw $v1, -76($30)
+    lw $a0, -80($30)
+    lw $a1, -84($30)
+    lw $a2, -88($30)
+    lw $a3, -92($30)
+    lw $ra, -96($30)
+    add $29, $30, $0
+    lw $30, 0($29)
+    jr $ra
 
 scanf_translate_hexCharToInt:
  	#Assuming return label is in $v1, return value in $v0
  	#$a0 contains char
-
- 	li $a2, 48 # $a2 may be used as a temporary
-	beq $a0, $a2, scanf_translate_hexCharToInt_0
-	li $a2, 49
-	beq $a0, $a2, scanf_translate_hexCharToInt_1
-	li $a2, 50
-	beq $a0, $a2, scanf_translate_hexCharToInt_2
-	li $a2, 51
-	beq $a0, $a2, scanf_translate_hexCharToInt_3
-	li $a2, 52
-	beq $a0, $a2, scanf_translate_hexCharToInt_4
-	li $a2, 53
-	beq $a0, $a2, scanf_translate_hexCharToInt_5
-	li $a2, 54
-	beq $a0, $a2, scanf_translate_hexCharToInt_6
-	li $a2, 55
-	beq $a0, $a2, scanf_translate_hexCharToInt_7
-	li $a2, 56
-	beq $a0, $a2,, scanf_translate_hexCharToInt_8
-	li $a2, 57
-	beq $a0, $a2, scanf_translate_hexCharToInt_9
-	li $a2, 97
-	beq $a0, $a2, scanf_translate_hexCharToInt_a
-	li $a2, 98
-	beq $a0, $a2, scanf_translate_hexCharToInt_b
-	li $a2, 99
-	beq $a0, $a2, scanf_translate_hexCharToInt_c
-	li $a2, 100
-	beq $a0, $a2,scanf_translate_hexCharToInt_d
-	li $a2, 101
-	beq $a0, $a2, scanf_translate_hexCharToInt_e
-	li $a2, 102
-	beq $a0, $a2, scanf_translate_hexCharToInt_f
+	beq $a0, 48, scanf_translate_hexCharToInt_0
+	beq $a0, 49, scanf_translate_hexCharToInt_1
+	beq $a0, 50, scanf_translate_hexCharToInt_2
+	beq $a0, 51, scanf_translate_hexCharToInt_3
+	beq $a0, 52, scanf_translate_hexCharToInt_4
+	beq $a0, 53, scanf_translate_hexCharToInt_5
+	beq $a0, 54, scanf_translate_hexCharToInt_6
+	beq $a0, 55, scanf_translate_hexCharToInt_7
+	beq $a0, 56, scanf_translate_hexCharToInt_8
+	beq $a0, 57, scanf_translate_hexCharToInt_9
+	beq $a0, 97, scanf_translate_hexCharToInt_a
+	beq $a0, 98, scanf_translate_hexCharToInt_b
+	beq $a0, 99, scanf_translate_hexCharToInt_c
+	beq $a0, 100,scanf_translate_hexCharToInt_d
+	beq $a0, 101, scanf_translate_hexCharToInt_e
+	beq $a0, 102, scanf_translate_hexCharToInt_f
 	#Else: Undefined character
 scanf_translate_hexCharToInt_0:
 	li $a0, 0 #$a0 now the contains translation
@@ -257,7 +279,4 @@ scanf_power_16:
 		mul $a3, $a3, $a0 # e.g. for bit 8, 8 * (16^exp = $a3)
 		add $v0, $v0, $a3 # Add result to hex value
 		jr $v1 # Go back
-
-
-
 

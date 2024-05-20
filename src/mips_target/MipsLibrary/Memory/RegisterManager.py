@@ -121,6 +121,7 @@ class RegisterManager:
         var.address = reg
         var.is_loaded = True
 
+        print(offset)
         block.lw_function(self.getMemoryObject("fp"), -offset, var)
 
     def getRegister(self, var: Memory):

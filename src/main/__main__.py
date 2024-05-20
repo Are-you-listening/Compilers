@@ -231,7 +231,7 @@ def main(argv):
     if llvm_file is not None:
         LLVMSingleton.setName(input_file)
 
-        to_llvm = AST2LLVM(codegetter, llvm_file, comments)  # The codegetter is used to add the original code as comments
+        to_llvm = AST2LLVM(codegetter, llvm_file, copy.deepcopy(comments))  # The codegetter is used to add the original code as comments
         to_llvm.visit(ast)
 
         if control_flow_file is not None:
