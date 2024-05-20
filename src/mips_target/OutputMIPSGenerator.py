@@ -733,6 +733,21 @@ class Conversion:
         dict we use to retrieve which conversion command to call
         """
         block = MipsSingleton.getInstance().getCurrentBlock()  # Get the current block
+
+        """
+        Special cases of casting between ptrs
+        """
+
+        if to_type.getPtrAmount() != from_type.getPtrAmount() and min(to_type.getPtrAmount(), from_type.getPtrAmount()) != 0:
+
+            ptr_difference = from_type.getPtrAmount() - to_type.getPtrAmount()
+            for t in range(max(ptr_difference, 0)):
+                var = block.lw(var, 0)
+
+            var.symbol_type = to_type
+            return var
+
+
         conversion_dict = {("INT", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
                            ("CHAR", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
                            ("PTR", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
@@ -751,7 +766,6 @@ class Conversion:
                            ("PTR", "INT"): lambda x: x
                            }
 
-        print(from_type.getType(), to_type.getType())
         c = conversion_dict.get((from_type.getType(), to_type.getType()))
         var = c(var)
         var.symbol_type = to_type
