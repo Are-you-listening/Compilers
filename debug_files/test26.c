@@ -1,16 +1,38 @@
 #include <stdio.h>
 
-int main(){
-int b[2];
-    int a[4] = {1,2,3,4};
-    int* k = a;
-    k = k + 2;
-    printf("%d ", *k);
-    int e = 5 == a;
-    int t = a != 5;
-    int p = k != a;
+enum Direction {
+NORTH,
+EAST,
+SOUTH,
+WEST,
+};
 
-    printf("%d %d %d", e,t,p);
+int main()
+{
+/* NORTH++;  This should thrown an semantic error because */
+/* const int* appel = &peer; This should also give an error */
+int peer = 1;
+int* appel = &peer;
+appel--;
+--appel;
 
-    return 0;
+appel++;
+++appel;
+printf("%d ", peer);
+
+(*appel)--;
+printf("%d ", peer);
+(*appel)++;
+printf("%d ", peer);
+
+--(*appel);
+printf("%d ", peer);
+
+--appel;
+
+/* --(peer+peer); This is not allowed /
+--(peer);
+--(appel);
+/ appel + --appel; This returns an semantic error*/
+return 0;
 }

@@ -8,23 +8,24 @@ class Block:
     @staticmethod
     def __range_check(immediate: int):
         """Split the immediate into two parts for the `lui` instruction and the remainder"""
+
         # Check if the immediate value is within the 16-bit signed integer range
-        if -32768 <= immediate <= 32767:
+        if isinstance(immediate, str) or -32768 <= immediate <= 32767:
             return 0, immediate
 
-        # For large positive or negative values, ensure we handle 32-bit signed values correctly
+        # convert to unsigned value if negative (same representation in binary)
         if immediate < 0:
-            immediate = (1 << 32) + immediate
+            immediate += (1 << 32)
 
-        # Split the immediate value into upper and lower 16-bit parts
-        lui_value = (immediate >> 16) & 0xFFFF
-        remainder = immediate & 0xFFFF
+        # Calculate upper and lower 16-bit parts
+        upper = immediate // (1 << 16)
+        lower = immediate % (1 << 16)
 
-        # Adjust remainder to fit within the 16-bit signed integer range
-        if remainder & 0x8000:  # Check if the highest bit (sign bit) is set
-            remainder -= 0x10000  # Adjust to a negative value in the 16-bit range
+        # Adjust the lower part to fit within 16 bits if too large
+        if lower >= 32768:
+            lower -= (1 << 16)
 
-        return lui_value, remainder
+        return upper, lower
 
     def __handle_large_immediate(self, rt, rs, immediate, instruction_class):
         lui_value, remainder = Block.__range_check(immediate)

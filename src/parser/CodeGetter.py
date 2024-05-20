@@ -10,6 +10,10 @@ class CodeGetter(ASTVisitor):
         self.codeLines = {}
         self.highest_line_nrs = {}
 
+    def reset(self):
+        for k, v in self.highest_line_nrs.items():
+            self.highest_line_nrs[k] = -1
+
     def visitNode(self, node: ASTNode):
         pass
 
