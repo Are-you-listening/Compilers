@@ -11,7 +11,7 @@ from src.llvm_target.LLVMSingleton import *
 from TestCases.ABCTests.AstLoader import AstLoader
 from src.mips_target.MipsSingleton import MipsSingleton
 from src.mips_target.MipsLibrary.MipsManager import MipsManager
-
+from src.mips_target.MipsLibrary.Memory.RegisterManager import RegisterManager
 
 class ASTTest(ABC):
     """
@@ -160,6 +160,8 @@ class LLVMTest(unittest.TestCase, ABC):
                 LLVMSingleton.getInstance().clear()  # Make sure to reset the singleton service
                 MipsSingleton.getInstance().clear()
                 MipsManager.getInstance().clear()
+                RegisterManager.getInstance().clear()
+
 
                 try:
                     #sys.stdout = original
@@ -209,7 +211,7 @@ class LLVMTest(unittest.TestCase, ABC):
                     print("error", errors, expected_errors)  # Print any errors we didn't expect
                     assert errors == expected_errors
 
-                #sys.stdout = original
+                sys.stdout = original
                 sys.stderr = original_error
 
     def compileGCC(self, file_name):
