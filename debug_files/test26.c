@@ -1,13 +1,38 @@
 #include <stdio.h>
 
-int main(){
-    char array[12] = {'h','e','l','l','o',' ','w','o','r','l','d','!'};
-    char* ptr = &array;
+enum Direction {
+NORTH,
+EAST,
+SOUTH,
+WEST,
+};
 
-    int length = 12;
-    for (int i=0; i<length; i++){
-        printf("%c", *(ptr++));
-    }
+int main()
+{
+/* NORTH++;  This should thrown an semantic error because */
+/* const int* appel = &peer; This should also give an error */
+int peer = 1;
+int* appel = &peer;
+appel--;
+--appel;
 
-    return 0;
+appel++;
+++appel;
+printf("%d ", peer);
+
+(*appel)--;
+printf("%d ", peer);
+(*appel)++;
+printf("%d ", peer);
+
+--(*appel);
+printf("%d ", peer);
+
+--appel;
+
+/* --(peer+peer); This is not allowed /
+--(peer);
+--(appel);
+/ appel + --appel; This returns an semantic error*/
+return 0;
 }

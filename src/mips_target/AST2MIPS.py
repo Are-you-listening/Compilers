@@ -293,6 +293,8 @@ class AST2MIPS(ASTVisitor):
         self.mips_map[node] = mips_var
 
     def handleReturn(self, node: ASTNode):
+        if node.getChildAmount() == 0:
+            return
         mips_var = self.mips_map[node.getChild(0)]
         FunctionMet.handleReturn(mips_var)
 
