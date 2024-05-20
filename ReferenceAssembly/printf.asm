@@ -42,7 +42,6 @@ printf:
 
 	add $t3, $fp, 4 # store param counter
 	lw $t0, ($t3)
-
 	addi $t3, $t3, 4
 printf_char_loop:
 
