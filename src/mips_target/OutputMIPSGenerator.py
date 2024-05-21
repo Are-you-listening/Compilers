@@ -792,7 +792,7 @@ class Printf:
         temp_reg = print_char_special_token.addui(zero, 100)
         temp_reg.overrideMemory(t4)
 
-        print_char_special_token.beq(t2, t4, print_char_special_token_d.label)
+        print_char_special_token.beq(t2, t4, print_char_special_token_d_width.label)
 
         temp_reg = print_char_special_token.addui(zero, 99)
         temp_reg.overrideMemory(t4)

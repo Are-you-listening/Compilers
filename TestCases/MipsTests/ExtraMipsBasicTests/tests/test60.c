@@ -2,6 +2,6 @@
 
 
 int main(){
-    printf("%3d", 5);
+    printf("%3c", 'h');
     return 0;
 }
