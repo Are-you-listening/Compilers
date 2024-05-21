@@ -10,6 +10,7 @@ from src.parser.Utils.ArraySizeReader import ArraySizeReader
 from src.parser.SwitchConverter import SwitchConverter
 from src.parser.ConstantFoldingVisitor import ConstantFoldingVisitor
 
+
 class ArrayPreProcessor(ASTVisitor):
     """
     We are required to fill in int b[a], if a is a const integer, this preprocessor will fill in this information
