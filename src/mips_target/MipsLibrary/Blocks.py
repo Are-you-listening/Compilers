@@ -267,7 +267,15 @@ class Block:
 
     def sll(self, rt: Memory, shamt: int):
         rd = RegisterManager.getInstance().allocate(self)
+        RegisterManager.getInstance().loadIfNeeded(self, [rd, rt])
         instr = Sll(rd, rt, shamt)
+        self.instructions.append(instr)
+        return instr.getAddress()
+
+    def sllv(self, rt: Memory, shamt: Memory):
+        rd = RegisterManager.getInstance().allocate(self)
+        RegisterManager.getInstance().loadIfNeeded(self, [rd, rt])
+        instr = Sllv(rd, rt, shamt)
         self.instructions.append(instr)
         return instr.getAddress()
 

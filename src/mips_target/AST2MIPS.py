@@ -329,7 +329,8 @@ class AST2MIPS(ASTVisitor):
             mips = self.mips_map.get(c)
             params.append(mips)
 
-        FunctionMet.functionCall(function, params)
+        return_value = FunctionMet.functionCall(function, params)
+        self.mips_map[node] = return_value
 
     def handleOperations(self, node: ASTNode):
         """
