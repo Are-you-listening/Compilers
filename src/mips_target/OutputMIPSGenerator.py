@@ -618,8 +618,7 @@ class Printf:
         """
         Set return value to 0
         """
-        temp_reg = scanf_char_loop_end.addui(zero, 0)
-        temp_reg.overrideMemory(v0)
+        scanf_char_loop_end.instructions.append(Li(v0, v0, 1))
 
         function.endFunction()
         return function
