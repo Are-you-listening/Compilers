@@ -52,7 +52,7 @@ def cleanGreen(input_file, symbol_file):
     """
     clear singletons for testcases
     """
-    TypeNodeHandler.getInstance().clear()
+    TypeNodeHandler.getInstance().clear()  # Clear any old singletons
     LLVMSingleton.getInstance().clear()
 
     input_stream = FileStream(input_file)  # Create input stream
@@ -76,20 +76,21 @@ def cleanGreen(input_file, symbol_file):
     toAST.visit(tree)
     ast = toAST.getAST()
 
+    # Reset services after old run
     parser.reset()
     lexer.reset()
     stream.reset()
     input_stream.reset()
 
-    virtualLine = VirtualLineVisitor()
+    virtualLine = VirtualLineVisitor()  # Map virtual lines (for each ';')
     virtualLine.visit(ast)
 
     codegetter = CodeGetter()  # Link each line of code to a line number
     codegetter.visit(ast)
 
-    BlacklistVisitor().visit(ast)
+    BlacklistVisitor().visit(ast)  # Remove blacklisted characters
 
-    PointerReformater().visit(ast)
+    PointerReformater().visit(ast)  # Reformat pointer nodes
 
     ASTLoopCleaner().visit(ast)  # Cleanup For/While loops
 
@@ -97,54 +98,46 @@ def cleanGreen(input_file, symbol_file):
 
     EnumConverter().visit(ast)  # Convert enum to typedef & const bools
 
-
     TypeMerger().visit(ast)  # Reformat enum & struct declarations to our format
 
-    FileIO.add_file_type()
+    FileIO.add_file_type()  # Implement file ptrs as fancy structs
 
     ASTTypedefReplacer().visit(ast)  # Replace all uses of typedefs
 
-
     FunctionPtrCleaner().visit(ast)  # cleans the function ptrs
-
 
     ASTIfCleaner().visit(ast)  # Do a cleanup of the if statements
 
-
     ASTCleaner().visit(ast)  # Do a standard cleaning
 
-    TypeCleaner().visit(ast)
-
-
+    TypeCleaner().visit(ast)  # Make ASTNodeTypes with associated SymbolType
 
     SwitchConverter().visit(ast)  # convert switch statement to if else
 
-    StringToArray().visit(ast)
+    StringToArray().visit(ast)  # Convert strings to arrays
 
-    #DotVisitor("output/v").visit(ast)
+    ArrayPreProcessor().visit(ast)  # Fill in any already known array indices (literal values)
 
-    ArrayPreProcessor().visit(ast)
-
-    ArrayCleaner().visit(ast)
+    ArrayCleaner().visit(ast)  # Cleanup array stuff
 
     ASTTableCreator().visit(ast)  # Create the symbol table
 
-    SizeOfTranslater().visit(ast)
+    SizeOfTranslater().visit(ast)  # Resolve sizes of types
 
     if includeSTLIB:
-        DynamicAllocation.add_allocation(ast)
-    FileIO.add_io(ast)
+        DynamicAllocation.add_allocation(ast)  # Add heap functions
+    FileIO.add_io(ast)  # Add io functions
 
-    StructCleanerAfter().visit(ast)
+    StructCleanerAfter().visit(ast)  # Massage & Clean
 
     ASTCleanerAfter().visit(ast)  # Clean even more :)
 
-    CheckRvalues().visit(ast)
+    CheckRvalues().visit(ast)  # Check up semantics already
 
     ASTDereferencer().visit(ast)  # Correct the use of references & pointers into our format
 
     if symbol_file is not None:
-        s = TableDotVisitor(symbol_file)
+        s = TableDotVisitor(symbol_file)  # Create symbol table
         s.visit(ast.root.getSymbolTable(), False)
 
     return ast, codegetter, includeSTDIO, comments
@@ -157,19 +150,19 @@ def Processing(ast, dot_file, fold, includeSTDIO, unused_var):
     It is vital that AST conversion occurs before constant folding
     """
 
-    ASTConversion().visit(ast)
+    ASTConversion().visit(ast)  # Resolve types & add conversions as explicit
 
-    UnarySaVisitor().visit(ast)
+    UnarySaVisitor().visit(ast)  # Check up semantics for unary ops
 
-    ConstantFoldingVisitor().visit(ast)
+    ConstantFoldingVisitor().visit(ast)  # Apply folding
     if fold:
-        ValueAdderVisitor().visit(ast)
-    ConstantStatementFolding().visit(ast)
+        ValueAdderVisitor().visit(ast)  # Apply propagation
+    ConstantStatementFolding().visit(ast)   # Fold simple statements and remove useless statements
 
     if unused_var:
-        UnusedCleaner().visit(ast)
+        UnusedCleaner().visit(ast)  # Remove unused vars
 
-    ScopeCleaner().visit(ast)
+    ScopeCleaner().visit(ast)  # Clean the use of scope nodes
 
     cfc = ControlFlowCreator()
     cfc.visit(ast)
@@ -191,7 +184,6 @@ def main(argv):
     PRECONDITION: Given files should exist and be reachable from the compilers directory
     :return:
     """
-
     input_file = None  # Define some standard variables & settings
     dot_file = None
     symbol_file = None
@@ -249,4 +241,3 @@ if __name__ == '__main__':
     main(sys.argv)
     LLVMSingleton.getInstance().clear()
     MipsSingleton.getInstance().clear()
-
