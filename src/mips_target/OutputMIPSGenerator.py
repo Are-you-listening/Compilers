@@ -1059,6 +1059,10 @@ class Printf:
 
         print_x_first_skipper.bne(t1, t6, xwidth_space_loop.label)
 
+        temp_reg = print_x_first_skipper.li(28)
+        temp_reg.overrideMemory(t6)
+        print_x_first_skipper.beq(t6, s0, xwidth_space_loop.label)
+
         temp_reg = print_x_first_skipper.addi(t9, 1)
         temp_reg.overrideMemory(t9)
 
