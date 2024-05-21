@@ -275,18 +275,200 @@ class Printf:
         scanf_char_special_token = function.createBlock()
         scanf_char_special_token_d = function.createBlock()
         scanf_char_special_token_c = function.createBlock()
-        scanf_char_special_token_f = function.createBlock()
-        scanf_char_special_token_s = function.createBlock()
         scanf_char_special_token_x = function.createBlock()
-        scanf_char_special_token_x_return_7 = function.createBlock()
-        scanf_char_special_token_x_return_6 = function.createBlock()
-        scanf_char_special_token_x_return_5 = function.createBlock()
-        scanf_char_special_token_x_return_4 = function.createBlock()
-        scanf_char_special_token_x_return_3 = function.createBlock()
-        scanf_char_special_token_x_return_2 = function.createBlock()
-        scanf_char_special_token_x_return_1 = function.createBlock()
-        scanf_char_special_token_x_return_0 = function.createBlock()
+
+        zero = Memory(0, True)
+        v0 = Memory("v0", True)
+        v1 = Memory("v1", True)
+        a0 = Memory("a0", True)
+        a1 = Memory("a1", True)
+        a2 = Memory("a2", True)
+        a3 = Memory("a3", True)
+        fp = Memory("fp", True)
+        sp = Memory("sp", True)
+        t0 = Memory("t0", True)
+        t1 = Memory("t1", True)
+        t2 = Memory("t2", True)
+        t3 = Memory("t3", True)
+        t4 = Memory("t4", True)
+        t5 = Memory("t5", True)
+        t6 = Memory("t6", True)
+        s0 = Memory("s0", True)
+        s1 = Memory("s1", True)
+        f0 = Memory("f0", True)
+
+        change_labels_to_scanf_translate_hexCharToInt = []  # This construction is a pain
+
+        """
+        Point to first parameter
+        """
+        function_function_scanf.instructions.append(Addiu(t3, fp, 4))
+
+        """
+        Load format string in t0
+        """
+        function_function_scanf.instructions.append(Lw(t0, t3, 0))
+
+        """
+        Increase the parameter counter by 1 param
+        """
+        function_function_scanf.instructions.append(Addiu(t3, t3, 4))
+
+        """
+        Read the next byte of the format string
+        """
+        scanf_char_loop.instructions.append(Lb(t1, t0, 0))
+
+        """
+        When coming across a 'zero' byte stop with the looping
+        """
+        scanf_char_loop.beq(t1, zero, None)
+        change_label_to_scanf_char_loop_end = scanf_char_loop.instructions[-1]
+
+        scanf_char_loop.beq(t1, 37, scanf_char_special_token.label)
+
+        scanf_char_loop.instructions.append(Li(v0, v0, 11))
+        scanf_char_loop.move(a0, t1)
+        scanf_char_loop.systemCall()
+        scanf_char_loop.instructions.append(Addi(t0, t0, 1))
+        scanf_char_loop.j(scanf_char_loop.label)
+
+        """scanf_char_special_token"""
+        temp_reg = scanf_char_special_token.addi(t0, 1)
+        temp_reg.overrideMemory(t0)
+        temp_reg = scanf_char_special_token.lb(t0, 0)
+        temp_reg.overrideMemory(t2)
+        scanf_char_special_token.beq(t2, 100, scanf_char_special_token_d.label)
+        scanf_char_special_token.beq(t2, 99, scanf_char_special_token_c.label)
+        scanf_char_special_token.beq(t2, 120, scanf_char_special_token_x.label)
+        scanf_char_special_token.beq(t2, 115, None)
+        change_label_to_scanf_char_special_token_s = scanf_char_special_token.instructions[-1]
+        scanf_char_special_token.beq(t2, 102, None)
+        change_label_to_scanf_char_special_token_f = scanf_char_special_token.instructions[-1]
+        scanf_char_special_token.move(t1, t2)
+
+        """scanf_char_special_token_d"""
+        scanf_char_special_token_d.instructions.append(Li(v0, v0, 5))
+        scanf_char_special_token_d.systemCall()
+        scanf_char_special_token_d.instructions.append(Lw(t6, t3, 0))
+        scanf_char_special_token_d.sw(v0, t6, 0)
+        scanf_char_special_token_d.instructions.append(Addi(t3, t3, 4))
+        scanf_char_special_token_d.instructions.append(Addi(t0, t0, 1))
+        scanf_char_special_token_d.j(scanf_char_loop.label)
+
+        """scanf_char_special_token_c"""
+        scanf_char_special_token_c.instructions.append(Li(v0, v0, 12))
+        scanf_char_special_token_c.systemCall()
+        scanf_char_special_token_c.instructions.append(Lw(t6, t3, 0))
+        scanf_char_special_token_c.sb(v0, t6)
+        scanf_char_special_token_c.instructions.append(Addi(t3, t3, 4))
+        scanf_char_special_token_c.instructions.append(Addi(t0, t0, 1))
+        scanf_char_special_token_c.j(scanf_char_loop.label)
+
+        """scanf_char_special_token_x"""
+        scanf_char_special_token_x.instructions.append(Addi(a0, sp, 8))
+        scanf_char_special_token_x.instructions.append(Li(a1, a1, 9))
+        scanf_char_special_token_x.instructions.append(Li(v0, v0, 8))
+        scanf_char_special_token_x.sw(zero, a0, 0)  # Make sure to set the space we are going to write in to zero
+        scanf_char_special_token_x.sw(zero, a0, 4)
+        scanf_char_special_token_x.systemCall()
+
+        scanf_char_special_token_x.lw_function(a0, 0, s0)
+        scanf_char_special_token_x.lw_function(a0, 4, s1)
+        scanf_char_special_token_x.add(zero, zero, v0)
+
+        scanf_char_special_token_x.move(a0, s1)
+        scanf_char_special_token_x.srl(a0, 24, a0)
+        scanf_char_special_token_x.add(zero, zero, a1)
+        scanf_char_special_token_x.la("scanf_char_special_token_x_return_7", v1)
+        scanf_char_special_token_x.bne(a0, zero, None)
+        change_labels_to_scanf_translate_hexCharToInt.append(scanf_char_special_token_x.instructions[-1])
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, -1))
+        scanf_char_special_token_x.manual_label("scanf_char_special_token_x_return_7")
+
+        scanf_char_special_token_x.move(a0, s1)
+        scanf_char_special_token_x.sll(a0, 8, a0)
+        scanf_char_special_token_x.srl(a0, 24, a0)
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, 1))
+        scanf_char_special_token_x.la("scanf_char_special_token_x_return_6", v1)
+        scanf_char_special_token_x.bne(a0, zero, None)
+        change_labels_to_scanf_translate_hexCharToInt.append(scanf_char_special_token_x.instructions[-1])
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, -1))
+        scanf_char_special_token_x.manual_label("scanf_char_special_token_x_return_6")
+
+        scanf_char_special_token_x.move(a0, s1)
+        scanf_char_special_token_x.sll(a0, 16, a0)
+        scanf_char_special_token_x.srl(a0, 24, a0)
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, 1))
+        scanf_char_special_token_x.la("scanf_char_special_token_x_return_5", v1)
+        scanf_char_special_token_x.bne(a0, zero, None)
+        change_labels_to_scanf_translate_hexCharToInt.append(scanf_char_special_token_x.instructions[-1])
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, -1))
+        scanf_char_special_token_x.manual_label("scanf_char_special_token_x_return_5")
+
+        scanf_char_special_token_x.move(a0, s1)
+        scanf_char_special_token_x.sll(a0, 24, a0)
+        scanf_char_special_token_x.srl(a0, 24, a0)
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, 1))
+        scanf_char_special_token_x.la("scanf_char_special_token_x_return_4", v1)
+        scanf_char_special_token_x.bne(a0, zero, None)
+        change_labels_to_scanf_translate_hexCharToInt.append(scanf_char_special_token_x.instructions[-1])
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, -1))
+        scanf_char_special_token_x.manual_label("scanf_char_special_token_x_return_4")
+
+        scanf_char_special_token_x.move(a0, s0)
+        scanf_char_special_token_x.srl(a0, 24, a0)
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, 1))
+        scanf_char_special_token_x.la("scanf_char_special_token_x_return_3", v1)
+        scanf_char_special_token_x.bne(a0, zero, None)
+        change_labels_to_scanf_translate_hexCharToInt.append(scanf_char_special_token_x.instructions[-1])
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, -1))
+        scanf_char_special_token_x.manual_label("scanf_char_special_token_x_return_3")
+
+        scanf_char_special_token_x.move(a0, s0)
+        scanf_char_special_token_x.sll(a0, 8, a0)
+        scanf_char_special_token_x.srl(a0, 24, a0)
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, 1))
+        scanf_char_special_token_x.la("scanf_char_special_token_x_return_2", v1)
+        scanf_char_special_token_x.bne(a0, zero, None)
+        change_labels_to_scanf_translate_hexCharToInt.append(scanf_char_special_token_x.instructions[-1])
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, -1))
+        scanf_char_special_token_x.manual_label("scanf_char_special_token_x_return_2")
+
+        scanf_char_special_token_x.move(a0, s0)
+        scanf_char_special_token_x.sll(a0, 16, a0)
+        scanf_char_special_token_x.srl(a0, 24, a0)
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, 1))
+        scanf_char_special_token_x.la("scanf_char_special_token_x_return_1", v1)
+        scanf_char_special_token_x.bne(a0, zero, None)
+        change_labels_to_scanf_translate_hexCharToInt.append(scanf_char_special_token_x.instructions[-1])
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, -1))
+        scanf_char_special_token_x.manual_label("scanf_char_special_token_x_return_1")
+
+        scanf_char_special_token_x.move(a0, s0)
+        scanf_char_special_token_x.sll(a0, 24, a0)
+        scanf_char_special_token_x.srl(a0, 24, a0)
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, 1))
+        scanf_char_special_token_x.la("scanf_char_special_token_x_return_0", v1)
+        scanf_char_special_token_x.bne(a0, zero, None)
+        change_labels_to_scanf_translate_hexCharToInt.append(scanf_char_special_token_x.instructions[-1])
+        scanf_char_special_token_x.instructions.append(Addi(a1, a1, -1))
+        scanf_char_special_token_x.manual_label("scanf_char_special_token_x_return_0")
+
+        scanf_char_special_token_x.instructions.append(Lw(t6, t3, 0))
+        scanf_char_special_token_x.sw(v0, t6, 0)
+        scanf_char_special_token_x.instructions.append(Addi(t3, t3, 4))
+        scanf_char_special_token_x.instructions.append(Addi(t0, t0, 1))
+        scanf_char_special_token_x.j(scanf_char_loop.label)
+
+        scanf_char_special_token_s = function.createBlock()
+        change_label_to_scanf_char_special_token_s.label = scanf_char_special_token_s.label
+        scanf_char_special_token_f = function.createBlock()
+        change_label_to_scanf_char_special_token_f.label = scanf_char_special_token_f.label
         scanf_translate_hexCharToInt = function.createBlock()
+        for change in change_labels_to_scanf_translate_hexCharToInt:  # Correct label usage
+            change.label = scanf_translate_hexCharToInt.label
+
         scanf_translate_hexCharToInt_0 = function.createBlock()
         scanf_translate_hexCharToInt_1 = function.createBlock()
         scanf_translate_hexCharToInt_2 = function.createBlock()
@@ -306,220 +488,25 @@ class Printf:
         scanf_power_16 = function.createBlock()
         scanf_power_16_while = function.createBlock()
         scanf_power_16_exit_pow = function.createBlock()
-        scanf_char_loop_end = function.createBlock()
-
-        zero = Memory(0, True)
-        v0 = Memory("v0", True)
-        v1 = Memory("v1", True)
-        a0 = Memory("a0", True)
-        a1 = Memory("a1", True)
-        a2 = Memory("a2", True)
-        a3 = Memory("a3", True)
-        fp = Memory("fp", True)
-        sp = Memory("sp", True)
-        t0 = Memory("t0", True)
-        t1 = Memory("t1", True)
-        t2 = Memory("t2", True)
-        t3 = Memory("t3", True)
-        t4 = Memory("t4", True)
-        t5 = Memory("t5", True)
-        t6 = Memory("t6", True)
-        s0 = Memory("s0", True)
-        f0 = Memory("f0", True)
-
-        """
-        Point to first parameter
-        """
-        temp_reg = function_function_scanf.addui(fp, 4)
-        temp_reg.overrideMemory(t3)
-
-        """
-        Load format string in t0
-        """
-        temp_reg = function_function_scanf.lw(t3, 0)
-        temp_reg.overrideMemory(t0)
-
-        """
-        Increase the parameter counter by 1 param
-        """
-        temp_reg = function_function_scanf.addui(t3, 4)
-        temp_reg.overrideMemory(t3)
-
-        """
-        Read the next byte of the format string
-        """
-        lb_instr = scanf_char_loop.lb(t0, 0)
-        lb_instr.overrideMemory(t1)
-
-        """
-        When coming across a 'zero' byte stop with the looping
-        """
-        scanf_char_loop.beq(t1, zero, scanf_char_loop_end.label)
-
-        temp_reg = scanf_char_loop.li(37)
-        scanf_char_loop.beq(t1, temp_reg, scanf_char_special_token.label)
-
-        temp_reg = scanf_char_loop.li(11)
-        temp_reg.overrideMemory(v0)
-        scanf_char_loop.move(a0, t1)
-        scanf_char_loop.systemCall()
-        temp_reg = scanf_char_loop.addi(t0, 1)
-        temp_reg.overrideMemory(t0)
-        scanf_char_loop.j(scanf_char_loop.label)
-
-        """scanf_char_special_token"""
-        temp_reg = scanf_char_special_token.addi(t0, 1)
-        temp_reg.overrideMemory(t0)
-        temp_reg = scanf_char_special_token.lb(t0, 0)
-        temp_reg.overrideMemory(t2)
-        scanf_char_special_token.beq(t2, 100, scanf_char_special_token_d.label)
-        scanf_char_special_token.beq(t2, 99, scanf_char_special_token_c.label)
-        scanf_char_special_token.beq(t2, 120, scanf_char_special_token_x.label)
-        scanf_char_special_token.beq(t2, 115, scanf_char_special_token_s.label)
-        scanf_char_special_token.beq(t2, 102, scanf_char_special_token_f.label)
-        scanf_char_special_token.move(t1, t2)
-
-        """scanf_char_special_token_d"""
-        temp_reg = scanf_char_special_token_d.li(5)
-        temp_reg.overrideMemory(v0)
-        scanf_char_special_token_d.systemCall()
-        temp_reg = scanf_char_special_token_d.addi(t3, 4)
-        temp_reg.overrideMemory(t3)
-        scanf_char_special_token_d.sw(v0, t3, 0)
-        temp_reg = scanf_char_special_token_d.addi(t0, 1)
-        temp_reg.overrideMemory(t0)
-        scanf_char_special_token_d.j(scanf_char_loop.label)
-
-        """scanf_char_special_token_c"""
-        temp_reg = scanf_char_special_token_c.li(12)
-        temp_reg.overrideMemory(v0)
-        scanf_char_special_token_c.systemCall()
-        temp_reg = scanf_char_special_token_c.addi(t3, 4)
-        temp_reg.overrideMemory(t3)
-        scanf_char_special_token_c.sb(v0, t3)
-        temp_reg = scanf_char_special_token_c.addi(t0, 1)
-        temp_reg.overrideMemory(t0)
-        scanf_char_special_token_c.j(scanf_char_loop.label)
-
-        """scanf_char_special_token_x"""
-        scanf_char_special_token_x.move(a0, sp)
-        temp_reg = scanf_char_special_token_x.li(9)
-        temp_reg.overrideMemory(a1)
-        temp_reg = scanf_char_special_token_x.li(8)
-        temp_reg.overrideMemory(v0)
-        scanf_char_special_token_x.systemCall()
-
-        temp_reg = scanf_char_special_token_x.li(0)
-        temp_reg.overrideMemory(v0)
-
-        temp_reg = scanf_char_special_token_x.lb(sp, 7)
-        temp_reg.overrideMemory(a0)
-        temp_reg = scanf_char_special_token_x.li(0)
-        temp_reg.overrideMemory(a1)
-        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_7.label)
-        temp_reg.overrideMemory(v1)
-        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
-        temp_reg = scanf_char_special_token_x.addi(a1, -1)
-        temp_reg.overrideMemory(a1)
-
-        temp_reg = scanf_char_special_token_x.lb(sp, 6)
-        temp_reg.overrideMemory(a0)
-        temp_reg = scanf_char_special_token_x.addi(a1, 1)
-        temp_reg.overrideMemory(a1)
-        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_6.label)
-        temp_reg.overrideMemory(v1)
-        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
-        temp_reg = scanf_char_special_token_x.addi(a1, -1)
-        temp_reg.overrideMemory(a1)
-
-        temp_reg = scanf_char_special_token_x.lb(sp, 5)
-        temp_reg.overrideMemory(a0)
-        temp_reg = scanf_char_special_token_x.addi(a1, 1)
-        temp_reg.overrideMemory(a1)
-        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_5.label)
-        temp_reg.overrideMemory(v1)
-        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
-        temp_reg = scanf_char_special_token_x.addi(a1, -1)
-        temp_reg.overrideMemory(a1)
-
-        temp_reg = scanf_char_special_token_x.lb(sp, 4)
-        temp_reg.overrideMemory(a0)
-        temp_reg = scanf_char_special_token_x.addi(a1, 1)
-        temp_reg.overrideMemory(a1)
-        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_4.label)
-        temp_reg.overrideMemory(v1)
-        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
-        temp_reg = scanf_char_special_token_x.addi(a1, -1)
-        temp_reg.overrideMemory(a1)
-
-        temp_reg = scanf_char_special_token_x.lb(sp, 3)
-        temp_reg.overrideMemory(a0)
-        temp_reg = scanf_char_special_token_x.addi(a1, 1)
-        temp_reg.overrideMemory(a1)
-        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_3.label)
-        temp_reg.overrideMemory(v1)
-        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
-        temp_reg = scanf_char_special_token_x.addi(a1, -1)
-        temp_reg.overrideMemory(a1)
-
-        temp_reg = scanf_char_special_token_x.lb(sp, 2)
-        temp_reg.overrideMemory(a0)
-        temp_reg = scanf_char_special_token_x.addi(a1, 1)
-        temp_reg.overrideMemory(a1)
-        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_2.label)
-        temp_reg.overrideMemory(v1)
-        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
-        temp_reg = scanf_char_special_token_x.addi(a1, -1)
-        temp_reg.overrideMemory(a1)
-
-        temp_reg = scanf_char_special_token_x.lb(sp, 1)
-        temp_reg.overrideMemory(a0)
-        temp_reg = scanf_char_special_token_x.addi(a1, 1)
-        temp_reg.overrideMemory(a1)
-        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_1.label)
-        temp_reg.overrideMemory(v1)
-        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
-        temp_reg = scanf_char_special_token_x.addi(a1, -1)
-        temp_reg.overrideMemory(a1)
-
-        temp_reg = scanf_char_special_token_x.lb(sp, 0)
-        temp_reg.overrideMemory(a0)
-        temp_reg = scanf_char_special_token_x.addi(a1, 1)
-        temp_reg.overrideMemory(a1)
-        temp_reg = scanf_char_special_token_x.la(scanf_char_special_token_x_return_0.label)
-        temp_reg.overrideMemory(v1)
-        scanf_char_special_token_x.bne(a0, zero, scanf_translate_hexCharToInt.label)
-        temp_reg = scanf_char_special_token_x.addi(a1, -1)
-        temp_reg.overrideMemory(a1)
-
-        temp_reg = scanf_char_special_token_x.addi(t3, 4)
-        temp_reg.overrideMemory(t3)
-        scanf_char_special_token_x.sw(v0, t3, 0)
-        temp_reg = scanf_char_special_token_x.addi(t0, 1)
-        temp_reg.overrideMemory(t0)
-        scanf_char_special_token_x.j(scanf_char_loop.label)
 
         """scanf_char_special_token_s"""
-        temp_reg = scanf_char_special_token_s.li(12)
-        temp_reg.overrideMemory(v0)
-        temp_reg = scanf_char_special_token_s.li(512)
-        temp_reg.overrideMemory(a1)
+        scanf_char_special_token_s.instructions.append(Li(v0, v0, 8))
+        scanf_char_special_token_s.instructions.append(Li(a1, a1, 512))
+        scanf_char_special_token_s.instructions.append(Lw(a0, t3, 0))
         scanf_char_special_token_s.systemCall()
-        temp_reg = scanf_char_special_token_s.addi(t3, 4)
-        temp_reg.overrideMemory(t3)
+        scanf_char_special_token_s.instructions.append(Addi(t3, t3, 4))
+        scanf_char_special_token_s.instructions.append(Addi(t0, t0, 1))
         scanf_char_special_token_s.j(scanf_char_loop.label)
 
         """scanf_char_special_token_f"""
-        temp_reg = scanf_char_special_token_f.li(6)
-        temp_reg.overrideMemory(v0)
+        scanf_char_special_token_f.instructions.append(Li(v0, v0, 6))
         scanf_char_special_token_f.systemCall()
 
-        temp_reg = scanf_char_special_token_f.addi(t3, 4)
-        temp_reg.overrideMemory(t3)
         scanf_char_special_token_f.mfc1(f0, v0)
-        scanf_char_special_token_f.sw(v0, t3, 0)
-        temp_reg = scanf_char_special_token_f.addi(t0, 1)
-        temp_reg.overrideMemory(t0)
+        scanf_char_special_token_f.instructions.append(Lw(t6, t3, 0))
+        scanf_char_special_token_f.sw(v0, t6, 0)
+        scanf_char_special_token_f.instructions.append(Addi(t3, t3, 4))
+        scanf_char_special_token_f.instructions.append(Addi(t0, t0, 1))
         scanf_char_special_token_f.j(scanf_char_loop.label)
 
         """scanf_translate_hexCharToInt"""
@@ -539,6 +526,9 @@ class Printf:
         scanf_translate_hexCharToInt.beq(a0, 100, scanf_translate_hexCharToInt_d.label)
         scanf_translate_hexCharToInt.beq(a0, 101, scanf_translate_hexCharToInt_e.label)
         scanf_translate_hexCharToInt.beq(a0, 102, scanf_translate_hexCharToInt_f.label)
+        #Else: Undefined character: go back
+        scanf_translate_hexCharToInt.instructions.append(Addi(a1, a1, -1))
+        scanf_translate_hexCharToInt.jr(v1)
         """scanf_translate_hexCharToInt_0"""
         temp_reg = scanf_translate_hexCharToInt_0.li(0)
         temp_reg.overrideMemory(a0)
@@ -619,9 +609,11 @@ class Printf:
         """scanf_power_16_exit_pow"""
         temp_reg = scanf_power_16_exit_pow.mul(a3, a0)
         temp_reg.overrideMemory(a3)
-        scanf_power_16_exit_pow.add(v0, v0, a3)
+        scanf_power_16_exit_pow.add(a3, v0, v0)
         scanf_power_16_exit_pow.jr(v1)
 
+        scanf_char_loop_end = function.createBlock()
+        change_label_to_scanf_char_loop_end.label = scanf_char_loop_end.label
 
         """
         Set return value to 0

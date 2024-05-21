@@ -1,9 +1,10 @@
 #include <stdio.h>
 
 int main(){
-/* Beuaty */
     int k = 0;
-    scanf("%d", &k);
-    printf("%d", k);
+    printf("%d %x \n", k , &k);
+    scanf("%x" , &k );
+
+    printf("%d %x", k , &k);
     return 0;
 }
