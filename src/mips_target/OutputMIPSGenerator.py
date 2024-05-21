@@ -933,6 +933,9 @@ class Printf:
         temp_reg = print_char_special_token_f.addi(t9, -8)
         temp_reg.overrideMemory(t9)
 
+        temp_reg = print_char_special_token_f.addui(s2, 7)
+        temp_reg.overrideMemory(s2)
+
         temp_reg = print_char_special_token_f.addui(zero, 2)
         temp_reg.overrideMemory(v0)
 
