@@ -643,12 +643,19 @@ class Printf:
         print_base_block = function.createBlock()
         print_char_loop = function.createBlock()
         print_char_special_token_after = function.createBlock()
+        width_space_loop = function.createBlock()
+        width_space_loop_after = function.createBlock()
         print_char_special_token = function.createBlock()
         print_char_special_token_end_if = function.createBlock()
+        print_char_special_token_d_width = function.createBlock()
+        print_char_special_token_d_width_loop = function.createBlock()
         print_char_special_token_d = function.createBlock()
         print_char_special_token_c = function.createBlock()
         print_char_special_token_s = function.createBlock()
+        print_char_special_token_s_width_loop = function.createBlock()
+        print_char_special_token_s_after = function.createBlock()
         print_char_special_token_x = function.createBlock()
+        xwidth_space_loop = function.createBlock()
         print_x_first_skipper = function.createBlock()
         print_x_half_byte_loop = function.createBlock()
         print_x_half_byte_loop_after = function.createBlock()
@@ -663,6 +670,9 @@ class Printf:
         t4 = Memory(12, True)
         t5 = Memory(13, True)
         t6 = Memory(14, True)
+        t7 = Memory(15, True)
+        t8 = Memory(24, True)
+        t9 = Memory(25, True)
         fp_register = Memory(30, True)
         v0 = Memory(2, True)
         a0 = Memory(4, True)
@@ -691,6 +701,9 @@ class Printf:
         """
         Read the next byte of the format string
         """
+        lb_instr = print_char_loop.li(0)
+        lb_instr.overrideMemory(t9)
+
         lb_instr = print_char_loop.lb(t0, 0)
         lb_instr.overrideMemory(t1)
 
@@ -715,23 +728,54 @@ class Printf:
         print_char_loop.beq(t1, t4, print_char_special_token.label)
 
         """
+        width_space_loop
+        """
+        temp_reg = width_space_loop.li(1)
+        temp_reg.overrideMemory(t8)
+
+        temp_reg = width_space_loop.slt(t9, t8)
+        temp_reg.overrideMemory(t7)
+
+        width_space_loop.beq(t7, t8, width_space_loop_after.label)
+        width_space_loop.move(t7, v0)
+
+        temp_reg = width_space_loop.li(11)
+        temp_reg.overrideMemory(v0)
+
+        temp_reg = width_space_loop.li(32)
+        temp_reg.overrideMemory(a0)
+
+        width_space_loop.systemCall()
+
+        temp_reg = width_space_loop.addui(t9, -1)
+        temp_reg.overrideMemory(t9)
+
+        width_space_loop.move(v0, t7)
+
+        temp_reg = width_space_loop.li(0)
+        temp_reg.overrideMemory(t8)
+
+        width_space_loop.bne(t9, t8, width_space_loop.label)
+
+        """
         store $t1, char value in $a0 for system call
         """
-        temp_reg = print_char_special_token_after.add(zero, t1)
+
+        temp_reg = width_space_loop_after.add(zero, t1)
         temp_reg.overrideMemory(a0)
 
         """
         Execute the print system call
         """
-        print_char_special_token_after.systemCall()
+        width_space_loop_after.systemCall()
 
         """
         Increase the format string ptr by 1
         """
-        temp_reg = print_char_special_token_after.addui(t0, 1)
+        temp_reg = width_space_loop_after.addui(t0, 1)
         temp_reg.overrideMemory(t0)
 
-        print_char_special_token_after.j(print_char_loop.label)
+        width_space_loop_after.j(print_char_loop.label)
 
         """
         In case of a special tokens we look at the next character
@@ -771,9 +815,39 @@ class Printf:
         print_char_special_token.beq(t2, t4, print_char_special_token_f.label)
 
         """
+        check value
+        """
+        temp_reg = print_char_special_token.li(47)
+        temp_reg.overrideMemory(t7)
+        temp_reg = print_char_special_token.li(58)
+        temp_reg.overrideMemory(t8)
+        temp_reg = print_char_special_token.slt(t7, t2)
+        temp_reg.overrideMemory(t7)
+        temp_reg = print_char_special_token.sgt(t8, t2)
+        temp_reg.overrideMemory(t8)
+        temp_reg = print_char_special_token.mips_and(t7, t8)
+        temp_reg.overrideMemory(t7)
+        print_char_special_token.move(t1, t2)
+
+        temp_reg = print_char_special_token.li(1)
+        temp_reg.overrideMemory(t8)
+        print_char_special_token.bne(t7, t8, print_char_special_token_end_if.label)
+
+        temp_reg = print_char_special_token.addui(t2, -48)
+        temp_reg.overrideMemory(t7)
+
+        temp_reg = print_char_special_token.li(10)
+        temp_reg.overrideMemory(t8)
+        temp_reg = print_char_special_token.mul(t9, t8)
+        temp_reg.overrideMemory(t9)
+        temp_reg = print_char_special_token.add(t9, t7)
+        temp_reg.overrideMemory(t9)
+        print_char_special_token.j(print_char_special_token.label)
+
+
+        """
         move $t1, $t2
         """
-        print_char_special_token_after.add(zero, t2, t1)
 
         """
         After checking special character, go to block to do the print
@@ -783,6 +857,26 @@ class Printf:
         """
         Load the latest parameter value for %d special case
         """
+        temp_reg = print_char_special_token_d_width.lw(t3, 0)
+        temp_reg.overrideMemory(t1)
+
+        temp_reg = print_char_special_token_d_width_loop.li(10)
+        temp_reg.overrideMemory(t7)
+
+        temp_reg = print_char_special_token_d_width_loop.div(t1, t7)
+        temp_reg.overrideMemory(t1)
+
+        temp_reg = print_char_special_token_d_width_loop.li(1)
+        temp_reg.overrideMemory(t7)
+
+        temp_reg = print_char_special_token_d_width_loop.sub(t9, t7)
+        temp_reg.overrideMemory(t9)
+
+        temp_reg = print_char_special_token_d_width_loop.li(0)
+        temp_reg.overrideMemory(t7)
+
+        print_char_special_token_d_width_loop.bne(t7, t1, print_char_special_token_d_width_loop.label)
+
         """
         When special character == 'd', we will print an integer, that corresponds with next parameter
         """
@@ -803,6 +897,9 @@ class Printf:
         """
         When special character == 'c', we will print an char, that corresponds with next parameter
         """
+        temp_reg = print_char_special_token_c.addi(t9, -1)
+        temp_reg.overrideMemory(t9)
+
         temp_reg = print_char_special_token_c.addui(zero, 11)
         temp_reg.overrideMemory(v0)
 
@@ -821,6 +918,9 @@ class Printf:
         """
         When special character == 'f', we will print a string, that corresponds with next parameter
         """
+        temp_reg = print_char_special_token_f.addi(t9, -8)
+        temp_reg.overrideMemory(t9)
+
         temp_reg = print_char_special_token_f.addui(zero, 2)
         temp_reg.overrideMemory(v0)
 
@@ -836,19 +936,36 @@ class Printf:
         """
         Load the latest parameter value for %s special case
         """
+        temp_reg = print_char_special_token_s.lw(t3, 0)
+        temp_reg.overrideMemory(t7)
+
+        temp_reg = print_char_special_token_s_width_loop.lb(t7, 0)
+        temp_reg.overrideMemory(t1)
+
+        temp_reg = print_char_special_token_s_width_loop.li(0)
+        temp_reg.overrideMemory(t8)
+        print_char_special_token_s_width_loop.beq(t1, t8, print_char_special_token_s_after.label)
+
+        temp_reg = print_char_special_token_s_width_loop.addi(t7, 1)
+        temp_reg.overrideMemory(t7)
+
+        temp_reg = print_char_special_token_s_width_loop.addi(t9, -1)
+        temp_reg.overrideMemory(t9)
+
+        print_char_special_token_s_width_loop.j(print_char_special_token_s_width_loop.label)
 
         """
         When special character == 's', we will print a string, that corresponds with next parameter
         """
-        temp_reg = print_char_special_token_s.addui(zero, 4)
+        temp_reg = print_char_special_token_s_after.addui(zero, 4)
         temp_reg.overrideMemory(v0)
 
-        temp_reg = print_char_special_token_s.lw(t3, 0)
+        temp_reg = print_char_special_token_s_after.lw(t3, 0)
         temp_reg.overrideMemory(t1)
 
-        temp_reg = print_char_special_token_s.addui(t3, 4)
+        temp_reg = print_char_special_token_s_after.addui(t3, 4)
         temp_reg.overrideMemory(t3)
-        print_char_special_token_s.j(print_char_special_token_end_if.label)
+        print_char_special_token_s_after.j(print_char_special_token_end_if.label)
 
         """
         Load the latest parameter value for %x special case
@@ -866,6 +983,41 @@ class Printf:
         """
         temp_reg = print_char_special_token_x.li(0)
         temp_reg.overrideMemory(s0)
+
+        temp_reg = print_char_special_token_x.addi(t9, -8)
+        temp_reg.overrideMemory(t9)
+        """
+        x width
+        """
+
+        temp_reg = xwidth_space_loop.li(1)
+        temp_reg.overrideMemory(t8)
+
+        temp_reg = xwidth_space_loop.slt(t9, t8)
+        temp_reg.overrideMemory(t7)
+
+        xwidth_space_loop.beq(t7, t8, print_x_half_byte_loop.label)
+        xwidth_space_loop.move(t7, v0)
+
+        temp_reg = xwidth_space_loop.li(11)
+        temp_reg.overrideMemory(v0)
+
+        temp_reg = xwidth_space_loop.li(32)
+        temp_reg.overrideMemory(a0)
+
+        xwidth_space_loop.systemCall()
+
+        temp_reg = xwidth_space_loop.addui(t9, -1)
+        temp_reg.overrideMemory(t9)
+
+        xwidth_space_loop.move(v0, t7)
+
+        temp_reg = xwidth_space_loop.li(0)
+        temp_reg.overrideMemory(t8)
+
+        xwidth_space_loop.bne(t9, t8, xwidth_space_loop.label)
+        xwidth_space_loop.j(print_x_half_byte_loop.label)
+
         """
         Jump to skipper
         """
@@ -882,7 +1034,11 @@ class Printf:
         temp_reg = print_x_first_skipper.li(0)
         temp_reg.overrideMemory(t6)
 
-        print_x_first_skipper.bne(t1, t6, print_x_half_byte_loop.label)
+        print_x_first_skipper.bne(t1, t6, xwidth_space_loop.label)
+
+        temp_reg = print_x_first_skipper.addi(t9, 1)
+        temp_reg.overrideMemory(t9)
+
         temp_reg = print_x_first_skipper.addui(s0, 4)
         temp_reg.overrideMemory(s0)
 
@@ -898,7 +1054,10 @@ class Printf:
         Display the first 4 bits as hex
         Using a mathematical formula we can make sure to display 'a-f', without need for any branches
         """
+        temp_reg = print_x_half_byte_loop.li(28)
+        temp_reg.overrideMemory(s1)
 
+        print_x_half_byte_loop.beq(s0, s1, print_x_half_byte_loop_after.label)
         """
         Take 4 bits at a time
         """

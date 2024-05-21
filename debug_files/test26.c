@@ -1,8 +1,7 @@
 #include <stdio.h>
 
 
-int main()
-{
-    printf("%x", 6355555);
+int main(){
+    printf("%s", "hello world");
     return 0;
 }
