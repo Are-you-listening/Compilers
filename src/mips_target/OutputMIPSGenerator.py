@@ -1392,7 +1392,7 @@ class Conversion:
                            ("FLOAT", "BOOL"): lambda x: BinaryWrapper.notEqual(block.fptosi(x), block.li(0)),
                            ("INT", "BOOL"): lambda x: BinaryWrapper.notEqual(x, block.li(0)),
                            ("PTR", "BOOL"): lambda x: BinaryWrapper.notEqual(x, block.li(0)),
-                           ("INT", "CHAR"): lambda x: block.sll(block.srl(x, 24), 24),
+                           ("INT", "CHAR"): lambda x: block.srl(block.sll(x, 24), 24),
                            ("CHAR", "INT"): lambda x: x,
                            ("BOOL", "INT"): lambda x: x,
                            ("BOOL", "CHAR"): lambda x: x,
