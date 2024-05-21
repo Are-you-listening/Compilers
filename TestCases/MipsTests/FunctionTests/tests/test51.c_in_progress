@@ -17,6 +17,6 @@ int main() {
     struct kaas* ptr;
 
     ptr = structCreator(10, 20.0);
-    printf("%d %f ", ptr->melk, ptr->yoghurt);
+    printf("%d %d ", ptr->melk, (int) ptr->yoghurt);
     return 0;
 }

@@ -11,7 +11,7 @@ int main() {
     int c = 6;
     int* a = &c;
     int** d = &a;
-    printf("%f", m(d));
+    printf("%d", (int) m(d));
 
     return 0;
 }

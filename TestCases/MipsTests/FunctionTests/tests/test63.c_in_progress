@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int foo(float foo){
-    printf("%f\n", foo);
+    printf("%d\n", (int) foo);
     return foo;
 }
 

@@ -164,12 +164,12 @@ def Processing(ast, dot_file, fold, includeSTDIO, unused_var):
 
     ScopeCleaner().visit(ast)  # Clean the use of scope nodes
 
-    cfc = ControlFlowCreator()
+    cfc = ControlFlowCreator()  # creates control flow graph
     cfc.visit(ast)
 
     DeadCodeRemover().visit(ast, cfc.getControlFlowGraph())  # removes dead code inside a block coming after a return/continue or break
 
-    VoidReturnAdder().addReturn(cfc.getControlFlowGraph())
+    VoidReturnAdder().addReturn(cfc.getControlFlowGraph())  # Semantic analysis, to check all paths have a return (and implict void returns)
 
     if dot_file is not None:
         DotVisitor(dot_file).visit(ast)  # Export AST in Dot
