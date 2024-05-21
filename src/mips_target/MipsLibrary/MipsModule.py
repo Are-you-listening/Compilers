@@ -35,4 +35,8 @@ class MipsModule:
             special_info = ""
         self.data_segment.append(f"{key}: {special_info} {value}")
 
-
+    def getFunction(self, function_name: str):
+        for function in self.functions:
+            if function.function_name == function_name:
+                return function
+        return None

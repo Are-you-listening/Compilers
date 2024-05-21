@@ -48,12 +48,13 @@ class AST2MIPS(ASTVisitor):
         visited = set()
         while len(stack) > 0:
             current_node = stack[-1]  # get top of stack without popping it
-
             if current_node.text == "Function" and current_node not in visited:
                 visited.add(current_node)
-                if current_node.children[1].text == "Code":
-                    self.handleFunction(current_node)
-                    self.map_table = MapTable(self.map_table)
+
+                self.handleFunction(current_node)
+                self.map_table = MapTable(self.map_table)
+
+
 
 
             if isinstance(current_node, ASTNodeBlock) and current_node.text == "Block" and current_node not in visited:
@@ -249,13 +250,19 @@ class AST2MIPS(ASTVisitor):
     def handleFunction(self, node: ASTNode):
         function_name = node.getChild(0).text
         mips_module = MipsSingleton.getInstance().getModule()
-        function = mips_module.createFunction(function_name)
+        function = mips_module.getFunction(function_name)
+        if function is None:
+            function = mips_module.createFunction(function_name)
+
 
         MipsSingleton.getInstance().setLastFunction(function)
         current_table = node.getSymbolTable()
         symbol_entry = current_table.getEntry(function_name, node.position.virtual_linenr)
 
         self.map_table.addEntry(MapEntry(function_name, function), symbol_entry)
+
+
+
 
     def handleComment(self, node):
         if node.position is None or node.symbol_table is None or node.symbol_table.isRoot():  # We can't add comments in the global scope of llvm

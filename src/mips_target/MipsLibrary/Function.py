@@ -97,8 +97,8 @@ class Function:
         for b in self.blocks:
             string += b.toString()
             string += "\n"
-
-        string += f"{self.load_block.toString()}"
+        if self.load_block is not None:
+            string += f"{self.load_block.toString()}"
         string += "jr $ra\n"
 
         return string
