@@ -649,6 +649,9 @@ class Printf:
         print_char_special_token_c = function.createBlock()
         print_char_special_token_s = function.createBlock()
         print_char_special_token_x = function.createBlock()
+        print_x_first_skipper = function.createBlock()
+        print_x_half_byte_loop = function.createBlock()
+        print_x_half_byte_loop_after = function.createBlock()
         print_char_special_token_f = function.createBlock()
         printf_char_loop_end = function.createBlock()
 
@@ -659,9 +662,13 @@ class Printf:
         t3 = Memory(11, True)
         t4 = Memory(12, True)
         t5 = Memory(13, True)
+        t6 = Memory(14, True)
         fp_register = Memory(30, True)
         v0 = Memory(2, True)
         a0 = Memory(4, True)
+
+        s0 = Memory(16, True)
+        s1 = Memory(17, True)
 
         """
         Point to first parameter
@@ -851,10 +858,40 @@ class Printf:
         When special character == 'x', we will print a string, that corresponds with next parameter
         """
 
-        temp_reg = print_char_special_token_x.addui(zero, 4)
+        temp_reg = print_char_special_token_x.addui(zero, 11)
         temp_reg.overrideMemory(v0)
 
-        x_char = print_char_special_token_x.lb(t3, 0)
+        """
+        Initialize counter
+        """
+        temp_reg = print_char_special_token_x.li(0)
+        temp_reg.overrideMemory(s0)
+        """
+        Jump to skipper
+        """
+        print_char_special_token_x.j(print_x_first_skipper.label)
+
+        x_char = print_x_first_skipper.lw(t3, 0)
+        x_char.overrideMemory(t1)
+
+        x_char = print_x_first_skipper.sllv(t1, s0)
+        x_char.overrideMemory(t1)
+        x_char = print_x_first_skipper.srl(t1, 28)
+        x_char.overrideMemory(t1)
+
+        temp_reg = print_x_first_skipper.li(0)
+        temp_reg.overrideMemory(t6)
+
+        print_x_first_skipper.bne(t1, t6, print_x_half_byte_loop.label)
+        temp_reg = print_x_first_skipper.addui(s0, 4)
+        temp_reg.overrideMemory(s0)
+
+        print_x_first_skipper.j(print_x_first_skipper.label)
+
+        """
+        Start print loop
+        """
+        x_char = print_x_half_byte_loop.lw(t3, 0)
         x_char.overrideMemory(t1)
 
         """
@@ -863,80 +900,91 @@ class Printf:
         """
 
         """
-        Take last 4 bytes
+        Take 4 bits at a time
         """
-        temp_reg = print_char_special_token_x.srl(t1, 4)
+        x_char = print_x_half_byte_loop.sllv(t1, s0)
+        x_char.overrideMemory(t1)
+        temp_reg = print_x_half_byte_loop.srl(t1, 28)
         temp_reg.overrideMemory(t1)
 
         """
         Print it to ascii character range starting with '0'
         """
-        temp_reg = print_char_special_token_x.addui(t1, 48)
+        temp_reg = print_x_half_byte_loop.addui(t1, 48)
         temp_reg.overrideMemory(t1)
 
-        temp_reg = print_char_special_token_x.addui(zero, 58)
+        temp_reg = print_x_half_byte_loop.addui(zero, 58)
         temp_reg.overrideMemory(t5)
 
-        temp_reg = print_char_special_token_x.div(t1, t5)
+        temp_reg = print_x_half_byte_loop.div(t1, t5)
         temp_reg.overrideMemory(t4)
-        print_char_special_token_x.mflo(t4)
-        temp_reg = print_char_special_token_x.andi(t4, 1)
+        print_x_half_byte_loop.mflo(t4)
+        temp_reg = print_x_half_byte_loop.andi(t4, 1)
         temp_reg.overrideMemory(t5)
-        temp_reg = print_char_special_token_x.addi(t4, 38)
+        temp_reg = print_x_half_byte_loop.addi(t4, 38)
         temp_reg.overrideMemory(t4)
-        temp_reg = print_char_special_token_x.mul(t5, t4)
+        temp_reg = print_x_half_byte_loop.mul(t5, t4)
         temp_reg.overrideMemory(t5)
-        print_char_special_token_x.add(t5, t1, t1)
+        print_x_half_byte_loop.add(t5, t1, t1)
 
         """
         Display first 4 bits as hex
         """
-        temp_reg = print_char_special_token_x.addui(zero, 11)
+        temp_reg = print_x_half_byte_loop.addui(zero, 11)
         temp_reg.overrideMemory(v0)
 
-        print_char_special_token_x.add(zero, t1, a0)
+        print_x_half_byte_loop.add(zero, t1, a0)
 
-        print_char_special_token_x.systemCall()
+        print_x_half_byte_loop.systemCall()
+
+        temp_reg = print_x_half_byte_loop.addui(s0, 4)
+        temp_reg.overrideMemory(s0)
+
+        temp_reg = print_x_half_byte_loop.li(28)
+        temp_reg.overrideMemory(s1)
+
+        print_x_half_byte_loop.beq(s0, s1, print_x_half_byte_loop_after.label)
+        print_x_half_byte_loop.j(print_x_half_byte_loop.label)
 
         """
         Display the second part (last 4 bits)
         No seperate syscall will occur, but just the default syscall
         """
-        x_char = print_char_special_token_x.lb(t3, 0)
+        x_char = print_x_half_byte_loop_after.lb(t3, 0)
         x_char.overrideMemory(t1)
 
         """
         Wipe all expect last 4 bites
         """
-        temp_reg = print_char_special_token_x.sll(t1, 28)
+        temp_reg = print_x_half_byte_loop_after.sll(t1, 28)
         temp_reg.overrideMemory(t1)
-        temp_reg = print_char_special_token_x.srl(t1, 28)
+        temp_reg = print_x_half_byte_loop_after.srl(t1, 28)
         temp_reg.overrideMemory(t1)
 
         """
         Print it to ascii character range starting with '0'
         """
-        temp_reg = print_char_special_token_x.addui(t1, 48)
+        temp_reg = print_x_half_byte_loop_after.addui(t1, 48)
         temp_reg.overrideMemory(t1)
 
-        temp_reg = print_char_special_token_x.addui(zero, 58)
+        temp_reg = print_x_half_byte_loop_after.addui(zero, 58)
         temp_reg.overrideMemory(t5)
 
-        temp_reg = print_char_special_token_x.div(t1, t5)
+        temp_reg = print_x_half_byte_loop_after.div(t1, t5)
         temp_reg.overrideMemory(t4)
-        print_char_special_token_x.mflo(t4)
-        temp_reg = print_char_special_token_x.andi(t4, 1)
+        print_x_half_byte_loop_after.mflo(t4)
+        temp_reg = print_x_half_byte_loop_after.andi(t4, 1)
         temp_reg.overrideMemory(t5)
-        temp_reg = print_char_special_token_x.addi(t4, 38)
+        temp_reg = print_x_half_byte_loop_after.addi(t4, 38)
         temp_reg.overrideMemory(t4)
-        temp_reg = print_char_special_token_x.mul(t5, t4)
+        temp_reg = print_x_half_byte_loop_after.mul(t5, t4)
         temp_reg.overrideMemory(t5)
-        print_char_special_token_x.add(t5, t1, t1)
+        print_x_half_byte_loop_after.add(t5, t1, t1)
 
-        temp_reg = print_char_special_token_x.addui(t3, 4)
+        temp_reg = print_x_half_byte_loop_after.addui(t3, 4)
         temp_reg.overrideMemory(t3)
 
-        print_char_special_token_x.j(print_char_special_token_end_if.label)
+        print_x_half_byte_loop_after.j(print_char_special_token_end_if.label)
 
         """
         Set return value to 0
