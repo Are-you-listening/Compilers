@@ -1,13 +1,13 @@
 digraph AST {
-  "129070810732560" [label="main:  INT
+  "128736601483264" [label="main:  INT
 fopen:  0_IO_FILE*
 fgets:  CHAR*
 fputs:  CHAR
 fclose:  VOID"];
-  "129070810732560" -> "129070810740672";
-  "129070810740672" [label=""];
-  "129070810740672" -> "129070810727616";
-  "129070810727616" [label="perier:  water
+  "128736601483264" -> "128736601479280";
+  "128736601479280" [label=""];
+  "128736601479280" -> "128736601489312";
+  "128736601489312" [label="perier:  water
 spa:  water
 sea:  water
 boo:  bottle"];

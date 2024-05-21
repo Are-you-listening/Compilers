@@ -52,6 +52,10 @@ class Block:
         self.instructions: list[Instruction] = []
         self.function = function
 
+    def manual_label(self, label: str):
+        instr = self.instructions.append(Manual_Label(label))
+        return instr
+
     def li(self, immediate: int):
         rt = RegisterManager.getInstance().allocate(self)
         return self.__handle_large_immediate(rt, rt, immediate, Li)
@@ -86,9 +90,9 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
-    def lb(self, rs: Memory, load_value: int):
-
-        rt = RegisterManager.getInstance().allocate(self)
+    def lb(self, rs: Memory, load_value: int, rt=None):
+        if rt is None:
+            rt = RegisterManager.getInstance().allocate(self)
 
         RegisterManager.getInstance().loadIfNeeded(self, [rs, rt])
 
@@ -265,8 +269,9 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
-    def sll(self, rt: Memory, shamt: int):
-        rd = RegisterManager.getInstance().allocate(self)
+    def sll(self, rt: Memory, shamt: int, rd=None):
+        if rd is None:
+            rd = RegisterManager.getInstance().allocate(self)
         RegisterManager.getInstance().loadIfNeeded(self, [rd, rt])
         instr = Sll(rd, rt, shamt)
         self.instructions.append(instr)
@@ -295,8 +300,9 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
-    def srl(self, rt: Memory, shamt: int):
-        rd = RegisterManager.getInstance().allocate(self)
+    def srl(self, rt: Memory, shamt: int, rd=None):
+        if rd is None:
+            rd = RegisterManager.getInstance().allocate(self)
         instr = Srl(rd, rt, shamt)
         self.instructions.append(instr)
         return instr.getAddress()
@@ -335,13 +341,14 @@ class Block:
         return instr.getAddress()
 
     def sb(self, v0, t3, load_value=0):
-        RegisterManager.getInstance().loadIfNeeded(self, [v0,t3])
+        RegisterManager.getInstance().loadIfNeeded(self, [v0, t3])
         instr = Sb(v0, t3, load_value)
         self.instructions.append(instr)
         return instr.getAddress()
 
-    def la(self, label: str):
-        rt = RegisterManager.getInstance().allocate(self)
+    def la(self, label: str, rt=None):
+        if rt is None:
+            rt = RegisterManager.getInstance().allocate(self)
         instr = La(rt, label)
         self.instructions.append(instr)
         return rt
