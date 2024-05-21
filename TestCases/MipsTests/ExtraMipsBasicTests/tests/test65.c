@@ -2,7 +2,7 @@
 
 
 int main(){
-    int a = printf("%d\n", 5);
+    int a = printf("%d\n", 55);
     printf("%d", a);
     return 0;
 }

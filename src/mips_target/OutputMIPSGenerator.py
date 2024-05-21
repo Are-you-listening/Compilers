@@ -675,10 +675,12 @@ class Printf:
         t9 = Memory(25, True)
         fp_register = Memory(30, True)
         v0 = Memory(2, True)
+
         a0 = Memory(4, True)
 
         s0 = Memory(16, True)
         s1 = Memory(17, True)
+        s2 = Memory(18, True)
 
         """
         Point to first parameter
@@ -745,6 +747,8 @@ class Printf:
         temp_reg = width_space_loop.li(32)
         temp_reg.overrideMemory(a0)
 
+        temp_reg = width_space_loop.addui(s2, 1)
+        temp_reg.overrideMemory(s2)
         width_space_loop.systemCall()
 
         temp_reg = width_space_loop.addui(t9, -1)
@@ -767,6 +771,8 @@ class Printf:
         """
         Execute the print system call
         """
+        temp_reg = width_space_loop_after.addui(s2, 1)
+        temp_reg.overrideMemory(s2)
         width_space_loop_after.systemCall()
 
         """
@@ -866,6 +872,9 @@ class Printf:
         temp_reg = print_char_special_token_d_width_loop.div(t1, t7)
         temp_reg.overrideMemory(t1)
 
+        temp_reg = print_char_special_token_d_width_loop.addui(s2, 1)
+        temp_reg.overrideMemory(s2)
+
         temp_reg = print_char_special_token_d_width_loop.li(1)
         temp_reg.overrideMemory(t7)
 
@@ -880,6 +889,9 @@ class Printf:
         """
         When special character == 'd', we will print an integer, that corresponds with next parameter
         """
+        temp_reg = print_char_special_token_d.addui(s2, -1)
+        temp_reg.overrideMemory(s2)
+
         temp_reg = print_char_special_token_d.addui(zero, 1)
         temp_reg.overrideMemory(v0)
 
@@ -1005,6 +1017,8 @@ class Printf:
         temp_reg = xwidth_space_loop.li(32)
         temp_reg.overrideMemory(a0)
 
+        temp_reg = xwidth_space_loop.addui(s2, 1)
+        temp_reg.overrideMemory(s2)
         xwidth_space_loop.systemCall()
 
         temp_reg = xwidth_space_loop.addui(t9, -1)
@@ -1094,6 +1108,8 @@ class Printf:
 
         print_x_half_byte_loop.add(zero, t1, a0)
 
+        temp_reg = print_x_half_byte_loop.addui(s2, 1)
+        temp_reg.overrideMemory(s2)
         print_x_half_byte_loop.systemCall()
 
         temp_reg = print_x_half_byte_loop.addui(s0, 4)
@@ -1148,8 +1164,7 @@ class Printf:
         """
         Set return value to 0
         """
-        temp_reg = printf_char_loop_end.addui(zero, 0)
-        temp_reg.overrideMemory(v0)
+        printf_char_loop_end.move(v0, s2)
 
         function.endFunction()
         return function
