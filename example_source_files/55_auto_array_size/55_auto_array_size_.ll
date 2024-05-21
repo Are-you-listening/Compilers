@@ -1,11 +1,11 @@
-; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/example_source_files/55_auto_array_size/55_auto_array_size.c"
+; ModuleID = "/home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/example_source_files/55_auto_array_size/55_auto_array_size.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca [12 x i8], align 16
+  %".3" = alloca [12 x i8], align 64
   ;      INT main ( ) { CHAR c [ ] = "hello world" ;
   %".5" = getelementptr inbounds [12 x i8], [12 x i8]* %".3", i64 0, i32 11
   store i8 0, i8* %".5", align 4
@@ -38,7 +38,7 @@ define i32 @"main"()
   store i8* %".29", i8** %".32"
   %".34" = load i8*, i8** %".32"
   %".35" = call i32 (i8*, ...) @"printf"(i8* %".31", i8* %".34")
-  %".36" = alloca [3 x i8], align 4
+  %".36" = alloca [3 x i8], align 16
   ;  CHAR d [ ] = { 'a' , 'b' , '\0' } ;
   %".38" = getelementptr inbounds [3 x i8], [3 x i8]* %".36", i64 0, i32 2
   store i8 0, i8* %".38", align 4

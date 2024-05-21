@@ -1,4 +1,4 @@
-; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/example_source_files/39_arrays/39_arrays.c"
+; ModuleID = "/home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/example_source_files/39_arrays/39_arrays.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
@@ -8,7 +8,7 @@ define i32 @"main"()
   %".3" = alloca i32, align 4
   store i32 5, i32* %".3", align 4
   ;    INT main ( ) { INT q = 5 ;
-  %".6" = alloca [10 x i8], align 16
+  %".6" = alloca [10 x i8], align 64
   ; CHAR y [ 10 ] ;
   %".8" = getelementptr inbounds [10 x i8], [10 x i8]* %".6", i64 0, i32 5
   ; y [ 5 ] = 'a' ;

@@ -79,7 +79,7 @@ understand the LLVM output
 
 
 ### Optional Functionality: 
-(In short we did all the optionals except 'Function overloading' and we did 2 extra optionals ('CFG' and 'array[] automatic size' )')
+(In short we did all the optionals except 'Function overloading' and we did 4 extra optionals ('CFG' and 'array[] automatic size' )', 'Func ptrs', 'calloc en realloc'')
 - [X] [Include Guards (mandatory because group of 4)](./example_source_files/45_include_guards/45_include_guards.c)
 - [X] [Unions (mandatory because group of 4)](./example_source_files/46_unions/46_unions.c)
 - [X] [Function Pointers (mandatory because group of 4)](./example_source_files/47_function_pointer/47_function_pointer.c)
@@ -97,8 +97,8 @@ understand the LLVM output
 - [X] [Dynamically allocated strings and character buffers (can be used for printf, fgets, fputs, ...)](./example_source_files/54_file_io/54_file_io.c)
 - [X] [Array that automatically inferred array size int a[] = {1, 2, 3}](./example_source_files/55_auto_array_size/55_auto_array_size.c)
 - [X] [Do not generate code for variables that are not used](./example_source_files/56_unused_variables/56_unused_variables.c)
-- [X] [File pointers]
-- [X] [Dynamic Allocation Extension: Using Calloc and Realloc]
+- [X] [File pointers](./example_source_files/54_file_io/54_file_io.c)
+- [X] [Dynamic Allocation Extension: Using Calloc and Realloc](./example_source_files/53_dynamic_allocation/53_dynamic_allocation.c)
 
 
 ### Technical Functionality: 
