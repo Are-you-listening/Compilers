@@ -958,6 +958,9 @@ class Printf:
         temp_reg.overrideMemory(t8)
         print_char_special_token_s_width_loop.beq(t1, t8, print_char_special_token_s_after.label)
 
+        temp_reg = print_char_special_token_s_width_loop.addui(s2, 1)
+        temp_reg.overrideMemory(s2)
+
         temp_reg = print_char_special_token_s_width_loop.addi(t7, 1)
         temp_reg.overrideMemory(t7)
 
@@ -971,6 +974,9 @@ class Printf:
         """
         temp_reg = print_char_special_token_s_after.addui(zero, 4)
         temp_reg.overrideMemory(v0)
+
+        temp_reg = print_char_special_token_s_after.addui(s2, -1)
+        temp_reg.overrideMemory(s2)
 
         temp_reg = print_char_special_token_s_after.lw(t3, 0)
         temp_reg.overrideMemory(t1)

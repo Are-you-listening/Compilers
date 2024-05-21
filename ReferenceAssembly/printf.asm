@@ -1,5 +1,5 @@
 	.data
-str0: .asciiz  "%s"
+str0: .asciiz  "%3d"
 str1: .asciiz  "hello world"
 	.text
 
@@ -12,7 +12,7 @@ main:
 	la $t0, str0
 	sw	$t0, 4($sp)	# push old frame pointer (dynamic link)
 
-	la $t0, str1
+	li $t0, 5
 	sw	$t0, 8($sp)	# push old frame pointer (dynamic link)
 
 
@@ -41,6 +41,7 @@ printf:
 
 
 	addi $t3, $t3, 4
+	li $v1, 0
 printf_char_loop:
 	li $t9, 0
 
@@ -61,6 +62,7 @@ width_space_loop:
 	move $t7, $v0
 	li $v0, 11
 	li	$a0, 32
+	addiu $v1, $v1, 1
 	syscall
 
 	addiu $t9, $t9, -1
@@ -71,6 +73,7 @@ width_space_loop:
 width_space_loop_after:
 
 	move	$a0, $t1
+	addiu $v1, $v1, 1
 	syscall
 
 	addi 	$t0, $t0, 1
@@ -115,11 +118,13 @@ printf_char_special_token_d_width_loop:
 	li $t7, 10
 	div $t1, $t1, 10
 	subi $t9, $t9, 1
+	addiu $v1, $v1, 1
 
 	li $t7, 0
 	bne $t7, $t1, printf_char_special_token_d_width_loop
 
 printf_char_special_token_d:
+	addiu $v1, $v1, -1
 	li 	$v0, 1
 	lw $t1, ($t3)
 	addi $t3, $t3, 4
@@ -154,6 +159,7 @@ xwidth_space_loop:
 	move $t7, $v0
 	li $v0, 11
 	li	$a0, 32
+	addiu $v1, $v1, 1
 	syscall
 
 	addiu $t9, $t9, -1
@@ -194,6 +200,7 @@ print_x_half_byte_loop:
 
 
 	move $a0, $t1
+	addiu $v1, $v1, 1
 	syscall
 
 	addiu $s0, $s0, 4 #already increase counter
@@ -230,12 +237,14 @@ printf_char_special_token_s_width_loop:
 	lb $t1, ($t7)
 	li $t8, 0
 	beq $t1, $t8, printf_char_special_token_s_after
+	addiu $v1, $v1, 1
 	addi $t7, $t7, 1
 	subi $t9, $t9, 1
 	j printf_char_special_token_s_width_loop
 
 
 printf_char_special_token_s_after:
+	addiu $v1, $v1, -1
 	li 	$v0, 4
 	lw $t1, ($t3)
 	addi $t3, $t3, 4
