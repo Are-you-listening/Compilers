@@ -18,4 +18,5 @@ from .addu import Addu
 from .sgt import Sgt
 from .subu import Subu
 from .sllv import Sllv
+from .srlv import Srlv
 from .RMipsInstruction import RMipsInstruction

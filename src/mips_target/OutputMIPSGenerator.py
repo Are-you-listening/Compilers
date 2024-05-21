@@ -1241,6 +1241,12 @@ class Calculation:
                         }
 
         mips_op = op_translate.get(operator, None)
+        if isinstance(right, Memory):
+            if mips_op == block.sll:
+                mips_op = block.sllv
+            elif mips_op == block.srl:
+                mips_op = block.srlv
+
         instr = mips_op(left, right)
         if instr.symbol_type is None:
             instr.symbol_type = to_type

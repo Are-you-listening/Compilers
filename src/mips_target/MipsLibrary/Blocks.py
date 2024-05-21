@@ -301,6 +301,12 @@ class Block:
         self.instructions.append(instr)
         return instr.getAddress()
 
+    def srlv(self, rt: Memory, shamt: Memory):
+        rd = RegisterManager.getInstance().allocate(self)
+        instr = Srlv(rd, rt, shamt)
+        self.instructions.append(instr)
+        return instr.getAddress()
+
     def sub(self, rs: Memory, rt: Memory):
         rd = RegisterManager.getInstance().allocate(self)
 
