@@ -4,7 +4,6 @@ struct kaas{
     int melk;
     float fermtented;
     char lol;
-    char* zeta;
 };
 
 int main() {
@@ -13,8 +12,7 @@ int main() {
    ementaler.melk = 1;
    ementaler.fermtented = 18.9;
    ementaler.lol = 'l';
-   ementaler.zeta = &(ementaler.lol);
-   printf("%d %f %c %c", ementaler.melk,ementaler.fermtented, ementaler.lol, *(ementaler.zeta));
+   printf("%d %d %c", ementaler.melk, (int) (ementaler.fermtented*1000), ementaler.lol);
 
     return 0;
 

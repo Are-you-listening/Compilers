@@ -12,7 +12,8 @@ int main() {
    ementaler.melk = 1;
    ementaler.fermtented = 18.9;
    ementaler.lol = 'l';
-   printf("%d %f %c", ementaler.melk, ementaler.fermtented, ementaler.lol);
+   char b = ementaler.lol;
+   printf("%d %d %c %c", ementaler.melk,(char)(ementaler.fermtented*100), ementaler.lol, b);
 
     return 0;
 
