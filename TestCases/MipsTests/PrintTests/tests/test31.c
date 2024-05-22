@@ -7,6 +7,6 @@ int main(){
     y = 0.5;
     char c;
     c = 'c';
-    printf("%d; %f; %c", x, y, c);
+    printf("%d; %d; %c", x,(int) y, c);
     return 0;
 }

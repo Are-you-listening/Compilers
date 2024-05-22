@@ -136,7 +136,7 @@ class LLVMTest(unittest.TestCase, ABC):
                 index = file[4:-2]  # The index is used to refer to the files & other data belonging to this testfile
                 file_name = f"tests/test{index}.c"
 
-                if index == 3 or index == "3":
+                if index == 3 or index == "37":
                     pass
                 print(index, file_name, fold)  # Toggle for debug
 

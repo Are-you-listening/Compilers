@@ -7,11 +7,11 @@ int main()
 
 
 
-    printf("%% %d %x %f  kappa kappa",p, p,q);
+    printf("%% %d %x %d  kappa kappa",p,(int) p,(int)*q);
 
     const float* z = q;
 
-    printf("%% %f %f %f  kappa kappa",z, z,q);
+    printf("%% %d %d %d  kappa kappa",(int) *z, (int) *z, (int) *q);
 
 
 

@@ -5,17 +5,16 @@ int main()
     float p = 3.14;
     float* q = &p;
 
+    printf("%d %d %d ",(int)  3.14,(int)  p,7);
 
-    printf("%f %f %d ",3.14,p,7);
+    printf("%% %c %d %x %d  kappa kappa",'a', (int)  p,12, (int)  p);
 
-    printf("%% %c %f %x %f  kappa kappa",'a', p,12,p);
+    printf("%x,d",5);
+    printf("%d ",(int) p);
+    printf("%d ", (int) p);
+    printf("a%da ", (int) p);
 
-    printf("%x,f",5);
-    printf("%f ", p);
-    printf("%f ", p);
-    printf("a%fa ", p);
-
-    printf("%f", p);
+    printf("%d", (int) p);
 
     printf("%s", "This is a beautifull string");
 

@@ -4,7 +4,7 @@
 int main()
 {
 
-    printf("%s\n he", "Th\\nis is a beautifull\n st\nri\n\nng");
+    printf("%s\n he", "This is a beautifull\n st\nri\n\nng");
 
 
 
