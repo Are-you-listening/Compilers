@@ -34,6 +34,9 @@ class AccessWrapper:
 
             if isinstance(target, SymbolTypeArray):
                 offset = 4
+                if target.deReference().isBase():
+                    offset = target.deReference().getBytesUsed()
+
                 symbol_type = target
                 print(offset)
             if isinstance(target, SymbolTypeStruct):
@@ -100,7 +103,7 @@ class UnaryWrapper:
 
         value = 1
         if isinstance(mips_val.symbol_type, SymbolTypePtr):
-            value = 4
+            value = mips_val.symbol_type.deReference().getBytesUsed()
 
         instr = block.addi(mips_val, value)
         return instr
@@ -111,7 +114,7 @@ class UnaryWrapper:
 
         value = 1
         if isinstance(mips_val.symbol_type, SymbolTypePtr):
-            value = 4
+            value = mips_val.symbol_type.deReference().getBytesUsed()
 
         instr = block.addi(mips_val, -value)
         return instr

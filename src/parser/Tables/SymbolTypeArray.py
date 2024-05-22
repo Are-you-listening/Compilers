@@ -28,7 +28,7 @@ class SymbolTypeArray(SymbolTypePtr):
 
     def getBytesUsed(self):
 
-        byte_amount = self.size * math.ceil(self.pts_to.getBytesUsed()/4)*4
+        byte_amount = math.ceil(self.size * self.pts_to.getBytesUsed()/4)*4
 
         return byte_amount
 

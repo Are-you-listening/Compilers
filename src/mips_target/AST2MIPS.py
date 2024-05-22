@@ -204,6 +204,7 @@ class AST2MIPS(ASTVisitor):
             else:
 
                 mips_var = entry.llvm
+                print("mips_var", mips_var, node.text)
 
                 self.mips_map[node] = mips_var
 
@@ -219,6 +220,8 @@ class AST2MIPS(ASTVisitor):
 
         if node.type == "STRING":
             mips_var = Declaration.string(node.text)
+            mips_var.symbol_type = SymbolTypePtr(SymbolType("CHAR", False), False)
+
             mips_var.symbol_type = SymbolTypeArray(SymbolType("CHAR", False), False, len(node.text))
             self.mips_map[node] = mips_var
 
@@ -268,9 +271,6 @@ class AST2MIPS(ASTVisitor):
         symbol_entry = current_table.getEntry(function_name, node.position.virtual_linenr)
 
         self.map_table.addEntry(MapEntry(function_name, function), symbol_entry)
-
-
-
 
     def handleComment(self, node):
         if node.position is None or node.symbol_table is None or node.symbol_table.isRoot():  # We can't add comments in the global scope of llvm
