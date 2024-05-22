@@ -32,7 +32,7 @@ class AccessWrapper:
 
             offset = target.getBytesUsed()
 
-            if isinstance(target, SymbolTypeArray):
+            if isinstance(target, SymbolTypePtr):
                 offset = 4
                 if target.deReference().isBase():
                     offset = target.deReference().getBytesUsed()
