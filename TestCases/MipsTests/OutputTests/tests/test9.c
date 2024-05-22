@@ -16,10 +16,10 @@ const int* z = &x;
 printf("%x", *z);
 
 const float a = 856.25668;
-printf("%f", a);
+printf("%d", (int) a);
 const float* a_ptr = &a;
 
-printf("%f", *a_ptr);
+printf("%d", (int) *a_ptr);
     return 0;
 
 }

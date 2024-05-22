@@ -15,7 +15,7 @@ printf("%d", *z);
 
 float a = 856.25668;
 float* a_ptr = &a;
-printf("%f", *a_ptr);
+printf("%d", (int) *a_ptr);
 
     return 0;
 

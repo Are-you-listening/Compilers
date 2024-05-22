@@ -1,19 +1,24 @@
 #include <stdio.h>
 
-int main()
-{
 
-    const int p = 3.14;
-    int* q = &p;
-    const int* s = q;
+int main() {
+// line 1
+char c = 's';
 
-    scanf("%d", s);
-    printf("%d", *s);
-    printf("%d", p);
 
+float f = 33.1; // another line
+
+
+/////// some documentation
+/////////////////////////////////////
+
+// abcdef 123 //////////
+float final_line = 33.99895;
+
+printf("%d", (int) final_line);
+printf("%d", (int) f);
+printf("%c", c);
 
     return 0;
+
 }
-
-
-

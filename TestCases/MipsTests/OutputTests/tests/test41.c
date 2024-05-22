@@ -28,7 +28,7 @@ float* pptr = &p;
 float** ptrptr = pptr;
 float** pieter = &pptr;
 
-printf("%f", **pieter);
+printf("%d", (int) **pieter);
 
 return 0;
 }

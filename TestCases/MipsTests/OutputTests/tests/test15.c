@@ -10,7 +10,7 @@ printf("%x", y);
 
 const float z = f * f * f;
 
-printf("%f", z);
+printf("%d", (int) z);
     return 0;
 
 }
