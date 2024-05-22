@@ -90,7 +90,7 @@ class AST2MIPS(ASTVisitor):
 
         if isinstance(node, ASTNodeBlock) and node.text == "Block":
             if self.last_vertex is not None:
-                self.last_vertex.check_flipped()
+                self.last_vertex.check_flipped(True)
 
                 """
                 When we have instructions for our statement, there is no problem, but IR constants are not considered
