@@ -6,9 +6,8 @@ int main()
     float* q = &p;
 
 
-    printf("%f %f %d ",3.14,p,7);
+    printf("%d %d %d ", (int) 3.14,(int) p,7);
 
-    printf("%f", p);
 
 
     return 0;

@@ -5,6 +5,8 @@ float mul(int** b){
     return 0.0;
 }
 
+/* Hi Kars here, might this be undefined behaviour?*/
+
 int main() {
     int z[5] = {1,2,3,4,5};
 

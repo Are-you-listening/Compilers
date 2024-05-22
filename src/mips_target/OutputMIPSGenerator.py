@@ -10,6 +10,7 @@ from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
 from src.mips_target.MipsLibrary import *
 from .MipsSingleton import MipsSingleton
 from .PredifinedStructures import SpecialFunctions
+from copy import deepcopy
 
 
 class AccessWrapper:
@@ -336,17 +337,17 @@ class Printf:
 
         scanf_char_loop.beq(t1, 37, scanf_char_special_token.label)
 
-        scanf_char_loop.instructions.append(Li(v0, v0, 11))
-        scanf_char_loop.move(a0, t1)
-        scanf_char_loop.systemCall()
+        scanf_char_loop.instructions.append(Manual_Label("scanf_char_loop_temp"))
+
+        # scanf_char_loop.instructions.append(Li(v0, v0, 11))
+        # scanf_char_loop.move(a0, t1)
+        # scanf_char_loop.systemCall()
         scanf_char_loop.instructions.append(Addi(t0, t0, 1))
         scanf_char_loop.j(scanf_char_loop.label)
 
         """scanf_char_special_token"""
-        temp_reg = scanf_char_special_token.addi(t0, 1)
-        temp_reg.overrideMemory(t0)
-        temp_reg = scanf_char_special_token.lb(t0, 0)
-        temp_reg.overrideMemory(t2)
+        scanf_char_special_token.instructions.append(Addi(t0, t0, 1))
+        scanf_char_special_token.instructions.append(Lb(t2, t0, 0))
         scanf_char_special_token.beq(t2, 100, scanf_char_special_token_d.label)
         scanf_char_special_token.beq(t2, 99, scanf_char_special_token_c.label)
         scanf_char_special_token.beq(t2, 120, scanf_char_special_token_x.label)
@@ -355,6 +356,8 @@ class Printf:
         scanf_char_special_token.beq(t2, 102, None)
         change_label_to_scanf_char_special_token_f = scanf_char_special_token.instructions[-1]
         scanf_char_special_token.move(t1, t2)
+        scanf_char_special_token.j("scanf_char_loop_temp")
+
 
         """scanf_char_special_token_d"""
         scanf_char_special_token_d.instructions.append(Li(v0, v0, 5))
@@ -1387,7 +1390,7 @@ class Conversion:
                            ("PTR", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
                            ("BOOL", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
                            ("FLOAT", "INT"): lambda x: block.fptosi(x),
-                           ("FLOAT", "CHAR"): lambda x: block.slr(block.sll(block.fptosi(x), 24), 24),  # First convert to int, then to char
+                           ("FLOAT", "CHAR"): lambda x: block.srl(block.sll(block.fptosi(x), 24), 24),  # First convert to int, then to char
                            ("FLOAT", "PTR"): lambda x: block.fptosi(x),
                            ("FLOAT", "BOOL"): lambda x: BinaryWrapper.notEqual(block.fptosi(x), block.li(0)),
                            ("INT", "BOOL"): lambda x: BinaryWrapper.notEqual(x, block.li(0)),

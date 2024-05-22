@@ -6,12 +6,12 @@ int main()
     float* q = &p;
 
 
-    printf("%f %f %d ",3.14,p,7);
+    printf("%d %d %d ",(int)  3.14,(int)  p,7);
 
-    printf("%% %c %f %x %f  kappa kappa",'a', p,12,p);
+    printf("%% %c %d %x %d  kappa kappa",'a', (int)  p,12, (int)  p);
 
 
-    printf("%f", p);
+    printf("%d", (int) p);
 
 
     return 0;
