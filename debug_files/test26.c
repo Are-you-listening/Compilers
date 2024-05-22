@@ -1,22 +1,9 @@
 #include <stdio.h>
 
-union kaas{
-    int melk;
-    float yoghurt;
-};
+int main(){
 
-
-
-
-int main() {
-    union kaas gouda;
-
-    gouda.melk = 5;
-    printf("%d\n", gouda.melk);
-    gouda.yoghurt = 3.14;
-
-    printf("%d\n", (int) (gouda.yoghurt));
-    printf("%d\n", gouda.melk);
-
+    int array[2][2] = {{0,1}, {2,3}};
+    int* ptr = &array;
+    printf("%d", *(ptr + 2));
     return 0;
 }

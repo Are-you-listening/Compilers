@@ -308,7 +308,7 @@ class RegisterManager:
             self.curr_function[block.function.getFunctionName()] = counter
 
             block.addui_function(sp, -needed, sp)
-            for i, v in enumerate(values):
+            for i, v in enumerate(reversed(values)):
 
                 self.loadIfNeeded(block, [v])
                 if symbol_type.deReference().getBytesUsed() < 4:
