@@ -14,11 +14,11 @@ printf("%d", x);
 
 float f = 0.986312;
 float f2 = f * 33.0 + 2.0;
-printf("%f", f);
-printf("%f", f2);
+printf("%d", (int) f);
+printf("%d", (int) f2);
 f2 = f2 + f;
 
-printf("%f", f2);
+printf("%d", (int) f2);
 
 char c = 'a';
 printf("%c", c);
