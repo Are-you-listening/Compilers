@@ -305,24 +305,22 @@ class RegisterManager:
             for v in range(symbol_type.size):
                 v2 = self.storeVariable(block, value, symbol_type.deReference())
                 values.append(v2)
-            print("needed")
+
             counter = self.curr_function[block.function.getFunctionName()]
             counter += needed
             self.curr_function[block.function.getFunctionName()] = counter
 
-            print("n", len(values)*4, needed)
             block.addui_function(sp, -needed, sp)
             for i, v in enumerate(values):
 
                 self.loadIfNeeded(block, [v])
-                print("b", symbol_type.deReference().getBytesUsed())
                 if symbol_type.deReference().getBytesUsed() < 4:
                     block.sb_spill(v, sp, (i * symbol_type.deReference().getBytesUsed()) + 4)  # Store to new ptr
                 else:
                     block.sw_spill(v, sp, (i*4) + 4)  # Store to new ptr
 
             store_ptr = block.addui(sp, 4)
-            print("s", store_ptr)
+
 
         elif isinstance(symbol_type, SymbolTypePtr):
 
@@ -349,7 +347,7 @@ class RegisterManager:
 
                 values.append(v2)
 
-            print("n", needed)
+
             counter = self.curr_function[block.function.getFunctionName()]
             counter += needed
             self.curr_function[block.function.getFunctionName()] = counter
