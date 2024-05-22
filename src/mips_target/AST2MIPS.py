@@ -433,7 +433,7 @@ class AST2MIPS(ASTVisitor):
             from_type = var.symbol_type
 
         to_type = node.getChild(0).symbol_type
-
+        print("he", to_type.getType(), from_type.getType())
         if (to_type.getType() == from_type.getType()) and (to_type.getPtrAmount() == from_type.getPtrAmount()):
             other_mem = Memory(var.getAddress(), var.is_loaded)
             other_mem.symbol_type = to_type

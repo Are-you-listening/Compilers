@@ -13,7 +13,7 @@ int main() {
 
         struct kaas gouda;
     gouda.melk = 3.14;
-    printf("%f", gouda.melk);
+    printf("%d", (int) (gouda.melk*1000));
 
     return 0;
 

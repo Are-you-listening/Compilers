@@ -52,8 +52,13 @@ class AccessWrapper:
                     """
 
                     temp_offset = max(symbol_type.getBytesUsed(), 4)
-                    symbol_type = target.getElementType(i)
+
                     offset += temp_offset
+
+                symbol_type = target.getElementType(j)
+                if isinstance(target, SymbolTypeUnion):
+                    symbol_type = target.getStoreType()
+
                 is_struct = True
 
         if not is_struct:
@@ -65,6 +70,7 @@ class AccessWrapper:
             real_index = block.li(offset)
             instr = block.addu(location, real_index)
 
+        print("i", index, symbol_type.getPtrTuple())
         instr.symbol_type = symbol_type
 
         return instr

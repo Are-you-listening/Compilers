@@ -1,20 +1,22 @@
 #include <stdio.h>
 
-int func(int a, int b);
+union kaas{
+    int melk;
+    float yoghurt;
+};
+
+
+
 
 int main() {
-    int y = 5;
-    int u = 10;
-    int c;
-    c = func(y, u);
-    printf("%d\n", c);
-    return y;
+    union kaas gouda;
+
+    gouda.melk = 5;
+    printf("%d\n", gouda.melk);
+    gouda.yoghurt = 3.14;
+
+    printf("%d\n", (int) (gouda.yoghurt));
+    printf("%d\n", gouda.melk);
+
+    return 0;
 }
-
-
-
-
-int func(int a, int b) {
-    return a + b;
-}
-
