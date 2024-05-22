@@ -199,6 +199,15 @@ class AST2MIPS(ASTVisitor):
                     self.mips_map[node] = mips_var
                     mips_var.symbol_type = SymbolTypePtr(entry_sym.getTypeObject(), False)
                     self.map_table.addEntry(MapEntry(node.text, mips_var), entry_sym)
+                else:
+                    if node.parent.text not in ("Declaration", "Parameter", "Function"):
+                        """
+                        Fix the int True = True issue
+                        """
+                        d = Declaration.declare("", SymbolTypePtr(entry_sym.getTypeObject(), False), 0)
+                        self.mips_map[node] = d
+
+
             else:
                 mips_var = entry.llvm
 

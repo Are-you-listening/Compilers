@@ -1,17 +1,20 @@
 #include <stdio.h>
 
-float mul(int** b){
-    printf("%d", (*b)[0]);
-    return 0.0;
-}
-
-
+int func(int a, int b);
 
 int main() {
-    int z[1] = {1};
-
-    int** a = &z;
-    mul(a);
-
-    return 0;
+    int y = 5;
+    int u = 10;
+    int c;
+    c = func(y, u);
+    printf("%d\n", c);
+    return y;
 }
+
+
+
+
+int func(int a, int b) {
+    return a + b;
+}
+
