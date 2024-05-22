@@ -10,6 +10,7 @@ from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
 from src.mips_target.MipsLibrary import *
 from .MipsSingleton import MipsSingleton
 from .PredifinedStructures import SpecialFunctions
+from copy import deepcopy
 
 class AccessWrapper:
 
@@ -1378,7 +1379,7 @@ class Conversion:
                            ("PTR", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
                            ("BOOL", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
                            ("FLOAT", "INT"): lambda x: block.fptosi(x),
-                           ("FLOAT", "CHAR"): lambda x: block.slr(block.sll(block.fptosi(x), 24), 24),  # First convert to int, then to char
+                           ("FLOAT", "CHAR"): lambda x: block.srl(block.sll(block.fptosi(x), 24), 24),  # First convert to int, then to char
                            ("FLOAT", "PTR"): lambda x: block.fptosi(x),
                            ("FLOAT", "BOOL"): lambda x: BinaryWrapper.notEqual(block.fptosi(x), block.li(0)),
                            ("INT", "BOOL"): lambda x: BinaryWrapper.notEqual(x, block.li(0)),
