@@ -8,7 +8,6 @@ class L_s(SpecialInstruction):
         self.data = data
 
     def toString(self):
-        print(self.rd.getAddress())
         return f"l.s ${self.rd.getAddress()}, {self.data}"
 
     def getAddress(self):
