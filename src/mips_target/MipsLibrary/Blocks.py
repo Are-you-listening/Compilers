@@ -174,6 +174,14 @@ class Block:
 
         return self.__handle_large_immediate(rt, rs, immediate, Sw)
 
+    def sb_spill(self, rt: Memory, rs: Memory, immediate: int):
+        """
+        Store function that only be used in spill, because it will not load
+        the variable it needs to store
+        """
+
+        return self.__handle_large_immediate(rt, rs, immediate, Sb)
+
     def __moveToC1(self, lst: list[Memory]):
         temp = []
         for i in range(0, len(lst)):

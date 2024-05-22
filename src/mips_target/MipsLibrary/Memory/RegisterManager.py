@@ -296,22 +296,30 @@ class RegisterManager:
         needed = math.ceil(byte_size/4)*4
 
         sp = self.getMemoryObject("sp")
-
         if isinstance(symbol_type, SymbolTypeArray):
+            print("array needed", needed)
+            """
+            4 bytes
+            """
             values = []
             for v in range(symbol_type.size):
                 v2 = self.storeVariable(block, value, symbol_type.deReference())
                 values.append(v2)
-
+            print("needed")
             counter = self.curr_function[block.function.getFunctionName()]
             counter += needed
             self.curr_function[block.function.getFunctionName()] = counter
 
-            block.addui_function(sp, -len(values)*4, sp)
+            print("n", len(values)*4, needed)
+            block.addui_function(sp, -needed, sp)
             for i, v in enumerate(values):
 
                 self.loadIfNeeded(block, [v])
-                block.sw_spill(v, sp, (i*4) + 4)  # Store to new ptr
+                print("b", symbol_type.deReference().getBytesUsed())
+                if symbol_type.deReference().getBytesUsed() < 4:
+                    block.sb_spill(v, sp, (i * symbol_type.deReference().getBytesUsed()) + 4)  # Store to new ptr
+                else:
+                    block.sw_spill(v, sp, (i*4) + 4)  # Store to new ptr
 
             store_ptr = block.addui(sp, 4)
             print("s", store_ptr)

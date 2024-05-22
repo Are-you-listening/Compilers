@@ -199,6 +199,7 @@ class AST2MIPS(ASTVisitor):
                     self.map_table.addEntry(MapEntry(node.text, mips_var), entry_sym)
             else:
                 mips_var = entry.llvm
+                print("mips_var", mips_var, node.text)
 
                 self.mips_map[node] = mips_var
 
@@ -214,6 +215,8 @@ class AST2MIPS(ASTVisitor):
 
         if node.type == "STRING":
             mips_var = Declaration.string(node.text)
+            mips_var.symbol_type = SymbolTypePtr(SymbolType("CHAR", False), False)
+
             mips_var.symbol_type = SymbolTypeArray(SymbolType("CHAR", False), False, len(node.text))
             self.mips_map[node] = mips_var
 
@@ -301,7 +304,11 @@ class AST2MIPS(ASTVisitor):
         child_mips = self.mips_map[node.getChild(0)]
         RegisterManager.getInstance().loadIfNeeded(block, [child_mips])
 
-        mips_var = block.lw(child_mips, 0)
+        if child_mips.symbol_type.deReference().getBaseType() == "CHAR" and child_mips.symbol_type.deReference().isBase():
+            mips_var = block.lb(child_mips, 0)
+        else:
+            mips_var = block.lw(child_mips, 0)
+
         mips_var.symbol_type = child_mips.symbol_type.deReference()
 
         self.mips_map[node] = mips_var
