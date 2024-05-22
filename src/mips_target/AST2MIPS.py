@@ -201,7 +201,6 @@ class AST2MIPS(ASTVisitor):
                     self.map_table.addEntry(MapEntry(node.text, mips_var), entry_sym)
             else:
                 mips_var = entry.llvm
-                print("mips_var", mips_var, node.text)
 
                 self.mips_map[node] = mips_var
 
