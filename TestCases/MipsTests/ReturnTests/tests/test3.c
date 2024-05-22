@@ -7,6 +7,6 @@ float d(){
 int main() {
     float a = 0.5;
     a = d();
-    printf("%f", a);
+    printf("%d", (int) a);
     return 0;
 }
