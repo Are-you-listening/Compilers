@@ -8,9 +8,9 @@ int mul(int x){
 int main(){
     int* k;
     int result = mul(3);
-    result = printf("%d ", result);
-    printf("%d ", result);
-    printf("%d ", mul( scanf("%d ", &result))     );
-    printf("%d ", mul(result));
+    result = printf("%d", result);
+    printf("%d", result);
+    printf("%d", mul( scanf("%d", &result))     );
+    printf("%d", mul(result));
     return 0;
 }
