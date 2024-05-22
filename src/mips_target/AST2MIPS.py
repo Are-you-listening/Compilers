@@ -56,9 +56,6 @@ class AST2MIPS(ASTVisitor):
                 self.handleFunction(current_node)
                 self.map_table = MapTable(self.map_table)
 
-
-
-
             if isinstance(current_node, ASTNodeBlock) and current_node.text == "Block" and current_node not in visited:
                 node = current_node
 
@@ -72,7 +69,6 @@ class AST2MIPS(ASTVisitor):
                 self.last_vertex = node.vertex
 
                 self.addOriginalCodeAsComment(current_node)
-
 
             child_not_visited = False
             for child in reversed(current_node.getChildren()):
@@ -202,7 +198,6 @@ class AST2MIPS(ASTVisitor):
                     mips_var.symbol_type = SymbolTypePtr(entry_sym.getTypeObject(), False)
                     self.map_table.addEntry(MapEntry(node.text, mips_var), entry_sym)
             else:
-
                 mips_var = entry.llvm
 
                 self.mips_map[node] = mips_var
@@ -262,15 +257,11 @@ class AST2MIPS(ASTVisitor):
         if function is None:
             function = mips_module.createFunction(function_name)
 
-
         MipsSingleton.getInstance().setLastFunction(function)
         current_table = node.getSymbolTable()
         symbol_entry = current_table.getEntry(function_name, node.position.virtual_linenr)
 
         self.map_table.addEntry(MapEntry(function_name, function), symbol_entry)
-
-
-
 
     def handleComment(self, node):
         if node.position is None or node.symbol_table is None or node.symbol_table.isRoot():  # We can't add comments in the global scope of llvm
@@ -397,6 +388,8 @@ class AST2MIPS(ASTVisitor):
                 mips_var.symbol_type = node.getSymbolTable().getEntry(left.function_name).typeObject
             elif operator == "[]":
                 pass
+            elif operator in ['<' ,'>', '>=' ,'<=', '==' , '!=']:
+                mips_var.symbol_type = SymbolType("BOOL", False)
             else:
                 mips_var.symbol_type = left.symbol_type
 
@@ -438,7 +431,6 @@ class AST2MIPS(ASTVisitor):
             self.mips_map[p] = mem_obj
 
             param_identifier = p.getChild(0)
-
 
             entry = param_identifier.getSymbolTable().getEntry(param_identifier.text)
 
