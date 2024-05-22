@@ -12,8 +12,9 @@ int x = 1;
 
 int main()
 {
+    int y = PI * 100000;
     printf("%d",z);
     printf("%d",BUFFER_SIZE);
-    printf("%f", PI);
+    printf("%d", y);
     return 0;
 }
