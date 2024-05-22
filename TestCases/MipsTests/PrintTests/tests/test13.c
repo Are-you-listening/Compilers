@@ -1,25 +1,11 @@
 #include <stdio.h>
 
-int main()
-{
-    float p = 3.14;
-    float* q = &p;
-
-
-    printf("%f %f %d ",3.14,p,7);
-
-    printf("%% %c %d %f  kappa kappa",'a',12,p);
-
-
-    printf("%f ", p);
-    printf("%f ", p);
-    printf("a%fa ", p);
-
-    printf("%f", p);
-
-
+int main(){
+    int a = 3;
+    char* b = "hello";
+    int c = 255;
+    float d = 3.14;
+    char e = 'c';
+    printf(" %d \n %s \n %x \n %d \n %c", a,b,c, (int) d,e);
     return 0;
 }
-
-
-

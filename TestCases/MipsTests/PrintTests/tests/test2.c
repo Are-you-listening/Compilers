@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int main(){
-    printf("%f", 5.2);
+    printf("%d", (int) 5.2);
     return 0;
 
 }

@@ -7,7 +7,7 @@ int main()
 
 
 
-    printf("%% %d %x %f  kappa kappa",p, p,q);
+    printf("%% %d %x %d  kappa kappa",p, p, (int) *q);
 
 
 

@@ -1,38 +1,12 @@
 #include <stdio.h>
 
-int main(){
-
-    int a = 1;
-    int b = 1;
-
-    a = 1;
-    b = 1;
-
-    if (a || b){
-        printf("%d", 1);
+int main() {
+    int x = 10;
+    {;;;;;;;;
+        printf("%d\n", x);
+        int x = 20;
+        printf("%d\n", x);
     }
-
-    a = 1;
-    b = 0;
-
-    if (a || b){
-        printf("%d", 1);
-    }
-
-    a = 0;
-    b = 1;
-
-    if (a || b){
-        printf("%d", 1);
-    }
-
-    a = 0;
-    b = 0;
-
-    if (a || b){
-        printf("%d", 1);
-    }
-
+    printf("%d\n", x);
     return 0;
-
 }

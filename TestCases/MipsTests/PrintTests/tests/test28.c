@@ -1,6 +1,6 @@
 #include <stdio.h>
 
 int main(){
-    printf("%d%f%c", 10, 0.5, '%');
+    printf("%d%d%c", 10, (int) 0.5, '%');
     return 0;
 }
