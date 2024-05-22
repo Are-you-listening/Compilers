@@ -6,6 +6,7 @@ from src.parser.AST import ASTNodeBlock, ASTNodeTypes
 from src.internal_tools import PreConditions
 from src.mips_target.OutputMIPSGenerator import *
 from .MipsSingleton import MipsSingleton
+from .PredifinedStructures import SpecialFunctions
 
 
 class AST2MIPS(ASTVisitor):
@@ -17,6 +18,7 @@ class AST2MIPS(ASTVisitor):
         self.fileName = fileName
         self.comments = comments
         self.special_functions_declared = {}
+        self.special_func_creator = {"malloc": SpecialFunctions.malloc}
         self.branch_needed = set()
         self.last_vertex = None
         self.globals = {}
@@ -172,11 +174,17 @@ class AST2MIPS(ASTVisitor):
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
-            entry_sym = node.getSymbolTable().getEntry(node.text)
+            entry_sym = node.getSymbolTable().getEntry(node.text, node.position.virtual_linenr)
+
+            if isinstance(entry_sym.getTypeObject(), FunctionSymbolType) and node.text not in self.special_functions_declared and node.text in self.special_func_creator:
+                function = self.special_func_creator[node.text]()
+                self.special_functions_declared[node.text] = function
+                self.map_table.addEntry(MapEntry(node.text, function), entry_sym)
+
             entry = self.map_table.getEntry(entry_sym)
             if entry is None:
                 mips_var = RegisterManager.getInstance().allocate(MipsSingleton.getInstance().getCurrentBlock(), False)
-                mips_var.symbol_type = SymbolTypePtr(entry_sym.typeObject, False)
+                mips_var.symbol_type = SymbolTypePtr(entry_sym.getTypeObject(), False)
                 self.mips_map[node] = mips_var
 
                 if not node.getSymbolTable().isRoot() and entry_sym.firstDeclared.getSymbolTable().isRoot():  # First use of the global value 'outside' of the global scope
@@ -191,7 +199,7 @@ class AST2MIPS(ASTVisitor):
                     mips_var = block.la(label)
                         #mips_var = register_manager.getInstance().storeVariable(block, mips_var, symbol_type.getBytesUsed())
                     self.mips_map[node] = mips_var
-                    mips_var.symbol_type = SymbolTypePtr(entry_sym.typeObject, False)
+                    mips_var.symbol_type = SymbolTypePtr(entry_sym.getTypeObject(), False)
                     self.map_table.addEntry(MapEntry(node.text, mips_var), entry_sym)
             else:
 

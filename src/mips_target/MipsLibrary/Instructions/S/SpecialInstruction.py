@@ -12,3 +12,7 @@ class SpecialInstruction(Instruction):
     def getAddress(self):
         pass
 
+    @abstractmethod
+    def overrideMemory(self, other: "Memory"):
+        pass
+

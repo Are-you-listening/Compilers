@@ -9,12 +9,21 @@ class MipsModule:
         self.data_segment = []
 
     def toString(self):
+
         string = ""
+
         string += ".data\n"
+        string += "heap: .space 4\n"
+
         for d in self.data_segment:
             string += f"{d}\n"
         string += ".text\n"
         string += "main:\n"
+        string += f"li $a0, {1024*8}\n"
+        string += "li $v0, 9\n"
+        string += "syscall\n"
+        string += "la $t0, heap\n"
+        string += "sw $v0, 0($t0)\n"
         string += "jal function_main\n"
         string += "li 	$v0, 10 #exit system call\n"
         string += "syscall\n"
