@@ -1,4 +1,4 @@
-; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/example_source_files/53_dynamic_allocation/53_dynamic_allocation.c"
+; ModuleID = "/home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/example_source_files/53_dynamic_allocation/53_dynamic_allocation.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 

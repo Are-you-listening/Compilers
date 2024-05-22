@@ -11,6 +11,7 @@ from src.mips_target.MipsLibrary import *
 from .MipsSingleton import MipsSingleton
 from .PredifinedStructures import SpecialFunctions
 
+
 class AccessWrapper:
 
     @staticmethod
@@ -18,12 +19,13 @@ class AccessWrapper:
 
         block = MipsSingleton.getInstance().getCurrentBlock()
 
-        symbol_type = location.symbol_type
+        symbol_type: SymbolTypePtr = location.symbol_type
         print(type(symbol_type.pts_to), type(symbol_type))
 
         location = block.lw(location, 0)
 
         offset = 4
+
         is_struct = False
         if isinstance(symbol_type, SymbolTypePtr):
             target = symbol_type.deReference()
@@ -210,7 +212,11 @@ class Declaration:
             to_store = block.la(f"function_{to_store.getFunctionName()}")
 
         RegisterManager.getInstance().loadIfNeeded(block, [store_location, to_store])
-        instr = block.sw(to_store, store_location, 0)
+
+        if store_location.symbol_type.getBaseType() == "CHAR" and store_location.symbol_type.getPtrAmount() == 1:
+            instr = block.sb(to_store, store_location, 0)
+        else:
+            instr = block.sw(to_store, store_location, 0)
 
         return instr
 
@@ -1205,7 +1211,7 @@ class Calculation:
             to_type = right.symbol_type
 
         if is_ptr:
-            li = block.li(max(ptr.symbol_type.deReference().getBytesUsed(), 4))
+            li = block.li(ptr.symbol_type.deReference().getBytesUsed())
             mul = block.mul(not_ptr, li)
             if operator == "+":
                 instr = block.addu(ptr, mul)

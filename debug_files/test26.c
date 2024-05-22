@@ -2,10 +2,8 @@
 
 
 int main() {
-    int a = 5;
-    int b = 0;
-    b = 0;
-    a = (char) b;
+    char a[3] = {'a', 'b', 'c'};
+    printf("%c%c%c", a[0], a[1], a[2]);
 
     return 0;
 }
