@@ -16,6 +16,6 @@ float vergelijken(int a, int b)
 int main()
 {
     float boolean = vergelijken(APPELLEN, PEREN);
-    printf( "%f", boolean);
+    printf( "%d", (int) boolean);
     return 0;
 }

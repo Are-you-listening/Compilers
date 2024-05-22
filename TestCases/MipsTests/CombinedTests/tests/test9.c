@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#define VLEES 180
+
 float whatIsBigger(float a, float b)
 {
     if (a > b)
@@ -14,7 +16,7 @@ float whatIsBigger(float a, float b)
 }
 int main()
 {
-    float biggest = whatIsBigger(154.55, 854.154);
-    printf( "%f", biggest);
+    float biggest = whatIsBigger(154.55, VLEES);
+    printf( "%d", (int) biggest);
     return 0;
 }

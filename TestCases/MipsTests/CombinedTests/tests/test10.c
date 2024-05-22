@@ -18,6 +18,6 @@ float smallest(float a, float b)
 int main()
 {
     float biggest = smallest(KAAS, VLEES);
-    printf( "%f", biggest);
+    printf( "%d", (int) biggest);
     return 0;
 }
