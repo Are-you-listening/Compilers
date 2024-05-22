@@ -1,24 +1,13 @@
 #include <stdio.h>
 
+int main(){
 
-int main() {
-// line 1
-char c = 's';
+    int a = 1;
+    int b = 0;
 
-
-float f = 33.1; // another line
-
-
-/////// some documentation
-/////////////////////////////////////
-
-// abcdef 123 //////////
-float final_line = 33.99895;
-
-printf("%d", (int) final_line);
-printf("%d", (int) f);
-printf("%c", c);
+    if (a && b){
+        printf("%d", 1);
+    }
 
     return 0;
-
 }

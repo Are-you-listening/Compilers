@@ -61,7 +61,7 @@ class Vertex:
 
         self.node_link = None
 
-    def check_flipped(self):
+    def check_flipped(self, mips:bool=False):
         """
         Check if we need to place an XOR
 
@@ -81,9 +81,13 @@ class Vertex:
         The flip value determines if we flip the value we are going to return,
         So on flip, we add an XOR
         """
-        if true_edge.flip_eval:
+        if true_edge.flip_eval and not mips:
             last_instruction = self.llvm.block.instructions[-1]
             self.llvm.xor(last_instruction, ir.Constant(last_instruction.type, 1))
+
+        if true_edge.flip_eval and mips:
+            self.mips.xor(self.mips.instructions[-1].getAddress(), self.mips.li(1))
+
 
     def create_branch(self, mips: bool= False):
         if len(self.edges) != 2:

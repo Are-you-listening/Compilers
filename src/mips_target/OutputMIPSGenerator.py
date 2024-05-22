@@ -32,7 +32,7 @@ class AccessWrapper:
 
             offset = target.getBytesUsed()
 
-            if isinstance(target, SymbolTypeArray):
+            if isinstance(target, SymbolTypePtr):
                 offset = 4
                 if target.deReference().isBase():
                     offset = target.deReference().getBytesUsed()
@@ -170,7 +170,11 @@ class Declaration:
                 """
                 make global array
                 """
-                values = [str(value) for i in range(symbol_type.size)]
+                if value == 0:
+                    values = [str(value) for i in range(symbol_type.size)]
+                else:
+                    values = value
+
                 if isinstance(symbol_type.deReference(), SymbolTypeArray):
                     values = []
                     for i in range(symbol_type.size):
@@ -178,9 +182,26 @@ class Declaration:
 
                         values.append(str(val))
 
-                module.addDataSegment(f".{var_name}", f"{','.join(values)}", special_info=".word")
+                if symbol_type.deReference().isBase() and symbol_type.deReference().getBaseType() == "CHAR":
+                    special_info = f".byte"
+                else:
+                    special_info = f".word"
+
+                module.addDataSegment(f".{var_name}", f"{','.join(values)}", special_info=special_info)
+
                 special_info = f".word"
+
                 value = f".{var_name}"
+
+            elif symbol_type.getPtrAmount() == 1 and symbol_type.getBaseType() == "CHAR":
+                index, found = MipsSingleton.getInstance().getStringIndex(value)
+
+                label = f"str{index}"
+                if not found:
+                    MipsSingleton.getInstance().getModule().addDataSegment(label, f""" "{value[:-1]}" """, ".asciiz")
+                value = label
+                special_info = f".word"
+
             else:
                 special_info = ".word"
 

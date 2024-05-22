@@ -90,7 +90,7 @@ class AST2MIPS(ASTVisitor):
 
         if isinstance(node, ASTNodeBlock) and node.text == "Block":
             if self.last_vertex is not None:
-                self.last_vertex.check_flipped()
+                self.last_vertex.check_flipped(True)
 
                 """
                 When we have instructions for our statement, there is no problem, but IR constants are not considered
@@ -121,6 +121,8 @@ class AST2MIPS(ASTVisitor):
             instruction to continue, so we generate the phi of the last (current) vertex
             """
             phi = self.last_vertex.create_phi(True)
+            block = MipsSingleton.getInstance().getCurrentBlock()
+            phi = block.addui(phi, 0)
             self.mips_map[node] = phi
 
             return
@@ -197,9 +199,17 @@ class AST2MIPS(ASTVisitor):
                     self.mips_map[node] = mips_var
                     mips_var.symbol_type = SymbolTypePtr(entry_sym.getTypeObject(), False)
                     self.map_table.addEntry(MapEntry(node.text, mips_var), entry_sym)
+                else:
+                    if node.parent.text not in ("Declaration", "Parameter", "Function"):
+                        """
+                        Fix the int True = True issue
+                        """
+                        d = Declaration.declare("", SymbolTypePtr(entry_sym.getTypeObject(), False), 0)
+                        self.mips_map[node] = d
+
+
             else:
                 mips_var = entry.llvm
-                print("mips_var", mips_var, node.text)
 
                 self.mips_map[node] = mips_var
 
@@ -229,7 +239,14 @@ class AST2MIPS(ASTVisitor):
 
             value = 0
             if node.getChildAmount() > 1:
-                value = node.getChild(1).text
+                if node.getChild(1).getChildAmount() == 0:
+                    value = node.getChild(1).text
+                else:
+                    value = []
+                    for c in node.getChild(1).children:
+                        print("c", c.text)
+                        value.append(c.text)
+
 
             mips_var = Declaration.declare(var_node.text, entry.getTypeObject(), value, is_global=True)
             self.mips_map[node] = mips_var

@@ -1,13 +1,15 @@
 import subprocess
 from src.parser.ControlFlow.ControlFlowGraph import *
 
+
 class ControlFlowDotVisitor:
-    def __init__(self, function_name, outfile="ControlFlow", ):
+    def __init__(self, function_name, outfile="ControlFlow", mips: bool = False):
         self.filename = outfile.split('.')[0]
         self.filename = self.filename + "_" + function_name
         self.outfile = open(self.filename + ".dot", "w")
         self.outfile.write("digraph AST {\n")
         self.edge_blacklist = []
+        self.mips = mips
 
     def visit(self, root_vertex: Vertex):
         self.edge_blacklist = []
@@ -28,11 +30,18 @@ class ControlFlowDotVisitor:
             self.preorder(edge.to_vertex)
 
     def visitVertex(self, vertex: Vertex):
-        if vertex.llvm is None:
+        if self.mips:
+            v = vertex.mips
+            base_lambda = lambda x: x.toString()
+        else:
+            v = vertex.llvm
+            base_lambda = lambda x: str(x.block)
+
+        if v is None:
             label = f"not yet labeled {vertex.abnormally_ended}"
 
         else:
-            label = str(vertex.llvm.block)
+            label = base_lambda(v)
 
             label = label.replace('\\', '\\\\')
             label = label.replace('"', '\\\"')

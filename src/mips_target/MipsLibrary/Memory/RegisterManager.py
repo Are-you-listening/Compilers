@@ -120,8 +120,6 @@ class RegisterManager:
         self.registers[reg] = var
         var.address = reg
         var.is_loaded = True
-
-        print(offset)
         block.lw_function(self.getMemoryObject("fp"), -offset, var)
 
     def getRegister(self, var: Memory):
@@ -297,7 +295,6 @@ class RegisterManager:
 
         sp = self.getMemoryObject("sp")
         if isinstance(symbol_type, SymbolTypeArray):
-            print("array needed", needed)
             """
             4 bytes
             """
@@ -320,7 +317,6 @@ class RegisterManager:
                     block.sw_spill(v, sp, (i*4) + 4)  # Store to new ptr
 
             store_ptr = block.addui(sp, 4)
-
 
         elif isinstance(symbol_type, SymbolTypePtr):
 

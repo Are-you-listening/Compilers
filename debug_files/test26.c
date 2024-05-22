@@ -1,13 +1,20 @@
 #include <stdio.h>
 
-int main(){
-    char array[12] = {'h','e','l','l','o',' ','w','o','r','l','d','!'};
-    char* ptr = &array;
+int func(int a, int b);
 
-    int length = 12;
-    for (int i=0; i<length; i++){
-        printf("%c", *(ptr++));
-    }
-
-    return 0;
+int main() {
+    int y = 5;
+    int u = 10;
+    int c;
+    c = func(y, u);
+    printf("%d\n", c);
+    return y;
 }
+
+
+
+
+int func(int a, int b) {
+    return a + b;
+}
+
