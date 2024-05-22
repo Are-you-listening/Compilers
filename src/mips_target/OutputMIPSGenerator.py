@@ -170,7 +170,11 @@ class Declaration:
                 """
                 make global array
                 """
-                values = [str(value) for i in range(symbol_type.size)]
+                if value == 0:
+                    values = [str(value) for i in range(symbol_type.size)]
+                else:
+                    values = value
+
                 if isinstance(symbol_type.deReference(), SymbolTypeArray):
                     values = []
                     for i in range(symbol_type.size):

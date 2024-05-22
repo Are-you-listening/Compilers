@@ -321,7 +321,6 @@ class RegisterManager:
 
             store_ptr = block.addui(sp, 4)
 
-
         elif isinstance(symbol_type, SymbolTypePtr):
 
             value = self.storeVariable(block, value, symbol_type.deReference())

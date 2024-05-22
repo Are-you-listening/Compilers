@@ -235,6 +235,11 @@ def main(argv):
                            comments)  # The codegetter is used to add the original code as comments
         to_mips.visit(ast)
 
+        if control_flow_file is not None:
+            for function_name, cfg in cfgs.items():
+                control_dot = ControlFlowDotVisitor(f"{function_name}_mips", control_flow_file, True)  # Create a CFG
+                control_dot.visit(cfg.root)
+
 
 if __name__ == '__main__':
     main(sys.argv)

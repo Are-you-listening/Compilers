@@ -121,6 +121,8 @@ class AST2MIPS(ASTVisitor):
             instruction to continue, so we generate the phi of the last (current) vertex
             """
             phi = self.last_vertex.create_phi(True)
+            block = MipsSingleton.getInstance().getCurrentBlock()
+            phi = block.addui(phi, 0)
             self.mips_map[node] = phi
 
             return
@@ -229,7 +231,14 @@ class AST2MIPS(ASTVisitor):
 
             value = 0
             if node.getChildAmount() > 1:
-                value = node.getChild(1).text
+                if node.getChild(1).getChildAmount() == 0:
+                    value = node.getChild(1).text
+                else:
+                    value = []
+                    for c in node.getChild(1).children:
+                        print("c", c.text)
+                        value.append(c.text)
+
 
             mips_var = Declaration.declare(var_node.text, entry.getTypeObject(), value, is_global=True)
             self.mips_map[node] = mips_var

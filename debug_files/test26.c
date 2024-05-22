@@ -1,13 +1,18 @@
 #include <stdio.h>
 
 int main(){
-    char array[12] = {'h','e','l','l','o',' ','w','o','r','l','d','!'};
-    char* ptr = &array;
 
-    int length = 12;
-    for (int i=0; i<length; i++){
-        printf("%c", *(ptr++));
+    int a = 1;
+    int b = 1;
+
+
+    a = 1;
+    b = 0;
+
+    if (a && b){
+        printf("%d", 1);
     }
 
     return 0;
+
 }
