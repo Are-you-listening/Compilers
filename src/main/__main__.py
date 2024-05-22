@@ -158,7 +158,6 @@ def Processing(ast, dot_file, fold, includeSTDIO, unused_var):
     if fold:
         ValueAdderVisitor().visit(ast)  # Apply propagation
     ConstantStatementFolding().visit(ast)   # Fold simple statements and remove useless statements
-
     if unused_var:
         UnusedCleaner().visit(ast)  # Remove unused vars
 

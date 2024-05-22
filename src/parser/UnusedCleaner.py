@@ -51,7 +51,7 @@ class UnusedCleaner(ASTVisitor):
 
     def visitNodeTerminal(self, node: ASTNodeTerminal):
         if node.type == "IDENTIFIER":
-            self.usefull[node] = True
+            self.usefull[node] = False
 
             symbol_entry = node.getSymbolTable().getEntry(node.text, node.position.virtual_linenr)
 
@@ -114,6 +114,9 @@ class UnusedCleaner(ASTVisitor):
 
                     if use.parent.text in ("Declaration", "Assignment", "Code", "Scope") and use.parent.findChild(use) == 0:
 
+                        if use.parent.getChildAmount() == 2 and self.usefull.get(use.parent.getChild(1), False):
+                            continue
+
                         temp = use
                         while temp.text not in ("Function", "WHILE", "Start"):
                             temp = temp.parent
@@ -127,6 +130,11 @@ class UnusedCleaner(ASTVisitor):
                         no_other_use.clear()
 
                 for use in no_other_use:
+
+                    if use.parent.text == "Declaration" and len(v) > len(no_other_use):
+                        continue
+
+
                     changed = True
                     node = use.parent
                     self.to_remove.add(node)

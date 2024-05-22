@@ -274,5 +274,5 @@ pip install unittest-parallel
 ```
 
 ```bash
- unittest-parallel -t . -s TestCases
+ unittest-parallel -t . -s TestCases --level=class
 ```

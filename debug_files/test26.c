@@ -1,8 +1,11 @@
 #include <stdio.h>
 
-int main(){
-    int k = 0;
-    printf("%x %d", k , k);
-    printf("%x %d", k , k);
+
+int main() {
+    int a = 5;
+    int b = 0;
+    b = 0;
+    a = (char) b;
+
     return 0;
 }

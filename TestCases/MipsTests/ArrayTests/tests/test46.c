@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int main(){
-int b[2];
+    int b[2];
     int a[4] = {1,2,3,4};
     int* k = a;
     k = k + 2;
