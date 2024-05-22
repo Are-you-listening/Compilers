@@ -1,13 +1,13 @@
 digraph AST {
-  "128736601562976" [label="main:  INT
+  "128829991577696" [label="main:  INT
 fopen:  0_IO_FILE*
 fgets:  CHAR*
 fputs:  CHAR
 fclose:  VOID"];
-  "128736601562976" -> "128736601562352";
-  "128736601562352" [label=""];
-  "128736601562352" -> "128736601558080";
-  "128736601558080" [label="k:  INT
+  "128829991577696" -> "128829991569200";
+  "128829991569200" [label=""];
+  "128829991569200" -> "128829991578416";
+  "128829991578416" [label="k:  INT
 s:  FLOAT
 safety:  NotTypeSafe
 safety_ptr:  NotTypeSafe*
