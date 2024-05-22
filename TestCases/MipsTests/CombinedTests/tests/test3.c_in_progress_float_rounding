@@ -6,7 +6,7 @@ void printPositive(float a)
 {
     if (a > NULL)
     {
-        printf("f%", a);
+        printf("%f", a);
     }
 }
 
