@@ -10,6 +10,6 @@ int main()
     int x = 1.13;
 
     printf("%d",BUFFER_SIZE);
-    printf("%f",x);
+    printf("%d",x);
     return 0;
 }

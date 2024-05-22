@@ -1,20 +1,38 @@
 #include <stdio.h>
 
-float whatIsBigger(float a, float b)
-{
-    if (a > b)
-    {
-        return a;
-    }
-    else
-    {
-        return b;
+int main(){
+
+    int a = 1;
+    int b = 1;
+
+    a = 1;
+    b = 1;
+
+    if (a || b){
+        printf("%d", 1);
     }
 
-}
-int main()
-{
-    float biggest = whatIsBigger(154.55, 854.154);
-    printf( "%f", biggest);
+    a = 1;
+    b = 0;
+
+    if (a || b){
+        printf("%d", 1);
+    }
+
+    a = 0;
+    b = 1;
+
+    if (a || b){
+        printf("%d", 1);
+    }
+
+    a = 0;
+    b = 0;
+
+    if (a || b){
+        printf("%d", 1);
+    }
+
     return 0;
+
 }
