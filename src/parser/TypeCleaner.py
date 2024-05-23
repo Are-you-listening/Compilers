@@ -154,7 +154,7 @@ class TypeCleaner(ASTVisitor):
                 """
                 new_array_size = max(new_array_size, 4)
 
-                temp_richest = SymbolTypeArray(SymbolType("INT", False), False,
+                temp_richest = SymbolTypeArray(SymbolType("CHAR", False), False,
                                                new_array_size)
 
                 richest = temp_richest

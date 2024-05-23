@@ -1416,21 +1416,28 @@ class Conversion:
                     size = 1
                     sub_size = temp.deReference().getBytesUsed()
 
-                change = int(temp.getBytesUsed()/sub_size)
+                change = int(sub_size)
+                print("c", change, sub_size)
+
+
 
                 t_list = []
                 for s in range(size):
-                    t = block.addui(var, int(s*change))
+
+                    t = block.addui(var, int((s+1)*change))
                     t_list.append(t)
                     print("t2", t)
 
-                RegisterManager.getInstance().claimStack(block, (size+1)*4)
                 print("claimed", len(t_list)*4)
+
+                RegisterManager.getInstance().claimStack(block, (size + 1) * 4)
+                store_loc = block.addui(Memory("sp", True), 4)
+
                 for i, t in enumerate(t_list):
                     print("used", 4)
-                    block.sw(t, Memory("sp", True), 4*(i+1))
+                    block.sw(t, store_loc, 4*(i))
 
-                var = block.addui(Memory("sp", True), 4)
+                var = store_loc
                 RegisterManager.getInstance().claimStack(block, 4)
                 block.sw(var,Memory("sp", True), 4)
                 var = block.addui(Memory("sp", True), 4)

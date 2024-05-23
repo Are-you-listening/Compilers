@@ -1,22 +1,23 @@
 #include <stdio.h>
 
-struct kaas{
-    char lol;
+union NotTypeSafe {
+int as_integer;
+char as_str[30][2];
+float as_float;
 };
-
-struct pointer{
-    struct kaas* kaas_ptr;
-};
-
 
 int main() {
-struct kaas ementaler;
-   ementaler.lol = 'l';
+    union NotTypeSafe gouda;
 
-    struct pointer ptr;
-    ptr.kaas_ptr = &ementaler;
+    gouda.as_integer = 5;
 
-    printf("%c", (*ptr.kaas_ptr).lol);
+
+    int q = gouda.as_integer;
+
+    printf("%d", q);
+
+    gouda.as_str[1][1] = 'a';
+    printf("%c", gouda.as_str[1][1]);
 
     return 0;
 }

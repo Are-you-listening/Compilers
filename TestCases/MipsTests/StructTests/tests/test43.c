@@ -22,7 +22,7 @@ int main() {
     gouda.as_float = 5.2;
     float qr = gouda.as_float;
 
-    printf("%f", qr);
+    printf("%d", (int) (qr*1000));
 
     return 0;
 }
