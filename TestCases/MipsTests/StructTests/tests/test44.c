@@ -21,7 +21,7 @@ int main() {
     printf("%c", gouda.as_str[1][1]);
 
     gouda.as_float2[1][1] = 5.2;
-    printf("%f", gouda.as_float2[1][1]);
+    printf("%d", (int) (gouda.as_float2[1][1]*1000));
 
 
     return 0;

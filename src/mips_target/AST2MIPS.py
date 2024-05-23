@@ -175,7 +175,7 @@ class AST2MIPS(ASTVisitor):
             entry_sym = node.getSymbolTable().getEntry(node.text, node.position.virtual_linenr)
 
             if isinstance(entry_sym.getTypeObject(), FunctionSymbolType) and node.text not in self.special_functions_declared and node.text in self.special_func_creator:
-                function = self.special_func_creator[node.text]()
+                function = self.special_func_creator[node.text](node.getSymbolTable().getEntry(node.text, node.position.virtual_linenr).getTypeObject())
                 self.special_functions_declared[node.text] = function
                 self.map_table.addEntry(MapEntry(node.text, function), entry_sym)
 
@@ -275,7 +275,7 @@ class AST2MIPS(ASTVisitor):
         mips_module = MipsSingleton.getInstance().getModule()
         function = mips_module.getFunction(function_name)
         if function is None:
-            function = mips_module.createFunction(function_name)
+            function = mips_module.createFunction(function_name, node.getChild(0).getSymbolTable().getEntry(function_name, node.getChild(0).position.virtual_linenr-1).getTypeObject())
 
         MipsSingleton.getInstance().setLastFunction(function)
         current_table = node.getSymbolTable()
@@ -347,9 +347,9 @@ class AST2MIPS(ASTVisitor):
 
         if name not in self.special_functions_declared:
             if printf:
-                function = Printf.printf()
+                function = Printf.printf(FunctionSymbolType(SymbolType("INT", False), []))
             else:
-                function = Printf.scanf()
+                function = Printf.scanf(FunctionSymbolType(SymbolType("INT", False), []))
             self.special_functions_declared[name] = function
         else:
             function = self.special_functions_declared[name]
@@ -408,14 +408,14 @@ class AST2MIPS(ASTVisitor):
                 return
 
             mips_var = Calculation.operation(left, right, operator)
-            if isinstance(left, Function):  # Take the return value for function calls
-                mips_var.symbol_type = node.getSymbolTable().getEntry(left.function_name).typeObject
-            elif operator == "[]":
-                pass
-            elif operator in ['<' ,'>', '>=' ,'<=', '==' , '!=']:
-                mips_var.symbol_type = SymbolType("BOOL", False)
-            else:
-                mips_var.symbol_type = left.symbol_type
+
+            if mips_var.symbol_type is None:
+                if operator == "[]":
+                    pass
+                elif operator in ['<' ,'>', '>=' ,'<=', '==' , '!=']:
+                    mips_var.symbol_type = SymbolType("BOOL", False)
+                else:
+                    mips_var.symbol_type = left.symbol_type
 
         #mips_var.symbol_type = node.getSymbolTable().getEntry()
         self.mips_map[node] = mips_var

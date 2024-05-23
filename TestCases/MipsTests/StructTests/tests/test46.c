@@ -19,7 +19,7 @@ int main() {
     printf("%d", q);
 
     gouda.as_float2[0][0] = 5.2;
-    printf("%f", gouda.as_float2[0][0]);
+    printf("%d", (int) (gouda.as_float2[0][0]*1000));
 
     gouda.as_str[49][49] = 'a';
 
