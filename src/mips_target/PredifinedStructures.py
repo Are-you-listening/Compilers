@@ -4,14 +4,14 @@ from .MipsSingleton import MipsSingleton
 
 class SpecialFunctions:
     @staticmethod
-    def malloc():
+    def malloc(func_type):
         """
         To understand this function pls read the reference .asm file
         This one is very cool, thats why I leave it, but SPIm has a lame syscall which and this doesnt work in SPIM
 
         :return:
         """
-        function: Function = MipsSingleton.getInstance().getModule().createFunction("malloc")
+        function: Function = MipsSingleton.getInstance().getModule().createFunction("malloc", func_type)
 
         base_block = function.createBlock()
         search = function.createBlock()
@@ -106,26 +106,6 @@ class SpecialFunctions:
         temp_reg.overrideMemory(t1)
 
         assign.move(v0, t1)
-
-        function.endFunction()
-        return function
-
-    @staticmethod
-    def malloc2():
-        function: Function = MipsSingleton.getInstance().getModule().createFunction("malloc")
-
-        base = function.createBlock()
-
-        fp_register = Memory(30, True)
-        a0 = Memory(4, True)
-        v0 = Memory(2, True)
-
-        temp_reg = base.lw(fp_register, 4)
-        temp_reg.overrideMemory(a0)
-
-        temp_reg = base.li(9)
-        temp_reg.overrideMemory(v0)
-        base.systemCall()
 
         function.endFunction()
         return function

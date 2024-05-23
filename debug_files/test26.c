@@ -1,23 +1,22 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-union NotTypeSafe {
-int as_integer;
-char as_str[30][2];
-float as_float;
+struct v{
+    int a;
 };
 
-int main() {
-    union NotTypeSafe gouda;
+struct v* hello(){
+    struct v* n= malloc(sizeof(struct v));
+    n->a = 5;
 
-    gouda.as_integer = 5;
+    return n;
+}
 
+int main(){
 
-    int q = gouda.as_integer;
-
-    printf("%d", q);
-
-    gouda.as_str[1][1] = 'a';
-    printf("%c", gouda.as_str[1][1]);
+    struct v* b = hello();
+    printf("%d", b->a);
 
     return 0;
+
 }

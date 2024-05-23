@@ -301,8 +301,8 @@ class Declaration:
 
 class Printf:
     @staticmethod
-    def scanf():
-        function: Function = MipsSingleton.getInstance().getModule().createFunction("scanf")
+    def scanf(func_type):
+        function: Function = MipsSingleton.getInstance().getModule().createFunction("scanf", func_type)
         function_function_scanf = function.createBlock()
         scanf_char_loop = function.createBlock()
         scanf_char_special_token = function.createBlock()
@@ -659,13 +659,13 @@ class Printf:
         return function
 
     @staticmethod
-    def printf():
+    def printf(func_type):
         """
         Implementation of ReferenceAssembly>printf.asm
         :return:
         """
 
-        function: Function = MipsSingleton.getInstance().getModule().createFunction("printf")
+        function: Function = MipsSingleton.getInstance().getModule().createFunction("printf", func_type)
         print_base_block = function.createBlock()
         print_char_loop = function.createBlock()
         print_char_special_token_after = function.createBlock()
@@ -1328,6 +1328,10 @@ class FunctionMet:
         """
         free_register = RegisterManager.getInstance().allocate(block)
         block.move(free_register, Memory("v0", True))
+
+        if not isinstance(func_name, Memory):
+            free_register.symbol_type = func_name.symbol_type.return_type
+
         return free_register
 
     @staticmethod
@@ -1469,6 +1473,11 @@ class Conversion:
                            }
 
         c = conversion_dict.get((from_type.getType(), to_type.getType()))
+        if c is None:
+            print(type(from_type))
+            print("conv", from_type.getPtrTuple(), to_type.getPtrTuple())
+            var.symbol_type = to_type
+            return var
         var = c(var)
         var.symbol_type = to_type
         return var

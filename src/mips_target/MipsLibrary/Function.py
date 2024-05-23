@@ -2,10 +2,11 @@
 from .Memory import *
 from .MipsManager import MipsManager
 from .Blocks import Block
+from src.parser.Tables.SymbolType import SymbolType
 
 
 class Function:
-    def __init__(self, function_name: str):
+    def __init__(self, function_name: str, symbol_type: SymbolType):
         self.function_name = function_name
         self.blocks = []
 
@@ -16,6 +17,7 @@ class Function:
 
         self.createBlock()
         self.parameters = None
+        self.symbol_type = symbol_type
 
     def getOffset(self):
         return len(self.frame_registers)*4

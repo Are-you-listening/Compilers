@@ -33,8 +33,8 @@ class MipsModule:
 
         return string
 
-    def createFunction(self, function_name: str) -> Function:
-        function = Function(function_name)
+    def createFunction(self, function_name: str, func_type) -> Function:
+        function = Function(function_name, func_type)
         self.functions.append(function)
 
         return function

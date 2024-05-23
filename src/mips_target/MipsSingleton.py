@@ -48,7 +48,7 @@ class MipsSingleton:
     def setLastFunction(self, function: Function):
         self.__last_function = function
 
-    def getFunction(self, function_name: Function):
+    def getFunction(self, function_name: str):
         for function in self.__functions:
             if function.function_name == function_name:
                 return function
