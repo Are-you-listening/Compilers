@@ -1,9 +1,22 @@
 #include <stdio.h>
 
-int main(){
+struct kaas{
+    char lol;
+};
 
-    int array[2][2] = {{0,1}, {2,3}};
-    int* ptr = &array;
-    printf("%d", *(ptr + 2));
+struct pointer{
+    struct kaas* kaas_ptr;
+};
+
+
+int main() {
+struct kaas ementaler;
+   ementaler.lol = 'l';
+
+    struct pointer ptr;
+    ptr.kaas_ptr = &ementaler;
+
+    printf("%c", (*ptr.kaas_ptr).lol);
+
     return 0;
 }
