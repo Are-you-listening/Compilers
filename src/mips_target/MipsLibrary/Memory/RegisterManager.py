@@ -1,3 +1,4 @@
+from src.parser.Tables.TypeNodehandler import SymbolTypeUnion
 from .Memory import Memory
 from src.internal_tools.IntegrityChecks import PreConditions
 import math
@@ -295,11 +296,18 @@ class RegisterManager:
 
         sp = self.getMemoryObject("sp")
         if isinstance(symbol_type, SymbolTypeArray):
+            print("q", type(symbol_type), symbol_type.getPtrTuple())
+            if isinstance(symbol_type, SymbolTypeArray):
+                size = symbol_type.size
+            else:
+                size = 1
+                needed = 4
+
             """
             4 bytes
             """
             values = []
-            for v in range(symbol_type.size):
+            for v in range(size):
                 v2 = self.storeVariable(block, value, symbol_type.deReference())
                 values.append(v2)
 
@@ -308,7 +316,7 @@ class RegisterManager:
             self.curr_function[block.function.getFunctionName()] = counter
 
             block.addui_function(sp, -needed, sp)
-            for i, v in enumerate(values):
+            for i, v in enumerate(reversed(values)):
 
                 self.loadIfNeeded(block, [v])
                 if symbol_type.deReference().getBytesUsed() < 4:
@@ -334,22 +342,26 @@ class RegisterManager:
         elif isinstance(symbol_type, SymbolTypeStruct):
             values = []
             needed = 4
-            for v in range(symbol_type.getElementCount()):
-                if isinstance(symbol_type.getElementType(v), SymbolTypePtr):
-                    byte_size = 4
-                    v2 = block.addui(sp, 4)
-                    v2.symbol_type = symbol_type
-                else:
-                    v2 = self.storeVariable(block, value, symbol_type.getElementType(v).deReference())
-                    byte_size = symbol_type.getElementType(v).deReference().getBytesUsed()
-                    byte_size = math.ceil(byte_size/4)*4
 
-                if isinstance(symbol_type.getElementType(v).deReference(), SymbolTypeArray):
+            elem_count = symbol_type.getElementCount()
+            if isinstance(symbol_type, SymbolTypeUnion):
+                elem_count = 1
+
+            for v in range(elem_count):
+
+                elem_type = symbol_type.getElementType(v)
+                if isinstance(symbol_type, SymbolTypeUnion):
+                    elem_type = symbol_type.getStoreType()
+
+                v2 = self.storeVariable(block, value, elem_type.deReference())
+                byte_size = elem_type.deReference().getBytesUsed()
+                byte_size = math.ceil(byte_size/4)*4
+
+                if isinstance(elem_type.deReference(), SymbolTypeArray):
                     byte_size = 4
                 needed += byte_size
 
                 values.append(v2)
-
 
             counter = self.curr_function[block.function.getFunctionName()]
             counter += needed
@@ -375,3 +387,12 @@ class RegisterManager:
                 continue
 
             self.spill(block, k)
+
+    def claimStack(self, block, needed: int):
+        counter = self.curr_function[block.function.getFunctionName()]
+        counter += needed
+        self.curr_function[block.function.getFunctionName()] = counter
+
+        sp = self.getMemoryObject("sp")
+
+        block.addui_function(sp, -needed, sp)

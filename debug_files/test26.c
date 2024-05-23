@@ -1,22 +1,23 @@
 #include <stdio.h>
 
-union kaas{
-    int melk;
-    float yoghurt;
+union NotTypeSafe {
+int as_integer;
+char as_str[30][2];
+float as_float;
 };
 
-
-
-
 int main() {
-    union kaas gouda;
+    union NotTypeSafe gouda;
 
-    gouda.melk = 5;
-    printf("%d\n", gouda.melk);
-    gouda.yoghurt = 3.14;
+    gouda.as_integer = 5;
 
-    printf("%d\n", (int) (gouda.yoghurt));
-    printf("%d\n", gouda.melk);
+
+    int q = gouda.as_integer;
+
+    printf("%d", q);
+
+    gouda.as_str[1][1] = 'a';
+    printf("%c", gouda.as_str[1][1]);
 
     return 0;
 }

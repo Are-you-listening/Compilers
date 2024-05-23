@@ -1399,14 +1399,55 @@ class Conversion:
         """
 
         if to_type.getPtrAmount() != from_type.getPtrAmount() and min(to_type.getPtrAmount(), from_type.getPtrAmount()) != 0:
-
             ptr_difference = from_type.getPtrAmount() - to_type.getPtrAmount()
             for t in range(max(ptr_difference, 0)):
                 var = block.lw(var, 0)
 
+            for t in range(min(ptr_difference, 0)*-1):
+                temp = to_type
+                for v in range((ptr_difference*-1)-t):
+                    temp = temp.deReference()
+
+                if isinstance(temp, SymbolTypeArray):
+                    size = temp.size
+                    sub_size = temp.deReference().getBytesUsed()
+
+                else:
+                    size = 1
+                    sub_size = temp.deReference().getBytesUsed()
+
+                change = int(sub_size)
+                print("c", change, sub_size)
+
+
+
+                t_list = []
+                for s in range(size):
+
+                    t = block.addui(var, int((s+1)*change))
+                    t_list.append(t)
+                    print("t2", t)
+
+                print("claimed", len(t_list)*4)
+
+                RegisterManager.getInstance().claimStack(block, (size + 1) * 4)
+                store_loc = block.addui(Memory("sp", True), 4)
+
+                for i, t in enumerate(t_list):
+                    print("used", 4)
+                    block.sw(t, store_loc, 4*(i))
+
+                var = store_loc
+                RegisterManager.getInstance().claimStack(block, 4)
+                block.sw(var,Memory("sp", True), 4)
+                var = block.addui(Memory("sp", True), 4)
+                print("final_var", var)
+
+                print(size, sub_size)
+                print("t", temp.getPtrTuple())
+
             var.symbol_type = to_type
             return var
-
 
         conversion_dict = {("INT", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),
                            ("CHAR", "FLOAT"): lambda x: block.sitofp(x, Memory("f0", True)),

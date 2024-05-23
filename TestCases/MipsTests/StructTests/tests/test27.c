@@ -16,7 +16,6 @@ int main() {
     gouda.yoghurt = 3.14;
 
     printf("%d\n", (int) (gouda.yoghurt*1000));
-    printf("%d\n", gouda.melk);
 
     return 0;
 }
