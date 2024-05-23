@@ -1331,6 +1331,11 @@ class FunctionMet:
 
         if not isinstance(func_name, Memory):
             free_register.symbol_type = func_name.symbol_type.return_type
+        else:
+            if isinstance(func_name.symbol_type, SymbolTypePtr):
+                free_register.symbol_type = func_name.symbol_type.deReference().return_type
+            else:
+                free_register.symbol_type = func_name.symbol_type.return_type
 
         return free_register
 
@@ -1413,7 +1418,6 @@ class Conversion:
                     temp = temp.deReference()
 
                 if isinstance(temp, SymbolTypeStruct):
-                    print("he")
                     size = temp.getElementCount()
                     sub_size = 4
                     for option in range(temp.getElementCount()):
