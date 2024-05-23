@@ -353,9 +353,14 @@ class RegisterManager:
                 if isinstance(symbol_type, SymbolTypeUnion):
                     elem_type = symbol_type.getStoreType()
 
-                v2 = self.storeVariable(block, value, elem_type.deReference())
-                byte_size = elem_type.deReference().getBytesUsed()
-                byte_size = math.ceil(byte_size/4)*4
+                if isinstance(symbol_type.getElementType(v), SymbolTypePtr):
+                    byte_size = 4
+                    v2 = block.addui(sp, 4)
+                    v2.symbol_type = symbol_type
+                else:
+                    v2 = self.storeVariable(block, value, symbol_type.getElementType(v).deReference())
+                    byte_size = symbol_type.getElementType(v).deReference().getBytesUsed()
+                    byte_size = math.ceil(byte_size / 4) * 4
 
                 if isinstance(elem_type.deReference(), SymbolTypeArray):
                     byte_size = 4
