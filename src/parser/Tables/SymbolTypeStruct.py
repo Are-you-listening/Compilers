@@ -24,6 +24,9 @@ class SymbolTypeStruct(SymbolType):
     def getPtrAmount(self):
         return 1
 
+    def getRealPtrAmount(self):
+        return 0
+
     def getBytesUsed(self):
         pts_to = TypeNodeHandler.getInstance().getInstance().struct_param[self.data_type]
 

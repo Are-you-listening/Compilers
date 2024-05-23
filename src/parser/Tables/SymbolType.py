@@ -39,6 +39,9 @@ class SymbolType:
     def getPtrAmount(self):
         return 0
 
+    def getRealPtrAmount(self):
+        return self.getPtrAmount()
+
     def getBytesUsed(self):
         bytes_used = {"INT": 4, "CHAR": 1, "FLOAT": 4, "BOOL": 1}
 

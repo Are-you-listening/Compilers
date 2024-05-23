@@ -1412,7 +1412,16 @@ class Conversion:
                 for v in range((ptr_difference*-1)-t):
                     temp = temp.deReference()
 
-                if isinstance(temp, SymbolTypeArray):
+                if isinstance(temp, SymbolTypeStruct):
+                    print("he")
+                    size = temp.getElementCount()
+                    sub_size = 4
+                    for option in range(temp.getElementCount()):
+                        o = temp.getElementType(option)
+                        sub_size = max(sub_size, o.getBytesUsed())
+
+
+                elif isinstance(temp, SymbolTypeArray):
                     size = temp.size
                     sub_size = temp.deReference().getBytesUsed()
 

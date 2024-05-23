@@ -409,12 +409,13 @@ class AST2MIPS(ASTVisitor):
 
             mips_var = Calculation.operation(left, right, operator)
 
-            if operator == "[]":
-                pass
-            elif operator in ['<' ,'>', '>=' ,'<=', '==' , '!=']:
-                mips_var.symbol_type = SymbolType("BOOL", False)
-            else:
-                mips_var.symbol_type = left.symbol_type
+            if mips_var.symbol_type is None:
+                if operator == "[]":
+                    pass
+                elif operator in ['<' ,'>', '>=' ,'<=', '==' , '!=']:
+                    mips_var.symbol_type = SymbolType("BOOL", False)
+                else:
+                    mips_var.symbol_type = left.symbol_type
 
         #mips_var.symbol_type = node.getSymbolTable().getEntry()
         self.mips_map[node] = mips_var
