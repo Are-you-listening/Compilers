@@ -103,14 +103,24 @@ class AST2MIPS(ASTVisitor):
                     block = MipsSingleton.getInstance().getCurrentBlock()
 
                     if len(block.instructions) > 0 and self.last_vertex.edges[0].to_vertex != self.last_vertex.edges[1].to_vertex:
-                        index = -1
-                        while True:
-                            t = block.instructions[index].getAddress()
-                            if t is not None:
+                        valid_instr_found = False
+                        for instr in block.instructions:
+                            """
+                            check that the instructions are not just all comments
+                            """
+                            if not isinstance(instr, S.Comment):
+                                valid_instr_found = True
                                 break
-                            index -= 1
 
-                        block.move(Memory("v0", True), block.instructions[index].getAddress())
+                        if valid_instr_found:
+                            index = -1
+                            while True:
+                                t = block.instructions[index].getAddress()
+                                if t is not None:
+                                    break
+                                index -= 1
+
+                            block.move(Memory("v0", True), block.instructions[index].getAddress())
 
                     RegisterManager.getInstance().spillAll(self.last_vertex.mips)
             return
