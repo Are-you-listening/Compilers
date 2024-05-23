@@ -265,6 +265,8 @@ class Declaration:
                 value = value.encode('utf-8').decode('unicode-escape')
 
             value = ord(value)  # Values are strings
+            if value > 127:  # outside of a certain range, chars need to be read as signed chars
+                value -= 256
 
         block = MipsSingleton.getInstance().getCurrentBlock()
         if isinstance(value, float):
