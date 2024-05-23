@@ -353,7 +353,11 @@ class RegisterManager:
                 if isinstance(symbol_type, SymbolTypeUnion):
                     elem_type = symbol_type.getStoreType()
 
-                v2 = self.storeVariable(block, value, elem_type.deReference())
+                if isinstance(elem_type.deReference(), SymbolTypePtr) and isinstance(elem_type.deReference().deReference(), SymbolTypeStruct):
+                    v2 = self.storeVariable(block, value, SymbolType("INT", False))
+                else:
+                    v2 = self.storeVariable(block, value, elem_type.deReference())
+
                 byte_size = elem_type.deReference().getBytesUsed()
                 byte_size = math.ceil(byte_size/4)*4
 

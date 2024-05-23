@@ -1,15 +1,20 @@
 #include <stdio.h>
 
-int m(int a){
-    return 5;
-}
+struct a{
+    struct a* b;
+    int v;
+};
 
-int main () {
 
-    int (*v)(float) = 0;
+int main() {
 
-    int b = v(5);
-    printf("%d", b);
+    struct a c;
+    struct a d;
+    d.v = 5;
+
+    c.b = &d;
+
+    printf("%d", c.b->v);
 
     return 0;
 }

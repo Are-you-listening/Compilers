@@ -1,22 +1,20 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-struct v{
-    int a;
+struct a{
+    struct a* b;
+    int v;
 };
 
-struct v* hello(){
-    struct v* n= malloc(sizeof(struct v));
-    n->a = 5;
 
-    return n;
-}
+int main() {
 
-int main(){
+    struct a c;
+    struct a d;
+    d.v = 5;
 
-    struct v* b = hello();
-    printf("%d", b->a);
+    c.b = &d;
+
+    printf("%d", c.b->v);
 
     return 0;
-
 }
