@@ -105,6 +105,7 @@ class AST2MIPS(ASTVisitor):
                     if len(block.instructions) > 0 and self.last_vertex.edges[0].to_vertex != self.last_vertex.edges[1].to_vertex:
                         index = -1
                         while True:
+
                             t = block.instructions[index].getAddress()
                             if t is not None:
                                 break

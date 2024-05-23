@@ -1,20 +1,17 @@
 #include <stdio.h>
 
-struct a{
-    struct a* b;
-    int v;
-};
-
+float mul(int** b){
+    printf("%d;", **b);
+    return 5.4;
+}
 
 int main() {
+    float (*m)(int**) = &mul;
 
-    struct a c;
-    struct a d;
-    d.v = 5;
-
-    c.b = &d;
-
-    printf("%d", c.b->v);
+    int c = 6;
+    int* a = &c;
+    int** d = &a;
+    printf("%d", (int) m(d));
 
     return 0;
 }
