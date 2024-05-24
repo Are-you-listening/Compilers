@@ -87,7 +87,7 @@ class FileIO:
         to user
         """
 
-        file_struct_param.append(SymbolTypePtr(SymbolType("CHAR", False), False))
+        file_struct_param.append(SymbolTypePtr(SymbolType("INT", False), False))
         file_struct_param.append(SymbolTypePtr(SymbolType("CHAR", False), False))
 
         file_struct = SymbolTypeStruct("0_IO_FILE")
