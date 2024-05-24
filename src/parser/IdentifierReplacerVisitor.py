@@ -62,6 +62,9 @@ class IdentifierReplacerVisitor(ASTVisitor):
             if post_incr or pre_incr:
                 return
 
+            if node.type == "STRING":
+                return
+
             if node.type != "IDENTIFIER":
                 ErrorExporter.invalidDereference(node.position, node.type)
                 return
@@ -72,6 +75,8 @@ class IdentifierReplacerVisitor(ASTVisitor):
 
             if self.is_strict and not entry.isConst():
                 return
+
+            #print(entry)
 
             if (not entry.isConst() and (entry.firstUsed is not None and entry.firstUsed != node)) or entry.is_referenced() or \
                     entry.getTypeObject().hasFunction():

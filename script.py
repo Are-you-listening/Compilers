@@ -1,6 +1,7 @@
 from src.main.__main__ import main
 from src.llvm_target.LLVMSingleton import *
 import os
+import subprocess
 
 
 def script():
@@ -12,9 +13,11 @@ def script():
         if file == "includes":
             continue
         file_name = directory+"/"+file+"/"+file
+        working_dir = directory+"/"+file
 
         c = file_name+".c"
         llvm = file_name+"_.ll"
+        mips = file_name+"_.asm"
         cfg = file_name+"_cfg.dot"
         ast = file_name+"_ast.dot"
         table = file_name+"_table.dot"
@@ -26,16 +29,21 @@ def script():
         if file_name.endswith("56_unused_variables"):
             unused_var = "True"
 
-        # Run our llvm
+        for old in os.listdir(working_dir):  # List all files for a specific example dir
+            if not old.endswith(".c"):  # Ignore the test file
+                os.chdir(working_dir)  # Cd to the specific example dir
+                if os.path.isfile(old):  # Double check file exists
+                     os.remove(old)  # Remove old file
+                os.chdir("../../")  # Cd back
+
         try:
             outfile = open(file_name+".sh", "w")  # Create a .sh file to execute files in the subdirectory
             outfile.write("cd ../../\n")
-            outfile.write(f"python3 -m src.main --input {c} --target_llvm {llvm} --fold True --render_ast {ast} --render_symb {table} --target_control_flow {cfg} --unused_var {unused_var}")
+            outfile.write(f"python3 -m src.main --input {c} --target_llvm {llvm} --target_mips {mips} --fold True --render_ast {ast} --render_symb {table} --target_control_flow {cfg} --unused_var {unused_var}")
             outfile.close()
 
-            main([0, "--input", f"{curr_dir}{c[1:]}", "--target_llvm", f"{curr_dir}{llvm[1:]}", "--fold", "True", "--render_ast", f"{curr_dir}{ast[1:]}", "--render_symb", f"{curr_dir}{table[1:]}", "--target_control_flow", f"{curr_dir}{cfg[1:]}", "--unused_var", unused_var])  # Run our compiler with folding
+            main([0, "--input", f"{curr_dir}{c[1:]}", "--target_llvm", f"{curr_dir}{llvm[1:]}", "--target_mips", f"{curr_dir}{mips[1:]}", "--fold", "True", "--render_ast", f"{curr_dir}{ast[1:]}", "--render_symb", f"{curr_dir}{table[1:]}", "--target_control_flow", f"{curr_dir}{cfg[1:]}", "--unused_var", unused_var])  # Run our compiler with folding
         except:
-
             """
             Get the index
             """
@@ -46,8 +54,6 @@ def script():
             if "error" not in file_name:
                 if index == "in":
                     pass
-
-
             continue
 
 script()

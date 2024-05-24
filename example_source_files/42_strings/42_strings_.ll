@@ -1,11 +1,11 @@
-; ModuleID = "/home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/example_source_files/42_strings/42_strings.c"
+; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/example_source_files/42_strings/42_strings.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
 define i32 @"main"()
 {
 .2:
-  %".3" = alloca [10 x i8], align 64
+  %".3" = alloca [10 x i8], align 16
   ;  INT main ( ) { CHAR s [ 10 ] = "string\nhe" ;
   %".5" = getelementptr inbounds [10 x i8], [10 x i8]* %".3", i64 0, i32 9
   store i8 0, i8* %".5", align 4

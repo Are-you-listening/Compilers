@@ -129,7 +129,87 @@ Compilers
 │   │   └── OutputLLVMGenerator.py - Contains methods to convert parts of the tree to LLVM code
 │   ├── main - Directory containing the main function
 │   │   └──__main__.py - Main file 
-│   ├── mips_target
+│   ├── mips_target - Directory containing files to generated Mips
+│   │   ├── AST2MIPS.py - Main visitor to convert to Mips
+│   │   ├── MipsLibrary - Our own library, based upon the workings of LLVMLite
+│   │   │   ├── Blocks.py - Structure to create blocks
+│   │   │   ├── Function.py - Structure to create functions
+│   │   │   ├── Instructions - We won't go over each instructions, but these classes are called in the block structure, just like you're used to for LLVMLite.
+│   │   │   │   ├── FR
+│   │   │   │   │   ├── add_s.py
+│   │   │   │   │   ├── c.eq.s.py
+│   │   │   │   │   ├── c.le.s.py
+│   │   │   │   │   ├── c.lt.s.py
+│   │   │   │   │   ├── div_s.py
+│   │   │   │   │   ├── FloatMipsInstruction.py
+│   │   │   │   │   ├── mul_s.py
+│   │   │   │   │   └── sub_s.py
+│   │   │   │   ├── I
+│   │   │   │   │   ├── addi.py
+│   │   │   │   │   ├── addiu.py
+│   │   │   │   │   ├── andi.py
+│   │   │   │   │   ├── beq.py
+│   │   │   │   │   ├── bne.py
+│   │   │   │   │   ├── IMipsInstruction.py
+│   │   │   │   │   ├── lb.py
+│   │   │   │   │   ├── li.py
+│   │   │   │   │   ├── lui.py
+│   │   │   │   │   ├── lw.py
+│   │   │   │   │   ├── mips_not.py
+│   │   │   │   │   ├── neg.py
+│   │   │   │   │   ├── ori.py
+│   │   │   │   │   ├── sb.py
+│   │   │   │   │   ├── slti.py
+│   │   │   │   │   ├── sltiu.py
+│   │   │   │   │   └── sw.py
+│   │   │   │   ├── Instruction.py
+│   │   │   │   ├── J
+│   │   │   │   │   ├── jal.py
+│   │   │   │   │   ├── jalr.py
+│   │   │   │   │   ├── JMipsInstruction.py
+│   │   │   │   │   └── j.py
+│   │   │   │   ├── R
+│   │   │   │   │   ├── add.py
+│   │   │   │   │   ├── addu.py
+│   │   │   │   │   ├── div.py
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── jr.py
+│   │   │   │   │   ├── mfhi.py
+│   │   │   │   │   ├── mflo.py
+│   │   │   │   │   ├── mips_and.py
+│   │   │   │   │   ├── mips_or.py
+│   │   │   │   │   ├── mul.py
+│   │   │   │   │   ├── nor.py
+│   │   │   │   │   ├── RMipsInstruction.py
+│   │   │   │   │   ├── sgt.py
+│   │   │   │   │   ├── sll.py
+│   │   │   │   │   ├── sllv.py
+│   │   │   │   │   ├── slt.py
+│   │   │   │   │   ├── srl.py
+│   │   │   │   │   ├── srlv.py
+│   │   │   │   │   ├── sub.py
+│   │   │   │   │   ├── subu.py
+│   │   │   │   │   └── xor.py
+│   │   │   │   └── S
+│   │   │   │       ├── comment.py
+│   │   │   │       ├── cvt_s_w.py
+│   │   │   │       ├── cvt_w_s.py
+│   │   │   │       ├── la.py
+│   │   │   │       ├── l_s.py
+│   │   │   │       ├── manual_label.py
+│   │   │   │       ├── mfc1.py
+│   │   │   │       ├── move.py
+│   │   │   │       ├── mtc1.py
+│   │   │   │       ├── SpecialInstruction.py
+│   │   │   │       └── systemCall.py
+│   │   │   ├── Memory - Directory containing files related to memory management.
+│   │   │   │   ├── Memory.py - Memory object, used for registers or stack locations. Widely used by the registermanager.
+│   │   │   │   └── RegisterManager.py - A singleton service with function to retrieve a free registers and spill any data to memory. 
+│   │   │   ├── MipsManager.py - Mips Label manager
+│   │   │   ├── MipsModule.py - Module manager
+│   │   ├── MipsSingleton.py - Similar to LLVMSingleton.py
+│   │   ├── OutputMIPSGenerator.py - Similar to it's LLVM counterpart
+│   │   ├── PredifinedStructures.py - Predefined functions translated from c to Mips
 │   ├── parser - Directory containing code to parse an input file, create & massage the tree
 │   │   ├── ArrayCleaner.py - Massage the tree, specificly for arrays
 │   │   ├── ArrayPreProcessor.py - Makes sure const values are propagated inside the array size
@@ -240,7 +320,7 @@ Compilers
     ├── ASTTests - Directory containing AST unit tests
     └── LLVMTests - Directory containing LLVM unit tests
 
-169 directories, 1714 files
+357 directories, 3512 files
 ```
 
 ### Tests

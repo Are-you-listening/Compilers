@@ -164,7 +164,6 @@ class LLVMTest(unittest.TestCase, ABC):
                 MipsManager.getInstance().clear()
                 RegisterManager.getInstance().clear()
 
-
                 try:
                     #sys.stdout = original
 

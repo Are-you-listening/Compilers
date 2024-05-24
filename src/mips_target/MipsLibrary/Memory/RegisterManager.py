@@ -302,7 +302,6 @@ class RegisterManager:
 
         sp = self.getMemoryObject("sp")
         if isinstance(symbol_type, SymbolTypeArray):
-            print("q", type(symbol_type), symbol_type.getPtrTuple())
             if isinstance(symbol_type, SymbolTypeArray):
                 size = symbol_type.size
             else:

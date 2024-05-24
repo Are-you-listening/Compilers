@@ -89,7 +89,6 @@ class Block:
         The reason it is, is because we cannot have any spill overhead during this procedure
 
         """
-        print("lw", load_value)
 
 
         instr = Lw(rt, rs, load_value, False, "")
@@ -177,8 +176,7 @@ class Block:
         Store function that only be used in spill, because it will not load
         the variable it needs to store
         """
-        if immediate == -140:
-            print("sw", immediate)
+
         return self.__handle_large_immediate(rt, rs, immediate, Sw)
 
     def sb_spill(self, rt: Memory, rs: Memory, immediate: int):

@@ -126,27 +126,30 @@ class AST2MIPS(ASTVisitor):
                 if len(self.last_vertex.edges) == 2:
 
                     if len(block.instructions) > 0 and self.last_vertex.edges[0].to_vertex != self.last_vertex.edges[1].to_vertex:
-                        index = -1
-                        while True:
-
-                            t = block.instructions[index].getAddress()
-                            if t is not None:
+                        valid_instr_found = False
+                        for instr in block.instructions:
+                            """
+                            check that the instructions are not just all comments
+                            """
+                            if not isinstance(instr, S.Comment):
+                                valid_instr_found = True
                                 break
-                            index -= 1
 
-                        block.move(Memory("v0", True), block.instructions[index].getAddress())
-                    print("end block", self.last_vertex.mips.stack_val.address)
+                        if valid_instr_found:
 
-                    print("end block", self.last_vertex.mips.stack_val.address)
+                            index = -1
+                            while True:
 
-                RegisterManager.getInstance().spillAll(self.last_vertex.mips)
+                                t = block.instructions[index].getAddress()
+                                if t is not None:
+                                    break
+                                index -= 1
 
-                #print("overtimer1", node.vertex.mips.counter)
-                node.vertex.mips.counter = RegisterManager.getInstance().curr_function[
-                    node.vertex.mips.function.getFunctionName()]
-                #print("overtimer2", node.vertex.mips.counter)
+                            block.move(Memory("v0", True), block.instructions[index].getAddress())
 
-
+                    RegisterManager.getInstance().spillAll(self.last_vertex.mips)
+                    node.vertex.mips.counter = RegisterManager.getInstance().curr_function[
+                        node.vertex.mips.function.getFunctionName()]
             return
 
         if isinstance(node, ASTNodeBlock) and node.text == "PHI":
@@ -220,16 +223,9 @@ class AST2MIPS(ASTVisitor):
                 self.mips_map[node] = mips_var
 
                 if not node.getSymbolTable().isRoot() and entry_sym.firstDeclared.getSymbolTable().isRoot():  # First use of the global value 'outside' of the global scope
-                    register_manager = RegisterManager.getInstance()
                     block = MipsSingleton.getInstance().getCurrentBlock()
                     label = self.globals[node.text].address
-                    symbol_type = self.globals[node.text].symbol_type
-
-                    # if mips_var.symbol_type.getBaseType() == "FLOAT":
-                    #     mips_var = block.l_s(label)
-                    # else:
                     mips_var = block.la(label)
-                        #mips_var = register_manager.getInstance().storeVariable(block, mips_var, symbol_type.getBytesUsed())
                     self.mips_map[node] = mips_var
                     mips_var.symbol_type = SymbolTypePtr(entry_sym.getTypeObject(), False)
                     self.map_table.addEntry(MapEntry(node.text, mips_var), entry_sym)
@@ -240,12 +236,8 @@ class AST2MIPS(ASTVisitor):
                         """
                         d = Declaration.declare("", SymbolTypePtr(entry_sym.getTypeObject(), False), 0)
                         self.mips_map[node] = d
-
-
             else:
                 mips_var = entry.llvm
-                #if isinstance(mips_var, Memory):
-                    #print("mipsvar", mips_var.address, node.text)
 
                 self.mips_map[node] = mips_var
 
@@ -280,9 +272,7 @@ class AST2MIPS(ASTVisitor):
                 else:
                     value = []
                     for c in node.getChild(1).children:
-                        print("c", c.text)
                         value.append(c.text)
-
 
             mips_var = Declaration.declare(var_node.text, entry.getTypeObject(), value, is_global=True)
             self.mips_map[node] = mips_var
@@ -304,7 +294,6 @@ class AST2MIPS(ASTVisitor):
 
         with open(self.fileName, 'w') as f:
             f.write(str(MipsSingleton.getInstance().getModule().toString()))
-
 
     def handleFunction(self, node: ASTNode):
         function_name = node.getChild(0).text
@@ -452,8 +441,6 @@ class AST2MIPS(ASTVisitor):
                     mips_var.symbol_type = SymbolType("BOOL", False)
                 else:
                     mips_var.symbol_type = left.symbol_type
-
-        #mips_var.symbol_type = node.getSymbolTable().getEntry()
         self.mips_map[node] = mips_var
 
     def handleConversions(self, node: ASTNode):

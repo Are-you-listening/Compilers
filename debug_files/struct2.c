@@ -1,13 +1,24 @@
 #include <stdio.h>
 
-int main(){
+void printPyramid(int rows, char toPrint)
+{
 
-    int a = 1;
-    int b = 0;
+   int i = 1;
+   while (i <= rows) {
+        int j = 1;
+      while (j < i) {
+         printf("%c", toPrint);
+         j++;
+      }
+        printf("%c\n", toPrint);
+      i++;
+   }
+}
 
-    if (a && b){
-        printf("%d", 1);
-    }
-
-    return 0;
+int main() {
+    char toPrint = '*';
+    //printf("%c", toPrint);
+    int rows = 5;
+    printPyramid(rows, toPrint);
+   return 0;
 }
