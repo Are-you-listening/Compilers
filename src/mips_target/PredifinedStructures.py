@@ -148,7 +148,7 @@ class SpecialFunctions:
         fp_register = Memory(30, True)
 
         val1 = base_block.lw(fp_register, 4)
-        val2 = base_block.lw(fp_register, 4)
+        val2 = base_block.lw(fp_register, 8)
 
         v0 = Memory(2, True)
 
@@ -181,3 +181,41 @@ class SpecialFunctions:
         function.endFunction()
         return function
 
+    @staticmethod
+    def realloc(func_type):
+        function: Function = MipsSingleton.getInstance().getModule().createFunction("realloc", func_type)
+
+        base_block = function.createBlock()
+        loop_block = function.createBlock()
+
+        fp_register = Memory(30, True)
+
+        v0 = Memory(2, True)
+
+        a0 = Memory(4, True)
+
+        original_ptr = base_block.lw(fp_register, 4)
+        new_size = base_block.lw(fp_register, 8)
+
+        base_block.move(a0, new_size)
+        temp_reg = base_block.li(9)
+        temp_reg.overrideMemory(v0)
+        base_block.systemCall()
+
+        base_block.j(loop_block.label)
+        temp = loop_block.addui(new_size, -1)
+        temp.overrideMemory(new_size)
+
+        var_ptr = loop_block.addui(v0, 0)
+        clear_location = loop_block.addu(var_ptr, new_size)
+        old_location = loop_block.addu(original_ptr, new_size)
+
+        temp_val = loop_block.lb(old_location, 0)
+
+        loop_block.sb(temp_val, clear_location, 0)
+
+        temp_zero = loop_block.li(0)
+        loop_block.bne(temp_zero, new_size, loop_block.label)
+
+        function.endFunction()
+        return function

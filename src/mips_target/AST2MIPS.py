@@ -20,7 +20,7 @@ class AST2MIPS(ASTVisitor):
         self.comments = comments
         self.special_functions_declared = {}
         self.special_func_creator = {"malloc": SpecialFunctions.malloc, "free": SpecialFunctions.free,
-                                     "calloc": SpecialFunctions.calloc}
+                                     "calloc": SpecialFunctions.calloc, "realloc": SpecialFunctions.realloc}
         self.branch_needed = []
         self.last_vertex = None
         self.globals = {}

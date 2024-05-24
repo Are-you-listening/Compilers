@@ -2,7 +2,7 @@
 #include <stdlib.h>
 int main(){
 
-    int* ptr = (int*) malloc(5);
+    int* ptr = (int*) malloc(5*4);
     *(ptr+3) = 1;
 
     printf("%c", *(ptr+3));
