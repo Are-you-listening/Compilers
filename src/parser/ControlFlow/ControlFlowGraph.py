@@ -152,7 +152,7 @@ class Vertex:
                                          self.mips.counter - false_edge.to_vertex.mips.start_counter,
                                          Memory("sp", True))
 
-                if false_edge.to_vertex.mips.terminated:
+                if false_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self):
                     RegisterManager.getInstance().loadIfNeeded(self.mips, [self.mips.stack_val])
                     print("v", false_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self))
                     stack_buf = self.mips.addui(Memory("sp", True), 0)
@@ -166,7 +166,7 @@ class Vertex:
                                          (self.mips.counter - false_edge.to_vertex.mips.start_counter)*-1,
                                          Memory("sp", True))
 
-                if false_edge.to_vertex.mips.terminated:
+                if false_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self):
                     print("sp1", stack_buf.address)
                     self.mips.move(Memory("sp", True), stack_buf)
 
@@ -177,9 +177,8 @@ class Vertex:
                                          self.mips.counter - true_edge.to_vertex.mips.start_counter,
                                          Memory("sp", True))
 
-                if true_edge.to_vertex.mips.terminated:
+                if true_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self):
                     RegisterManager.getInstance().loadIfNeeded(self.mips, [self.mips.stack_val])
-                    print("sp2", stack_buf.address)
                     print("v", true_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self))
                     self.mips.move(Memory("sp", True), self.mips.stack_val)
 

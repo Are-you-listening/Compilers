@@ -1,18 +1,17 @@
 #include <stdio.h>
 
-int main(){
-    char a = 0;
-    char b = 1;
-
-    printf("%d", a || b);
-    printf("%d", !(a || b));
-
-    char c = 0;
-    char d = 0;
-    printf("%d", c && d);
-    printf("%d", c || d);
 
 
-    return 0;
+int main() {
+    int i = 1;
+   while (i <= 3) {
+        int j = 1;
+      while (j < i) {
+         printf("%c", '*');
+         j++;
+      }
+        printf("%c\n", '*');
+      i++;
+   }
+   return 0;
 }
-

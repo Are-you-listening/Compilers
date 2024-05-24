@@ -6,8 +6,6 @@ class ControlFlowDotVisitor:
     def __init__(self, function_name, outfile="ControlFlow", mips: bool = False):
         self.filename = outfile.split('.')[0]
         self.filename = self.filename + "_" + function_name
-        if mips:
-            self.filename += "_mips"
         self.outfile = open(self.filename + ".dot", "w")
         self.outfile.write("digraph AST {\n")
         self.edge_blacklist = []
