@@ -232,6 +232,7 @@ class Block:
         return instr.getAddress()
 
     def move(self, rt: Memory, rs: Memory):
+
         RegisterManager.getInstance().loadIfNeeded(self, [rs, rt])
 
         instr = Move(rt, rs)

@@ -119,12 +119,12 @@ class Vertex:
 
                 self.mips.addui_function(Memory("sp", True), self.mips.counter - true_edge.to_vertex.mips.start_counter,
                                          Memory("sp", True))
-                if true_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self):
-                    RegisterManager.getInstance().loadIfNeeded(self.mips, [self.mips.stack_val])
+                if true_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self) and true_edge.to_vertex.mips.terminated:
+                    RegisterManager.getInstance().loadIfNeeded(self.mips, [true_edge.to_vertex.mips.stack_val])
                     print("sp3", true_edge.to_vertex.mips.stack_val)
                     print("v", true_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self))
                     print("quickie", self.mips.label, self.mips.counter)
-                    self.mips.move(Memory("sp", True), self.mips.stack_val)
+                    self.mips.move(Memory("sp", True), true_edge.to_vertex.mips.stack_val)
 
                 self.mips.j(true_edge.to_vertex.mips.label)
                 self.mips.terminated = True
@@ -152,11 +152,12 @@ class Vertex:
                                          self.mips.counter - false_edge.to_vertex.mips.start_counter,
                                          Memory("sp", True))
 
-                if false_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self):
-                    RegisterManager.getInstance().loadIfNeeded(self.mips, [self.mips.stack_val])
+                if false_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self) and false_edge.to_vertex.mips.terminated:
+                    print("quickie3", self.mips.label, self.mips.counter)
+                    RegisterManager.getInstance().loadIfNeeded(self.mips, [false_edge.to_vertex.mips.stack_val])
                     print("v", false_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self))
                     stack_buf = self.mips.addui(Memory("sp", True), 0)
-                    self.mips.move(Memory("sp", True), self.mips.stack_val)
+                    self.mips.move(Memory("sp", True), false_edge.to_vertex.mips.stack_val)
 
                 print("counterspace", self.mips.counter - true_edge.to_vertex.mips.start_counter)
                 print("counterspace", self.mips.counter - false_edge.to_vertex.mips.start_counter)
@@ -166,7 +167,7 @@ class Vertex:
                                          (self.mips.counter - false_edge.to_vertex.mips.start_counter)*-1,
                                          Memory("sp", True))
 
-                if false_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self):
+                if false_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self) and false_edge.to_vertex.mips.terminated:
                     print("sp1", stack_buf.address)
                     self.mips.move(Memory("sp", True), stack_buf)
 
@@ -177,10 +178,13 @@ class Vertex:
                                          self.mips.counter - true_edge.to_vertex.mips.start_counter,
                                          Memory("sp", True))
 
-                if true_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self):
-                    RegisterManager.getInstance().loadIfNeeded(self.mips, [self.mips.stack_val])
+                if true_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self) and true_edge.to_vertex.mips.terminated:
+                    print("s", ControlFlowGraph.get_reverse_vertices(self))
+                    print("s2", self.reverse_edges)
+                    RegisterManager.getInstance().loadIfNeeded(self.mips, [true_edge.to_vertex.mips.stack_val])
+                    print("quickie2", self.mips.label, self.mips.counter)
                     print("v", true_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self))
-                    self.mips.move(Memory("sp", True), self.mips.stack_val)
+                    self.mips.move(Memory("sp", True), true_edge.to_vertex.mips.stack_val)
 
 
                 self.mips.j(true_edge.to_vertex.mips.label)
