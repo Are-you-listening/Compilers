@@ -196,16 +196,9 @@ class AST2MIPS(ASTVisitor):
                 self.mips_map[node] = mips_var
 
                 if not node.getSymbolTable().isRoot() and entry_sym.firstDeclared.getSymbolTable().isRoot():  # First use of the global value 'outside' of the global scope
-                    register_manager = RegisterManager.getInstance()
                     block = MipsSingleton.getInstance().getCurrentBlock()
                     label = self.globals[node.text].address
-                    symbol_type = self.globals[node.text].symbol_type
-
-                    # if mips_var.symbol_type.getBaseType() == "FLOAT":
-                    #     mips_var = block.l_s(label)
-                    # else:
                     mips_var = block.la(label)
-                        #mips_var = register_manager.getInstance().storeVariable(block, mips_var, symbol_type.getBytesUsed())
                     self.mips_map[node] = mips_var
                     mips_var.symbol_type = SymbolTypePtr(entry_sym.getTypeObject(), False)
                     self.map_table.addEntry(MapEntry(node.text, mips_var), entry_sym)
@@ -216,8 +209,6 @@ class AST2MIPS(ASTVisitor):
                         """
                         d = Declaration.declare("", SymbolTypePtr(entry_sym.getTypeObject(), False), 0)
                         self.mips_map[node] = d
-
-
             else:
                 mips_var = entry.llvm
 
@@ -242,7 +233,7 @@ class AST2MIPS(ASTVisitor):
 
     def handleDeclaration(self, node):
         var_node: ASTNode = node.getChild(0)
-        entry = var_node.getSymbolTable().getEntry(var_node.text)
+        entry = var_node.getSymbolTable().getEntry(var_node.text, var_node.position.virtual_linenr)
 
         if var_node.getSymbolTable().isRoot():
             # Handle global variable (add to .data segment)
@@ -256,7 +247,6 @@ class AST2MIPS(ASTVisitor):
                     for c in node.getChild(1).children:
                         print("c", c.text)
                         value.append(c.text)
-
 
             mips_var = Declaration.declare(var_node.text, entry.getTypeObject(), value, is_global=True)
             self.mips_map[node] = mips_var
@@ -278,7 +268,6 @@ class AST2MIPS(ASTVisitor):
 
         with open(self.fileName, 'w') as f:
             f.write(str(MipsSingleton.getInstance().getModule().toString()))
-
 
     def handleFunction(self, node: ASTNode):
         function_name = node.getChild(0).text
@@ -426,8 +415,6 @@ class AST2MIPS(ASTVisitor):
                     mips_var.symbol_type = SymbolType("BOOL", False)
                 else:
                     mips_var.symbol_type = left.symbol_type
-
-        #mips_var.symbol_type = node.getSymbolTable().getEntry()
         self.mips_map[node] = mips_var
 
     def handleConversions(self, node: ASTNode):
@@ -443,7 +430,6 @@ class AST2MIPS(ASTVisitor):
             from_type = var.symbol_type
 
         to_type = node.getChild(0).symbol_type
-        print("he", to_type.getType(), from_type.getType())
         if (to_type.getType() == from_type.getType()) and (to_type.getPtrAmount() == from_type.getPtrAmount()):
             other_mem = Memory(var.getAddress(), var.is_loaded)
             other_mem.symbol_type = to_type

@@ -84,8 +84,6 @@ class Block:
         The reason it is, is because we cannot have any spill overhead during this procedure
 
         """
-
-
         instr = Lw(rt, rs, load_value, False, "")
         self.instructions.append(instr)
         return instr.getAddress()
