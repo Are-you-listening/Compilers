@@ -68,11 +68,7 @@ class AST2MIPS(ASTVisitor):
                         rev = r.from_vertex
                         if rev.mips is None:
                             continue
-                        print("curr count", rev.mips.counter)
                         counter_max = max(counter_max, rev.mips.counter)
-                    print("max", counter_max)
-
-                    #print("overtime", counter_max)
 
                     node.vertex.mips.counter = counter_max
                     node.vertex.mips.start_counter = counter_max
@@ -82,7 +78,7 @@ class AST2MIPS(ASTVisitor):
                     self.mips_map[node] = current_stack
 
                     #print("currstack", current_stack, node.vertex.mips.label)
-                    print("hello", current_stack)
+
                     node.vertex.mips.stack_val = current_stack
 
                 MipsSingleton.getInstance().setCurrentBlock(node.vertex.mips)
@@ -135,9 +131,6 @@ class AST2MIPS(ASTVisitor):
                             index -= 1
 
                         block.move(Memory("v0", True), block.instructions[index].getAddress())
-                    print("end block", self.last_vertex.mips.stack_val.address)
-
-                    print("end block", self.last_vertex.mips.stack_val.address)
 
                 RegisterManager.getInstance().spillAll(self.last_vertex.mips)
 
