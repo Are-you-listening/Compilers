@@ -71,6 +71,8 @@ class RegisterManager:
         var.is_loaded = True
 
     def spill(self, block, reg: str):
+        print("spiller", reg, self.curr_function.get(block.function.getFunctionName()), block.label,
+              block.function.getFunctionName())
         """
         Spill a register to memory
         :return:
@@ -94,14 +96,15 @@ class RegisterManager:
             sp = self.getMemoryObject("sp")
 
             block.addui_function(sp, -4, sp)  # Adjust frame/stack ptr
+            block.comment(f"#1 {-(block.function.getOffset() + counter)}")
             block.sw_spill(var, fp, -(block.function.getOffset()+counter))  # Store to new ptr
             function_spill_map[var] = -(block.function.getOffset()+counter)
             self.register_spill_map[block.function.getFunctionName()] = function_spill_map
 
             var.is_loaded = False
             var.address = block.function.getOffset() + counter
-            self.registers[reg] = None
 
+            self.registers[reg] = None
 
         else:
             """
@@ -285,6 +288,9 @@ class RegisterManager:
         if symbol_type.getPtrAmount() == 0:
             return value
 
+        print("bef", self.curr_function.get(block.function.getFunctionName()), block.label,
+              block.function.getFunctionName(), block.function.getOffset()+self.curr_function.get(block.function.getFunctionName(),0)+4)
+
         self.loadIfNeeded(block, [value])
 
         if block.function.getFunctionName() not in self.curr_function:
@@ -379,6 +385,9 @@ class RegisterManager:
             store_ptr = block.addui(sp, 4)
 
         store_ptr.symbol_type = symbol_type
+        block.comment(f"#2 {-(block.function.getOffset() + self.curr_function[block.function.getFunctionName()])}")
+        print("aft", self.curr_function.get(block.function.getFunctionName()), block.label,
+              block.function.getFunctionName(), store_ptr.address)
 
         return store_ptr
 
@@ -390,6 +399,7 @@ class RegisterManager:
             if v is None:
                 continue
 
+            print("offset", block.function.getOffset())
             self.spill(block, k)
 
     def claimStack(self, block, needed: int):

@@ -51,6 +51,10 @@ class Block:
         self.label = label
         self.instructions: list[Instruction] = []
         self.function = function
+        self.terminated = False
+        self.stack_val = None
+        self.counter = 0
+        self.start_counter = 0
 
     def manual_label(self, label: str):
         instr = self.instructions.append(Manual_Label(label))
@@ -71,8 +75,9 @@ class Block:
         :param global_name:
         :return:
         """
+
         rt = RegisterManager.getInstance().allocate(self)
-        RegisterManager.getInstance().loadIfNeeded(self, [rs])
+        RegisterManager.getInstance().loadIfNeeded(self, [rs, rt])
 
         instr = Lw(rt, rs, load_value, load_global, global_name)
         self.instructions.append(instr)
@@ -84,6 +89,7 @@ class Block:
         The reason it is, is because we cannot have any spill overhead during this procedure
 
         """
+        print("lw", load_value)
 
 
         instr = Lw(rt, rs, load_value, False, "")
@@ -171,7 +177,8 @@ class Block:
         Store function that only be used in spill, because it will not load
         the variable it needs to store
         """
-
+        if immediate == -140:
+            print("sw", immediate)
         return self.__handle_large_immediate(rt, rs, immediate, Sw)
 
     def sb_spill(self, rt: Memory, rs: Memory, immediate: int):
@@ -514,7 +521,6 @@ class Block:
         Get a specific parameter provided base on the parameter index
         """
         fp_register = Memory(30, True)
-
         instr = self.lw(fp_register, 4*(index+1))
         return instr
 

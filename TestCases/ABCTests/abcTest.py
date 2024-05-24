@@ -180,6 +180,7 @@ class LLVMTest(unittest.TestCase, ABC):
                     """
                     #sys.stdout = original
                     print('a', out.stdout, 'b', c_out.stdout)
+
                     assert out.stdout == c_out.stdout
 
                     """

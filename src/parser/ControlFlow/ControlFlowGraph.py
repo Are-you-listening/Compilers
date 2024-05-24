@@ -88,7 +88,6 @@ class Vertex:
         if true_edge.flip_eval and mips:
             self.mips.xor(self.mips.instructions[-1].getAddress(), self.mips.li(1))
 
-
     def create_branch(self, mips: bool= False):
         if len(self.edges) != 2:
             return
@@ -116,7 +115,19 @@ class Vertex:
             make branch statement a boolean
             """
             if mips:
+                RegisterManager.getInstance().curr_function[self.mips.function.getFunctionName()] = self.mips.counter
+
+                self.mips.addui_function(Memory("sp", True), self.mips.counter - true_edge.to_vertex.mips.start_counter,
+                                         Memory("sp", True))
+                if true_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self):
+                    RegisterManager.getInstance().loadIfNeeded(self.mips, [self.mips.stack_val])
+                    print("sp3", true_edge.to_vertex.mips.stack_val)
+                    print("v", true_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self))
+                    print("quickie", self.mips.label, self.mips.counter)
+                    self.mips.move(Memory("sp", True), self.mips.stack_val)
+
                 self.mips.j(true_edge.to_vertex.mips.label)
+                self.mips.terminated = True
             else:
                 self.llvm.branch(true_edge.to_vertex.llvm.block)
 
@@ -135,11 +146,46 @@ class Vertex:
                 """
                 If false
                 """
+                RegisterManager.getInstance().curr_function[self.mips.function.getFunctionName()] = self.mips.counter
+
+                self.mips.addui_function(Memory("sp", True),
+                                         self.mips.counter - false_edge.to_vertex.mips.start_counter,
+                                         Memory("sp", True))
+
+                if false_edge.to_vertex.mips.terminated:
+                    RegisterManager.getInstance().loadIfNeeded(self.mips, [self.mips.stack_val])
+                    print("v", false_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self))
+                    stack_buf = self.mips.addui(Memory("sp", True), 0)
+                    self.mips.move(Memory("sp", True), self.mips.stack_val)
+
+                print("counterspace", self.mips.counter - true_edge.to_vertex.mips.start_counter)
+                print("counterspace", self.mips.counter - false_edge.to_vertex.mips.start_counter)
+
                 self.mips.beq(Memory(r, True), Memory("zero", True), false_edge.to_vertex.mips.label)
+                self.mips.addui_function(Memory("sp", True),
+                                         (self.mips.counter - false_edge.to_vertex.mips.start_counter)*-1,
+                                         Memory("sp", True))
+
+                if false_edge.to_vertex.mips.terminated:
+                    print("sp1", stack_buf.address)
+                    self.mips.move(Memory("sp", True), stack_buf)
+
                 """
                 If True, just do a jump
                 """
+                self.mips.addui_function(Memory("sp", True),
+                                         self.mips.counter - true_edge.to_vertex.mips.start_counter,
+                                         Memory("sp", True))
+
+                if true_edge.to_vertex.mips.terminated:
+                    RegisterManager.getInstance().loadIfNeeded(self.mips, [self.mips.stack_val])
+                    print("sp2", stack_buf.address)
+                    print("v", true_edge.to_vertex in ControlFlowGraph.get_reverse_vertices(self))
+                    self.mips.move(Memory("sp", True), self.mips.stack_val)
+
+
                 self.mips.j(true_edge.to_vertex.mips.label)
+                self.mips.terminated = True
             else:
                 last_instruction = ControlFlowGraph.makeBool(self.llvm)
                 self.llvm.cbranch(last_instruction, true_edge.to_vertex.llvm.block, false_edge.to_vertex.llvm.block)
@@ -166,8 +212,8 @@ class Vertex:
         """
         bool_type = ir.IntType(1)
         if mips:
-            phi: Memory = RegisterManager.getInstance().allocate(self.mips)
-
+            phi: Memory = Memory("a1", True)
+            print("phi_location", phi)
 
         else:
             phi: ir.PhiInstr = self.llvm.phi(bool_type)
@@ -180,7 +226,6 @@ class Vertex:
             sort_lambda = lambda x: x.mips.label
         else:
             sort_lambda = lambda x: x.llvm.block.name
-
 
         for vertex in sorted(list(edge_true_list.union(edge_false_list)), key=sort_lambda):
             in_true = vertex in edge_true_list
@@ -646,6 +691,19 @@ class ControlFlowGraph:
                     assert re.to_vertex == e.to_vertex
                     assert re in re.from_vertex.edges
                 assert e in e.to_vertex.reverse_edges
+
+    @staticmethod
+    def get_reverse_vertices(vertex):
+        s = [vertex]
+        visited = set(s)
+
+        while len(s) > 0:
+            t = s.pop()
+            for r in t.reverse_edges:
+                if r.from_vertex not in visited and r.from_vertex not in s:
+                    visited.add(r.from_vertex)
+                    s.append(r.from_vertex)
+        return visited
 
     @staticmethod
     def while_statement(in_cfg: "ControlFlowGraph", always_true=False):

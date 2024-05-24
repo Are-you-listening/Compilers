@@ -1354,6 +1354,7 @@ class FunctionMet:
 
         RegisterManager.getInstance().loadIfNeeded(block, params)
 
+        RegisterManager.getInstance().curr_function[block.function.getFunctionName()] += alloc_size
         block.addui_function(sp_frame, -alloc_size, sp_frame)
         for i, p in enumerate(params):
             block.sw(p, sp_frame, (i+1)*4)
@@ -1375,6 +1376,7 @@ class FunctionMet:
             block.lw_function(sp_frame, (i + 1) * 4, p)
 
         block.addui_function(sp_frame, alloc_size, sp_frame)
+        RegisterManager.getInstance().curr_function[block.function.getFunctionName()] -= alloc_size
 
     @staticmethod
     def handleReturn(return_value: Memory):

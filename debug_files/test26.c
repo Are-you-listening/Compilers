@@ -1,17 +1,18 @@
 #include <stdio.h>
 
-float mul(int** b){
-    printf("%d;", **b);
-    return 5.4;
-}
+int main(){
+    char a = 0;
+    char b = 1;
 
-int main() {
-    float (*m)(int**) = &mul;
+    printf("%d", a || b);
+    printf("%d", !(a || b));
 
-    int c = 6;
-    int* a = &c;
-    int** d = &a;
-    printf("%d", (int) m(d));
+    char c = 0;
+    char d = 0;
+    printf("%d", c && d);
+    printf("%d", c || d);
+
 
     return 0;
 }
+

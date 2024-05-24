@@ -7,6 +7,7 @@ from src.internal_tools import PreConditions
 from src.mips_target.OutputMIPSGenerator import *
 from .MipsSingleton import MipsSingleton
 from .PredifinedStructures import SpecialFunctions
+from ..parser.ControlFlow.ControlFlowGraph import ControlFlowGraph
 
 
 class AST2MIPS(ASTVisitor):
@@ -19,7 +20,7 @@ class AST2MIPS(ASTVisitor):
         self.comments = comments
         self.special_functions_declared = {}
         self.special_func_creator = {"malloc": SpecialFunctions.malloc}
-        self.branch_needed = set()
+        self.branch_needed = []
         self.last_vertex = None
         self.globals = {}
 
@@ -27,7 +28,7 @@ class AST2MIPS(ASTVisitor):
         self.special_functions_declared = {}
         self.map_table = MapTable(None)
         self.mips_map = {}
-        self.branch_needed = set()
+        self.branch_needed = []
         self.last_vertex = None
         self.globals = {}
 
@@ -61,6 +62,28 @@ class AST2MIPS(ASTVisitor):
 
                 if node.vertex.mips is None:
                     node.vertex.mips = MipsSingleton.getInstance().addBlock()
+
+                    counter_max = 0
+                    for r in node.vertex.reverse_edges:
+                        rev = r.from_vertex
+                        if rev.mips is None:
+                            continue
+                        print("curr count", rev.mips.counter)
+                        counter_max = max(counter_max, rev.mips.counter)
+                    print("max", counter_max)
+
+                    #print("overtime", counter_max)
+
+                    node.vertex.mips.counter = counter_max
+                    node.vertex.mips.start_counter = counter_max
+                    RegisterManager.getInstance().curr_function[node.vertex.mips.function.getFunctionName()] = counter_max
+
+                    current_stack = node.vertex.mips.addui(Memory("sp", True), 0)
+                    self.mips_map[node] = current_stack
+
+                    #print("currstack", current_stack, node.vertex.mips.label)
+                    print("hello", current_stack)
+                    node.vertex.mips.stack_val = current_stack
 
                 MipsSingleton.getInstance().setCurrentBlock(node.vertex.mips)
 
@@ -97,10 +120,10 @@ class AST2MIPS(ASTVisitor):
                 an instruction, so in those cases we need to pass it to the create branch, in case it needs to create 
                 a conditional branch
                 """
-
-                self.branch_needed.add(self.last_vertex)
+                block = MipsSingleton.getInstance().getCurrentBlock()
+                if self.last_vertex not in self.branch_needed:
+                    self.branch_needed.append(self.last_vertex)
                 if len(self.last_vertex.edges) == 2:
-                    block = MipsSingleton.getInstance().getCurrentBlock()
 
                     if len(block.instructions) > 0 and self.last_vertex.edges[0].to_vertex != self.last_vertex.edges[1].to_vertex:
                         index = -1
@@ -112,8 +135,18 @@ class AST2MIPS(ASTVisitor):
                             index -= 1
 
                         block.move(Memory("v0", True), block.instructions[index].getAddress())
+                    print("end block", self.last_vertex.mips.stack_val.address)
 
-                    RegisterManager.getInstance().spillAll(self.last_vertex.mips)
+                    print("end block", self.last_vertex.mips.stack_val.address)
+
+                RegisterManager.getInstance().spillAll(self.last_vertex.mips)
+
+                #print("overtimer1", node.vertex.mips.counter)
+                node.vertex.mips.counter = RegisterManager.getInstance().curr_function[
+                    node.vertex.mips.function.getFunctionName()]
+                #print("overtimer2", node.vertex.mips.counter)
+
+
             return
 
         if isinstance(node, ASTNodeBlock) and node.text == "PHI":
@@ -211,6 +244,8 @@ class AST2MIPS(ASTVisitor):
 
             else:
                 mips_var = entry.llvm
+                #if isinstance(mips_var, Memory):
+                    #print("mipsvar", mips_var.address, node.text)
 
                 self.mips_map[node] = mips_var
 
@@ -233,7 +268,7 @@ class AST2MIPS(ASTVisitor):
 
     def handleDeclaration(self, node):
         var_node: ASTNode = node.getChild(0)
-        entry = var_node.getSymbolTable().getEntry(var_node.text)
+        entry = var_node.getSymbolTable().getEntry(var_node.text, var_node.position.virtual_linenr)
 
         if var_node.getSymbolTable().isRoot():
             # Handle global variable (add to .data segment)
@@ -434,7 +469,6 @@ class AST2MIPS(ASTVisitor):
             from_type = var.symbol_type
 
         to_type = node.getChild(0).symbol_type
-        print("he", to_type.getType(), from_type.getType())
         if (to_type.getType() == from_type.getType()) and (to_type.getPtrAmount() == from_type.getPtrAmount()):
             other_mem = Memory(var.getAddress(), var.is_loaded)
             other_mem.symbol_type = to_type
