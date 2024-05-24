@@ -126,30 +126,25 @@ class AST2MIPS(ASTVisitor):
                 if len(self.last_vertex.edges) == 2:
 
                     if len(block.instructions) > 0 and self.last_vertex.edges[0].to_vertex != self.last_vertex.edges[1].to_vertex:
-                        valid_instr_found = False
-                        for instr in block.instructions:
-                            """
-                            check that the instructions are not just all comments
-                            """
-                            if not isinstance(instr, S.Comment):
-                                valid_instr_found = True
+                        index = -1
+                        while True:
+
+                            t = block.instructions[index].getAddress()
+                            if t is not None:
                                 break
+                            index -= 1
 
-                        if valid_instr_found:
+                        block.move(Memory("v0", True), block.instructions[index].getAddress())
+                    print("end block", self.last_vertex.mips.stack_val.address)
 
-                            index = -1
-                            while True:
+                    print("end block", self.last_vertex.mips.stack_val.address)
 
-                                t = block.instructions[index].getAddress()
-                                if t is not None:
-                                    break
-                                index -= 1
+                RegisterManager.getInstance().spillAll(self.last_vertex.mips)
 
-                            block.move(Memory("v0", True), block.instructions[index].getAddress())
-
-                    RegisterManager.getInstance().spillAll(self.last_vertex.mips)
-                    node.vertex.mips.counter = RegisterManager.getInstance().curr_function[
-                        node.vertex.mips.function.getFunctionName()]
+                #print("overtimer1", node.vertex.mips.counter)
+                node.vertex.mips.counter = RegisterManager.getInstance().curr_function[
+                    node.vertex.mips.function.getFunctionName()]
+                #print("overtimer2", node.vertex.mips.counter)
             return
 
         if isinstance(node, ASTNodeBlock) and node.text == "PHI":
