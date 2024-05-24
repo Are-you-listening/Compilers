@@ -1,5 +1,5 @@
 digraph AST {
-  "128829991771136" [label="%\".2\" = .2:
+  "131770531032192" [label="%\".2\" = .2:
   %\".3\" = alloca i32, align 4
   ;    enum week { Mon , Tue , Wed , Thur , Fri , Sat , Sun } ;  INT main ( ) { enum week day ;
   store i32 2, i32* %\".3\", align 4

@@ -70,7 +70,6 @@ class AccessWrapper:
             real_index = block.li(offset)
             instr = block.addu(location, real_index)
 
-        print("i", index, symbol_type.getPtrTuple())
         instr.symbol_type = symbol_type
 
         return instr
@@ -1436,34 +1435,23 @@ class Conversion:
                     sub_size = temp.deReference().getBytesUsed()
 
                 change = int(sub_size)
-                print("c", change, sub_size)
-
-
 
                 t_list = []
                 for s in range(size):
 
                     t = block.addui(var, int((s+1)*change))
                     t_list.append(t)
-                    print("t2", t)
-
-                print("claimed", len(t_list)*4)
 
                 RegisterManager.getInstance().claimStack(block, (size + 1) * 4)
                 store_loc = block.addui(Memory("sp", True), 4)
 
                 for i, t in enumerate(t_list):
-                    print("used", 4)
                     block.sw(t, store_loc, 4*(i))
 
                 var = store_loc
                 RegisterManager.getInstance().claimStack(block, 4)
                 block.sw(var,Memory("sp", True), 4)
                 var = block.addui(Memory("sp", True), 4)
-                print("final_var", var)
-
-                print(size, sub_size)
-                print("t", temp.getPtrTuple())
 
             var.symbol_type = to_type
             return var
@@ -1489,8 +1477,6 @@ class Conversion:
 
         c = conversion_dict.get((from_type.getType(), to_type.getType()))
         if c is None:
-            print(type(from_type))
-            print("conv", from_type.getPtrTuple(), to_type.getPtrTuple())
             var.symbol_type = to_type
             return var
         var = c(var)

@@ -1,10 +1,24 @@
 #include <stdio.h>
 
-int main(){
-char* c = "llla";
+void printPyramid(int rows, char toPrint)
+{
 
-printf("%c", *c);
-printf("%c", *(c+1));
-return 0;
+   int i = 1;
+   while (i <= rows) {
+        int j = 1;
+      while (j < i) {
+         printf("%c", toPrint);
+         j++;
+      }
+        printf("%c\n", toPrint);
+      i++;
+   }
+}
 
+int main() {
+    char toPrint = '*';
+    //printf("%c", toPrint);
+    int rows = 5;
+    printPyramid(rows, toPrint);
+   return 0;
 }

@@ -245,7 +245,6 @@ class AST2MIPS(ASTVisitor):
                 else:
                     value = []
                     for c in node.getChild(1).children:
-                        print("c", c.text)
                         value.append(c.text)
 
             mips_var = Declaration.declare(var_node.text, entry.getTypeObject(), value, is_global=True)
