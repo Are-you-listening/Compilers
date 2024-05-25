@@ -1,0 +1,20 @@
+digraph AST {
+  "131960298467056" [label="L2:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+addiu $t0, $0, 0
+move $v0, $t0
+j function_main_load
+# INT main ( ) {      return 0 ; 
+
+#/*
+#    *
+#    * multiline comment
+#    *
+#    * / */
+
+addiu $29, $29, -4
+sw $t0, -104($30)
+"];
+}

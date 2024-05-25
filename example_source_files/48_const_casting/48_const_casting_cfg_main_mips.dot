@@ -1,0 +1,57 @@
+digraph AST {
+  "131960298465664" [label="L2:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+addiu $t1, $0, 5
+li $t2, 0
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+sw $t1, 0($t3)
+#   INT main ( ) { const INT n = 5 ; 
+
+li $t5, 0
+addiu $29, $29, -4
+sw $t5, 4($29)
+addiu $t6, $29, 4
+addiu $29, $29, -4
+sw $t6, 4($29)
+addiu $t7, $29, 4
+sw $t3, 0($t7)
+#INT * n_ptr = & n ; 
+
+lw $t8, 0($t7)
+#* n_ptr = 7 ; 
+
+addiu $t9, $0, 7
+sw $t9, 0($t8)
+addiu $s0, $0, 0
+move $v0, $s0
+j function_main_load
+#return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -116($30)
+addiu $29, $29, -4
+sw $t1, -120($30)
+addiu $29, $29, -4
+sw $t2, -124($30)
+addiu $29, $29, -4
+sw $t3, -128($30)
+addiu $29, $29, -4
+sw $t4, -132($30)
+addiu $29, $29, -4
+sw $t5, -136($30)
+addiu $29, $29, -4
+sw $t6, -140($30)
+addiu $29, $29, -4
+sw $t7, -144($30)
+addiu $29, $29, -4
+sw $t8, -148($30)
+addiu $29, $29, -4
+sw $t9, -152($30)
+addiu $29, $29, -4
+sw $s0, -156($30)
+"];
+}

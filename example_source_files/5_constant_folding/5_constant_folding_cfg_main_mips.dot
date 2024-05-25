@@ -1,0 +1,30 @@
+digraph AST {
+  "131960297926144" [label="L2:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+addiu $t1, $0, 35
+li $t2, 0
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+sw $t1, 0($t3)
+#  INT main ( ) {  INT a = 5 * ( 4 + 3 ) ; 
+
+addiu $t4, $0, 0
+move $v0, $t4
+j function_main_load
+# return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -108($30)
+addiu $29, $29, -4
+sw $t1, -112($30)
+addiu $29, $29, -4
+sw $t2, -116($30)
+addiu $29, $29, -4
+sw $t3, -120($30)
+addiu $29, $29, -4
+sw $t4, -124($30)
+"];
+}

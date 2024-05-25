@@ -1,0 +1,121 @@
+digraph AST {
+  "131960299383696" [label="L2:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+l.s $f0, float...index_0
+mfc1 $t1, $f0
+li $t2, 0
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+sw $t1, 0($t3)
+# INT main ( ) { FLOAT a = 5.0 ; 
+
+addiu $t5, $0, 5
+li $t6, 0
+addiu $29, $29, -4
+sw $t6, 4($29)
+addiu $t7, $29, 4
+sw $t5, 0($t7)
+#INT b = 5 ; 
+
+addiu $t9, $0, 101
+li $s0, 0
+addiu $29, $29, -4
+sw $s0, 4($29)
+addiu $s1, $29, 4
+sb $t9, 0($s1)
+#CHAR c = 'e' ; 
+
+li $s3, 0
+addiu $29, $29, -4
+sw $s3, 4($29)
+addiu $s4, $29, 4
+addiu $29, $29, -4
+sw $s4, 4($29)
+addiu $s5, $29, 4
+sw $t3, 0($s5)
+#FLOAT * d = & a ; 
+
+li $s7, 0
+addiu $29, $29, -4
+sw $s7, 4($29)
+addiu $29, $29, -4
+sw $t0, -128($30)
+addiu $29, $29, -4
+sw $t1, -132($30)
+addiu $29, $29, -4
+sw $t2, -136($30)
+addiu $29, $29, -4
+sw $t3, -140($30)
+addiu $29, $29, -4
+sw $t4, -144($30)
+addiu $29, $29, -4
+sw $t5, -148($30)
+addiu $29, $29, -4
+sw $t6, -152($30)
+addiu $29, $29, -4
+sw $t7, -156($30)
+addiu $29, $29, -4
+sw $t8, -160($30)
+addiu $29, $29, -4
+sw $t9, -164($30)
+addiu $29, $29, -4
+sw $s0, -168($30)
+addiu $29, $29, -4
+sw $s1, -172($30)
+addiu $29, $29, -4
+sw $s2, -176($30)
+addiu $29, $29, -4
+sw $s3, -180($30)
+addiu $29, $29, -4
+sw $s4, -184($30)
+addiu $29, $29, -4
+sw $s5, -188($30)
+addiu $29, $29, -4
+sw $s6, -192($30)
+addiu $29, $29, -4
+sw $s7, -196($30)
+addiu $t0, $29, 4
+addiu $29, $29, -4
+sw $t0, 4($29)
+addiu $t1, $29, 4
+lw $t2, -156($30)
+sw $t2, 0($t1)
+#INT * e = & b ; 
+
+li $t4, 0
+addiu $29, $29, -4
+sw $t4, 4($29)
+addiu $t5, $29, 4
+addiu $29, $29, -4
+sw $t5, 4($29)
+addiu $t6, $29, 4
+lw $t7, -172($30)
+sw $t7, 0($t6)
+#CHAR * f = & c ; 
+
+addiu $t8, $0, 0
+move $v0, $t8
+j function_main_load
+#return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -212($30)
+addiu $29, $29, -4
+sw $t1, -216($30)
+sw $t2, -156($30)
+addiu $29, $29, -4
+sw $t3, -220($30)
+addiu $29, $29, -4
+sw $t4, -224($30)
+addiu $29, $29, -4
+sw $t5, -228($30)
+addiu $29, $29, -4
+sw $t6, -232($30)
+sw $t7, -172($30)
+addiu $29, $29, -4
+sw $t8, -236($30)
+"];
+}

@@ -1,0 +1,114 @@
+digraph AST {
+  "131960296979328" [label="L2:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+l.s $f0, float...index_0
+mfc1 $t1, $f0
+li $t2, 0
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+sw $t1, 0($t3)
+# INT main ( ) { FLOAT a = 5.0 ; 
+
+addiu $t5, $0, 5
+li $t6, 0
+addiu $29, $29, -4
+sw $t6, 4($29)
+addiu $t7, $29, 4
+sw $t5, 0($t7)
+#INT b = 5 ; 
+
+addiu $t9, $0, 101
+li $s0, 0
+addiu $29, $29, -4
+sw $s0, 4($29)
+addiu $s1, $29, 4
+sb $t9, 0($s1)
+#CHAR c = 'e' ; 
+
+l.s $f0, float...index_1
+mfc1 $s3, $f0
+li $s4, 0
+addiu $29, $29, -4
+sw $s4, 4($29)
+addiu $s5, $29, 4
+sw $s3, 0($s5)
+#const FLOAT d = 10.01 ; 
+
+addiu $s7, $0, 2
+addiu $29, $29, -4
+sw $t0, -120($30)
+addiu $29, $29, -4
+sw $t1, -124($30)
+addiu $29, $29, -4
+sw $t2, -128($30)
+addiu $29, $29, -4
+sw $t3, -132($30)
+addiu $29, $29, -4
+sw $t4, -136($30)
+addiu $29, $29, -4
+sw $t5, -140($30)
+addiu $29, $29, -4
+sw $t6, -144($30)
+addiu $29, $29, -4
+sw $t7, -148($30)
+addiu $29, $29, -4
+sw $t8, -152($30)
+addiu $29, $29, -4
+sw $t9, -156($30)
+addiu $29, $29, -4
+sw $s0, -160($30)
+addiu $29, $29, -4
+sw $s1, -164($30)
+addiu $29, $29, -4
+sw $s2, -168($30)
+addiu $29, $29, -4
+sw $s3, -172($30)
+addiu $29, $29, -4
+sw $s4, -176($30)
+addiu $29, $29, -4
+sw $s5, -180($30)
+addiu $29, $29, -4
+sw $s6, -184($30)
+addiu $29, $29, -4
+sw $s7, -188($30)
+li $t0, 0
+addiu $29, $29, -4
+sw $t0, 4($29)
+addiu $t1, $29, 4
+lw $t2, -188($30)
+sw $t2, 0($t1)
+#const INT e = 2 ; 
+
+addiu $t4, $0, 98
+li $t5, 0
+addiu $29, $29, -4
+sw $t5, 4($29)
+addiu $t6, $29, 4
+sb $t4, 0($t6)
+#const CHAR f = 'b' ; 
+
+addiu $t7, $0, 0
+move $v0, $t7
+j function_main_load
+#return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -200($30)
+addiu $29, $29, -4
+sw $t1, -204($30)
+sw $t2, -188($30)
+addiu $29, $29, -4
+sw $t3, -208($30)
+addiu $29, $29, -4
+sw $t4, -212($30)
+addiu $29, $29, -4
+sw $t5, -216($30)
+addiu $29, $29, -4
+sw $t6, -220($30)
+addiu $29, $29, -4
+sw $t7, -224($30)
+"];
+}

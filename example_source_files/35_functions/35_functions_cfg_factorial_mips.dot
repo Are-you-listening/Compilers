@@ -1,0 +1,119 @@
+digraph AST {
+  "131960297726944" [label="L4:
+addiu $29, $29, -4
+sw $t0, -100($30)
+addiu $29, $29, -4
+sw $t1, -104($30)
+addiu $29, $29, -4
+sw $t2, -108($30)
+addiu $29, $29, -4
+sw $t3, -112($30)
+addiu $29, $29, -4
+sw $t4, -116($30)
+addiu $29, $29, -4
+sw $t5, -120($30)
+addiu $29, $29, -4
+sw $t6, -124($30)
+addiu $29, $29, -4
+sw $t7, -128($30)
+addiu $29, $29, -4
+sw $t8, -132($30)
+addiu $29, $29, -4
+sw $t9, -136($30)
+addiu $29, $29, -4
+sw $s0, -140($30)
+addiu $29, $29, -4
+sw $s1, -144($30)
+addiu $29, $29, -4
+sw $s2, -148($30)
+addiu $29, $29, -4
+sw $s3, -152($30)
+addiu $29, $29, -4
+sw $s4, -156($30)
+addiu $29, $29, -4
+sw $s5, -160($30)
+addiu $29, $29, -4
+sw $s6, -164($30)
+addiu $29, $29, -4
+sw $s7, -168($30)
+addiu $t0, $sp, 0
+addiu $t2, $fp, 4
+move $v0, $t2
+addiu $29, $29, -4
+sw $t0, -172($30)
+addiu $29, $29, -4
+sw $t1, -176($30)
+addiu $29, $29, -4
+sw $t2, -180($30)
+lw $t0, -180($30)
+lw $t1, 0($t0)
+#}  INT factorial ( INT n ) { if ( n == 0 ) { 
+
+addiu $t2, $0, 0
+xor $t3, $t1, $t2
+sltiu $t4, $t3, 1
+move $v0, $t4
+sw $t0, -180($30)
+addiu $29, $29, -4
+sw $t1, -184($30)
+addiu $29, $29, -4
+sw $t2, -188($30)
+addiu $29, $29, -4
+sw $t3, -192($30)
+addiu $29, $29, -4
+sw $t4, -196($30)
+addiu $sp, $sp, 0
+beq $v0, $zero, L6
+addiu $sp, $sp, 0
+addiu $sp, $sp, 0
+j L5
+"];
+  "131960297726944" -> "131960297732992" [label="True"];
+  "131960297726944" -> "131960297730736" [label="False"];
+  "131960297732992" [label="L5:
+addiu $t0, $sp, 0
+addiu $t1, $0, 1
+move $v0, $t1
+j function_factorial_load
+#return 1 ; 
+
+addiu $29, $29, -4
+sw $t0, -200($30)
+addiu $29, $29, -4
+sw $t1, -204($30)
+"];
+  "131960297730736" [label="L6:
+addiu $t0, $sp, 0
+lw $t1, -180($30)
+lw $t2, 0($t1)
+#} else { return n * factorial ( n - 1 ) ; 
+
+lw $t3, 0($t1)
+addiu $t4, $0, 1
+sub $t5, $t3, $t4
+addiu $29, $29, -4
+sw $t5, 4($29)
+jal function_factorial
+lw $t5, 4($29)
+addiu $29, $29, 4
+move $t6, $v0
+mul $t7, $t2, $t6
+move $v0, $t7
+j function_factorial_load
+addiu $29, $29, -4
+sw $t0, -200($30)
+sw $t1, -180($30)
+addiu $29, $29, -4
+sw $t2, -204($30)
+addiu $29, $29, -4
+sw $t3, -208($30)
+addiu $29, $29, -4
+sw $t4, -212($30)
+addiu $29, $29, -4
+sw $t5, -216($30)
+addiu $29, $29, -4
+sw $t6, -220($30)
+addiu $29, $29, -4
+sw $t7, -224($30)
+"];
+}

@@ -1,0 +1,116 @@
+digraph AST {
+  "131960298063856" [label="L2:
+addiu $t0, $sp, 0
+move $v0, $t0
+addiu $29, $29, -4
+sw $t0, -100($30)
+addiu $t1, $0, 1
+li $t2, 0
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+sw $t1, 0($t3)
+# INT main ( ) { INT x = 1 ; 
+
+addiu $t5, $0, 2
+li $t6, 0
+addiu $29, $29, -4
+sw $t6, 4($29)
+addiu $t7, $29, 4
+sw $t5, 0($t7)
+#INT y = 2 ; 
+
+lw $t8, 0($t3)
+#if ( x == y ) 
+
+lw $t9, 0($t7)
+xor $s0, $t8, $t9
+sltiu $s1, $s0, 1
+move $v0, $s1
+addiu $29, $29, -4
+sw $t0, -112($30)
+addiu $29, $29, -4
+sw $t1, -116($30)
+addiu $29, $29, -4
+sw $t2, -120($30)
+addiu $29, $29, -4
+sw $t3, -124($30)
+addiu $29, $29, -4
+sw $t4, -128($30)
+addiu $29, $29, -4
+sw $t5, -132($30)
+addiu $29, $29, -4
+sw $t6, -136($30)
+addiu $29, $29, -4
+sw $t7, -140($30)
+addiu $29, $29, -4
+sw $t8, -144($30)
+addiu $29, $29, -4
+sw $t9, -148($30)
+addiu $29, $29, -4
+sw $s0, -152($30)
+addiu $29, $29, -4
+sw $s1, -156($30)
+addiu $sp, $sp, 0
+beq $v0, $zero, L4
+addiu $sp, $sp, 0
+addiu $sp, $sp, 0
+j L3
+"];
+  "131960298063856" -> "131960298248688" [label="True"];
+  "131960298063856" -> "131960298076528" [label="False"];
+  "131960298248688" [label="L3:
+addiu $t0, $sp, 0
+li $t2, 0
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+#{ CHAR z ; 
+
+addiu $29, $29, -4
+sw $t0, -164($30)
+addiu $29, $29, -4
+sw $t1, -168($30)
+addiu $29, $29, -4
+sw $t2, -172($30)
+addiu $29, $29, -4
+sw $t3, -176($30)
+addiu $sp, $sp, 0
+j L5
+"];
+  "131960298248688" -> "131960298062512" [label="True"];
+  "131960298248688" -> "131960298062512" [label="False"];
+  "131960298062512" [label="L5:
+addiu $t0, $sp, 0
+addiu $t1, $0, 0
+move $v0, $t1
+j function_main_load
+#} return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -180($30)
+addiu $29, $29, -4
+sw $t1, -184($30)
+"];
+  "131960298076528" [label="L4:
+addiu $t0, $sp, 0
+li $t2, 0
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+#} else { INT z ; 
+
+addiu $29, $29, -4
+sw $t0, -164($30)
+addiu $29, $29, -4
+sw $t1, -168($30)
+addiu $29, $29, -4
+sw $t2, -172($30)
+addiu $29, $29, -4
+sw $t3, -176($30)
+addiu $sp, $sp, 0
+j L5
+"];
+  "131960298076528" -> "131960298062512" [label="True"];
+  "131960298076528" -> "131960298062512" [label="False"];
+}

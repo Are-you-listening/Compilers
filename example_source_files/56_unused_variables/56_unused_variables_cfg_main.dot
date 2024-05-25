@@ -1,5 +1,5 @@
 digraph AST {
-  "132635252622768" [label="%\".2\" = .2:
+  "131960296819728" [label="%\".2\" = .2:
   ; /** use param --unused_var True* To get the expected results*/
   %\".4\" = alloca i32, align 4
   store i32 5, i32* %\".4\", align 4

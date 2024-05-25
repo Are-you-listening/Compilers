@@ -58,5 +58,6 @@ class ControlFlowDotVisitor:
     def __del__(self):
         self.outfile.write("}\n")
         self.outfile.close()
+
         dot_command = "dot -Tpng " + self.filename + ".dot" + " -o " + self.filename + ".png"
-        subprocess.run(["ulimit -s unlimited", dot_command], shell=True)
+        subprocess.run(f"{dot_command}", shell=True)

@@ -1,0 +1,157 @@
+digraph AST {
+  "131960296523472" [label="L2:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+addiu $t1, $0, 3
+li $t2, 0
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+sw $t1, 0($t3)
+#   INT main ( ) { INT a = 3 ; 
+
+la $t5, str0
+li $t6, 0
+addiu $29, $29, -4
+sw $t6, 4($29)
+addiu $t7, $29, 4
+addiu $29, $29, -4
+sw $t7, 4($29)
+addiu $t8, $29, 4
+sw $t5, 0($t8)
+#CHAR * b = \"hello\" ; 
+
+addiu $s0, $0, 255
+li $s1, 0
+addiu $29, $29, -4
+sw $s1, 4($29)
+addiu $s2, $29, 4
+sw $s0, 0($s2)
+#INT c = 255 ; 
+
+l.s $f0, float...index_0
+mfc1 $s4, $f0
+li $s5, 0
+addiu $29, $29, -4
+sw $s5, 4($29)
+addiu $s6, $29, 4
+sw $s4, 0($s6)
+#FLOAT d = 3.14 ; 
+
+addiu $29, $29, -4
+sw $t0, -124($30)
+addiu $29, $29, -4
+sw $t1, -128($30)
+addiu $29, $29, -4
+sw $t2, -132($30)
+addiu $29, $29, -4
+sw $t3, -136($30)
+addiu $29, $29, -4
+sw $t4, -140($30)
+addiu $29, $29, -4
+sw $t5, -144($30)
+addiu $29, $29, -4
+sw $t6, -148($30)
+addiu $29, $29, -4
+sw $t7, -152($30)
+addiu $29, $29, -4
+sw $t8, -156($30)
+addiu $29, $29, -4
+sw $t9, -160($30)
+addiu $29, $29, -4
+sw $s0, -164($30)
+addiu $29, $29, -4
+sw $s1, -168($30)
+addiu $29, $29, -4
+sw $s2, -172($30)
+addiu $29, $29, -4
+sw $s3, -176($30)
+addiu $29, $29, -4
+sw $s4, -180($30)
+addiu $29, $29, -4
+sw $s5, -184($30)
+addiu $29, $29, -4
+sw $s6, -188($30)
+addiu $29, $29, -4
+sw $s7, -192($30)
+addiu $t0, $0, 99
+li $t1, 0
+addiu $29, $29, -4
+sw $t1, 4($29)
+addiu $t2, $29, 4
+sb $t0, 0($t2)
+#CHAR e = 'c' ; 
+
+la $t3, str1
+addiu $t4, $0, 3
+la $t5, str0
+addiu $t6, $0, 255
+l.s $f0, float...index_1
+mfc1 $t7, $f0
+addiu $t8, $0, 99
+addiu $29, $29, -24
+sw $t3, 4($29)
+sw $t4, 8($29)
+sw $t5, 12($29)
+sw $t6, 16($29)
+sw $t7, 20($29)
+sw $t8, 24($29)
+jal function_printf
+lw $t3, 4($29)
+lw $t4, 8($29)
+lw $t5, 12($29)
+lw $t6, 16($29)
+lw $t7, 20($29)
+lw $t8, 24($29)
+addiu $29, $29, 24
+addiu $29, $29, -4
+sw $t0, -200($30)
+addiu $29, $29, -4
+sw $t1, -204($30)
+addiu $29, $29, -4
+sw $t2, -208($30)
+addiu $29, $29, -4
+sw $t3, -212($30)
+addiu $29, $29, -4
+sw $t4, -216($30)
+addiu $29, $29, -4
+sw $t5, -220($30)
+addiu $29, $29, -4
+sw $t6, -224($30)
+addiu $29, $29, -4
+sw $t7, -228($30)
+addiu $29, $29, -4
+sw $t8, -232($30)
+addiu $29, $29, -4
+sw $t9, -236($30)
+addiu $29, $29, -4
+sw $s0, -240($30)
+addiu $29, $29, -4
+sw $s1, -244($30)
+addiu $29, $29, -4
+sw $s2, -248($30)
+addiu $29, $29, -4
+sw $s3, -252($30)
+addiu $29, $29, -4
+sw $s4, -256($30)
+addiu $29, $29, -4
+sw $s5, -260($30)
+addiu $29, $29, -4
+sw $s6, -264($30)
+addiu $29, $29, -4
+sw $s7, -268($30)
+move $t0, $v0
+#printf ( \" %d \\n %s \\n %x \\n %f \\n %c\" , a , b , c , d , e ) ; 
+
+addiu $t1, $0, 0
+move $v0, $t1
+j function_main_load
+#return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -272($30)
+addiu $29, $29, -4
+sw $t1, -276($30)
+"];
+}

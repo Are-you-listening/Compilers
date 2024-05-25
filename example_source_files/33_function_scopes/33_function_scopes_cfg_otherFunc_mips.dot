@@ -1,0 +1,19 @@
+digraph AST {
+  "131960296394992" [label="L2:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+li $t1, 0
+addiu $29, $29, -4
+sw $t1, 4($29)
+addiu $t2, $29, 4
+# VOID otherFunc ( ) { CHAR x ; 
+
+addiu $29, $29, -4
+sw $t0, -108($30)
+addiu $29, $29, -4
+sw $t1, -112($30)
+addiu $29, $29, -4
+sw $t2, -116($30)
+"];
+}

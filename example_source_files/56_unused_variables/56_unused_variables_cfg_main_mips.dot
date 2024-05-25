@@ -1,0 +1,81 @@
+digraph AST {
+  "131960296819728" [label="L2:
+addiu $t0, $sp, 0
+#/*
+#* use param --unused_var True
+#* To get the expected results
+#*/
+
+addiu $29, $29, -4
+sw $t0, -100($30)
+addiu $t1, $0, 5
+li $t2, 0
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+sw $t1, 0($t3)
+#        INT main ( ) { INT a = 3 ; INT b = a ;  INT c = 5 ; 
+
+addiu $t4, $0, 5
+sw $t4, 0($t3)
+#c = 5 ; 
+
+la $t5, str0
+lw $t6, 0($t3)
+#printf ( \"%d\" , c ) ; 
+
+addiu $29, $29, -8
+sw $t5, 4($29)
+sw $t6, 8($29)
+jal function_printf
+lw $t5, 4($29)
+lw $t6, 8($29)
+addiu $29, $29, 8
+addiu $29, $29, -4
+sw $t0, -108($30)
+addiu $29, $29, -4
+sw $t1, -112($30)
+addiu $29, $29, -4
+sw $t2, -116($30)
+addiu $29, $29, -4
+sw $t3, -120($30)
+addiu $29, $29, -4
+sw $t4, -124($30)
+addiu $29, $29, -4
+sw $t5, -128($30)
+addiu $29, $29, -4
+sw $t6, -132($30)
+addiu $29, $29, -4
+sw $t7, -136($30)
+addiu $29, $29, -4
+sw $t8, -140($30)
+addiu $29, $29, -4
+sw $t9, -144($30)
+addiu $29, $29, -4
+sw $s0, -148($30)
+addiu $29, $29, -4
+sw $s1, -152($30)
+addiu $29, $29, -4
+sw $s2, -156($30)
+addiu $29, $29, -4
+sw $s3, -160($30)
+addiu $29, $29, -4
+sw $s4, -164($30)
+addiu $29, $29, -4
+sw $s5, -168($30)
+addiu $29, $29, -4
+sw $s6, -172($30)
+addiu $29, $29, -4
+sw $s7, -176($30)
+move $t0, $v0
+addiu $t1, $0, 0
+move $v0, $t1
+j function_main_load
+#return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -180($30)
+addiu $29, $29, -4
+sw $t1, -184($30)
+"];
+}

@@ -1,0 +1,32 @@
+digraph AST {
+  "131960298063136" [label="L2:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+li $t1, 0
+addiu $29, $29, -4
+sw $t1, 4($29)
+addiu $t2, $29, 4
+#   enum week { Mon , Tue , Wed , Thur , Fri , Sat , Sun } ;  INT main ( ) { enum week day ; 
+
+addiu $t3, $0, 2
+sw $t3, 0($t2)
+#day = Wed ; 
+
+addiu $t4, $0, 0
+move $v0, $t4
+j function_main_load
+#return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -108($30)
+addiu $29, $29, -4
+sw $t1, -112($30)
+addiu $29, $29, -4
+sw $t2, -116($30)
+addiu $29, $29, -4
+sw $t3, -120($30)
+addiu $29, $29, -4
+sw $t4, -124($30)
+"];
+}

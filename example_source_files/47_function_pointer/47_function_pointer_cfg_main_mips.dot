@@ -1,0 +1,78 @@
+digraph AST {
+  "131960299388256" [label="L3:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+addiu $t1, $0, 5
+li $t2, 0
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+sw $t1, 0($t3)
+#   INT factorial ( INT c ) ;  INT main ( ) { INT n = 5 ; 
+
+li $t5, 0
+addiu $29, $29, -4
+sw $t5, 4($29)
+addiu $t6, $29, 4
+addiu $29, $29, -4
+sw $t6, 4($29)
+addiu $t7, $29, 4
+la $t8, function_factorial
+sw $t8, 0($t7)
+#INT ( * factorial_ptr ) ( INT ) = & factorial ; 
+
+lw $s0, 0($t7)
+#INT fact = factorial_ptr ( n ) ; 
+
+addiu $s1, $0, 5
+addiu $29, $29, -4
+sw $s1, 4($29)
+jalr $s0
+lw $s1, 4($29)
+addiu $29, $29, 4
+move $s2, $v0
+li $s3, 0
+addiu $29, $29, -4
+sw $s3, 4($29)
+addiu $s4, $29, 4
+sw $s2, 0($s4)
+addiu $s5, $0, 0
+move $v0, $s5
+j function_main_load
+#return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -120($30)
+addiu $29, $29, -4
+sw $t1, -124($30)
+addiu $29, $29, -4
+sw $t2, -128($30)
+addiu $29, $29, -4
+sw $t3, -132($30)
+addiu $29, $29, -4
+sw $t4, -136($30)
+addiu $29, $29, -4
+sw $t5, -140($30)
+addiu $29, $29, -4
+sw $t6, -144($30)
+addiu $29, $29, -4
+sw $t7, -148($30)
+addiu $29, $29, -4
+sw $t8, -152($30)
+addiu $29, $29, -4
+sw $t9, -156($30)
+addiu $29, $29, -4
+sw $s0, -160($30)
+addiu $29, $29, -4
+sw $s1, -164($30)
+addiu $29, $29, -4
+sw $s2, -168($30)
+addiu $29, $29, -4
+sw $s3, -172($30)
+addiu $29, $29, -4
+sw $s4, -176($30)
+addiu $29, $29, -4
+sw $s5, -180($30)
+"];
+}
