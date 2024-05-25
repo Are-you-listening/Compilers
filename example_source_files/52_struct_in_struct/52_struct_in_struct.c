@@ -18,10 +18,16 @@ int main(){
     struct water sea;
     sea.has_nemo = 1;
 
+        printf("%d", perier.has_nemo )
+    printf("%d", spa.has_nemo )
+    printf("%d", sea.has_nemo )
+
     struct bottle boo;
     boo.perier = perier;
     boo.spa = spa;
     boo.sea = sea;
+
+
 
     return 0;
 }

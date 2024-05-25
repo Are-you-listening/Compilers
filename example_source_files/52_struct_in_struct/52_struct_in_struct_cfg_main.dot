@@ -1,5 +1,5 @@
 digraph AST {
-  "131960299900400" [label="%\".2\" = .2:
+  "125515036695936" [label="%\".2\" = .2:
   %\".3\" = alloca %\"water\", align 4
   ;    struct water { INT has_nemo ; } ;  struct bottle { struct water perier ; struct water spa ; struct water sea ; } ;  INT main ( ) { struct water perier ;
   %\".5\" = getelementptr inbounds %\"water\", %\"water\"* %\".3\", i32 0, i32 0

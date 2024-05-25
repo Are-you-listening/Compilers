@@ -1,4 +1,4 @@
-; ModuleID = "/home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/example_source_files/1_binary_operations/1_binary_operations.c"
+; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/example_source_files/1_binary_operations/1_binary_operations.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 

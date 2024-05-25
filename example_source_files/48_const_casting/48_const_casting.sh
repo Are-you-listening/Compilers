@@ -1,2 +1,3 @@
 cd ../../
 python3 -m src.main --input ./example_source_files/48_const_casting/48_const_casting.c --target_llvm ./example_source_files/48_const_casting/48_const_casting_.ll --target_mips ./example_source_files/48_const_casting/48_const_casting_.asm --fold True --render_ast ./example_source_files/48_const_casting/48_const_casting_ast.dot --render_symb ./example_source_files/48_const_casting/48_const_casting_table.dot --target_control_flow ./example_source_files/48_const_casting/48_const_casting_cfg.dot --unused_var False
+ spim -file ./example_source_files/48_const_casting/48_const_casting_.asm

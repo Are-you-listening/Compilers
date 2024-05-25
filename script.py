@@ -52,9 +52,11 @@ def script():
             if file_name == "./example_source_files/46_unions/46_unions":
                 cfg_target = ""
 
-
-
             main([0, "--input", f"{curr_dir}{c[1:]}", "--target_llvm", f"{curr_dir}{llvm[1:]}", "--target_mips", f"{curr_dir}{mips[1:]}", "--fold", "True", "--render_ast", f"{curr_dir}{ast[1:]}", "--render_symb", f"{curr_dir}{table[1:]}", "--target_control_flow", cfg_target, "--unused_var", unused_var])  # Run our compiler with folding
+
+            outfile = open(file_name+".sh", "a")  # Create a .sh file to execute files in the subdirectory
+            outfile.write(f"\n spim -file {mips}")
+            outfile.close()
         except:
             """
             Get the index

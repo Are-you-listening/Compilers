@@ -1,2 +1,3 @@
 cd ../../
 python3 -m src.main --input ./example_source_files/25_printf/25_printf.c --target_llvm ./example_source_files/25_printf/25_printf_.ll --target_mips ./example_source_files/25_printf/25_printf_.asm --fold True --render_ast ./example_source_files/25_printf/25_printf_ast.dot --render_symb ./example_source_files/25_printf/25_printf_table.dot --target_control_flow ./example_source_files/25_printf/25_printf_cfg.dot --unused_var False
+ spim -file ./example_source_files/25_printf/25_printf_.asm

@@ -3,7 +3,7 @@
 union NotTypeSafe {
 int as_integer;
 float as_float;
-char as_str[50][50];
+char as_str[2][2];
 };
 
 int main() {
@@ -19,7 +19,9 @@ int main() {
 
     int q = safety_ptr->as_integer;
 
-    (*safety_ptr).as_str[49][49] = 'a';
+    (*safety_ptr).as_str[0][0] = 'a';
+
+    printf("%c", (*safety_ptr).as_str[0][0]);
 
     return 0;
 }
