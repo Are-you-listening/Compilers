@@ -6,10 +6,14 @@ class ControlFlowDotVisitor:
     def __init__(self, function_name, outfile="ControlFlow", mips: bool = False):
         self.filename = outfile.split('.')[0]
         self.filename = self.filename + "_" + function_name
+        if mips:
+            self.filename = f"{self.filename}_mips"
         self.outfile = open(self.filename + ".dot", "w")
         self.outfile.write("digraph AST {\n")
         self.edge_blacklist = []
         self.mips = mips
+
+
 
     def visit(self, root_vertex: Vertex):
         self.edge_blacklist = []
@@ -42,12 +46,9 @@ class ControlFlowDotVisitor:
 
         else:
             label = base_lambda(v)
-
             label = label.replace('\\', '\\\\')
             label = label.replace('"', '\\\"')
 
-            if label == "'\x00'" or label == "'\00'":
-                label = "'\\\\00'"
             label = label.replace("\00", "\\\\00")
 
         self.outfile.write(f'  "{id(vertex)}" [label="{label}"];\n')
@@ -58,4 +59,4 @@ class ControlFlowDotVisitor:
         self.outfile.write("}\n")
         self.outfile.close()
         dot_command = "dot -Tpng " + self.filename + ".dot" + " -o " + self.filename + ".png"
-        subprocess.run(dot_command, shell=True)
+        subprocess.run(["ulimit -s unlimited", dot_command], shell=True)

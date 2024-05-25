@@ -3,6 +3,9 @@ from src.llvm_target.LLVMSingleton import *
 import os
 import subprocess
 
+from src.mips_target.MipsLibrary import MipsManager, RegisterManager
+from src.mips_target.MipsSingleton import MipsSingleton
+
 
 def script():
     curr_dir = os.path.dirname(os.path.abspath(__file__))  # Get directory file is in
@@ -24,6 +27,9 @@ def script():
 
         # Clear singleton
         LLVMSingleton.getInstance().clear()
+        MipsSingleton.getInstance().clear()
+        MipsManager.getInstance().clear()
+        RegisterManager.getInstance().clear()
 
         unused_var = "False"
         if file_name.endswith("56_unused_variables"):

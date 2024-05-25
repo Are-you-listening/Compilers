@@ -238,7 +238,7 @@ def main(argv):
 
         if control_flow_file is not None:
             for function_name, cfg in cfgs.items():
-                control_dot = ControlFlowDotVisitor(f"{function_name}_mips", control_flow_file, True)  # Create a CFG
+                control_dot = ControlFlowDotVisitor(function_name, control_flow_file, True)  # Create a CFG
                 control_dot.visit(cfg.root)
 
 
