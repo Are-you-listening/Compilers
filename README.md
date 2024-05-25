@@ -12,7 +12,7 @@ sudo apt install llvm
 ```
 
 ### Video Explanation
-Find our demonstration [here](https://youtu.be/HygwHcQxuHY) 
+Find our demonstration for [Mips]() , [LLVM](https://youtu.be/HygwHcQxuHY)
 
 ```--unused_var False``` Disables the optimization to remove unused variables. This might help to better
 understand the LLVM output
@@ -29,11 +29,10 @@ understand the LLVM output
 - [X] [Binary operator %](./example_source_files/1_binary_operations/1_binary_operations.c) 
 - [X] [Shift operators <<, >>](./example_source_files/1_binary_operations/1_binary_operations.c) 
 - [X] [Bitwise operators &, |,~ and ^](./example_source_files/4_logical_operators/4_logical_operators.c) 
-- [X] [Use of Abstract Syntax Tree](./example_source_files/1_binary_operations/1_binary_operations.c) 
+- [X] [Abstract syntax tree and visualisation](./example_source_files/1_binary_operations/1_binary_operations.c) 
 - [X] [Constant Folding](./example_source_files/5_constant_folding/5_constant_folding.c) 
-- [X] [Visualisation of Abstract Syntax Tree (using dot)](./example_source_files/5_constant_folding/5_constant_folding.c) 
-- [X] [Mandatory main() Function](./example_source_files/6_main/6_main.c)
-- [X] [Keywords: 'const', 'char', 'int' and 'float'](./example_source_files/7_keywords/7_keywords.c)
+- [X] [Add an int main() { ... } function](./example_source_files/6_main/6_main.c)
+- [X] [Extra reserved keywords need to be supported: const, char, int, and float](./example_source_files/7_keywords/7_keywords.c)
 - [X] [Expressions](./example_source_files/8_Expressions/8_Expressions.c)
 - [X] [Literals of types: 'char', 'int', 'float' and pointers for these types](./example_source_files/9_literals/9_literals.c)
 - [X] [Variables: variable declarations, variable definitions, assignment statements, and identifiers](./example_source_files/10_variables/10_variables.c)
@@ -47,6 +46,23 @@ understand the LLVM output
 - [X] [Constant propagation](./example_source_files/18_constant_propagation/18_constant_propagation.c)
 - [X] [Error Analysis: Syntax Errors](example_source_files/19_1_syntax_errors/19_1_syntax_errors.c)
 - [X] [Error Analysis: Semantic Errors (all Semantic error features)](example_source_files/20_1_semantic_errors/20_1_semantic_errors.c)
+  1. Semantic error: Use of undeclared var
+  2. Semantic error: Redeclaration of an undeclared var
+  3. Semantic error: Operations or assignments of incompatible types
+  4. Semantic error: Assignment to an rvalue
+  5. Semantic error: Assignment to a const variable
+  6. Symbol table and visualisation
+  7. Semantic analysis: Consistency of return type. 
+  8. Semantic analysis: Parameter types passed to call should be consistent with the function signature. 
+  9. Semantic analysis: Consistency between forward declarations and function definitions. Functions
+must be declared/defined before calling them. Functions should not be re-defined.
+  10. Semantic analysis: Type checking for array types (parameter passing, assignment, indexing). 
+  11. Semantic analysis: Checking the length of array initialisers ({ ... }) during assignment.
+  12. Semantic analysis: Type checking for accessing and assigning struct members. 
+  13. Semantic analysis: Type checking for accessing and assigning union members (if implemented). 
+  14. Semantic analysis: Type checking for function pointers: assigning function pointers, calling
+  15. Semantic analysis: Check for all paths in a function body whether a return statement is present.
+functions, etc. (if implemented)
 - [X] [SymbolTable and Visualization of the symbol table](example_source_files/21_symbolTable_and_visualization/21_symbolTable_and_visualization.c)
 - [X] [Singleline Comments](example_source_files/22_singleLine_comment/22_singleLine_comment.c)
 - [X] [Multiline Comments](example_source_files/23_multiLine_comment/23_multiLine_comment.c)
@@ -71,35 +87,35 @@ understand the LLVM output
 - [X] [Strings encoded as zero-terminated char-arrays (both supported as char str[size] and char* str)](./example_source_files/42_strings/42_strings.c)
 - [X] [printf and scanf](./example_source_files/43_printf_and_scanf/43_printf_and_scanf.c)
 - [X] [user Defined Structs](./example_source_files/44_user_defined_structs/44_user_defined_structs.c)
-
 - [X] [Include Guards (mandatory because group of 4)](./example_source_files/45_include_guards/45_include_guards.c)
 - [X] [Unions (mandatory because group of 4)](./example_source_files/46_unions/46_unions.c)
 - [X] [Function Pointers (mandatory because group of 4)](./example_source_files/47_function_pointer/47_function_pointer.c)
 - [X] [Code Generation: LLVM IR](TestCases/LLVMTests)
-
+- [X] [Code Generation: Mips](TestCases/MipsTests)
 
 ### Optional Functionality: 
 (In short we did all the optionals except 'Function overloading' and we did 4 extra optionals ('CFG' and 'array[] automatic size' )', 'Func ptrs', 'calloc en realloc'')
 - [X] [Include Guards (mandatory because group of 4)](./example_source_files/45_include_guards/45_include_guards.c)
 - [X] [Unions (mandatory because group of 4)](./example_source_files/46_unions/46_unions.c)
 - [X] [Function Pointers (mandatory because group of 4)](./example_source_files/47_function_pointer/47_function_pointer.c)
-
 - [X] [Const Casting](./example_source_files/48_const_casting/48_const_casting.c)
-- [X] [ControlFlow and visualization (Extra optional)](./example_source_files/49_cfg/49_cfg.c)
 - [X] [Else If Statements](./example_source_files/49_cfg/49_cfg.c)
+- [X] [Semantic Analysis: Check for all paths in a function body whether a return statement is present](./example_source_files/51_valid_conditional_return/51_valid_conditional_return.c)
+- [X] [Optimisation: Do not generate code for variables that are not used](./example_source_files/56_unused_variables/56_unused_variables.c)
 - [X] [Optimisation: Do not generate code for conditions that are always false](./example_source_files/50_remove_dead_conditions/50_remove_dead_conditions.c)
-- [X] [Semantic Error: Check for all paths in a function body whether a return statement is present](./example_source_files/51_valid_conditional_return/51_valid_conditional_return.c)
-- [X] [Dynamic Arrays (stored on heap) (malloc, free, calloc, realloc)](./example_source_files/53_dynamic_allocation/53_dynamic_allocation.c) (sidenote we require #include <stdlib.h> to be included, (similar situation as printf and scanf))
+- [X] [Dynamic Arrays (stored on heap) (malloc, free)](./example_source_files/53_dynamic_allocation/53_dynamic_allocation.c) (sidenote we require #include <stdlib.h> to be included, (similar situation as printf and scanf))
 - [X] [Structs that contain other structs as a value](./example_source_files/52_struct_in_struct/52_struct_in_struct.c)
 - [X] [Dynamic Allocation of Structs (store structs on heap) (support by also supporting sizeof function)](./example_source_files/53_dynamic_allocation/53_dynamic_allocation.c)
-- [X] [File reading using fgets (uses FILE* with fopen and fclose)](./example_source_files/54_file_io/54_file_io.c)
-- [X] [File writing using fputs (uses FILE* with fopen and fclose)](./example_source_files/54_file_io/54_file_io.c)
+- [X] [File reading using fgets](./example_source_files/54_file_io/54_file_io.c)
+- [X] [File writing using fputs](./example_source_files/54_file_io/54_file_io.c)
 - [X] [Dynamically allocated strings and character buffers (can be used for printf, fgets, fputs, ...)](./example_source_files/54_file_io/54_file_io.c)
-- [X] [Array that automatically inferred array size int a[] = {1, 2, 3}](./example_source_files/55_auto_array_size/55_auto_array_size.c)
-- [X] [Do not generate code for variables that are not used](./example_source_files/56_unused_variables/56_unused_variables.c)
-- [X] [File pointers](./example_source_files/54_file_io/54_file_io.c)
-- [X] [Dynamic Allocation Extension: Using Calloc and Realloc](./example_source_files/53_dynamic_allocation/53_dynamic_allocation.c)
 
+### Extra Optional Functionality:
+
+- [X] [ControlFlow and visualization (Extra optional)](./example_source_files/49_cfg/49_cfg.c)
+- [X] [Dynamic Allocation Extension: Using Calloc and Realloc](./example_source_files/53_dynamic_allocation/53_dynamic_allocation.c)
+- [X] [File reading uses File Pointers with fopen and fclose](./example_source_files/54_file_io/54_file_io.c)
+- [X] [Array that automatically inferred array size int a[] = {1, 2, 3}](./example_source_files/55_auto_array_size/55_auto_array_size.c)
 
 ### Technical Functionality: 
 - [X] README
