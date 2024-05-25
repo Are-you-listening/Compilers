@@ -1,8 +1,8 @@
-; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/example_source_files/54_file_io/54_file_io.c"
+; ModuleID = "/home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/example_source_files/54_file_io/54_file_io.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
-%"0_IO_FILE" = type {i8*, i8*}
+%"0_IO_FILE" = type {i32*, i8*}
 define i32 @"main"()
 {
 .2:

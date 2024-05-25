@@ -1234,7 +1234,7 @@ class Calculation:
             not_ptr = right
             to_type = left.symbol_type
 
-        if isinstance(right, Memory) and isinstance(right.symbol_type, SymbolTypePtr) and operator in ["+", "-"]:
+        elif isinstance(right, Memory) and isinstance(right.symbol_type, SymbolTypePtr) and operator in ["+", "-"]:
             is_ptr = True
             ptr = right
             not_ptr = left
@@ -1242,11 +1242,20 @@ class Calculation:
 
         if is_ptr:
             li = block.li(ptr.symbol_type.deReference().getBytesUsed())
-            mul = block.mul(not_ptr, li)
-            if operator == "+":
-                instr = block.addu(ptr, mul)
+
+            if not isinstance(not_ptr.symbol_type, SymbolTypePtr):
+                muly = block.mul(not_ptr, li)
             else:
-                instr = block.subu(ptr, mul)
+                muly = not_ptr
+
+            if operator == "+":
+                instr = block.addu(ptr, muly)
+            else:
+                instr = block.subu(ptr, muly)
+
+            if isinstance(not_ptr.symbol_type, SymbolTypePtr):
+                instr = block.div(instr, li)
+
             instr.symbol_type = to_type
             return instr
 

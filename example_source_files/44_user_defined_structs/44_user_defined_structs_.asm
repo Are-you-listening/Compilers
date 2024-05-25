@@ -1,13 +1,5 @@
 .data
 heap: .space 4
-str0: .asciiz  "Something went wrong" 
-str1: .asciiz  "Hello world!\n" 
-str2: .asciiz  "Something went wrong here" 
-str3: .asciiz  "%d" 
-float...index_0: .float 10.0
-float...index_1: .float 5.0
-str4: .asciiz  "%s" 
-float...index_2: .float 3.14
 Sun: .word 6
 Sat: .word 5
 Fri: .word 4
@@ -15,29 +7,12 @@ Thur: .word 3
 Wed: .word 2
 Tue: .word 1
 Mon: .word 0
-str5: .asciiz  "Enter two numbers:" 
-str6: .asciiz  "%d%d" 
-str7: .asciiz  "%d; %d" 
-str8: .asciiz  "Apple1" 
-str9: .asciiz  "string he" 
-float...index_3: .float 5.0
-float...index_4: .float 5.0
-True: .word 1
-float...index_5: .float 5.0
-str10: .asciiz  "Rico, kaboom!" 
-peer: .word 8
-x: .word 1
-z: .word 3
-y: .word 3
-str11: .asciiz  "%f" 
-float...index_6: .float 3.14159
-float...index_7: .float 5.0
-float...index_8: .float 10.01
-str12: .asciiz  "hello" 
-float...index_9: .float 3.14
-str13: .asciiz  " %d \n %s \n %x \n %f \n %c" 
-float...index_10: .float 3.14
-float...index_11: .float 10.0
+str0: .asciiz  "../includes/io.txt" 
+str1: .asciiz  "r" 
+str2: .asciiz  "w" 
+str3: .asciiz  "Enter two numbers:" 
+str4: .asciiz  "%d%d" 
+str5: .asciiz  "%d; %d" 
 .text
 main:
 li $a0, 8192
@@ -48,7 +23,7 @@ sw $v0, 0($t0)
 jal function_main
 li 	$v0, 10 #exit system call
 syscall
-function_main:
+function_factorial:
 sw $30, 0($29)
 add $30, $29, $0
 addiu $29, $29, -100
@@ -78,314 +53,485 @@ sw $a3, -92($30)
 sw $ra, -96($30)
 L1:
 
-L2:
-addiu $t1, $0, 5
-li $t2, 0
+L4:
 addiu $29, $29, -4
-sw $t2, 4($29)
-addiu $t3, $29, 4
-sw $t1, 0($t3)
-#   INT main ( ) { INT x = 5 ; 
-
-lw $t4, 0($t3)
-# if ( x < 5 ) { 
-
-addiu $t5, $0, 5
-slt $t6, $t4, $t5
-move $v0, $t6
+sw $t0, -100($30)
 addiu $29, $29, -4
-sw $t0, -104($30)
+sw $t1, -104($30)
 addiu $29, $29, -4
-sw $t1, -108($30)
+sw $t2, -108($30)
 addiu $29, $29, -4
-sw $t2, -112($30)
+sw $t3, -112($30)
 addiu $29, $29, -4
-sw $t3, -116($30)
+sw $t4, -116($30)
 addiu $29, $29, -4
-sw $t4, -120($30)
+sw $t5, -120($30)
 addiu $29, $29, -4
-sw $t5, -124($30)
+sw $t6, -124($30)
 addiu $29, $29, -4
-sw $t6, -128($30)
-beq $v0, $zero, L26
-j L3
-
-L3:
-la $t0, str0
+sw $t7, -128($30)
 addiu $29, $29, -4
-sw $t0, 4($29)
-jal function_printf
-lw $t0, 4($29)
-addiu $29, $29, 4
+sw $t8, -132($30)
 addiu $29, $29, -4
-sw $t0, -132($30)
+sw $t9, -136($30)
 addiu $29, $29, -4
-sw $t1, -136($30)
+sw $s0, -140($30)
 addiu $29, $29, -4
-sw $t2, -140($30)
+sw $s1, -144($30)
 addiu $29, $29, -4
-sw $t3, -144($30)
+sw $s2, -148($30)
 addiu $29, $29, -4
-sw $t4, -148($30)
+sw $s3, -152($30)
 addiu $29, $29, -4
-sw $t5, -152($30)
+sw $s4, -156($30)
 addiu $29, $29, -4
-sw $t6, -156($30)
+sw $s5, -160($30)
 addiu $29, $29, -4
-sw $t7, -160($30)
+sw $s6, -164($30)
 addiu $29, $29, -4
-sw $t8, -164($30)
+sw $s7, -168($30)
+addiu $t0, $sp, 0
+addiu $t2, $fp, 4
+move $v0, $t2
 addiu $29, $29, -4
-sw $t9, -168($30)
+sw $t0, -172($30)
 addiu $29, $29, -4
-sw $s0, -172($30)
+sw $t1, -176($30)
 addiu $29, $29, -4
-sw $s1, -176($30)
-addiu $29, $29, -4
-sw $s2, -180($30)
-addiu $29, $29, -4
-sw $s3, -184($30)
-addiu $29, $29, -4
-sw $s4, -188($30)
-addiu $29, $29, -4
-sw $s5, -192($30)
-addiu $29, $29, -4
-sw $s6, -196($30)
-addiu $29, $29, -4
-sw $s7, -200($30)
-move $t0, $v0
-#printf ( "Something went wrong" ) ; 
-
-addiu $29, $29, -4
-sw $t0, -204($30)
-j L29
-
-L26:
-lw $t0, -116($30)
+sw $t2, -180($30)
+lw $t0, -180($30)
 lw $t1, 0($t0)
-#} else if ( x == 5 ) { 
+#}  INT factorial ( INT n ) { if ( n == 0 ) { 
 
-addiu $t2, $0, 5
+addiu $t2, $0, 0
 xor $t3, $t1, $t2
 sltiu $t4, $t3, 1
 move $v0, $t4
-sw $t0, -116($30)
+sw $t0, -180($30)
 addiu $29, $29, -4
-sw $t1, -208($30)
+sw $t1, -184($30)
 addiu $29, $29, -4
-sw $t2, -212($30)
+sw $t2, -188($30)
 addiu $29, $29, -4
-sw $t3, -216($30)
+sw $t3, -192($30)
 addiu $29, $29, -4
-sw $t4, -220($30)
-beq $v0, $zero, L28
-j L27
+sw $t4, -196($30)
+addiu $sp, $sp, 0
+beq $v0, $zero, L6
+addiu $sp, $sp, 0
+addiu $sp, $sp, 0
+j L5
 
-L27:
-la $t0, str1
+L5:
+addiu $t0, $sp, 0
+addiu $t1, $0, 1
+move $v0, $t1
+j function_factorial_load
+#return 1 ; 
+
 addiu $29, $29, -4
-sw $t0, 4($29)
-jal function_printf
-lw $t0, 4($29)
+sw $t0, -200($30)
+addiu $29, $29, -4
+sw $t1, -204($30)
+
+L6:
+addiu $t0, $sp, 0
+lw $t1, -180($30)
+lw $t2, 0($t1)
+#} else { return n * factorial ( n - 1 ) ; 
+
+lw $t3, 0($t1)
+addiu $t4, $0, 1
+sub $t5, $t3, $t4
+addiu $29, $29, -4
+sw $t5, 4($29)
+jal function_factorial
+lw $t5, 4($29)
 addiu $29, $29, 4
-move $t1, $v0
-#printf ( "Hello world!\n" ) ; 
+move $t6, $v0
+mul $t7, $t2, $t6
+move $v0, $t7
+j function_factorial_load
+addiu $29, $29, -4
+sw $t0, -200($30)
+sw $t1, -180($30)
+addiu $29, $29, -4
+sw $t2, -204($30)
+addiu $29, $29, -4
+sw $t3, -208($30)
+addiu $29, $29, -4
+sw $t4, -212($30)
+addiu $29, $29, -4
+sw $t5, -216($30)
+addiu $29, $29, -4
+sw $t6, -220($30)
+addiu $29, $29, -4
+sw $t7, -224($30)
 
-addiu $29, $29, -4
-sw $t0, -224($30)
-addiu $29, $29, -4
-sw $t1, -228($30)
-j L29
+function_factorial_load:
+lw $t0, -4($30)
+lw $t1, -8($30)
+lw $t2, -12($30)
+lw $t3, -16($30)
+lw $t4, -20($30)
+lw $t5, -24($30)
+lw $t6, -28($30)
+lw $t7, -32($30)
+lw $t8, -36($30)
+lw $t9, -40($30)
+lw $s0, -44($30)
+lw $s1, -48($30)
+lw $s2, -52($30)
+lw $s3, -56($30)
+lw $s4, -60($30)
+lw $s5, -64($30)
+lw $s6, -68($30)
+lw $s7, -72($30)
+lw $v1, -76($30)
+lw $a0, -80($30)
+lw $a1, -84($30)
+lw $a2, -88($30)
+lw $a3, -92($30)
+lw $ra, -96($30)
+add $29, $30, $0
+lw $30, 0($29)
+jr $ra
+function_main:
+sw $30, 0($29)
+add $30, $29, $0
+addiu $29, $29, -100
+sw $t0, -4($30)
+sw $t1, -8($30)
+sw $t2, -12($30)
+sw $t3, -16($30)
+sw $t4, -20($30)
+sw $t5, -24($30)
+sw $t6, -28($30)
+sw $t7, -32($30)
+sw $t8, -36($30)
+sw $t9, -40($30)
+sw $s0, -44($30)
+sw $s1, -48($30)
+sw $s2, -52($30)
+sw $s3, -56($30)
+sw $s4, -60($30)
+sw $s5, -64($30)
+sw $s6, -68($30)
+sw $s7, -72($30)
+sw $v1, -76($30)
+sw $a0, -80($30)
+sw $a1, -84($30)
+sw $a2, -88($30)
+sw $a3, -92($30)
+sw $ra, -96($30)
+L2:
 
-L28:
-la $t0, str2
+L3:
+addiu $t0, $sp, 0
 addiu $29, $29, -4
-sw $t0, 4($29)
-jal function_printf
-lw $t0, 4($29)
-addiu $29, $29, 4
-move $t1, $v0
-#} else { printf ( "Something went wrong here" ) ; 
-
-addiu $29, $29, -4
-sw $t0, -232($30)
-addiu $29, $29, -4
-sw $t1, -236($30)
-j L29
-
-L29:
-addiu $t0, $0, 0
-move $v0, $t0
-j function_main_load
-#} return 0 ; 
-
-
-L30:
-addiu $29, $29, -4
-sw $t0, -240($30)
-addiu $29, $29, -4
-sw $t1, -244($30)
-addiu $29, $29, -4
-sw $t2, -248($30)
-addiu $29, $29, -4
-sw $t3, -252($30)
-addiu $29, $29, -4
-sw $t4, -256($30)
-addiu $29, $29, -4
-sw $t5, -260($30)
-addiu $29, $29, -4
-sw $t6, -264($30)
-addiu $29, $29, -4
-sw $t7, -268($30)
-addiu $29, $29, -4
-sw $t8, -272($30)
-addiu $29, $29, -4
-sw $t9, -276($30)
-addiu $29, $29, -4
-sw $s0, -280($30)
-addiu $29, $29, -4
-sw $s1, -284($30)
-addiu $29, $29, -4
-sw $s2, -288($30)
-addiu $29, $29, -4
-sw $s3, -292($30)
-addiu $29, $29, -4
-sw $s4, -296($30)
-addiu $29, $29, -4
-sw $s5, -300($30)
-addiu $29, $29, -4
-sw $s6, -304($30)
-addiu $29, $29, -4
-sw $s7, -308($30)
+sw $t0, -100($30)
 addiu $t1, $0, 5
 li $t2, 0
 addiu $29, $29, -4
 sw $t2, 4($29)
 addiu $t3, $29, 4
 sw $t1, 0($t3)
-# INT main ( ) { INT a = 5 ; 
+#   INT factorial ( INT c ) ;  INT main ( ) { INT n = 5 ; 
 
-addiu $t5, $0, 4
-li $t6, 0
+li $t5, 0
+addiu $29, $29, -4
+sw $t5, 4($29)
+addiu $t6, $29, 4
 addiu $29, $29, -4
 sw $t6, 4($29)
 addiu $t7, $29, 4
-sw $t5, 0($t7)
-#INT b = 4 ; 
+la $t8, function_factorial
+sw $t8, 0($t7)
+#INT ( * factorial_ptr ) ( INT ) = & factorial ; 
 
-lw $t8, 0($t3)
-#a + b ; 
+lw $s0, 0($t7)
+#INT fact = factorial_ptr ( n ) ; 
 
-lw $t9, 0($t7)
-add $s0, $t8, $t9
-lw $s1, 0($t3)
-#a - b ; 
-
-lw $s2, 0($t7)
-sub $s3, $s1, $s2
-lw $s4, 0($t3)
-#a / b ; 
-
-lw $s5, 0($t7)
-div $s6 $s4 $s5
-lw $s7, 0($t3)
-#a * b ; 
-
+addiu $s1, $0, 5
 addiu $29, $29, -4
-sw $t0, -320($30)
+sw $s1, 4($29)
+jalr $s0
+lw $s1, 4($29)
+addiu $29, $29, 4
+move $s2, $v0
+li $s3, 0
 addiu $29, $29, -4
-sw $t1, -324($30)
-addiu $29, $29, -4
-sw $t2, -328($30)
-addiu $29, $29, -4
-sw $t3, -332($30)
-addiu $29, $29, -4
-sw $t4, -336($30)
-addiu $29, $29, -4
-sw $t5, -340($30)
-addiu $29, $29, -4
-sw $t6, -344($30)
-addiu $29, $29, -4
-sw $t7, -348($30)
-addiu $29, $29, -4
-sw $t8, -352($30)
-addiu $29, $29, -4
-sw $t9, -356($30)
-addiu $29, $29, -4
-sw $s0, -360($30)
-addiu $29, $29, -4
-sw $s1, -364($30)
-addiu $29, $29, -4
-sw $s2, -368($30)
-addiu $29, $29, -4
-sw $s3, -372($30)
-addiu $29, $29, -4
-sw $s4, -376($30)
-addiu $29, $29, -4
-sw $s5, -380($30)
-addiu $29, $29, -4
-sw $s6, -384($30)
-addiu $29, $29, -4
-sw $s7, -388($30)
-lw $t1, -348($30)
-lw $t0, 0($t1)
-lw $t3, -388($30)
-mul $t2, $t3, $t0
-lw $t4, -332($30)
-lw $t5, 0($t4)
-#a > b ; 
-
-lw $t6, 0($t1)
-sgt $t7, $t5, $t6
-lw $t8, 0($t4)
-#a < b ; 
-
-lw $t9, 0($t1)
-slt $s0, $t8, $t9
-addiu $s1, $0, 0
-move $v0, $s1
+sw $s3, 4($29)
+addiu $s4, $29, 4
+sw $s2, 0($s4)
+addiu $s5, $0, 0
+move $v0, $s5
 j function_main_load
-#a && b ; a || b ;  return 0 ; 
+#return 0 ; 
 
+addiu $29, $29, -4
+sw $t0, -120($30)
+addiu $29, $29, -4
+sw $t1, -124($30)
+addiu $29, $29, -4
+sw $t2, -128($30)
+addiu $29, $29, -4
+sw $t3, -132($30)
+addiu $29, $29, -4
+sw $t4, -136($30)
+addiu $29, $29, -4
+sw $t5, -140($30)
+addiu $29, $29, -4
+sw $t6, -144($30)
+addiu $29, $29, -4
+sw $t7, -148($30)
+addiu $29, $29, -4
+sw $t8, -152($30)
+addiu $29, $29, -4
+sw $t9, -156($30)
+addiu $29, $29, -4
+sw $s0, -160($30)
+addiu $29, $29, -4
+sw $s1, -164($30)
+addiu $29, $29, -4
+sw $s2, -168($30)
+addiu $29, $29, -4
+sw $s3, -172($30)
+addiu $29, $29, -4
+sw $s4, -176($30)
+addiu $29, $29, -4
+sw $s5, -180($30)
 
-L31:
-#/*
-#* use param --unused_var True
-#* To get the expected results
-#*/
+L7:
+addiu $29, $29, -4
+sw $t0, -100($30)
+addiu $29, $29, -4
+sw $t1, -104($30)
+addiu $29, $29, -4
+sw $t2, -108($30)
+addiu $29, $29, -4
+sw $t3, -112($30)
+addiu $29, $29, -4
+sw $t4, -116($30)
+addiu $29, $29, -4
+sw $t5, -120($30)
+addiu $29, $29, -4
+sw $t6, -124($30)
+addiu $29, $29, -4
+sw $t7, -128($30)
+addiu $29, $29, -4
+sw $t8, -132($30)
+addiu $29, $29, -4
+sw $t9, -136($30)
+addiu $29, $29, -4
+sw $s0, -140($30)
+addiu $29, $29, -4
+sw $s1, -144($30)
+addiu $29, $29, -4
+sw $s2, -148($30)
+addiu $29, $29, -4
+sw $s3, -152($30)
+addiu $29, $29, -4
+sw $s4, -156($30)
+addiu $29, $29, -4
+sw $s5, -160($30)
+addiu $29, $29, -4
+sw $s6, -164($30)
+addiu $29, $29, -4
+sw $s7, -168($30)
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -172($30)
+li $t1, 0
+addiu $29, $29, -8
+sw $t1, 4($29)
+addiu $t2, $29, 4
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+#   struct water { INT has_nemo ; } ;  struct bottle { struct water perier ; struct water spa ; struct water sea ; } ;  INT main ( ) { struct water perier ; 
 
-addiu $s3, $0, 5
-li $s4, 0
+addiu $t4, $0, 0
+lw $t5, 0($t3)
+li $t6, 0
+addu $t7, $t5, $t6
+#perier . has_nemo = 0 ; 
+
+addiu $t8, $0, 0
+sw $t8, 0($t7)
+li $s0, 0
+addiu $29, $29, -8
+sw $s0, 4($29)
+addiu $s1, $29, 4
+addiu $29, $29, -4
+sw $s1, 4($29)
+addiu $s2, $29, 4
+#struct water spa ; 
+
+addiu $s3, $0, 0
+lw $s4, 0($s2)
+li $s5, 0
+addu $s6, $s4, $s5
+#spa . has_nemo = 0 ; 
+
+addiu $s7, $0, 0
+sw $s7, 0($s6)
+addiu $29, $29, -4
+sw $t0, -200($30)
+addiu $29, $29, -4
+sw $t1, -204($30)
+addiu $29, $29, -4
+sw $t2, -208($30)
+addiu $29, $29, -4
+sw $t3, -212($30)
+addiu $29, $29, -4
+sw $t4, -216($30)
+addiu $29, $29, -4
+sw $t5, -220($30)
+addiu $29, $29, -4
+sw $t6, -224($30)
+addiu $29, $29, -4
+sw $t7, -228($30)
+addiu $29, $29, -4
+sw $t8, -232($30)
+addiu $29, $29, -4
+sw $t9, -236($30)
+addiu $29, $29, -4
+sw $s0, -240($30)
+addiu $29, $29, -4
+sw $s1, -244($30)
+addiu $29, $29, -4
+sw $s2, -248($30)
+addiu $29, $29, -4
+sw $s3, -252($30)
+addiu $29, $29, -4
+sw $s4, -256($30)
+addiu $29, $29, -4
+sw $s5, -260($30)
+addiu $29, $29, -4
+sw $s6, -264($30)
+addiu $29, $29, -4
+sw $s7, -268($30)
+li $t1, 0
+addiu $29, $29, -8
+sw $t1, 4($29)
+addiu $t2, $29, 4
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+#struct water sea ; 
+
+addiu $t4, $0, 0
+lw $t5, 0($t3)
+li $t6, 0
+addu $t7, $t5, $t6
+#sea . has_nemo = 1 ; 
+
+addiu $t8, $0, 1
+sw $t8, 0($t7)
+li $s0, 0
+addiu $29, $29, -8
+sw $s0, 4($29)
+addiu $s1, $29, 4
+addiu $29, $29, -8
+sw $s0, 4($29)
+addiu $s2, $29, 4
+addiu $29, $29, -8
+sw $s0, 4($29)
+addiu $s3, $29, 4
+addiu $29, $29, -16
+sw $s1, 4($29)
+sw $s2, 8($29)
+sw $s3, 12($29)
+addiu $s4, $29, 4
 addiu $29, $29, -4
 sw $s4, 4($29)
 addiu $s5, $29, 4
-sw $s3, 0($s5)
-#        INT main ( ) { INT a = 3 ; INT b = a ;  INT c = 5 ; 
+# struct bottle boo ; 
 
-addiu $s6, $0, 5
-sw $s6, 0($s5)
-#c = 5 ; 
+addiu $s6, $0, 0
+lw $s7, 0($s5)
+addiu $29, $29, -4
+sw $t0, -328($30)
+addiu $29, $29, -4
+sw $t1, -332($30)
+addiu $29, $29, -4
+sw $t2, -336($30)
+addiu $29, $29, -4
+sw $t3, -340($30)
+addiu $29, $29, -4
+sw $t4, -344($30)
+addiu $29, $29, -4
+sw $t5, -348($30)
+addiu $29, $29, -4
+sw $t6, -352($30)
+addiu $29, $29, -4
+sw $t7, -356($30)
+addiu $29, $29, -4
+sw $t8, -360($30)
+addiu $29, $29, -4
+sw $t9, -364($30)
+addiu $29, $29, -4
+sw $s0, -368($30)
+addiu $29, $29, -4
+sw $s1, -372($30)
+addiu $29, $29, -4
+sw $s2, -376($30)
+addiu $29, $29, -4
+sw $s3, -380($30)
+addiu $29, $29, -4
+sw $s4, -384($30)
+addiu $29, $29, -4
+sw $s5, -388($30)
+addiu $29, $29, -4
+sw $s6, -392($30)
+addiu $29, $29, -4
+sw $s7, -396($30)
+li $t0, 0
+lw $t2, -396($30)
+addu $t1, $t2, $t0
+#boo . perier = perier ; 
 
-la $s7, str3
+lw $t3, -212($30)
+lw $t4, 0($t3)
+sw $t4, 0($t1)
+addiu $t5, $0, 1
+lw $t7, -388($30)
+lw $t6, 0($t7)
+li $t8, 4
+addu $t9, $t6, $t8
+#boo . spa = spa ; 
+
+lw $s0, -248($30)
+lw $s1, 0($s0)
+sw $s1, 0($t9)
+addiu $s2, $0, 2
+lw $s3, 0($t7)
+li $s4, 8
+addu $s5, $s3, $s4
+#boo . sea = sea ; 
+
+lw $s6, -340($30)
+lw $s7, 0($s6)
+sw $s7, 0($s5)
 addiu $29, $29, -4
-sw $t0, -396($30)
-sw $t1, -348($30)
+sw $t0, -400($30)
 addiu $29, $29, -4
-sw $t2, -400($30)
-sw $t3, -388($30)
-sw $t4, -332($30)
+sw $t1, -404($30)
+sw $t2, -396($30)
+sw $t3, -212($30)
 addiu $29, $29, -4
-sw $t5, -404($30)
+sw $t4, -408($30)
 addiu $29, $29, -4
-sw $t6, -408($30)
+sw $t5, -412($30)
 addiu $29, $29, -4
-sw $t7, -412($30)
+sw $t6, -416($30)
+sw $t7, -388($30)
 addiu $29, $29, -4
-sw $t8, -416($30)
+sw $t8, -420($30)
 addiu $29, $29, -4
-sw $t9, -420($30)
-addiu $29, $29, -4
-sw $s0, -424($30)
+sw $t9, -424($30)
+sw $s0, -248($30)
 addiu $29, $29, -4
 sw $s1, -428($30)
 addiu $29, $29, -4
@@ -396,10251 +542,66 @@ addiu $29, $29, -4
 sw $s4, -440($30)
 addiu $29, $29, -4
 sw $s5, -444($30)
+sw $s6, -340($30)
 addiu $29, $29, -4
-sw $s6, -448($30)
-addiu $29, $29, -4
-sw $s7, -452($30)
-lw $t1, -444($30)
-lw $t0, 0($t1)
-#printf ( "%d" , c ) ; 
-
-sw $t1, -444($30)
-addiu $29, $29, -4
-sw $t2, -456($30)
-addiu $29, $29, -4
-sw $t3, -460($30)
-addiu $29, $29, -4
-sw $t4, -464($30)
-addiu $29, $29, -4
-sw $t5, -468($30)
-addiu $29, $29, -4
-sw $t6, -472($30)
-addiu $29, $29, -4
-sw $t7, -476($30)
-addiu $29, $29, -4
-sw $t8, -480($30)
-addiu $29, $29, -4
-sw $t9, -484($30)
-addiu $29, $29, -4
-sw $s0, -488($30)
-addiu $29, $29, -4
-sw $s1, -492($30)
-addiu $29, $29, -4
-sw $s2, -496($30)
-addiu $29, $29, -4
-sw $s3, -500($30)
-addiu $29, $29, -4
-sw $s4, -504($30)
-addiu $29, $29, -4
-sw $s5, -508($30)
-addiu $29, $29, -4
-sw $s6, -512($30)
-addiu $29, $29, -4
-sw $s7, -516($30)
-lw $t1, -452($30)
-addiu $29, $29, -8
-sw $t1, 4($29)
-sw $t0, 8($29)
-jal function_printf
-lw $t1, 4($29)
-lw $t0, 8($29)
-addiu $29, $29, 8
-move $t2, $v0
-addiu $t3, $0, 0
-move $v0, $t3
-j function_main_load
-#return 0 ; 
-
-
-L54:
-addiu $29, $29, -4
-sw $t0, -520($30)
-sw $t1, -452($30)
-addiu $29, $29, -4
-sw $t2, -524($30)
-addiu $29, $29, -4
-sw $t3, -528($30)
-
-L55:
-# INT main ( ) {  while ( 1 ) { 
-
-addiu $t0, $0, 1
-addiu $29, $29, -4
-sw $t0, -532($30)
-
-L56:
-addiu $t1, $0, 0
-li $t2, 0
-addiu $29, $29, -4
-sw $t2, 4($29)
-addiu $t3, $29, 4
-sw $t1, 0($t3)
-#INT a = 0 ; 
-
-lw $t4, 0($t3)
-#if ( a % 2 == 1 ) { 
-
-addiu $t5, $0, 2
-div $t6 $t4 $t5
-mfhi $t6
-addiu $t7, $0, 1
-xor $t8, $t6, $t7
-sltiu $t9, $t8, 1
-move $v0, $t9
-addiu $29, $29, -4
-sw $t0, -540($30)
-addiu $29, $29, -4
-sw $t1, -544($30)
-addiu $29, $29, -4
-sw $t2, -548($30)
-addiu $29, $29, -4
-sw $t3, -552($30)
-addiu $29, $29, -4
-sw $t4, -556($30)
-addiu $29, $29, -4
-sw $t5, -560($30)
-addiu $29, $29, -4
-sw $t6, -564($30)
-addiu $29, $29, -4
-sw $t7, -568($30)
-addiu $29, $29, -4
-sw $t8, -572($30)
-addiu $29, $29, -4
-sw $t9, -576($30)
-
-L57:
-#continue ; 
-
-
-L58:
-lw $t0, -552($30)
-lw $t1, 0($t0)
-#INT c = 0 ; } if ( a > 10 ) { 
-
-addiu $t2, $0, 10
-sgt $t3, $t1, $t2
-move $v0, $t3
-sw $t0, -552($30)
-addiu $29, $29, -4
-sw $t1, -580($30)
-addiu $29, $29, -4
-sw $t2, -584($30)
-addiu $29, $29, -4
-sw $t3, -588($30)
-
-L59:
-#break ; 
-
-
-L60:
-lw $t0, -552($30)
-lw $t1, 0($t0)
-#INT g = 0 ; }  a ++ ; 
-
-addi $t2, $t1, 1
-sw $t2, 0($t0)
-sw $t0, -552($30)
-addiu $29, $29, -4
-sw $t1, -592($30)
-addiu $29, $29, -4
-sw $t2, -596($30)
-
-L61:
+sw $s7, -448($30)
 addiu $t0, $0, 0
 move $v0, $t0
 j function_main_load
-# } return 0 ; 
-
-
-L62:
-addiu $t2, $0, 5
-li $t3, 0
-addiu $29, $29, -4
-sw $t3, 4($29)
-addiu $t4, $29, 4
-sw $t2, 0($t4)
-#  INT main ( ) {  INT a = 5 ; 
-
-addiu $t5, $0, 5
-sw $t5, 0($t4)
-#a = 5 ; 
-
-addiu $t7, $0, 6
-li $t8, 0
-addiu $29, $29, -4
-sw $t8, 4($29)
-addiu $t9, $29, 4
-sw $t7, 0($t9)
-# INT b = 6 ; 
-
-addiu $s0, $0, 6
-sw $s0, 0($t9)
-#b = 6 ; 
-
-addiu $s2, $0, 3
-li $s3, 0
-addiu $29, $29, -4
-sw $s3, 4($29)
-addiu $s4, $29, 4
-sw $s2, 0($s4)
-# INT c = 3 ; 
-
-addiu $s5, $0, 3
-sw $s5, 0($s4)
-#c = 3 ; 
-
-lw $s7, 0($t4)
-# INT d = ( a + b ) * c ; 
-
-addiu $29, $29, -4
-sw $t0, -612($30)
-addiu $29, $29, -4
-sw $t1, -616($30)
-addiu $29, $29, -4
-sw $t2, -620($30)
-addiu $29, $29, -4
-sw $t3, -624($30)
-addiu $29, $29, -4
-sw $t4, -628($30)
-addiu $29, $29, -4
-sw $t5, -632($30)
-addiu $29, $29, -4
-sw $t6, -636($30)
-addiu $29, $29, -4
-sw $t7, -640($30)
-addiu $29, $29, -4
-sw $t8, -644($30)
-addiu $29, $29, -4
-sw $t9, -648($30)
-addiu $29, $29, -4
-sw $s0, -652($30)
-addiu $29, $29, -4
-sw $s1, -656($30)
-addiu $29, $29, -4
-sw $s2, -660($30)
-addiu $29, $29, -4
-sw $s3, -664($30)
-addiu $29, $29, -4
-sw $s4, -668($30)
-addiu $29, $29, -4
-sw $s5, -672($30)
-addiu $29, $29, -4
-sw $s6, -676($30)
-addiu $29, $29, -4
-sw $s7, -680($30)
-lw $t1, -648($30)
-lw $t0, 0($t1)
-lw $t3, -680($30)
-add $t2, $t3, $t0
-lw $t4, -668($30)
-lw $t5, 0($t4)
-mul $t6, $t2, $t5
-li $t7, 0
-addiu $29, $29, -4
-sw $t7, 4($29)
-addiu $t8, $29, 4
-sw $t6, 0($t8)
-addiu $t9, $0, 0
-move $v0, $t9
-j function_main_load
 # return 0 ; 
 
+addiu $29, $29, -4
+sw $t0, -452($30)
 
-L63:
-addiu $s1, $0, 10
-li $s2, 0
+L8:
+addiu $t7, $sp, 0
 addiu $29, $29, -4
-sw $s2, 4($29)
-addiu $s3, $29, 4
-sw $s1, 0($s3)
-# INT main ( ) { INT a = 10.2 ; 
-
-addiu $s5, $0, 5
-li $s6, 0
+sw $t0, -100($30)
 addiu $29, $29, -4
-sw $s6, 4($29)
-addiu $s7, $29, 4
-sb $s5, 0($s7)
-#CHAR c = 5 ; 
-
+sw $t1, -104($30)
 addiu $29, $29, -4
-sw $t0, -696($30)
-sw $t1, -648($30)
+sw $t2, -108($30)
 addiu $29, $29, -4
-sw $t2, -700($30)
-sw $t3, -680($30)
-sw $t4, -668($30)
+sw $t3, -112($30)
 addiu $29, $29, -4
-sw $t5, -704($30)
+sw $t4, -116($30)
 addiu $29, $29, -4
-sw $t6, -708($30)
+sw $t5, -120($30)
 addiu $29, $29, -4
-sw $t7, -712($30)
+sw $t6, -124($30)
 addiu $29, $29, -4
-sw $t8, -716($30)
-addiu $29, $29, -4
-sw $t9, -720($30)
-addiu $29, $29, -4
-sw $s0, -724($30)
-addiu $29, $29, -4
-sw $s1, -728($30)
-addiu $29, $29, -4
-sw $s2, -732($30)
-addiu $29, $29, -4
-sw $s3, -736($30)
-addiu $29, $29, -4
-sw $s4, -740($30)
-addiu $29, $29, -4
-sw $s5, -744($30)
-addiu $29, $29, -4
-sw $s6, -748($30)
-addiu $29, $29, -4
-sw $s7, -752($30)
-l.s $f0, float...index_0
-mfc1 $t1, $f0
-li $t2, 0
-addiu $29, $29, -4
-sw $t2, 4($29)
-addiu $t3, $29, 4
-sw $t1, 0($t3)
-#FLOAT b = 10 ; 
-
-addiu $t4, $0, 0
-move $v0, $t4
-j function_main_load
-#return 0 ; 
-
-
-L64:
-addiu $t6, $0, 6
-li $t7, 0
-addiu $29, $29, -4
-sw $t7, 4($29)
-addiu $t8, $29, 4
-sw $t6, 0($t8)
-#  INT main ( ) {  INT a = 6 ; 
-
-addiu $t9, $0, 6
-sw $t9, 0($t8)
-#a = 6 ; 
-
-lw $s1, 0($t8)
-# INT b = + a ; 
-
-li $s2, 0
-addiu $29, $29, -4
-sw $s2, 4($29)
-addiu $s3, $29, 4
-sw $s1, 0($s3)
-lw $s4, 0($t8)
-#b = - a ; 
-
-neg $s5, $s4
-sw $s5, 0($s3)
-addiu $s6, $0, 0
-move $v0, $s6
-j function_main_load
-# return 0 ; 
-
-
-L65:
-l.s $f0, float...index_1
-addiu $29, $29, -4
-sw $t0, -768($30)
-addiu $29, $29, -4
-sw $t1, -772($30)
-addiu $29, $29, -4
-sw $t2, -776($30)
-addiu $29, $29, -4
-sw $t3, -780($30)
-addiu $29, $29, -4
-sw $t4, -784($30)
-addiu $29, $29, -4
-sw $t5, -788($30)
-addiu $29, $29, -4
-sw $t6, -792($30)
-addiu $29, $29, -4
-sw $t7, -796($30)
-addiu $29, $29, -4
-sw $t8, -800($30)
-addiu $29, $29, -4
-sw $t9, -804($30)
-addiu $29, $29, -4
-sw $s0, -808($30)
-addiu $29, $29, -4
-sw $s1, -812($30)
-addiu $29, $29, -4
-sw $s2, -816($30)
-addiu $29, $29, -4
-sw $s3, -820($30)
-addiu $29, $29, -4
-sw $s4, -824($30)
-addiu $29, $29, -4
-sw $s5, -828($30)
-addiu $29, $29, -4
-sw $s6, -832($30)
-addiu $29, $29, -4
-sw $s7, -836($30)
-mfc1 $t0, $f0
+sw $t7, -128($30)
 li $t1, 0
 addiu $29, $29, -4
 sw $t1, 4($29)
 addiu $t2, $29, 4
-sw $t0, 0($t2)
-# INT main ( ) { FLOAT a = 5.0 ; 
-
-addiu $t4, $0, 5
-li $t5, 0
-addiu $29, $29, -4
-sw $t5, 4($29)
-addiu $t6, $29, 4
-sw $t4, 0($t6)
-#INT b = 5 ; 
-
-addiu $t8, $0, 101
-li $t9, 0
-addiu $29, $29, -4
-sw $t9, 4($29)
-addiu $s0, $29, 4
-sb $t8, 0($s0)
-#CHAR c = 'e' ; 
-
-li $s2, 0
-addiu $29, $29, -4
-sw $s2, 4($29)
-addiu $s3, $29, 4
-addiu $29, $29, -4
-sw $s3, 4($29)
-addiu $s4, $29, 4
-sw $t2, 0($s4)
-#FLOAT * d = & a ; 
-
-li $s6, 0
-addiu $29, $29, -4
-sw $s6, 4($29)
-addiu $s7, $29, 4
-addiu $29, $29, -4
-sw $s7, 4($29)
-addiu $29, $29, -4
-sw $t0, -868($30)
-addiu $29, $29, -4
-sw $t1, -872($30)
-addiu $29, $29, -4
-sw $t2, -876($30)
-addiu $29, $29, -4
-sw $t3, -880($30)
-addiu $29, $29, -4
-sw $t4, -884($30)
-addiu $29, $29, -4
-sw $t5, -888($30)
-addiu $29, $29, -4
-sw $t6, -892($30)
-addiu $29, $29, -4
-sw $t7, -896($30)
-addiu $29, $29, -4
-sw $t8, -900($30)
-addiu $29, $29, -4
-sw $t9, -904($30)
-addiu $29, $29, -4
-sw $s0, -908($30)
-addiu $29, $29, -4
-sw $s1, -912($30)
-addiu $29, $29, -4
-sw $s2, -916($30)
-addiu $29, $29, -4
-sw $s3, -920($30)
-addiu $29, $29, -4
-sw $s4, -924($30)
-addiu $29, $29, -4
-sw $s5, -928($30)
-addiu $29, $29, -4
-sw $s6, -932($30)
-addiu $29, $29, -4
-sw $s7, -936($30)
-addiu $t0, $29, 4
-lw $t1, -892($30)
-sw $t1, 0($t0)
-#INT * e = & b ; 
-
-li $t3, 0
-addiu $29, $29, -4
-sw $t3, 4($29)
-addiu $t4, $29, 4
-addiu $29, $29, -4
-sw $t4, 4($29)
-addiu $t5, $29, 4
-lw $t6, -908($30)
-sw $t6, 0($t5)
-#CHAR * f = & c ; 
-
-addiu $t7, $0, 0
-move $v0, $t7
-j function_main_load
-#return 0 ; 
-
-
-L66:
-#// global comment
-
-addiu $t8, $0, 0
-move $v0, $t8
-j function_main_load
-#  INT main ( ) {  return 0 ; 
-
-#// inside main
-
-#// another global comment
-
-
-L67:
-li $s0, 0
-addiu $29, $29, -20
-sw $s0, 4($29)
-sw $s0, 8($29)
-sw $s0, 12($29)
-sw $s0, 16($29)
-sw $s0, 20($29)
-addiu $s1, $29, 4
-addiu $29, $29, -4
-sw $s1, 4($29)
-addiu $s2, $29, 4
-#   INT main ( ) { INT c [ 5 ] = { 1 , 2 , 3 , 4 , 5 } ; 
-
-addiu $s3, $0, 4
-lw $s4, 0($s2)
-li $s5, 4
-mul $s6, $s3, $s5
-addu $s7, $s4, $s6
-addiu $29, $29, -4
-sw $t0, -972($30)
-sw $t1, -892($30)
-addiu $29, $29, -4
-sw $t2, -976($30)
-addiu $29, $29, -4
-sw $t3, -980($30)
-addiu $29, $29, -4
-sw $t4, -984($30)
-addiu $29, $29, -4
-sw $t5, -988($30)
-sw $t6, -908($30)
-addiu $29, $29, -4
-sw $t7, -992($30)
-addiu $29, $29, -4
-sw $t8, -996($30)
-addiu $29, $29, -4
-sw $t9, -1000($30)
-addiu $29, $29, -4
-sw $s0, -1004($30)
-addiu $29, $29, -4
-sw $s1, -1008($30)
-addiu $29, $29, -4
-sw $s2, -1012($30)
-addiu $29, $29, -4
-sw $s3, -1016($30)
-addiu $29, $29, -4
-sw $s4, -1020($30)
-addiu $29, $29, -4
-sw $s5, -1024($30)
-addiu $29, $29, -4
-sw $s6, -1028($30)
-addiu $29, $29, -4
-sw $s7, -1032($30)
-addiu $t0, $0, 5
-lw $t1, -1032($30)
-sw $t0, 0($t1)
-addiu $t2, $0, 3
-lw $t4, -1012($30)
-lw $t3, 0($t4)
-li $t5, 4
-mul $t6, $t2, $t5
-addu $t7, $t3, $t6
-addiu $t8, $0, 4
-sw $t8, 0($t7)
-addiu $t9, $0, 2
-lw $s0, 0($t4)
-li $s1, 4
-mul $s2, $t9, $s1
-addu $s3, $s0, $s2
-addiu $s4, $0, 3
-sw $s4, 0($s3)
-addiu $s5, $0, 1
-lw $s6, 0($t4)
-li $s7, 4
-addiu $29, $29, -4
-sw $t0, -1036($30)
-sw $t1, -1032($30)
-addiu $29, $29, -4
-sw $t2, -1040($30)
-addiu $29, $29, -4
-sw $t3, -1044($30)
-sw $t4, -1012($30)
-addiu $29, $29, -4
-sw $t5, -1048($30)
-addiu $29, $29, -4
-sw $t6, -1052($30)
-addiu $29, $29, -4
-sw $t7, -1056($30)
-addiu $29, $29, -4
-sw $t8, -1060($30)
-addiu $29, $29, -4
-sw $t9, -1064($30)
-addiu $29, $29, -4
-sw $s0, -1068($30)
-addiu $29, $29, -4
-sw $s1, -1072($30)
-addiu $29, $29, -4
-sw $s2, -1076($30)
-addiu $29, $29, -4
-sw $s3, -1080($30)
-addiu $29, $29, -4
-sw $s4, -1084($30)
-addiu $29, $29, -4
-sw $s5, -1088($30)
-addiu $29, $29, -4
-sw $s6, -1092($30)
-addiu $29, $29, -4
-sw $s7, -1096($30)
-lw $t1, -1088($30)
-lw $t2, -1096($30)
-mul $t0, $t1, $t2
-lw $t4, -1092($30)
-addu $t3, $t4, $t0
-addiu $t5, $0, 2
-sw $t5, 0($t3)
-addiu $t6, $0, 0
-lw $t8, -1012($30)
-lw $t7, 0($t8)
-li $t9, 4
-mul $s0, $t6, $t9
-addu $s1, $t7, $s0
-addiu $s2, $0, 1
-sw $s2, 0($s1)
-addiu $s3, $0, 1
-lw $s4, 0($t8)
-li $s5, 4
-mul $s6, $s3, $s5
-addu $s7, $s4, $s6
-#c [ 1 ] = 0 ; 
-
-addiu $29, $29, -4
-sw $t0, -1100($30)
-sw $t1, -1088($30)
-sw $t2, -1096($30)
-addiu $29, $29, -4
-sw $t3, -1104($30)
-sw $t4, -1092($30)
-addiu $29, $29, -4
-sw $t5, -1108($30)
-addiu $29, $29, -4
-sw $t6, -1112($30)
-addiu $29, $29, -4
-sw $t7, -1116($30)
-sw $t8, -1012($30)
-addiu $29, $29, -4
-sw $t9, -1120($30)
-addiu $29, $29, -4
-sw $s0, -1124($30)
-addiu $29, $29, -4
-sw $s1, -1128($30)
-addiu $29, $29, -4
-sw $s2, -1132($30)
-addiu $29, $29, -4
-sw $s3, -1136($30)
-addiu $29, $29, -4
-sw $s4, -1140($30)
-addiu $29, $29, -4
-sw $s5, -1144($30)
-addiu $29, $29, -4
-sw $s6, -1148($30)
-addiu $29, $29, -4
-sw $s7, -1152($30)
-addiu $t0, $0, 0
-lw $t1, -1152($30)
-sw $t0, 0($t1)
-addiu $t2, $0, 0
-move $v0, $t2
-j function_main_load
-#return 0 ; 
-
-
-L68:
-li $t4, 0
-addiu $29, $29, -12
-sb $t4, 4($29)
-sb $t4, 5($29)
-sb $t4, 6($29)
-sb $t4, 7($29)
-sb $t4, 8($29)
-sb $t4, 9($29)
-sb $t4, 10($29)
-sb $t4, 11($29)
-sb $t4, 12($29)
-sb $t4, 13($29)
-sb $t4, 14($29)
-sb $t4, 15($29)
-addiu $t5, $29, 4
-addiu $29, $29, -4
-sw $t5, 4($29)
-addiu $t6, $29, 4
-#     INT main ( ) { CHAR c [ ] = "hello world" ; 
-
-addiu $t7, $0, 11
-lw $t8, 0($t6)
-li $t9, 1
-mul $s0, $t7, $t9
-addu $s1, $t8, $s0
-addiu $s2, $0, 0
-sb $s2, 0($s1)
-addiu $s3, $0, 10
-lw $s4, 0($t6)
-li $s5, 1
-mul $s6, $s3, $s5
-addu $s7, $s4, $s6
-addiu $29, $29, -4
-sw $t0, -1172($30)
-sw $t1, -1152($30)
-addiu $29, $29, -4
-sw $t2, -1176($30)
-addiu $29, $29, -4
-sw $t3, -1180($30)
-addiu $29, $29, -4
-sw $t4, -1184($30)
-addiu $29, $29, -4
-sw $t5, -1188($30)
-addiu $29, $29, -4
-sw $t6, -1192($30)
-addiu $29, $29, -4
-sw $t7, -1196($30)
-addiu $29, $29, -4
-sw $t8, -1200($30)
-addiu $29, $29, -4
-sw $t9, -1204($30)
-addiu $29, $29, -4
-sw $s0, -1208($30)
-addiu $29, $29, -4
-sw $s1, -1212($30)
-addiu $29, $29, -4
-sw $s2, -1216($30)
-addiu $29, $29, -4
-sw $s3, -1220($30)
-addiu $29, $29, -4
-sw $s4, -1224($30)
-addiu $29, $29, -4
-sw $s5, -1228($30)
-addiu $29, $29, -4
-sw $s6, -1232($30)
-addiu $29, $29, -4
-sw $s7, -1236($30)
-addiu $t0, $0, 100
-lw $t1, -1236($30)
-sb $t0, 0($t1)
-addiu $t2, $0, 9
-lw $t4, -1192($30)
-lw $t3, 0($t4)
-li $t5, 1
-mul $t6, $t2, $t5
-addu $t7, $t3, $t6
-addiu $t8, $0, 108
-sb $t8, 0($t7)
-addiu $t9, $0, 8
-lw $s0, 0($t4)
-li $s1, 1
-mul $s2, $t9, $s1
-addu $s3, $s0, $s2
-addiu $s4, $0, 114
-sb $s4, 0($s3)
-addiu $s5, $0, 7
-lw $s6, 0($t4)
-li $s7, 1
-addiu $29, $29, -4
-sw $t0, -1240($30)
-sw $t1, -1236($30)
-addiu $29, $29, -4
-sw $t2, -1244($30)
-addiu $29, $29, -4
-sw $t3, -1248($30)
-sw $t4, -1192($30)
-addiu $29, $29, -4
-sw $t5, -1252($30)
-addiu $29, $29, -4
-sw $t6, -1256($30)
-addiu $29, $29, -4
-sw $t7, -1260($30)
-addiu $29, $29, -4
-sw $t8, -1264($30)
-addiu $29, $29, -4
-sw $t9, -1268($30)
-addiu $29, $29, -4
-sw $s0, -1272($30)
-addiu $29, $29, -4
-sw $s1, -1276($30)
-addiu $29, $29, -4
-sw $s2, -1280($30)
-addiu $29, $29, -4
-sw $s3, -1284($30)
-addiu $29, $29, -4
-sw $s4, -1288($30)
-addiu $29, $29, -4
-sw $s5, -1292($30)
-addiu $29, $29, -4
-sw $s6, -1296($30)
-addiu $29, $29, -4
-sw $s7, -1300($30)
-lw $t1, -1292($30)
-lw $t2, -1300($30)
-mul $t0, $t1, $t2
-lw $t4, -1296($30)
-addu $t3, $t4, $t0
-addiu $t5, $0, 111
-sb $t5, 0($t3)
-addiu $t6, $0, 6
-lw $t8, -1192($30)
-lw $t7, 0($t8)
-li $t9, 1
-mul $s0, $t6, $t9
-addu $s1, $t7, $s0
-addiu $s2, $0, 119
-sb $s2, 0($s1)
-addiu $s3, $0, 5
-lw $s4, 0($t8)
-li $s5, 1
-mul $s6, $s3, $s5
-addu $s7, $s4, $s6
-addiu $29, $29, -4
-sw $t0, -1304($30)
-sw $t1, -1292($30)
-sw $t2, -1300($30)
-addiu $29, $29, -4
-sw $t3, -1308($30)
-sw $t4, -1296($30)
-addiu $29, $29, -4
-sw $t5, -1312($30)
-addiu $29, $29, -4
-sw $t6, -1316($30)
-addiu $29, $29, -4
-sw $t7, -1320($30)
-sw $t8, -1192($30)
-addiu $29, $29, -4
-sw $t9, -1324($30)
-addiu $29, $29, -4
-sw $s0, -1328($30)
-addiu $29, $29, -4
-sw $s1, -1332($30)
-addiu $29, $29, -4
-sw $s2, -1336($30)
-addiu $29, $29, -4
-sw $s3, -1340($30)
-addiu $29, $29, -4
-sw $s4, -1344($30)
-addiu $29, $29, -4
-sw $s5, -1348($30)
-addiu $29, $29, -4
-sw $s6, -1352($30)
-addiu $29, $29, -4
-sw $s7, -1356($30)
-addiu $t0, $0, 32
-lw $t1, -1356($30)
-sb $t0, 0($t1)
-addiu $t2, $0, 4
-lw $t4, -1192($30)
-lw $t3, 0($t4)
-li $t5, 1
-mul $t6, $t2, $t5
-addu $t7, $t3, $t6
-addiu $t8, $0, 111
-sb $t8, 0($t7)
-addiu $t9, $0, 3
-lw $s0, 0($t4)
-li $s1, 1
-mul $s2, $t9, $s1
-addu $s3, $s0, $s2
-addiu $s4, $0, 108
-sb $s4, 0($s3)
-addiu $s5, $0, 2
-lw $s6, 0($t4)
-li $s7, 1
-addiu $29, $29, -4
-sw $t0, -1360($30)
-sw $t1, -1356($30)
-addiu $29, $29, -4
-sw $t2, -1364($30)
-addiu $29, $29, -4
-sw $t3, -1368($30)
-sw $t4, -1192($30)
-addiu $29, $29, -4
-sw $t5, -1372($30)
-addiu $29, $29, -4
-sw $t6, -1376($30)
-addiu $29, $29, -4
-sw $t7, -1380($30)
-addiu $29, $29, -4
-sw $t8, -1384($30)
-addiu $29, $29, -4
-sw $t9, -1388($30)
-addiu $29, $29, -4
-sw $s0, -1392($30)
-addiu $29, $29, -4
-sw $s1, -1396($30)
-addiu $29, $29, -4
-sw $s2, -1400($30)
-addiu $29, $29, -4
-sw $s3, -1404($30)
-addiu $29, $29, -4
-sw $s4, -1408($30)
-addiu $29, $29, -4
-sw $s5, -1412($30)
-addiu $29, $29, -4
-sw $s6, -1416($30)
-addiu $29, $29, -4
-sw $s7, -1420($30)
-lw $t1, -1412($30)
-lw $t2, -1420($30)
-mul $t0, $t1, $t2
-lw $t4, -1416($30)
-addu $t3, $t4, $t0
-addiu $t5, $0, 108
-sb $t5, 0($t3)
-addiu $t6, $0, 1
-lw $t8, -1192($30)
-lw $t7, 0($t8)
-li $t9, 1
-mul $s0, $t6, $t9
-addu $s1, $t7, $s0
-addiu $s2, $0, 101
-sb $s2, 0($s1)
-addiu $s3, $0, 0
-lw $s4, 0($t8)
-li $s5, 1
-mul $s6, $s3, $s5
-addu $s7, $s4, $s6
-addiu $29, $29, -4
-sw $t0, -1424($30)
-sw $t1, -1412($30)
-sw $t2, -1420($30)
-addiu $29, $29, -4
-sw $t3, -1428($30)
-sw $t4, -1416($30)
-addiu $29, $29, -4
-sw $t5, -1432($30)
-addiu $29, $29, -4
-sw $t6, -1436($30)
-addiu $29, $29, -4
-sw $t7, -1440($30)
-sw $t8, -1192($30)
-addiu $29, $29, -4
-sw $t9, -1444($30)
-addiu $29, $29, -4
-sw $s0, -1448($30)
-addiu $29, $29, -4
-sw $s1, -1452($30)
-addiu $29, $29, -4
-sw $s2, -1456($30)
-addiu $29, $29, -4
-sw $s3, -1460($30)
-addiu $29, $29, -4
-sw $s4, -1464($30)
-addiu $29, $29, -4
-sw $s5, -1468($30)
-addiu $29, $29, -4
-sw $s6, -1472($30)
-addiu $29, $29, -4
-sw $s7, -1476($30)
-addiu $t0, $0, 104
-lw $t1, -1476($30)
-sb $t0, 0($t1)
-la $t2, str4
-lw $t3, -1192($30)
-lw $t4, 0($t3)
-# printf ( "%s" , c ) ; 
-
-addiu $29, $29, -8
-sw $t2, 4($29)
-sw $t4, 8($29)
-jal function_printf
-lw $t2, 4($29)
-lw $t4, 8($29)
-addiu $29, $29, 8
-addiu $29, $29, -4
-sw $t0, -1480($30)
-sw $t1, -1476($30)
-addiu $29, $29, -4
-sw $t2, -1484($30)
-sw $t3, -1192($30)
-addiu $29, $29, -4
-sw $t4, -1488($30)
-addiu $29, $29, -4
-sw $t5, -1492($30)
-addiu $29, $29, -4
-sw $t6, -1496($30)
-addiu $29, $29, -4
-sw $t7, -1500($30)
-addiu $29, $29, -4
-sw $t8, -1504($30)
-addiu $29, $29, -4
-sw $t9, -1508($30)
-addiu $29, $29, -4
-sw $s0, -1512($30)
-addiu $29, $29, -4
-sw $s1, -1516($30)
-addiu $29, $29, -4
-sw $s2, -1520($30)
-addiu $29, $29, -4
-sw $s3, -1524($30)
-addiu $29, $29, -4
-sw $s4, -1528($30)
-addiu $29, $29, -4
-sw $s5, -1532($30)
-addiu $29, $29, -4
-sw $s6, -1536($30)
-addiu $29, $29, -4
-sw $s7, -1540($30)
-move $t0, $v0
-li $t2, 0
-addiu $29, $29, -4
-sb $t2, 4($29)
-sb $t2, 5($29)
-sb $t2, 6($29)
-addiu $t3, $29, 4
-addiu $29, $29, -4
-sw $t3, 4($29)
-addiu $t4, $29, 4
-# CHAR d [ ] = { 'a' , 'b' , '\0' } ; 
-
-addiu $t5, $0, 2
-lw $t6, 0($t4)
-li $t7, 1
-mul $t8, $t5, $t7
-addu $t9, $t6, $t8
-addiu $s0, $0, 0
-sb $s0, 0($t9)
-addiu $s1, $0, 1
-lw $s2, 0($t4)
-li $s3, 1
-mul $s4, $s1, $s3
-addu $s5, $s2, $s4
-addiu $s6, $0, 98
-sb $s6, 0($s5)
-addiu $s7, $0, 0
-addiu $29, $29, -4
-sw $t0, -1552($30)
-addiu $29, $29, -4
-sw $t1, -1556($30)
-addiu $29, $29, -4
-sw $t2, -1560($30)
-addiu $29, $29, -4
-sw $t3, -1564($30)
-addiu $29, $29, -4
-sw $t4, -1568($30)
-addiu $29, $29, -4
-sw $t5, -1572($30)
-addiu $29, $29, -4
-sw $t6, -1576($30)
-addiu $29, $29, -4
-sw $t7, -1580($30)
-addiu $29, $29, -4
-sw $t8, -1584($30)
-addiu $29, $29, -4
-sw $t9, -1588($30)
-addiu $29, $29, -4
-sw $s0, -1592($30)
-addiu $29, $29, -4
-sw $s1, -1596($30)
-addiu $29, $29, -4
-sw $s2, -1600($30)
-addiu $29, $29, -4
-sw $s3, -1604($30)
-addiu $29, $29, -4
-sw $s4, -1608($30)
-addiu $29, $29, -4
-sw $s5, -1612($30)
-addiu $29, $29, -4
-sw $s6, -1616($30)
-addiu $29, $29, -4
-sw $s7, -1620($30)
-lw $t1, -1568($30)
-lw $t0, 0($t1)
-li $t2, 1
-lw $t4, -1620($30)
-mul $t3, $t4, $t2
-addu $t5, $t0, $t3
-addiu $t6, $0, 97
-sb $t6, 0($t5)
-la $t7, str4
-lw $t8, 0($t1)
-# printf ( "%s" , d ) ; 
-
-addiu $29, $29, -8
-sw $t7, 4($29)
-sw $t8, 8($29)
-jal function_printf
-lw $t7, 4($29)
-lw $t8, 8($29)
-addiu $29, $29, 8
-move $t9, $v0
-addiu $s0, $0, 0
-move $v0, $s0
-j function_main_load
-# return 0 ; 
-
-
-L91:
-li $s2, 0
-addiu $29, $29, -4
-sw $s2, 4($29)
-addiu $s3, $29, 4
-#   union NotTypeSafe { INT as_integer ; FLOAT as_float ; CHAR as_str [ 50 ] [ 50 ] ; } ;  INT main ( ) { INT k ; 
-
-li $s5, 0
-addiu $29, $29, -4
-sw $s5, 4($29)
-addiu $s6, $29, 4
-#FLOAT s ; 
-
-addiu $29, $29, -4
-sw $t0, -1632($30)
-sw $t1, -1568($30)
-addiu $29, $29, -4
-sw $t2, -1636($30)
-addiu $29, $29, -4
-sw $t3, -1640($30)
-sw $t4, -1620($30)
-addiu $29, $29, -4
-sw $t5, -1644($30)
-addiu $29, $29, -4
-sw $t6, -1648($30)
-addiu $29, $29, -4
-sw $t7, -1652($30)
-addiu $29, $29, -4
-sw $t8, -1656($30)
-addiu $29, $29, -4
-sw $t9, -1660($30)
-addiu $29, $29, -4
-sw $s0, -1664($30)
-addiu $29, $29, -4
-sw $s1, -1668($30)
-addiu $29, $29, -4
-sw $s2, -1672($30)
-addiu $29, $29, -4
-sw $s3, -1676($30)
-addiu $29, $29, -4
-sw $s4, -1680($30)
-addiu $29, $29, -4
-sw $s5, -1684($30)
-addiu $29, $29, -4
-sw $s6, -1688($30)
-addiu $29, $29, -4
-sw $s7, -1692($30)
-li $t0, 0
-addiu $29, $29, -2600
-sb $t0, 4($29)
-sb $t0, 5($29)
-sb $t0, 6($29)
-sb $t0, 7($29)
-sb $t0, 8($29)
-sb $t0, 9($29)
-sb $t0, 10($29)
-sb $t0, 11($29)
-sb $t0, 12($29)
-sb $t0, 13($29)
-sb $t0, 14($29)
-sb $t0, 15($29)
-sb $t0, 16($29)
-sb $t0, 17($29)
-sb $t0, 18($29)
-sb $t0, 19($29)
-sb $t0, 20($29)
-sb $t0, 21($29)
-sb $t0, 22($29)
-sb $t0, 23($29)
-sb $t0, 24($29)
-sb $t0, 25($29)
-sb $t0, 26($29)
-sb $t0, 27($29)
-sb $t0, 28($29)
-sb $t0, 29($29)
-sb $t0, 30($29)
-sb $t0, 31($29)
-sb $t0, 32($29)
-sb $t0, 33($29)
-sb $t0, 34($29)
-sb $t0, 35($29)
-sb $t0, 36($29)
-sb $t0, 37($29)
-sb $t0, 38($29)
-sb $t0, 39($29)
-sb $t0, 40($29)
-sb $t0, 41($29)
-sb $t0, 42($29)
-sb $t0, 43($29)
-sb $t0, 44($29)
-sb $t0, 45($29)
-sb $t0, 46($29)
-sb $t0, 47($29)
-sb $t0, 48($29)
-sb $t0, 49($29)
-sb $t0, 50($29)
-sb $t0, 51($29)
-sb $t0, 52($29)
-sb $t0, 53($29)
-sb $t0, 54($29)
-sb $t0, 55($29)
-sb $t0, 56($29)
-sb $t0, 57($29)
-sb $t0, 58($29)
-sb $t0, 59($29)
-sb $t0, 60($29)
-sb $t0, 61($29)
-sb $t0, 62($29)
-sb $t0, 63($29)
-sb $t0, 64($29)
-sb $t0, 65($29)
-sb $t0, 66($29)
-sb $t0, 67($29)
-sb $t0, 68($29)
-sb $t0, 69($29)
-sb $t0, 70($29)
-sb $t0, 71($29)
-sb $t0, 72($29)
-sb $t0, 73($29)
-sb $t0, 74($29)
-sb $t0, 75($29)
-sb $t0, 76($29)
-sb $t0, 77($29)
-sb $t0, 78($29)
-sb $t0, 79($29)
-sb $t0, 80($29)
-sb $t0, 81($29)
-sb $t0, 82($29)
-sb $t0, 83($29)
-sb $t0, 84($29)
-sb $t0, 85($29)
-sb $t0, 86($29)
-sb $t0, 87($29)
-sb $t0, 88($29)
-sb $t0, 89($29)
-sb $t0, 90($29)
-sb $t0, 91($29)
-sb $t0, 92($29)
-sb $t0, 93($29)
-sb $t0, 94($29)
-sb $t0, 95($29)
-sb $t0, 96($29)
-sb $t0, 97($29)
-sb $t0, 98($29)
-sb $t0, 99($29)
-sb $t0, 100($29)
-sb $t0, 101($29)
-sb $t0, 102($29)
-sb $t0, 103($29)
-sb $t0, 104($29)
-sb $t0, 105($29)
-sb $t0, 106($29)
-sb $t0, 107($29)
-sb $t0, 108($29)
-sb $t0, 109($29)
-sb $t0, 110($29)
-sb $t0, 111($29)
-sb $t0, 112($29)
-sb $t0, 113($29)
-sb $t0, 114($29)
-sb $t0, 115($29)
-sb $t0, 116($29)
-sb $t0, 117($29)
-sb $t0, 118($29)
-sb $t0, 119($29)
-sb $t0, 120($29)
-sb $t0, 121($29)
-sb $t0, 122($29)
-sb $t0, 123($29)
-sb $t0, 124($29)
-sb $t0, 125($29)
-sb $t0, 126($29)
-sb $t0, 127($29)
-sb $t0, 128($29)
-sb $t0, 129($29)
-sb $t0, 130($29)
-sb $t0, 131($29)
-sb $t0, 132($29)
-sb $t0, 133($29)
-sb $t0, 134($29)
-sb $t0, 135($29)
-sb $t0, 136($29)
-sb $t0, 137($29)
-sb $t0, 138($29)
-sb $t0, 139($29)
-sb $t0, 140($29)
-sb $t0, 141($29)
-sb $t0, 142($29)
-sb $t0, 143($29)
-sb $t0, 144($29)
-sb $t0, 145($29)
-sb $t0, 146($29)
-sb $t0, 147($29)
-sb $t0, 148($29)
-sb $t0, 149($29)
-sb $t0, 150($29)
-sb $t0, 151($29)
-sb $t0, 152($29)
-sb $t0, 153($29)
-sb $t0, 154($29)
-sb $t0, 155($29)
-sb $t0, 156($29)
-sb $t0, 157($29)
-sb $t0, 158($29)
-sb $t0, 159($29)
-sb $t0, 160($29)
-sb $t0, 161($29)
-sb $t0, 162($29)
-sb $t0, 163($29)
-sb $t0, 164($29)
-sb $t0, 165($29)
-sb $t0, 166($29)
-sb $t0, 167($29)
-sb $t0, 168($29)
-sb $t0, 169($29)
-sb $t0, 170($29)
-sb $t0, 171($29)
-sb $t0, 172($29)
-sb $t0, 173($29)
-sb $t0, 174($29)
-sb $t0, 175($29)
-sb $t0, 176($29)
-sb $t0, 177($29)
-sb $t0, 178($29)
-sb $t0, 179($29)
-sb $t0, 180($29)
-sb $t0, 181($29)
-sb $t0, 182($29)
-sb $t0, 183($29)
-sb $t0, 184($29)
-sb $t0, 185($29)
-sb $t0, 186($29)
-sb $t0, 187($29)
-sb $t0, 188($29)
-sb $t0, 189($29)
-sb $t0, 190($29)
-sb $t0, 191($29)
-sb $t0, 192($29)
-sb $t0, 193($29)
-sb $t0, 194($29)
-sb $t0, 195($29)
-sb $t0, 196($29)
-sb $t0, 197($29)
-sb $t0, 198($29)
-sb $t0, 199($29)
-sb $t0, 200($29)
-sb $t0, 201($29)
-sb $t0, 202($29)
-sb $t0, 203($29)
-sb $t0, 204($29)
-sb $t0, 205($29)
-sb $t0, 206($29)
-sb $t0, 207($29)
-sb $t0, 208($29)
-sb $t0, 209($29)
-sb $t0, 210($29)
-sb $t0, 211($29)
-sb $t0, 212($29)
-sb $t0, 213($29)
-sb $t0, 214($29)
-sb $t0, 215($29)
-sb $t0, 216($29)
-sb $t0, 217($29)
-sb $t0, 218($29)
-sb $t0, 219($29)
-sb $t0, 220($29)
-sb $t0, 221($29)
-sb $t0, 222($29)
-sb $t0, 223($29)
-sb $t0, 224($29)
-sb $t0, 225($29)
-sb $t0, 226($29)
-sb $t0, 227($29)
-sb $t0, 228($29)
-sb $t0, 229($29)
-sb $t0, 230($29)
-sb $t0, 231($29)
-sb $t0, 232($29)
-sb $t0, 233($29)
-sb $t0, 234($29)
-sb $t0, 235($29)
-sb $t0, 236($29)
-sb $t0, 237($29)
-sb $t0, 238($29)
-sb $t0, 239($29)
-sb $t0, 240($29)
-sb $t0, 241($29)
-sb $t0, 242($29)
-sb $t0, 243($29)
-sb $t0, 244($29)
-sb $t0, 245($29)
-sb $t0, 246($29)
-sb $t0, 247($29)
-sb $t0, 248($29)
-sb $t0, 249($29)
-sb $t0, 250($29)
-sb $t0, 251($29)
-sb $t0, 252($29)
-sb $t0, 253($29)
-sb $t0, 254($29)
-sb $t0, 255($29)
-sb $t0, 256($29)
-sb $t0, 257($29)
-sb $t0, 258($29)
-sb $t0, 259($29)
-sb $t0, 260($29)
-sb $t0, 261($29)
-sb $t0, 262($29)
-sb $t0, 263($29)
-sb $t0, 264($29)
-sb $t0, 265($29)
-sb $t0, 266($29)
-sb $t0, 267($29)
-sb $t0, 268($29)
-sb $t0, 269($29)
-sb $t0, 270($29)
-sb $t0, 271($29)
-sb $t0, 272($29)
-sb $t0, 273($29)
-sb $t0, 274($29)
-sb $t0, 275($29)
-sb $t0, 276($29)
-sb $t0, 277($29)
-sb $t0, 278($29)
-sb $t0, 279($29)
-sb $t0, 280($29)
-sb $t0, 281($29)
-sb $t0, 282($29)
-sb $t0, 283($29)
-sb $t0, 284($29)
-sb $t0, 285($29)
-sb $t0, 286($29)
-sb $t0, 287($29)
-sb $t0, 288($29)
-sb $t0, 289($29)
-sb $t0, 290($29)
-sb $t0, 291($29)
-sb $t0, 292($29)
-sb $t0, 293($29)
-sb $t0, 294($29)
-sb $t0, 295($29)
-sb $t0, 296($29)
-sb $t0, 297($29)
-sb $t0, 298($29)
-sb $t0, 299($29)
-sb $t0, 300($29)
-sb $t0, 301($29)
-sb $t0, 302($29)
-sb $t0, 303($29)
-sb $t0, 304($29)
-sb $t0, 305($29)
-sb $t0, 306($29)
-sb $t0, 307($29)
-sb $t0, 308($29)
-sb $t0, 309($29)
-sb $t0, 310($29)
-sb $t0, 311($29)
-sb $t0, 312($29)
-sb $t0, 313($29)
-sb $t0, 314($29)
-sb $t0, 315($29)
-sb $t0, 316($29)
-sb $t0, 317($29)
-sb $t0, 318($29)
-sb $t0, 319($29)
-sb $t0, 320($29)
-sb $t0, 321($29)
-sb $t0, 322($29)
-sb $t0, 323($29)
-sb $t0, 324($29)
-sb $t0, 325($29)
-sb $t0, 326($29)
-sb $t0, 327($29)
-sb $t0, 328($29)
-sb $t0, 329($29)
-sb $t0, 330($29)
-sb $t0, 331($29)
-sb $t0, 332($29)
-sb $t0, 333($29)
-sb $t0, 334($29)
-sb $t0, 335($29)
-sb $t0, 336($29)
-sb $t0, 337($29)
-sb $t0, 338($29)
-sb $t0, 339($29)
-sb $t0, 340($29)
-sb $t0, 341($29)
-sb $t0, 342($29)
-sb $t0, 343($29)
-sb $t0, 344($29)
-sb $t0, 345($29)
-sb $t0, 346($29)
-sb $t0, 347($29)
-sb $t0, 348($29)
-sb $t0, 349($29)
-sb $t0, 350($29)
-sb $t0, 351($29)
-sb $t0, 352($29)
-sb $t0, 353($29)
-sb $t0, 354($29)
-sb $t0, 355($29)
-sb $t0, 356($29)
-sb $t0, 357($29)
-sb $t0, 358($29)
-sb $t0, 359($29)
-sb $t0, 360($29)
-sb $t0, 361($29)
-sb $t0, 362($29)
-sb $t0, 363($29)
-sb $t0, 364($29)
-sb $t0, 365($29)
-sb $t0, 366($29)
-sb $t0, 367($29)
-sb $t0, 368($29)
-sb $t0, 369($29)
-sb $t0, 370($29)
-sb $t0, 371($29)
-sb $t0, 372($29)
-sb $t0, 373($29)
-sb $t0, 374($29)
-sb $t0, 375($29)
-sb $t0, 376($29)
-sb $t0, 377($29)
-sb $t0, 378($29)
-sb $t0, 379($29)
-sb $t0, 380($29)
-sb $t0, 381($29)
-sb $t0, 382($29)
-sb $t0, 383($29)
-sb $t0, 384($29)
-sb $t0, 385($29)
-sb $t0, 386($29)
-sb $t0, 387($29)
-sb $t0, 388($29)
-sb $t0, 389($29)
-sb $t0, 390($29)
-sb $t0, 391($29)
-sb $t0, 392($29)
-sb $t0, 393($29)
-sb $t0, 394($29)
-sb $t0, 395($29)
-sb $t0, 396($29)
-sb $t0, 397($29)
-sb $t0, 398($29)
-sb $t0, 399($29)
-sb $t0, 400($29)
-sb $t0, 401($29)
-sb $t0, 402($29)
-sb $t0, 403($29)
-sb $t0, 404($29)
-sb $t0, 405($29)
-sb $t0, 406($29)
-sb $t0, 407($29)
-sb $t0, 408($29)
-sb $t0, 409($29)
-sb $t0, 410($29)
-sb $t0, 411($29)
-sb $t0, 412($29)
-sb $t0, 413($29)
-sb $t0, 414($29)
-sb $t0, 415($29)
-sb $t0, 416($29)
-sb $t0, 417($29)
-sb $t0, 418($29)
-sb $t0, 419($29)
-sb $t0, 420($29)
-sb $t0, 421($29)
-sb $t0, 422($29)
-sb $t0, 423($29)
-sb $t0, 424($29)
-sb $t0, 425($29)
-sb $t0, 426($29)
-sb $t0, 427($29)
-sb $t0, 428($29)
-sb $t0, 429($29)
-sb $t0, 430($29)
-sb $t0, 431($29)
-sb $t0, 432($29)
-sb $t0, 433($29)
-sb $t0, 434($29)
-sb $t0, 435($29)
-sb $t0, 436($29)
-sb $t0, 437($29)
-sb $t0, 438($29)
-sb $t0, 439($29)
-sb $t0, 440($29)
-sb $t0, 441($29)
-sb $t0, 442($29)
-sb $t0, 443($29)
-sb $t0, 444($29)
-sb $t0, 445($29)
-sb $t0, 446($29)
-sb $t0, 447($29)
-sb $t0, 448($29)
-sb $t0, 449($29)
-sb $t0, 450($29)
-sb $t0, 451($29)
-sb $t0, 452($29)
-sb $t0, 453($29)
-sb $t0, 454($29)
-sb $t0, 455($29)
-sb $t0, 456($29)
-sb $t0, 457($29)
-sb $t0, 458($29)
-sb $t0, 459($29)
-sb $t0, 460($29)
-sb $t0, 461($29)
-sb $t0, 462($29)
-sb $t0, 463($29)
-sb $t0, 464($29)
-sb $t0, 465($29)
-sb $t0, 466($29)
-sb $t0, 467($29)
-sb $t0, 468($29)
-sb $t0, 469($29)
-sb $t0, 470($29)
-sb $t0, 471($29)
-sb $t0, 472($29)
-sb $t0, 473($29)
-sb $t0, 474($29)
-sb $t0, 475($29)
-sb $t0, 476($29)
-sb $t0, 477($29)
-sb $t0, 478($29)
-sb $t0, 479($29)
-sb $t0, 480($29)
-sb $t0, 481($29)
-sb $t0, 482($29)
-sb $t0, 483($29)
-sb $t0, 484($29)
-sb $t0, 485($29)
-sb $t0, 486($29)
-sb $t0, 487($29)
-sb $t0, 488($29)
-sb $t0, 489($29)
-sb $t0, 490($29)
-sb $t0, 491($29)
-sb $t0, 492($29)
-sb $t0, 493($29)
-sb $t0, 494($29)
-sb $t0, 495($29)
-sb $t0, 496($29)
-sb $t0, 497($29)
-sb $t0, 498($29)
-sb $t0, 499($29)
-sb $t0, 500($29)
-sb $t0, 501($29)
-sb $t0, 502($29)
-sb $t0, 503($29)
-sb $t0, 504($29)
-sb $t0, 505($29)
-sb $t0, 506($29)
-sb $t0, 507($29)
-sb $t0, 508($29)
-sb $t0, 509($29)
-sb $t0, 510($29)
-sb $t0, 511($29)
-sb $t0, 512($29)
-sb $t0, 513($29)
-sb $t0, 514($29)
-sb $t0, 515($29)
-sb $t0, 516($29)
-sb $t0, 517($29)
-sb $t0, 518($29)
-sb $t0, 519($29)
-sb $t0, 520($29)
-sb $t0, 521($29)
-sb $t0, 522($29)
-sb $t0, 523($29)
-sb $t0, 524($29)
-sb $t0, 525($29)
-sb $t0, 526($29)
-sb $t0, 527($29)
-sb $t0, 528($29)
-sb $t0, 529($29)
-sb $t0, 530($29)
-sb $t0, 531($29)
-sb $t0, 532($29)
-sb $t0, 533($29)
-sb $t0, 534($29)
-sb $t0, 535($29)
-sb $t0, 536($29)
-sb $t0, 537($29)
-sb $t0, 538($29)
-sb $t0, 539($29)
-sb $t0, 540($29)
-sb $t0, 541($29)
-sb $t0, 542($29)
-sb $t0, 543($29)
-sb $t0, 544($29)
-sb $t0, 545($29)
-sb $t0, 546($29)
-sb $t0, 547($29)
-sb $t0, 548($29)
-sb $t0, 549($29)
-sb $t0, 550($29)
-sb $t0, 551($29)
-sb $t0, 552($29)
-sb $t0, 553($29)
-sb $t0, 554($29)
-sb $t0, 555($29)
-sb $t0, 556($29)
-sb $t0, 557($29)
-sb $t0, 558($29)
-sb $t0, 559($29)
-sb $t0, 560($29)
-sb $t0, 561($29)
-sb $t0, 562($29)
-sb $t0, 563($29)
-sb $t0, 564($29)
-sb $t0, 565($29)
-sb $t0, 566($29)
-sb $t0, 567($29)
-sb $t0, 568($29)
-sb $t0, 569($29)
-sb $t0, 570($29)
-sb $t0, 571($29)
-sb $t0, 572($29)
-sb $t0, 573($29)
-sb $t0, 574($29)
-sb $t0, 575($29)
-sb $t0, 576($29)
-sb $t0, 577($29)
-sb $t0, 578($29)
-sb $t0, 579($29)
-sb $t0, 580($29)
-sb $t0, 581($29)
-sb $t0, 582($29)
-sb $t0, 583($29)
-sb $t0, 584($29)
-sb $t0, 585($29)
-sb $t0, 586($29)
-sb $t0, 587($29)
-sb $t0, 588($29)
-sb $t0, 589($29)
-sb $t0, 590($29)
-sb $t0, 591($29)
-sb $t0, 592($29)
-sb $t0, 593($29)
-sb $t0, 594($29)
-sb $t0, 595($29)
-sb $t0, 596($29)
-sb $t0, 597($29)
-sb $t0, 598($29)
-sb $t0, 599($29)
-sb $t0, 600($29)
-sb $t0, 601($29)
-sb $t0, 602($29)
-sb $t0, 603($29)
-sb $t0, 604($29)
-sb $t0, 605($29)
-sb $t0, 606($29)
-sb $t0, 607($29)
-sb $t0, 608($29)
-sb $t0, 609($29)
-sb $t0, 610($29)
-sb $t0, 611($29)
-sb $t0, 612($29)
-sb $t0, 613($29)
-sb $t0, 614($29)
-sb $t0, 615($29)
-sb $t0, 616($29)
-sb $t0, 617($29)
-sb $t0, 618($29)
-sb $t0, 619($29)
-sb $t0, 620($29)
-sb $t0, 621($29)
-sb $t0, 622($29)
-sb $t0, 623($29)
-sb $t0, 624($29)
-sb $t0, 625($29)
-sb $t0, 626($29)
-sb $t0, 627($29)
-sb $t0, 628($29)
-sb $t0, 629($29)
-sb $t0, 630($29)
-sb $t0, 631($29)
-sb $t0, 632($29)
-sb $t0, 633($29)
-sb $t0, 634($29)
-sb $t0, 635($29)
-sb $t0, 636($29)
-sb $t0, 637($29)
-sb $t0, 638($29)
-sb $t0, 639($29)
-sb $t0, 640($29)
-sb $t0, 641($29)
-sb $t0, 642($29)
-sb $t0, 643($29)
-sb $t0, 644($29)
-sb $t0, 645($29)
-sb $t0, 646($29)
-sb $t0, 647($29)
-sb $t0, 648($29)
-sb $t0, 649($29)
-sb $t0, 650($29)
-sb $t0, 651($29)
-sb $t0, 652($29)
-sb $t0, 653($29)
-sb $t0, 654($29)
-sb $t0, 655($29)
-sb $t0, 656($29)
-sb $t0, 657($29)
-sb $t0, 658($29)
-sb $t0, 659($29)
-sb $t0, 660($29)
-sb $t0, 661($29)
-sb $t0, 662($29)
-sb $t0, 663($29)
-sb $t0, 664($29)
-sb $t0, 665($29)
-sb $t0, 666($29)
-sb $t0, 667($29)
-sb $t0, 668($29)
-sb $t0, 669($29)
-sb $t0, 670($29)
-sb $t0, 671($29)
-sb $t0, 672($29)
-sb $t0, 673($29)
-sb $t0, 674($29)
-sb $t0, 675($29)
-sb $t0, 676($29)
-sb $t0, 677($29)
-sb $t0, 678($29)
-sb $t0, 679($29)
-sb $t0, 680($29)
-sb $t0, 681($29)
-sb $t0, 682($29)
-sb $t0, 683($29)
-sb $t0, 684($29)
-sb $t0, 685($29)
-sb $t0, 686($29)
-sb $t0, 687($29)
-sb $t0, 688($29)
-sb $t0, 689($29)
-sb $t0, 690($29)
-sb $t0, 691($29)
-sb $t0, 692($29)
-sb $t0, 693($29)
-sb $t0, 694($29)
-sb $t0, 695($29)
-sb $t0, 696($29)
-sb $t0, 697($29)
-sb $t0, 698($29)
-sb $t0, 699($29)
-sb $t0, 700($29)
-sb $t0, 701($29)
-sb $t0, 702($29)
-sb $t0, 703($29)
-sb $t0, 704($29)
-sb $t0, 705($29)
-sb $t0, 706($29)
-sb $t0, 707($29)
-sb $t0, 708($29)
-sb $t0, 709($29)
-sb $t0, 710($29)
-sb $t0, 711($29)
-sb $t0, 712($29)
-sb $t0, 713($29)
-sb $t0, 714($29)
-sb $t0, 715($29)
-sb $t0, 716($29)
-sb $t0, 717($29)
-sb $t0, 718($29)
-sb $t0, 719($29)
-sb $t0, 720($29)
-sb $t0, 721($29)
-sb $t0, 722($29)
-sb $t0, 723($29)
-sb $t0, 724($29)
-sb $t0, 725($29)
-sb $t0, 726($29)
-sb $t0, 727($29)
-sb $t0, 728($29)
-sb $t0, 729($29)
-sb $t0, 730($29)
-sb $t0, 731($29)
-sb $t0, 732($29)
-sb $t0, 733($29)
-sb $t0, 734($29)
-sb $t0, 735($29)
-sb $t0, 736($29)
-sb $t0, 737($29)
-sb $t0, 738($29)
-sb $t0, 739($29)
-sb $t0, 740($29)
-sb $t0, 741($29)
-sb $t0, 742($29)
-sb $t0, 743($29)
-sb $t0, 744($29)
-sb $t0, 745($29)
-sb $t0, 746($29)
-sb $t0, 747($29)
-sb $t0, 748($29)
-sb $t0, 749($29)
-sb $t0, 750($29)
-sb $t0, 751($29)
-sb $t0, 752($29)
-sb $t0, 753($29)
-sb $t0, 754($29)
-sb $t0, 755($29)
-sb $t0, 756($29)
-sb $t0, 757($29)
-sb $t0, 758($29)
-sb $t0, 759($29)
-sb $t0, 760($29)
-sb $t0, 761($29)
-sb $t0, 762($29)
-sb $t0, 763($29)
-sb $t0, 764($29)
-sb $t0, 765($29)
-sb $t0, 766($29)
-sb $t0, 767($29)
-sb $t0, 768($29)
-sb $t0, 769($29)
-sb $t0, 770($29)
-sb $t0, 771($29)
-sb $t0, 772($29)
-sb $t0, 773($29)
-sb $t0, 774($29)
-sb $t0, 775($29)
-sb $t0, 776($29)
-sb $t0, 777($29)
-sb $t0, 778($29)
-sb $t0, 779($29)
-sb $t0, 780($29)
-sb $t0, 781($29)
-sb $t0, 782($29)
-sb $t0, 783($29)
-sb $t0, 784($29)
-sb $t0, 785($29)
-sb $t0, 786($29)
-sb $t0, 787($29)
-sb $t0, 788($29)
-sb $t0, 789($29)
-sb $t0, 790($29)
-sb $t0, 791($29)
-sb $t0, 792($29)
-sb $t0, 793($29)
-sb $t0, 794($29)
-sb $t0, 795($29)
-sb $t0, 796($29)
-sb $t0, 797($29)
-sb $t0, 798($29)
-sb $t0, 799($29)
-sb $t0, 800($29)
-sb $t0, 801($29)
-sb $t0, 802($29)
-sb $t0, 803($29)
-sb $t0, 804($29)
-sb $t0, 805($29)
-sb $t0, 806($29)
-sb $t0, 807($29)
-sb $t0, 808($29)
-sb $t0, 809($29)
-sb $t0, 810($29)
-sb $t0, 811($29)
-sb $t0, 812($29)
-sb $t0, 813($29)
-sb $t0, 814($29)
-sb $t0, 815($29)
-sb $t0, 816($29)
-sb $t0, 817($29)
-sb $t0, 818($29)
-sb $t0, 819($29)
-sb $t0, 820($29)
-sb $t0, 821($29)
-sb $t0, 822($29)
-sb $t0, 823($29)
-sb $t0, 824($29)
-sb $t0, 825($29)
-sb $t0, 826($29)
-sb $t0, 827($29)
-sb $t0, 828($29)
-sb $t0, 829($29)
-sb $t0, 830($29)
-sb $t0, 831($29)
-sb $t0, 832($29)
-sb $t0, 833($29)
-sb $t0, 834($29)
-sb $t0, 835($29)
-sb $t0, 836($29)
-sb $t0, 837($29)
-sb $t0, 838($29)
-sb $t0, 839($29)
-sb $t0, 840($29)
-sb $t0, 841($29)
-sb $t0, 842($29)
-sb $t0, 843($29)
-sb $t0, 844($29)
-sb $t0, 845($29)
-sb $t0, 846($29)
-sb $t0, 847($29)
-sb $t0, 848($29)
-sb $t0, 849($29)
-sb $t0, 850($29)
-sb $t0, 851($29)
-sb $t0, 852($29)
-sb $t0, 853($29)
-sb $t0, 854($29)
-sb $t0, 855($29)
-sb $t0, 856($29)
-sb $t0, 857($29)
-sb $t0, 858($29)
-sb $t0, 859($29)
-sb $t0, 860($29)
-sb $t0, 861($29)
-sb $t0, 862($29)
-sb $t0, 863($29)
-sb $t0, 864($29)
-sb $t0, 865($29)
-sb $t0, 866($29)
-sb $t0, 867($29)
-sb $t0, 868($29)
-sb $t0, 869($29)
-sb $t0, 870($29)
-sb $t0, 871($29)
-sb $t0, 872($29)
-sb $t0, 873($29)
-sb $t0, 874($29)
-sb $t0, 875($29)
-sb $t0, 876($29)
-sb $t0, 877($29)
-sb $t0, 878($29)
-sb $t0, 879($29)
-sb $t0, 880($29)
-sb $t0, 881($29)
-sb $t0, 882($29)
-sb $t0, 883($29)
-sb $t0, 884($29)
-sb $t0, 885($29)
-sb $t0, 886($29)
-sb $t0, 887($29)
-sb $t0, 888($29)
-sb $t0, 889($29)
-sb $t0, 890($29)
-sb $t0, 891($29)
-sb $t0, 892($29)
-sb $t0, 893($29)
-sb $t0, 894($29)
-sb $t0, 895($29)
-sb $t0, 896($29)
-sb $t0, 897($29)
-sb $t0, 898($29)
-sb $t0, 899($29)
-sb $t0, 900($29)
-sb $t0, 901($29)
-sb $t0, 902($29)
-sb $t0, 903($29)
-sb $t0, 904($29)
-sb $t0, 905($29)
-sb $t0, 906($29)
-sb $t0, 907($29)
-sb $t0, 908($29)
-sb $t0, 909($29)
-sb $t0, 910($29)
-sb $t0, 911($29)
-sb $t0, 912($29)
-sb $t0, 913($29)
-sb $t0, 914($29)
-sb $t0, 915($29)
-sb $t0, 916($29)
-sb $t0, 917($29)
-sb $t0, 918($29)
-sb $t0, 919($29)
-sb $t0, 920($29)
-sb $t0, 921($29)
-sb $t0, 922($29)
-sb $t0, 923($29)
-sb $t0, 924($29)
-sb $t0, 925($29)
-sb $t0, 926($29)
-sb $t0, 927($29)
-sb $t0, 928($29)
-sb $t0, 929($29)
-sb $t0, 930($29)
-sb $t0, 931($29)
-sb $t0, 932($29)
-sb $t0, 933($29)
-sb $t0, 934($29)
-sb $t0, 935($29)
-sb $t0, 936($29)
-sb $t0, 937($29)
-sb $t0, 938($29)
-sb $t0, 939($29)
-sb $t0, 940($29)
-sb $t0, 941($29)
-sb $t0, 942($29)
-sb $t0, 943($29)
-sb $t0, 944($29)
-sb $t0, 945($29)
-sb $t0, 946($29)
-sb $t0, 947($29)
-sb $t0, 948($29)
-sb $t0, 949($29)
-sb $t0, 950($29)
-sb $t0, 951($29)
-sb $t0, 952($29)
-sb $t0, 953($29)
-sb $t0, 954($29)
-sb $t0, 955($29)
-sb $t0, 956($29)
-sb $t0, 957($29)
-sb $t0, 958($29)
-sb $t0, 959($29)
-sb $t0, 960($29)
-sb $t0, 961($29)
-sb $t0, 962($29)
-sb $t0, 963($29)
-sb $t0, 964($29)
-sb $t0, 965($29)
-sb $t0, 966($29)
-sb $t0, 967($29)
-sb $t0, 968($29)
-sb $t0, 969($29)
-sb $t0, 970($29)
-sb $t0, 971($29)
-sb $t0, 972($29)
-sb $t0, 973($29)
-sb $t0, 974($29)
-sb $t0, 975($29)
-sb $t0, 976($29)
-sb $t0, 977($29)
-sb $t0, 978($29)
-sb $t0, 979($29)
-sb $t0, 980($29)
-sb $t0, 981($29)
-sb $t0, 982($29)
-sb $t0, 983($29)
-sb $t0, 984($29)
-sb $t0, 985($29)
-sb $t0, 986($29)
-sb $t0, 987($29)
-sb $t0, 988($29)
-sb $t0, 989($29)
-sb $t0, 990($29)
-sb $t0, 991($29)
-sb $t0, 992($29)
-sb $t0, 993($29)
-sb $t0, 994($29)
-sb $t0, 995($29)
-sb $t0, 996($29)
-sb $t0, 997($29)
-sb $t0, 998($29)
-sb $t0, 999($29)
-sb $t0, 1000($29)
-sb $t0, 1001($29)
-sb $t0, 1002($29)
-sb $t0, 1003($29)
-sb $t0, 1004($29)
-sb $t0, 1005($29)
-sb $t0, 1006($29)
-sb $t0, 1007($29)
-sb $t0, 1008($29)
-sb $t0, 1009($29)
-sb $t0, 1010($29)
-sb $t0, 1011($29)
-sb $t0, 1012($29)
-sb $t0, 1013($29)
-sb $t0, 1014($29)
-sb $t0, 1015($29)
-sb $t0, 1016($29)
-sb $t0, 1017($29)
-sb $t0, 1018($29)
-sb $t0, 1019($29)
-sb $t0, 1020($29)
-sb $t0, 1021($29)
-sb $t0, 1022($29)
-sb $t0, 1023($29)
-sb $t0, 1024($29)
-sb $t0, 1025($29)
-sb $t0, 1026($29)
-sb $t0, 1027($29)
-sb $t0, 1028($29)
-sb $t0, 1029($29)
-sb $t0, 1030($29)
-sb $t0, 1031($29)
-sb $t0, 1032($29)
-sb $t0, 1033($29)
-sb $t0, 1034($29)
-sb $t0, 1035($29)
-sb $t0, 1036($29)
-sb $t0, 1037($29)
-sb $t0, 1038($29)
-sb $t0, 1039($29)
-sb $t0, 1040($29)
-sb $t0, 1041($29)
-sb $t0, 1042($29)
-sb $t0, 1043($29)
-sb $t0, 1044($29)
-sb $t0, 1045($29)
-sb $t0, 1046($29)
-sb $t0, 1047($29)
-sb $t0, 1048($29)
-sb $t0, 1049($29)
-sb $t0, 1050($29)
-sb $t0, 1051($29)
-sb $t0, 1052($29)
-sb $t0, 1053($29)
-sb $t0, 1054($29)
-sb $t0, 1055($29)
-sb $t0, 1056($29)
-sb $t0, 1057($29)
-sb $t0, 1058($29)
-sb $t0, 1059($29)
-sb $t0, 1060($29)
-sb $t0, 1061($29)
-sb $t0, 1062($29)
-sb $t0, 1063($29)
-sb $t0, 1064($29)
-sb $t0, 1065($29)
-sb $t0, 1066($29)
-sb $t0, 1067($29)
-sb $t0, 1068($29)
-sb $t0, 1069($29)
-sb $t0, 1070($29)
-sb $t0, 1071($29)
-sb $t0, 1072($29)
-sb $t0, 1073($29)
-sb $t0, 1074($29)
-sb $t0, 1075($29)
-sb $t0, 1076($29)
-sb $t0, 1077($29)
-sb $t0, 1078($29)
-sb $t0, 1079($29)
-sb $t0, 1080($29)
-sb $t0, 1081($29)
-sb $t0, 1082($29)
-sb $t0, 1083($29)
-sb $t0, 1084($29)
-sb $t0, 1085($29)
-sb $t0, 1086($29)
-sb $t0, 1087($29)
-sb $t0, 1088($29)
-sb $t0, 1089($29)
-sb $t0, 1090($29)
-sb $t0, 1091($29)
-sb $t0, 1092($29)
-sb $t0, 1093($29)
-sb $t0, 1094($29)
-sb $t0, 1095($29)
-sb $t0, 1096($29)
-sb $t0, 1097($29)
-sb $t0, 1098($29)
-sb $t0, 1099($29)
-sb $t0, 1100($29)
-sb $t0, 1101($29)
-sb $t0, 1102($29)
-sb $t0, 1103($29)
-sb $t0, 1104($29)
-sb $t0, 1105($29)
-sb $t0, 1106($29)
-sb $t0, 1107($29)
-sb $t0, 1108($29)
-sb $t0, 1109($29)
-sb $t0, 1110($29)
-sb $t0, 1111($29)
-sb $t0, 1112($29)
-sb $t0, 1113($29)
-sb $t0, 1114($29)
-sb $t0, 1115($29)
-sb $t0, 1116($29)
-sb $t0, 1117($29)
-sb $t0, 1118($29)
-sb $t0, 1119($29)
-sb $t0, 1120($29)
-sb $t0, 1121($29)
-sb $t0, 1122($29)
-sb $t0, 1123($29)
-sb $t0, 1124($29)
-sb $t0, 1125($29)
-sb $t0, 1126($29)
-sb $t0, 1127($29)
-sb $t0, 1128($29)
-sb $t0, 1129($29)
-sb $t0, 1130($29)
-sb $t0, 1131($29)
-sb $t0, 1132($29)
-sb $t0, 1133($29)
-sb $t0, 1134($29)
-sb $t0, 1135($29)
-sb $t0, 1136($29)
-sb $t0, 1137($29)
-sb $t0, 1138($29)
-sb $t0, 1139($29)
-sb $t0, 1140($29)
-sb $t0, 1141($29)
-sb $t0, 1142($29)
-sb $t0, 1143($29)
-sb $t0, 1144($29)
-sb $t0, 1145($29)
-sb $t0, 1146($29)
-sb $t0, 1147($29)
-sb $t0, 1148($29)
-sb $t0, 1149($29)
-sb $t0, 1150($29)
-sb $t0, 1151($29)
-sb $t0, 1152($29)
-sb $t0, 1153($29)
-sb $t0, 1154($29)
-sb $t0, 1155($29)
-sb $t0, 1156($29)
-sb $t0, 1157($29)
-sb $t0, 1158($29)
-sb $t0, 1159($29)
-sb $t0, 1160($29)
-sb $t0, 1161($29)
-sb $t0, 1162($29)
-sb $t0, 1163($29)
-sb $t0, 1164($29)
-sb $t0, 1165($29)
-sb $t0, 1166($29)
-sb $t0, 1167($29)
-sb $t0, 1168($29)
-sb $t0, 1169($29)
-sb $t0, 1170($29)
-sb $t0, 1171($29)
-sb $t0, 1172($29)
-sb $t0, 1173($29)
-sb $t0, 1174($29)
-sb $t0, 1175($29)
-sb $t0, 1176($29)
-sb $t0, 1177($29)
-sb $t0, 1178($29)
-sb $t0, 1179($29)
-sb $t0, 1180($29)
-sb $t0, 1181($29)
-sb $t0, 1182($29)
-sb $t0, 1183($29)
-sb $t0, 1184($29)
-sb $t0, 1185($29)
-sb $t0, 1186($29)
-sb $t0, 1187($29)
-sb $t0, 1188($29)
-sb $t0, 1189($29)
-sb $t0, 1190($29)
-sb $t0, 1191($29)
-sb $t0, 1192($29)
-sb $t0, 1193($29)
-sb $t0, 1194($29)
-sb $t0, 1195($29)
-sb $t0, 1196($29)
-sb $t0, 1197($29)
-sb $t0, 1198($29)
-sb $t0, 1199($29)
-sb $t0, 1200($29)
-sb $t0, 1201($29)
-sb $t0, 1202($29)
-sb $t0, 1203($29)
-sb $t0, 1204($29)
-sb $t0, 1205($29)
-sb $t0, 1206($29)
-sb $t0, 1207($29)
-sb $t0, 1208($29)
-sb $t0, 1209($29)
-sb $t0, 1210($29)
-sb $t0, 1211($29)
-sb $t0, 1212($29)
-sb $t0, 1213($29)
-sb $t0, 1214($29)
-sb $t0, 1215($29)
-sb $t0, 1216($29)
-sb $t0, 1217($29)
-sb $t0, 1218($29)
-sb $t0, 1219($29)
-sb $t0, 1220($29)
-sb $t0, 1221($29)
-sb $t0, 1222($29)
-sb $t0, 1223($29)
-sb $t0, 1224($29)
-sb $t0, 1225($29)
-sb $t0, 1226($29)
-sb $t0, 1227($29)
-sb $t0, 1228($29)
-sb $t0, 1229($29)
-sb $t0, 1230($29)
-sb $t0, 1231($29)
-sb $t0, 1232($29)
-sb $t0, 1233($29)
-sb $t0, 1234($29)
-sb $t0, 1235($29)
-sb $t0, 1236($29)
-sb $t0, 1237($29)
-sb $t0, 1238($29)
-sb $t0, 1239($29)
-sb $t0, 1240($29)
-sb $t0, 1241($29)
-sb $t0, 1242($29)
-sb $t0, 1243($29)
-sb $t0, 1244($29)
-sb $t0, 1245($29)
-sb $t0, 1246($29)
-sb $t0, 1247($29)
-sb $t0, 1248($29)
-sb $t0, 1249($29)
-sb $t0, 1250($29)
-sb $t0, 1251($29)
-sb $t0, 1252($29)
-sb $t0, 1253($29)
-sb $t0, 1254($29)
-sb $t0, 1255($29)
-sb $t0, 1256($29)
-sb $t0, 1257($29)
-sb $t0, 1258($29)
-sb $t0, 1259($29)
-sb $t0, 1260($29)
-sb $t0, 1261($29)
-sb $t0, 1262($29)
-sb $t0, 1263($29)
-sb $t0, 1264($29)
-sb $t0, 1265($29)
-sb $t0, 1266($29)
-sb $t0, 1267($29)
-sb $t0, 1268($29)
-sb $t0, 1269($29)
-sb $t0, 1270($29)
-sb $t0, 1271($29)
-sb $t0, 1272($29)
-sb $t0, 1273($29)
-sb $t0, 1274($29)
-sb $t0, 1275($29)
-sb $t0, 1276($29)
-sb $t0, 1277($29)
-sb $t0, 1278($29)
-sb $t0, 1279($29)
-sb $t0, 1280($29)
-sb $t0, 1281($29)
-sb $t0, 1282($29)
-sb $t0, 1283($29)
-sb $t0, 1284($29)
-sb $t0, 1285($29)
-sb $t0, 1286($29)
-sb $t0, 1287($29)
-sb $t0, 1288($29)
-sb $t0, 1289($29)
-sb $t0, 1290($29)
-sb $t0, 1291($29)
-sb $t0, 1292($29)
-sb $t0, 1293($29)
-sb $t0, 1294($29)
-sb $t0, 1295($29)
-sb $t0, 1296($29)
-sb $t0, 1297($29)
-sb $t0, 1298($29)
-sb $t0, 1299($29)
-sb $t0, 1300($29)
-sb $t0, 1301($29)
-sb $t0, 1302($29)
-sb $t0, 1303($29)
-sb $t0, 1304($29)
-sb $t0, 1305($29)
-sb $t0, 1306($29)
-sb $t0, 1307($29)
-sb $t0, 1308($29)
-sb $t0, 1309($29)
-sb $t0, 1310($29)
-sb $t0, 1311($29)
-sb $t0, 1312($29)
-sb $t0, 1313($29)
-sb $t0, 1314($29)
-sb $t0, 1315($29)
-sb $t0, 1316($29)
-sb $t0, 1317($29)
-sb $t0, 1318($29)
-sb $t0, 1319($29)
-sb $t0, 1320($29)
-sb $t0, 1321($29)
-sb $t0, 1322($29)
-sb $t0, 1323($29)
-sb $t0, 1324($29)
-sb $t0, 1325($29)
-sb $t0, 1326($29)
-sb $t0, 1327($29)
-sb $t0, 1328($29)
-sb $t0, 1329($29)
-sb $t0, 1330($29)
-sb $t0, 1331($29)
-sb $t0, 1332($29)
-sb $t0, 1333($29)
-sb $t0, 1334($29)
-sb $t0, 1335($29)
-sb $t0, 1336($29)
-sb $t0, 1337($29)
-sb $t0, 1338($29)
-sb $t0, 1339($29)
-sb $t0, 1340($29)
-sb $t0, 1341($29)
-sb $t0, 1342($29)
-sb $t0, 1343($29)
-sb $t0, 1344($29)
-sb $t0, 1345($29)
-sb $t0, 1346($29)
-sb $t0, 1347($29)
-sb $t0, 1348($29)
-sb $t0, 1349($29)
-sb $t0, 1350($29)
-sb $t0, 1351($29)
-sb $t0, 1352($29)
-sb $t0, 1353($29)
-sb $t0, 1354($29)
-sb $t0, 1355($29)
-sb $t0, 1356($29)
-sb $t0, 1357($29)
-sb $t0, 1358($29)
-sb $t0, 1359($29)
-sb $t0, 1360($29)
-sb $t0, 1361($29)
-sb $t0, 1362($29)
-sb $t0, 1363($29)
-sb $t0, 1364($29)
-sb $t0, 1365($29)
-sb $t0, 1366($29)
-sb $t0, 1367($29)
-sb $t0, 1368($29)
-sb $t0, 1369($29)
-sb $t0, 1370($29)
-sb $t0, 1371($29)
-sb $t0, 1372($29)
-sb $t0, 1373($29)
-sb $t0, 1374($29)
-sb $t0, 1375($29)
-sb $t0, 1376($29)
-sb $t0, 1377($29)
-sb $t0, 1378($29)
-sb $t0, 1379($29)
-sb $t0, 1380($29)
-sb $t0, 1381($29)
-sb $t0, 1382($29)
-sb $t0, 1383($29)
-sb $t0, 1384($29)
-sb $t0, 1385($29)
-sb $t0, 1386($29)
-sb $t0, 1387($29)
-sb $t0, 1388($29)
-sb $t0, 1389($29)
-sb $t0, 1390($29)
-sb $t0, 1391($29)
-sb $t0, 1392($29)
-sb $t0, 1393($29)
-sb $t0, 1394($29)
-sb $t0, 1395($29)
-sb $t0, 1396($29)
-sb $t0, 1397($29)
-sb $t0, 1398($29)
-sb $t0, 1399($29)
-sb $t0, 1400($29)
-sb $t0, 1401($29)
-sb $t0, 1402($29)
-sb $t0, 1403($29)
-sb $t0, 1404($29)
-sb $t0, 1405($29)
-sb $t0, 1406($29)
-sb $t0, 1407($29)
-sb $t0, 1408($29)
-sb $t0, 1409($29)
-sb $t0, 1410($29)
-sb $t0, 1411($29)
-sb $t0, 1412($29)
-sb $t0, 1413($29)
-sb $t0, 1414($29)
-sb $t0, 1415($29)
-sb $t0, 1416($29)
-sb $t0, 1417($29)
-sb $t0, 1418($29)
-sb $t0, 1419($29)
-sb $t0, 1420($29)
-sb $t0, 1421($29)
-sb $t0, 1422($29)
-sb $t0, 1423($29)
-sb $t0, 1424($29)
-sb $t0, 1425($29)
-sb $t0, 1426($29)
-sb $t0, 1427($29)
-sb $t0, 1428($29)
-sb $t0, 1429($29)
-sb $t0, 1430($29)
-sb $t0, 1431($29)
-sb $t0, 1432($29)
-sb $t0, 1433($29)
-sb $t0, 1434($29)
-sb $t0, 1435($29)
-sb $t0, 1436($29)
-sb $t0, 1437($29)
-sb $t0, 1438($29)
-sb $t0, 1439($29)
-sb $t0, 1440($29)
-sb $t0, 1441($29)
-sb $t0, 1442($29)
-sb $t0, 1443($29)
-sb $t0, 1444($29)
-sb $t0, 1445($29)
-sb $t0, 1446($29)
-sb $t0, 1447($29)
-sb $t0, 1448($29)
-sb $t0, 1449($29)
-sb $t0, 1450($29)
-sb $t0, 1451($29)
-sb $t0, 1452($29)
-sb $t0, 1453($29)
-sb $t0, 1454($29)
-sb $t0, 1455($29)
-sb $t0, 1456($29)
-sb $t0, 1457($29)
-sb $t0, 1458($29)
-sb $t0, 1459($29)
-sb $t0, 1460($29)
-sb $t0, 1461($29)
-sb $t0, 1462($29)
-sb $t0, 1463($29)
-sb $t0, 1464($29)
-sb $t0, 1465($29)
-sb $t0, 1466($29)
-sb $t0, 1467($29)
-sb $t0, 1468($29)
-sb $t0, 1469($29)
-sb $t0, 1470($29)
-sb $t0, 1471($29)
-sb $t0, 1472($29)
-sb $t0, 1473($29)
-sb $t0, 1474($29)
-sb $t0, 1475($29)
-sb $t0, 1476($29)
-sb $t0, 1477($29)
-sb $t0, 1478($29)
-sb $t0, 1479($29)
-sb $t0, 1480($29)
-sb $t0, 1481($29)
-sb $t0, 1482($29)
-sb $t0, 1483($29)
-sb $t0, 1484($29)
-sb $t0, 1485($29)
-sb $t0, 1486($29)
-sb $t0, 1487($29)
-sb $t0, 1488($29)
-sb $t0, 1489($29)
-sb $t0, 1490($29)
-sb $t0, 1491($29)
-sb $t0, 1492($29)
-sb $t0, 1493($29)
-sb $t0, 1494($29)
-sb $t0, 1495($29)
-sb $t0, 1496($29)
-sb $t0, 1497($29)
-sb $t0, 1498($29)
-sb $t0, 1499($29)
-sb $t0, 1500($29)
-sb $t0, 1501($29)
-sb $t0, 1502($29)
-sb $t0, 1503($29)
-sb $t0, 1504($29)
-sb $t0, 1505($29)
-sb $t0, 1506($29)
-sb $t0, 1507($29)
-sb $t0, 1508($29)
-sb $t0, 1509($29)
-sb $t0, 1510($29)
-sb $t0, 1511($29)
-sb $t0, 1512($29)
-sb $t0, 1513($29)
-sb $t0, 1514($29)
-sb $t0, 1515($29)
-sb $t0, 1516($29)
-sb $t0, 1517($29)
-sb $t0, 1518($29)
-sb $t0, 1519($29)
-sb $t0, 1520($29)
-sb $t0, 1521($29)
-sb $t0, 1522($29)
-sb $t0, 1523($29)
-sb $t0, 1524($29)
-sb $t0, 1525($29)
-sb $t0, 1526($29)
-sb $t0, 1527($29)
-sb $t0, 1528($29)
-sb $t0, 1529($29)
-sb $t0, 1530($29)
-sb $t0, 1531($29)
-sb $t0, 1532($29)
-sb $t0, 1533($29)
-sb $t0, 1534($29)
-sb $t0, 1535($29)
-sb $t0, 1536($29)
-sb $t0, 1537($29)
-sb $t0, 1538($29)
-sb $t0, 1539($29)
-sb $t0, 1540($29)
-sb $t0, 1541($29)
-sb $t0, 1542($29)
-sb $t0, 1543($29)
-sb $t0, 1544($29)
-sb $t0, 1545($29)
-sb $t0, 1546($29)
-sb $t0, 1547($29)
-sb $t0, 1548($29)
-sb $t0, 1549($29)
-sb $t0, 1550($29)
-sb $t0, 1551($29)
-sb $t0, 1552($29)
-sb $t0, 1553($29)
-sb $t0, 1554($29)
-sb $t0, 1555($29)
-sb $t0, 1556($29)
-sb $t0, 1557($29)
-sb $t0, 1558($29)
-sb $t0, 1559($29)
-sb $t0, 1560($29)
-sb $t0, 1561($29)
-sb $t0, 1562($29)
-sb $t0, 1563($29)
-sb $t0, 1564($29)
-sb $t0, 1565($29)
-sb $t0, 1566($29)
-sb $t0, 1567($29)
-sb $t0, 1568($29)
-sb $t0, 1569($29)
-sb $t0, 1570($29)
-sb $t0, 1571($29)
-sb $t0, 1572($29)
-sb $t0, 1573($29)
-sb $t0, 1574($29)
-sb $t0, 1575($29)
-sb $t0, 1576($29)
-sb $t0, 1577($29)
-sb $t0, 1578($29)
-sb $t0, 1579($29)
-sb $t0, 1580($29)
-sb $t0, 1581($29)
-sb $t0, 1582($29)
-sb $t0, 1583($29)
-sb $t0, 1584($29)
-sb $t0, 1585($29)
-sb $t0, 1586($29)
-sb $t0, 1587($29)
-sb $t0, 1588($29)
-sb $t0, 1589($29)
-sb $t0, 1590($29)
-sb $t0, 1591($29)
-sb $t0, 1592($29)
-sb $t0, 1593($29)
-sb $t0, 1594($29)
-sb $t0, 1595($29)
-sb $t0, 1596($29)
-sb $t0, 1597($29)
-sb $t0, 1598($29)
-sb $t0, 1599($29)
-sb $t0, 1600($29)
-sb $t0, 1601($29)
-sb $t0, 1602($29)
-sb $t0, 1603($29)
-sb $t0, 1604($29)
-sb $t0, 1605($29)
-sb $t0, 1606($29)
-sb $t0, 1607($29)
-sb $t0, 1608($29)
-sb $t0, 1609($29)
-sb $t0, 1610($29)
-sb $t0, 1611($29)
-sb $t0, 1612($29)
-sb $t0, 1613($29)
-sb $t0, 1614($29)
-sb $t0, 1615($29)
-sb $t0, 1616($29)
-sb $t0, 1617($29)
-sb $t0, 1618($29)
-sb $t0, 1619($29)
-sb $t0, 1620($29)
-sb $t0, 1621($29)
-sb $t0, 1622($29)
-sb $t0, 1623($29)
-sb $t0, 1624($29)
-sb $t0, 1625($29)
-sb $t0, 1626($29)
-sb $t0, 1627($29)
-sb $t0, 1628($29)
-sb $t0, 1629($29)
-sb $t0, 1630($29)
-sb $t0, 1631($29)
-sb $t0, 1632($29)
-sb $t0, 1633($29)
-sb $t0, 1634($29)
-sb $t0, 1635($29)
-sb $t0, 1636($29)
-sb $t0, 1637($29)
-sb $t0, 1638($29)
-sb $t0, 1639($29)
-sb $t0, 1640($29)
-sb $t0, 1641($29)
-sb $t0, 1642($29)
-sb $t0, 1643($29)
-sb $t0, 1644($29)
-sb $t0, 1645($29)
-sb $t0, 1646($29)
-sb $t0, 1647($29)
-sb $t0, 1648($29)
-sb $t0, 1649($29)
-sb $t0, 1650($29)
-sb $t0, 1651($29)
-sb $t0, 1652($29)
-sb $t0, 1653($29)
-sb $t0, 1654($29)
-sb $t0, 1655($29)
-sb $t0, 1656($29)
-sb $t0, 1657($29)
-sb $t0, 1658($29)
-sb $t0, 1659($29)
-sb $t0, 1660($29)
-sb $t0, 1661($29)
-sb $t0, 1662($29)
-sb $t0, 1663($29)
-sb $t0, 1664($29)
-sb $t0, 1665($29)
-sb $t0, 1666($29)
-sb $t0, 1667($29)
-sb $t0, 1668($29)
-sb $t0, 1669($29)
-sb $t0, 1670($29)
-sb $t0, 1671($29)
-sb $t0, 1672($29)
-sb $t0, 1673($29)
-sb $t0, 1674($29)
-sb $t0, 1675($29)
-sb $t0, 1676($29)
-sb $t0, 1677($29)
-sb $t0, 1678($29)
-sb $t0, 1679($29)
-sb $t0, 1680($29)
-sb $t0, 1681($29)
-sb $t0, 1682($29)
-sb $t0, 1683($29)
-sb $t0, 1684($29)
-sb $t0, 1685($29)
-sb $t0, 1686($29)
-sb $t0, 1687($29)
-sb $t0, 1688($29)
-sb $t0, 1689($29)
-sb $t0, 1690($29)
-sb $t0, 1691($29)
-sb $t0, 1692($29)
-sb $t0, 1693($29)
-sb $t0, 1694($29)
-sb $t0, 1695($29)
-sb $t0, 1696($29)
-sb $t0, 1697($29)
-sb $t0, 1698($29)
-sb $t0, 1699($29)
-sb $t0, 1700($29)
-sb $t0, 1701($29)
-sb $t0, 1702($29)
-sb $t0, 1703($29)
-sb $t0, 1704($29)
-sb $t0, 1705($29)
-sb $t0, 1706($29)
-sb $t0, 1707($29)
-sb $t0, 1708($29)
-sb $t0, 1709($29)
-sb $t0, 1710($29)
-sb $t0, 1711($29)
-sb $t0, 1712($29)
-sb $t0, 1713($29)
-sb $t0, 1714($29)
-sb $t0, 1715($29)
-sb $t0, 1716($29)
-sb $t0, 1717($29)
-sb $t0, 1718($29)
-sb $t0, 1719($29)
-sb $t0, 1720($29)
-sb $t0, 1721($29)
-sb $t0, 1722($29)
-sb $t0, 1723($29)
-sb $t0, 1724($29)
-sb $t0, 1725($29)
-sb $t0, 1726($29)
-sb $t0, 1727($29)
-sb $t0, 1728($29)
-sb $t0, 1729($29)
-sb $t0, 1730($29)
-sb $t0, 1731($29)
-sb $t0, 1732($29)
-sb $t0, 1733($29)
-sb $t0, 1734($29)
-sb $t0, 1735($29)
-sb $t0, 1736($29)
-sb $t0, 1737($29)
-sb $t0, 1738($29)
-sb $t0, 1739($29)
-sb $t0, 1740($29)
-sb $t0, 1741($29)
-sb $t0, 1742($29)
-sb $t0, 1743($29)
-sb $t0, 1744($29)
-sb $t0, 1745($29)
-sb $t0, 1746($29)
-sb $t0, 1747($29)
-sb $t0, 1748($29)
-sb $t0, 1749($29)
-sb $t0, 1750($29)
-sb $t0, 1751($29)
-sb $t0, 1752($29)
-sb $t0, 1753($29)
-sb $t0, 1754($29)
-sb $t0, 1755($29)
-sb $t0, 1756($29)
-sb $t0, 1757($29)
-sb $t0, 1758($29)
-sb $t0, 1759($29)
-sb $t0, 1760($29)
-sb $t0, 1761($29)
-sb $t0, 1762($29)
-sb $t0, 1763($29)
-sb $t0, 1764($29)
-sb $t0, 1765($29)
-sb $t0, 1766($29)
-sb $t0, 1767($29)
-sb $t0, 1768($29)
-sb $t0, 1769($29)
-sb $t0, 1770($29)
-sb $t0, 1771($29)
-sb $t0, 1772($29)
-sb $t0, 1773($29)
-sb $t0, 1774($29)
-sb $t0, 1775($29)
-sb $t0, 1776($29)
-sb $t0, 1777($29)
-sb $t0, 1778($29)
-sb $t0, 1779($29)
-sb $t0, 1780($29)
-sb $t0, 1781($29)
-sb $t0, 1782($29)
-sb $t0, 1783($29)
-sb $t0, 1784($29)
-sb $t0, 1785($29)
-sb $t0, 1786($29)
-sb $t0, 1787($29)
-sb $t0, 1788($29)
-sb $t0, 1789($29)
-sb $t0, 1790($29)
-sb $t0, 1791($29)
-sb $t0, 1792($29)
-sb $t0, 1793($29)
-sb $t0, 1794($29)
-sb $t0, 1795($29)
-sb $t0, 1796($29)
-sb $t0, 1797($29)
-sb $t0, 1798($29)
-sb $t0, 1799($29)
-sb $t0, 1800($29)
-sb $t0, 1801($29)
-sb $t0, 1802($29)
-sb $t0, 1803($29)
-sb $t0, 1804($29)
-sb $t0, 1805($29)
-sb $t0, 1806($29)
-sb $t0, 1807($29)
-sb $t0, 1808($29)
-sb $t0, 1809($29)
-sb $t0, 1810($29)
-sb $t0, 1811($29)
-sb $t0, 1812($29)
-sb $t0, 1813($29)
-sb $t0, 1814($29)
-sb $t0, 1815($29)
-sb $t0, 1816($29)
-sb $t0, 1817($29)
-sb $t0, 1818($29)
-sb $t0, 1819($29)
-sb $t0, 1820($29)
-sb $t0, 1821($29)
-sb $t0, 1822($29)
-sb $t0, 1823($29)
-sb $t0, 1824($29)
-sb $t0, 1825($29)
-sb $t0, 1826($29)
-sb $t0, 1827($29)
-sb $t0, 1828($29)
-sb $t0, 1829($29)
-sb $t0, 1830($29)
-sb $t0, 1831($29)
-sb $t0, 1832($29)
-sb $t0, 1833($29)
-sb $t0, 1834($29)
-sb $t0, 1835($29)
-sb $t0, 1836($29)
-sb $t0, 1837($29)
-sb $t0, 1838($29)
-sb $t0, 1839($29)
-sb $t0, 1840($29)
-sb $t0, 1841($29)
-sb $t0, 1842($29)
-sb $t0, 1843($29)
-sb $t0, 1844($29)
-sb $t0, 1845($29)
-sb $t0, 1846($29)
-sb $t0, 1847($29)
-sb $t0, 1848($29)
-sb $t0, 1849($29)
-sb $t0, 1850($29)
-sb $t0, 1851($29)
-sb $t0, 1852($29)
-sb $t0, 1853($29)
-sb $t0, 1854($29)
-sb $t0, 1855($29)
-sb $t0, 1856($29)
-sb $t0, 1857($29)
-sb $t0, 1858($29)
-sb $t0, 1859($29)
-sb $t0, 1860($29)
-sb $t0, 1861($29)
-sb $t0, 1862($29)
-sb $t0, 1863($29)
-sb $t0, 1864($29)
-sb $t0, 1865($29)
-sb $t0, 1866($29)
-sb $t0, 1867($29)
-sb $t0, 1868($29)
-sb $t0, 1869($29)
-sb $t0, 1870($29)
-sb $t0, 1871($29)
-sb $t0, 1872($29)
-sb $t0, 1873($29)
-sb $t0, 1874($29)
-sb $t0, 1875($29)
-sb $t0, 1876($29)
-sb $t0, 1877($29)
-sb $t0, 1878($29)
-sb $t0, 1879($29)
-sb $t0, 1880($29)
-sb $t0, 1881($29)
-sb $t0, 1882($29)
-sb $t0, 1883($29)
-sb $t0, 1884($29)
-sb $t0, 1885($29)
-sb $t0, 1886($29)
-sb $t0, 1887($29)
-sb $t0, 1888($29)
-sb $t0, 1889($29)
-sb $t0, 1890($29)
-sb $t0, 1891($29)
-sb $t0, 1892($29)
-sb $t0, 1893($29)
-sb $t0, 1894($29)
-sb $t0, 1895($29)
-sb $t0, 1896($29)
-sb $t0, 1897($29)
-sb $t0, 1898($29)
-sb $t0, 1899($29)
-sb $t0, 1900($29)
-sb $t0, 1901($29)
-sb $t0, 1902($29)
-sb $t0, 1903($29)
-sb $t0, 1904($29)
-sb $t0, 1905($29)
-sb $t0, 1906($29)
-sb $t0, 1907($29)
-sb $t0, 1908($29)
-sb $t0, 1909($29)
-sb $t0, 1910($29)
-sb $t0, 1911($29)
-sb $t0, 1912($29)
-sb $t0, 1913($29)
-sb $t0, 1914($29)
-sb $t0, 1915($29)
-sb $t0, 1916($29)
-sb $t0, 1917($29)
-sb $t0, 1918($29)
-sb $t0, 1919($29)
-sb $t0, 1920($29)
-sb $t0, 1921($29)
-sb $t0, 1922($29)
-sb $t0, 1923($29)
-sb $t0, 1924($29)
-sb $t0, 1925($29)
-sb $t0, 1926($29)
-sb $t0, 1927($29)
-sb $t0, 1928($29)
-sb $t0, 1929($29)
-sb $t0, 1930($29)
-sb $t0, 1931($29)
-sb $t0, 1932($29)
-sb $t0, 1933($29)
-sb $t0, 1934($29)
-sb $t0, 1935($29)
-sb $t0, 1936($29)
-sb $t0, 1937($29)
-sb $t0, 1938($29)
-sb $t0, 1939($29)
-sb $t0, 1940($29)
-sb $t0, 1941($29)
-sb $t0, 1942($29)
-sb $t0, 1943($29)
-sb $t0, 1944($29)
-sb $t0, 1945($29)
-sb $t0, 1946($29)
-sb $t0, 1947($29)
-sb $t0, 1948($29)
-sb $t0, 1949($29)
-sb $t0, 1950($29)
-sb $t0, 1951($29)
-sb $t0, 1952($29)
-sb $t0, 1953($29)
-sb $t0, 1954($29)
-sb $t0, 1955($29)
-sb $t0, 1956($29)
-sb $t0, 1957($29)
-sb $t0, 1958($29)
-sb $t0, 1959($29)
-sb $t0, 1960($29)
-sb $t0, 1961($29)
-sb $t0, 1962($29)
-sb $t0, 1963($29)
-sb $t0, 1964($29)
-sb $t0, 1965($29)
-sb $t0, 1966($29)
-sb $t0, 1967($29)
-sb $t0, 1968($29)
-sb $t0, 1969($29)
-sb $t0, 1970($29)
-sb $t0, 1971($29)
-sb $t0, 1972($29)
-sb $t0, 1973($29)
-sb $t0, 1974($29)
-sb $t0, 1975($29)
-sb $t0, 1976($29)
-sb $t0, 1977($29)
-sb $t0, 1978($29)
-sb $t0, 1979($29)
-sb $t0, 1980($29)
-sb $t0, 1981($29)
-sb $t0, 1982($29)
-sb $t0, 1983($29)
-sb $t0, 1984($29)
-sb $t0, 1985($29)
-sb $t0, 1986($29)
-sb $t0, 1987($29)
-sb $t0, 1988($29)
-sb $t0, 1989($29)
-sb $t0, 1990($29)
-sb $t0, 1991($29)
-sb $t0, 1992($29)
-sb $t0, 1993($29)
-sb $t0, 1994($29)
-sb $t0, 1995($29)
-sb $t0, 1996($29)
-sb $t0, 1997($29)
-sb $t0, 1998($29)
-sb $t0, 1999($29)
-sb $t0, 2000($29)
-sb $t0, 2001($29)
-sb $t0, 2002($29)
-sb $t0, 2003($29)
-sb $t0, 2004($29)
-sb $t0, 2005($29)
-sb $t0, 2006($29)
-sb $t0, 2007($29)
-sb $t0, 2008($29)
-sb $t0, 2009($29)
-sb $t0, 2010($29)
-sb $t0, 2011($29)
-sb $t0, 2012($29)
-sb $t0, 2013($29)
-sb $t0, 2014($29)
-sb $t0, 2015($29)
-sb $t0, 2016($29)
-sb $t0, 2017($29)
-sb $t0, 2018($29)
-sb $t0, 2019($29)
-sb $t0, 2020($29)
-sb $t0, 2021($29)
-sb $t0, 2022($29)
-sb $t0, 2023($29)
-sb $t0, 2024($29)
-sb $t0, 2025($29)
-sb $t0, 2026($29)
-sb $t0, 2027($29)
-sb $t0, 2028($29)
-sb $t0, 2029($29)
-sb $t0, 2030($29)
-sb $t0, 2031($29)
-sb $t0, 2032($29)
-sb $t0, 2033($29)
-sb $t0, 2034($29)
-sb $t0, 2035($29)
-sb $t0, 2036($29)
-sb $t0, 2037($29)
-sb $t0, 2038($29)
-sb $t0, 2039($29)
-sb $t0, 2040($29)
-sb $t0, 2041($29)
-sb $t0, 2042($29)
-sb $t0, 2043($29)
-sb $t0, 2044($29)
-sb $t0, 2045($29)
-sb $t0, 2046($29)
-sb $t0, 2047($29)
-sb $t0, 2048($29)
-sb $t0, 2049($29)
-sb $t0, 2050($29)
-sb $t0, 2051($29)
-sb $t0, 2052($29)
-sb $t0, 2053($29)
-sb $t0, 2054($29)
-sb $t0, 2055($29)
-sb $t0, 2056($29)
-sb $t0, 2057($29)
-sb $t0, 2058($29)
-sb $t0, 2059($29)
-sb $t0, 2060($29)
-sb $t0, 2061($29)
-sb $t0, 2062($29)
-sb $t0, 2063($29)
-sb $t0, 2064($29)
-sb $t0, 2065($29)
-sb $t0, 2066($29)
-sb $t0, 2067($29)
-sb $t0, 2068($29)
-sb $t0, 2069($29)
-sb $t0, 2070($29)
-sb $t0, 2071($29)
-sb $t0, 2072($29)
-sb $t0, 2073($29)
-sb $t0, 2074($29)
-sb $t0, 2075($29)
-sb $t0, 2076($29)
-sb $t0, 2077($29)
-sb $t0, 2078($29)
-sb $t0, 2079($29)
-sb $t0, 2080($29)
-sb $t0, 2081($29)
-sb $t0, 2082($29)
-sb $t0, 2083($29)
-sb $t0, 2084($29)
-sb $t0, 2085($29)
-sb $t0, 2086($29)
-sb $t0, 2087($29)
-sb $t0, 2088($29)
-sb $t0, 2089($29)
-sb $t0, 2090($29)
-sb $t0, 2091($29)
-sb $t0, 2092($29)
-sb $t0, 2093($29)
-sb $t0, 2094($29)
-sb $t0, 2095($29)
-sb $t0, 2096($29)
-sb $t0, 2097($29)
-sb $t0, 2098($29)
-sb $t0, 2099($29)
-sb $t0, 2100($29)
-sb $t0, 2101($29)
-sb $t0, 2102($29)
-sb $t0, 2103($29)
-sb $t0, 2104($29)
-sb $t0, 2105($29)
-sb $t0, 2106($29)
-sb $t0, 2107($29)
-sb $t0, 2108($29)
-sb $t0, 2109($29)
-sb $t0, 2110($29)
-sb $t0, 2111($29)
-sb $t0, 2112($29)
-sb $t0, 2113($29)
-sb $t0, 2114($29)
-sb $t0, 2115($29)
-sb $t0, 2116($29)
-sb $t0, 2117($29)
-sb $t0, 2118($29)
-sb $t0, 2119($29)
-sb $t0, 2120($29)
-sb $t0, 2121($29)
-sb $t0, 2122($29)
-sb $t0, 2123($29)
-sb $t0, 2124($29)
-sb $t0, 2125($29)
-sb $t0, 2126($29)
-sb $t0, 2127($29)
-sb $t0, 2128($29)
-sb $t0, 2129($29)
-sb $t0, 2130($29)
-sb $t0, 2131($29)
-sb $t0, 2132($29)
-sb $t0, 2133($29)
-sb $t0, 2134($29)
-sb $t0, 2135($29)
-sb $t0, 2136($29)
-sb $t0, 2137($29)
-sb $t0, 2138($29)
-sb $t0, 2139($29)
-sb $t0, 2140($29)
-sb $t0, 2141($29)
-sb $t0, 2142($29)
-sb $t0, 2143($29)
-sb $t0, 2144($29)
-sb $t0, 2145($29)
-sb $t0, 2146($29)
-sb $t0, 2147($29)
-sb $t0, 2148($29)
-sb $t0, 2149($29)
-sb $t0, 2150($29)
-sb $t0, 2151($29)
-sb $t0, 2152($29)
-sb $t0, 2153($29)
-sb $t0, 2154($29)
-sb $t0, 2155($29)
-sb $t0, 2156($29)
-sb $t0, 2157($29)
-sb $t0, 2158($29)
-sb $t0, 2159($29)
-sb $t0, 2160($29)
-sb $t0, 2161($29)
-sb $t0, 2162($29)
-sb $t0, 2163($29)
-sb $t0, 2164($29)
-sb $t0, 2165($29)
-sb $t0, 2166($29)
-sb $t0, 2167($29)
-sb $t0, 2168($29)
-sb $t0, 2169($29)
-sb $t0, 2170($29)
-sb $t0, 2171($29)
-sb $t0, 2172($29)
-sb $t0, 2173($29)
-sb $t0, 2174($29)
-sb $t0, 2175($29)
-sb $t0, 2176($29)
-sb $t0, 2177($29)
-sb $t0, 2178($29)
-sb $t0, 2179($29)
-sb $t0, 2180($29)
-sb $t0, 2181($29)
-sb $t0, 2182($29)
-sb $t0, 2183($29)
-sb $t0, 2184($29)
-sb $t0, 2185($29)
-sb $t0, 2186($29)
-sb $t0, 2187($29)
-sb $t0, 2188($29)
-sb $t0, 2189($29)
-sb $t0, 2190($29)
-sb $t0, 2191($29)
-sb $t0, 2192($29)
-sb $t0, 2193($29)
-sb $t0, 2194($29)
-sb $t0, 2195($29)
-sb $t0, 2196($29)
-sb $t0, 2197($29)
-sb $t0, 2198($29)
-sb $t0, 2199($29)
-sb $t0, 2200($29)
-sb $t0, 2201($29)
-sb $t0, 2202($29)
-sb $t0, 2203($29)
-sb $t0, 2204($29)
-sb $t0, 2205($29)
-sb $t0, 2206($29)
-sb $t0, 2207($29)
-sb $t0, 2208($29)
-sb $t0, 2209($29)
-sb $t0, 2210($29)
-sb $t0, 2211($29)
-sb $t0, 2212($29)
-sb $t0, 2213($29)
-sb $t0, 2214($29)
-sb $t0, 2215($29)
-sb $t0, 2216($29)
-sb $t0, 2217($29)
-sb $t0, 2218($29)
-sb $t0, 2219($29)
-sb $t0, 2220($29)
-sb $t0, 2221($29)
-sb $t0, 2222($29)
-sb $t0, 2223($29)
-sb $t0, 2224($29)
-sb $t0, 2225($29)
-sb $t0, 2226($29)
-sb $t0, 2227($29)
-sb $t0, 2228($29)
-sb $t0, 2229($29)
-sb $t0, 2230($29)
-sb $t0, 2231($29)
-sb $t0, 2232($29)
-sb $t0, 2233($29)
-sb $t0, 2234($29)
-sb $t0, 2235($29)
-sb $t0, 2236($29)
-sb $t0, 2237($29)
-sb $t0, 2238($29)
-sb $t0, 2239($29)
-sb $t0, 2240($29)
-sb $t0, 2241($29)
-sb $t0, 2242($29)
-sb $t0, 2243($29)
-sb $t0, 2244($29)
-sb $t0, 2245($29)
-sb $t0, 2246($29)
-sb $t0, 2247($29)
-sb $t0, 2248($29)
-sb $t0, 2249($29)
-sb $t0, 2250($29)
-sb $t0, 2251($29)
-sb $t0, 2252($29)
-sb $t0, 2253($29)
-sb $t0, 2254($29)
-sb $t0, 2255($29)
-sb $t0, 2256($29)
-sb $t0, 2257($29)
-sb $t0, 2258($29)
-sb $t0, 2259($29)
-sb $t0, 2260($29)
-sb $t0, 2261($29)
-sb $t0, 2262($29)
-sb $t0, 2263($29)
-sb $t0, 2264($29)
-sb $t0, 2265($29)
-sb $t0, 2266($29)
-sb $t0, 2267($29)
-sb $t0, 2268($29)
-sb $t0, 2269($29)
-sb $t0, 2270($29)
-sb $t0, 2271($29)
-sb $t0, 2272($29)
-sb $t0, 2273($29)
-sb $t0, 2274($29)
-sb $t0, 2275($29)
-sb $t0, 2276($29)
-sb $t0, 2277($29)
-sb $t0, 2278($29)
-sb $t0, 2279($29)
-sb $t0, 2280($29)
-sb $t0, 2281($29)
-sb $t0, 2282($29)
-sb $t0, 2283($29)
-sb $t0, 2284($29)
-sb $t0, 2285($29)
-sb $t0, 2286($29)
-sb $t0, 2287($29)
-sb $t0, 2288($29)
-sb $t0, 2289($29)
-sb $t0, 2290($29)
-sb $t0, 2291($29)
-sb $t0, 2292($29)
-sb $t0, 2293($29)
-sb $t0, 2294($29)
-sb $t0, 2295($29)
-sb $t0, 2296($29)
-sb $t0, 2297($29)
-sb $t0, 2298($29)
-sb $t0, 2299($29)
-sb $t0, 2300($29)
-sb $t0, 2301($29)
-sb $t0, 2302($29)
-sb $t0, 2303($29)
-sb $t0, 2304($29)
-sb $t0, 2305($29)
-sb $t0, 2306($29)
-sb $t0, 2307($29)
-sb $t0, 2308($29)
-sb $t0, 2309($29)
-sb $t0, 2310($29)
-sb $t0, 2311($29)
-sb $t0, 2312($29)
-sb $t0, 2313($29)
-sb $t0, 2314($29)
-sb $t0, 2315($29)
-sb $t0, 2316($29)
-sb $t0, 2317($29)
-sb $t0, 2318($29)
-sb $t0, 2319($29)
-sb $t0, 2320($29)
-sb $t0, 2321($29)
-sb $t0, 2322($29)
-sb $t0, 2323($29)
-sb $t0, 2324($29)
-sb $t0, 2325($29)
-sb $t0, 2326($29)
-sb $t0, 2327($29)
-sb $t0, 2328($29)
-sb $t0, 2329($29)
-sb $t0, 2330($29)
-sb $t0, 2331($29)
-sb $t0, 2332($29)
-sb $t0, 2333($29)
-sb $t0, 2334($29)
-sb $t0, 2335($29)
-sb $t0, 2336($29)
-sb $t0, 2337($29)
-sb $t0, 2338($29)
-sb $t0, 2339($29)
-sb $t0, 2340($29)
-sb $t0, 2341($29)
-sb $t0, 2342($29)
-sb $t0, 2343($29)
-sb $t0, 2344($29)
-sb $t0, 2345($29)
-sb $t0, 2346($29)
-sb $t0, 2347($29)
-sb $t0, 2348($29)
-sb $t0, 2349($29)
-sb $t0, 2350($29)
-sb $t0, 2351($29)
-sb $t0, 2352($29)
-sb $t0, 2353($29)
-sb $t0, 2354($29)
-sb $t0, 2355($29)
-sb $t0, 2356($29)
-sb $t0, 2357($29)
-sb $t0, 2358($29)
-sb $t0, 2359($29)
-sb $t0, 2360($29)
-sb $t0, 2361($29)
-sb $t0, 2362($29)
-sb $t0, 2363($29)
-sb $t0, 2364($29)
-sb $t0, 2365($29)
-sb $t0, 2366($29)
-sb $t0, 2367($29)
-sb $t0, 2368($29)
-sb $t0, 2369($29)
-sb $t0, 2370($29)
-sb $t0, 2371($29)
-sb $t0, 2372($29)
-sb $t0, 2373($29)
-sb $t0, 2374($29)
-sb $t0, 2375($29)
-sb $t0, 2376($29)
-sb $t0, 2377($29)
-sb $t0, 2378($29)
-sb $t0, 2379($29)
-sb $t0, 2380($29)
-sb $t0, 2381($29)
-sb $t0, 2382($29)
-sb $t0, 2383($29)
-sb $t0, 2384($29)
-sb $t0, 2385($29)
-sb $t0, 2386($29)
-sb $t0, 2387($29)
-sb $t0, 2388($29)
-sb $t0, 2389($29)
-sb $t0, 2390($29)
-sb $t0, 2391($29)
-sb $t0, 2392($29)
-sb $t0, 2393($29)
-sb $t0, 2394($29)
-sb $t0, 2395($29)
-sb $t0, 2396($29)
-sb $t0, 2397($29)
-sb $t0, 2398($29)
-sb $t0, 2399($29)
-sb $t0, 2400($29)
-sb $t0, 2401($29)
-sb $t0, 2402($29)
-sb $t0, 2403($29)
-sb $t0, 2404($29)
-sb $t0, 2405($29)
-sb $t0, 2406($29)
-sb $t0, 2407($29)
-sb $t0, 2408($29)
-sb $t0, 2409($29)
-sb $t0, 2410($29)
-sb $t0, 2411($29)
-sb $t0, 2412($29)
-sb $t0, 2413($29)
-sb $t0, 2414($29)
-sb $t0, 2415($29)
-sb $t0, 2416($29)
-sb $t0, 2417($29)
-sb $t0, 2418($29)
-sb $t0, 2419($29)
-sb $t0, 2420($29)
-sb $t0, 2421($29)
-sb $t0, 2422($29)
-sb $t0, 2423($29)
-sb $t0, 2424($29)
-sb $t0, 2425($29)
-sb $t0, 2426($29)
-sb $t0, 2427($29)
-sb $t0, 2428($29)
-sb $t0, 2429($29)
-sb $t0, 2430($29)
-sb $t0, 2431($29)
-sb $t0, 2432($29)
-sb $t0, 2433($29)
-sb $t0, 2434($29)
-sb $t0, 2435($29)
-sb $t0, 2436($29)
-sb $t0, 2437($29)
-sb $t0, 2438($29)
-sb $t0, 2439($29)
-sb $t0, 2440($29)
-sb $t0, 2441($29)
-sb $t0, 2442($29)
-sb $t0, 2443($29)
-sb $t0, 2444($29)
-sb $t0, 2445($29)
-sb $t0, 2446($29)
-sb $t0, 2447($29)
-sb $t0, 2448($29)
-sb $t0, 2449($29)
-sb $t0, 2450($29)
-sb $t0, 2451($29)
-sb $t0, 2452($29)
-sb $t0, 2453($29)
-sb $t0, 2454($29)
-sb $t0, 2455($29)
-sb $t0, 2456($29)
-sb $t0, 2457($29)
-sb $t0, 2458($29)
-sb $t0, 2459($29)
-sb $t0, 2460($29)
-sb $t0, 2461($29)
-sb $t0, 2462($29)
-sb $t0, 2463($29)
-sb $t0, 2464($29)
-sb $t0, 2465($29)
-sb $t0, 2466($29)
-sb $t0, 2467($29)
-sb $t0, 2468($29)
-sb $t0, 2469($29)
-sb $t0, 2470($29)
-sb $t0, 2471($29)
-sb $t0, 2472($29)
-sb $t0, 2473($29)
-sb $t0, 2474($29)
-sb $t0, 2475($29)
-sb $t0, 2476($29)
-sb $t0, 2477($29)
-sb $t0, 2478($29)
-sb $t0, 2479($29)
-sb $t0, 2480($29)
-sb $t0, 2481($29)
-sb $t0, 2482($29)
-sb $t0, 2483($29)
-sb $t0, 2484($29)
-sb $t0, 2485($29)
-sb $t0, 2486($29)
-sb $t0, 2487($29)
-sb $t0, 2488($29)
-sb $t0, 2489($29)
-sb $t0, 2490($29)
-sb $t0, 2491($29)
-sb $t0, 2492($29)
-sb $t0, 2493($29)
-sb $t0, 2494($29)
-sb $t0, 2495($29)
-sb $t0, 2496($29)
-sb $t0, 2497($29)
-sb $t0, 2498($29)
-sb $t0, 2499($29)
-sb $t0, 2500($29)
-sb $t0, 2501($29)
-sb $t0, 2502($29)
-sb $t0, 2503($29)
-sb $t0, 2504($29)
-sb $t0, 2505($29)
-sb $t0, 2506($29)
-sb $t0, 2507($29)
-sb $t0, 2508($29)
-sb $t0, 2509($29)
-sb $t0, 2510($29)
-sb $t0, 2511($29)
-sb $t0, 2512($29)
-sb $t0, 2513($29)
-sb $t0, 2514($29)
-sb $t0, 2515($29)
-sb $t0, 2516($29)
-sb $t0, 2517($29)
-sb $t0, 2518($29)
-sb $t0, 2519($29)
-sb $t0, 2520($29)
-sb $t0, 2521($29)
-sb $t0, 2522($29)
-sb $t0, 2523($29)
-sb $t0, 2524($29)
-sb $t0, 2525($29)
-sb $t0, 2526($29)
-sb $t0, 2527($29)
-sb $t0, 2528($29)
-sb $t0, 2529($29)
-sb $t0, 2530($29)
-sb $t0, 2531($29)
-sb $t0, 2532($29)
-sb $t0, 2533($29)
-sb $t0, 2534($29)
-sb $t0, 2535($29)
-sb $t0, 2536($29)
-sb $t0, 2537($29)
-sb $t0, 2538($29)
-sb $t0, 2539($29)
-sb $t0, 2540($29)
-sb $t0, 2541($29)
-sb $t0, 2542($29)
-sb $t0, 2543($29)
-sb $t0, 2544($29)
-sb $t0, 2545($29)
-sb $t0, 2546($29)
-sb $t0, 2547($29)
-sb $t0, 2548($29)
-sb $t0, 2549($29)
-sb $t0, 2550($29)
-sb $t0, 2551($29)
-sb $t0, 2552($29)
-sb $t0, 2553($29)
-sb $t0, 2554($29)
-sb $t0, 2555($29)
-sb $t0, 2556($29)
-sb $t0, 2557($29)
-sb $t0, 2558($29)
-sb $t0, 2559($29)
-sb $t0, 2560($29)
-sb $t0, 2561($29)
-sb $t0, 2562($29)
-sb $t0, 2563($29)
-sb $t0, 2564($29)
-sb $t0, 2565($29)
-sb $t0, 2566($29)
-sb $t0, 2567($29)
-sb $t0, 2568($29)
-sb $t0, 2569($29)
-sb $t0, 2570($29)
-sb $t0, 2571($29)
-sb $t0, 2572($29)
-sb $t0, 2573($29)
-sb $t0, 2574($29)
-sb $t0, 2575($29)
-sb $t0, 2576($29)
-sb $t0, 2577($29)
-sb $t0, 2578($29)
-sb $t0, 2579($29)
-sb $t0, 2580($29)
-sb $t0, 2581($29)
-sb $t0, 2582($29)
-sb $t0, 2583($29)
-sb $t0, 2584($29)
-sb $t0, 2585($29)
-sb $t0, 2586($29)
-sb $t0, 2587($29)
-sb $t0, 2588($29)
-sb $t0, 2589($29)
-sb $t0, 2590($29)
-sb $t0, 2591($29)
-sb $t0, 2592($29)
-sb $t0, 2593($29)
-sb $t0, 2594($29)
-sb $t0, 2595($29)
-sb $t0, 2596($29)
-sb $t0, 2597($29)
-sb $t0, 2598($29)
-sb $t0, 2599($29)
-sb $t0, 2600($29)
-sb $t0, 2601($29)
-sb $t0, 2602($29)
-sb $t0, 2603($29)
-addiu $t1, $29, 4
-addiu $29, $29, -8
-sw $t1, 4($29)
-addiu $t2, $29, 4
-addiu $29, $29, -4
-sw $t2, 4($29)
-addiu $t3, $29, 4
-#union NotTypeSafe safety ; 
-
-li $t5, 0
-addiu $29, $29, -2600
-sb $t5, 4($29)
-sb $t5, 5($29)
-sb $t5, 6($29)
-sb $t5, 7($29)
-sb $t5, 8($29)
-sb $t5, 9($29)
-sb $t5, 10($29)
-sb $t5, 11($29)
-sb $t5, 12($29)
-sb $t5, 13($29)
-sb $t5, 14($29)
-sb $t5, 15($29)
-sb $t5, 16($29)
-sb $t5, 17($29)
-sb $t5, 18($29)
-sb $t5, 19($29)
-sb $t5, 20($29)
-sb $t5, 21($29)
-sb $t5, 22($29)
-sb $t5, 23($29)
-sb $t5, 24($29)
-sb $t5, 25($29)
-sb $t5, 26($29)
-sb $t5, 27($29)
-sb $t5, 28($29)
-sb $t5, 29($29)
-sb $t5, 30($29)
-sb $t5, 31($29)
-sb $t5, 32($29)
-sb $t5, 33($29)
-sb $t5, 34($29)
-sb $t5, 35($29)
-sb $t5, 36($29)
-sb $t5, 37($29)
-sb $t5, 38($29)
-sb $t5, 39($29)
-sb $t5, 40($29)
-sb $t5, 41($29)
-sb $t5, 42($29)
-sb $t5, 43($29)
-sb $t5, 44($29)
-sb $t5, 45($29)
-sb $t5, 46($29)
-sb $t5, 47($29)
-sb $t5, 48($29)
-sb $t5, 49($29)
-sb $t5, 50($29)
-sb $t5, 51($29)
-sb $t5, 52($29)
-sb $t5, 53($29)
-sb $t5, 54($29)
-sb $t5, 55($29)
-sb $t5, 56($29)
-sb $t5, 57($29)
-sb $t5, 58($29)
-sb $t5, 59($29)
-sb $t5, 60($29)
-sb $t5, 61($29)
-sb $t5, 62($29)
-sb $t5, 63($29)
-sb $t5, 64($29)
-sb $t5, 65($29)
-sb $t5, 66($29)
-sb $t5, 67($29)
-sb $t5, 68($29)
-sb $t5, 69($29)
-sb $t5, 70($29)
-sb $t5, 71($29)
-sb $t5, 72($29)
-sb $t5, 73($29)
-sb $t5, 74($29)
-sb $t5, 75($29)
-sb $t5, 76($29)
-sb $t5, 77($29)
-sb $t5, 78($29)
-sb $t5, 79($29)
-sb $t5, 80($29)
-sb $t5, 81($29)
-sb $t5, 82($29)
-sb $t5, 83($29)
-sb $t5, 84($29)
-sb $t5, 85($29)
-sb $t5, 86($29)
-sb $t5, 87($29)
-sb $t5, 88($29)
-sb $t5, 89($29)
-sb $t5, 90($29)
-sb $t5, 91($29)
-sb $t5, 92($29)
-sb $t5, 93($29)
-sb $t5, 94($29)
-sb $t5, 95($29)
-sb $t5, 96($29)
-sb $t5, 97($29)
-sb $t5, 98($29)
-sb $t5, 99($29)
-sb $t5, 100($29)
-sb $t5, 101($29)
-sb $t5, 102($29)
-sb $t5, 103($29)
-sb $t5, 104($29)
-sb $t5, 105($29)
-sb $t5, 106($29)
-sb $t5, 107($29)
-sb $t5, 108($29)
-sb $t5, 109($29)
-sb $t5, 110($29)
-sb $t5, 111($29)
-sb $t5, 112($29)
-sb $t5, 113($29)
-sb $t5, 114($29)
-sb $t5, 115($29)
-sb $t5, 116($29)
-sb $t5, 117($29)
-sb $t5, 118($29)
-sb $t5, 119($29)
-sb $t5, 120($29)
-sb $t5, 121($29)
-sb $t5, 122($29)
-sb $t5, 123($29)
-sb $t5, 124($29)
-sb $t5, 125($29)
-sb $t5, 126($29)
-sb $t5, 127($29)
-sb $t5, 128($29)
-sb $t5, 129($29)
-sb $t5, 130($29)
-sb $t5, 131($29)
-sb $t5, 132($29)
-sb $t5, 133($29)
-sb $t5, 134($29)
-sb $t5, 135($29)
-sb $t5, 136($29)
-sb $t5, 137($29)
-sb $t5, 138($29)
-sb $t5, 139($29)
-sb $t5, 140($29)
-sb $t5, 141($29)
-sb $t5, 142($29)
-sb $t5, 143($29)
-sb $t5, 144($29)
-sb $t5, 145($29)
-sb $t5, 146($29)
-sb $t5, 147($29)
-sb $t5, 148($29)
-sb $t5, 149($29)
-sb $t5, 150($29)
-sb $t5, 151($29)
-sb $t5, 152($29)
-sb $t5, 153($29)
-sb $t5, 154($29)
-sb $t5, 155($29)
-sb $t5, 156($29)
-sb $t5, 157($29)
-sb $t5, 158($29)
-sb $t5, 159($29)
-sb $t5, 160($29)
-sb $t5, 161($29)
-sb $t5, 162($29)
-sb $t5, 163($29)
-sb $t5, 164($29)
-sb $t5, 165($29)
-sb $t5, 166($29)
-sb $t5, 167($29)
-sb $t5, 168($29)
-sb $t5, 169($29)
-sb $t5, 170($29)
-sb $t5, 171($29)
-sb $t5, 172($29)
-sb $t5, 173($29)
-sb $t5, 174($29)
-sb $t5, 175($29)
-sb $t5, 176($29)
-sb $t5, 177($29)
-sb $t5, 178($29)
-sb $t5, 179($29)
-sb $t5, 180($29)
-sb $t5, 181($29)
-sb $t5, 182($29)
-sb $t5, 183($29)
-sb $t5, 184($29)
-sb $t5, 185($29)
-sb $t5, 186($29)
-sb $t5, 187($29)
-sb $t5, 188($29)
-sb $t5, 189($29)
-sb $t5, 190($29)
-sb $t5, 191($29)
-sb $t5, 192($29)
-sb $t5, 193($29)
-sb $t5, 194($29)
-sb $t5, 195($29)
-sb $t5, 196($29)
-sb $t5, 197($29)
-sb $t5, 198($29)
-sb $t5, 199($29)
-sb $t5, 200($29)
-sb $t5, 201($29)
-sb $t5, 202($29)
-sb $t5, 203($29)
-sb $t5, 204($29)
-sb $t5, 205($29)
-sb $t5, 206($29)
-sb $t5, 207($29)
-sb $t5, 208($29)
-sb $t5, 209($29)
-sb $t5, 210($29)
-sb $t5, 211($29)
-sb $t5, 212($29)
-sb $t5, 213($29)
-sb $t5, 214($29)
-sb $t5, 215($29)
-sb $t5, 216($29)
-sb $t5, 217($29)
-sb $t5, 218($29)
-sb $t5, 219($29)
-sb $t5, 220($29)
-sb $t5, 221($29)
-sb $t5, 222($29)
-sb $t5, 223($29)
-sb $t5, 224($29)
-sb $t5, 225($29)
-sb $t5, 226($29)
-sb $t5, 227($29)
-sb $t5, 228($29)
-sb $t5, 229($29)
-sb $t5, 230($29)
-sb $t5, 231($29)
-sb $t5, 232($29)
-sb $t5, 233($29)
-sb $t5, 234($29)
-sb $t5, 235($29)
-sb $t5, 236($29)
-sb $t5, 237($29)
-sb $t5, 238($29)
-sb $t5, 239($29)
-sb $t5, 240($29)
-sb $t5, 241($29)
-sb $t5, 242($29)
-sb $t5, 243($29)
-sb $t5, 244($29)
-sb $t5, 245($29)
-sb $t5, 246($29)
-sb $t5, 247($29)
-sb $t5, 248($29)
-sb $t5, 249($29)
-sb $t5, 250($29)
-sb $t5, 251($29)
-sb $t5, 252($29)
-sb $t5, 253($29)
-sb $t5, 254($29)
-sb $t5, 255($29)
-sb $t5, 256($29)
-sb $t5, 257($29)
-sb $t5, 258($29)
-sb $t5, 259($29)
-sb $t5, 260($29)
-sb $t5, 261($29)
-sb $t5, 262($29)
-sb $t5, 263($29)
-sb $t5, 264($29)
-sb $t5, 265($29)
-sb $t5, 266($29)
-sb $t5, 267($29)
-sb $t5, 268($29)
-sb $t5, 269($29)
-sb $t5, 270($29)
-sb $t5, 271($29)
-sb $t5, 272($29)
-sb $t5, 273($29)
-sb $t5, 274($29)
-sb $t5, 275($29)
-sb $t5, 276($29)
-sb $t5, 277($29)
-sb $t5, 278($29)
-sb $t5, 279($29)
-sb $t5, 280($29)
-sb $t5, 281($29)
-sb $t5, 282($29)
-sb $t5, 283($29)
-sb $t5, 284($29)
-sb $t5, 285($29)
-sb $t5, 286($29)
-sb $t5, 287($29)
-sb $t5, 288($29)
-sb $t5, 289($29)
-sb $t5, 290($29)
-sb $t5, 291($29)
-sb $t5, 292($29)
-sb $t5, 293($29)
-sb $t5, 294($29)
-sb $t5, 295($29)
-sb $t5, 296($29)
-sb $t5, 297($29)
-sb $t5, 298($29)
-sb $t5, 299($29)
-sb $t5, 300($29)
-sb $t5, 301($29)
-sb $t5, 302($29)
-sb $t5, 303($29)
-sb $t5, 304($29)
-sb $t5, 305($29)
-sb $t5, 306($29)
-sb $t5, 307($29)
-sb $t5, 308($29)
-sb $t5, 309($29)
-sb $t5, 310($29)
-sb $t5, 311($29)
-sb $t5, 312($29)
-sb $t5, 313($29)
-sb $t5, 314($29)
-sb $t5, 315($29)
-sb $t5, 316($29)
-sb $t5, 317($29)
-sb $t5, 318($29)
-sb $t5, 319($29)
-sb $t5, 320($29)
-sb $t5, 321($29)
-sb $t5, 322($29)
-sb $t5, 323($29)
-sb $t5, 324($29)
-sb $t5, 325($29)
-sb $t5, 326($29)
-sb $t5, 327($29)
-sb $t5, 328($29)
-sb $t5, 329($29)
-sb $t5, 330($29)
-sb $t5, 331($29)
-sb $t5, 332($29)
-sb $t5, 333($29)
-sb $t5, 334($29)
-sb $t5, 335($29)
-sb $t5, 336($29)
-sb $t5, 337($29)
-sb $t5, 338($29)
-sb $t5, 339($29)
-sb $t5, 340($29)
-sb $t5, 341($29)
-sb $t5, 342($29)
-sb $t5, 343($29)
-sb $t5, 344($29)
-sb $t5, 345($29)
-sb $t5, 346($29)
-sb $t5, 347($29)
-sb $t5, 348($29)
-sb $t5, 349($29)
-sb $t5, 350($29)
-sb $t5, 351($29)
-sb $t5, 352($29)
-sb $t5, 353($29)
-sb $t5, 354($29)
-sb $t5, 355($29)
-sb $t5, 356($29)
-sb $t5, 357($29)
-sb $t5, 358($29)
-sb $t5, 359($29)
-sb $t5, 360($29)
-sb $t5, 361($29)
-sb $t5, 362($29)
-sb $t5, 363($29)
-sb $t5, 364($29)
-sb $t5, 365($29)
-sb $t5, 366($29)
-sb $t5, 367($29)
-sb $t5, 368($29)
-sb $t5, 369($29)
-sb $t5, 370($29)
-sb $t5, 371($29)
-sb $t5, 372($29)
-sb $t5, 373($29)
-sb $t5, 374($29)
-sb $t5, 375($29)
-sb $t5, 376($29)
-sb $t5, 377($29)
-sb $t5, 378($29)
-sb $t5, 379($29)
-sb $t5, 380($29)
-sb $t5, 381($29)
-sb $t5, 382($29)
-sb $t5, 383($29)
-sb $t5, 384($29)
-sb $t5, 385($29)
-sb $t5, 386($29)
-sb $t5, 387($29)
-sb $t5, 388($29)
-sb $t5, 389($29)
-sb $t5, 390($29)
-sb $t5, 391($29)
-sb $t5, 392($29)
-sb $t5, 393($29)
-sb $t5, 394($29)
-sb $t5, 395($29)
-sb $t5, 396($29)
-sb $t5, 397($29)
-sb $t5, 398($29)
-sb $t5, 399($29)
-sb $t5, 400($29)
-sb $t5, 401($29)
-sb $t5, 402($29)
-sb $t5, 403($29)
-sb $t5, 404($29)
-sb $t5, 405($29)
-sb $t5, 406($29)
-sb $t5, 407($29)
-sb $t5, 408($29)
-sb $t5, 409($29)
-sb $t5, 410($29)
-sb $t5, 411($29)
-sb $t5, 412($29)
-sb $t5, 413($29)
-sb $t5, 414($29)
-sb $t5, 415($29)
-sb $t5, 416($29)
-sb $t5, 417($29)
-sb $t5, 418($29)
-sb $t5, 419($29)
-sb $t5, 420($29)
-sb $t5, 421($29)
-sb $t5, 422($29)
-sb $t5, 423($29)
-sb $t5, 424($29)
-sb $t5, 425($29)
-sb $t5, 426($29)
-sb $t5, 427($29)
-sb $t5, 428($29)
-sb $t5, 429($29)
-sb $t5, 430($29)
-sb $t5, 431($29)
-sb $t5, 432($29)
-sb $t5, 433($29)
-sb $t5, 434($29)
-sb $t5, 435($29)
-sb $t5, 436($29)
-sb $t5, 437($29)
-sb $t5, 438($29)
-sb $t5, 439($29)
-sb $t5, 440($29)
-sb $t5, 441($29)
-sb $t5, 442($29)
-sb $t5, 443($29)
-sb $t5, 444($29)
-sb $t5, 445($29)
-sb $t5, 446($29)
-sb $t5, 447($29)
-sb $t5, 448($29)
-sb $t5, 449($29)
-sb $t5, 450($29)
-sb $t5, 451($29)
-sb $t5, 452($29)
-sb $t5, 453($29)
-sb $t5, 454($29)
-sb $t5, 455($29)
-sb $t5, 456($29)
-sb $t5, 457($29)
-sb $t5, 458($29)
-sb $t5, 459($29)
-sb $t5, 460($29)
-sb $t5, 461($29)
-sb $t5, 462($29)
-sb $t5, 463($29)
-sb $t5, 464($29)
-sb $t5, 465($29)
-sb $t5, 466($29)
-sb $t5, 467($29)
-sb $t5, 468($29)
-sb $t5, 469($29)
-sb $t5, 470($29)
-sb $t5, 471($29)
-sb $t5, 472($29)
-sb $t5, 473($29)
-sb $t5, 474($29)
-sb $t5, 475($29)
-sb $t5, 476($29)
-sb $t5, 477($29)
-sb $t5, 478($29)
-sb $t5, 479($29)
-sb $t5, 480($29)
-sb $t5, 481($29)
-sb $t5, 482($29)
-sb $t5, 483($29)
-sb $t5, 484($29)
-sb $t5, 485($29)
-sb $t5, 486($29)
-sb $t5, 487($29)
-sb $t5, 488($29)
-sb $t5, 489($29)
-sb $t5, 490($29)
-sb $t5, 491($29)
-sb $t5, 492($29)
-sb $t5, 493($29)
-sb $t5, 494($29)
-sb $t5, 495($29)
-sb $t5, 496($29)
-sb $t5, 497($29)
-sb $t5, 498($29)
-sb $t5, 499($29)
-sb $t5, 500($29)
-sb $t5, 501($29)
-sb $t5, 502($29)
-sb $t5, 503($29)
-sb $t5, 504($29)
-sb $t5, 505($29)
-sb $t5, 506($29)
-sb $t5, 507($29)
-sb $t5, 508($29)
-sb $t5, 509($29)
-sb $t5, 510($29)
-sb $t5, 511($29)
-sb $t5, 512($29)
-sb $t5, 513($29)
-sb $t5, 514($29)
-sb $t5, 515($29)
-sb $t5, 516($29)
-sb $t5, 517($29)
-sb $t5, 518($29)
-sb $t5, 519($29)
-sb $t5, 520($29)
-sb $t5, 521($29)
-sb $t5, 522($29)
-sb $t5, 523($29)
-sb $t5, 524($29)
-sb $t5, 525($29)
-sb $t5, 526($29)
-sb $t5, 527($29)
-sb $t5, 528($29)
-sb $t5, 529($29)
-sb $t5, 530($29)
-sb $t5, 531($29)
-sb $t5, 532($29)
-sb $t5, 533($29)
-sb $t5, 534($29)
-sb $t5, 535($29)
-sb $t5, 536($29)
-sb $t5, 537($29)
-sb $t5, 538($29)
-sb $t5, 539($29)
-sb $t5, 540($29)
-sb $t5, 541($29)
-sb $t5, 542($29)
-sb $t5, 543($29)
-sb $t5, 544($29)
-sb $t5, 545($29)
-sb $t5, 546($29)
-sb $t5, 547($29)
-sb $t5, 548($29)
-sb $t5, 549($29)
-sb $t5, 550($29)
-sb $t5, 551($29)
-sb $t5, 552($29)
-sb $t5, 553($29)
-sb $t5, 554($29)
-sb $t5, 555($29)
-sb $t5, 556($29)
-sb $t5, 557($29)
-sb $t5, 558($29)
-sb $t5, 559($29)
-sb $t5, 560($29)
-sb $t5, 561($29)
-sb $t5, 562($29)
-sb $t5, 563($29)
-sb $t5, 564($29)
-sb $t5, 565($29)
-sb $t5, 566($29)
-sb $t5, 567($29)
-sb $t5, 568($29)
-sb $t5, 569($29)
-sb $t5, 570($29)
-sb $t5, 571($29)
-sb $t5, 572($29)
-sb $t5, 573($29)
-sb $t5, 574($29)
-sb $t5, 575($29)
-sb $t5, 576($29)
-sb $t5, 577($29)
-sb $t5, 578($29)
-sb $t5, 579($29)
-sb $t5, 580($29)
-sb $t5, 581($29)
-sb $t5, 582($29)
-sb $t5, 583($29)
-sb $t5, 584($29)
-sb $t5, 585($29)
-sb $t5, 586($29)
-sb $t5, 587($29)
-sb $t5, 588($29)
-sb $t5, 589($29)
-sb $t5, 590($29)
-sb $t5, 591($29)
-sb $t5, 592($29)
-sb $t5, 593($29)
-sb $t5, 594($29)
-sb $t5, 595($29)
-sb $t5, 596($29)
-sb $t5, 597($29)
-sb $t5, 598($29)
-sb $t5, 599($29)
-sb $t5, 600($29)
-sb $t5, 601($29)
-sb $t5, 602($29)
-sb $t5, 603($29)
-sb $t5, 604($29)
-sb $t5, 605($29)
-sb $t5, 606($29)
-sb $t5, 607($29)
-sb $t5, 608($29)
-sb $t5, 609($29)
-sb $t5, 610($29)
-sb $t5, 611($29)
-sb $t5, 612($29)
-sb $t5, 613($29)
-sb $t5, 614($29)
-sb $t5, 615($29)
-sb $t5, 616($29)
-sb $t5, 617($29)
-sb $t5, 618($29)
-sb $t5, 619($29)
-sb $t5, 620($29)
-sb $t5, 621($29)
-sb $t5, 622($29)
-sb $t5, 623($29)
-sb $t5, 624($29)
-sb $t5, 625($29)
-sb $t5, 626($29)
-sb $t5, 627($29)
-sb $t5, 628($29)
-sb $t5, 629($29)
-sb $t5, 630($29)
-sb $t5, 631($29)
-sb $t5, 632($29)
-sb $t5, 633($29)
-sb $t5, 634($29)
-sb $t5, 635($29)
-sb $t5, 636($29)
-sb $t5, 637($29)
-sb $t5, 638($29)
-sb $t5, 639($29)
-sb $t5, 640($29)
-sb $t5, 641($29)
-sb $t5, 642($29)
-sb $t5, 643($29)
-sb $t5, 644($29)
-sb $t5, 645($29)
-sb $t5, 646($29)
-sb $t5, 647($29)
-sb $t5, 648($29)
-sb $t5, 649($29)
-sb $t5, 650($29)
-sb $t5, 651($29)
-sb $t5, 652($29)
-sb $t5, 653($29)
-sb $t5, 654($29)
-sb $t5, 655($29)
-sb $t5, 656($29)
-sb $t5, 657($29)
-sb $t5, 658($29)
-sb $t5, 659($29)
-sb $t5, 660($29)
-sb $t5, 661($29)
-sb $t5, 662($29)
-sb $t5, 663($29)
-sb $t5, 664($29)
-sb $t5, 665($29)
-sb $t5, 666($29)
-sb $t5, 667($29)
-sb $t5, 668($29)
-sb $t5, 669($29)
-sb $t5, 670($29)
-sb $t5, 671($29)
-sb $t5, 672($29)
-sb $t5, 673($29)
-sb $t5, 674($29)
-sb $t5, 675($29)
-sb $t5, 676($29)
-sb $t5, 677($29)
-sb $t5, 678($29)
-sb $t5, 679($29)
-sb $t5, 680($29)
-sb $t5, 681($29)
-sb $t5, 682($29)
-sb $t5, 683($29)
-sb $t5, 684($29)
-sb $t5, 685($29)
-sb $t5, 686($29)
-sb $t5, 687($29)
-sb $t5, 688($29)
-sb $t5, 689($29)
-sb $t5, 690($29)
-sb $t5, 691($29)
-sb $t5, 692($29)
-sb $t5, 693($29)
-sb $t5, 694($29)
-sb $t5, 695($29)
-sb $t5, 696($29)
-sb $t5, 697($29)
-sb $t5, 698($29)
-sb $t5, 699($29)
-sb $t5, 700($29)
-sb $t5, 701($29)
-sb $t5, 702($29)
-sb $t5, 703($29)
-sb $t5, 704($29)
-sb $t5, 705($29)
-sb $t5, 706($29)
-sb $t5, 707($29)
-sb $t5, 708($29)
-sb $t5, 709($29)
-sb $t5, 710($29)
-sb $t5, 711($29)
-sb $t5, 712($29)
-sb $t5, 713($29)
-sb $t5, 714($29)
-sb $t5, 715($29)
-sb $t5, 716($29)
-sb $t5, 717($29)
-sb $t5, 718($29)
-sb $t5, 719($29)
-sb $t5, 720($29)
-sb $t5, 721($29)
-sb $t5, 722($29)
-sb $t5, 723($29)
-sb $t5, 724($29)
-sb $t5, 725($29)
-sb $t5, 726($29)
-sb $t5, 727($29)
-sb $t5, 728($29)
-sb $t5, 729($29)
-sb $t5, 730($29)
-sb $t5, 731($29)
-sb $t5, 732($29)
-sb $t5, 733($29)
-sb $t5, 734($29)
-sb $t5, 735($29)
-sb $t5, 736($29)
-sb $t5, 737($29)
-sb $t5, 738($29)
-sb $t5, 739($29)
-sb $t5, 740($29)
-sb $t5, 741($29)
-sb $t5, 742($29)
-sb $t5, 743($29)
-sb $t5, 744($29)
-sb $t5, 745($29)
-sb $t5, 746($29)
-sb $t5, 747($29)
-sb $t5, 748($29)
-sb $t5, 749($29)
-sb $t5, 750($29)
-sb $t5, 751($29)
-sb $t5, 752($29)
-sb $t5, 753($29)
-sb $t5, 754($29)
-sb $t5, 755($29)
-sb $t5, 756($29)
-sb $t5, 757($29)
-sb $t5, 758($29)
-sb $t5, 759($29)
-sb $t5, 760($29)
-sb $t5, 761($29)
-sb $t5, 762($29)
-sb $t5, 763($29)
-sb $t5, 764($29)
-sb $t5, 765($29)
-sb $t5, 766($29)
-sb $t5, 767($29)
-sb $t5, 768($29)
-sb $t5, 769($29)
-sb $t5, 770($29)
-sb $t5, 771($29)
-sb $t5, 772($29)
-sb $t5, 773($29)
-sb $t5, 774($29)
-sb $t5, 775($29)
-sb $t5, 776($29)
-sb $t5, 777($29)
-sb $t5, 778($29)
-sb $t5, 779($29)
-sb $t5, 780($29)
-sb $t5, 781($29)
-sb $t5, 782($29)
-sb $t5, 783($29)
-sb $t5, 784($29)
-sb $t5, 785($29)
-sb $t5, 786($29)
-sb $t5, 787($29)
-sb $t5, 788($29)
-sb $t5, 789($29)
-sb $t5, 790($29)
-sb $t5, 791($29)
-sb $t5, 792($29)
-sb $t5, 793($29)
-sb $t5, 794($29)
-sb $t5, 795($29)
-sb $t5, 796($29)
-sb $t5, 797($29)
-sb $t5, 798($29)
-sb $t5, 799($29)
-sb $t5, 800($29)
-sb $t5, 801($29)
-sb $t5, 802($29)
-sb $t5, 803($29)
-sb $t5, 804($29)
-sb $t5, 805($29)
-sb $t5, 806($29)
-sb $t5, 807($29)
-sb $t5, 808($29)
-sb $t5, 809($29)
-sb $t5, 810($29)
-sb $t5, 811($29)
-sb $t5, 812($29)
-sb $t5, 813($29)
-sb $t5, 814($29)
-sb $t5, 815($29)
-sb $t5, 816($29)
-sb $t5, 817($29)
-sb $t5, 818($29)
-sb $t5, 819($29)
-sb $t5, 820($29)
-sb $t5, 821($29)
-sb $t5, 822($29)
-sb $t5, 823($29)
-sb $t5, 824($29)
-sb $t5, 825($29)
-sb $t5, 826($29)
-sb $t5, 827($29)
-sb $t5, 828($29)
-sb $t5, 829($29)
-sb $t5, 830($29)
-sb $t5, 831($29)
-sb $t5, 832($29)
-sb $t5, 833($29)
-sb $t5, 834($29)
-sb $t5, 835($29)
-sb $t5, 836($29)
-sb $t5, 837($29)
-sb $t5, 838($29)
-sb $t5, 839($29)
-sb $t5, 840($29)
-sb $t5, 841($29)
-sb $t5, 842($29)
-sb $t5, 843($29)
-sb $t5, 844($29)
-sb $t5, 845($29)
-sb $t5, 846($29)
-sb $t5, 847($29)
-sb $t5, 848($29)
-sb $t5, 849($29)
-sb $t5, 850($29)
-sb $t5, 851($29)
-sb $t5, 852($29)
-sb $t5, 853($29)
-sb $t5, 854($29)
-sb $t5, 855($29)
-sb $t5, 856($29)
-sb $t5, 857($29)
-sb $t5, 858($29)
-sb $t5, 859($29)
-sb $t5, 860($29)
-sb $t5, 861($29)
-sb $t5, 862($29)
-sb $t5, 863($29)
-sb $t5, 864($29)
-sb $t5, 865($29)
-sb $t5, 866($29)
-sb $t5, 867($29)
-sb $t5, 868($29)
-sb $t5, 869($29)
-sb $t5, 870($29)
-sb $t5, 871($29)
-sb $t5, 872($29)
-sb $t5, 873($29)
-sb $t5, 874($29)
-sb $t5, 875($29)
-sb $t5, 876($29)
-sb $t5, 877($29)
-sb $t5, 878($29)
-sb $t5, 879($29)
-sb $t5, 880($29)
-sb $t5, 881($29)
-sb $t5, 882($29)
-sb $t5, 883($29)
-sb $t5, 884($29)
-sb $t5, 885($29)
-sb $t5, 886($29)
-sb $t5, 887($29)
-sb $t5, 888($29)
-sb $t5, 889($29)
-sb $t5, 890($29)
-sb $t5, 891($29)
-sb $t5, 892($29)
-sb $t5, 893($29)
-sb $t5, 894($29)
-sb $t5, 895($29)
-sb $t5, 896($29)
-sb $t5, 897($29)
-sb $t5, 898($29)
-sb $t5, 899($29)
-sb $t5, 900($29)
-sb $t5, 901($29)
-sb $t5, 902($29)
-sb $t5, 903($29)
-sb $t5, 904($29)
-sb $t5, 905($29)
-sb $t5, 906($29)
-sb $t5, 907($29)
-sb $t5, 908($29)
-sb $t5, 909($29)
-sb $t5, 910($29)
-sb $t5, 911($29)
-sb $t5, 912($29)
-sb $t5, 913($29)
-sb $t5, 914($29)
-sb $t5, 915($29)
-sb $t5, 916($29)
-sb $t5, 917($29)
-sb $t5, 918($29)
-sb $t5, 919($29)
-sb $t5, 920($29)
-sb $t5, 921($29)
-sb $t5, 922($29)
-sb $t5, 923($29)
-sb $t5, 924($29)
-sb $t5, 925($29)
-sb $t5, 926($29)
-sb $t5, 927($29)
-sb $t5, 928($29)
-sb $t5, 929($29)
-sb $t5, 930($29)
-sb $t5, 931($29)
-sb $t5, 932($29)
-sb $t5, 933($29)
-sb $t5, 934($29)
-sb $t5, 935($29)
-sb $t5, 936($29)
-sb $t5, 937($29)
-sb $t5, 938($29)
-sb $t5, 939($29)
-sb $t5, 940($29)
-sb $t5, 941($29)
-sb $t5, 942($29)
-sb $t5, 943($29)
-sb $t5, 944($29)
-sb $t5, 945($29)
-sb $t5, 946($29)
-sb $t5, 947($29)
-sb $t5, 948($29)
-sb $t5, 949($29)
-sb $t5, 950($29)
-sb $t5, 951($29)
-sb $t5, 952($29)
-sb $t5, 953($29)
-sb $t5, 954($29)
-sb $t5, 955($29)
-sb $t5, 956($29)
-sb $t5, 957($29)
-sb $t5, 958($29)
-sb $t5, 959($29)
-sb $t5, 960($29)
-sb $t5, 961($29)
-sb $t5, 962($29)
-sb $t5, 963($29)
-sb $t5, 964($29)
-sb $t5, 965($29)
-sb $t5, 966($29)
-sb $t5, 967($29)
-sb $t5, 968($29)
-sb $t5, 969($29)
-sb $t5, 970($29)
-sb $t5, 971($29)
-sb $t5, 972($29)
-sb $t5, 973($29)
-sb $t5, 974($29)
-sb $t5, 975($29)
-sb $t5, 976($29)
-sb $t5, 977($29)
-sb $t5, 978($29)
-sb $t5, 979($29)
-sb $t5, 980($29)
-sb $t5, 981($29)
-sb $t5, 982($29)
-sb $t5, 983($29)
-sb $t5, 984($29)
-sb $t5, 985($29)
-sb $t5, 986($29)
-sb $t5, 987($29)
-sb $t5, 988($29)
-sb $t5, 989($29)
-sb $t5, 990($29)
-sb $t5, 991($29)
-sb $t5, 992($29)
-sb $t5, 993($29)
-sb $t5, 994($29)
-sb $t5, 995($29)
-sb $t5, 996($29)
-sb $t5, 997($29)
-sb $t5, 998($29)
-sb $t5, 999($29)
-sb $t5, 1000($29)
-sb $t5, 1001($29)
-sb $t5, 1002($29)
-sb $t5, 1003($29)
-sb $t5, 1004($29)
-sb $t5, 1005($29)
-sb $t5, 1006($29)
-sb $t5, 1007($29)
-sb $t5, 1008($29)
-sb $t5, 1009($29)
-sb $t5, 1010($29)
-sb $t5, 1011($29)
-sb $t5, 1012($29)
-sb $t5, 1013($29)
-sb $t5, 1014($29)
-sb $t5, 1015($29)
-sb $t5, 1016($29)
-sb $t5, 1017($29)
-sb $t5, 1018($29)
-sb $t5, 1019($29)
-sb $t5, 1020($29)
-sb $t5, 1021($29)
-sb $t5, 1022($29)
-sb $t5, 1023($29)
-sb $t5, 1024($29)
-sb $t5, 1025($29)
-sb $t5, 1026($29)
-sb $t5, 1027($29)
-sb $t5, 1028($29)
-sb $t5, 1029($29)
-sb $t5, 1030($29)
-sb $t5, 1031($29)
-sb $t5, 1032($29)
-sb $t5, 1033($29)
-sb $t5, 1034($29)
-sb $t5, 1035($29)
-sb $t5, 1036($29)
-sb $t5, 1037($29)
-sb $t5, 1038($29)
-sb $t5, 1039($29)
-sb $t5, 1040($29)
-sb $t5, 1041($29)
-sb $t5, 1042($29)
-sb $t5, 1043($29)
-sb $t5, 1044($29)
-sb $t5, 1045($29)
-sb $t5, 1046($29)
-sb $t5, 1047($29)
-sb $t5, 1048($29)
-sb $t5, 1049($29)
-sb $t5, 1050($29)
-sb $t5, 1051($29)
-sb $t5, 1052($29)
-sb $t5, 1053($29)
-sb $t5, 1054($29)
-sb $t5, 1055($29)
-sb $t5, 1056($29)
-sb $t5, 1057($29)
-sb $t5, 1058($29)
-sb $t5, 1059($29)
-sb $t5, 1060($29)
-sb $t5, 1061($29)
-sb $t5, 1062($29)
-sb $t5, 1063($29)
-sb $t5, 1064($29)
-sb $t5, 1065($29)
-sb $t5, 1066($29)
-sb $t5, 1067($29)
-sb $t5, 1068($29)
-sb $t5, 1069($29)
-sb $t5, 1070($29)
-sb $t5, 1071($29)
-sb $t5, 1072($29)
-sb $t5, 1073($29)
-sb $t5, 1074($29)
-sb $t5, 1075($29)
-sb $t5, 1076($29)
-sb $t5, 1077($29)
-sb $t5, 1078($29)
-sb $t5, 1079($29)
-sb $t5, 1080($29)
-sb $t5, 1081($29)
-sb $t5, 1082($29)
-sb $t5, 1083($29)
-sb $t5, 1084($29)
-sb $t5, 1085($29)
-sb $t5, 1086($29)
-sb $t5, 1087($29)
-sb $t5, 1088($29)
-sb $t5, 1089($29)
-sb $t5, 1090($29)
-sb $t5, 1091($29)
-sb $t5, 1092($29)
-sb $t5, 1093($29)
-sb $t5, 1094($29)
-sb $t5, 1095($29)
-sb $t5, 1096($29)
-sb $t5, 1097($29)
-sb $t5, 1098($29)
-sb $t5, 1099($29)
-sb $t5, 1100($29)
-sb $t5, 1101($29)
-sb $t5, 1102($29)
-sb $t5, 1103($29)
-sb $t5, 1104($29)
-sb $t5, 1105($29)
-sb $t5, 1106($29)
-sb $t5, 1107($29)
-sb $t5, 1108($29)
-sb $t5, 1109($29)
-sb $t5, 1110($29)
-sb $t5, 1111($29)
-sb $t5, 1112($29)
-sb $t5, 1113($29)
-sb $t5, 1114($29)
-sb $t5, 1115($29)
-sb $t5, 1116($29)
-sb $t5, 1117($29)
-sb $t5, 1118($29)
-sb $t5, 1119($29)
-sb $t5, 1120($29)
-sb $t5, 1121($29)
-sb $t5, 1122($29)
-sb $t5, 1123($29)
-sb $t5, 1124($29)
-sb $t5, 1125($29)
-sb $t5, 1126($29)
-sb $t5, 1127($29)
-sb $t5, 1128($29)
-sb $t5, 1129($29)
-sb $t5, 1130($29)
-sb $t5, 1131($29)
-sb $t5, 1132($29)
-sb $t5, 1133($29)
-sb $t5, 1134($29)
-sb $t5, 1135($29)
-sb $t5, 1136($29)
-sb $t5, 1137($29)
-sb $t5, 1138($29)
-sb $t5, 1139($29)
-sb $t5, 1140($29)
-sb $t5, 1141($29)
-sb $t5, 1142($29)
-sb $t5, 1143($29)
-sb $t5, 1144($29)
-sb $t5, 1145($29)
-sb $t5, 1146($29)
-sb $t5, 1147($29)
-sb $t5, 1148($29)
-sb $t5, 1149($29)
-sb $t5, 1150($29)
-sb $t5, 1151($29)
-sb $t5, 1152($29)
-sb $t5, 1153($29)
-sb $t5, 1154($29)
-sb $t5, 1155($29)
-sb $t5, 1156($29)
-sb $t5, 1157($29)
-sb $t5, 1158($29)
-sb $t5, 1159($29)
-sb $t5, 1160($29)
-sb $t5, 1161($29)
-sb $t5, 1162($29)
-sb $t5, 1163($29)
-sb $t5, 1164($29)
-sb $t5, 1165($29)
-sb $t5, 1166($29)
-sb $t5, 1167($29)
-sb $t5, 1168($29)
-sb $t5, 1169($29)
-sb $t5, 1170($29)
-sb $t5, 1171($29)
-sb $t5, 1172($29)
-sb $t5, 1173($29)
-sb $t5, 1174($29)
-sb $t5, 1175($29)
-sb $t5, 1176($29)
-sb $t5, 1177($29)
-sb $t5, 1178($29)
-sb $t5, 1179($29)
-sb $t5, 1180($29)
-sb $t5, 1181($29)
-sb $t5, 1182($29)
-sb $t5, 1183($29)
-sb $t5, 1184($29)
-sb $t5, 1185($29)
-sb $t5, 1186($29)
-sb $t5, 1187($29)
-sb $t5, 1188($29)
-sb $t5, 1189($29)
-sb $t5, 1190($29)
-sb $t5, 1191($29)
-sb $t5, 1192($29)
-sb $t5, 1193($29)
-sb $t5, 1194($29)
-sb $t5, 1195($29)
-sb $t5, 1196($29)
-sb $t5, 1197($29)
-sb $t5, 1198($29)
-sb $t5, 1199($29)
-sb $t5, 1200($29)
-sb $t5, 1201($29)
-sb $t5, 1202($29)
-sb $t5, 1203($29)
-sb $t5, 1204($29)
-sb $t5, 1205($29)
-sb $t5, 1206($29)
-sb $t5, 1207($29)
-sb $t5, 1208($29)
-sb $t5, 1209($29)
-sb $t5, 1210($29)
-sb $t5, 1211($29)
-sb $t5, 1212($29)
-sb $t5, 1213($29)
-sb $t5, 1214($29)
-sb $t5, 1215($29)
-sb $t5, 1216($29)
-sb $t5, 1217($29)
-sb $t5, 1218($29)
-sb $t5, 1219($29)
-sb $t5, 1220($29)
-sb $t5, 1221($29)
-sb $t5, 1222($29)
-sb $t5, 1223($29)
-sb $t5, 1224($29)
-sb $t5, 1225($29)
-sb $t5, 1226($29)
-sb $t5, 1227($29)
-sb $t5, 1228($29)
-sb $t5, 1229($29)
-sb $t5, 1230($29)
-sb $t5, 1231($29)
-sb $t5, 1232($29)
-sb $t5, 1233($29)
-sb $t5, 1234($29)
-sb $t5, 1235($29)
-sb $t5, 1236($29)
-sb $t5, 1237($29)
-sb $t5, 1238($29)
-sb $t5, 1239($29)
-sb $t5, 1240($29)
-sb $t5, 1241($29)
-sb $t5, 1242($29)
-sb $t5, 1243($29)
-sb $t5, 1244($29)
-sb $t5, 1245($29)
-sb $t5, 1246($29)
-sb $t5, 1247($29)
-sb $t5, 1248($29)
-sb $t5, 1249($29)
-sb $t5, 1250($29)
-sb $t5, 1251($29)
-sb $t5, 1252($29)
-sb $t5, 1253($29)
-sb $t5, 1254($29)
-sb $t5, 1255($29)
-sb $t5, 1256($29)
-sb $t5, 1257($29)
-sb $t5, 1258($29)
-sb $t5, 1259($29)
-sb $t5, 1260($29)
-sb $t5, 1261($29)
-sb $t5, 1262($29)
-sb $t5, 1263($29)
-sb $t5, 1264($29)
-sb $t5, 1265($29)
-sb $t5, 1266($29)
-sb $t5, 1267($29)
-sb $t5, 1268($29)
-sb $t5, 1269($29)
-sb $t5, 1270($29)
-sb $t5, 1271($29)
-sb $t5, 1272($29)
-sb $t5, 1273($29)
-sb $t5, 1274($29)
-sb $t5, 1275($29)
-sb $t5, 1276($29)
-sb $t5, 1277($29)
-sb $t5, 1278($29)
-sb $t5, 1279($29)
-sb $t5, 1280($29)
-sb $t5, 1281($29)
-sb $t5, 1282($29)
-sb $t5, 1283($29)
-sb $t5, 1284($29)
-sb $t5, 1285($29)
-sb $t5, 1286($29)
-sb $t5, 1287($29)
-sb $t5, 1288($29)
-sb $t5, 1289($29)
-sb $t5, 1290($29)
-sb $t5, 1291($29)
-sb $t5, 1292($29)
-sb $t5, 1293($29)
-sb $t5, 1294($29)
-sb $t5, 1295($29)
-sb $t5, 1296($29)
-sb $t5, 1297($29)
-sb $t5, 1298($29)
-sb $t5, 1299($29)
-sb $t5, 1300($29)
-sb $t5, 1301($29)
-sb $t5, 1302($29)
-sb $t5, 1303($29)
-sb $t5, 1304($29)
-sb $t5, 1305($29)
-sb $t5, 1306($29)
-sb $t5, 1307($29)
-sb $t5, 1308($29)
-sb $t5, 1309($29)
-sb $t5, 1310($29)
-sb $t5, 1311($29)
-sb $t5, 1312($29)
-sb $t5, 1313($29)
-sb $t5, 1314($29)
-sb $t5, 1315($29)
-sb $t5, 1316($29)
-sb $t5, 1317($29)
-sb $t5, 1318($29)
-sb $t5, 1319($29)
-sb $t5, 1320($29)
-sb $t5, 1321($29)
-sb $t5, 1322($29)
-sb $t5, 1323($29)
-sb $t5, 1324($29)
-sb $t5, 1325($29)
-sb $t5, 1326($29)
-sb $t5, 1327($29)
-sb $t5, 1328($29)
-sb $t5, 1329($29)
-sb $t5, 1330($29)
-sb $t5, 1331($29)
-sb $t5, 1332($29)
-sb $t5, 1333($29)
-sb $t5, 1334($29)
-sb $t5, 1335($29)
-sb $t5, 1336($29)
-sb $t5, 1337($29)
-sb $t5, 1338($29)
-sb $t5, 1339($29)
-sb $t5, 1340($29)
-sb $t5, 1341($29)
-sb $t5, 1342($29)
-sb $t5, 1343($29)
-sb $t5, 1344($29)
-sb $t5, 1345($29)
-sb $t5, 1346($29)
-sb $t5, 1347($29)
-sb $t5, 1348($29)
-sb $t5, 1349($29)
-sb $t5, 1350($29)
-sb $t5, 1351($29)
-sb $t5, 1352($29)
-sb $t5, 1353($29)
-sb $t5, 1354($29)
-sb $t5, 1355($29)
-sb $t5, 1356($29)
-sb $t5, 1357($29)
-sb $t5, 1358($29)
-sb $t5, 1359($29)
-sb $t5, 1360($29)
-sb $t5, 1361($29)
-sb $t5, 1362($29)
-sb $t5, 1363($29)
-sb $t5, 1364($29)
-sb $t5, 1365($29)
-sb $t5, 1366($29)
-sb $t5, 1367($29)
-sb $t5, 1368($29)
-sb $t5, 1369($29)
-sb $t5, 1370($29)
-sb $t5, 1371($29)
-sb $t5, 1372($29)
-sb $t5, 1373($29)
-sb $t5, 1374($29)
-sb $t5, 1375($29)
-sb $t5, 1376($29)
-sb $t5, 1377($29)
-sb $t5, 1378($29)
-sb $t5, 1379($29)
-sb $t5, 1380($29)
-sb $t5, 1381($29)
-sb $t5, 1382($29)
-sb $t5, 1383($29)
-sb $t5, 1384($29)
-sb $t5, 1385($29)
-sb $t5, 1386($29)
-sb $t5, 1387($29)
-sb $t5, 1388($29)
-sb $t5, 1389($29)
-sb $t5, 1390($29)
-sb $t5, 1391($29)
-sb $t5, 1392($29)
-sb $t5, 1393($29)
-sb $t5, 1394($29)
-sb $t5, 1395($29)
-sb $t5, 1396($29)
-sb $t5, 1397($29)
-sb $t5, 1398($29)
-sb $t5, 1399($29)
-sb $t5, 1400($29)
-sb $t5, 1401($29)
-sb $t5, 1402($29)
-sb $t5, 1403($29)
-sb $t5, 1404($29)
-sb $t5, 1405($29)
-sb $t5, 1406($29)
-sb $t5, 1407($29)
-sb $t5, 1408($29)
-sb $t5, 1409($29)
-sb $t5, 1410($29)
-sb $t5, 1411($29)
-sb $t5, 1412($29)
-sb $t5, 1413($29)
-sb $t5, 1414($29)
-sb $t5, 1415($29)
-sb $t5, 1416($29)
-sb $t5, 1417($29)
-sb $t5, 1418($29)
-sb $t5, 1419($29)
-sb $t5, 1420($29)
-sb $t5, 1421($29)
-sb $t5, 1422($29)
-sb $t5, 1423($29)
-sb $t5, 1424($29)
-sb $t5, 1425($29)
-sb $t5, 1426($29)
-sb $t5, 1427($29)
-sb $t5, 1428($29)
-sb $t5, 1429($29)
-sb $t5, 1430($29)
-sb $t5, 1431($29)
-sb $t5, 1432($29)
-sb $t5, 1433($29)
-sb $t5, 1434($29)
-sb $t5, 1435($29)
-sb $t5, 1436($29)
-sb $t5, 1437($29)
-sb $t5, 1438($29)
-sb $t5, 1439($29)
-sb $t5, 1440($29)
-sb $t5, 1441($29)
-sb $t5, 1442($29)
-sb $t5, 1443($29)
-sb $t5, 1444($29)
-sb $t5, 1445($29)
-sb $t5, 1446($29)
-sb $t5, 1447($29)
-sb $t5, 1448($29)
-sb $t5, 1449($29)
-sb $t5, 1450($29)
-sb $t5, 1451($29)
-sb $t5, 1452($29)
-sb $t5, 1453($29)
-sb $t5, 1454($29)
-sb $t5, 1455($29)
-sb $t5, 1456($29)
-sb $t5, 1457($29)
-sb $t5, 1458($29)
-sb $t5, 1459($29)
-sb $t5, 1460($29)
-sb $t5, 1461($29)
-sb $t5, 1462($29)
-sb $t5, 1463($29)
-sb $t5, 1464($29)
-sb $t5, 1465($29)
-sb $t5, 1466($29)
-sb $t5, 1467($29)
-sb $t5, 1468($29)
-sb $t5, 1469($29)
-sb $t5, 1470($29)
-sb $t5, 1471($29)
-sb $t5, 1472($29)
-sb $t5, 1473($29)
-sb $t5, 1474($29)
-sb $t5, 1475($29)
-sb $t5, 1476($29)
-sb $t5, 1477($29)
-sb $t5, 1478($29)
-sb $t5, 1479($29)
-sb $t5, 1480($29)
-sb $t5, 1481($29)
-sb $t5, 1482($29)
-sb $t5, 1483($29)
-sb $t5, 1484($29)
-sb $t5, 1485($29)
-sb $t5, 1486($29)
-sb $t5, 1487($29)
-sb $t5, 1488($29)
-sb $t5, 1489($29)
-sb $t5, 1490($29)
-sb $t5, 1491($29)
-sb $t5, 1492($29)
-sb $t5, 1493($29)
-sb $t5, 1494($29)
-sb $t5, 1495($29)
-sb $t5, 1496($29)
-sb $t5, 1497($29)
-sb $t5, 1498($29)
-sb $t5, 1499($29)
-sb $t5, 1500($29)
-sb $t5, 1501($29)
-sb $t5, 1502($29)
-sb $t5, 1503($29)
-sb $t5, 1504($29)
-sb $t5, 1505($29)
-sb $t5, 1506($29)
-sb $t5, 1507($29)
-sb $t5, 1508($29)
-sb $t5, 1509($29)
-sb $t5, 1510($29)
-sb $t5, 1511($29)
-sb $t5, 1512($29)
-sb $t5, 1513($29)
-sb $t5, 1514($29)
-sb $t5, 1515($29)
-sb $t5, 1516($29)
-sb $t5, 1517($29)
-sb $t5, 1518($29)
-sb $t5, 1519($29)
-sb $t5, 1520($29)
-sb $t5, 1521($29)
-sb $t5, 1522($29)
-sb $t5, 1523($29)
-sb $t5, 1524($29)
-sb $t5, 1525($29)
-sb $t5, 1526($29)
-sb $t5, 1527($29)
-sb $t5, 1528($29)
-sb $t5, 1529($29)
-sb $t5, 1530($29)
-sb $t5, 1531($29)
-sb $t5, 1532($29)
-sb $t5, 1533($29)
-sb $t5, 1534($29)
-sb $t5, 1535($29)
-sb $t5, 1536($29)
-sb $t5, 1537($29)
-sb $t5, 1538($29)
-sb $t5, 1539($29)
-sb $t5, 1540($29)
-sb $t5, 1541($29)
-sb $t5, 1542($29)
-sb $t5, 1543($29)
-sb $t5, 1544($29)
-sb $t5, 1545($29)
-sb $t5, 1546($29)
-sb $t5, 1547($29)
-sb $t5, 1548($29)
-sb $t5, 1549($29)
-sb $t5, 1550($29)
-sb $t5, 1551($29)
-sb $t5, 1552($29)
-sb $t5, 1553($29)
-sb $t5, 1554($29)
-sb $t5, 1555($29)
-sb $t5, 1556($29)
-sb $t5, 1557($29)
-sb $t5, 1558($29)
-sb $t5, 1559($29)
-sb $t5, 1560($29)
-sb $t5, 1561($29)
-sb $t5, 1562($29)
-sb $t5, 1563($29)
-sb $t5, 1564($29)
-sb $t5, 1565($29)
-sb $t5, 1566($29)
-sb $t5, 1567($29)
-sb $t5, 1568($29)
-sb $t5, 1569($29)
-sb $t5, 1570($29)
-sb $t5, 1571($29)
-sb $t5, 1572($29)
-sb $t5, 1573($29)
-sb $t5, 1574($29)
-sb $t5, 1575($29)
-sb $t5, 1576($29)
-sb $t5, 1577($29)
-sb $t5, 1578($29)
-sb $t5, 1579($29)
-sb $t5, 1580($29)
-sb $t5, 1581($29)
-sb $t5, 1582($29)
-sb $t5, 1583($29)
-sb $t5, 1584($29)
-sb $t5, 1585($29)
-sb $t5, 1586($29)
-sb $t5, 1587($29)
-sb $t5, 1588($29)
-sb $t5, 1589($29)
-sb $t5, 1590($29)
-sb $t5, 1591($29)
-sb $t5, 1592($29)
-sb $t5, 1593($29)
-sb $t5, 1594($29)
-sb $t5, 1595($29)
-sb $t5, 1596($29)
-sb $t5, 1597($29)
-sb $t5, 1598($29)
-sb $t5, 1599($29)
-sb $t5, 1600($29)
-sb $t5, 1601($29)
-sb $t5, 1602($29)
-sb $t5, 1603($29)
-sb $t5, 1604($29)
-sb $t5, 1605($29)
-sb $t5, 1606($29)
-sb $t5, 1607($29)
-sb $t5, 1608($29)
-sb $t5, 1609($29)
-sb $t5, 1610($29)
-sb $t5, 1611($29)
-sb $t5, 1612($29)
-sb $t5, 1613($29)
-sb $t5, 1614($29)
-sb $t5, 1615($29)
-sb $t5, 1616($29)
-sb $t5, 1617($29)
-sb $t5, 1618($29)
-sb $t5, 1619($29)
-sb $t5, 1620($29)
-sb $t5, 1621($29)
-sb $t5, 1622($29)
-sb $t5, 1623($29)
-sb $t5, 1624($29)
-sb $t5, 1625($29)
-sb $t5, 1626($29)
-sb $t5, 1627($29)
-sb $t5, 1628($29)
-sb $t5, 1629($29)
-sb $t5, 1630($29)
-sb $t5, 1631($29)
-sb $t5, 1632($29)
-sb $t5, 1633($29)
-sb $t5, 1634($29)
-sb $t5, 1635($29)
-sb $t5, 1636($29)
-sb $t5, 1637($29)
-sb $t5, 1638($29)
-sb $t5, 1639($29)
-sb $t5, 1640($29)
-sb $t5, 1641($29)
-sb $t5, 1642($29)
-sb $t5, 1643($29)
-sb $t5, 1644($29)
-sb $t5, 1645($29)
-sb $t5, 1646($29)
-sb $t5, 1647($29)
-sb $t5, 1648($29)
-sb $t5, 1649($29)
-sb $t5, 1650($29)
-sb $t5, 1651($29)
-sb $t5, 1652($29)
-sb $t5, 1653($29)
-sb $t5, 1654($29)
-sb $t5, 1655($29)
-sb $t5, 1656($29)
-sb $t5, 1657($29)
-sb $t5, 1658($29)
-sb $t5, 1659($29)
-sb $t5, 1660($29)
-sb $t5, 1661($29)
-sb $t5, 1662($29)
-sb $t5, 1663($29)
-sb $t5, 1664($29)
-sb $t5, 1665($29)
-sb $t5, 1666($29)
-sb $t5, 1667($29)
-sb $t5, 1668($29)
-sb $t5, 1669($29)
-sb $t5, 1670($29)
-sb $t5, 1671($29)
-sb $t5, 1672($29)
-sb $t5, 1673($29)
-sb $t5, 1674($29)
-sb $t5, 1675($29)
-sb $t5, 1676($29)
-sb $t5, 1677($29)
-sb $t5, 1678($29)
-sb $t5, 1679($29)
-sb $t5, 1680($29)
-sb $t5, 1681($29)
-sb $t5, 1682($29)
-sb $t5, 1683($29)
-sb $t5, 1684($29)
-sb $t5, 1685($29)
-sb $t5, 1686($29)
-sb $t5, 1687($29)
-sb $t5, 1688($29)
-sb $t5, 1689($29)
-sb $t5, 1690($29)
-sb $t5, 1691($29)
-sb $t5, 1692($29)
-sb $t5, 1693($29)
-sb $t5, 1694($29)
-sb $t5, 1695($29)
-sb $t5, 1696($29)
-sb $t5, 1697($29)
-sb $t5, 1698($29)
-sb $t5, 1699($29)
-sb $t5, 1700($29)
-sb $t5, 1701($29)
-sb $t5, 1702($29)
-sb $t5, 1703($29)
-sb $t5, 1704($29)
-sb $t5, 1705($29)
-sb $t5, 1706($29)
-sb $t5, 1707($29)
-sb $t5, 1708($29)
-sb $t5, 1709($29)
-sb $t5, 1710($29)
-sb $t5, 1711($29)
-sb $t5, 1712($29)
-sb $t5, 1713($29)
-sb $t5, 1714($29)
-sb $t5, 1715($29)
-sb $t5, 1716($29)
-sb $t5, 1717($29)
-sb $t5, 1718($29)
-sb $t5, 1719($29)
-sb $t5, 1720($29)
-sb $t5, 1721($29)
-sb $t5, 1722($29)
-sb $t5, 1723($29)
-sb $t5, 1724($29)
-sb $t5, 1725($29)
-sb $t5, 1726($29)
-sb $t5, 1727($29)
-sb $t5, 1728($29)
-sb $t5, 1729($29)
-sb $t5, 1730($29)
-sb $t5, 1731($29)
-sb $t5, 1732($29)
-sb $t5, 1733($29)
-sb $t5, 1734($29)
-sb $t5, 1735($29)
-sb $t5, 1736($29)
-sb $t5, 1737($29)
-sb $t5, 1738($29)
-sb $t5, 1739($29)
-sb $t5, 1740($29)
-sb $t5, 1741($29)
-sb $t5, 1742($29)
-sb $t5, 1743($29)
-sb $t5, 1744($29)
-sb $t5, 1745($29)
-sb $t5, 1746($29)
-sb $t5, 1747($29)
-sb $t5, 1748($29)
-sb $t5, 1749($29)
-sb $t5, 1750($29)
-sb $t5, 1751($29)
-sb $t5, 1752($29)
-sb $t5, 1753($29)
-sb $t5, 1754($29)
-sb $t5, 1755($29)
-sb $t5, 1756($29)
-sb $t5, 1757($29)
-sb $t5, 1758($29)
-sb $t5, 1759($29)
-sb $t5, 1760($29)
-sb $t5, 1761($29)
-sb $t5, 1762($29)
-sb $t5, 1763($29)
-sb $t5, 1764($29)
-sb $t5, 1765($29)
-sb $t5, 1766($29)
-sb $t5, 1767($29)
-sb $t5, 1768($29)
-sb $t5, 1769($29)
-sb $t5, 1770($29)
-sb $t5, 1771($29)
-sb $t5, 1772($29)
-sb $t5, 1773($29)
-sb $t5, 1774($29)
-sb $t5, 1775($29)
-sb $t5, 1776($29)
-sb $t5, 1777($29)
-sb $t5, 1778($29)
-sb $t5, 1779($29)
-sb $t5, 1780($29)
-sb $t5, 1781($29)
-sb $t5, 1782($29)
-sb $t5, 1783($29)
-sb $t5, 1784($29)
-sb $t5, 1785($29)
-sb $t5, 1786($29)
-sb $t5, 1787($29)
-sb $t5, 1788($29)
-sb $t5, 1789($29)
-sb $t5, 1790($29)
-sb $t5, 1791($29)
-sb $t5, 1792($29)
-sb $t5, 1793($29)
-sb $t5, 1794($29)
-sb $t5, 1795($29)
-sb $t5, 1796($29)
-sb $t5, 1797($29)
-sb $t5, 1798($29)
-sb $t5, 1799($29)
-sb $t5, 1800($29)
-sb $t5, 1801($29)
-sb $t5, 1802($29)
-sb $t5, 1803($29)
-sb $t5, 1804($29)
-sb $t5, 1805($29)
-sb $t5, 1806($29)
-sb $t5, 1807($29)
-sb $t5, 1808($29)
-sb $t5, 1809($29)
-sb $t5, 1810($29)
-sb $t5, 1811($29)
-sb $t5, 1812($29)
-sb $t5, 1813($29)
-sb $t5, 1814($29)
-sb $t5, 1815($29)
-sb $t5, 1816($29)
-sb $t5, 1817($29)
-sb $t5, 1818($29)
-sb $t5, 1819($29)
-sb $t5, 1820($29)
-sb $t5, 1821($29)
-sb $t5, 1822($29)
-sb $t5, 1823($29)
-sb $t5, 1824($29)
-sb $t5, 1825($29)
-sb $t5, 1826($29)
-sb $t5, 1827($29)
-sb $t5, 1828($29)
-sb $t5, 1829($29)
-sb $t5, 1830($29)
-sb $t5, 1831($29)
-sb $t5, 1832($29)
-sb $t5, 1833($29)
-sb $t5, 1834($29)
-sb $t5, 1835($29)
-sb $t5, 1836($29)
-sb $t5, 1837($29)
-sb $t5, 1838($29)
-sb $t5, 1839($29)
-sb $t5, 1840($29)
-sb $t5, 1841($29)
-sb $t5, 1842($29)
-sb $t5, 1843($29)
-sb $t5, 1844($29)
-sb $t5, 1845($29)
-sb $t5, 1846($29)
-sb $t5, 1847($29)
-sb $t5, 1848($29)
-sb $t5, 1849($29)
-sb $t5, 1850($29)
-sb $t5, 1851($29)
-sb $t5, 1852($29)
-sb $t5, 1853($29)
-sb $t5, 1854($29)
-sb $t5, 1855($29)
-sb $t5, 1856($29)
-sb $t5, 1857($29)
-sb $t5, 1858($29)
-sb $t5, 1859($29)
-sb $t5, 1860($29)
-sb $t5, 1861($29)
-sb $t5, 1862($29)
-sb $t5, 1863($29)
-sb $t5, 1864($29)
-sb $t5, 1865($29)
-sb $t5, 1866($29)
-sb $t5, 1867($29)
-sb $t5, 1868($29)
-sb $t5, 1869($29)
-sb $t5, 1870($29)
-sb $t5, 1871($29)
-sb $t5, 1872($29)
-sb $t5, 1873($29)
-sb $t5, 1874($29)
-sb $t5, 1875($29)
-sb $t5, 1876($29)
-sb $t5, 1877($29)
-sb $t5, 1878($29)
-sb $t5, 1879($29)
-sb $t5, 1880($29)
-sb $t5, 1881($29)
-sb $t5, 1882($29)
-sb $t5, 1883($29)
-sb $t5, 1884($29)
-sb $t5, 1885($29)
-sb $t5, 1886($29)
-sb $t5, 1887($29)
-sb $t5, 1888($29)
-sb $t5, 1889($29)
-sb $t5, 1890($29)
-sb $t5, 1891($29)
-sb $t5, 1892($29)
-sb $t5, 1893($29)
-sb $t5, 1894($29)
-sb $t5, 1895($29)
-sb $t5, 1896($29)
-sb $t5, 1897($29)
-sb $t5, 1898($29)
-sb $t5, 1899($29)
-sb $t5, 1900($29)
-sb $t5, 1901($29)
-sb $t5, 1902($29)
-sb $t5, 1903($29)
-sb $t5, 1904($29)
-sb $t5, 1905($29)
-sb $t5, 1906($29)
-sb $t5, 1907($29)
-sb $t5, 1908($29)
-sb $t5, 1909($29)
-sb $t5, 1910($29)
-sb $t5, 1911($29)
-sb $t5, 1912($29)
-sb $t5, 1913($29)
-sb $t5, 1914($29)
-sb $t5, 1915($29)
-sb $t5, 1916($29)
-sb $t5, 1917($29)
-sb $t5, 1918($29)
-sb $t5, 1919($29)
-sb $t5, 1920($29)
-sb $t5, 1921($29)
-sb $t5, 1922($29)
-sb $t5, 1923($29)
-sb $t5, 1924($29)
-sb $t5, 1925($29)
-sb $t5, 1926($29)
-sb $t5, 1927($29)
-sb $t5, 1928($29)
-sb $t5, 1929($29)
-sb $t5, 1930($29)
-sb $t5, 1931($29)
-sb $t5, 1932($29)
-sb $t5, 1933($29)
-sb $t5, 1934($29)
-sb $t5, 1935($29)
-sb $t5, 1936($29)
-sb $t5, 1937($29)
-sb $t5, 1938($29)
-sb $t5, 1939($29)
-sb $t5, 1940($29)
-sb $t5, 1941($29)
-sb $t5, 1942($29)
-sb $t5, 1943($29)
-sb $t5, 1944($29)
-sb $t5, 1945($29)
-sb $t5, 1946($29)
-sb $t5, 1947($29)
-sb $t5, 1948($29)
-sb $t5, 1949($29)
-sb $t5, 1950($29)
-sb $t5, 1951($29)
-sb $t5, 1952($29)
-sb $t5, 1953($29)
-sb $t5, 1954($29)
-sb $t5, 1955($29)
-sb $t5, 1956($29)
-sb $t5, 1957($29)
-sb $t5, 1958($29)
-sb $t5, 1959($29)
-sb $t5, 1960($29)
-sb $t5, 1961($29)
-sb $t5, 1962($29)
-sb $t5, 1963($29)
-sb $t5, 1964($29)
-sb $t5, 1965($29)
-sb $t5, 1966($29)
-sb $t5, 1967($29)
-sb $t5, 1968($29)
-sb $t5, 1969($29)
-sb $t5, 1970($29)
-sb $t5, 1971($29)
-sb $t5, 1972($29)
-sb $t5, 1973($29)
-sb $t5, 1974($29)
-sb $t5, 1975($29)
-sb $t5, 1976($29)
-sb $t5, 1977($29)
-sb $t5, 1978($29)
-sb $t5, 1979($29)
-sb $t5, 1980($29)
-sb $t5, 1981($29)
-sb $t5, 1982($29)
-sb $t5, 1983($29)
-sb $t5, 1984($29)
-sb $t5, 1985($29)
-sb $t5, 1986($29)
-sb $t5, 1987($29)
-sb $t5, 1988($29)
-sb $t5, 1989($29)
-sb $t5, 1990($29)
-sb $t5, 1991($29)
-sb $t5, 1992($29)
-sb $t5, 1993($29)
-sb $t5, 1994($29)
-sb $t5, 1995($29)
-sb $t5, 1996($29)
-sb $t5, 1997($29)
-sb $t5, 1998($29)
-sb $t5, 1999($29)
-sb $t5, 2000($29)
-sb $t5, 2001($29)
-sb $t5, 2002($29)
-sb $t5, 2003($29)
-sb $t5, 2004($29)
-sb $t5, 2005($29)
-sb $t5, 2006($29)
-sb $t5, 2007($29)
-sb $t5, 2008($29)
-sb $t5, 2009($29)
-sb $t5, 2010($29)
-sb $t5, 2011($29)
-sb $t5, 2012($29)
-sb $t5, 2013($29)
-sb $t5, 2014($29)
-sb $t5, 2015($29)
-sb $t5, 2016($29)
-sb $t5, 2017($29)
-sb $t5, 2018($29)
-sb $t5, 2019($29)
-sb $t5, 2020($29)
-sb $t5, 2021($29)
-sb $t5, 2022($29)
-sb $t5, 2023($29)
-sb $t5, 2024($29)
-sb $t5, 2025($29)
-sb $t5, 2026($29)
-sb $t5, 2027($29)
-sb $t5, 2028($29)
-sb $t5, 2029($29)
-sb $t5, 2030($29)
-sb $t5, 2031($29)
-sb $t5, 2032($29)
-sb $t5, 2033($29)
-sb $t5, 2034($29)
-sb $t5, 2035($29)
-sb $t5, 2036($29)
-sb $t5, 2037($29)
-sb $t5, 2038($29)
-sb $t5, 2039($29)
-sb $t5, 2040($29)
-sb $t5, 2041($29)
-sb $t5, 2042($29)
-sb $t5, 2043($29)
-sb $t5, 2044($29)
-sb $t5, 2045($29)
-sb $t5, 2046($29)
-sb $t5, 2047($29)
-sb $t5, 2048($29)
-sb $t5, 2049($29)
-sb $t5, 2050($29)
-sb $t5, 2051($29)
-sb $t5, 2052($29)
-sb $t5, 2053($29)
-sb $t5, 2054($29)
-sb $t5, 2055($29)
-sb $t5, 2056($29)
-sb $t5, 2057($29)
-sb $t5, 2058($29)
-sb $t5, 2059($29)
-sb $t5, 2060($29)
-sb $t5, 2061($29)
-sb $t5, 2062($29)
-sb $t5, 2063($29)
-sb $t5, 2064($29)
-sb $t5, 2065($29)
-sb $t5, 2066($29)
-sb $t5, 2067($29)
-sb $t5, 2068($29)
-sb $t5, 2069($29)
-sb $t5, 2070($29)
-sb $t5, 2071($29)
-sb $t5, 2072($29)
-sb $t5, 2073($29)
-sb $t5, 2074($29)
-sb $t5, 2075($29)
-sb $t5, 2076($29)
-sb $t5, 2077($29)
-sb $t5, 2078($29)
-sb $t5, 2079($29)
-sb $t5, 2080($29)
-sb $t5, 2081($29)
-sb $t5, 2082($29)
-sb $t5, 2083($29)
-sb $t5, 2084($29)
-sb $t5, 2085($29)
-sb $t5, 2086($29)
-sb $t5, 2087($29)
-sb $t5, 2088($29)
-sb $t5, 2089($29)
-sb $t5, 2090($29)
-sb $t5, 2091($29)
-sb $t5, 2092($29)
-sb $t5, 2093($29)
-sb $t5, 2094($29)
-sb $t5, 2095($29)
-sb $t5, 2096($29)
-sb $t5, 2097($29)
-sb $t5, 2098($29)
-sb $t5, 2099($29)
-sb $t5, 2100($29)
-sb $t5, 2101($29)
-sb $t5, 2102($29)
-sb $t5, 2103($29)
-sb $t5, 2104($29)
-sb $t5, 2105($29)
-sb $t5, 2106($29)
-sb $t5, 2107($29)
-sb $t5, 2108($29)
-sb $t5, 2109($29)
-sb $t5, 2110($29)
-sb $t5, 2111($29)
-sb $t5, 2112($29)
-sb $t5, 2113($29)
-sb $t5, 2114($29)
-sb $t5, 2115($29)
-sb $t5, 2116($29)
-sb $t5, 2117($29)
-sb $t5, 2118($29)
-sb $t5, 2119($29)
-sb $t5, 2120($29)
-sb $t5, 2121($29)
-sb $t5, 2122($29)
-sb $t5, 2123($29)
-sb $t5, 2124($29)
-sb $t5, 2125($29)
-sb $t5, 2126($29)
-sb $t5, 2127($29)
-sb $t5, 2128($29)
-sb $t5, 2129($29)
-sb $t5, 2130($29)
-sb $t5, 2131($29)
-sb $t5, 2132($29)
-sb $t5, 2133($29)
-sb $t5, 2134($29)
-sb $t5, 2135($29)
-sb $t5, 2136($29)
-sb $t5, 2137($29)
-sb $t5, 2138($29)
-sb $t5, 2139($29)
-sb $t5, 2140($29)
-sb $t5, 2141($29)
-sb $t5, 2142($29)
-sb $t5, 2143($29)
-sb $t5, 2144($29)
-sb $t5, 2145($29)
-sb $t5, 2146($29)
-sb $t5, 2147($29)
-sb $t5, 2148($29)
-sb $t5, 2149($29)
-sb $t5, 2150($29)
-sb $t5, 2151($29)
-sb $t5, 2152($29)
-sb $t5, 2153($29)
-sb $t5, 2154($29)
-sb $t5, 2155($29)
-sb $t5, 2156($29)
-sb $t5, 2157($29)
-sb $t5, 2158($29)
-sb $t5, 2159($29)
-sb $t5, 2160($29)
-sb $t5, 2161($29)
-sb $t5, 2162($29)
-sb $t5, 2163($29)
-sb $t5, 2164($29)
-sb $t5, 2165($29)
-sb $t5, 2166($29)
-sb $t5, 2167($29)
-sb $t5, 2168($29)
-sb $t5, 2169($29)
-sb $t5, 2170($29)
-sb $t5, 2171($29)
-sb $t5, 2172($29)
-sb $t5, 2173($29)
-sb $t5, 2174($29)
-sb $t5, 2175($29)
-sb $t5, 2176($29)
-sb $t5, 2177($29)
-sb $t5, 2178($29)
-sb $t5, 2179($29)
-sb $t5, 2180($29)
-sb $t5, 2181($29)
-sb $t5, 2182($29)
-sb $t5, 2183($29)
-sb $t5, 2184($29)
-sb $t5, 2185($29)
-sb $t5, 2186($29)
-sb $t5, 2187($29)
-sb $t5, 2188($29)
-sb $t5, 2189($29)
-sb $t5, 2190($29)
-sb $t5, 2191($29)
-sb $t5, 2192($29)
-sb $t5, 2193($29)
-sb $t5, 2194($29)
-sb $t5, 2195($29)
-sb $t5, 2196($29)
-sb $t5, 2197($29)
-sb $t5, 2198($29)
-sb $t5, 2199($29)
-sb $t5, 2200($29)
-sb $t5, 2201($29)
-sb $t5, 2202($29)
-sb $t5, 2203($29)
-sb $t5, 2204($29)
-sb $t5, 2205($29)
-sb $t5, 2206($29)
-sb $t5, 2207($29)
-sb $t5, 2208($29)
-sb $t5, 2209($29)
-sb $t5, 2210($29)
-sb $t5, 2211($29)
-sb $t5, 2212($29)
-sb $t5, 2213($29)
-sb $t5, 2214($29)
-sb $t5, 2215($29)
-sb $t5, 2216($29)
-sb $t5, 2217($29)
-sb $t5, 2218($29)
-sb $t5, 2219($29)
-sb $t5, 2220($29)
-sb $t5, 2221($29)
-sb $t5, 2222($29)
-sb $t5, 2223($29)
-sb $t5, 2224($29)
-sb $t5, 2225($29)
-sb $t5, 2226($29)
-sb $t5, 2227($29)
-sb $t5, 2228($29)
-sb $t5, 2229($29)
-sb $t5, 2230($29)
-sb $t5, 2231($29)
-sb $t5, 2232($29)
-sb $t5, 2233($29)
-sb $t5, 2234($29)
-sb $t5, 2235($29)
-sb $t5, 2236($29)
-sb $t5, 2237($29)
-sb $t5, 2238($29)
-sb $t5, 2239($29)
-sb $t5, 2240($29)
-sb $t5, 2241($29)
-sb $t5, 2242($29)
-sb $t5, 2243($29)
-sb $t5, 2244($29)
-sb $t5, 2245($29)
-sb $t5, 2246($29)
-sb $t5, 2247($29)
-sb $t5, 2248($29)
-sb $t5, 2249($29)
-sb $t5, 2250($29)
-sb $t5, 2251($29)
-sb $t5, 2252($29)
-sb $t5, 2253($29)
-sb $t5, 2254($29)
-sb $t5, 2255($29)
-sb $t5, 2256($29)
-sb $t5, 2257($29)
-sb $t5, 2258($29)
-sb $t5, 2259($29)
-sb $t5, 2260($29)
-sb $t5, 2261($29)
-sb $t5, 2262($29)
-sb $t5, 2263($29)
-sb $t5, 2264($29)
-sb $t5, 2265($29)
-sb $t5, 2266($29)
-sb $t5, 2267($29)
-sb $t5, 2268($29)
-sb $t5, 2269($29)
-sb $t5, 2270($29)
-sb $t5, 2271($29)
-sb $t5, 2272($29)
-sb $t5, 2273($29)
-sb $t5, 2274($29)
-sb $t5, 2275($29)
-sb $t5, 2276($29)
-sb $t5, 2277($29)
-sb $t5, 2278($29)
-sb $t5, 2279($29)
-sb $t5, 2280($29)
-sb $t5, 2281($29)
-sb $t5, 2282($29)
-sb $t5, 2283($29)
-sb $t5, 2284($29)
-sb $t5, 2285($29)
-sb $t5, 2286($29)
-sb $t5, 2287($29)
-sb $t5, 2288($29)
-sb $t5, 2289($29)
-sb $t5, 2290($29)
-sb $t5, 2291($29)
-sb $t5, 2292($29)
-sb $t5, 2293($29)
-sb $t5, 2294($29)
-sb $t5, 2295($29)
-sb $t5, 2296($29)
-sb $t5, 2297($29)
-sb $t5, 2298($29)
-sb $t5, 2299($29)
-sb $t5, 2300($29)
-sb $t5, 2301($29)
-sb $t5, 2302($29)
-sb $t5, 2303($29)
-sb $t5, 2304($29)
-sb $t5, 2305($29)
-sb $t5, 2306($29)
-sb $t5, 2307($29)
-sb $t5, 2308($29)
-sb $t5, 2309($29)
-sb $t5, 2310($29)
-sb $t5, 2311($29)
-sb $t5, 2312($29)
-sb $t5, 2313($29)
-sb $t5, 2314($29)
-sb $t5, 2315($29)
-sb $t5, 2316($29)
-sb $t5, 2317($29)
-sb $t5, 2318($29)
-sb $t5, 2319($29)
-sb $t5, 2320($29)
-sb $t5, 2321($29)
-sb $t5, 2322($29)
-sb $t5, 2323($29)
-sb $t5, 2324($29)
-sb $t5, 2325($29)
-sb $t5, 2326($29)
-sb $t5, 2327($29)
-sb $t5, 2328($29)
-sb $t5, 2329($29)
-sb $t5, 2330($29)
-sb $t5, 2331($29)
-sb $t5, 2332($29)
-sb $t5, 2333($29)
-sb $t5, 2334($29)
-sb $t5, 2335($29)
-sb $t5, 2336($29)
-sb $t5, 2337($29)
-sb $t5, 2338($29)
-sb $t5, 2339($29)
-sb $t5, 2340($29)
-sb $t5, 2341($29)
-sb $t5, 2342($29)
-sb $t5, 2343($29)
-sb $t5, 2344($29)
-sb $t5, 2345($29)
-sb $t5, 2346($29)
-sb $t5, 2347($29)
-sb $t5, 2348($29)
-sb $t5, 2349($29)
-sb $t5, 2350($29)
-sb $t5, 2351($29)
-sb $t5, 2352($29)
-sb $t5, 2353($29)
-sb $t5, 2354($29)
-sb $t5, 2355($29)
-sb $t5, 2356($29)
-sb $t5, 2357($29)
-sb $t5, 2358($29)
-sb $t5, 2359($29)
-sb $t5, 2360($29)
-sb $t5, 2361($29)
-sb $t5, 2362($29)
-sb $t5, 2363($29)
-sb $t5, 2364($29)
-sb $t5, 2365($29)
-sb $t5, 2366($29)
-sb $t5, 2367($29)
-sb $t5, 2368($29)
-sb $t5, 2369($29)
-sb $t5, 2370($29)
-sb $t5, 2371($29)
-sb $t5, 2372($29)
-sb $t5, 2373($29)
-sb $t5, 2374($29)
-sb $t5, 2375($29)
-sb $t5, 2376($29)
-sb $t5, 2377($29)
-sb $t5, 2378($29)
-sb $t5, 2379($29)
-sb $t5, 2380($29)
-sb $t5, 2381($29)
-sb $t5, 2382($29)
-sb $t5, 2383($29)
-sb $t5, 2384($29)
-sb $t5, 2385($29)
-sb $t5, 2386($29)
-sb $t5, 2387($29)
-sb $t5, 2388($29)
-sb $t5, 2389($29)
-sb $t5, 2390($29)
-sb $t5, 2391($29)
-sb $t5, 2392($29)
-sb $t5, 2393($29)
-sb $t5, 2394($29)
-sb $t5, 2395($29)
-sb $t5, 2396($29)
-sb $t5, 2397($29)
-sb $t5, 2398($29)
-sb $t5, 2399($29)
-sb $t5, 2400($29)
-sb $t5, 2401($29)
-sb $t5, 2402($29)
-sb $t5, 2403($29)
-sb $t5, 2404($29)
-sb $t5, 2405($29)
-sb $t5, 2406($29)
-sb $t5, 2407($29)
-sb $t5, 2408($29)
-sb $t5, 2409($29)
-sb $t5, 2410($29)
-sb $t5, 2411($29)
-sb $t5, 2412($29)
-sb $t5, 2413($29)
-sb $t5, 2414($29)
-sb $t5, 2415($29)
-sb $t5, 2416($29)
-sb $t5, 2417($29)
-sb $t5, 2418($29)
-sb $t5, 2419($29)
-sb $t5, 2420($29)
-sb $t5, 2421($29)
-sb $t5, 2422($29)
-sb $t5, 2423($29)
-sb $t5, 2424($29)
-sb $t5, 2425($29)
-sb $t5, 2426($29)
-sb $t5, 2427($29)
-sb $t5, 2428($29)
-sb $t5, 2429($29)
-sb $t5, 2430($29)
-sb $t5, 2431($29)
-sb $t5, 2432($29)
-sb $t5, 2433($29)
-sb $t5, 2434($29)
-sb $t5, 2435($29)
-sb $t5, 2436($29)
-sb $t5, 2437($29)
-sb $t5, 2438($29)
-sb $t5, 2439($29)
-sb $t5, 2440($29)
-sb $t5, 2441($29)
-sb $t5, 2442($29)
-sb $t5, 2443($29)
-sb $t5, 2444($29)
-sb $t5, 2445($29)
-sb $t5, 2446($29)
-sb $t5, 2447($29)
-sb $t5, 2448($29)
-sb $t5, 2449($29)
-sb $t5, 2450($29)
-sb $t5, 2451($29)
-sb $t5, 2452($29)
-sb $t5, 2453($29)
-sb $t5, 2454($29)
-sb $t5, 2455($29)
-sb $t5, 2456($29)
-sb $t5, 2457($29)
-sb $t5, 2458($29)
-sb $t5, 2459($29)
-sb $t5, 2460($29)
-sb $t5, 2461($29)
-sb $t5, 2462($29)
-sb $t5, 2463($29)
-sb $t5, 2464($29)
-sb $t5, 2465($29)
-sb $t5, 2466($29)
-sb $t5, 2467($29)
-sb $t5, 2468($29)
-sb $t5, 2469($29)
-sb $t5, 2470($29)
-sb $t5, 2471($29)
-sb $t5, 2472($29)
-sb $t5, 2473($29)
-sb $t5, 2474($29)
-sb $t5, 2475($29)
-sb $t5, 2476($29)
-sb $t5, 2477($29)
-sb $t5, 2478($29)
-sb $t5, 2479($29)
-sb $t5, 2480($29)
-sb $t5, 2481($29)
-sb $t5, 2482($29)
-sb $t5, 2483($29)
-sb $t5, 2484($29)
-sb $t5, 2485($29)
-sb $t5, 2486($29)
-sb $t5, 2487($29)
-sb $t5, 2488($29)
-sb $t5, 2489($29)
-sb $t5, 2490($29)
-sb $t5, 2491($29)
-sb $t5, 2492($29)
-sb $t5, 2493($29)
-sb $t5, 2494($29)
-sb $t5, 2495($29)
-sb $t5, 2496($29)
-sb $t5, 2497($29)
-sb $t5, 2498($29)
-sb $t5, 2499($29)
-sb $t5, 2500($29)
-sb $t5, 2501($29)
-sb $t5, 2502($29)
-sb $t5, 2503($29)
-sb $t5, 2504($29)
-sb $t5, 2505($29)
-sb $t5, 2506($29)
-sb $t5, 2507($29)
-sb $t5, 2508($29)
-sb $t5, 2509($29)
-sb $t5, 2510($29)
-sb $t5, 2511($29)
-sb $t5, 2512($29)
-sb $t5, 2513($29)
-sb $t5, 2514($29)
-sb $t5, 2515($29)
-sb $t5, 2516($29)
-sb $t5, 2517($29)
-sb $t5, 2518($29)
-sb $t5, 2519($29)
-sb $t5, 2520($29)
-sb $t5, 2521($29)
-sb $t5, 2522($29)
-sb $t5, 2523($29)
-sb $t5, 2524($29)
-sb $t5, 2525($29)
-sb $t5, 2526($29)
-sb $t5, 2527($29)
-sb $t5, 2528($29)
-sb $t5, 2529($29)
-sb $t5, 2530($29)
-sb $t5, 2531($29)
-sb $t5, 2532($29)
-sb $t5, 2533($29)
-sb $t5, 2534($29)
-sb $t5, 2535($29)
-sb $t5, 2536($29)
-sb $t5, 2537($29)
-sb $t5, 2538($29)
-sb $t5, 2539($29)
-sb $t5, 2540($29)
-sb $t5, 2541($29)
-sb $t5, 2542($29)
-sb $t5, 2543($29)
-sb $t5, 2544($29)
-sb $t5, 2545($29)
-sb $t5, 2546($29)
-sb $t5, 2547($29)
-sb $t5, 2548($29)
-sb $t5, 2549($29)
-sb $t5, 2550($29)
-sb $t5, 2551($29)
-sb $t5, 2552($29)
-sb $t5, 2553($29)
-sb $t5, 2554($29)
-sb $t5, 2555($29)
-sb $t5, 2556($29)
-sb $t5, 2557($29)
-sb $t5, 2558($29)
-sb $t5, 2559($29)
-sb $t5, 2560($29)
-sb $t5, 2561($29)
-sb $t5, 2562($29)
-sb $t5, 2563($29)
-sb $t5, 2564($29)
-sb $t5, 2565($29)
-sb $t5, 2566($29)
-sb $t5, 2567($29)
-sb $t5, 2568($29)
-sb $t5, 2569($29)
-sb $t5, 2570($29)
-sb $t5, 2571($29)
-sb $t5, 2572($29)
-sb $t5, 2573($29)
-sb $t5, 2574($29)
-sb $t5, 2575($29)
-sb $t5, 2576($29)
-sb $t5, 2577($29)
-sb $t5, 2578($29)
-sb $t5, 2579($29)
-sb $t5, 2580($29)
-sb $t5, 2581($29)
-sb $t5, 2582($29)
-sb $t5, 2583($29)
-sb $t5, 2584($29)
-sb $t5, 2585($29)
-sb $t5, 2586($29)
-sb $t5, 2587($29)
-sb $t5, 2588($29)
-sb $t5, 2589($29)
-sb $t5, 2590($29)
-sb $t5, 2591($29)
-sb $t5, 2592($29)
-sb $t5, 2593($29)
-sb $t5, 2594($29)
-sb $t5, 2595($29)
-sb $t5, 2596($29)
-sb $t5, 2597($29)
-sb $t5, 2598($29)
-sb $t5, 2599($29)
-sb $t5, 2600($29)
-sb $t5, 2601($29)
-sb $t5, 2602($29)
-sb $t5, 2603($29)
-addiu $t6, $29, 4
-addiu $29, $29, -8
-sw $t6, 4($29)
-addiu $t7, $29, 4
-addiu $29, $29, -4
-sw $t7, 4($29)
-addiu $t8, $29, 4
-addiu $29, $29, -4
-sw $t8, 4($29)
-addiu $t9, $29, 4
-#union NotTypeSafe * safety_ptr ; 
-
-# safety . as_integer = 5 ; 
-
-addiu $s0, $0, 0
-lw $s1, 0($t3)
-li $s2, 0
-addu $s3, $s1, $s2
-lw $s4, 0($s3)
-addiu $s5, $0, 5
-sw $s5, 0($s4)
-#k = safety . as_integer ; 
-
-addiu $s6, $0, 0
-lw $s7, 0($t3)
-addiu $29, $29, -4
-sw $t0, -6924($30)
-addiu $29, $29, -4
-sw $t1, -6928($30)
-addiu $29, $29, -4
-sw $t2, -6932($30)
-addiu $29, $29, -4
-sw $t3, -6936($30)
-addiu $29, $29, -4
-sw $t4, -6940($30)
-addiu $29, $29, -4
-sw $t5, -6944($30)
-addiu $29, $29, -4
-sw $t6, -6948($30)
-addiu $29, $29, -4
-sw $t7, -6952($30)
-addiu $29, $29, -4
-sw $t8, -6956($30)
-addiu $29, $29, -4
-sw $t9, -6960($30)
-addiu $29, $29, -4
-sw $s0, -6964($30)
-addiu $29, $29, -4
-sw $s1, -6968($30)
-addiu $29, $29, -4
-sw $s2, -6972($30)
-addiu $29, $29, -4
-sw $s3, -6976($30)
-addiu $29, $29, -4
-sw $s4, -6980($30)
-addiu $29, $29, -4
-sw $s5, -6984($30)
-addiu $29, $29, -4
-sw $s6, -6988($30)
-addiu $29, $29, -4
-sw $s7, -6992($30)
-li $t0, 0
-lw $t2, -6992($30)
-addu $t1, $t2, $t0
-lw $t3, 0($t1)
-lw $t4, 0($t3)
-lw $t5, -1676($30)
-sw $t4, 0($t5)
-# safety_ptr -> as_float = 3.14 ; 
-
-lw $t6, -6960($30)
-lw $t7, 0($t6)
-addiu $t8, $0, 0
-lw $t9, 0($t7)
-li $s0, 0
-addu $s1, $t9, $s0
-lw $s2, 0($s1)
-l.s $f0, float...index_2
-mfc1 $s3, $f0
-sw $s3, 0($s2)
-# INT q = safety_ptr -> as_integer ; 
-
-lw $s5, 0($t6)
-addiu $s6, $0, 0
-lw $s7, 0($s5)
-addiu $29, $29, -4
-sw $t0, -6996($30)
-addiu $29, $29, -4
-sw $t1, -7000($30)
-sw $t2, -6992($30)
-addiu $29, $29, -4
-sw $t3, -7004($30)
-addiu $29, $29, -4
-sw $t4, -7008($30)
-sw $t5, -1676($30)
-sw $t6, -6960($30)
-addiu $29, $29, -4
-sw $t7, -7012($30)
-addiu $29, $29, -4
-sw $t8, -7016($30)
-addiu $29, $29, -4
-sw $t9, -7020($30)
-addiu $29, $29, -4
-sw $s0, -7024($30)
-addiu $29, $29, -4
-sw $s1, -7028($30)
-addiu $29, $29, -4
-sw $s2, -7032($30)
-addiu $29, $29, -4
-sw $s3, -7036($30)
-addiu $29, $29, -4
-sw $s4, -7040($30)
-addiu $29, $29, -4
-sw $s5, -7044($30)
-addiu $29, $29, -4
-sw $s6, -7048($30)
-addiu $29, $29, -4
-sw $s7, -7052($30)
-li $t0, 0
-lw $t2, -7052($30)
-addu $t1, $t2, $t0
-lw $t3, 0($t1)
-lw $t4, 0($t3)
-li $t5, 0
-addiu $29, $29, -4
-sw $t5, 4($29)
-addiu $t6, $29, 4
-sw $t4, 0($t6)
-# ( * safety_ptr ) . as_str [ 49 ] [ 49 ] = 'a' ; 
-
-lw $t7, -6960($30)
-lw $t8, 0($t7)
-addiu $t9, $0, 0
-lw $s0, 0($t8)
-li $s1, 0
-addu $s2, $s0, $s1
-addiu $s3, $s2, 52
-addiu $s4, $s2, 104
-addiu $s5, $s2, 156
-addiu $s6, $s2, 208
-addiu $s7, $s2, 260
-addiu $29, $29, -4
-sw $t0, -7060($30)
-addiu $29, $29, -4
-sw $t1, -7064($30)
-sw $t2, -7052($30)
-addiu $29, $29, -4
-sw $t3, -7068($30)
-addiu $29, $29, -4
-sw $t4, -7072($30)
-addiu $29, $29, -4
-sw $t5, -7076($30)
-addiu $29, $29, -4
-sw $t6, -7080($30)
-sw $t7, -6960($30)
-addiu $29, $29, -4
-sw $t8, -7084($30)
-addiu $29, $29, -4
-sw $t9, -7088($30)
-addiu $29, $29, -4
-sw $s0, -7092($30)
-addiu $29, $29, -4
-sw $s1, -7096($30)
-addiu $29, $29, -4
-sw $s2, -7100($30)
-addiu $29, $29, -4
-sw $s3, -7104($30)
-addiu $29, $29, -4
-sw $s4, -7108($30)
-addiu $29, $29, -4
-sw $s5, -7112($30)
-addiu $29, $29, -4
-sw $s6, -7116($30)
-addiu $29, $29, -4
-sw $s7, -7120($30)
-lw $t1, -7100($30)
-addiu $t0, $t1, 312
-addiu $t2, $t1, 364
-addiu $t3, $t1, 416
-addiu $t4, $t1, 468
-addiu $t5, $t1, 520
-addiu $t6, $t1, 572
-addiu $t7, $t1, 624
-addiu $t8, $t1, 676
-addiu $t9, $t1, 728
-addiu $s0, $t1, 780
-addiu $s1, $t1, 832
-addiu $s2, $t1, 884
-addiu $s3, $t1, 936
-addiu $s4, $t1, 988
-addiu $s5, $t1, 1040
-addiu $s6, $t1, 1092
-addiu $s7, $t1, 1144
-addiu $29, $29, -4
-sw $t0, -7124($30)
-sw $t1, -7100($30)
-addiu $29, $29, -4
-sw $t2, -7128($30)
-addiu $29, $29, -4
-sw $t3, -7132($30)
-addiu $29, $29, -4
-sw $t4, -7136($30)
-addiu $29, $29, -4
-sw $t5, -7140($30)
-addiu $29, $29, -4
-sw $t6, -7144($30)
-addiu $29, $29, -4
-sw $t7, -7148($30)
-addiu $29, $29, -4
-sw $t8, -7152($30)
-addiu $29, $29, -4
-sw $t9, -7156($30)
-addiu $29, $29, -4
-sw $s0, -7160($30)
-addiu $29, $29, -4
-sw $s1, -7164($30)
-addiu $29, $29, -4
-sw $s2, -7168($30)
-addiu $29, $29, -4
-sw $s3, -7172($30)
-addiu $29, $29, -4
-sw $s4, -7176($30)
-addiu $29, $29, -4
-sw $s5, -7180($30)
-addiu $29, $29, -4
-sw $s6, -7184($30)
-addiu $29, $29, -4
-sw $s7, -7188($30)
-lw $t1, -7100($30)
-addiu $t0, $t1, 1196
-addiu $t2, $t1, 1248
-addiu $t3, $t1, 1300
-addiu $t4, $t1, 1352
-addiu $t5, $t1, 1404
-addiu $t6, $t1, 1456
-addiu $t7, $t1, 1508
-addiu $t8, $t1, 1560
-addiu $t9, $t1, 1612
-addiu $s0, $t1, 1664
-addiu $s1, $t1, 1716
-addiu $s2, $t1, 1768
-addiu $s3, $t1, 1820
-addiu $s4, $t1, 1872
-addiu $s5, $t1, 1924
-addiu $s6, $t1, 1976
-addiu $s7, $t1, 2028
-addiu $29, $29, -4
-sw $t0, -7192($30)
-sw $t1, -7100($30)
-addiu $29, $29, -4
-sw $t2, -7196($30)
-addiu $29, $29, -4
-sw $t3, -7200($30)
-addiu $29, $29, -4
-sw $t4, -7204($30)
-addiu $29, $29, -4
-sw $t5, -7208($30)
-addiu $29, $29, -4
-sw $t6, -7212($30)
-addiu $29, $29, -4
-sw $t7, -7216($30)
-addiu $29, $29, -4
-sw $t8, -7220($30)
-addiu $29, $29, -4
-sw $t9, -7224($30)
-addiu $29, $29, -4
-sw $s0, -7228($30)
-addiu $29, $29, -4
-sw $s1, -7232($30)
-addiu $29, $29, -4
-sw $s2, -7236($30)
-addiu $29, $29, -4
-sw $s3, -7240($30)
-addiu $29, $29, -4
-sw $s4, -7244($30)
-addiu $29, $29, -4
-sw $s5, -7248($30)
-addiu $29, $29, -4
-sw $s6, -7252($30)
-addiu $29, $29, -4
-sw $s7, -7256($30)
-lw $t1, -7100($30)
-addiu $t0, $t1, 2080
-addiu $t2, $t1, 2132
-addiu $t3, $t1, 2184
-addiu $t4, $t1, 2236
-addiu $t5, $t1, 2288
-addiu $t6, $t1, 2340
-addiu $t7, $t1, 2392
-addiu $t8, $t1, 2444
-addiu $t9, $t1, 2496
-addiu $s0, $t1, 2548
-addiu $s1, $t1, 2600
-addiu $29, $29, -204
-addiu $s2, $sp, 4
-lw $s3, -7104($30)
-sw $s3, 0($s2)
-lw $s4, -7108($30)
-sw $s4, 4($s2)
-lw $s5, -7112($30)
-sw $s5, 8($s2)
-lw $s6, -7116($30)
-sw $s6, 12($s2)
-lw $s7, -7120($30)
-sw $s7, 16($s2)
-addiu $29, $29, -4
-sw $t0, -7464($30)
-sw $t1, -7100($30)
-addiu $29, $29, -4
-sw $t2, -7468($30)
-addiu $29, $29, -4
-sw $t3, -7472($30)
-addiu $29, $29, -4
-sw $t4, -7476($30)
-addiu $29, $29, -4
-sw $t5, -7480($30)
-addiu $29, $29, -4
-sw $t6, -7484($30)
-addiu $29, $29, -4
-sw $t7, -7488($30)
-addiu $29, $29, -4
-sw $t8, -7492($30)
-addiu $29, $29, -4
-sw $t9, -7496($30)
-addiu $29, $29, -4
-sw $s0, -7500($30)
-addiu $29, $29, -4
-sw $s1, -7504($30)
-sw $s3, -7104($30)
-sw $s4, -7108($30)
-sw $s5, -7112($30)
-sw $s6, -7116($30)
-sw $s7, -7120($30)
-lw $t0, -7124($30)
-sw $t0, 20($s2)
-lw $t1, -7128($30)
-sw $t1, 24($s2)
-lw $t2, -7132($30)
-sw $t2, 28($s2)
-lw $t3, -7136($30)
-sw $t3, 32($s2)
-lw $t4, -7140($30)
-sw $t4, 36($s2)
-lw $t5, -7144($30)
-sw $t5, 40($s2)
-lw $t6, -7148($30)
-sw $t6, 44($s2)
-lw $t7, -7152($30)
-sw $t7, 48($s2)
-lw $t8, -7156($30)
-sw $t8, 52($s2)
-lw $t9, -7160($30)
-sw $t9, 56($s2)
-lw $s0, -7164($30)
-sw $s0, 60($s2)
-lw $s1, -7168($30)
-sw $s1, 64($s2)
-lw $s3, -7172($30)
-sw $s3, 68($s2)
-lw $s4, -7176($30)
-sw $s4, 72($s2)
-lw $s5, -7180($30)
-sw $s5, 76($s2)
-lw $s6, -7184($30)
-sw $s6, 80($s2)
-lw $s7, -7188($30)
-sw $s7, 84($s2)
-sw $t0, -7124($30)
-sw $t1, -7128($30)
-sw $t2, -7132($30)
-sw $t3, -7136($30)
-sw $t4, -7140($30)
-sw $t5, -7144($30)
-sw $t6, -7148($30)
-sw $t7, -7152($30)
-sw $t8, -7156($30)
-sw $t9, -7160($30)
-sw $s0, -7164($30)
-sw $s1, -7168($30)
-sw $s3, -7172($30)
-sw $s4, -7176($30)
-sw $s5, -7180($30)
-sw $s6, -7184($30)
-sw $s7, -7188($30)
-lw $t0, -7192($30)
-sw $t0, 88($s2)
-lw $t1, -7196($30)
-sw $t1, 92($s2)
-lw $t2, -7200($30)
-sw $t2, 96($s2)
-lw $t3, -7204($30)
-sw $t3, 100($s2)
-lw $t4, -7208($30)
-sw $t4, 104($s2)
-lw $t5, -7212($30)
-sw $t5, 108($s2)
-lw $t6, -7216($30)
-sw $t6, 112($s2)
-lw $t7, -7220($30)
-sw $t7, 116($s2)
-lw $t8, -7224($30)
-sw $t8, 120($s2)
-lw $t9, -7228($30)
-sw $t9, 124($s2)
-lw $s0, -7232($30)
-sw $s0, 128($s2)
-lw $s1, -7236($30)
-sw $s1, 132($s2)
-lw $s3, -7240($30)
-sw $s3, 136($s2)
-lw $s4, -7244($30)
-sw $s4, 140($s2)
-lw $s5, -7248($30)
-sw $s5, 144($s2)
-lw $s6, -7252($30)
-sw $s6, 148($s2)
-lw $s7, -7256($30)
-sw $s7, 152($s2)
-sw $t0, -7192($30)
-sw $t1, -7196($30)
-sw $t2, -7200($30)
-sw $t3, -7204($30)
-sw $t4, -7208($30)
-sw $t5, -7212($30)
-sw $t6, -7216($30)
-sw $t7, -7220($30)
-sw $t8, -7224($30)
-sw $t9, -7228($30)
-sw $s0, -7232($30)
-sw $s1, -7236($30)
-sw $s3, -7240($30)
-sw $s4, -7244($30)
-sw $s5, -7248($30)
-sw $s6, -7252($30)
-sw $s7, -7256($30)
-lw $t0, -7464($30)
-sw $t0, 156($s2)
-lw $t1, -7468($30)
-sw $t1, 160($s2)
-lw $t2, -7472($30)
-sw $t2, 164($s2)
-lw $t3, -7476($30)
-sw $t3, 168($s2)
-lw $t4, -7480($30)
-sw $t4, 172($s2)
-lw $t5, -7484($30)
-sw $t5, 176($s2)
-lw $t6, -7488($30)
-sw $t6, 180($s2)
-lw $t7, -7492($30)
-sw $t7, 184($s2)
-lw $t8, -7496($30)
-sw $t8, 188($s2)
-lw $t9, -7500($30)
-sw $t9, 192($s2)
-lw $s0, -7504($30)
-sw $s0, 196($s2)
-addiu $29, $29, -4
-sw $s2, 4($sp)
-addiu $s1, $sp, 4
-addiu $s3, $0, 49
-lw $s4, 0($s1)
-li $s5, 4
-mul $s6, $s3, $s5
-addu $s7, $s4, $s6
-sw $t0, -7464($30)
-sw $t1, -7468($30)
-sw $t2, -7472($30)
-sw $t3, -7476($30)
-sw $t4, -7480($30)
-sw $t5, -7484($30)
-sw $t6, -7488($30)
-sw $t7, -7492($30)
-sw $t8, -7496($30)
-sw $t9, -7500($30)
-sw $s0, -7504($30)
-addiu $29, $29, -4
-sw $s1, -7512($30)
-addiu $29, $29, -4
-sw $s2, -7516($30)
-addiu $29, $29, -4
-sw $s3, -7520($30)
-addiu $29, $29, -4
-sw $s4, -7524($30)
-addiu $29, $29, -4
-sw $s5, -7528($30)
-addiu $29, $29, -4
-sw $s6, -7532($30)
-addiu $29, $29, -4
-sw $s7, -7536($30)
-addiu $t0, $0, 49
-lw $t2, -7536($30)
-lw $t1, 0($t2)
-li $t3, 1
-mul $t4, $t0, $t3
-addu $t5, $t1, $t4
-addiu $t6, $0, 97
-sb $t6, 0($t5)
-addiu $t7, $0, 0
-move $v0, $t7
-j function_main_load
-# return 0 ; 
-
-
-L92:
-addiu $t9, $0, 1
-li $s0, 0
-addiu $29, $29, -4
-sw $s0, 4($29)
-addiu $s1, $29, 4
-sw $t9, 0($s1)
-#      INT main ( ) { INT x = 1.13 ; 
-
-addiu $s2, $0, 2048
-sw $s2, 0($s1)
-#x = 2048 ; 
-
-addiu $s3, $0, 0
-move $v0, $s3
-j function_main_load
-#return 0 ; 
-
-addiu $29, $29, -4
-sw $t0, -7544($30)
-addiu $29, $29, -4
-sw $t1, -7548($30)
-sw $t2, -7536($30)
-addiu $29, $29, -4
-sw $t3, -7552($30)
-addiu $29, $29, -4
-sw $t4, -7556($30)
-addiu $29, $29, -4
-sw $t5, -7560($30)
-addiu $29, $29, -4
-sw $t6, -7564($30)
-addiu $29, $29, -4
-sw $t7, -7568($30)
-addiu $29, $29, -4
-sw $t8, -7572($30)
-addiu $29, $29, -4
-sw $t9, -7576($30)
-addiu $29, $29, -4
-sw $s0, -7580($30)
-addiu $29, $29, -4
-sw $s1, -7584($30)
-addiu $29, $29, -4
-sw $s2, -7588($30)
-addiu $29, $29, -4
-sw $s3, -7592($30)
-addiu $29, $29, -4
-sw $s4, -7596($30)
-addiu $29, $29, -4
-sw $s5, -7600($30)
-addiu $29, $29, -4
-sw $s6, -7604($30)
-addiu $29, $29, -4
-sw $s7, -7608($30)
-
-L93:
-li $t4, 0
-addiu $29, $29, -4
-sw $t4, 4($29)
-addiu $t5, $29, 4
 #   enum week { Mon , Tue , Wed , Thur , Fri , Sat , Sun } ;  INT main ( ) { enum week day ; 
 
-addiu $t6, $0, 2
-sw $t6, 0($t5)
+addiu $t3, $0, 2
+sw $t3, 0($t2)
 #day = Wed ; 
 
-addiu $t7, $0, 0
-move $v0, $t7
-j function_main_load
-#return 0 ; 
-
-
-L94:
-li $t9, 0
-addiu $29, $29, -8
-sw $t9, 4($29)
-addiu $s0, $29, 4
-addiu $29, $29, -4
-sw $s0, 4($29)
-addiu $s1, $29, 4
-#   struct cheese { INT milk ; } ;  INT main ( ) { struct cheese gouda ; 
-
-addiu $s2, $0, 0
-lw $s3, 0($s1)
-li $s4, 0
-addu $s5, $s3, $s4
-#gouda . milk = 3 ; 
-
-addiu $s6, $0, 3
-sw $s6, 0($s5)
-# struct cheese * gouda_ptr = ( struct cheese * ) malloc ( sizeof ( struct cheese ) ) ; 
-
-addiu $29, $29, -4
-sw $t0, -7628($30)
-addiu $29, $29, -4
-sw $t1, -7632($30)
-addiu $29, $29, -4
-sw $t2, -7636($30)
-addiu $29, $29, -4
-sw $t3, -7640($30)
-addiu $29, $29, -4
-sw $t4, -7644($30)
-addiu $29, $29, -4
-sw $t5, -7648($30)
-addiu $29, $29, -4
-sw $t6, -7652($30)
-addiu $29, $29, -4
-sw $t7, -7656($30)
-addiu $29, $29, -4
-sw $t8, -7660($30)
-addiu $29, $29, -4
-sw $t9, -7664($30)
-addiu $29, $29, -4
-sw $s0, -7668($30)
-addiu $29, $29, -4
-sw $s1, -7672($30)
-addiu $29, $29, -4
-sw $s2, -7676($30)
-addiu $29, $29, -4
-sw $s3, -7680($30)
-addiu $29, $29, -4
-sw $s4, -7684($30)
-addiu $29, $29, -4
-sw $s5, -7688($30)
-addiu $29, $29, -4
-sw $s6, -7692($30)
-addiu $29, $29, -4
-sw $s7, -7696($30)
-addiu $t0, $0, 4
-addiu $29, $29, -4
-sw $t0, 4($29)
-jal function_malloc
-lw $t0, 4($29)
-addiu $29, $29, 4
-move $t1, $v0
-addiu $t2, $t1, 8
-addiu $29, $29, -8
-addiu $t3, $sp, 4
-sw $t2, 0($t3)
-addiu $29, $29, -4
-sw $t3, 4($sp)
-addiu $t4, $sp, 4
-li $t5, 0
-addiu $29, $29, -8
-sw $t5, 4($29)
-addiu $t6, $29, 4
-addiu $29, $29, -4
-sw $t6, 4($29)
-addiu $t7, $29, 4
-addiu $29, $29, -4
-sw $t7, 4($29)
-addiu $t8, $29, 4
-sw $t4, 0($t8)
-# gouda_ptr = realloc ( gouda_ptr , sizeof ( struct cheese ) * 2 ) ; 
-
-
-L100:
-addiu $s1, $0, 1
-li $s2, 0
-addiu $29, $29, -4
-sw $s2, 4($29)
-addiu $s3, $29, 4
-sw $s1, 0($s3)
-# typedef INT bool ; typedef CHAR appel ; typedef const CHAR peer ; typedef const bool Cbool ;  INT main ( ) { bool x = 1 ; 
-
-addiu $s5, $0, 0
-li $s6, 0
-addiu $29, $29, -4
-sw $s6, 4($29)
-addiu $s7, $29, 4
-sw $s5, 0($s7)
-#bool y = 0 ; 
-
-addiu $29, $29, -4
-sw $t0, -7736($30)
-addiu $29, $29, -4
-sw $t1, -7740($30)
-addiu $29, $29, -4
-sw $t2, -7744($30)
-addiu $29, $29, -4
-sw $t3, -7748($30)
-addiu $29, $29, -4
-sw $t4, -7752($30)
-addiu $29, $29, -4
-sw $t5, -7756($30)
-addiu $29, $29, -4
-sw $t6, -7760($30)
-addiu $29, $29, -4
-sw $t7, -7764($30)
-addiu $29, $29, -4
-sw $t8, -7768($30)
-addiu $29, $29, -4
-sw $t9, -7772($30)
-addiu $29, $29, -4
-sw $s0, -7776($30)
-addiu $29, $29, -4
-sw $s1, -7780($30)
-addiu $29, $29, -4
-sw $s2, -7784($30)
-addiu $29, $29, -4
-sw $s3, -7788($30)
-addiu $29, $29, -4
-sw $s4, -7792($30)
-addiu $29, $29, -4
-sw $s5, -7796($30)
-addiu $29, $29, -4
-sw $s6, -7800($30)
-addiu $29, $29, -4
-sw $s7, -7804($30)
-addiu $t1, $0, 0
-li $t2, 0
-addiu $29, $29, -4
-sw $t2, 4($29)
-addiu $t3, $29, 4
-sw $t1, 0($t3)
-#INT z = x && y ; 
-
-addiu $t5, $0, 5
-li $t6, 0
-addiu $29, $29, -4
-sw $t6, 4($29)
-addiu $t7, $29, 4
-sb $t5, 0($t7)
-# appel a = 5 ; 
-
-addiu $t9, $0, 4
-li $s0, 0
-addiu $29, $29, -4
-sw $s0, 4($29)
-addiu $s1, $29, 4
-sb $t9, 0($s1)
-#peer b = 4 ; 
-
-addiu $s3, $0, 1
-li $s4, 0
-addiu $29, $29, -4
-sw $s4, 4($29)
-addiu $s5, $29, 4
-sw $s3, 0($s5)
-#Cbool c = 1 ; 
-
-lw $s7, -7804($30)
-addiu $29, $29, -4
-sw $t0, -7824($30)
-addiu $29, $29, -4
-sw $t1, -7828($30)
-addiu $29, $29, -4
-sw $t2, -7832($30)
-addiu $29, $29, -4
-sw $t3, -7836($30)
-addiu $29, $29, -4
-sw $t4, -7840($30)
-addiu $29, $29, -4
-sw $t5, -7844($30)
-addiu $29, $29, -4
-sw $t6, -7848($30)
-addiu $29, $29, -4
-sw $t7, -7852($30)
-addiu $29, $29, -4
-sw $t8, -7856($30)
-addiu $29, $29, -4
-sw $t9, -7860($30)
-addiu $29, $29, -4
-sw $s0, -7864($30)
-addiu $29, $29, -4
-sw $s1, -7868($30)
-addiu $29, $29, -4
-sw $s2, -7872($30)
-addiu $29, $29, -4
-sw $s3, -7876($30)
-addiu $29, $29, -4
-sw $s4, -7880($30)
-addiu $29, $29, -4
-sw $s5, -7884($30)
-addiu $29, $29, -4
-sw $s6, -7888($30)
-sw $s7, -7804($30)
-lw $t1, -7804($30)
-lw $t0, 0($t1)
-# bool boo = y * z * 57809 ; 
-
-addiu $t2, $0, 0
-mul $t3, $t0, $t2
-ori $t4, $0 57809
-mul $t5, $t3, $t4
-li $t6, 0
-addiu $29, $29, -4
-sw $t6, 4($29)
-addiu $t7, $29, 4
-sw $t5, 0($t7)
-addiu $t8, $0, 0
-move $v0, $t8
-j function_main_load
-#return 0 ; 
-
-
-L101:
-addiu $s0, $0, 5
-li $s1, 0
-addiu $29, $29, -4
-sw $s1, 4($29)
-addiu $s2, $29, 4
-sw $s0, 0($s2)
-#   INT main ( ) { const INT n = 5 ; 
-
-li $s4, 0
-addiu $29, $29, -4
-sw $s4, 4($29)
-addiu $s5, $29, 4
-addiu $29, $29, -4
-sw $s5, 4($29)
-addiu $s6, $29, 4
-sw $s2, 0($s6)
-#INT * n_ptr = & n ; 
-
-lw $s7, 0($s6)
-#* n_ptr = 7 ; 
-
-addiu $29, $29, -4
-sw $t0, -7908($30)
-sw $t1, -7804($30)
-addiu $29, $29, -4
-sw $t2, -7912($30)
-addiu $29, $29, -4
-sw $t3, -7916($30)
-addiu $29, $29, -4
-sw $t4, -7920($30)
-addiu $29, $29, -4
-sw $t5, -7924($30)
-addiu $29, $29, -4
-sw $t6, -7928($30)
-addiu $29, $29, -4
-sw $t7, -7932($30)
-addiu $29, $29, -4
-sw $t8, -7936($30)
-addiu $29, $29, -4
-sw $t9, -7940($30)
-addiu $29, $29, -4
-sw $s0, -7944($30)
-addiu $29, $29, -4
-sw $s1, -7948($30)
-addiu $29, $29, -4
-sw $s2, -7952($30)
-addiu $29, $29, -4
-sw $s3, -7956($30)
-addiu $29, $29, -4
-sw $s4, -7960($30)
-addiu $29, $29, -4
-sw $s5, -7964($30)
-addiu $29, $29, -4
-sw $s6, -7968($30)
-addiu $29, $29, -4
-sw $s7, -7972($30)
-addiu $t0, $0, 7
-lw $t1, -7972($30)
-sw $t0, 0($t1)
-addiu $t2, $0, 0
-move $v0, $t2
-j function_main_load
-#return 0 ; 
-
-
-L102:
-addiu $t4, $0, 5
-li $t5, 0
-addiu $29, $29, -4
-sw $t5, 4($29)
-addiu $t6, $29, 4
-sw $t4, 0($t6)
-#   INT main ( ) { INT q = 5 ; 
-
-li $t8, 0
-addiu $29, $29, -12
-sb $t8, 4($29)
-sb $t8, 5($29)
-sb $t8, 6($29)
-sb $t8, 7($29)
-sb $t8, 8($29)
-sb $t8, 9($29)
-sb $t8, 10($29)
-sb $t8, 11($29)
-sb $t8, 12($29)
-sb $t8, 13($29)
-addiu $t9, $29, 4
-addiu $29, $29, -4
-sw $t9, 4($29)
-addiu $s0, $29, 4
-#CHAR y [ 10 ] ; 
-
-addiu $s1, $0, 5
-lw $s2, 0($s0)
-li $s3, 1
-mul $s4, $s1, $s3
-addu $s5, $s2, $s4
-#y [ 5 ] = 'a' ; 
-
-addiu $s6, $0, 97
-sb $s6, 0($s5)
-addiu $29, $29, -4
-sw $t0, -7996($30)
-sw $t1, -7972($30)
-addiu $29, $29, -4
-sw $t2, -8000($30)
-addiu $29, $29, -4
-sw $t3, -8004($30)
-addiu $29, $29, -4
-sw $t4, -8008($30)
-addiu $29, $29, -4
-sw $t5, -8012($30)
-addiu $29, $29, -4
-sw $t6, -8016($30)
-addiu $29, $29, -4
-sw $t7, -8020($30)
-addiu $29, $29, -4
-sw $t8, -8024($30)
-addiu $29, $29, -4
-sw $t9, -8028($30)
-addiu $29, $29, -4
-sw $s0, -8032($30)
-addiu $29, $29, -4
-sw $s1, -8036($30)
-addiu $29, $29, -4
-sw $s2, -8040($30)
-addiu $29, $29, -4
-sw $s3, -8044($30)
-addiu $29, $29, -4
-sw $s4, -8048($30)
-addiu $29, $29, -4
-sw $s5, -8052($30)
-addiu $29, $29, -4
-sw $s6, -8056($30)
-addiu $29, $29, -4
-sw $s7, -8060($30)
-li $t0, 0
-addiu $29, $29, -12
-sw $t0, 4($29)
-sw $t0, 8($29)
-sw $t0, 12($29)
-addiu $t1, $29, 4
-addiu $29, $29, -12
-sw $t0, 4($29)
-sw $t0, 8($29)
-sw $t0, 12($29)
-addiu $t2, $29, 4
-addiu $29, $29, -24
-sw $t2, 4($29)
-sw $t1, 8($29)
-addiu $t3, $29, 4
-addiu $29, $29, -4
-sw $t3, 4($29)
-addiu $t4, $29, 4
-#INT x [ 2 ] [ 3 ] ; 
-
-addiu $t5, $0, 1
-lw $t6, 0($t4)
-li $t7, 4
-mul $t8, $t5, $t7
-addu $t9, $t6, $t8
-# x [ 1 ] [ 2 ] = 1 ; 
-
-addiu $s0, $0, 2
-lw $s1, 0($t9)
-li $s2, 4
-mul $s3, $s0, $s2
-addu $s4, $s1, $s3
-addiu $s5, $0, 1
-sw $s5, 0($s4)
-addiu $s6, $0, 0
-move $v0, $s6
-j function_main_load
-#return 0 ; 
-
-
-L103:
-addiu $29, $29, -4
-sw $t0, -8116($30)
-addiu $29, $29, -4
-sw $t1, -8120($30)
-addiu $29, $29, -4
-sw $t2, -8124($30)
-addiu $29, $29, -4
-sw $t3, -8128($30)
-addiu $29, $29, -4
-sw $t4, -8132($30)
-addiu $29, $29, -4
-sw $t5, -8136($30)
-addiu $29, $29, -4
-sw $t6, -8140($30)
-addiu $29, $29, -4
-sw $t7, -8144($30)
-addiu $29, $29, -4
-sw $t8, -8148($30)
-addiu $29, $29, -4
-sw $t9, -8152($30)
-addiu $29, $29, -4
-sw $s0, -8156($30)
-addiu $29, $29, -4
-sw $s1, -8160($30)
-addiu $29, $29, -4
-sw $s2, -8164($30)
-addiu $29, $29, -4
-sw $s3, -8168($30)
-addiu $29, $29, -4
-sw $s4, -8172($30)
-addiu $29, $29, -4
-sw $s5, -8176($30)
-addiu $29, $29, -4
-sw $s6, -8180($30)
-addiu $29, $29, -4
-sw $s7, -8184($30)
-li $t0, 0
-addiu $29, $29, -4
-sw $t0, 4($29)
-addiu $t1, $29, 4
-#   INT main ( ) { INT x ; 
-
-li $t3, 0
-addiu $29, $29, -4
-sw $t3, 4($29)
-addiu $t4, $29, 4
-#INT y ; 
-
-la $t5, str5
-addiu $29, $29, -4
-sw $t5, 4($29)
-jal function_printf
-lw $t5, 4($29)
-addiu $29, $29, 4
-addiu $29, $29, -4
-sw $t0, -8196($30)
-addiu $29, $29, -4
-sw $t1, -8200($30)
-addiu $29, $29, -4
-sw $t2, -8204($30)
-addiu $29, $29, -4
-sw $t3, -8208($30)
-addiu $29, $29, -4
-sw $t4, -8212($30)
-addiu $29, $29, -4
-sw $t5, -8216($30)
-addiu $29, $29, -4
-sw $t6, -8220($30)
-addiu $29, $29, -4
-sw $t7, -8224($30)
-addiu $29, $29, -4
-sw $t8, -8228($30)
-addiu $29, $29, -4
-sw $t9, -8232($30)
-addiu $29, $29, -4
-sw $s0, -8236($30)
-addiu $29, $29, -4
-sw $s1, -8240($30)
-addiu $29, $29, -4
-sw $s2, -8244($30)
-addiu $29, $29, -4
-sw $s3, -8248($30)
-addiu $29, $29, -4
-sw $s4, -8252($30)
-addiu $29, $29, -4
-sw $s5, -8256($30)
-addiu $29, $29, -4
-sw $s6, -8260($30)
-addiu $29, $29, -4
-sw $s7, -8264($30)
-move $t0, $v0
-#printf ( "Enter two numbers:" ) ; 
-
-la $t1, str6
-addiu $29, $29, -4
-sw $t0, -8268($30)
-addiu $29, $29, -4
-sw $t2, -8272($30)
-addiu $29, $29, -4
-sw $t3, -8276($30)
-addiu $29, $29, -4
-sw $t4, -8280($30)
-addiu $29, $29, -4
-sw $t5, -8284($30)
-addiu $29, $29, -4
-sw $t6, -8288($30)
-addiu $29, $29, -4
-sw $t7, -8292($30)
-addiu $29, $29, -4
-sw $t8, -8296($30)
-addiu $29, $29, -4
-sw $t9, -8300($30)
-addiu $29, $29, -4
-sw $s0, -8304($30)
-addiu $29, $29, -4
-sw $s1, -8308($30)
-addiu $29, $29, -4
-sw $s2, -8312($30)
-addiu $29, $29, -4
-sw $s3, -8316($30)
-addiu $29, $29, -4
-sw $s4, -8320($30)
-addiu $29, $29, -4
-sw $s5, -8324($30)
-addiu $29, $29, -4
-sw $s6, -8328($30)
-addiu $29, $29, -4
-sw $s7, -8332($30)
-lw $t0, -8200($30)
-lw $t2, -8212($30)
-addiu $29, $29, -12
-sw $t1, 4($29)
-sw $t0, 8($29)
-sw $t2, 12($29)
-jal function_scanf
-lw $t1, 4($29)
-lw $t0, 8($29)
-lw $t2, 12($29)
-addiu $29, $29, 12
-move $t3, $v0
-#scanf ( "%d%d" , & x , & y ) ; 
-
-la $t4, str7
-lw $t5, 0($t0)
-#printf ( "%d; %d" , x , y ) ; 
-
-lw $t6, 0($t2)
-addiu $29, $29, -12
-sw $t4, 4($29)
-sw $t5, 8($29)
-sw $t6, 12($29)
-jal function_printf
-lw $t4, 4($29)
-lw $t5, 8($29)
-lw $t6, 12($29)
-addiu $29, $29, 12
-move $t7, $v0
-addiu $t8, $0, 0
-move $v0, $t8
-j function_main_load
-#return 0 ; 
-
-
-L156:
-sw $t0, -8200($30)
-addiu $29, $29, -4
-sw $t1, -8336($30)
-sw $t2, -8212($30)
-addiu $29, $29, -4
-sw $t3, -8340($30)
-addiu $29, $29, -4
-sw $t4, -8344($30)
-addiu $29, $29, -4
-sw $t5, -8348($30)
-addiu $29, $29, -4
-sw $t6, -8352($30)
-addiu $29, $29, -4
-sw $t7, -8356($30)
-addiu $29, $29, -4
-sw $t8, -8360($30)
-li $t1, 0
-addiu $29, $29, -4
-sw $t1, 4($29)
-addiu $t2, $29, 4
-#   INT main ( ) { INT b ; 
-
-addiu $t4, $0, 1
-li $t5, 0
-addiu $29, $29, -4
-sw $t5, 4($29)
-addiu $t6, $29, 4
-sw $t4, 0($t6)
-#INT a = 1 ; 
-
-lw $t7, 0($t6)
-#switch ( a ) { 
-
-addiu $t8, $0, 1
-xor $t9, $t7, $t8
-sltiu $s0, $t9, 1
-move $v0, $s0
-addiu $29, $29, -4
-sw $t0, -8372($30)
-addiu $29, $29, -4
-sw $t1, -8376($30)
-addiu $29, $29, -4
-sw $t2, -8380($30)
-addiu $29, $29, -4
-sw $t3, -8384($30)
-addiu $29, $29, -4
-sw $t4, -8388($30)
-addiu $29, $29, -4
-sw $t5, -8392($30)
-addiu $29, $29, -4
-sw $t6, -8396($30)
-addiu $29, $29, -4
-sw $t7, -8400($30)
-addiu $29, $29, -4
-sw $t8, -8404($30)
-addiu $29, $29, -4
-sw $t9, -8408($30)
-addiu $29, $29, -4
-sw $s0, -8412($30)
-
-L157:
-#case 1 : b = 1 ; 
-
-addiu $t0, $0, 1
-lw $t1, -8380($30)
-sw $t0, 0($t1)
-addiu $29, $29, -4
-sw $t0, -8416($30)
-sw $t1, -8380($30)
-
-L158:
-lw $t0, -8396($30)
-lw $t1, 0($t0)
-addiu $t2, $0, 1
-xor $t3, $t1, $t2
-sltiu $t4, $t3, 1
-sltiu $t5, $t4, 1
-move $v0, $t5
-sw $t0, -8396($30)
-addiu $29, $29, -4
-sw $t1, -8420($30)
-addiu $29, $29, -4
-sw $t2, -8424($30)
-addiu $29, $29, -4
-sw $t3, -8428($30)
-addiu $29, $29, -4
-sw $t4, -8432($30)
-addiu $29, $29, -4
-sw $t5, -8436($30)
-
-L159:
-#break ; default : b = 3 ; 
-
-addiu $t0, $0, 3
-lw $t1, -8380($30)
-sw $t0, 0($t1)
-addiu $29, $29, -4
-sw $t0, -8440($30)
-sw $t1, -8380($30)
-
-L160:
-addiu $t0, $0, 0
-move $v0, $t0
-j function_main_load
-#break ;  } return 0 ; 
-
-
-L185:
-#                     INT main ( ) { printAppel ( ) ; 
-
-addiu $29, $29, 0
-jal function_printAppel
-addiu $29, $29, 0
-addiu $29, $29, -4
-sw $t0, -8444($30)
-addiu $29, $29, -4
-sw $t1, -8448($30)
-addiu $29, $29, -4
-sw $t2, -8452($30)
-addiu $29, $29, -4
-sw $t3, -8456($30)
-addiu $29, $29, -4
-sw $t4, -8460($30)
-addiu $29, $29, -4
-sw $t5, -8464($30)
-addiu $29, $29, -4
-sw $t6, -8468($30)
-addiu $29, $29, -4
-sw $t7, -8472($30)
-addiu $29, $29, -4
-sw $t8, -8476($30)
-addiu $29, $29, -4
-sw $t9, -8480($30)
-addiu $29, $29, -4
-sw $s0, -8484($30)
-addiu $29, $29, -4
-sw $s1, -8488($30)
-addiu $29, $29, -4
-sw $s2, -8492($30)
-addiu $29, $29, -4
-sw $s3, -8496($30)
-addiu $29, $29, -4
-sw $s4, -8500($30)
-addiu $29, $29, -4
-sw $s5, -8504($30)
-addiu $29, $29, -4
-sw $s6, -8508($30)
-addiu $29, $29, -4
-sw $s7, -8512($30)
-move $t0, $v0
-addiu $t1, $0, 0
-move $v0, $t1
-j function_main_load
-#return 0 ; 
-
-
-L187:
-addiu $t2, $0, 5
-li $t3, 0
-addiu $29, $29, -4
-sw $t3, 4($29)
-addiu $t4, $29, 4
-sw $t2, 0($t4)
-#   INT factorial ( INT c ) ;  INT main ( ) { INT n = 5 ; 
-
-li $t6, 0
-addiu $29, $29, -4
-sw $t6, 4($29)
-addiu $t7, $29, 4
-addiu $29, $29, -4
-sw $t7, 4($29)
-addiu $t8, $29, 4
-la $t9, function_factorial
-sw $t9, 0($t8)
-#INT ( * factorial_ptr ) ( INT ) = & factorial ; 
-
-lw $s1, 0($t8)
-#INT fact = factorial_ptr ( n ) ; 
-
-addiu $s2, $0, 5
-addiu $29, $29, -4
-sw $s2, 4($29)
-jalr $s1
-lw $s2, 4($29)
-addiu $29, $29, 4
-move $s3, $v0
-li $s4, 0
-addiu $29, $29, -4
-sw $s4, 4($29)
-addiu $s5, $29, 4
-sw $s3, 0($s5)
-addiu $s6, $0, 0
-move $v0, $s6
-j function_main_load
-#return 0 ; 
-
-
-L188:
-addiu $29, $29, -4
-sw $t0, -8532($30)
-addiu $29, $29, -4
-sw $t1, -8536($30)
-addiu $29, $29, -4
-sw $t2, -8540($30)
-addiu $29, $29, -4
-sw $t3, -8544($30)
-addiu $29, $29, -4
-sw $t4, -8548($30)
-addiu $29, $29, -4
-sw $t5, -8552($30)
-addiu $29, $29, -4
-sw $t6, -8556($30)
-addiu $29, $29, -4
-sw $t7, -8560($30)
-addiu $29, $29, -4
-sw $t8, -8564($30)
-addiu $29, $29, -4
-sw $t9, -8568($30)
-addiu $29, $29, -4
-sw $s0, -8572($30)
-addiu $29, $29, -4
-sw $s1, -8576($30)
-addiu $29, $29, -4
-sw $s2, -8580($30)
-addiu $29, $29, -4
-sw $s3, -8584($30)
-addiu $29, $29, -4
-sw $s4, -8588($30)
-addiu $29, $29, -4
-sw $s5, -8592($30)
-addiu $29, $29, -4
-sw $s6, -8596($30)
-addiu $29, $29, -4
-sw $s7, -8600($30)
-li $t0, 0
-addiu $29, $29, -12
-sb $t0, 4($29)
-sb $t0, 5($29)
-sb $t0, 6($29)
-sb $t0, 7($29)
-sb $t0, 8($29)
-sb $t0, 9($29)
-sb $t0, 10($29)
-sb $t0, 11($29)
-sb $t0, 12($29)
-sb $t0, 13($29)
-addiu $t1, $29, 4
-addiu $29, $29, -4
-sw $t1, 4($29)
-addiu $t2, $29, 4
-# INT main ( ) { CHAR s [ 10 ] = "string\nhe" ; 
-
-addiu $t3, $0, 9
-lw $t4, 0($t2)
-li $t5, 1
-mul $t6, $t3, $t5
-addu $t7, $t4, $t6
-addiu $t8, $0, 0
-sb $t8, 0($t7)
-addiu $t9, $0, 8
-lw $s0, 0($t2)
-li $s1, 1
-mul $s2, $t9, $s1
-addu $s3, $s0, $s2
-addiu $s4, $0, 101
-sb $s4, 0($s3)
-addiu $s5, $0, 7
-lw $s6, 0($t2)
-li $s7, 1
-addiu $29, $29, -4
-sw $t0, -8620($30)
-addiu $29, $29, -4
-sw $t1, -8624($30)
-addiu $29, $29, -4
-sw $t2, -8628($30)
-addiu $29, $29, -4
-sw $t3, -8632($30)
-addiu $29, $29, -4
-sw $t4, -8636($30)
-addiu $29, $29, -4
-sw $t5, -8640($30)
-addiu $29, $29, -4
-sw $t6, -8644($30)
-addiu $29, $29, -4
-sw $t7, -8648($30)
-addiu $29, $29, -4
-sw $t8, -8652($30)
-addiu $29, $29, -4
-sw $t9, -8656($30)
-addiu $29, $29, -4
-sw $s0, -8660($30)
-addiu $29, $29, -4
-sw $s1, -8664($30)
-addiu $29, $29, -4
-sw $s2, -8668($30)
-addiu $29, $29, -4
-sw $s3, -8672($30)
-addiu $29, $29, -4
-sw $s4, -8676($30)
-addiu $29, $29, -4
-sw $s5, -8680($30)
-addiu $29, $29, -4
-sw $s6, -8684($30)
-addiu $29, $29, -4
-sw $s7, -8688($30)
-lw $t1, -8680($30)
-lw $t2, -8688($30)
-mul $t0, $t1, $t2
-lw $t4, -8684($30)
-addu $t3, $t4, $t0
-addiu $t5, $0, 104
-sb $t5, 0($t3)
-addiu $t6, $0, 6
-lw $t8, -8628($30)
-lw $t7, 0($t8)
-li $t9, 1
-mul $s0, $t6, $t9
-addu $s1, $t7, $s0
-addiu $s2, $0, 10
-sb $s2, 0($s1)
-addiu $s3, $0, 5
-lw $s4, 0($t8)
-li $s5, 1
-mul $s6, $s3, $s5
-addu $s7, $s4, $s6
-addiu $29, $29, -4
-sw $t0, -8692($30)
-sw $t1, -8680($30)
-sw $t2, -8688($30)
-addiu $29, $29, -4
-sw $t3, -8696($30)
-sw $t4, -8684($30)
-addiu $29, $29, -4
-sw $t5, -8700($30)
-addiu $29, $29, -4
-sw $t6, -8704($30)
-addiu $29, $29, -4
-sw $t7, -8708($30)
-sw $t8, -8628($30)
-addiu $29, $29, -4
-sw $t9, -8712($30)
-addiu $29, $29, -4
-sw $s0, -8716($30)
-addiu $29, $29, -4
-sw $s1, -8720($30)
-addiu $29, $29, -4
-sw $s2, -8724($30)
-addiu $29, $29, -4
-sw $s3, -8728($30)
-addiu $29, $29, -4
-sw $s4, -8732($30)
-addiu $29, $29, -4
-sw $s5, -8736($30)
-addiu $29, $29, -4
-sw $s6, -8740($30)
-addiu $29, $29, -4
-sw $s7, -8744($30)
-addiu $t0, $0, 103
-lw $t1, -8744($30)
-sb $t0, 0($t1)
-addiu $t2, $0, 4
-lw $t4, -8628($30)
-lw $t3, 0($t4)
-li $t5, 1
-mul $t6, $t2, $t5
-addu $t7, $t3, $t6
-addiu $t8, $0, 110
-sb $t8, 0($t7)
-addiu $t9, $0, 3
-lw $s0, 0($t4)
-li $s1, 1
-mul $s2, $t9, $s1
-addu $s3, $s0, $s2
-addiu $s4, $0, 105
-sb $s4, 0($s3)
-addiu $s5, $0, 2
-lw $s6, 0($t4)
-li $s7, 1
-addiu $29, $29, -4
-sw $t0, -8748($30)
-sw $t1, -8744($30)
-addiu $29, $29, -4
-sw $t2, -8752($30)
-addiu $29, $29, -4
-sw $t3, -8756($30)
-sw $t4, -8628($30)
-addiu $29, $29, -4
-sw $t5, -8760($30)
-addiu $29, $29, -4
-sw $t6, -8764($30)
-addiu $29, $29, -4
-sw $t7, -8768($30)
-addiu $29, $29, -4
-sw $t8, -8772($30)
-addiu $29, $29, -4
-sw $t9, -8776($30)
-addiu $29, $29, -4
-sw $s0, -8780($30)
-addiu $29, $29, -4
-sw $s1, -8784($30)
-addiu $29, $29, -4
-sw $s2, -8788($30)
-addiu $29, $29, -4
-sw $s3, -8792($30)
-addiu $29, $29, -4
-sw $s4, -8796($30)
-addiu $29, $29, -4
-sw $s5, -8800($30)
-addiu $29, $29, -4
-sw $s6, -8804($30)
-addiu $29, $29, -4
-sw $s7, -8808($30)
-lw $t1, -8800($30)
-lw $t2, -8808($30)
-mul $t0, $t1, $t2
-lw $t4, -8804($30)
-addu $t3, $t4, $t0
-addiu $t5, $0, 114
-sb $t5, 0($t3)
-addiu $t6, $0, 1
-lw $t8, -8628($30)
-lw $t7, 0($t8)
-li $t9, 1
-mul $s0, $t6, $t9
-addu $s1, $t7, $s0
-addiu $s2, $0, 116
-sb $s2, 0($s1)
-addiu $s3, $0, 0
-lw $s4, 0($t8)
-li $s5, 1
-mul $s6, $s3, $s5
-addu $s7, $s4, $s6
-addiu $29, $29, -4
-sw $t0, -8812($30)
-sw $t1, -8800($30)
-sw $t2, -8808($30)
-addiu $29, $29, -4
-sw $t3, -8816($30)
-sw $t4, -8804($30)
-addiu $29, $29, -4
-sw $t5, -8820($30)
-addiu $29, $29, -4
-sw $t6, -8824($30)
-addiu $29, $29, -4
-sw $t7, -8828($30)
-sw $t8, -8628($30)
-addiu $29, $29, -4
-sw $t9, -8832($30)
-addiu $29, $29, -4
-sw $s0, -8836($30)
-addiu $29, $29, -4
-sw $s1, -8840($30)
-addiu $29, $29, -4
-sw $s2, -8844($30)
-addiu $29, $29, -4
-sw $s3, -8848($30)
-addiu $29, $29, -4
-sw $s4, -8852($30)
-addiu $29, $29, -4
-sw $s5, -8856($30)
-addiu $29, $29, -4
-sw $s6, -8860($30)
-addiu $29, $29, -4
-sw $s7, -8864($30)
-addiu $t0, $0, 115
-lw $t1, -8864($30)
-sb $t0, 0($t1)
-addiu $t2, $0, 0
-lw $t4, -8628($30)
-lw $t3, 0($t4)
-li $t5, 1
-mul $t6, $t2, $t5
-addu $t7, $t3, $t6
-# s [ 0 ] = 'a' ; 
-
-addiu $t8, $0, 97
-sb $t8, 0($t7)
-addiu $t9, $0, 1
-lw $s0, 0($t4)
-li $s1, 1
-mul $s2, $t9, $s1
-addu $s3, $s0, $s2
-#s [ 1 ] = 101 ; 
-
-addiu $s4, $0, 101
-sb $s4, 0($s3)
-la $s6, str9
-li $s7, 0
-addiu $29, $29, -4
-sw $s7, 4($29)
-addiu $29, $29, -4
-sw $t0, -8872($30)
-sw $t1, -8864($30)
-addiu $29, $29, -4
-sw $t2, -8876($30)
-addiu $29, $29, -4
-sw $t3, -8880($30)
-sw $t4, -8628($30)
-addiu $29, $29, -4
-sw $t5, -8884($30)
-addiu $29, $29, -4
-sw $t6, -8888($30)
-addiu $29, $29, -4
-sw $t7, -8892($30)
-addiu $29, $29, -4
-sw $t8, -8896($30)
-addiu $29, $29, -4
-sw $t9, -8900($30)
-addiu $29, $29, -4
-sw $s0, -8904($30)
-addiu $29, $29, -4
-sw $s1, -8908($30)
-addiu $29, $29, -4
-sw $s2, -8912($30)
-addiu $29, $29, -4
-sw $s3, -8916($30)
-addiu $29, $29, -4
-sw $s4, -8920($30)
-addiu $29, $29, -4
-sw $s5, -8924($30)
-addiu $29, $29, -4
-sw $s6, -8928($30)
-addiu $29, $29, -4
-sw $s7, -8932($30)
-addiu $t0, $29, 4
-addiu $29, $29, -4
-sw $t0, 4($29)
-addiu $t1, $29, 4
-lw $t2, -8928($30)
-sw $t2, 0($t1)
-# CHAR * str = "string he" ; 
-
-addiu $t3, $0, 0
-move $v0, $t3
-j function_main_load
-#return 0 ; 
-
-
-L189:
-li $t5, 0
-addiu $29, $29, -4
-sw $t5, 4($29)
-addiu $t6, $29, 4
-# INT main ( ) { INT d ; 
-
-l.s $f0, float...index_3
-mfc1 $t8, $f0
-li $t9, 0
-addiu $29, $29, -4
-sw $t9, 4($29)
-addiu $s0, $29, 4
-sw $t8, 0($s0)
-#FLOAT a = 5.0 ; 
-
-addiu $s2, $0, 5
-li $s3, 0
-addiu $29, $29, -4
-sw $s3, 4($29)
-addiu $s4, $29, 4
-sw $s2, 0($s4)
-#INT b = 5 ; 
-
-addiu $s6, $0, 101
-li $s7, 0
-addiu $29, $29, -4
-sw $s7, 4($29)
-addiu $29, $29, -4
-sw $t0, -8956($30)
-addiu $29, $29, -4
-sw $t1, -8960($30)
-sw $t2, -8928($30)
-addiu $29, $29, -4
-sw $t3, -8964($30)
-addiu $29, $29, -4
-sw $t4, -8968($30)
-addiu $29, $29, -4
-sw $t5, -8972($30)
-addiu $29, $29, -4
-sw $t6, -8976($30)
-addiu $29, $29, -4
-sw $t7, -8980($30)
-addiu $29, $29, -4
-sw $t8, -8984($30)
-addiu $29, $29, -4
-sw $t9, -8988($30)
-addiu $29, $29, -4
-sw $s0, -8992($30)
-addiu $29, $29, -4
-sw $s1, -8996($30)
-addiu $29, $29, -4
-sw $s2, -9000($30)
-addiu $29, $29, -4
-sw $s3, -9004($30)
-addiu $29, $29, -4
-sw $s4, -9008($30)
-addiu $29, $29, -4
-sw $s5, -9012($30)
-addiu $29, $29, -4
-sw $s6, -9016($30)
-addiu $29, $29, -4
-sw $s7, -9020($30)
-addiu $t0, $29, 4
-lw $t1, -9016($30)
-sb $t1, 0($t0)
-#CHAR c = 'e' ; 
-
-l.s $f0, float...index_4
-mfc1 $t2, $f0
-lw $t3, -8992($30)
-sw $t2, 0($t3)
-#a = 5 ; 
-
-addiu $t4, $0, 0
-move $v0, $t4
-j function_main_load
-# return 0 ; 
-
-
-L190:
-li $t6, 0
-addiu $29, $29, -8
-sw $t6, 4($29)
-addiu $t7, $29, 4
-addiu $29, $29, -4
-sw $t7, 4($29)
-addiu $t8, $29, 4
-#   struct water { INT has_nemo ; } ;  struct bottle { struct water perier ; struct water spa ; struct water sea ; } ;  INT main ( ) { struct water perier ; 
-
-addiu $t9, $0, 0
-lw $s0, 0($t8)
-li $s1, 0
-addu $s2, $s0, $s1
-#perier . has_nemo = 0 ; 
-
-addiu $s3, $0, 0
-sw $s3, 0($s2)
-li $s5, 0
-addiu $29, $29, -8
-sw $s5, 4($29)
-addiu $s6, $29, 4
-addiu $29, $29, -4
-sw $s6, 4($29)
-addiu $s7, $29, 4
-#struct water spa ; 
-
-addiu $29, $29, -4
-sw $t0, -9048($30)
-sw $t1, -9016($30)
-addiu $29, $29, -4
-sw $t2, -9052($30)
-sw $t3, -8992($30)
-addiu $29, $29, -4
-sw $t4, -9056($30)
-addiu $29, $29, -4
-sw $t5, -9060($30)
-addiu $29, $29, -4
-sw $t6, -9064($30)
-addiu $29, $29, -4
-sw $t7, -9068($30)
-addiu $29, $29, -4
-sw $t8, -9072($30)
-addiu $29, $29, -4
-sw $t9, -9076($30)
-addiu $29, $29, -4
-sw $s0, -9080($30)
-addiu $29, $29, -4
-sw $s1, -9084($30)
-addiu $29, $29, -4
-sw $s2, -9088($30)
-addiu $29, $29, -4
-sw $s3, -9092($30)
-addiu $29, $29, -4
-sw $s4, -9096($30)
-addiu $29, $29, -4
-sw $s5, -9100($30)
-addiu $29, $29, -4
-sw $s6, -9104($30)
-addiu $29, $29, -4
-sw $s7, -9108($30)
-addiu $t0, $0, 0
-lw $t2, -9108($30)
-lw $t1, 0($t2)
-li $t3, 0
-addu $t4, $t1, $t3
-#spa . has_nemo = 0 ; 
-
-addiu $t5, $0, 0
-sw $t5, 0($t4)
-li $t7, 0
-addiu $29, $29, -8
-sw $t7, 4($29)
-addiu $t8, $29, 4
-addiu $29, $29, -4
-sw $t8, 4($29)
-addiu $t9, $29, 4
-#struct water sea ; 
-
-addiu $s0, $0, 0
-lw $s1, 0($t9)
-li $s2, 0
-addu $s3, $s1, $s2
-#sea . has_nemo = 1 ; 
-
-addiu $s4, $0, 1
-sw $s4, 0($s3)
-li $s6, 0
-addiu $29, $29, -8
-sw $s6, 4($29)
-addiu $s7, $29, 4
-addiu $29, $29, -8
-sw $s6, 4($29)
-addiu $29, $29, -4
-sw $t0, -9140($30)
-addiu $29, $29, -4
-sw $t1, -9144($30)
-sw $t2, -9108($30)
-addiu $29, $29, -4
-sw $t3, -9148($30)
-addiu $29, $29, -4
-sw $t4, -9152($30)
-addiu $29, $29, -4
-sw $t5, -9156($30)
-addiu $29, $29, -4
-sw $t6, -9160($30)
-addiu $29, $29, -4
-sw $t7, -9164($30)
-addiu $29, $29, -4
-sw $t8, -9168($30)
-addiu $29, $29, -4
-sw $t9, -9172($30)
-addiu $29, $29, -4
-sw $s0, -9176($30)
-addiu $29, $29, -4
-sw $s1, -9180($30)
-addiu $29, $29, -4
-sw $s2, -9184($30)
-addiu $29, $29, -4
-sw $s3, -9188($30)
-addiu $29, $29, -4
-sw $s4, -9192($30)
-addiu $29, $29, -4
-sw $s5, -9196($30)
-addiu $29, $29, -4
-sw $s6, -9200($30)
-addiu $29, $29, -4
-sw $s7, -9204($30)
-addiu $t0, $29, 4
-lw $t1, -9200($30)
-addiu $29, $29, -8
-sw $t1, 4($29)
-addiu $t2, $29, 4
-addiu $29, $29, -16
-lw $t3, -9204($30)
-sw $t3, 4($29)
-sw $t0, 8($29)
-sw $t2, 12($29)
-addiu $t4, $29, 4
-addiu $29, $29, -4
-sw $t4, 4($29)
-addiu $t5, $29, 4
-# struct bottle boo ; 
-
-addiu $t6, $0, 0
-lw $t7, 0($t5)
-li $t8, 0
-addu $t9, $t7, $t8
-#boo . perier = perier ; 
-
-lw $s0, -9072($30)
-lw $s1, 0($s0)
-sw $s1, 0($t9)
-addiu $s2, $0, 1
-lw $s3, 0($t5)
-li $s4, 4
-addu $s5, $s3, $s4
-#boo . spa = spa ; 
-
-lw $s6, -9108($30)
-lw $s7, 0($s6)
-sw $s7, 0($s5)
-addiu $29, $29, -4
-sw $t0, -9236($30)
-sw $t1, -9200($30)
-addiu $29, $29, -4
-sw $t2, -9240($30)
-sw $t3, -9204($30)
-addiu $29, $29, -4
-sw $t4, -9244($30)
-addiu $29, $29, -4
-sw $t5, -9248($30)
-addiu $29, $29, -4
-sw $t6, -9252($30)
-addiu $29, $29, -4
-sw $t7, -9256($30)
-addiu $29, $29, -4
-sw $t8, -9260($30)
-addiu $29, $29, -4
-sw $t9, -9264($30)
-sw $s0, -9072($30)
-addiu $29, $29, -4
-sw $s1, -9268($30)
-addiu $29, $29, -4
-sw $s2, -9272($30)
-addiu $29, $29, -4
-sw $s3, -9276($30)
-addiu $29, $29, -4
-sw $s4, -9280($30)
-addiu $29, $29, -4
-sw $s5, -9284($30)
-sw $s6, -9108($30)
-addiu $29, $29, -4
-sw $s7, -9288($30)
-addiu $t0, $0, 2
-lw $t2, -9248($30)
-lw $t1, 0($t2)
-li $t3, 8
-addu $t4, $t1, $t3
-#boo . sea = sea ; 
-
-lw $t5, -9172($30)
-lw $t6, 0($t5)
-sw $t6, 0($t4)
-addiu $t7, $0, 0
-move $v0, $t7
-j function_main_load
-# return 0 ; 
-
-
-L191:
-addiu $s0, $0, -20
-li $s1, 0
-addiu $29, $29, -4
-sw $s1, 4($29)
-addiu $s2, $29, 4
-sw $s0, 0($s2)
-# INT True = 1 ;  INT main ( ) { INT True = - 20 ; 
-
-addiu $s4, $0, -20
-li $s5, 0
-addiu $29, $29, -4
-sw $s5, 4($29)
-addiu $s6, $29, 4
-sw $s4, 0($s6)
-#INT success = True ; 
-
-addiu $s7, $0, 0
-move $v0, $s7
-j function_main_load
-#return 0 ; 
-
-
-L192:
-addiu $29, $29, -4
-sw $t0, -9300($30)
-addiu $29, $29, -4
-sw $t1, -9304($30)
-sw $t2, -9248($30)
-addiu $29, $29, -4
-sw $t3, -9308($30)
-addiu $29, $29, -4
-sw $t4, -9312($30)
-sw $t5, -9172($30)
-addiu $29, $29, -4
-sw $t6, -9316($30)
-addiu $29, $29, -4
-sw $t7, -9320($30)
-addiu $29, $29, -4
-sw $t8, -9324($30)
-addiu $29, $29, -4
-sw $t9, -9328($30)
-addiu $29, $29, -4
-sw $s0, -9332($30)
-addiu $29, $29, -4
-sw $s1, -9336($30)
-addiu $29, $29, -4
-sw $s2, -9340($30)
-addiu $29, $29, -4
-sw $s3, -9344($30)
-addiu $29, $29, -4
-sw $s4, -9348($30)
-addiu $29, $29, -4
-sw $s5, -9352($30)
-addiu $29, $29, -4
-sw $s6, -9356($30)
-addiu $29, $29, -4
-sw $s7, -9360($30)
-l.s $f0, float...index_5
-mfc1 $t1, $f0
-li $t2, 0
-addiu $29, $29, -4
-sw $t2, 4($29)
-addiu $t3, $29, 4
-sw $t1, 0($t3)
-# INT main ( ) { FLOAT a = 5.0 ; 
-
-addiu $t5, $0, 5
-li $t6, 0
-addiu $29, $29, -4
-sw $t6, 4($29)
-addiu $t7, $29, 4
-sw $t5, 0($t7)
-#INT b = 5 ; 
-
-addiu $t9, $0, 101
-li $s0, 0
-addiu $29, $29, -4
-sw $s0, 4($29)
-addiu $s1, $29, 4
-sb $t9, 0($s1)
-#CHAR c = 'e' ; 
-
-li $s3, 0
-addiu $29, $29, -4
-sw $s3, 4($29)
-addiu $s4, $29, 4
-addiu $29, $29, -4
-sw $s4, 4($29)
-addiu $s5, $29, 4
-sw $t3, 0($s5)
-#FLOAT * d = & a ; 
-
-li $s7, 0
-addiu $29, $29, -4
-sw $s7, 4($29)
-addiu $29, $29, -4
-sw $t0, -9388($30)
-addiu $29, $29, -4
-sw $t1, -9392($30)
-addiu $29, $29, -4
-sw $t2, -9396($30)
-addiu $29, $29, -4
-sw $t3, -9400($30)
-addiu $29, $29, -4
-sw $t4, -9404($30)
-addiu $29, $29, -4
-sw $t5, -9408($30)
-addiu $29, $29, -4
-sw $t6, -9412($30)
-addiu $29, $29, -4
-sw $t7, -9416($30)
-addiu $29, $29, -4
-sw $t8, -9420($30)
-addiu $29, $29, -4
-sw $t9, -9424($30)
-addiu $29, $29, -4
-sw $s0, -9428($30)
-addiu $29, $29, -4
-sw $s1, -9432($30)
-addiu $29, $29, -4
-sw $s2, -9436($30)
-addiu $29, $29, -4
-sw $s3, -9440($30)
-addiu $29, $29, -4
-sw $s4, -9444($30)
-addiu $29, $29, -4
-sw $s5, -9448($30)
-addiu $29, $29, -4
-sw $s6, -9452($30)
-addiu $29, $29, -4
-sw $s7, -9456($30)
-addiu $t0, $29, 4
-addiu $29, $29, -4
-sw $t0, 4($29)
-addiu $t1, $29, 4
-lw $t2, -9416($30)
-sw $t2, 0($t1)
-#INT * e = & b ; 
-
-li $t4, 0
-addiu $29, $29, -4
-sw $t4, 4($29)
-addiu $t5, $29, 4
-addiu $29, $29, -4
-sw $t5, 4($29)
-addiu $t6, $29, 4
-lw $t7, -9432($30)
-sw $t7, 0($t6)
-#CHAR * f = & c ; 
-
-addiu $t8, $0, 0
-move $v0, $t8
-j function_main_load
-#return 0 ; 
-
-
-L193:
-addiu $s0, $0, 5
-li $s1, 0
-addiu $29, $29, -4
-sw $s1, 4($29)
-addiu $s2, $29, 4
-sw $s0, 0($s2)
-#   INT main ( ) { INT x = 5 ; 
-
-la $s3, str10
-addiu $29, $29, -4
-sw $s3, 4($29)
-jal function_printf
-lw $s3, 4($29)
-addiu $29, $29, 4
-addiu $29, $29, -4
-sw $t0, -9476($30)
-addiu $29, $29, -4
-sw $t1, -9480($30)
-sw $t2, -9416($30)
-addiu $29, $29, -4
-sw $t3, -9484($30)
-addiu $29, $29, -4
-sw $t4, -9488($30)
-addiu $29, $29, -4
-sw $t5, -9492($30)
-addiu $29, $29, -4
-sw $t6, -9496($30)
-sw $t7, -9432($30)
-addiu $29, $29, -4
-sw $t8, -9500($30)
-addiu $29, $29, -4
-sw $t9, -9504($30)
-addiu $29, $29, -4
-sw $s0, -9508($30)
-addiu $29, $29, -4
-sw $s1, -9512($30)
-addiu $29, $29, -4
-sw $s2, -9516($30)
-addiu $29, $29, -4
-sw $s3, -9520($30)
-addiu $29, $29, -4
-sw $s4, -9524($30)
-addiu $29, $29, -4
-sw $s5, -9528($30)
-addiu $29, $29, -4
-sw $s6, -9532($30)
-addiu $29, $29, -4
-sw $s7, -9536($30)
-move $t0, $v0
-# if ( 0 == 0 ) { printf ( "Rico, kaboom!" ) ; 
-
-addiu $t1, $0, 0
-move $v0, $t1
-j function_main_load
-#} else if ( 0 != 0 ) { printf ( "Kowalski analysis!" ) ; } return 0 ; 
-
-
-L216:
-addiu $29, $29, -4
-sw $t0, -9540($30)
-addiu $29, $29, -4
-sw $t1, -9544($30)
-addiu $t1, $0, 1
-li $t2, 0
-addiu $29, $29, -4
-sw $t2, 4($29)
-addiu $t3, $29, 4
-sw $t1, 0($t3)
-# INT main ( ) { INT x = 1 ; 
-
-addiu $t5, $0, 2
-li $t6, 0
-addiu $29, $29, -4
-sw $t6, 4($29)
-addiu $t7, $29, 4
-sw $t5, 0($t7)
-#INT y = 2 ; 
-
-lw $t8, 0($t3)
-#if ( x == y ) 
-
-lw $t9, 0($t7)
-xor $s0, $t8, $t9
-sltiu $s1, $s0, 1
-move $v0, $s1
-addiu $29, $29, -4
-sw $t0, -9556($30)
-addiu $29, $29, -4
-sw $t1, -9560($30)
-addiu $29, $29, -4
-sw $t2, -9564($30)
-addiu $29, $29, -4
-sw $t3, -9568($30)
-addiu $29, $29, -4
-sw $t4, -9572($30)
-addiu $29, $29, -4
-sw $t5, -9576($30)
-addiu $29, $29, -4
-sw $t6, -9580($30)
-addiu $29, $29, -4
-sw $t7, -9584($30)
-addiu $29, $29, -4
-sw $t8, -9588($30)
-addiu $29, $29, -4
-sw $t9, -9592($30)
-addiu $29, $29, -4
-sw $s0, -9596($30)
-addiu $29, $29, -4
-sw $s1, -9600($30)
-
-L217:
-li $t1, 0
-addiu $29, $29, -4
-sw $t1, 4($29)
-addiu $t2, $29, 4
-#{ CHAR z ; 
-
-addiu $29, $29, -4
-sw $t0, -9608($30)
-addiu $29, $29, -4
-sw $t1, -9612($30)
-addiu $29, $29, -4
-sw $t2, -9616($30)
-
-L218:
-li $t1, 0
-addiu $29, $29, -4
-sw $t1, 4($29)
-addiu $t2, $29, 4
-#} else { INT z ; 
-
-addiu $29, $29, -4
-sw $t0, -9624($30)
-addiu $29, $29, -4
-sw $t1, -9628($30)
-addiu $29, $29, -4
-sw $t2, -9632($30)
-
-L219:
-addiu $t0, $0, 0
-move $v0, $t0
-j function_main_load
-#} return 0 ; 
-
-
-L220:
-addiu $29, $29, -4
-sw $t0, -9636($30)
-addiu $t1, $0, 0
-li $t2, 0
-addiu $29, $29, -4
-sw $t2, 4($29)
-addiu $t3, $29, 4
-sw $t1, 0($t3)
-# INT main ( ) { INT x = 0 ; 
-
-addiu $t5, $0, 1
-li $t6, 0
-addiu $29, $29, -4
-sw $t6, 4($29)
-addiu $t7, $29, 4
-sw $t5, 0($t7)
-#{ INT x = 1 ; 
-
-#if ( x ) { 
-
-addiu $t8, $0, 1
-li $t9, 0
-xor $s0, $t8, $t9
-sltiu $s1, $s0, 1
-sltiu $s2, $s1, 1
-move $v0, $s2
-addiu $29, $29, -4
-sw $t0, -9648($30)
-addiu $29, $29, -4
-sw $t1, -9652($30)
-addiu $29, $29, -4
-sw $t2, -9656($30)
-addiu $29, $29, -4
-sw $t3, -9660($30)
-addiu $29, $29, -4
-sw $t4, -9664($30)
-addiu $29, $29, -4
-sw $t5, -9668($30)
-addiu $29, $29, -4
-sw $t6, -9672($30)
-addiu $29, $29, -4
-sw $t7, -9676($30)
-addiu $29, $29, -4
-sw $t8, -9680($30)
-addiu $29, $29, -4
-sw $t9, -9684($30)
-addiu $29, $29, -4
-sw $s0, -9688($30)
-addiu $29, $29, -4
-sw $s1, -9692($30)
-addiu $29, $29, -4
-sw $s2, -9696($30)
-
-L221:
-addiu $t1, $0, 2
-li $t2, 0
-addiu $29, $29, -4
-sw $t2, 4($29)
-addiu $t3, $29, 4
-sw $t1, 0($t3)
-#INT x = 2 ; 
-
-addiu $29, $29, -4
-sw $t0, -9704($30)
-addiu $29, $29, -4
-sw $t1, -9708($30)
-addiu $29, $29, -4
-sw $t2, -9712($30)
-addiu $29, $29, -4
-sw $t3, -9716($30)
-
-L222:
-
-L223:
-#} } while ( x ) { 
-
-lw $t0, -9660($30)
-lw $t1, 0($t0)
-li $t2, 0
-xor $t3, $t1, $t2
-sltiu $t4, $t3, 1
-sltiu $t5, $t4, 1
-move $v0, $t5
-sw $t0, -9660($30)
-addiu $29, $29, -4
-sw $t1, -9720($30)
-addiu $29, $29, -4
-sw $t2, -9724($30)
-addiu $29, $29, -4
-sw $t3, -9728($30)
-addiu $29, $29, -4
-sw $t4, -9732($30)
-addiu $29, $29, -4
-sw $t5, -9736($30)
-
-L224:
-#continue ; 
-
-
-L225:
-addiu $t0, $0, 0
-move $v0, $t0
-j function_main_load
-#} return 0 ; 
-
-
-L226:
-addiu $t3, $0, 5
-li $t4, 0
-addiu $29, $29, -4
-sw $t4, 4($29)
-addiu $t5, $29, 4
-sw $t3, 0($t5)
-#   INT factorial ( INT c ) ;  INT main ( ) { INT n = 5 ; 
-
-addiu $t7, $0, 5
-#INT fact = factorial ( n ) ; 
-
-addiu $29, $29, -4
-sw $t7, 4($29)
-jal function_factorial
-lw $t7, 4($29)
-addiu $29, $29, 4
-move $t8, $v0
-li $t9, 0
-addiu $29, $29, -4
-sw $t9, 4($29)
-addiu $s0, $29, 4
-sw $t8, 0($s0)
-addiu $s1, $0, 0
-move $v0, $s1
-j function_main_load
-#return 0 ; 
-
-
-L227:
-addiu $s3, $0, 35
-li $s4, 0
-addiu $29, $29, -4
-sw $s4, 4($29)
-addiu $s5, $29, 4
-sw $s3, 0($s5)
-#  INT main ( ) {  INT a = 5 * ( 4 + 3 ) ; 
-
-addiu $s6, $0, 0
-move $v0, $s6
-j function_main_load
-# return 0 ; 
-
-
-L228:
-addiu $29, $29, -4
-sw $t0, -9752($30)
-addiu $29, $29, -4
-sw $t1, -9756($30)
-addiu $29, $29, -4
-sw $t2, -9760($30)
-addiu $29, $29, -4
-sw $t3, -9764($30)
-addiu $29, $29, -4
-sw $t4, -9768($30)
-addiu $29, $29, -4
-sw $t5, -9772($30)
-addiu $29, $29, -4
-sw $t6, -9776($30)
-addiu $29, $29, -4
-sw $t7, -9780($30)
-addiu $29, $29, -4
-sw $t8, -9784($30)
-addiu $29, $29, -4
-sw $t9, -9788($30)
-addiu $29, $29, -4
-sw $s0, -9792($30)
-addiu $29, $29, -4
-sw $s1, -9796($30)
-addiu $29, $29, -4
-sw $s2, -9800($30)
-addiu $29, $29, -4
-sw $s3, -9804($30)
-addiu $29, $29, -4
-sw $s4, -9808($30)
-addiu $29, $29, -4
-sw $s5, -9812($30)
-addiu $29, $29, -4
-sw $s6, -9816($30)
-addiu $29, $29, -4
-sw $s7, -9820($30)
-addiu $t0, $0, 5
-li $t1, 0
-addiu $29, $29, -4
-sw $t1, 4($29)
-addiu $t2, $29, 4
-sw $t0, 0($t2)
-# INT main ( ) { INT q = 5 ; 
-
-li $t4, 0
-addiu $29, $29, -80
-sw $t4, 4($29)
-sw $t4, 8($29)
-sw $t4, 12($29)
-sw $t4, 16($29)
-sw $t4, 20($29)
-sw $t4, 24($29)
-sw $t4, 28($29)
-sw $t4, 32($29)
-sw $t4, 36($29)
-sw $t4, 40($29)
-sw $t4, 44($29)
-sw $t4, 48($29)
-sw $t4, 52($29)
-sw $t4, 56($29)
-sw $t4, 60($29)
-sw $t4, 64($29)
-sw $t4, 68($29)
-sw $t4, 72($29)
-sw $t4, 76($29)
-sw $t4, 80($29)
-addiu $t5, $29, 4
-addiu $29, $29, -80
-sw $t4, 4($29)
-sw $t4, 8($29)
-sw $t4, 12($29)
-sw $t4, 16($29)
-sw $t4, 20($29)
-sw $t4, 24($29)
-sw $t4, 28($29)
-sw $t4, 32($29)
-sw $t4, 36($29)
-sw $t4, 40($29)
-sw $t4, 44($29)
-sw $t4, 48($29)
-sw $t4, 52($29)
-sw $t4, 56($29)
-sw $t4, 60($29)
-sw $t4, 64($29)
-sw $t4, 68($29)
-sw $t4, 72($29)
-sw $t4, 76($29)
-sw $t4, 80($29)
-addiu $t6, $29, 4
-addiu $29, $29, -80
-sw $t4, 4($29)
-sw $t4, 8($29)
-sw $t4, 12($29)
-sw $t4, 16($29)
-sw $t4, 20($29)
-sw $t4, 24($29)
-sw $t4, 28($29)
-sw $t4, 32($29)
-sw $t4, 36($29)
-sw $t4, 40($29)
-sw $t4, 44($29)
-sw $t4, 48($29)
-sw $t4, 52($29)
-sw $t4, 56($29)
-sw $t4, 60($29)
-sw $t4, 64($29)
-sw $t4, 68($29)
-sw $t4, 72($29)
-sw $t4, 76($29)
-sw $t4, 80($29)
-addiu $t7, $29, 4
-addiu $29, $29, -80
-sw $t4, 4($29)
-sw $t4, 8($29)
-sw $t4, 12($29)
-sw $t4, 16($29)
-sw $t4, 20($29)
-sw $t4, 24($29)
-sw $t4, 28($29)
-sw $t4, 32($29)
-sw $t4, 36($29)
-sw $t4, 40($29)
-sw $t4, 44($29)
-sw $t4, 48($29)
-sw $t4, 52($29)
-sw $t4, 56($29)
-sw $t4, 60($29)
-sw $t4, 64($29)
-sw $t4, 68($29)
-sw $t4, 72($29)
-sw $t4, 76($29)
-sw $t4, 80($29)
-addiu $t8, $29, 4
-addiu $29, $29, -80
-sw $t4, 4($29)
-sw $t4, 8($29)
-sw $t4, 12($29)
-sw $t4, 16($29)
-sw $t4, 20($29)
-sw $t4, 24($29)
-sw $t4, 28($29)
-sw $t4, 32($29)
-sw $t4, 36($29)
-sw $t4, 40($29)
-sw $t4, 44($29)
-sw $t4, 48($29)
-sw $t4, 52($29)
-sw $t4, 56($29)
-sw $t4, 60($29)
-sw $t4, 64($29)
-sw $t4, 68($29)
-sw $t4, 72($29)
-sw $t4, 76($29)
-sw $t4, 80($29)
-addiu $t9, $29, 4
-addiu $29, $29, -80
-sw $t4, 4($29)
-sw $t4, 8($29)
-sw $t4, 12($29)
-sw $t4, 16($29)
-sw $t4, 20($29)
-sw $t4, 24($29)
-sw $t4, 28($29)
-sw $t4, 32($29)
-sw $t4, 36($29)
-sw $t4, 40($29)
-sw $t4, 44($29)
-sw $t4, 48($29)
-sw $t4, 52($29)
-sw $t4, 56($29)
-sw $t4, 60($29)
-sw $t4, 64($29)
-sw $t4, 68($29)
-sw $t4, 72($29)
-sw $t4, 76($29)
-sw $t4, 80($29)
-addiu $s0, $29, 4
-addiu $29, $29, -80
-sw $t4, 4($29)
-sw $t4, 8($29)
-sw $t4, 12($29)
-sw $t4, 16($29)
-sw $t4, 20($29)
-sw $t4, 24($29)
-sw $t4, 28($29)
-sw $t4, 32($29)
-sw $t4, 36($29)
-sw $t4, 40($29)
-sw $t4, 44($29)
-sw $t4, 48($29)
-sw $t4, 52($29)
-sw $t4, 56($29)
-sw $t4, 60($29)
-sw $t4, 64($29)
-sw $t4, 68($29)
-sw $t4, 72($29)
-sw $t4, 76($29)
-sw $t4, 80($29)
-addiu $s1, $29, 4
-addiu $29, $29, -80
-sw $t4, 4($29)
-sw $t4, 8($29)
-sw $t4, 12($29)
-sw $t4, 16($29)
-sw $t4, 20($29)
-sw $t4, 24($29)
-sw $t4, 28($29)
-sw $t4, 32($29)
-sw $t4, 36($29)
-sw $t4, 40($29)
-sw $t4, 44($29)
-sw $t4, 48($29)
-sw $t4, 52($29)
-sw $t4, 56($29)
-sw $t4, 60($29)
-sw $t4, 64($29)
-sw $t4, 68($29)
-sw $t4, 72($29)
-sw $t4, 76($29)
-sw $t4, 80($29)
-addiu $s2, $29, 4
-addiu $29, $29, -80
-sw $t4, 4($29)
-sw $t4, 8($29)
-sw $t4, 12($29)
-sw $t4, 16($29)
-sw $t4, 20($29)
-sw $t4, 24($29)
-sw $t4, 28($29)
-sw $t4, 32($29)
-sw $t4, 36($29)
-sw $t4, 40($29)
-sw $t4, 44($29)
-sw $t4, 48($29)
-sw $t4, 52($29)
-sw $t4, 56($29)
-sw $t4, 60($29)
-sw $t4, 64($29)
-sw $t4, 68($29)
-sw $t4, 72($29)
-sw $t4, 76($29)
-sw $t4, 80($29)
-addiu $s3, $29, 4
-addiu $29, $29, -80
-sw $t4, 4($29)
-sw $t4, 8($29)
-sw $t4, 12($29)
-sw $t4, 16($29)
-sw $t4, 20($29)
-sw $t4, 24($29)
-sw $t4, 28($29)
-sw $t4, 32($29)
-sw $t4, 36($29)
-sw $t4, 40($29)
-sw $t4, 44($29)
-sw $t4, 48($29)
-sw $t4, 52($29)
-sw $t4, 56($29)
-sw $t4, 60($29)
-sw $t4, 64($29)
-sw $t4, 68($29)
-sw $t4, 72($29)
-sw $t4, 76($29)
-sw $t4, 80($29)
-addiu $s4, $29, 4
-addiu $29, $29, -80
-sw $t4, 4($29)
-sw $t4, 8($29)
-sw $t4, 12($29)
-sw $t4, 16($29)
-sw $t4, 20($29)
-sw $t4, 24($29)
-sw $t4, 28($29)
-sw $t4, 32($29)
-sw $t4, 36($29)
-sw $t4, 40($29)
-sw $t4, 44($29)
-sw $t4, 48($29)
-sw $t4, 52($29)
-sw $t4, 56($29)
-sw $t4, 60($29)
-sw $t4, 64($29)
-sw $t4, 68($29)
-sw $t4, 72($29)
-sw $t4, 76($29)
-sw $t4, 80($29)
-addiu $s5, $29, 4
-addiu $29, $29, -880
-sw $s5, 4($29)
-sw $s4, 8($29)
-sw $s3, 12($29)
-sw $s2, 16($29)
-sw $s1, 20($29)
-sw $s0, 24($29)
-sw $t9, 28($29)
-sw $t8, 32($29)
-sw $t7, 36($29)
-sw $t6, 40($29)
-sw $t5, 44($29)
-addiu $s6, $29, 4
-addiu $29, $29, -4
-sw $s6, 4($29)
-addiu $s7, $29, 4
-#INT x [ 11 ] [ 20 ] ; 
-
-addiu $29, $29, -4
-sw $t0, -11592($30)
-addiu $29, $29, -4
-sw $t1, -11596($30)
-addiu $29, $29, -4
-sw $t2, -11600($30)
-addiu $29, $29, -4
-sw $t3, -11604($30)
-addiu $29, $29, -4
-sw $t4, -11608($30)
-addiu $29, $29, -4
-sw $t5, -11612($30)
-addiu $29, $29, -4
-sw $t6, -11616($30)
-addiu $29, $29, -4
-sw $t7, -11620($30)
-addiu $29, $29, -4
-sw $t8, -11624($30)
-addiu $29, $29, -4
-sw $t9, -11628($30)
-addiu $29, $29, -4
-sw $s0, -11632($30)
-addiu $29, $29, -4
-sw $s1, -11636($30)
-addiu $29, $29, -4
-sw $s2, -11640($30)
-addiu $29, $29, -4
-sw $s3, -11644($30)
-addiu $29, $29, -4
-sw $s4, -11648($30)
-addiu $29, $29, -4
-sw $s5, -11652($30)
-addiu $29, $29, -4
-sw $s6, -11656($30)
-addiu $29, $29, -4
-sw $s7, -11660($30)
-addiu $t0, $0, 10
-lw $t2, -11660($30)
-lw $t1, 0($t2)
-li $t3, 4
-mul $t4, $t0, $t3
-addu $t5, $t1, $t4
-# x [ 10 ] [ 19 ] = 1 + 5 ; 
-
-addiu $t6, $0, 19
-lw $t7, 0($t5)
-li $t8, 4
-mul $t9, $t6, $t8
-addu $s0, $t7, $t9
-addiu $s1, $0, 6
-sw $s1, 0($s0)
-addiu $s2, $0, 0
-move $v0, $s2
-j function_main_load
-#return 0 ; 
-
-
-L229:
-addiu $29, $29, -4
-sw $t0, -11664($30)
-addiu $29, $29, -4
-sw $t1, -11668($30)
-sw $t2, -11660($30)
-addiu $29, $29, -4
-sw $t3, -11672($30)
-addiu $29, $29, -4
-sw $t4, -11676($30)
-addiu $29, $29, -4
-sw $t5, -11680($30)
-addiu $29, $29, -4
-sw $t6, -11684($30)
-addiu $29, $29, -4
-sw $t7, -11688($30)
-addiu $29, $29, -4
-sw $t8, -11692($30)
-addiu $29, $29, -4
-sw $t9, -11696($30)
-addiu $29, $29, -4
-sw $s0, -11700($30)
-addiu $29, $29, -4
-sw $s1, -11704($30)
-addiu $29, $29, -4
-sw $s2, -11708($30)
-addiu $t1, $0, 0
-li $t2, 0
-addiu $29, $29, -4
-sw $t2, 4($29)
-addiu $t3, $29, 4
-sw $t1, 0($t3)
-#   INT main ( ) { INT a = 0 ; 
-
-li $t5, 0
-addiu $29, $29, -4
-sw $t5, 4($29)
-addiu $t6, $29, 4
-#INT i ; 
-
-addiu $t7, $0, 0
-sw $t7, 0($t6)
-#for ( i = 0 ; i < 5 ; i ++ ) { 
-
-addiu $29, $29, -4
-sw $t0, -11720($30)
-addiu $29, $29, -4
-sw $t1, -11724($30)
-addiu $29, $29, -4
-sw $t2, -11728($30)
-addiu $29, $29, -4
-sw $t3, -11732($30)
-addiu $29, $29, -4
-sw $t4, -11736($30)
-addiu $29, $29, -4
-sw $t5, -11740($30)
-addiu $29, $29, -4
-sw $t6, -11744($30)
-addiu $29, $29, -4
-sw $t7, -11748($30)
-
-L230:
-lw $t0, -11744($30)
-lw $t1, 0($t0)
-addiu $t2, $0, 5
-slt $t3, $t1, $t2
-move $v0, $t3
-sw $t0, -11744($30)
-addiu $29, $29, -4
-sw $t1, -11752($30)
-addiu $29, $29, -4
-sw $t2, -11756($30)
-addiu $29, $29, -4
-sw $t3, -11760($30)
-
-L231:
-lw $t1, -11744($30)
-lw $t2, 0($t1)
-#INT b = i ; 
-
-li $t3, 0
-addiu $29, $29, -4
-sw $t3, 4($29)
-addiu $t4, $29, 4
-sw $t2, 0($t4)
-lw $t5, 0($t1)
-addi $t6, $t5, 1
-sw $t6, 0($t1)
-addiu $29, $29, -4
-sw $t0, -11768($30)
-sw $t1, -11744($30)
-addiu $29, $29, -4
-sw $t2, -11772($30)
-addiu $29, $29, -4
-sw $t3, -11776($30)
-addiu $29, $29, -4
-sw $t4, -11780($30)
-addiu $29, $29, -4
-sw $t5, -11784($30)
-addiu $29, $29, -4
-sw $t6, -11788($30)
-
-L232:
-
-L233:
-#}  while ( a < 2 ) { 
-
-lw $t0, -11732($30)
-lw $t1, 0($t0)
-addiu $t2, $0, 2
-slt $t3, $t1, $t2
-move $v0, $t3
-sw $t0, -11732($30)
-addiu $29, $29, -4
-sw $t1, -11792($30)
-addiu $29, $29, -4
-sw $t2, -11796($30)
-addiu $29, $29, -4
-sw $t3, -11800($30)
-
-L234:
-lw $t0, -11732($30)
-lw $t1, 0($t0)
-#a ++ ; 
-
-addi $t2, $t1, 1
-sw $t2, 0($t0)
-sw $t0, -11732($30)
-addiu $29, $29, -4
-sw $t1, -11804($30)
-addiu $29, $29, -4
-sw $t2, -11808($30)
-
-L235:
-
-L236:
-#continue ; } while ( 1 ) { 
-
-addiu $t0, $0, 1
-addiu $29, $29, -4
-sw $t0, -11812($30)
-
-L237:
-#break ; 
-
-
-L238:
-addiu $t0, $0, 0
-move $v0, $t0
-j function_main_load
-#} return 0 ; 
-
-
-L239:
-addiu $t2, $0, 6
-li $t3, 0
-addiu $29, $29, -4
-sw $t3, 4($29)
-addiu $t4, $29, 4
-sw $t2, 0($t4)
-#  INT main ( ) {  INT a = 6 ; 
-
-addiu $t5, $0, 6
-sw $t5, 0($t4)
-#a = 6 ; 
-
-addiu $t7, $0, 2
-li $t8, 0
-addiu $29, $29, -4
-sw $t8, 4($29)
-addiu $t9, $29, 4
-sw $t7, 0($t9)
-#INT b = 2 ; 
-
-addiu $s0, $0, 2
-sw $s0, 0($t9)
-#b = 2 ; 
-
-lw $s2, 0($t4)
-# INT c = a + b ; 
-
-lw $s3, 0($t9)
-add $s4, $s2, $s3
-li $s5, 0
-addiu $29, $29, -4
-sw $s5, 4($29)
-addiu $s6, $29, 4
-sw $s4, 0($s6)
-addiu $29, $29, -4
-sw $t0, -11828($30)
-addiu $29, $29, -4
-sw $t1, -11832($30)
-addiu $29, $29, -4
-sw $t2, -11836($30)
-addiu $29, $29, -4
-sw $t3, -11840($30)
-addiu $29, $29, -4
-sw $t4, -11844($30)
-addiu $29, $29, -4
-sw $t5, -11848($30)
-addiu $29, $29, -4
-sw $t6, -11852($30)
-addiu $29, $29, -4
-sw $t7, -11856($30)
-addiu $29, $29, -4
-sw $t8, -11860($30)
-addiu $29, $29, -4
-sw $t9, -11864($30)
-addiu $29, $29, -4
-sw $s0, -11868($30)
-addiu $29, $29, -4
-sw $s1, -11872($30)
-addiu $29, $29, -4
-sw $s2, -11876($30)
-addiu $29, $29, -4
-sw $s3, -11880($30)
-addiu $29, $29, -4
-sw $s4, -11884($30)
-addiu $29, $29, -4
-sw $s5, -11888($30)
-addiu $29, $29, -4
-sw $s6, -11892($30)
-addiu $29, $29, -4
-sw $s7, -11896($30)
-lw $t1, -11844($30)
-lw $t0, 0($t1)
-#INT d = a - b ; 
-
-lw $t2, -11864($30)
-lw $t3, 0($t2)
-sub $t4, $t0, $t3
-li $t5, 0
-addiu $29, $29, -4
-sw $t5, 4($29)
-addiu $t6, $29, 4
-sw $t4, 0($t6)
-lw $t8, 0($t1)
-#INT e = a * b ; 
-
-lw $t9, 0($t2)
-mul $s0, $t8, $t9
-li $s1, 0
-addiu $29, $29, -4
-sw $s1, 4($29)
-addiu $s2, $29, 4
-sw $s0, 0($s2)
-lw $s4, 0($t1)
-#INT f = a / b ; 
-
-lw $s5, 0($t2)
-div $s6 $s4 $s5
-li $s7, 0
-addiu $29, $29, -4
-sw $s7, 4($29)
-addiu $29, $29, -4
-sw $t0, -11912($30)
-sw $t1, -11844($30)
-sw $t2, -11864($30)
-addiu $29, $29, -4
-sw $t3, -11916($30)
-addiu $29, $29, -4
-sw $t4, -11920($30)
-addiu $29, $29, -4
-sw $t5, -11924($30)
-addiu $29, $29, -4
-sw $t6, -11928($30)
-addiu $29, $29, -4
-sw $t7, -11932($30)
-addiu $29, $29, -4
-sw $t8, -11936($30)
-addiu $29, $29, -4
-sw $t9, -11940($30)
-addiu $29, $29, -4
-sw $s0, -11944($30)
-addiu $29, $29, -4
-sw $s1, -11948($30)
-addiu $29, $29, -4
-sw $s2, -11952($30)
-addiu $29, $29, -4
-sw $s3, -11956($30)
-addiu $29, $29, -4
-sw $s4, -11960($30)
-addiu $29, $29, -4
-sw $s5, -11964($30)
-addiu $29, $29, -4
-sw $s6, -11968($30)
-addiu $29, $29, -4
-sw $s7, -11972($30)
-addiu $t0, $29, 4
-lw $t1, -11968($30)
-sw $t1, 0($t0)
-# INT g = a == b ; 
-
-lw $t3, -11844($30)
-lw $t4, 0($t3)
-lw $t5, -11864($30)
-lw $t6, 0($t5)
-xor $t7, $t4, $t6
-sltiu $t8, $t7, 1
-li $t9, 0
-addiu $29, $29, -4
-sw $t9, 4($29)
-addiu $s0, $29, 4
-sw $t8, 0($s0)
-#INT h = a < b ; 
-
-lw $s2, 0($t3)
-lw $s3, 0($t5)
-slt $s4, $s2, $s3
-li $s5, 0
-addiu $29, $29, -4
-sw $s5, 4($29)
-addiu $s6, $29, 4
-sw $s4, 0($s6)
-#INT i = a > b ; 
-
-addiu $29, $29, -4
-sw $t0, -11984($30)
-sw $t1, -11968($30)
-addiu $29, $29, -4
-sw $t2, -11988($30)
-sw $t3, -11844($30)
-addiu $29, $29, -4
-sw $t4, -11992($30)
-sw $t5, -11864($30)
-addiu $29, $29, -4
-sw $t6, -11996($30)
-addiu $29, $29, -4
-sw $t7, -12000($30)
-addiu $29, $29, -4
-sw $t8, -12004($30)
-addiu $29, $29, -4
-sw $t9, -12008($30)
-addiu $29, $29, -4
-sw $s0, -12012($30)
-addiu $29, $29, -4
-sw $s1, -12016($30)
-addiu $29, $29, -4
-sw $s2, -12020($30)
-addiu $29, $29, -4
-sw $s3, -12024($30)
-addiu $29, $29, -4
-sw $s4, -12028($30)
-addiu $29, $29, -4
-sw $s5, -12032($30)
-addiu $29, $29, -4
-sw $s6, -12036($30)
-addiu $29, $29, -4
-sw $s7, -12040($30)
-lw $t1, -11844($30)
-lw $t0, 0($t1)
-lw $t2, -11864($30)
-lw $t3, 0($t2)
-sgt $t4, $t0, $t3
-li $t5, 0
-addiu $29, $29, -4
-sw $t5, 4($29)
-addiu $t6, $29, 4
-sw $t4, 0($t6)
-# INT j = a != b ; 
-
-lw $t8, 0($t1)
-lw $t9, 0($t2)
-xor $s0, $t8, $t9
-sltiu $s1, $s0, 1
-sltiu $s2, $s1, 1
-li $s3, 0
-addiu $29, $29, -4
-sw $s3, 4($29)
-addiu $s4, $29, 4
-sw $s2, 0($s4)
-#INT k = a <= b ; 
-
-lw $s6, 0($t1)
-lw $s7, 0($t2)
-addiu $29, $29, -4
-sw $t0, -12052($30)
-sw $t1, -11844($30)
-sw $t2, -11864($30)
-addiu $29, $29, -4
-sw $t3, -12056($30)
-addiu $29, $29, -4
-sw $t4, -12060($30)
-addiu $29, $29, -4
-sw $t5, -12064($30)
-addiu $29, $29, -4
-sw $t6, -12068($30)
-addiu $29, $29, -4
-sw $t7, -12072($30)
-addiu $29, $29, -4
-sw $t8, -12076($30)
-addiu $29, $29, -4
-sw $t9, -12080($30)
-addiu $29, $29, -4
-sw $s0, -12084($30)
-addiu $29, $29, -4
-sw $s1, -12088($30)
-addiu $29, $29, -4
-sw $s2, -12092($30)
-addiu $29, $29, -4
-sw $s3, -12096($30)
-addiu $29, $29, -4
-sw $s4, -12100($30)
-addiu $29, $29, -4
-sw $s5, -12104($30)
-addiu $29, $29, -4
-sw $s6, -12108($30)
-addiu $29, $29, -4
-sw $s7, -12112($30)
-lw $t1, -12108($30)
-lw $t2, -12112($30)
-sgt $t0, $t1, $t2
-sltiu $t3, $t0, 1
-li $t4, 0
-addiu $29, $29, -4
-sw $t4, 4($29)
-addiu $t5, $29, 4
-sw $t3, 0($t5)
-#INT l = a >= b ; 
-
-lw $t7, -11844($30)
-lw $t8, 0($t7)
-lw $t9, -11864($30)
-lw $s0, 0($t9)
-slt $s1, $t8, $s0
-sltiu $s2, $s1, 1
-li $s3, 0
-addiu $29, $29, -4
-sw $s3, 4($29)
-addiu $s4, $29, 4
-sw $s2, 0($s4)
-lw $s6, 0($t7)
-# INT m = a % b ; 
-
-lw $s7, 0($t9)
-addiu $29, $29, -4
-sw $t0, -12124($30)
-sw $t1, -12108($30)
-sw $t2, -12112($30)
-addiu $29, $29, -4
-sw $t3, -12128($30)
-addiu $29, $29, -4
-sw $t4, -12132($30)
-addiu $29, $29, -4
-sw $t5, -12136($30)
-addiu $29, $29, -4
-sw $t6, -12140($30)
-sw $t7, -11844($30)
-addiu $29, $29, -4
-sw $t8, -12144($30)
-sw $t9, -11864($30)
-addiu $29, $29, -4
-sw $s0, -12148($30)
-addiu $29, $29, -4
-sw $s1, -12152($30)
-addiu $29, $29, -4
-sw $s2, -12156($30)
-addiu $29, $29, -4
-sw $s3, -12160($30)
-addiu $29, $29, -4
-sw $s4, -12164($30)
-addiu $29, $29, -4
-sw $s5, -12168($30)
-addiu $29, $29, -4
-sw $s6, -12172($30)
-addiu $29, $29, -4
-sw $s7, -12176($30)
-lw $t1, -12172($30)
-lw $t2, -12176($30)
-div $t0 $t1 $t2
-mfhi $t0
-li $t3, 0
-addiu $29, $29, -4
-sw $t3, 4($29)
-addiu $t4, $29, 4
-sw $t0, 0($t4)
-lw $t6, -11844($30)
-lw $t7, 0($t6)
-# INT n = a << b ; 
-
-lw $t8, -11864($30)
-lw $t9, 0($t8)
-sllv $s0, $t7, $t9
-li $s1, 0
-addiu $29, $29, -4
-sw $s1, 4($29)
-addiu $s2, $29, 4
-sw $s0, 0($s2)
-lw $s4, 0($t6)
-# INT o = a >> b ; 
-
-lw $s5, 0($t8)
-srlv $s6, $s4, $s5
-li $s7, 0
-addiu $29, $29, -4
-sw $s7, 4($29)
-addiu $29, $29, -4
-sw $t0, -12192($30)
-sw $t1, -12172($30)
-sw $t2, -12176($30)
-addiu $29, $29, -4
-sw $t3, -12196($30)
-addiu $29, $29, -4
-sw $t4, -12200($30)
-addiu $29, $29, -4
-sw $t5, -12204($30)
-sw $t6, -11844($30)
-addiu $29, $29, -4
-sw $t7, -12208($30)
-sw $t8, -11864($30)
-addiu $29, $29, -4
-sw $t9, -12212($30)
-addiu $29, $29, -4
-sw $s0, -12216($30)
-addiu $29, $29, -4
-sw $s1, -12220($30)
-addiu $29, $29, -4
-sw $s2, -12224($30)
-addiu $29, $29, -4
-sw $s3, -12228($30)
-addiu $29, $29, -4
-sw $s4, -12232($30)
-addiu $29, $29, -4
-sw $s5, -12236($30)
-addiu $29, $29, -4
-sw $s6, -12240($30)
-addiu $29, $29, -4
-sw $s7, -12244($30)
-addiu $t0, $29, 4
-lw $t1, -12240($30)
-sw $t1, 0($t0)
-addiu $t2, $0, 0
-move $v0, $t2
-j function_main_load
-# return 0 ; 
-
-
-L240:
-la $t7, str3
-addiu $t8, $0, 3
-addiu $29, $29, -8
-sw $t7, 4($29)
-sw $t8, 8($29)
-jal function_printf
-lw $t7, 4($29)
-lw $t8, 8($29)
-addiu $29, $29, 8
-addiu $29, $29, -4
-sw $t0, -12248($30)
-sw $t1, -12240($30)
-addiu $29, $29, -4
-sw $t2, -12252($30)
-addiu $29, $29, -4
-sw $t3, -12256($30)
-addiu $29, $29, -4
-sw $t4, -12260($30)
-addiu $29, $29, -4
-sw $t5, -12264($30)
-addiu $29, $29, -4
-sw $t6, -12268($30)
-addiu $29, $29, -4
-sw $t7, -12272($30)
-addiu $29, $29, -4
-sw $t8, -12276($30)
-addiu $29, $29, -4
-sw $t9, -12280($30)
-addiu $29, $29, -4
-sw $s0, -12284($30)
-addiu $29, $29, -4
-sw $s1, -12288($30)
-addiu $29, $29, -4
-sw $s2, -12292($30)
-addiu $29, $29, -4
-sw $s3, -12296($30)
-addiu $29, $29, -4
-sw $s4, -12300($30)
-addiu $29, $29, -4
-sw $s5, -12304($30)
-addiu $29, $29, -4
-sw $s6, -12308($30)
-addiu $29, $29, -4
-sw $s7, -12312($30)
-move $t0, $v0
-#   INT peer = 8 ;  INT x = 1 ;        INT main ( ) { printf ( "%d" , y ) ; 
-
-la $t1, str3
-addiu $t2, $0, 8
-addiu $29, $29, -8
-sw $t1, 4($29)
-sw $t2, 8($29)
-jal function_printf
-lw $t1, 4($29)
-lw $t2, 8($29)
-addiu $29, $29, 8
-move $t3, $v0
-#printf ( "%d" , peer ) ; 
-
-la $t4, str11
-l.s $f0, float...index_6
-mfc1 $t5, $f0
-addiu $29, $29, -8
-sw $t4, 4($29)
-sw $t5, 8($29)
-jal function_printf
-lw $t4, 4($29)
-lw $t5, 8($29)
-addiu $29, $29, 8
-move $t6, $v0
-#printf ( "%f" , ) ; 
-
-addiu $t7, $0, 0
-move $v0, $t7
-j function_main_load
-#return 0 ; 
-
-
-L263:
-addiu $t9, $0, 4
-li $s0, 0
-addiu $29, $29, -4
-sw $s0, 4($29)
-addiu $s1, $29, 4
-sw $t9, 0($s1)
-# INT main ( ) { INT x = 4 ; 
-
-addiu $s3, $0, 4
-li $s4, 0
-addiu $29, $29, -4
-sw $s4, 4($29)
-addiu $s5, $29, 4
-sw $s3, 0($s5)
-#INT y = x ; 
-
-li $s7, 0
-addiu $29, $29, -12
-sw $s7, 4($29)
-sw $s7, 8($29)
-sw $s7, 12($29)
-addiu $29, $29, -4
-sw $t0, -12336($30)
-addiu $29, $29, -4
-sw $t1, -12340($30)
-addiu $29, $29, -4
-sw $t2, -12344($30)
-addiu $29, $29, -4
-sw $t3, -12348($30)
-addiu $29, $29, -4
-sw $t4, -12352($30)
-addiu $29, $29, -4
-sw $t5, -12356($30)
-addiu $29, $29, -4
-sw $t6, -12360($30)
-addiu $29, $29, -4
-sw $t7, -12364($30)
-addiu $29, $29, -4
-sw $t8, -12368($30)
-addiu $29, $29, -4
-sw $t9, -12372($30)
-addiu $29, $29, -4
-sw $s0, -12376($30)
-addiu $29, $29, -4
-sw $s1, -12380($30)
-addiu $29, $29, -4
-sw $s2, -12384($30)
-addiu $29, $29, -4
-sw $s3, -12388($30)
-addiu $29, $29, -4
-sw $s4, -12392($30)
-addiu $29, $29, -4
-sw $s5, -12396($30)
-addiu $29, $29, -4
-sw $s6, -12400($30)
-addiu $29, $29, -4
-sw $s7, -12404($30)
-addiu $t0, $29, 4
-addiu $29, $29, -4
-sw $t0, 4($29)
-addiu $t1, $29, 4
-#INT array [ 3 ] = { 1 , 2 , 3 } ; 
-
-addiu $t2, $0, 2
-lw $t3, 0($t1)
-li $t4, 4
-mul $t5, $t2, $t4
-addu $t6, $t3, $t5
-addiu $t7, $0, 3
-sw $t7, 0($t6)
-addiu $t8, $0, 1
-lw $t9, 0($t1)
-li $s0, 4
-mul $s1, $t8, $s0
-addu $s2, $t9, $s1
-addiu $s3, $0, 2
-sw $s3, 0($s2)
-addiu $s4, $0, 0
-lw $s5, 0($t1)
-li $s6, 4
-mul $s7, $s4, $s6
-addiu $29, $29, -4
-sw $t0, -12412($30)
-addiu $29, $29, -4
-sw $t1, -12416($30)
-addiu $29, $29, -4
-sw $t2, -12420($30)
-addiu $29, $29, -4
-sw $t3, -12424($30)
-addiu $29, $29, -4
-sw $t4, -12428($30)
-addiu $29, $29, -4
-sw $t5, -12432($30)
-addiu $29, $29, -4
-sw $t6, -12436($30)
-addiu $29, $29, -4
-sw $t7, -12440($30)
-addiu $29, $29, -4
-sw $t8, -12444($30)
-addiu $29, $29, -4
-sw $t9, -12448($30)
-addiu $29, $29, -4
-sw $s0, -12452($30)
-addiu $29, $29, -4
-sw $s1, -12456($30)
-addiu $29, $29, -4
-sw $s2, -12460($30)
-addiu $29, $29, -4
-sw $s3, -12464($30)
-addiu $29, $29, -4
-sw $s4, -12468($30)
-addiu $29, $29, -4
-sw $s5, -12472($30)
-addiu $29, $29, -4
-sw $s6, -12476($30)
-addiu $29, $29, -4
-sw $s7, -12480($30)
-lw $t1, -12472($30)
-lw $t2, -12480($30)
-addu $t0, $t1, $t2
-addiu $t3, $0, 1
-sw $t3, 0($t0)
 addiu $t4, $0, 0
 move $v0, $t4
 j function_main_load
 #return 0 ; 
 
+addiu $29, $29, -4
+sw $t0, -136($30)
+addiu $29, $29, -4
+sw $t1, -140($30)
+addiu $29, $29, -4
+sw $t2, -144($30)
+addiu $29, $29, -4
+sw $t3, -148($30)
+addiu $29, $29, -4
+sw $t4, -152($30)
 
-L264:
-l.s $f0, float...index_7
-mfc1 $t6, $f0
-li $t7, 0
-addiu $29, $29, -4
-sw $t7, 4($29)
-addiu $t8, $29, 4
-sw $t6, 0($t8)
-# INT main ( ) { FLOAT a = 5.0 ; 
-
-addiu $s0, $0, 5
-li $s1, 0
-addiu $29, $29, -4
-sw $s1, 4($29)
-addiu $s2, $29, 4
-sw $s0, 0($s2)
-#INT b = 5 ; 
-
-addiu $s4, $0, 101
-li $s5, 0
-addiu $29, $29, -4
-sw $s5, 4($29)
-addiu $s6, $29, 4
-sb $s4, 0($s6)
-#CHAR c = 'e' ; 
-
-l.s $f0, float...index_8
-addiu $29, $29, -4
-sw $t0, -12496($30)
-sw $t1, -12472($30)
-sw $t2, -12480($30)
-addiu $29, $29, -4
-sw $t3, -12500($30)
-addiu $29, $29, -4
-sw $t4, -12504($30)
-addiu $29, $29, -4
-sw $t5, -12508($30)
-addiu $29, $29, -4
-sw $t6, -12512($30)
-addiu $29, $29, -4
-sw $t7, -12516($30)
-addiu $29, $29, -4
-sw $t8, -12520($30)
-addiu $29, $29, -4
-sw $t9, -12524($30)
-addiu $29, $29, -4
-sw $s0, -12528($30)
-addiu $29, $29, -4
-sw $s1, -12532($30)
-addiu $29, $29, -4
-sw $s2, -12536($30)
-addiu $29, $29, -4
-sw $s3, -12540($30)
-addiu $29, $29, -4
-sw $s4, -12544($30)
-addiu $29, $29, -4
-sw $s5, -12548($30)
-addiu $29, $29, -4
-sw $s6, -12552($30)
-addiu $29, $29, -4
-sw $s7, -12556($30)
-mfc1 $t0, $f0
-li $t1, 0
-addiu $29, $29, -4
-sw $t1, 4($29)
-addiu $t2, $29, 4
-sw $t0, 0($t2)
-#const FLOAT d = 10.01 ; 
-
-addiu $t4, $0, 2
-li $t5, 0
-addiu $29, $29, -4
-sw $t5, 4($29)
-addiu $t6, $29, 4
-sw $t4, 0($t6)
-#const INT e = 2 ; 
-
-addiu $t8, $0, 98
-li $t9, 0
-addiu $29, $29, -4
-sw $t9, 4($29)
-addiu $s0, $29, 4
-sb $t8, 0($s0)
-#const CHAR f = 'b' ; 
-
-addiu $s1, $0, 0
-move $v0, $s1
-j function_main_load
-#return 0 ; 
-
-
-L265:
-addiu $s3, $0, 3
-li $s4, 0
-addiu $29, $29, -4
-sw $s4, 4($29)
-addiu $s5, $29, 4
-sw $s3, 0($s5)
-#   INT main ( ) { INT a = 3 ; 
-
-la $s7, str12
-addiu $29, $29, -4
-sw $t0, -12576($30)
-addiu $29, $29, -4
-sw $t1, -12580($30)
-addiu $29, $29, -4
-sw $t2, -12584($30)
-addiu $29, $29, -4
-sw $t3, -12588($30)
-addiu $29, $29, -4
-sw $t4, -12592($30)
-addiu $29, $29, -4
-sw $t5, -12596($30)
-addiu $29, $29, -4
-sw $t6, -12600($30)
-addiu $29, $29, -4
-sw $t7, -12604($30)
-addiu $29, $29, -4
-sw $t8, -12608($30)
-addiu $29, $29, -4
-sw $t9, -12612($30)
-addiu $29, $29, -4
-sw $s0, -12616($30)
-addiu $29, $29, -4
-sw $s1, -12620($30)
-addiu $29, $29, -4
-sw $s2, -12624($30)
-addiu $29, $29, -4
-sw $s3, -12628($30)
-addiu $29, $29, -4
-sw $s4, -12632($30)
-addiu $29, $29, -4
-sw $s5, -12636($30)
-addiu $29, $29, -4
-sw $s6, -12640($30)
-addiu $29, $29, -4
-sw $s7, -12644($30)
-li $t0, 0
-addiu $29, $29, -4
-sw $t0, 4($29)
-addiu $t1, $29, 4
-addiu $29, $29, -4
-sw $t1, 4($29)
-addiu $t2, $29, 4
-lw $t3, -12644($30)
-sw $t3, 0($t2)
-#CHAR * b = "hello" ; 
-
-addiu $t5, $0, 255
-li $t6, 0
-addiu $29, $29, -4
-sw $t6, 4($29)
-addiu $t7, $29, 4
-sw $t5, 0($t7)
-#INT c = 255 ; 
-
-l.s $f0, float...index_9
-mfc1 $t9, $f0
-li $s0, 0
-addiu $29, $29, -4
-sw $s0, 4($29)
-addiu $s1, $29, 4
-sw $t9, 0($s1)
-#FLOAT d = 3.14 ; 
-
-addiu $s3, $0, 99
-li $s4, 0
-addiu $29, $29, -4
-sw $s4, 4($29)
-addiu $s5, $29, 4
-sb $s3, 0($s5)
-#CHAR e = 'c' ; 
-
-la $s6, str13
-addiu $s7, $0, 3
-addiu $29, $29, -4
-sw $t0, -12668($30)
-addiu $29, $29, -4
-sw $t1, -12672($30)
-addiu $29, $29, -4
-sw $t2, -12676($30)
-sw $t3, -12644($30)
-addiu $29, $29, -4
-sw $t4, -12680($30)
-addiu $29, $29, -4
-sw $t5, -12684($30)
-addiu $29, $29, -4
-sw $t6, -12688($30)
-addiu $29, $29, -4
-sw $t7, -12692($30)
-addiu $29, $29, -4
-sw $t8, -12696($30)
-addiu $29, $29, -4
-sw $t9, -12700($30)
-addiu $29, $29, -4
-sw $s0, -12704($30)
-addiu $29, $29, -4
-sw $s1, -12708($30)
-addiu $29, $29, -4
-sw $s2, -12712($30)
-addiu $29, $29, -4
-sw $s3, -12716($30)
-addiu $29, $29, -4
-sw $s4, -12720($30)
-addiu $29, $29, -4
-sw $s5, -12724($30)
-addiu $29, $29, -4
-sw $s6, -12728($30)
-addiu $29, $29, -4
-sw $s7, -12732($30)
-la $t0, str12
-addiu $t1, $0, 255
-l.s $f0, float...index_10
-mfc1 $t2, $f0
-addiu $t3, $0, 99
-addiu $29, $29, -4
-sw $t4, -12736($30)
-addiu $29, $29, -4
-sw $t5, -12740($30)
-addiu $29, $29, -4
-sw $t6, -12744($30)
-addiu $29, $29, -4
-sw $t7, -12748($30)
-addiu $29, $29, -4
-sw $t8, -12752($30)
-addiu $29, $29, -4
-sw $t9, -12756($30)
-addiu $29, $29, -4
-sw $s0, -12760($30)
-addiu $29, $29, -4
-sw $s1, -12764($30)
-addiu $29, $29, -4
-sw $s2, -12768($30)
-addiu $29, $29, -4
-sw $s3, -12772($30)
-addiu $29, $29, -4
-sw $s4, -12776($30)
-addiu $29, $29, -4
-sw $s5, -12780($30)
-addiu $29, $29, -4
-sw $s6, -12784($30)
-addiu $29, $29, -4
-sw $s7, -12788($30)
-lw $t4, -12728($30)
-lw $t5, -12732($30)
-addiu $29, $29, -24
-sw $t4, 4($29)
-sw $t5, 8($29)
-sw $t0, 12($29)
-sw $t1, 16($29)
-sw $t2, 20($29)
-sw $t3, 24($29)
-jal function_printf
-lw $t4, 4($29)
-lw $t5, 8($29)
-lw $t0, 12($29)
-lw $t1, 16($29)
-lw $t2, 20($29)
-lw $t3, 24($29)
-addiu $29, $29, 24
-move $t6, $v0
-#printf ( " %d \n %s \n %x \n %f \n %c" , a , b , c , d , e ) ; 
-
-addiu $t7, $0, 0
-move $v0, $t7
-j function_main_load
-#return 0 ; 
-
-
-L288:
-addiu $t9, $0, 10
-li $s0, 0
-addiu $29, $29, -4
-sw $s0, 4($29)
-addiu $s1, $29, 4
-sw $t9, 0($s1)
-# INT main ( ) { INT a = 10 ; 
-
-addiu $s3, $0, 10
-li $s4, 0
-addiu $29, $29, -4
-sw $s4, 4($29)
-addiu $s5, $29, 4
-sb $s3, 0($s5)
-#CHAR c = ( CHAR ) a ; 
-
-l.s $f0, float...index_11
-mfc1 $s7, $f0
-addiu $29, $29, -4
-sw $t0, -12800($30)
-addiu $29, $29, -4
-sw $t1, -12804($30)
-addiu $29, $29, -4
-sw $t2, -12808($30)
-addiu $29, $29, -4
-sw $t3, -12812($30)
-sw $t4, -12728($30)
-sw $t5, -12732($30)
-addiu $29, $29, -4
-sw $t6, -12816($30)
-addiu $29, $29, -4
-sw $t7, -12820($30)
-addiu $29, $29, -4
-sw $t8, -12824($30)
-addiu $29, $29, -4
-sw $t9, -12828($30)
-addiu $29, $29, -4
-sw $s0, -12832($30)
-addiu $29, $29, -4
-sw $s1, -12836($30)
-addiu $29, $29, -4
-sw $s2, -12840($30)
-addiu $29, $29, -4
-sw $s3, -12844($30)
-addiu $29, $29, -4
-sw $s4, -12848($30)
-addiu $29, $29, -4
-sw $s5, -12852($30)
-addiu $29, $29, -4
-sw $s6, -12856($30)
-addiu $29, $29, -4
-sw $s7, -12860($30)
-li $t0, 0
-addiu $29, $29, -4
-sw $t0, 4($29)
-addiu $t1, $29, 4
-lw $t2, -12860($30)
-sw $t2, 0($t1)
-#FLOAT b = ( FLOAT ) c ; 
-
-#FLOAT * d = ( FLOAT * ) c ; 
-
-lw $t4, -12852($30)
-lb $t5, 0($t4)
-li $t6, 0
-addiu $29, $29, -4
-sw $t6, 4($29)
-addiu $t7, $29, 4
-addiu $29, $29, -4
-sw $t7, 4($29)
-addiu $t8, $29, 4
-sw $t5, 0($t8)
-addiu $t9, $0, 0
-move $v0, $t9
-j function_main_load
-#return 0 ; 
-
-
-L289:
-addiu $29, $29, -4
-sw $t0, -12876($30)
-addiu $29, $29, -4
-sw $t1, -12880($30)
-sw $t2, -12860($30)
-addiu $29, $29, -4
-sw $t3, -12884($30)
-sw $t4, -12852($30)
-addiu $29, $29, -4
-sw $t5, -12888($30)
-addiu $29, $29, -4
-sw $t6, -12892($30)
-addiu $29, $29, -4
-sw $t7, -12896($30)
-addiu $29, $29, -4
-sw $t8, -12900($30)
-addiu $29, $29, -4
-sw $t9, -12904($30)
+L9:
+addiu $t0, $sp, 0
+move $v0, $t0
+addiu $29, $29, -4
+sw $t0, -100($30)
 addiu $t1, $0, 1
 li $t2, 0
 addiu $29, $29, -4
@@ -10674,224 +635,1909 @@ sltiu $s3, $s2, 1
 sltiu $s4, $s3, 1
 move $v0, $s4
 addiu $29, $29, -4
-sw $t0, -12916($30)
+sw $t0, -112($30)
 addiu $29, $29, -4
-sw $t1, -12920($30)
+sw $t1, -116($30)
 addiu $29, $29, -4
-sw $t2, -12924($30)
+sw $t2, -120($30)
 addiu $29, $29, -4
-sw $t3, -12928($30)
+sw $t3, -124($30)
 addiu $29, $29, -4
-sw $t4, -12932($30)
+sw $t4, -128($30)
 addiu $29, $29, -4
-sw $t5, -12936($30)
+sw $t5, -132($30)
 addiu $29, $29, -4
-sw $t6, -12940($30)
+sw $t6, -136($30)
 addiu $29, $29, -4
-sw $t7, -12944($30)
+sw $t7, -140($30)
 addiu $29, $29, -4
-sw $t8, -12948($30)
+sw $t8, -144($30)
 addiu $29, $29, -4
-sw $t9, -12952($30)
+sw $t9, -148($30)
 addiu $29, $29, -4
-sw $s0, -12956($30)
+sw $s0, -152($30)
 addiu $29, $29, -4
-sw $s1, -12960($30)
+sw $s1, -156($30)
 addiu $29, $29, -4
-sw $s2, -12964($30)
+sw $s2, -160($30)
 addiu $29, $29, -4
-sw $s3, -12968($30)
+sw $s3, -164($30)
 addiu $29, $29, -4
-sw $s4, -12972($30)
+sw $s4, -168($30)
 
-L290:
+L10:
+addiu $t0, $sp, 0
+addiu $t2, $0, 0
+li $t3, 0
+addiu $29, $29, -4
+sw $t3, 4($29)
+addiu $t4, $29, 4
+sw $t2, 0($t4)
+#INT x = 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -176($30)
+addiu $29, $29, -4
+sw $t1, -180($30)
+addiu $29, $29, -4
+sw $t2, -184($30)
+addiu $29, $29, -4
+sw $t3, -188($30)
+addiu $29, $29, -4
+sw $t4, -192($30)
+
+L11:
+addiu $t0, $sp, 0
+addiu $t2, $0, 1
+li $t3, 0
+addiu $29, $29, -4
+sw $t3, 4($29)
+addiu $t4, $29, 4
+sw $t2, 0($t4)
+#} else { INT x = 1 ; 
+
+addiu $29, $29, -4
+sw $t0, -176($30)
+addiu $29, $29, -4
+sw $t1, -180($30)
+addiu $29, $29, -4
+sw $t2, -184($30)
+addiu $29, $29, -4
+sw $t3, -188($30)
+addiu $29, $29, -4
+sw $t4, -192($30)
+
+L12:
+addiu $t0, $sp, 0
+lw $t1, -140($30)
+lw $t2, 0($t1)
+#}  if ( 0 ) { INT y = 0 ; } else if ( ! b ) { 
+
+sltiu $t3, $t2, 1
+addiu $t5, $0, 1
+li $t6, 0
+addiu $29, $29, -4
+sw $t6, 4($29)
+addiu $t7, $29, 4
+sw $t5, 0($t7)
+#INT y = 1 ; 
+
+addiu $t8, $0, 0
+move $v0, $t8
+j function_main_load
+#}  return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -200($30)
+sw $t1, -140($30)
+addiu $29, $29, -4
+sw $t2, -204($30)
+addiu $29, $29, -4
+sw $t3, -208($30)
+addiu $29, $29, -4
+sw $t4, -212($30)
+addiu $29, $29, -4
+sw $t5, -216($30)
+addiu $29, $29, -4
+sw $t6, -220($30)
+addiu $29, $29, -4
+sw $t7, -224($30)
+addiu $29, $29, -4
+sw $t8, -228($30)
+
+L13:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
 addiu $t1, $0, 0
 li $t2, 0
 addiu $29, $29, -4
 sw $t2, 4($29)
 addiu $t3, $29, 4
 sw $t1, 0($t3)
-#INT x = 0 ; 
+#   INT main ( ) { INT a = 0 ; 
+
+li $t5, 0
+addiu $29, $29, -4
+sw $t5, 4($29)
+addiu $t6, $29, 4
+#INT i ; 
+
+addiu $t7, $0, 0
+sw $t7, 0($t6)
+#for ( i = 0 ; i < 5 ; i ++ ) { 
 
 addiu $29, $29, -4
-sw $t0, -12980($30)
+sw $t0, -112($30)
 addiu $29, $29, -4
-sw $t1, -12984($30)
+sw $t1, -116($30)
 addiu $29, $29, -4
-sw $t2, -12988($30)
+sw $t2, -120($30)
 addiu $29, $29, -4
-sw $t3, -12992($30)
+sw $t3, -124($30)
+addiu $29, $29, -4
+sw $t4, -128($30)
+addiu $29, $29, -4
+sw $t5, -132($30)
+addiu $29, $29, -4
+sw $t6, -136($30)
+addiu $29, $29, -4
+sw $t7, -140($30)
 
-L291:
+L14:
+addiu $t0, $sp, 0
+lw $t1, -136($30)
+lw $t2, 0($t1)
+addiu $t3, $0, 5
+slt $t4, $t2, $t3
+move $v0, $t4
+addiu $29, $29, -4
+sw $t0, -144($30)
+sw $t1, -136($30)
+addiu $29, $29, -4
+sw $t2, -148($30)
+addiu $29, $29, -4
+sw $t3, -152($30)
+addiu $29, $29, -4
+sw $t4, -156($30)
+
+L15:
+addiu $t0, $sp, 0
+lw $t2, -136($30)
+lw $t3, 0($t2)
+#INT b = i ; 
+
+li $t4, 0
+addiu $29, $29, -4
+sw $t4, 4($29)
+addiu $t5, $29, 4
+sw $t3, 0($t5)
+lw $t6, 0($t2)
+addi $t7, $t6, 1
+sw $t7, 0($t2)
+addiu $29, $29, -4
+sw $t0, -164($30)
+addiu $29, $29, -4
+sw $t1, -168($30)
+sw $t2, -136($30)
+addiu $29, $29, -4
+sw $t3, -172($30)
+addiu $29, $29, -4
+sw $t4, -176($30)
+addiu $29, $29, -4
+sw $t5, -180($30)
+addiu $29, $29, -4
+sw $t6, -184($30)
+addiu $29, $29, -4
+sw $t7, -188($30)
+
+L16:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -160($30)
+
+L17:
+addiu $t0, $sp, 0
+#}  while ( a < 2 ) { 
+
+lw $t1, -124($30)
+lw $t2, 0($t1)
+addiu $t3, $0, 2
+slt $t4, $t2, $t3
+move $v0, $t4
+addiu $29, $29, -4
+sw $t0, -164($30)
+sw $t1, -124($30)
+addiu $29, $29, -4
+sw $t2, -168($30)
+addiu $29, $29, -4
+sw $t3, -172($30)
+addiu $29, $29, -4
+sw $t4, -176($30)
+
+L18:
+addiu $t0, $sp, 0
+lw $t1, -124($30)
+lw $t2, 0($t1)
+#a ++ ; 
+
+addi $t3, $t2, 1
+sw $t3, 0($t1)
+addiu $29, $29, -4
+sw $t0, -180($30)
+sw $t1, -124($30)
+addiu $29, $29, -4
+sw $t2, -184($30)
+addiu $29, $29, -4
+sw $t3, -188($30)
+
+L19:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -180($30)
+
+L20:
+addiu $t0, $sp, 0
+#continue ; } while ( 1 ) { 
+
+addiu $t1, $0, 1
+addiu $29, $29, -4
+sw $t0, -184($30)
+addiu $29, $29, -4
+sw $t1, -188($30)
+
+L21:
+addiu $t0, $sp, 0
+#break ; 
+
+addiu $29, $29, -4
+sw $t0, -192($30)
+
+L22:
+addiu $t0, $sp, 0
+addiu $t1, $0, 0
+move $v0, $t1
+j function_main_load
+#} return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -196($30)
+addiu $29, $29, -4
+sw $t1, -200($30)
+
+L23:
+addiu $t0, $sp, 0
+move $v0, $t0
+addiu $29, $29, -4
+sw $t0, -100($30)
 addiu $t1, $0, 1
 li $t2, 0
 addiu $29, $29, -4
 sw $t2, 4($29)
 addiu $t3, $29, 4
 sw $t1, 0($t3)
-#} else { INT x = 1 ; 
+# INT main ( ) { INT x = 1 ; 
 
-addiu $29, $29, -4
-sw $t0, -13000($30)
-addiu $29, $29, -4
-sw $t1, -13004($30)
-addiu $29, $29, -4
-sw $t2, -13008($30)
-addiu $29, $29, -4
-sw $t3, -13012($30)
-
-L292:
-lw $t0, -12944($30)
-lw $t1, 0($t0)
-#}  if ( 0 ) { INT y = 0 ; } else if ( ! b ) { 
-
-sltiu $t2, $t1, 1
-addiu $t4, $0, 1
-li $t5, 0
-addiu $29, $29, -4
-sw $t5, 4($29)
-addiu $t6, $29, 4
-sw $t4, 0($t6)
-#INT y = 1 ; 
-
-addiu $t7, $0, 0
-move $v0, $t7
-j function_main_load
-#}  return 0 ; 
-
-
-L293:
-li $t9, 0
-addiu $29, $29, -12
-sw $t9, 4($29)
-sw $t9, 8($29)
-addiu $s0, $29, 4
-addiu $29, $29, -4
-sw $s0, 4($29)
-addiu $s1, $29, 4
-# struct kaas { INT melk ; INT fermtented ; } ;  INT main ( ) { struct kaas ementaler ; 
-
-addiu $s2, $0, 0
-lw $s3, 0($s1)
-li $s4, 0
-addu $s5, $s3, $s4
-#ementaler . melk = 1 ; 
-
-addiu $s6, $0, 1
-sw $s6, 0($s5)
-addiu $s7, $0, 1
-sw $t0, -12944($30)
-addiu $29, $29, -4
-sw $t1, -13036($30)
-addiu $29, $29, -4
-sw $t2, -13040($30)
-addiu $29, $29, -4
-sw $t3, -13044($30)
-addiu $29, $29, -4
-sw $t4, -13048($30)
-addiu $29, $29, -4
-sw $t5, -13052($30)
-addiu $29, $29, -4
-sw $t6, -13056($30)
-addiu $29, $29, -4
-sw $t7, -13060($30)
-addiu $29, $29, -4
-sw $t8, -13064($30)
-addiu $29, $29, -4
-sw $t9, -13068($30)
-addiu $29, $29, -4
-sw $s0, -13072($30)
-addiu $29, $29, -4
-sw $s1, -13076($30)
-addiu $29, $29, -4
-sw $s2, -13080($30)
-addiu $29, $29, -4
-sw $s3, -13084($30)
-addiu $29, $29, -4
-sw $s4, -13088($30)
-addiu $29, $29, -4
-sw $s5, -13092($30)
-addiu $29, $29, -4
-sw $s6, -13096($30)
-addiu $29, $29, -4
-sw $s7, -13100($30)
-lw $t1, -13076($30)
-lw $t0, 0($t1)
-li $t2, 4
-addu $t3, $t0, $t2
-#ementaler . fermtented = 18 ; 
-
-addiu $t4, $0, 18
-sw $t4, 0($t3)
+addiu $t5, $0, 2
 li $t6, 0
-addiu $29, $29, -12
+addiu $29, $29, -4
 sw $t6, 4($29)
-sw $t6, 8($29)
+addiu $t7, $29, 4
+sw $t5, 0($t7)
+#INT y = 2 ; 
+
+lw $t8, 0($t3)
+#if ( x == y ) 
+
+lw $t9, 0($t7)
+xor $s0, $t8, $t9
+sltiu $s1, $s0, 1
+move $v0, $s1
+addiu $29, $29, -4
+sw $t0, -112($30)
+addiu $29, $29, -4
+sw $t1, -116($30)
+addiu $29, $29, -4
+sw $t2, -120($30)
+addiu $29, $29, -4
+sw $t3, -124($30)
+addiu $29, $29, -4
+sw $t4, -128($30)
+addiu $29, $29, -4
+sw $t5, -132($30)
+addiu $29, $29, -4
+sw $t6, -136($30)
+addiu $29, $29, -4
+sw $t7, -140($30)
+addiu $29, $29, -4
+sw $t8, -144($30)
+addiu $29, $29, -4
+sw $t9, -148($30)
+addiu $29, $29, -4
+sw $s0, -152($30)
+addiu $29, $29, -4
+sw $s1, -156($30)
+
+L24:
+addiu $t0, $sp, 0
+li $t2, 0
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+#{ CHAR z ; 
+
+addiu $29, $29, -4
+sw $t0, -164($30)
+addiu $29, $29, -4
+sw $t1, -168($30)
+addiu $29, $29, -4
+sw $t2, -172($30)
+addiu $29, $29, -4
+sw $t3, -176($30)
+
+L25:
+addiu $t0, $sp, 0
+li $t2, 0
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+#} else { INT z ; 
+
+addiu $29, $29, -4
+sw $t0, -164($30)
+addiu $29, $29, -4
+sw $t1, -168($30)
+addiu $29, $29, -4
+sw $t2, -172($30)
+addiu $29, $29, -4
+sw $t3, -176($30)
+
+L26:
+addiu $t0, $sp, 0
+addiu $t1, $0, 0
+move $v0, $t1
+j function_main_load
+#} return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -180($30)
+addiu $29, $29, -4
+sw $t1, -184($30)
+
+L27:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+addiu $29, $29, -4
+sw $t0, -104($30)
+addiu $29, $29, -4
+sw $t1, -108($30)
+addiu $29, $29, -4
+sw $t2, -112($30)
+addiu $29, $29, -4
+sw $t3, -116($30)
+addiu $29, $29, -4
+sw $t4, -120($30)
+addiu $29, $29, -4
+sw $t5, -124($30)
+addiu $29, $29, -4
+sw $t6, -128($30)
+addiu $29, $29, -4
+sw $t7, -132($30)
+addiu $29, $29, -4
+sw $t8, -136($30)
+addiu $29, $29, -4
+sw $t9, -140($30)
+addiu $29, $29, -4
+sw $s0, -144($30)
+addiu $29, $29, -4
+sw $s1, -148($30)
+addiu $29, $29, -4
+sw $s2, -152($30)
+addiu $29, $29, -4
+sw $s3, -156($30)
+addiu $29, $29, -4
+sw $s4, -160($30)
+addiu $29, $29, -4
+sw $s5, -164($30)
+addiu $29, $29, -4
+sw $s6, -168($30)
+addiu $29, $29, -4
+sw $s7, -172($30)
+addiu $t0, $0, 50
+#   INT main ( ) { CHAR * buf = calloc ( 50 , sizeof ( CHAR ) ) ; 
+
+addiu $t1, $0, 1
+addiu $29, $29, -8
+sw $t0, 4($29)
+sw $t1, 8($29)
+jal function_calloc
+lw $t0, 4($29)
+lw $t1, 8($29)
+addiu $29, $29, 8
+move $t2, $v0
+li $t3, 0
+addiu $29, $29, -4
+sw $t3, 4($29)
+addiu $t4, $29, 4
+addiu $29, $29, -4
+sw $t4, 4($29)
+addiu $t5, $29, 4
+sw $t2, 0($t5)
+addiu $29, $29, -4
+sw $t0, -184($30)
+addiu $29, $29, -4
+sw $t1, -188($30)
+addiu $29, $29, -4
+sw $t2, -192($30)
+addiu $29, $29, -4
+sw $t3, -196($30)
+addiu $29, $29, -4
+sw $t4, -200($30)
+addiu $29, $29, -4
+sw $t5, -204($30)
+addiu $29, $29, -4
+sw $t6, -208($30)
+addiu $29, $29, -4
+sw $t7, -212($30)
+addiu $29, $29, -4
+sw $t8, -216($30)
+addiu $29, $29, -4
+sw $t9, -220($30)
+addiu $29, $29, -4
+sw $s0, -224($30)
+addiu $29, $29, -4
+sw $s1, -228($30)
+addiu $29, $29, -4
+sw $s2, -232($30)
+addiu $29, $29, -4
+sw $s3, -236($30)
+addiu $29, $29, -4
+sw $s4, -240($30)
+addiu $29, $29, -4
+sw $s5, -244($30)
+addiu $29, $29, -4
+sw $s6, -248($30)
+addiu $29, $29, -4
+sw $s7, -252($30)
+la $t0, str0
+# FILE * fp = fopen ( "../includes/io.txt" , "r" ) ; 
+
+la $t1, str1
+addiu $29, $29, -8
+sw $t0, 4($29)
+sw $t1, 8($29)
+jal function_fopen
+lw $t0, 4($29)
+lw $t1, 8($29)
+addiu $29, $29, 8
+move $t2, $v0
+li $t3, 0
+addiu $29, $29, -4
+sw $t3, 4($29)
+addiu $t4, $29, 4
+addiu $29, $29, -4
+sw $t3, 4($29)
+addiu $t5, $29, 4
+addiu $29, $29, -20
+sw $t4, 4($29)
+sw $t5, 8($29)
+addiu $t6, $29, 4
+addiu $29, $29, -4
+sw $t6, 4($29)
 addiu $t7, $29, 4
 addiu $29, $29, -4
 sw $t7, 4($29)
 addiu $t8, $29, 4
-# struct kaas gouda ; 
+sw $t2, 0($t8)
+addiu $29, $29, -4
+sw $t0, -292($30)
+addiu $29, $29, -4
+sw $t1, -296($30)
+addiu $29, $29, -4
+sw $t2, -300($30)
+addiu $29, $29, -4
+sw $t3, -304($30)
+addiu $29, $29, -4
+sw $t4, -308($30)
+addiu $29, $29, -4
+sw $t5, -312($30)
+addiu $29, $29, -4
+sw $t6, -316($30)
+addiu $29, $29, -4
+sw $t7, -320($30)
+addiu $29, $29, -4
+sw $t8, -324($30)
+addiu $29, $29, -4
+sw $t9, -328($30)
+addiu $29, $29, -4
+sw $s0, -332($30)
+addiu $29, $29, -4
+sw $s1, -336($30)
+addiu $29, $29, -4
+sw $s2, -340($30)
+addiu $29, $29, -4
+sw $s3, -344($30)
+addiu $29, $29, -4
+sw $s4, -348($30)
+addiu $29, $29, -4
+sw $s5, -352($30)
+addiu $29, $29, -4
+sw $s6, -356($30)
+addiu $29, $29, -4
+sw $s7, -360($30)
+lw $t0, -204($30)
+lw $t1, 0($t0)
+# fgets ( buf , 50 , fp ) ; 
 
-addiu $t9, $0, 0
-lw $s0, 0($t8)
-li $s1, 0
-addu $s2, $s0, $s1
-#gouda . melk = 7 ; 
+addiu $t2, $0, 50
+lw $t3, -324($30)
+lw $t4, 0($t3)
+addiu $29, $29, -12
+sw $t1, 4($29)
+sw $t2, 8($29)
+sw $t4, 12($29)
+jal function_fgets
+lw $t1, 4($29)
+lw $t2, 8($29)
+lw $t4, 12($29)
+addiu $29, $29, 12
+move $t5, $v0
+la $t6, str0
+# fp = fopen ( "../includes/io.txt" , "w" ) ; 
 
-addiu $s3, $0, 7
-sw $s3, 0($s2)
-addiu $s4, $0, 1
-lw $s5, 0($t8)
-li $s6, 4
-addu $s7, $s5, $s6
-#gouda . fermtented = 9 ; 
+la $t7, str2
+addiu $29, $29, -8
+sw $t6, 4($29)
+sw $t7, 8($29)
+jal function_fopen
+lw $t6, 4($29)
+lw $t7, 8($29)
+addiu $29, $29, 8
+move $t8, $v0
+sw $t8, 0($t3)
+sw $t0, -204($30)
+addiu $29, $29, -4
+sw $t1, -364($30)
+addiu $29, $29, -4
+sw $t2, -368($30)
+sw $t3, -324($30)
+addiu $29, $29, -4
+sw $t4, -372($30)
+addiu $29, $29, -4
+sw $t5, -376($30)
+addiu $29, $29, -4
+sw $t6, -380($30)
+addiu $29, $29, -4
+sw $t7, -384($30)
+addiu $29, $29, -4
+sw $t8, -388($30)
+addiu $29, $29, -4
+sw $t9, -392($30)
+addiu $29, $29, -4
+sw $s0, -396($30)
+addiu $29, $29, -4
+sw $s1, -400($30)
+addiu $29, $29, -4
+sw $s2, -404($30)
+addiu $29, $29, -4
+sw $s3, -408($30)
+addiu $29, $29, -4
+sw $s4, -412($30)
+addiu $29, $29, -4
+sw $s5, -416($30)
+addiu $29, $29, -4
+sw $s6, -420($30)
+addiu $29, $29, -4
+sw $s7, -424($30)
+lw $t1, -204($30)
+lw $t0, 0($t1)
+# fputs ( buf , fp ) ; 
+
+lw $t2, -324($30)
+lw $t3, 0($t2)
+addiu $29, $29, -8
+sw $t0, 4($29)
+sw $t3, 8($29)
+jal function_fputs
+lw $t0, 4($29)
+lw $t3, 8($29)
+addiu $29, $29, 8
+move $t4, $v0
+addiu $29, $29, -4
+sw $t0, -428($30)
+sw $t1, -204($30)
+sw $t2, -324($30)
+addiu $29, $29, -4
+sw $t3, -432($30)
+addiu $29, $29, -4
+sw $t4, -436($30)
+addiu $29, $29, -4
+sw $t5, -440($30)
+addiu $29, $29, -4
+sw $t6, -444($30)
+addiu $29, $29, -4
+sw $t7, -448($30)
+addiu $29, $29, -4
+sw $t8, -452($30)
+addiu $29, $29, -4
+sw $t9, -456($30)
+addiu $29, $29, -4
+sw $s0, -460($30)
+addiu $29, $29, -4
+sw $s1, -464($30)
+addiu $29, $29, -4
+sw $s2, -468($30)
+addiu $29, $29, -4
+sw $s3, -472($30)
+addiu $29, $29, -4
+sw $s4, -476($30)
+addiu $29, $29, -4
+sw $s5, -480($30)
+addiu $29, $29, -4
+sw $s6, -484($30)
+addiu $29, $29, -4
+sw $s7, -488($30)
+lw $t1, -324($30)
+lw $t0, 0($t1)
+# fclose ( fp ) ; 
 
 addiu $29, $29, -4
-sw $t0, -13120($30)
-sw $t1, -13076($30)
-addiu $29, $29, -4
-sw $t2, -13124($30)
-addiu $29, $29, -4
-sw $t3, -13128($30)
-addiu $29, $29, -4
-sw $t4, -13132($30)
-addiu $29, $29, -4
-sw $t5, -13136($30)
-addiu $29, $29, -4
-sw $t6, -13140($30)
-addiu $29, $29, -4
-sw $t7, -13144($30)
-addiu $29, $29, -4
-sw $t8, -13148($30)
-addiu $29, $29, -4
-sw $t9, -13152($30)
-addiu $29, $29, -4
-sw $s0, -13156($30)
-addiu $29, $29, -4
-sw $s1, -13160($30)
-addiu $29, $29, -4
-sw $s2, -13164($30)
-addiu $29, $29, -4
-sw $s3, -13168($30)
-addiu $29, $29, -4
-sw $s4, -13172($30)
-addiu $29, $29, -4
-sw $s5, -13176($30)
-addiu $29, $29, -4
-sw $s6, -13180($30)
-addiu $29, $29, -4
-sw $s7, -13184($30)
-addiu $t0, $0, 9
-lw $t1, -13184($30)
-sw $t0, 0($t1)
-addiu $t2, $0, 0
-move $v0, $t2
+sw $t0, 4($29)
+jal function_fclose
+lw $t0, 4($29)
+addiu $29, $29, 4
+move $t2, $v0
+addiu $t3, $0, 0
+move $v0, $t3
 j function_main_load
 # return 0 ; 
 
+addiu $29, $29, -4
+sw $t0, -492($30)
+sw $t1, -324($30)
+addiu $29, $29, -4
+sw $t2, -496($30)
+addiu $29, $29, -4
+sw $t3, -500($30)
+
+L44:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+li $t1, 0
+addiu $29, $29, -20
+sw $t1, 4($29)
+sw $t1, 8($29)
+sw $t1, 12($29)
+sw $t1, 16($29)
+sw $t1, 20($29)
+addiu $t2, $29, 4
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+#   INT main ( ) { INT c [ 5 ] = { 1 , 2 , 3 , 4 , 5 } ; 
+
+addiu $t4, $0, 4
+lw $t5, 0($t3)
+li $t6, 4
+mul $t7, $t4, $t6
+addu $t8, $t5, $t7
+addiu $t9, $0, 5
+sw $t9, 0($t8)
+addiu $s0, $0, 3
+lw $s1, 0($t3)
+li $s2, 4
+mul $s3, $s0, $s2
+addu $s4, $s1, $s3
+addiu $s5, $0, 4
+sw $s5, 0($s4)
+addiu $s6, $0, 2
+lw $s7, 0($t3)
+addiu $29, $29, -4
+sw $t0, -128($30)
+addiu $29, $29, -4
+sw $t1, -132($30)
+addiu $29, $29, -4
+sw $t2, -136($30)
+addiu $29, $29, -4
+sw $t3, -140($30)
+addiu $29, $29, -4
+sw $t4, -144($30)
+addiu $29, $29, -4
+sw $t5, -148($30)
+addiu $29, $29, -4
+sw $t6, -152($30)
+addiu $29, $29, -4
+sw $t7, -156($30)
+addiu $29, $29, -4
+sw $t8, -160($30)
+addiu $29, $29, -4
+sw $t9, -164($30)
+addiu $29, $29, -4
+sw $s0, -168($30)
+addiu $29, $29, -4
+sw $s1, -172($30)
+addiu $29, $29, -4
+sw $s2, -176($30)
+addiu $29, $29, -4
+sw $s3, -180($30)
+addiu $29, $29, -4
+sw $s4, -184($30)
+addiu $29, $29, -4
+sw $s5, -188($30)
+addiu $29, $29, -4
+sw $s6, -192($30)
+addiu $29, $29, -4
+sw $s7, -196($30)
+li $t0, 4
+lw $t2, -192($30)
+mul $t1, $t2, $t0
+lw $t4, -196($30)
+addu $t3, $t4, $t1
+addiu $t5, $0, 3
+sw $t5, 0($t3)
+addiu $t6, $0, 1
+lw $t8, -140($30)
+lw $t7, 0($t8)
+li $t9, 4
+mul $s0, $t6, $t9
+addu $s1, $t7, $s0
+addiu $s2, $0, 2
+sw $s2, 0($s1)
+addiu $s3, $0, 0
+lw $s4, 0($t8)
+li $s5, 4
+mul $s6, $s3, $s5
+addu $s7, $s4, $s6
+addiu $29, $29, -4
+sw $t0, -200($30)
+addiu $29, $29, -4
+sw $t1, -204($30)
+sw $t2, -192($30)
+addiu $29, $29, -4
+sw $t3, -208($30)
+sw $t4, -196($30)
+addiu $29, $29, -4
+sw $t5, -212($30)
+addiu $29, $29, -4
+sw $t6, -216($30)
+addiu $29, $29, -4
+sw $t7, -220($30)
+sw $t8, -140($30)
+addiu $29, $29, -4
+sw $t9, -224($30)
+addiu $29, $29, -4
+sw $s0, -228($30)
+addiu $29, $29, -4
+sw $s1, -232($30)
+addiu $29, $29, -4
+sw $s2, -236($30)
+addiu $29, $29, -4
+sw $s3, -240($30)
+addiu $29, $29, -4
+sw $s4, -244($30)
+addiu $29, $29, -4
+sw $s5, -248($30)
+addiu $29, $29, -4
+sw $s6, -252($30)
+addiu $29, $29, -4
+sw $s7, -256($30)
+addiu $t0, $0, 1
+lw $t1, -256($30)
+sw $t0, 0($t1)
+addiu $t2, $0, 1
+lw $t4, -140($30)
+lw $t3, 0($t4)
+li $t5, 4
+mul $t6, $t2, $t5
+addu $t7, $t3, $t6
+#c [ 1 ] = 0 ; 
+
+addiu $t8, $0, 0
+sw $t8, 0($t7)
+addiu $t9, $0, 0
+move $v0, $t9
+j function_main_load
+#return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -260($30)
+sw $t1, -256($30)
+addiu $29, $29, -4
+sw $t2, -264($30)
+addiu $29, $29, -4
+sw $t3, -268($30)
+sw $t4, -140($30)
+addiu $29, $29, -4
+sw $t5, -272($30)
+addiu $29, $29, -4
+sw $t6, -276($30)
+addiu $29, $29, -4
+sw $t7, -280($30)
+addiu $29, $29, -4
+sw $t8, -284($30)
+addiu $29, $29, -4
+sw $t9, -288($30)
+
+L45:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+li $t1, 0
+addiu $29, $29, -4
+sw $t1, 4($29)
+addiu $t2, $29, 4
+#   INT main ( ) { INT x ; 
+
+li $t4, 0
+addiu $29, $29, -4
+sw $t4, 4($29)
+addiu $t5, $29, 4
+#INT y ; 
+
+la $t6, str3
+addiu $29, $29, -4
+sw $t6, 4($29)
+jal function_printf
+lw $t6, 4($29)
+addiu $29, $29, 4
+addiu $29, $29, -4
+sw $t0, -112($30)
+addiu $29, $29, -4
+sw $t1, -116($30)
+addiu $29, $29, -4
+sw $t2, -120($30)
+addiu $29, $29, -4
+sw $t3, -124($30)
+addiu $29, $29, -4
+sw $t4, -128($30)
+addiu $29, $29, -4
+sw $t5, -132($30)
+addiu $29, $29, -4
+sw $t6, -136($30)
+addiu $29, $29, -4
+sw $t7, -140($30)
+addiu $29, $29, -4
+sw $t8, -144($30)
+addiu $29, $29, -4
+sw $t9, -148($30)
+addiu $29, $29, -4
+sw $s0, -152($30)
+addiu $29, $29, -4
+sw $s1, -156($30)
+addiu $29, $29, -4
+sw $s2, -160($30)
+addiu $29, $29, -4
+sw $s3, -164($30)
+addiu $29, $29, -4
+sw $s4, -168($30)
+addiu $29, $29, -4
+sw $s5, -172($30)
+addiu $29, $29, -4
+sw $s6, -176($30)
+addiu $29, $29, -4
+sw $s7, -180($30)
+move $t0, $v0
+#printf ( "Enter two numbers:" ) ; 
+
+la $t1, str4
+addiu $29, $29, -4
+sw $t0, -184($30)
+addiu $29, $29, -4
+sw $t2, -188($30)
+addiu $29, $29, -4
+sw $t3, -192($30)
+addiu $29, $29, -4
+sw $t4, -196($30)
+addiu $29, $29, -4
+sw $t5, -200($30)
+addiu $29, $29, -4
+sw $t6, -204($30)
+addiu $29, $29, -4
+sw $t7, -208($30)
+addiu $29, $29, -4
+sw $t8, -212($30)
+addiu $29, $29, -4
+sw $t9, -216($30)
+addiu $29, $29, -4
+sw $s0, -220($30)
+addiu $29, $29, -4
+sw $s1, -224($30)
+addiu $29, $29, -4
+sw $s2, -228($30)
+addiu $29, $29, -4
+sw $s3, -232($30)
+addiu $29, $29, -4
+sw $s4, -236($30)
+addiu $29, $29, -4
+sw $s5, -240($30)
+addiu $29, $29, -4
+sw $s6, -244($30)
+addiu $29, $29, -4
+sw $s7, -248($30)
+lw $t0, -120($30)
+lw $t2, -132($30)
+addiu $29, $29, -12
+sw $t1, 4($29)
+sw $t0, 8($29)
+sw $t2, 12($29)
+jal function_scanf
+lw $t1, 4($29)
+lw $t0, 8($29)
+lw $t2, 12($29)
+addiu $29, $29, 12
+move $t3, $v0
+#scanf ( "%d%d" , & x , & y ) ; 
+
+la $t4, str5
+lw $t5, 0($t0)
+#printf ( "%d; %d" , x , y ) ; 
+
+lw $t6, 0($t2)
+addiu $29, $29, -12
+sw $t4, 4($29)
+sw $t5, 8($29)
+sw $t6, 12($29)
+jal function_printf
+lw $t4, 4($29)
+lw $t5, 8($29)
+lw $t6, 12($29)
+addiu $29, $29, 12
+move $t7, $v0
+addiu $t8, $0, 0
+move $v0, $t8
+j function_main_load
+#return 0 ; 
+
+sw $t0, -120($30)
+addiu $29, $29, -4
+sw $t1, -252($30)
+sw $t2, -132($30)
+addiu $29, $29, -4
+sw $t3, -256($30)
+addiu $29, $29, -4
+sw $t4, -260($30)
+addiu $29, $29, -4
+sw $t5, -264($30)
+addiu $29, $29, -4
+sw $t6, -268($30)
+addiu $29, $29, -4
+sw $t7, -272($30)
+addiu $29, $29, -4
+sw $t8, -276($30)
+
+L98:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+
+L99:
+addiu $t0, $sp, 0
+# INT main ( ) {  while ( 1 ) { 
+
+addiu $t1, $0, 1
+addiu $29, $29, -4
+sw $t0, -104($30)
+addiu $29, $29, -4
+sw $t1, -108($30)
+
+L100:
+addiu $t0, $sp, 0
+addiu $t2, $0, 0
+li $t3, 0
+addiu $29, $29, -4
+sw $t3, 4($29)
+addiu $t4, $29, 4
+sw $t2, 0($t4)
+#INT a = 0 ; 
+
+lw $t5, 0($t4)
+#if ( a % 2 == 1 ) { 
+
+addiu $t6, $0, 2
+div $t7 $t5 $t6
+mfhi $t7
+addiu $t8, $0, 1
+xor $t9, $t7, $t8
+sltiu $s0, $t9, 1
+move $v0, $s0
+addiu $29, $29, -4
+sw $t0, -116($30)
+addiu $29, $29, -4
+sw $t1, -120($30)
+addiu $29, $29, -4
+sw $t2, -124($30)
+addiu $29, $29, -4
+sw $t3, -128($30)
+addiu $29, $29, -4
+sw $t4, -132($30)
+addiu $29, $29, -4
+sw $t5, -136($30)
+addiu $29, $29, -4
+sw $t6, -140($30)
+addiu $29, $29, -4
+sw $t7, -144($30)
+addiu $29, $29, -4
+sw $t8, -148($30)
+addiu $29, $29, -4
+sw $t9, -152($30)
+addiu $29, $29, -4
+sw $s0, -156($30)
+
+L101:
+addiu $t0, $sp, 0
+#continue ; 
+
+addiu $29, $29, -4
+sw $t0, -160($30)
+
+L102:
+addiu $t0, $sp, 0
+lw $t1, -132($30)
+lw $t2, 0($t1)
+#INT c = 0 ; } if ( a > 10 ) { 
+
+addiu $t3, $0, 10
+sgt $t4, $t2, $t3
+move $v0, $t4
+addiu $29, $29, -4
+sw $t0, -160($30)
+sw $t1, -132($30)
+addiu $29, $29, -4
+sw $t2, -164($30)
+addiu $29, $29, -4
+sw $t3, -168($30)
+addiu $29, $29, -4
+sw $t4, -172($30)
+
+L103:
+addiu $t0, $sp, 0
+#break ; 
+
+addiu $29, $29, -4
+sw $t0, -176($30)
+
+L104:
+addiu $t0, $sp, 0
+lw $t1, -132($30)
+lw $t2, 0($t1)
+#INT g = 0 ; }  a ++ ; 
+
+addi $t3, $t2, 1
+sw $t3, 0($t1)
+addiu $29, $29, -4
+sw $t0, -176($30)
+sw $t1, -132($30)
+addiu $29, $29, -4
+sw $t2, -180($30)
+addiu $29, $29, -4
+sw $t3, -184($30)
+
+L105:
+addiu $t0, $sp, 0
+addiu $t1, $0, 0
+move $v0, $t1
+j function_main_load
+# } return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -180($30)
+addiu $29, $29, -4
+sw $t1, -184($30)
+
+L106:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+li $t1, 0
+addiu $29, $29, -8
+sw $t1, 4($29)
+addiu $t2, $29, 4
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+#   struct cheese { INT milk ; } ;  INT main ( ) { struct cheese gouda ; 
+
+addiu $t4, $0, 0
+lw $t5, 0($t3)
+li $t6, 0
+addu $t7, $t5, $t6
+#gouda . milk = 3 ; 
+
+addiu $t8, $0, 3
+sw $t8, 0($t7)
+# struct cheese * gouda_ptr = ( struct cheese * ) malloc ( sizeof ( struct cheese ) ) ; 
+
+addiu $29, $29, -4
+sw $t0, -116($30)
+addiu $29, $29, -4
+sw $t1, -120($30)
+addiu $29, $29, -4
+sw $t2, -124($30)
+addiu $29, $29, -4
+sw $t3, -128($30)
+addiu $29, $29, -4
+sw $t4, -132($30)
+addiu $29, $29, -4
+sw $t5, -136($30)
+addiu $29, $29, -4
+sw $t6, -140($30)
+addiu $29, $29, -4
+sw $t7, -144($30)
+addiu $29, $29, -4
+sw $t8, -148($30)
+addiu $29, $29, -4
+sw $t9, -152($30)
+addiu $29, $29, -4
+sw $s0, -156($30)
+addiu $29, $29, -4
+sw $s1, -160($30)
+addiu $29, $29, -4
+sw $s2, -164($30)
+addiu $29, $29, -4
+sw $s3, -168($30)
+addiu $29, $29, -4
+sw $s4, -172($30)
+addiu $29, $29, -4
+sw $s5, -176($30)
+addiu $29, $29, -4
+sw $s6, -180($30)
+addiu $29, $29, -4
+sw $s7, -184($30)
+addiu $t0, $0, 4
+addiu $29, $29, -4
+sw $t0, 4($29)
+jal function_malloc
+lw $t0, 4($29)
+addiu $29, $29, 4
+move $t1, $v0
+addiu $t2, $t1, 8
+addiu $29, $29, -8
+addiu $t3, $sp, 4
+sw $t2, 0($t3)
+addiu $29, $29, -4
+sw $t3, 4($sp)
+addiu $t4, $sp, 4
+li $t5, 0
+addiu $29, $29, -8
+sw $t5, 4($29)
+addiu $t6, $29, 4
+addiu $29, $29, -4
+sw $t6, 4($29)
+addiu $t7, $29, 4
+addiu $29, $29, -4
+sw $t7, 4($29)
+addiu $t8, $29, 4
+sw $t4, 0($t8)
+# gouda_ptr = realloc ( gouda_ptr , sizeof ( struct cheese ) * 2 ) ; 
+
+addiu $29, $29, -4
+sw $t0, -216($30)
+addiu $29, $29, -4
+sw $t1, -220($30)
+addiu $29, $29, -4
+sw $t2, -224($30)
+addiu $29, $29, -4
+sw $t3, -228($30)
+addiu $29, $29, -4
+sw $t4, -232($30)
+addiu $29, $29, -4
+sw $t5, -236($30)
+addiu $29, $29, -4
+sw $t6, -240($30)
+addiu $29, $29, -4
+sw $t7, -244($30)
+addiu $29, $29, -4
+sw $t8, -248($30)
+addiu $29, $29, -4
+sw $t9, -252($30)
+addiu $29, $29, -4
+sw $s0, -256($30)
+addiu $29, $29, -4
+sw $s1, -260($30)
+addiu $29, $29, -4
+sw $s2, -264($30)
+addiu $29, $29, -4
+sw $s3, -268($30)
+addiu $29, $29, -4
+sw $s4, -272($30)
+addiu $29, $29, -4
+sw $s5, -276($30)
+addiu $29, $29, -4
+sw $s6, -280($30)
+addiu $29, $29, -4
+sw $s7, -284($30)
+lw $t1, -248($30)
+lw $t0, 0($t1)
+lw $t2, 0($t0)
+addiu $t3, $0, 8
+addiu $29, $29, -8
+sw $t2, 4($29)
+sw $t3, 8($29)
+jal function_realloc
+lw $t2, 4($29)
+lw $t3, 8($29)
+addiu $29, $29, 8
+move $t4, $v0
+addiu $t5, $t4, 8
+addiu $29, $29, -8
+addiu $t6, $sp, 4
+sw $t5, 0($t6)
+addiu $29, $29, -4
+sw $t6, 4($sp)
+addiu $t7, $sp, 4
+sw $t7, 0($t1)
+# free ( gouda_ptr ) ; 
+
+addiu $29, $29, -4
+sw $t0, -300($30)
+sw $t1, -248($30)
+addiu $29, $29, -4
+sw $t2, -304($30)
+addiu $29, $29, -4
+sw $t3, -308($30)
+addiu $29, $29, -4
+sw $t4, -312($30)
+addiu $29, $29, -4
+sw $t5, -316($30)
+addiu $29, $29, -4
+sw $t6, -320($30)
+addiu $29, $29, -4
+sw $t7, -324($30)
+addiu $29, $29, -4
+sw $t8, -328($30)
+addiu $29, $29, -4
+sw $t9, -332($30)
+addiu $29, $29, -4
+sw $s0, -336($30)
+addiu $29, $29, -4
+sw $s1, -340($30)
+addiu $29, $29, -4
+sw $s2, -344($30)
+addiu $29, $29, -4
+sw $s3, -348($30)
+addiu $29, $29, -4
+sw $s4, -352($30)
+addiu $29, $29, -4
+sw $s5, -356($30)
+addiu $29, $29, -4
+sw $s6, -360($30)
+addiu $29, $29, -4
+sw $s7, -364($30)
+lw $t1, -248($30)
+lw $t0, 0($t1)
+lw $t2, 0($t0)
+addiu $29, $29, -4
+sw $t2, 4($29)
+jal function_free
+lw $t2, 4($29)
+addiu $29, $29, 4
+move $t3, $v0
+addiu $29, $29, -4
+sw $t0, -368($30)
+sw $t1, -248($30)
+addiu $29, $29, -4
+sw $t2, -372($30)
+addiu $29, $29, -4
+sw $t3, -376($30)
+addiu $29, $29, -4
+sw $t4, -380($30)
+addiu $29, $29, -4
+sw $t5, -384($30)
+addiu $29, $29, -4
+sw $t6, -388($30)
+addiu $29, $29, -4
+sw $t7, -392($30)
+addiu $29, $29, -4
+sw $t8, -396($30)
+addiu $29, $29, -4
+sw $t9, -400($30)
+addiu $29, $29, -4
+sw $s0, -404($30)
+addiu $29, $29, -4
+sw $s1, -408($30)
+addiu $29, $29, -4
+sw $s2, -412($30)
+addiu $29, $29, -4
+sw $s3, -416($30)
+addiu $29, $29, -4
+sw $s4, -420($30)
+addiu $29, $29, -4
+sw $s5, -424($30)
+addiu $29, $29, -4
+sw $s6, -428($30)
+addiu $29, $29, -4
+sw $s7, -432($30)
+addiu $t0, $0, 2
+# CHAR * z = calloc ( 2 , sizeof ( CHAR ) ) ; 
+
+addiu $t1, $0, 1
+addiu $29, $29, -8
+sw $t0, 4($29)
+sw $t1, 8($29)
+jal function_calloc
+lw $t0, 4($29)
+lw $t1, 8($29)
+addiu $29, $29, 8
+move $t2, $v0
+li $t3, 0
+addiu $29, $29, -4
+sw $t3, 4($29)
+addiu $t4, $29, 4
+addiu $29, $29, -4
+sw $t4, 4($29)
+addiu $t5, $29, 4
+sw $t2, 0($t5)
+addiu $t6, $0, 0
+lw $t7, 0($t5)
+li $t8, 1
+mul $t9, $t6, $t8
+addu $s0, $t7, $t9
+#z [ 0 ] = 'O' ; 
+
+addiu $s1, $0, 79
+sb $s1, 0($s0)
+addiu $s2, $0, 1
+lw $s3, 0($t5)
+li $s4, 1
+mul $s5, $s2, $s4
+addu $s6, $s3, $s5
+#z [ 1 ] = 'Y' ; 
+
+addiu $s7, $0, 89
+sb $s7, 0($s6)
+addiu $29, $29, -4
+sw $t0, -444($30)
+addiu $29, $29, -4
+sw $t1, -448($30)
+addiu $29, $29, -4
+sw $t2, -452($30)
+addiu $29, $29, -4
+sw $t3, -456($30)
+addiu $29, $29, -4
+sw $t4, -460($30)
+addiu $29, $29, -4
+sw $t5, -464($30)
+addiu $29, $29, -4
+sw $t6, -468($30)
+addiu $29, $29, -4
+sw $t7, -472($30)
+addiu $29, $29, -4
+sw $t8, -476($30)
+addiu $29, $29, -4
+sw $t9, -480($30)
+addiu $29, $29, -4
+sw $s0, -484($30)
+addiu $29, $29, -4
+sw $s1, -488($30)
+addiu $29, $29, -4
+sw $s2, -492($30)
+addiu $29, $29, -4
+sw $s3, -496($30)
+addiu $29, $29, -4
+sw $s4, -500($30)
+addiu $29, $29, -4
+sw $s5, -504($30)
+addiu $29, $29, -4
+sw $s6, -508($30)
+addiu $29, $29, -4
+sw $s7, -512($30)
+lw $t1, -464($30)
+lw $t0, 0($t1)
+# free ( z ) ; 
+
+addiu $29, $29, -4
+sw $t0, 4($29)
+jal function_free
+lw $t0, 4($29)
+addiu $29, $29, 4
+move $t2, $v0
+addiu $t3, $0, 0
+move $v0, $t3
+j function_main_load
+# return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -516($30)
+sw $t1, -464($30)
+addiu $29, $29, -4
+sw $t2, -520($30)
+addiu $29, $29, -4
+sw $t3, -524($30)
+
+L116:
+addiu $t0, $sp, 0
+addiu $29, $29, -4
+sw $t0, -100($30)
+li $t1, 0
+addiu $29, $29, -12
+sw $t1, 4($29)
+sw $t1, 8($29)
+addiu $t2, $29, 4
+addiu $29, $29, -4
+sw $t2, 4($29)
+addiu $t3, $29, 4
+# struct kaas { INT melk ; INT fermtented ; } ;  INT main ( ) { struct kaas ementaler ; 
+
+addiu $t4, $0, 0
+lw $t5, 0($t3)
+li $t6, 0
+addu $t7, $t5, $t6
+#ementaler . melk = 1 ; 
+
+addiu $t8, $0, 1
+sw $t8, 0($t7)
+addiu $t9, $0, 1
+lw $s0, 0($t3)
+li $s1, 4
+addu $s2, $s0, $s1
+#ementaler . fermtented = 18 ; 
+
+addiu $s3, $0, 18
+sw $s3, 0($s2)
+li $s5, 0
+addiu $29, $29, -12
+sw $s5, 4($29)
+sw $s5, 8($29)
+addiu $s6, $29, 4
+addiu $29, $29, -4
+sw $s6, 4($29)
+addiu $s7, $29, 4
+# struct kaas gouda ; 
+
+addiu $29, $29, -4
+sw $t0, -136($30)
+addiu $29, $29, -4
+sw $t1, -140($30)
+addiu $29, $29, -4
+sw $t2, -144($30)
+addiu $29, $29, -4
+sw $t3, -148($30)
+addiu $29, $29, -4
+sw $t4, -152($30)
+addiu $29, $29, -4
+sw $t5, -156($30)
+addiu $29, $29, -4
+sw $t6, -160($30)
+addiu $29, $29, -4
+sw $t7, -164($30)
+addiu $29, $29, -4
+sw $t8, -168($30)
+addiu $29, $29, -4
+sw $t9, -172($30)
+addiu $29, $29, -4
+sw $s0, -176($30)
+addiu $29, $29, -4
+sw $s1, -180($30)
+addiu $29, $29, -4
+sw $s2, -184($30)
+addiu $29, $29, -4
+sw $s3, -188($30)
+addiu $29, $29, -4
+sw $s4, -192($30)
+addiu $29, $29, -4
+sw $s5, -196($30)
+addiu $29, $29, -4
+sw $s6, -200($30)
+addiu $29, $29, -4
+sw $s7, -204($30)
+addiu $t0, $0, 0
+lw $t2, -204($30)
+lw $t1, 0($t2)
+li $t3, 0
+addu $t4, $t1, $t3
+#gouda . melk = 7 ; 
+
+addiu $t5, $0, 7
+sw $t5, 0($t4)
+addiu $t6, $0, 1
+lw $t7, 0($t2)
+li $t8, 4
+addu $t9, $t7, $t8
+#gouda . fermtented = 9 ; 
+
+addiu $s0, $0, 9
+sw $s0, 0($t9)
+addiu $s1, $0, 0
+move $v0, $s1
+j function_main_load
+# return 0 ; 
+
+addiu $29, $29, -4
+sw $t0, -208($30)
+addiu $29, $29, -4
+sw $t1, -212($30)
+sw $t2, -204($30)
+addiu $29, $29, -4
+sw $t3, -216($30)
+addiu $29, $29, -4
+sw $t4, -220($30)
+addiu $29, $29, -4
+sw $t5, -224($30)
+addiu $29, $29, -4
+sw $t6, -228($30)
+addiu $29, $29, -4
+sw $t7, -232($30)
+addiu $29, $29, -4
+sw $t8, -236($30)
+addiu $29, $29, -4
+sw $t9, -240($30)
+addiu $29, $29, -4
+sw $s0, -244($30)
+addiu $29, $29, -4
+sw $s1, -248($30)
 
 function_main_load:
+lw $t0, -4($30)
+lw $t1, -8($30)
+lw $t2, -12($30)
+lw $t3, -16($30)
+lw $t4, -20($30)
+lw $t5, -24($30)
+lw $t6, -28($30)
+lw $t7, -32($30)
+lw $t8, -36($30)
+lw $t9, -40($30)
+lw $s0, -44($30)
+lw $s1, -48($30)
+lw $s2, -52($30)
+lw $s3, -56($30)
+lw $s4, -60($30)
+lw $s5, -64($30)
+lw $s6, -68($30)
+lw $s7, -72($30)
+lw $v1, -76($30)
+lw $a0, -80($30)
+lw $a1, -84($30)
+lw $a2, -88($30)
+lw $a3, -92($30)
+lw $ra, -96($30)
+add $29, $30, $0
+lw $30, 0($29)
+jr $ra
+function_calloc:
+sw $30, 0($29)
+add $30, $29, $0
+addiu $29, $29, -100
+sw $t0, -4($30)
+sw $t1, -8($30)
+sw $t2, -12($30)
+sw $t3, -16($30)
+sw $t4, -20($30)
+sw $t5, -24($30)
+sw $t6, -28($30)
+sw $t7, -32($30)
+sw $t8, -36($30)
+sw $t9, -40($30)
+sw $s0, -44($30)
+sw $s1, -48($30)
+sw $s2, -52($30)
+sw $s3, -56($30)
+sw $s4, -60($30)
+sw $s5, -64($30)
+sw $s6, -68($30)
+sw $s7, -72($30)
+sw $v1, -76($30)
+sw $a0, -80($30)
+sw $a1, -84($30)
+sw $a2, -88($30)
+sw $a3, -92($30)
+sw $ra, -96($30)
+L28:
+
+L29:
+lw $t0, 4($30)
+lw $t1, 8($30)
+mul $t2, $t0, $t1
+move $4, $t2
+li $2, 9
+syscall
+j L30
+
+L30:
+addiu $t2, $t2, -1
+addiu $t5, $2, 0
+addu $t6, $t5, $t2
+li $t7, 0
+sb $t7, 0($t6)
+bne $t7, $t2, L30
+
+function_calloc_load:
+lw $t0, -4($30)
+lw $t1, -8($30)
+lw $t2, -12($30)
+lw $t3, -16($30)
+lw $t4, -20($30)
+lw $t5, -24($30)
+lw $t6, -28($30)
+lw $t7, -32($30)
+lw $t8, -36($30)
+lw $t9, -40($30)
+lw $s0, -44($30)
+lw $s1, -48($30)
+lw $s2, -52($30)
+lw $s3, -56($30)
+lw $s4, -60($30)
+lw $s5, -64($30)
+lw $s6, -68($30)
+lw $s7, -72($30)
+lw $v1, -76($30)
+lw $a0, -80($30)
+lw $a1, -84($30)
+lw $a2, -88($30)
+lw $a3, -92($30)
+lw $ra, -96($30)
+add $29, $30, $0
+lw $30, 0($29)
+jr $ra
+function_fopen:
+sw $30, 0($29)
+add $30, $29, $0
+addiu $29, $29, -100
+sw $t0, -4($30)
+sw $t1, -8($30)
+sw $t2, -12($30)
+sw $t3, -16($30)
+sw $t4, -20($30)
+sw $t5, -24($30)
+sw $t6, -28($30)
+sw $t7, -32($30)
+sw $t8, -36($30)
+sw $t9, -40($30)
+sw $s0, -44($30)
+sw $s1, -48($30)
+sw $s2, -52($30)
+sw $s3, -56($30)
+sw $s4, -60($30)
+sw $s5, -64($30)
+sw $s6, -68($30)
+sw $s7, -72($30)
+sw $v1, -76($30)
+sw $a0, -80($30)
+sw $a1, -84($30)
+sw $a2, -88($30)
+sw $a3, -92($30)
+sw $ra, -96($30)
+L31:
+
+L32:
+lw $t0, 4($30)
+lw $t1, 8($30)
+lb $t2, 0($t1)
+li $t3, 114
+beq $t2, $t3, L33
+li $t4, 97
+beq $t2, $t4, L35
+li $t5, 119
+beq $t2, $t5, L34
+
+L33:
+li $t2, 0
+j L36
+
+L34:
+li $t2, 1
+j L36
+
+L35:
+li $t2, 9
+j L36
+
+L36:
+li $6, 0
+move $5, $t2
+move $4, $t0
+li $2, 13
+syscall
+addiu $s1, $2, 0
+move $2, $s1
+
+function_fopen_load:
+lw $t0, -4($30)
+lw $t1, -8($30)
+lw $t2, -12($30)
+lw $t3, -16($30)
+lw $t4, -20($30)
+lw $t5, -24($30)
+lw $t6, -28($30)
+lw $t7, -32($30)
+lw $t8, -36($30)
+lw $t9, -40($30)
+lw $s0, -44($30)
+lw $s1, -48($30)
+lw $s2, -52($30)
+lw $s3, -56($30)
+lw $s4, -60($30)
+lw $s5, -64($30)
+lw $s6, -68($30)
+lw $s7, -72($30)
+lw $v1, -76($30)
+lw $a0, -80($30)
+lw $a1, -84($30)
+lw $a2, -88($30)
+lw $a3, -92($30)
+lw $ra, -96($30)
+add $29, $30, $0
+lw $30, 0($29)
+jr $ra
+function_fgets:
+sw $30, 0($29)
+add $30, $29, $0
+addiu $29, $29, -100
+sw $t0, -4($30)
+sw $t1, -8($30)
+sw $t2, -12($30)
+sw $t3, -16($30)
+sw $t4, -20($30)
+sw $t5, -24($30)
+sw $t6, -28($30)
+sw $t7, -32($30)
+sw $t8, -36($30)
+sw $t9, -40($30)
+sw $s0, -44($30)
+sw $s1, -48($30)
+sw $s2, -52($30)
+sw $s3, -56($30)
+sw $s4, -60($30)
+sw $s5, -64($30)
+sw $s6, -68($30)
+sw $s7, -72($30)
+sw $v1, -76($30)
+sw $a0, -80($30)
+sw $a1, -84($30)
+sw $a2, -88($30)
+sw $a3, -92($30)
+sw $ra, -96($30)
+L37:
+
+L38:
+lw $t0, 4($30)
+lw $t1, 8($30)
+addiu $t1, $t1, -1
+lw $t3, 12($30)
+move $4, $t3
+move $5, $t0
+move $6, $t1
+li $2, 14
+syscall
+
+function_fgets_load:
+lw $t0, -4($30)
+lw $t1, -8($30)
+lw $t2, -12($30)
+lw $t3, -16($30)
+lw $t4, -20($30)
+lw $t5, -24($30)
+lw $t6, -28($30)
+lw $t7, -32($30)
+lw $t8, -36($30)
+lw $t9, -40($30)
+lw $s0, -44($30)
+lw $s1, -48($30)
+lw $s2, -52($30)
+lw $s3, -56($30)
+lw $s4, -60($30)
+lw $s5, -64($30)
+lw $s6, -68($30)
+lw $s7, -72($30)
+lw $v1, -76($30)
+lw $a0, -80($30)
+lw $a1, -84($30)
+lw $a2, -88($30)
+lw $a3, -92($30)
+lw $ra, -96($30)
+add $29, $30, $0
+lw $30, 0($29)
+jr $ra
+function_fputs:
+sw $30, 0($29)
+add $30, $29, $0
+addiu $29, $29, -100
+sw $t0, -4($30)
+sw $t1, -8($30)
+sw $t2, -12($30)
+sw $t3, -16($30)
+sw $t4, -20($30)
+sw $t5, -24($30)
+sw $t6, -28($30)
+sw $t7, -32($30)
+sw $t8, -36($30)
+sw $t9, -40($30)
+sw $s0, -44($30)
+sw $s1, -48($30)
+sw $s2, -52($30)
+sw $s3, -56($30)
+sw $s4, -60($30)
+sw $s5, -64($30)
+sw $s6, -68($30)
+sw $s7, -72($30)
+sw $v1, -76($30)
+sw $a0, -80($30)
+sw $a1, -84($30)
+sw $a2, -88($30)
+sw $a3, -92($30)
+sw $ra, -96($30)
+L39:
+
+L40:
+lw $t0, 4($30)
+li $t1, 0
+lw $t2, 8($30)
+j L41
+
+L41:
+move $4, $t2
+move $5, $t0
+move $6, $t1
+li $2, 15
+syscall
+
+function_fputs_load:
+lw $t0, -4($30)
+lw $t1, -8($30)
+lw $t2, -12($30)
+lw $t3, -16($30)
+lw $t4, -20($30)
+lw $t5, -24($30)
+lw $t6, -28($30)
+lw $t7, -32($30)
+lw $t8, -36($30)
+lw $t9, -40($30)
+lw $s0, -44($30)
+lw $s1, -48($30)
+lw $s2, -52($30)
+lw $s3, -56($30)
+lw $s4, -60($30)
+lw $s5, -64($30)
+lw $s6, -68($30)
+lw $s7, -72($30)
+lw $v1, -76($30)
+lw $a0, -80($30)
+lw $a1, -84($30)
+lw $a2, -88($30)
+lw $a3, -92($30)
+lw $ra, -96($30)
+add $29, $30, $0
+lw $30, 0($29)
+jr $ra
+function_fclose:
+sw $30, 0($29)
+add $30, $29, $0
+addiu $29, $29, -100
+sw $t0, -4($30)
+sw $t1, -8($30)
+sw $t2, -12($30)
+sw $t3, -16($30)
+sw $t4, -20($30)
+sw $t5, -24($30)
+sw $t6, -28($30)
+sw $t7, -32($30)
+sw $t8, -36($30)
+sw $t9, -40($30)
+sw $s0, -44($30)
+sw $s1, -48($30)
+sw $s2, -52($30)
+sw $s3, -56($30)
+sw $s4, -60($30)
+sw $s5, -64($30)
+sw $s6, -68($30)
+sw $s7, -72($30)
+sw $v1, -76($30)
+sw $a0, -80($30)
+sw $a1, -84($30)
+sw $a2, -88($30)
+sw $a3, -92($30)
+sw $ra, -96($30)
+L42:
+
+L43:
+lw $t0, 4($30)
+move $4, $t0
+li $2, 16
+syscall
+
+function_fclose_load:
 lw $t0, -4($30)
 lw $t1, -8($30)
 lw $t2, -12($30)
@@ -10947,27 +2593,27 @@ sw $a1, -84($30)
 sw $a2, -88($30)
 sw $a3, -92($30)
 sw $ra, -96($30)
-L4:
+L46:
 
-L5:
+L47:
 addiu $11, $30, 4
 lw $8, 0($11)
 addiu $11, $11, 4
 
-L6:
+L48:
 li $25, 0
 lb $9, 0($8)
-beq $9, $0, L25
+beq $9, $0, L67
 addiu $2, $0, 11
 addiu $12, $0, 37
-beq $9, $12, L10
+beq $9, $12, L52
 
-L7:
+L49:
 
-L8:
+L50:
 li $24, 1
 slt $15, $25, $24
-beq $15, $24, L9
+beq $15, $24, L51
 move $15, $2
 li $2, 11
 li $4, 32
@@ -10976,16 +2622,16 @@ syscall
 addiu $25, $25, -1
 move $2, $15
 li $24, 0
-bne $25, $24, L8
+bne $25, $24, L50
 
-L9:
+L51:
 add $4, $0, $9
 addiu $18, $18, 1
 syscall
 addiu $8, $8, 1
-j L6
+j L48
 
-L10:
+L52:
 addiu $8, $8, 1
 addiu $29, $29, -4
 sw $11, -100($30)
@@ -11025,15 +2671,15 @@ addiu $29, $29, -4
 sw $8, -168($30)
 lb $10, 0($8)
 addiu $12, $0, 100
-beq $10, $12, L12
+beq $10, $12, L54
 addiu $12, $0, 99
-beq $10, $12, L15
+beq $10, $12, L57
 addiu $12, $0, 115
-beq $10, $12, L16
+beq $10, $12, L58
 addiu $12, $0, 120
-beq $10, $12, L19
+beq $10, $12, L61
 addiu $12, $0, 102
-beq $10, $12, L24
+beq $10, $12, L66
 li $15, 47
 li $24, 58
 slt $15, $15, $10
@@ -11041,20 +2687,20 @@ sgt $24, $24, $10
 and $15, $15, $24
 move $9, $10
 li $24, 1
-bne $15, $24, L11
+bne $15, $24, L53
 addiu $15, $10, -48
 li $24, 10
 mul $25, $25, $24
 add $25, $25, $15
-j L10
+j L52
 
-L11:
-j L7
+L53:
+j L49
 
-L12:
+L54:
 lw $9, 0($11)
 
-L13:
+L55:
 li $15, 10
 addiu $29, $29, -4
 sw $10, -172($30)
@@ -11097,23 +2743,23 @@ addiu $18, $18, 1
 li $15, 1
 sub $25, $25, $15
 li $15, 0
-bne $15, $9, L13
+bne $15, $9, L55
 
-L14:
+L56:
 addiu $18, $18, -1
 addiu $2, $0, 1
 lw $9, 0($11)
 addiu $11, $11, 4
-j L11
+j L53
 
-L15:
+L57:
 addi $25, $25, -1
 addiu $2, $0, 11
 lb $9, 0($11)
 addiu $11, $11, 4
-j L11
+j L53
 
-L16:
+L58:
 addiu $29, $29, -4
 sw $9, -244($30)
 addiu $29, $29, -4
@@ -11152,32 +2798,32 @@ addiu $29, $29, -4
 sw $11, -312($30)
 lw $15, 0($11)
 
-L17:
+L59:
 lb $9, 0($15)
 li $24, 0
-beq $9, $24, L18
+beq $9, $24, L60
 addiu $18, $18, 1
 addi $15, $15, 1
 addi $25, $25, -1
-j L17
+j L59
 
-L18:
+L60:
 addiu $2, $0, 4
 addiu $18, $18, -1
 lw $9, 0($11)
 addiu $11, $11, 4
-j L11
+j L53
 
-L19:
+L61:
 addiu $2, $0, 11
 li $16, 0
 addi $25, $25, -8
-j L21
+j L63
 
-L20:
+L62:
 li $24, 1
 slt $15, $25, $24
-beq $15, $24, L22
+beq $15, $24, L64
 move $15, $2
 li $2, 11
 li $4, 32
@@ -11222,25 +2868,25 @@ sw $18, -384($30)
 addiu $25, $25, -1
 move $2, $15
 li $24, 0
-bne $25, $24, L20
-j L22
+bne $25, $24, L62
+j L64
 
-L21:
+L63:
 lw $9, 0($11)
 sllv $9, $9, $16
 srl $9, $9, 28
 li $14, 0
-bne $9, $14, L20
+bne $9, $14, L62
 li $14, 28
-beq $14, $16, L20
+beq $14, $16, L62
 addi $25, $25, 1
 addiu $16, $16, 4
-j L21
+j L63
 
-L22:
+L64:
 lw $9, 0($11)
 li $17, 28
-beq $16, $17, L23
+beq $16, $17, L65
 sllv $9, $9, $16
 srl $9, $9, 28
 addiu $9, $9, 48
@@ -11293,10 +2939,10 @@ addiu $18, $18, 1
 syscall
 addiu $16, $16, 4
 li $17, 28
-beq $16, $17, L23
-j L22
+beq $16, $17, L65
+j L64
 
-L23:
+L65:
 lb $9, 0($11)
 sll $9, $9, 28
 srl $9, $9, 28
@@ -11309,1403 +2955,18 @@ addi $12, $12, 38
 mul $13, $13, $12
 add $9, $13, $9
 addiu $11, $11, 4
-j L11
+j L53
 
-L24:
+L66:
 addi $25, $25, -8
 addiu $18, $18, 7
 addiu $2, $0, 2
 lw $9, 0($11)
 mtc1 $9, $f12
 addiu $11, $11, 4
-j L11
+j L53
 
-L25:
-move $2, $18
-
-function_printf_load:
-lw $t0, -4($30)
-lw $t1, -8($30)
-lw $t2, -12($30)
-lw $t3, -16($30)
-lw $t4, -20($30)
-lw $t5, -24($30)
-lw $t6, -28($30)
-lw $t7, -32($30)
-lw $t8, -36($30)
-lw $t9, -40($30)
-lw $s0, -44($30)
-lw $s1, -48($30)
-lw $s2, -52($30)
-lw $s3, -56($30)
-lw $s4, -60($30)
-lw $s5, -64($30)
-lw $s6, -68($30)
-lw $s7, -72($30)
-lw $v1, -76($30)
-lw $a0, -80($30)
-lw $a1, -84($30)
-lw $a2, -88($30)
-lw $a3, -92($30)
-lw $ra, -96($30)
-add $29, $30, $0
-lw $30, 0($29)
-jr $ra
-function_printf:
-sw $30, 0($29)
-add $30, $29, $0
-addiu $29, $29, -100
-sw $t0, -4($30)
-sw $t1, -8($30)
-sw $t2, -12($30)
-sw $t3, -16($30)
-sw $t4, -20($30)
-sw $t5, -24($30)
-sw $t6, -28($30)
-sw $t7, -32($30)
-sw $t8, -36($30)
-sw $t9, -40($30)
-sw $s0, -44($30)
-sw $s1, -48($30)
-sw $s2, -52($30)
-sw $s3, -56($30)
-sw $s4, -60($30)
-sw $s5, -64($30)
-sw $s6, -68($30)
-sw $s7, -72($30)
-sw $v1, -76($30)
-sw $a0, -80($30)
-sw $a1, -84($30)
-sw $a2, -88($30)
-sw $a3, -92($30)
-sw $ra, -96($30)
-L32:
-
-L33:
-addiu $11, $30, 4
-lw $8, 0($11)
-addiu $11, $11, 4
-
-L34:
-li $25, 0
-lb $9, 0($8)
-beq $9, $0, L53
-addiu $2, $0, 11
-addiu $12, $0, 37
-beq $9, $12, L38
-
-L35:
-
-L36:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L37
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
-syscall
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L36
-
-L37:
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $8, $8, 1
-j L34
-
-L38:
-addiu $8, $8, 1
-addiu $29, $29, -4
-sw $11, -460($30)
-addiu $29, $29, -4
-sw $8, -464($30)
-addiu $29, $29, -4
-sw $11, -468($30)
-addiu $29, $29, -4
-sw $25, -472($30)
-addiu $29, $29, -4
-sw $9, -476($30)
-addiu $29, $29, -4
-sw $2, -480($30)
-addiu $29, $29, -4
-sw $12, -484($30)
-addiu $29, $29, -4
-sw $24, -488($30)
-addiu $29, $29, -4
-sw $15, -492($30)
-addiu $29, $29, -4
-sw $2, -496($30)
-addiu $29, $29, -4
-sw $4, -500($30)
-addiu $29, $29, -4
-sw $18, -504($30)
-addiu $29, $29, -4
-sw $25, -508($30)
-addiu $29, $29, -4
-sw $24, -512($30)
-addiu $29, $29, -4
-sw $4, -516($30)
-addiu $29, $29, -4
-sw $18, -520($30)
-addiu $29, $29, -4
-sw $8, -524($30)
-addiu $29, $29, -4
-sw $8, -528($30)
-lb $10, 0($8)
-addiu $12, $0, 100
-beq $10, $12, L40
-addiu $12, $0, 99
-beq $10, $12, L43
-addiu $12, $0, 115
-beq $10, $12, L44
-addiu $12, $0, 120
-beq $10, $12, L47
-addiu $12, $0, 102
-beq $10, $12, L52
-li $15, 47
-li $24, 58
-slt $15, $15, $10
-sgt $24, $24, $10
-and $15, $15, $24
-move $9, $10
-li $24, 1
-bne $15, $24, L39
-addiu $15, $10, -48
-li $24, 10
-mul $25, $25, $24
-add $25, $25, $15
-j L38
-
-L39:
-j L35
-
-L40:
-lw $9, 0($11)
-
-L41:
-li $15, 10
-addiu $29, $29, -4
-sw $10, -532($30)
-addiu $29, $29, -4
-sw $12, -536($30)
-addiu $29, $29, -4
-sw $12, -540($30)
-addiu $29, $29, -4
-sw $12, -544($30)
-addiu $29, $29, -4
-sw $12, -548($30)
-addiu $29, $29, -4
-sw $12, -552($30)
-addiu $29, $29, -4
-sw $15, -556($30)
-addiu $29, $29, -4
-sw $24, -560($30)
-addiu $29, $29, -4
-sw $15, -564($30)
-addiu $29, $29, -4
-sw $24, -568($30)
-addiu $29, $29, -4
-sw $15, -572($30)
-addiu $29, $29, -4
-sw $24, -576($30)
-addiu $29, $29, -4
-sw $15, -580($30)
-addiu $29, $29, -4
-sw $24, -584($30)
-addiu $29, $29, -4
-sw $25, -588($30)
-addiu $29, $29, -4
-sw $25, -592($30)
-addiu $29, $29, -4
-sw $9, -596($30)
-addiu $29, $29, -4
-sw $15, -600($30)
-div $9 $9 $15
-addiu $18, $18, 1
-li $15, 1
-sub $25, $25, $15
-li $15, 0
-bne $15, $9, L41
-
-L42:
-addiu $18, $18, -1
-addiu $2, $0, 1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L39
-
-L43:
-addi $25, $25, -1
-addiu $2, $0, 11
-lb $9, 0($11)
-addiu $11, $11, 4
-j L39
-
-L44:
-addiu $29, $29, -4
-sw $9, -604($30)
-addiu $29, $29, -4
-sw $18, -608($30)
-addiu $29, $29, -4
-sw $15, -612($30)
-addiu $29, $29, -4
-sw $25, -616($30)
-addiu $29, $29, -4
-sw $15, -620($30)
-addiu $29, $29, -4
-sw $18, -624($30)
-addiu $29, $29, -4
-sw $2, -628($30)
-addiu $29, $29, -4
-sw $9, -632($30)
-addiu $29, $29, -4
-sw $11, -636($30)
-addiu $29, $29, -4
-sw $25, -640($30)
-addiu $29, $29, -4
-sw $2, -644($30)
-addiu $29, $29, -4
-sw $9, -648($30)
-addiu $29, $29, -4
-sw $11, -652($30)
-addiu $29, $29, -4
-sw $25, -656($30)
-addiu $29, $29, -4
-sw $18, -660($30)
-addiu $29, $29, -4
-sw $2, -664($30)
-addiu $29, $29, -4
-sw $9, -668($30)
-addiu $29, $29, -4
-sw $11, -672($30)
-lw $15, 0($11)
-
-L45:
-lb $9, 0($15)
-li $24, 0
-beq $9, $24, L46
-addiu $18, $18, 1
-addi $15, $15, 1
-addi $25, $25, -1
-j L45
-
-L46:
-addiu $2, $0, 4
-addiu $18, $18, -1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L39
-
-L47:
-addiu $2, $0, 11
-li $16, 0
-addi $25, $25, -8
-j L49
-
-L48:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L50
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
-syscall
-addiu $29, $29, -4
-sw $15, -676($30)
-addiu $29, $29, -4
-sw $9, -680($30)
-addiu $29, $29, -4
-sw $24, -684($30)
-addiu $29, $29, -4
-sw $18, -688($30)
-addiu $29, $29, -4
-sw $15, -692($30)
-addiu $29, $29, -4
-sw $25, -696($30)
-addiu $29, $29, -4
-sw $2, -700($30)
-addiu $29, $29, -4
-sw $18, -704($30)
-addiu $29, $29, -4
-sw $9, -708($30)
-addiu $29, $29, -4
-sw $11, -712($30)
-addiu $29, $29, -4
-sw $2, -716($30)
-addiu $29, $29, -4
-sw $16, -720($30)
-addiu $29, $29, -4
-sw $25, -724($30)
-addiu $29, $29, -4
-sw $24, -728($30)
-addiu $29, $29, -4
-sw $15, -732($30)
-addiu $29, $29, -4
-sw $2, -736($30)
-addiu $29, $29, -4
-sw $4, -740($30)
-addiu $29, $29, -4
-sw $18, -744($30)
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L48
-j L50
-
-L49:
-lw $9, 0($11)
-sllv $9, $9, $16
-srl $9, $9, 28
-li $14, 0
-bne $9, $14, L48
-li $14, 28
-beq $14, $16, L48
-addi $25, $25, 1
-addiu $16, $16, 4
-j L49
-
-L50:
-lw $9, 0($11)
-li $17, 28
-beq $16, $17, L51
-sllv $9, $9, $16
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-addiu $29, $29, -4
-sw $25, -748($30)
-addiu $29, $29, -4
-sw $24, -752($30)
-addiu $29, $29, -4
-sw $9, -756($30)
-addiu $29, $29, -4
-sw $9, -760($30)
-addiu $29, $29, -4
-sw $9, -764($30)
-addiu $29, $29, -4
-sw $14, -768($30)
-addiu $29, $29, -4
-sw $14, -772($30)
-addiu $29, $29, -4
-sw $25, -776($30)
-addiu $29, $29, -4
-sw $16, -780($30)
-addiu $29, $29, -4
-sw $9, -784($30)
-addiu $29, $29, -4
-sw $17, -788($30)
-addiu $29, $29, -4
-sw $9, -792($30)
-addiu $29, $29, -4
-sw $9, -796($30)
-addiu $29, $29, -4
-sw $9, -800($30)
-addiu $29, $29, -4
-sw $13, -804($30)
-addiu $29, $29, -4
-sw $12, -808($30)
-addiu $29, $29, -4
-sw $13, -812($30)
-addiu $29, $29, -4
-sw $12, -816($30)
-mul $13, $13, $12
-add $9, $13, $9
-addiu $2, $0, 11
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $16, $16, 4
-li $17, 28
-beq $16, $17, L51
-j L50
-
-L51:
-lb $9, 0($11)
-sll $9, $9, 28
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-mul $13, $13, $12
-add $9, $13, $9
-addiu $11, $11, 4
-j L39
-
-L52:
-addi $25, $25, -8
-addiu $18, $18, 7
-addiu $2, $0, 2
-lw $9, 0($11)
-mtc1 $9, $f12
-addiu $11, $11, 4
-j L39
-
-L53:
-move $2, $18
-
-function_printf_load:
-lw $t0, -4($30)
-lw $t1, -8($30)
-lw $t2, -12($30)
-lw $t3, -16($30)
-lw $t4, -20($30)
-lw $t5, -24($30)
-lw $t6, -28($30)
-lw $t7, -32($30)
-lw $t8, -36($30)
-lw $t9, -40($30)
-lw $s0, -44($30)
-lw $s1, -48($30)
-lw $s2, -52($30)
-lw $s3, -56($30)
-lw $s4, -60($30)
-lw $s5, -64($30)
-lw $s6, -68($30)
-lw $s7, -72($30)
-lw $v1, -76($30)
-lw $a0, -80($30)
-lw $a1, -84($30)
-lw $a2, -88($30)
-lw $a3, -92($30)
-lw $ra, -96($30)
-add $29, $30, $0
-lw $30, 0($29)
-jr $ra
-function_printf:
-sw $30, 0($29)
-add $30, $29, $0
-addiu $29, $29, -100
-sw $t0, -4($30)
-sw $t1, -8($30)
-sw $t2, -12($30)
-sw $t3, -16($30)
-sw $t4, -20($30)
-sw $t5, -24($30)
-sw $t6, -28($30)
-sw $t7, -32($30)
-sw $t8, -36($30)
-sw $t9, -40($30)
-sw $s0, -44($30)
-sw $s1, -48($30)
-sw $s2, -52($30)
-sw $s3, -56($30)
-sw $s4, -60($30)
-sw $s5, -64($30)
-sw $s6, -68($30)
-sw $s7, -72($30)
-sw $v1, -76($30)
-sw $a0, -80($30)
-sw $a1, -84($30)
-sw $a2, -88($30)
-sw $a3, -92($30)
-sw $ra, -96($30)
-L69:
-
-L70:
-addiu $11, $30, 4
-lw $8, 0($11)
-addiu $11, $11, 4
-
-L71:
-li $25, 0
-lb $9, 0($8)
-beq $9, $0, L90
-addiu $2, $0, 11
-addiu $12, $0, 37
-beq $9, $12, L75
-
-L72:
-
-L73:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L74
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
-syscall
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L73
-
-L74:
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $8, $8, 1
-j L71
-
-L75:
-addiu $8, $8, 1
-addiu $29, $29, -4
-sw $11, -820($30)
-addiu $29, $29, -4
-sw $8, -824($30)
-addiu $29, $29, -4
-sw $11, -828($30)
-addiu $29, $29, -4
-sw $25, -832($30)
-addiu $29, $29, -4
-sw $9, -836($30)
-addiu $29, $29, -4
-sw $2, -840($30)
-addiu $29, $29, -4
-sw $12, -844($30)
-addiu $29, $29, -4
-sw $24, -848($30)
-addiu $29, $29, -4
-sw $15, -852($30)
-addiu $29, $29, -4
-sw $2, -856($30)
-addiu $29, $29, -4
-sw $4, -860($30)
-addiu $29, $29, -4
-sw $18, -864($30)
-addiu $29, $29, -4
-sw $25, -868($30)
-addiu $29, $29, -4
-sw $24, -872($30)
-addiu $29, $29, -4
-sw $4, -876($30)
-addiu $29, $29, -4
-sw $18, -880($30)
-addiu $29, $29, -4
-sw $8, -884($30)
-addiu $29, $29, -4
-sw $8, -888($30)
-lb $10, 0($8)
-addiu $12, $0, 100
-beq $10, $12, L77
-addiu $12, $0, 99
-beq $10, $12, L80
-addiu $12, $0, 115
-beq $10, $12, L81
-addiu $12, $0, 120
-beq $10, $12, L84
-addiu $12, $0, 102
-beq $10, $12, L89
-li $15, 47
-li $24, 58
-slt $15, $15, $10
-sgt $24, $24, $10
-and $15, $15, $24
-move $9, $10
-li $24, 1
-bne $15, $24, L76
-addiu $15, $10, -48
-li $24, 10
-mul $25, $25, $24
-add $25, $25, $15
-j L75
-
-L76:
-j L72
-
-L77:
-lw $9, 0($11)
-
-L78:
-li $15, 10
-addiu $29, $29, -4
-sw $10, -892($30)
-addiu $29, $29, -4
-sw $12, -896($30)
-addiu $29, $29, -4
-sw $12, -900($30)
-addiu $29, $29, -4
-sw $12, -904($30)
-addiu $29, $29, -4
-sw $12, -908($30)
-addiu $29, $29, -4
-sw $12, -912($30)
-addiu $29, $29, -4
-sw $15, -916($30)
-addiu $29, $29, -4
-sw $24, -920($30)
-addiu $29, $29, -4
-sw $15, -924($30)
-addiu $29, $29, -4
-sw $24, -928($30)
-addiu $29, $29, -4
-sw $15, -932($30)
-addiu $29, $29, -4
-sw $24, -936($30)
-addiu $29, $29, -4
-sw $15, -940($30)
-addiu $29, $29, -4
-sw $24, -944($30)
-addiu $29, $29, -4
-sw $25, -948($30)
-addiu $29, $29, -4
-sw $25, -952($30)
-addiu $29, $29, -4
-sw $9, -956($30)
-addiu $29, $29, -4
-sw $15, -960($30)
-div $9 $9 $15
-addiu $18, $18, 1
-li $15, 1
-sub $25, $25, $15
-li $15, 0
-bne $15, $9, L78
-
-L79:
-addiu $18, $18, -1
-addiu $2, $0, 1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L76
-
-L80:
-addi $25, $25, -1
-addiu $2, $0, 11
-lb $9, 0($11)
-addiu $11, $11, 4
-j L76
-
-L81:
-addiu $29, $29, -4
-sw $9, -964($30)
-addiu $29, $29, -4
-sw $18, -968($30)
-addiu $29, $29, -4
-sw $15, -972($30)
-addiu $29, $29, -4
-sw $25, -976($30)
-addiu $29, $29, -4
-sw $15, -980($30)
-addiu $29, $29, -4
-sw $18, -984($30)
-addiu $29, $29, -4
-sw $2, -988($30)
-addiu $29, $29, -4
-sw $9, -992($30)
-addiu $29, $29, -4
-sw $11, -996($30)
-addiu $29, $29, -4
-sw $25, -1000($30)
-addiu $29, $29, -4
-sw $2, -1004($30)
-addiu $29, $29, -4
-sw $9, -1008($30)
-addiu $29, $29, -4
-sw $11, -1012($30)
-addiu $29, $29, -4
-sw $25, -1016($30)
-addiu $29, $29, -4
-sw $18, -1020($30)
-addiu $29, $29, -4
-sw $2, -1024($30)
-addiu $29, $29, -4
-sw $9, -1028($30)
-addiu $29, $29, -4
-sw $11, -1032($30)
-lw $15, 0($11)
-
-L82:
-lb $9, 0($15)
-li $24, 0
-beq $9, $24, L83
-addiu $18, $18, 1
-addi $15, $15, 1
-addi $25, $25, -1
-j L82
-
-L83:
-addiu $2, $0, 4
-addiu $18, $18, -1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L76
-
-L84:
-addiu $2, $0, 11
-li $16, 0
-addi $25, $25, -8
-j L86
-
-L85:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L87
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
-syscall
-addiu $29, $29, -4
-sw $15, -1036($30)
-addiu $29, $29, -4
-sw $9, -1040($30)
-addiu $29, $29, -4
-sw $24, -1044($30)
-addiu $29, $29, -4
-sw $18, -1048($30)
-addiu $29, $29, -4
-sw $15, -1052($30)
-addiu $29, $29, -4
-sw $25, -1056($30)
-addiu $29, $29, -4
-sw $2, -1060($30)
-addiu $29, $29, -4
-sw $18, -1064($30)
-addiu $29, $29, -4
-sw $9, -1068($30)
-addiu $29, $29, -4
-sw $11, -1072($30)
-addiu $29, $29, -4
-sw $2, -1076($30)
-addiu $29, $29, -4
-sw $16, -1080($30)
-addiu $29, $29, -4
-sw $25, -1084($30)
-addiu $29, $29, -4
-sw $24, -1088($30)
-addiu $29, $29, -4
-sw $15, -1092($30)
-addiu $29, $29, -4
-sw $2, -1096($30)
-addiu $29, $29, -4
-sw $4, -1100($30)
-addiu $29, $29, -4
-sw $18, -1104($30)
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L85
-j L87
-
-L86:
-lw $9, 0($11)
-sllv $9, $9, $16
-srl $9, $9, 28
-li $14, 0
-bne $9, $14, L85
-li $14, 28
-beq $14, $16, L85
-addi $25, $25, 1
-addiu $16, $16, 4
-j L86
-
-L87:
-lw $9, 0($11)
-li $17, 28
-beq $16, $17, L88
-sllv $9, $9, $16
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-addiu $29, $29, -4
-sw $25, -1108($30)
-addiu $29, $29, -4
-sw $24, -1112($30)
-addiu $29, $29, -4
-sw $9, -1116($30)
-addiu $29, $29, -4
-sw $9, -1120($30)
-addiu $29, $29, -4
-sw $9, -1124($30)
-addiu $29, $29, -4
-sw $14, -1128($30)
-addiu $29, $29, -4
-sw $14, -1132($30)
-addiu $29, $29, -4
-sw $25, -1136($30)
-addiu $29, $29, -4
-sw $16, -1140($30)
-addiu $29, $29, -4
-sw $9, -1144($30)
-addiu $29, $29, -4
-sw $17, -1148($30)
-addiu $29, $29, -4
-sw $9, -1152($30)
-addiu $29, $29, -4
-sw $9, -1156($30)
-addiu $29, $29, -4
-sw $9, -1160($30)
-addiu $29, $29, -4
-sw $13, -1164($30)
-addiu $29, $29, -4
-sw $12, -1168($30)
-addiu $29, $29, -4
-sw $13, -1172($30)
-addiu $29, $29, -4
-sw $12, -1176($30)
-mul $13, $13, $12
-add $9, $13, $9
-addiu $2, $0, 11
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $16, $16, 4
-li $17, 28
-beq $16, $17, L88
-j L87
-
-L88:
-lb $9, 0($11)
-sll $9, $9, 28
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-mul $13, $13, $12
-add $9, $13, $9
-addiu $11, $11, 4
-j L76
-
-L89:
-addi $25, $25, -8
-addiu $18, $18, 7
-addiu $2, $0, 2
-lw $9, 0($11)
-mtc1 $9, $f12
-addiu $11, $11, 4
-j L76
-
-L90:
-move $2, $18
-
-function_printf_load:
-lw $t0, -4($30)
-lw $t1, -8($30)
-lw $t2, -12($30)
-lw $t3, -16($30)
-lw $t4, -20($30)
-lw $t5, -24($30)
-lw $t6, -28($30)
-lw $t7, -32($30)
-lw $t8, -36($30)
-lw $t9, -40($30)
-lw $s0, -44($30)
-lw $s1, -48($30)
-lw $s2, -52($30)
-lw $s3, -56($30)
-lw $s4, -60($30)
-lw $s5, -64($30)
-lw $s6, -68($30)
-lw $s7, -72($30)
-lw $v1, -76($30)
-lw $a0, -80($30)
-lw $a1, -84($30)
-lw $a2, -88($30)
-lw $a3, -92($30)
-lw $ra, -96($30)
-add $29, $30, $0
-lw $30, 0($29)
-jr $ra
-function_malloc:
-sw $30, 0($29)
-add $30, $29, $0
-addiu $29, $29, -100
-sw $t0, -4($30)
-sw $t1, -8($30)
-sw $t2, -12($30)
-sw $t3, -16($30)
-sw $t4, -20($30)
-sw $t5, -24($30)
-sw $t6, -28($30)
-sw $t7, -32($30)
-sw $t8, -36($30)
-sw $t9, -40($30)
-sw $s0, -44($30)
-sw $s1, -48($30)
-sw $s2, -52($30)
-sw $s3, -56($30)
-sw $s4, -60($30)
-sw $s5, -64($30)
-sw $s6, -68($30)
-sw $s7, -72($30)
-sw $v1, -76($30)
-sw $a0, -80($30)
-sw $a1, -84($30)
-sw $a2, -88($30)
-sw $a3, -92($30)
-sw $ra, -96($30)
-L95:
-
-L96:
-lw $8, 4($30)
-li $9, 1
-div $8 $8 $9
-addiu $8, $8, 1
-la $9, heap
-lw $9, 0($9)
-
-L97:
-lw $10, 0($9)
-lw $11, 4($9)
-bne $10, $0, L98
-sgt $12, $8, $11
-mul $12, $12, $11
-bne $12, $0, L98
-j L99
-
-L98:
-li $12, 4
-mul $11, $11, $12
-addiu $11, $11, 8
-addu $9, $9, $11
-j L97
-
-L99:
-li $10, 1
-sw $10, 0($9)
-sw $8, 4($9)
-addiu $9, $9, 8
-move $2, $9
-
-function_malloc_load:
-lw $t0, -4($30)
-lw $t1, -8($30)
-lw $t2, -12($30)
-lw $t3, -16($30)
-lw $t4, -20($30)
-lw $t5, -24($30)
-lw $t6, -28($30)
-lw $t7, -32($30)
-lw $t8, -36($30)
-lw $t9, -40($30)
-lw $s0, -44($30)
-lw $s1, -48($30)
-lw $s2, -52($30)
-lw $s3, -56($30)
-lw $s4, -60($30)
-lw $s5, -64($30)
-lw $s6, -68($30)
-lw $s7, -72($30)
-lw $v1, -76($30)
-lw $a0, -80($30)
-lw $a1, -84($30)
-lw $a2, -88($30)
-lw $a3, -92($30)
-lw $ra, -96($30)
-add $29, $30, $0
-lw $30, 0($29)
-jr $ra
-function_printf:
-sw $30, 0($29)
-add $30, $29, $0
-addiu $29, $29, -100
-sw $t0, -4($30)
-sw $t1, -8($30)
-sw $t2, -12($30)
-sw $t3, -16($30)
-sw $t4, -20($30)
-sw $t5, -24($30)
-sw $t6, -28($30)
-sw $t7, -32($30)
-sw $t8, -36($30)
-sw $t9, -40($30)
-sw $s0, -44($30)
-sw $s1, -48($30)
-sw $s2, -52($30)
-sw $s3, -56($30)
-sw $s4, -60($30)
-sw $s5, -64($30)
-sw $s6, -68($30)
-sw $s7, -72($30)
-sw $v1, -76($30)
-sw $a0, -80($30)
-sw $a1, -84($30)
-sw $a2, -88($30)
-sw $a3, -92($30)
-sw $ra, -96($30)
-L104:
-
-L105:
-addiu $11, $30, 4
-lw $8, 0($11)
-addiu $11, $11, 4
-
-L106:
-li $25, 0
-lb $9, 0($8)
-beq $9, $0, L125
-addiu $2, $0, 11
-addiu $12, $0, 37
-beq $9, $12, L110
-
-L107:
-
-L108:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L109
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
-syscall
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L108
-
-L109:
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $8, $8, 1
-j L106
-
-L110:
-addiu $8, $8, 1
-addiu $29, $29, -4
-sw $11, -1180($30)
-addiu $29, $29, -4
-sw $8, -1184($30)
-addiu $29, $29, -4
-sw $11, -1188($30)
-addiu $29, $29, -4
-sw $25, -1192($30)
-addiu $29, $29, -4
-sw $9, -1196($30)
-addiu $29, $29, -4
-sw $2, -1200($30)
-addiu $29, $29, -4
-sw $12, -1204($30)
-addiu $29, $29, -4
-sw $24, -1208($30)
-addiu $29, $29, -4
-sw $15, -1212($30)
-addiu $29, $29, -4
-sw $2, -1216($30)
-addiu $29, $29, -4
-sw $4, -1220($30)
-addiu $29, $29, -4
-sw $18, -1224($30)
-addiu $29, $29, -4
-sw $25, -1228($30)
-addiu $29, $29, -4
-sw $24, -1232($30)
-addiu $29, $29, -4
-sw $4, -1236($30)
-addiu $29, $29, -4
-sw $18, -1240($30)
-addiu $29, $29, -4
-sw $8, -1244($30)
-addiu $29, $29, -4
-sw $8, -1248($30)
-lb $10, 0($8)
-addiu $12, $0, 100
-beq $10, $12, L112
-addiu $12, $0, 99
-beq $10, $12, L115
-addiu $12, $0, 115
-beq $10, $12, L116
-addiu $12, $0, 120
-beq $10, $12, L119
-addiu $12, $0, 102
-beq $10, $12, L124
-li $15, 47
-li $24, 58
-slt $15, $15, $10
-sgt $24, $24, $10
-and $15, $15, $24
-move $9, $10
-li $24, 1
-bne $15, $24, L111
-addiu $15, $10, -48
-li $24, 10
-mul $25, $25, $24
-add $25, $25, $15
-j L110
-
-L111:
-j L107
-
-L112:
-lw $9, 0($11)
-
-L113:
-li $15, 10
-addiu $29, $29, -4
-sw $10, -1252($30)
-addiu $29, $29, -4
-sw $12, -1256($30)
-addiu $29, $29, -4
-sw $12, -1260($30)
-addiu $29, $29, -4
-sw $12, -1264($30)
-addiu $29, $29, -4
-sw $12, -1268($30)
-addiu $29, $29, -4
-sw $12, -1272($30)
-addiu $29, $29, -4
-sw $15, -1276($30)
-addiu $29, $29, -4
-sw $24, -1280($30)
-addiu $29, $29, -4
-sw $15, -1284($30)
-addiu $29, $29, -4
-sw $24, -1288($30)
-addiu $29, $29, -4
-sw $15, -1292($30)
-addiu $29, $29, -4
-sw $24, -1296($30)
-addiu $29, $29, -4
-sw $15, -1300($30)
-addiu $29, $29, -4
-sw $24, -1304($30)
-addiu $29, $29, -4
-sw $25, -1308($30)
-addiu $29, $29, -4
-sw $25, -1312($30)
-addiu $29, $29, -4
-sw $9, -1316($30)
-addiu $29, $29, -4
-sw $15, -1320($30)
-div $9 $9 $15
-addiu $18, $18, 1
-li $15, 1
-sub $25, $25, $15
-li $15, 0
-bne $15, $9, L113
-
-L114:
-addiu $18, $18, -1
-addiu $2, $0, 1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L111
-
-L115:
-addi $25, $25, -1
-addiu $2, $0, 11
-lb $9, 0($11)
-addiu $11, $11, 4
-j L111
-
-L116:
-addiu $29, $29, -4
-sw $9, -1324($30)
-addiu $29, $29, -4
-sw $18, -1328($30)
-addiu $29, $29, -4
-sw $15, -1332($30)
-addiu $29, $29, -4
-sw $25, -1336($30)
-addiu $29, $29, -4
-sw $15, -1340($30)
-addiu $29, $29, -4
-sw $18, -1344($30)
-addiu $29, $29, -4
-sw $2, -1348($30)
-addiu $29, $29, -4
-sw $9, -1352($30)
-addiu $29, $29, -4
-sw $11, -1356($30)
-addiu $29, $29, -4
-sw $25, -1360($30)
-addiu $29, $29, -4
-sw $2, -1364($30)
-addiu $29, $29, -4
-sw $9, -1368($30)
-addiu $29, $29, -4
-sw $11, -1372($30)
-addiu $29, $29, -4
-sw $25, -1376($30)
-addiu $29, $29, -4
-sw $18, -1380($30)
-addiu $29, $29, -4
-sw $2, -1384($30)
-addiu $29, $29, -4
-sw $9, -1388($30)
-addiu $29, $29, -4
-sw $11, -1392($30)
-lw $15, 0($11)
-
-L117:
-lb $9, 0($15)
-li $24, 0
-beq $9, $24, L118
-addiu $18, $18, 1
-addi $15, $15, 1
-addi $25, $25, -1
-j L117
-
-L118:
-addiu $2, $0, 4
-addiu $18, $18, -1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L111
-
-L119:
-addiu $2, $0, 11
-li $16, 0
-addi $25, $25, -8
-j L121
-
-L120:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L122
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
-syscall
-addiu $29, $29, -4
-sw $15, -1396($30)
-addiu $29, $29, -4
-sw $9, -1400($30)
-addiu $29, $29, -4
-sw $24, -1404($30)
-addiu $29, $29, -4
-sw $18, -1408($30)
-addiu $29, $29, -4
-sw $15, -1412($30)
-addiu $29, $29, -4
-sw $25, -1416($30)
-addiu $29, $29, -4
-sw $2, -1420($30)
-addiu $29, $29, -4
-sw $18, -1424($30)
-addiu $29, $29, -4
-sw $9, -1428($30)
-addiu $29, $29, -4
-sw $11, -1432($30)
-addiu $29, $29, -4
-sw $2, -1436($30)
-addiu $29, $29, -4
-sw $16, -1440($30)
-addiu $29, $29, -4
-sw $25, -1444($30)
-addiu $29, $29, -4
-sw $24, -1448($30)
-addiu $29, $29, -4
-sw $15, -1452($30)
-addiu $29, $29, -4
-sw $2, -1456($30)
-addiu $29, $29, -4
-sw $4, -1460($30)
-addiu $29, $29, -4
-sw $18, -1464($30)
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L120
-j L122
-
-L121:
-lw $9, 0($11)
-sllv $9, $9, $16
-srl $9, $9, 28
-li $14, 0
-bne $9, $14, L120
-li $14, 28
-beq $14, $16, L120
-addi $25, $25, 1
-addiu $16, $16, 4
-j L121
-
-L122:
-lw $9, 0($11)
-li $17, 28
-beq $16, $17, L123
-sllv $9, $9, $16
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-addiu $29, $29, -4
-sw $25, -1468($30)
-addiu $29, $29, -4
-sw $24, -1472($30)
-addiu $29, $29, -4
-sw $9, -1476($30)
-addiu $29, $29, -4
-sw $9, -1480($30)
-addiu $29, $29, -4
-sw $9, -1484($30)
-addiu $29, $29, -4
-sw $14, -1488($30)
-addiu $29, $29, -4
-sw $14, -1492($30)
-addiu $29, $29, -4
-sw $25, -1496($30)
-addiu $29, $29, -4
-sw $16, -1500($30)
-addiu $29, $29, -4
-sw $9, -1504($30)
-addiu $29, $29, -4
-sw $17, -1508($30)
-addiu $29, $29, -4
-sw $9, -1512($30)
-addiu $29, $29, -4
-sw $9, -1516($30)
-addiu $29, $29, -4
-sw $9, -1520($30)
-addiu $29, $29, -4
-sw $13, -1524($30)
-addiu $29, $29, -4
-sw $12, -1528($30)
-addiu $29, $29, -4
-sw $13, -1532($30)
-addiu $29, $29, -4
-sw $12, -1536($30)
-mul $13, $13, $12
-add $9, $13, $9
-addiu $2, $0, 11
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $16, $16, 4
-li $17, 28
-beq $16, $17, L123
-j L122
-
-L123:
-lb $9, 0($11)
-sll $9, $9, 28
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-mul $13, $13, $12
-add $9, $13, $9
-addiu $11, $11, 4
-j L111
-
-L124:
-addi $25, $25, -8
-addiu $18, $18, 7
-addiu $2, $0, 2
-lw $9, 0($11)
-mtc1 $9, $f12
-addiu $11, $11, 4
-j L111
-
-L125:
+L67:
 move $2, $18
 
 function_printf_load:
@@ -12764,51 +3025,51 @@ sw $a1, -84($30)
 sw $a2, -88($30)
 sw $a3, -92($30)
 sw $ra, -96($30)
-L126:
+L68:
 
-L127:
+L69:
 addiu $t3, $fp, 4
 lw $t0, 0($t3)
 addiu $t3, $t3, 4
 
-L128:
+L70:
 lb $t1, 0($t0)
-beq $t1, $0, L155
-beq $t1, 37, L129
+beq $t1, $0, L97
+beq $t1, 37, L71
 scanf_char_loop_temp:
 addi $t0, $t0, 1
-j L128
+j L70
 
-L129:
+L71:
 addi $t0, $t0, 1
 lb $t2, 0($t0)
-beq $t2, 100, L130
-beq $t2, 99, L131
-beq $t2, 120, L132
-beq $t2, 115, L133
-beq $t2, 102, L134
+beq $t2, 100, L72
+beq $t2, 99, L73
+beq $t2, 120, L74
+beq $t2, 115, L75
+beq $t2, 102, L76
 move $t1, $t2
 j scanf_char_loop_temp
 
-L130:
+L72:
 li $v0, 5
 syscall
 lw $t6, 0($t3)
 sw $v0, 0($t6)
 addi $t3, $t3, 4
 addi $t0, $t0, 1
-j L128
+j L70
 
-L131:
+L73:
 li $v0, 12
 syscall
 lw $t6, 0($t3)
 sb $v0, 0($t6)
 addi $t3, $t3, 4
 addi $t0, $t0, 1
-j L128
+j L70
 
-L132:
+L74:
 addi $a0, $sp, 8
 li $a1, 9
 li $v0, 8
@@ -12822,7 +3083,7 @@ move $a0, $s1
 srl $a0, $a0, 24
 add $a1, $0, $0
 la $v1, scanf_char_special_token_x_return_7
-bne $a0, $0, L135
+bne $a0, $0, L77
 addi $a1, $a1, -1
 scanf_char_special_token_x_return_7:
 move $a0, $s1
@@ -12830,7 +3091,7 @@ sll $a0, $a0, 8
 srl $a0, $a0, 24
 addi $a1, $a1, 1
 la $v1, scanf_char_special_token_x_return_6
-bne $a0, $0, L135
+bne $a0, $0, L77
 addi $a1, $a1, -1
 scanf_char_special_token_x_return_6:
 move $a0, $s1
@@ -12838,7 +3099,7 @@ sll $a0, $a0, 16
 srl $a0, $a0, 24
 addi $a1, $a1, 1
 la $v1, scanf_char_special_token_x_return_5
-bne $a0, $0, L135
+bne $a0, $0, L77
 addi $a1, $a1, -1
 scanf_char_special_token_x_return_5:
 move $a0, $s1
@@ -12846,14 +3107,14 @@ sll $a0, $a0, 24
 srl $a0, $a0, 24
 addi $a1, $a1, 1
 la $v1, scanf_char_special_token_x_return_4
-bne $a0, $0, L135
+bne $a0, $0, L77
 addi $a1, $a1, -1
 scanf_char_special_token_x_return_4:
 move $a0, $s0
 srl $a0, $a0, 24
 addi $a1, $a1, 1
 la $v1, scanf_char_special_token_x_return_3
-bne $a0, $0, L135
+bne $a0, $0, L77
 addi $a1, $a1, -1
 scanf_char_special_token_x_return_3:
 move $a0, $s0
@@ -12861,7 +3122,7 @@ sll $a0, $a0, 8
 srl $a0, $a0, 24
 addi $a1, $a1, 1
 la $v1, scanf_char_special_token_x_return_2
-bne $a0, $0, L135
+bne $a0, $0, L77
 addi $a1, $a1, -1
 scanf_char_special_token_x_return_2:
 move $a0, $s0
@@ -12869,7 +3130,7 @@ sll $a0, $a0, 16
 srl $a0, $a0, 24
 addi $a1, $a1, 1
 la $v1, scanf_char_special_token_x_return_1
-bne $a0, $0, L135
+bne $a0, $0, L77
 addi $a1, $a1, -1
 scanf_char_special_token_x_return_1:
 move $a0, $s0
@@ -12877,25 +3138,25 @@ sll $a0, $a0, 24
 srl $a0, $a0, 24
 addi $a1, $a1, 1
 la $v1, scanf_char_special_token_x_return_0
-bne $a0, $0, L135
+bne $a0, $0, L77
 addi $a1, $a1, -1
 scanf_char_special_token_x_return_0:
 lw $t6, 0($t3)
 sw $v0, 0($t6)
 addi $t3, $t3, 4
 addi $t0, $t0, 1
-j L128
+j L70
 
-L133:
+L75:
 li $v0, 8
 li $a1, 512
 lw $a0, 0($t3)
 syscall
 addi $t3, $t3, 4
 addi $t0, $t0, 1
-j L128
+j L70
 
-L134:
+L76:
 li $v0, 6
 syscall
 mfc1 $v0, $f0
@@ -12903,98 +3164,98 @@ lw $t6, 0($t3)
 sw $v0, 0($t6)
 addi $t3, $t3, 4
 addi $t0, $t0, 1
-j L128
+j L70
 
-L135:
-beq $a0, 48, L136
-beq $a0, 49, L137
-beq $a0, 50, L138
-beq $a0, 51, L139
-beq $a0, 52, L140
-beq $a0, 53, L141
-beq $a0, 54, L142
-beq $a0, 55, L143
-beq $a0, 56, L144
-beq $a0, 57, L145
-beq $a0, 97, L146
-beq $a0, 98, L147
-beq $a0, 99, L148
-beq $a0, 100, L149
-beq $a0, 101, L150
-beq $a0, 102, L151
+L77:
+beq $a0, 48, L78
+beq $a0, 49, L79
+beq $a0, 50, L80
+beq $a0, 51, L81
+beq $a0, 52, L82
+beq $a0, 53, L83
+beq $a0, 54, L84
+beq $a0, 55, L85
+beq $a0, 56, L86
+beq $a0, 57, L87
+beq $a0, 97, L88
+beq $a0, 98, L89
+beq $a0, 99, L90
+beq $a0, 100, L91
+beq $a0, 101, L92
+beq $a0, 102, L93
 addi $a1, $a1, -1
 jr $v1
 
-L136:
+L78:
 li $a0, 0
-j L152
+j L94
 
-L137:
+L79:
 li $a0, 1
-j L152
+j L94
 
-L138:
+L80:
 li $a0, 2
-j L152
+j L94
 
-L139:
+L81:
 li $a0, 3
-j L152
+j L94
 
-L140:
+L82:
 li $a0, 4
-j L152
+j L94
 
-L141:
+L83:
 li $a0, 5
-j L152
+j L94
 
-L142:
+L84:
 li $a0, 6
-j L152
+j L94
 
-L143:
+L85:
 li $a0, 7
-j L152
+j L94
 
-L144:
+L86:
 li $a0, 8
-j L152
+j L94
 
-L145:
+L87:
 li $a0, 9
-j L152
+j L94
 
-L146:
+L88:
 li $a0, 10
-j L152
+j L94
 
-L147:
+L89:
 li $a0, 11
-j L152
+j L94
 
-L148:
+L90:
 li $a0, 12
-j L152
+j L94
 
-L149:
+L91:
 li $a0, 13
-j L152
+j L94
 
-L150:
+L92:
 li $a0, 14
-j L152
+j L94
 
-L151:
+L93:
 li $a0, 15
-j L152
+j L94
 
-L152:
+L94:
 move $a2, $a1
 li $a3, 1
-beq $a2, $0, L154
+beq $a2, $0, L96
 
-L153:
+L95:
 li $s7, 16
 addiu $29, $29, -4
 sw $a0, -100($30)
@@ -13035,14 +3296,14 @@ sw $s7, -168($30)
 lw $t1, -168($30)
 mul $a3, $a3, $t1
 addi $a2, $a2, -1
-bne $a2, $0, L153
+bne $a2, $0, L95
 
-L154:
+L96:
 mul $a3, $a3, $a0
 add $v0, $a3, $v0
 jr $v1
 
-L155:
+L97:
 li $v0, 1
 
 function_scanf_load:
@@ -13073,7 +3334,7 @@ lw $ra, -96($30)
 add $29, $30, $0
 lw $30, 0($29)
 jr $ra
-function_printAppel:
+function_malloc:
 sw $30, 0($29)
 add $30, $29, $0
 addiu $29, $29, -100
@@ -13101,59 +3362,14 @@ sw $a1, -84($30)
 sw $a2, -88($30)
 sw $a3, -92($30)
 sw $ra, -96($30)
-L161:
+L107:
 
-L162:
-la $t0, str4
-la $t1, str8
-addiu $29, $29, -8
-sw $t0, 4($29)
-sw $t1, 8($29)
-jal function_printf
-lw $t0, 4($29)
-lw $t1, 8($29)
-addiu $29, $29, 8
-addiu $29, $29, -4
-sw $t0, -100($30)
-addiu $29, $29, -4
-sw $t1, -104($30)
-addiu $29, $29, -4
-sw $t2, -108($30)
-addiu $29, $29, -4
-sw $t3, -112($30)
-addiu $29, $29, -4
-sw $t4, -116($30)
-addiu $29, $29, -4
-sw $t5, -120($30)
-addiu $29, $29, -4
-sw $t6, -124($30)
-addiu $29, $29, -4
-sw $t7, -128($30)
-addiu $29, $29, -4
-sw $t8, -132($30)
-addiu $29, $29, -4
-sw $t9, -136($30)
-addiu $29, $29, -4
-sw $s0, -140($30)
-addiu $29, $29, -4
-sw $s1, -144($30)
-addiu $29, $29, -4
-sw $s2, -148($30)
-addiu $29, $29, -4
-sw $s3, -152($30)
-addiu $29, $29, -4
-sw $s4, -156($30)
-addiu $29, $29, -4
-sw $s5, -160($30)
-addiu $29, $29, -4
-sw $s6, -164($30)
-addiu $29, $29, -4
-sw $s7, -168($30)
-move $t0, $v0
-# VOID printAppel ( ) { printf ( "%s" , "Apple1" ) ; 
+L108:
+lw $4, 4($30)
+li $2, 9
+syscall
 
-
-function_printAppel_load:
+function_malloc_load:
 lw $t0, -4($30)
 lw $t1, -8($30)
 lw $t2, -12($30)
@@ -13181,7 +3397,7 @@ lw $ra, -96($30)
 add $29, $30, $0
 lw $30, 0($29)
 jr $ra
-function_printf:
+function_realloc:
 sw $30, 0($29)
 add $30, $29, $0
 addiu $29, $29, -100
@@ -13209,383 +3425,27 @@ sw $a1, -84($30)
 sw $a2, -88($30)
 sw $a3, -92($30)
 sw $ra, -96($30)
-L163:
+L109:
 
-L164:
-addiu $11, $30, 4
-lw $8, 0($11)
-addiu $11, $11, 4
-
-L165:
-li $25, 0
-lb $9, 0($8)
-beq $9, $0, L184
-addiu $2, $0, 11
-addiu $12, $0, 37
-beq $9, $12, L169
-
-L166:
-
-L167:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L168
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
+L110:
+lw $t0, 4($30)
+lw $t1, 8($30)
+move $4, $t1
+li $2, 9
 syscall
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L167
+j L111
 
-L168:
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $8, $8, 1
-j L165
+L111:
+addiu $t1, $t1, -1
+addiu $t4, $2, 0
+addu $t5, $t4, $t1
+addu $t6, $t0, $t1
+lb $t7, 0($t6)
+sb $t7, 0($t5)
+li $t8, 0
+bne $t8, $t1, L111
 
-L169:
-addiu $8, $8, 1
-addiu $29, $29, -4
-sw $11, -1540($30)
-addiu $29, $29, -4
-sw $8, -1544($30)
-addiu $29, $29, -4
-sw $11, -1548($30)
-addiu $29, $29, -4
-sw $25, -1552($30)
-addiu $29, $29, -4
-sw $9, -1556($30)
-addiu $29, $29, -4
-sw $2, -1560($30)
-addiu $29, $29, -4
-sw $12, -1564($30)
-addiu $29, $29, -4
-sw $24, -1568($30)
-addiu $29, $29, -4
-sw $15, -1572($30)
-addiu $29, $29, -4
-sw $2, -1576($30)
-addiu $29, $29, -4
-sw $4, -1580($30)
-addiu $29, $29, -4
-sw $18, -1584($30)
-addiu $29, $29, -4
-sw $25, -1588($30)
-addiu $29, $29, -4
-sw $24, -1592($30)
-addiu $29, $29, -4
-sw $4, -1596($30)
-addiu $29, $29, -4
-sw $18, -1600($30)
-addiu $29, $29, -4
-sw $8, -1604($30)
-addiu $29, $29, -4
-sw $8, -1608($30)
-lb $10, 0($8)
-addiu $12, $0, 100
-beq $10, $12, L171
-addiu $12, $0, 99
-beq $10, $12, L174
-addiu $12, $0, 115
-beq $10, $12, L175
-addiu $12, $0, 120
-beq $10, $12, L178
-addiu $12, $0, 102
-beq $10, $12, L183
-li $15, 47
-li $24, 58
-slt $15, $15, $10
-sgt $24, $24, $10
-and $15, $15, $24
-move $9, $10
-li $24, 1
-bne $15, $24, L170
-addiu $15, $10, -48
-li $24, 10
-mul $25, $25, $24
-add $25, $25, $15
-j L169
-
-L170:
-j L166
-
-L171:
-lw $9, 0($11)
-
-L172:
-li $15, 10
-addiu $29, $29, -4
-sw $10, -1612($30)
-addiu $29, $29, -4
-sw $12, -1616($30)
-addiu $29, $29, -4
-sw $12, -1620($30)
-addiu $29, $29, -4
-sw $12, -1624($30)
-addiu $29, $29, -4
-sw $12, -1628($30)
-addiu $29, $29, -4
-sw $12, -1632($30)
-addiu $29, $29, -4
-sw $15, -1636($30)
-addiu $29, $29, -4
-sw $24, -1640($30)
-addiu $29, $29, -4
-sw $15, -1644($30)
-addiu $29, $29, -4
-sw $24, -1648($30)
-addiu $29, $29, -4
-sw $15, -1652($30)
-addiu $29, $29, -4
-sw $24, -1656($30)
-addiu $29, $29, -4
-sw $15, -1660($30)
-addiu $29, $29, -4
-sw $24, -1664($30)
-addiu $29, $29, -4
-sw $25, -1668($30)
-addiu $29, $29, -4
-sw $25, -1672($30)
-addiu $29, $29, -4
-sw $9, -1676($30)
-addiu $29, $29, -4
-sw $15, -1680($30)
-div $9 $9 $15
-addiu $18, $18, 1
-li $15, 1
-sub $25, $25, $15
-li $15, 0
-bne $15, $9, L172
-
-L173:
-addiu $18, $18, -1
-addiu $2, $0, 1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L170
-
-L174:
-addi $25, $25, -1
-addiu $2, $0, 11
-lb $9, 0($11)
-addiu $11, $11, 4
-j L170
-
-L175:
-addiu $29, $29, -4
-sw $9, -1684($30)
-addiu $29, $29, -4
-sw $18, -1688($30)
-addiu $29, $29, -4
-sw $15, -1692($30)
-addiu $29, $29, -4
-sw $25, -1696($30)
-addiu $29, $29, -4
-sw $15, -1700($30)
-addiu $29, $29, -4
-sw $18, -1704($30)
-addiu $29, $29, -4
-sw $2, -1708($30)
-addiu $29, $29, -4
-sw $9, -1712($30)
-addiu $29, $29, -4
-sw $11, -1716($30)
-addiu $29, $29, -4
-sw $25, -1720($30)
-addiu $29, $29, -4
-sw $2, -1724($30)
-addiu $29, $29, -4
-sw $9, -1728($30)
-addiu $29, $29, -4
-sw $11, -1732($30)
-addiu $29, $29, -4
-sw $25, -1736($30)
-addiu $29, $29, -4
-sw $18, -1740($30)
-addiu $29, $29, -4
-sw $2, -1744($30)
-addiu $29, $29, -4
-sw $9, -1748($30)
-addiu $29, $29, -4
-sw $11, -1752($30)
-lw $15, 0($11)
-
-L176:
-lb $9, 0($15)
-li $24, 0
-beq $9, $24, L177
-addiu $18, $18, 1
-addi $15, $15, 1
-addi $25, $25, -1
-j L176
-
-L177:
-addiu $2, $0, 4
-addiu $18, $18, -1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L170
-
-L178:
-addiu $2, $0, 11
-li $16, 0
-addi $25, $25, -8
-j L180
-
-L179:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L181
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
-syscall
-addiu $29, $29, -4
-sw $15, -1756($30)
-addiu $29, $29, -4
-sw $9, -1760($30)
-addiu $29, $29, -4
-sw $24, -1764($30)
-addiu $29, $29, -4
-sw $18, -1768($30)
-addiu $29, $29, -4
-sw $15, -1772($30)
-addiu $29, $29, -4
-sw $25, -1776($30)
-addiu $29, $29, -4
-sw $2, -1780($30)
-addiu $29, $29, -4
-sw $18, -1784($30)
-addiu $29, $29, -4
-sw $9, -1788($30)
-addiu $29, $29, -4
-sw $11, -1792($30)
-addiu $29, $29, -4
-sw $2, -1796($30)
-addiu $29, $29, -4
-sw $16, -1800($30)
-addiu $29, $29, -4
-sw $25, -1804($30)
-addiu $29, $29, -4
-sw $24, -1808($30)
-addiu $29, $29, -4
-sw $15, -1812($30)
-addiu $29, $29, -4
-sw $2, -1816($30)
-addiu $29, $29, -4
-sw $4, -1820($30)
-addiu $29, $29, -4
-sw $18, -1824($30)
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L179
-j L181
-
-L180:
-lw $9, 0($11)
-sllv $9, $9, $16
-srl $9, $9, 28
-li $14, 0
-bne $9, $14, L179
-li $14, 28
-beq $14, $16, L179
-addi $25, $25, 1
-addiu $16, $16, 4
-j L180
-
-L181:
-lw $9, 0($11)
-li $17, 28
-beq $16, $17, L182
-sllv $9, $9, $16
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-addiu $29, $29, -4
-sw $25, -1828($30)
-addiu $29, $29, -4
-sw $24, -1832($30)
-addiu $29, $29, -4
-sw $9, -1836($30)
-addiu $29, $29, -4
-sw $9, -1840($30)
-addiu $29, $29, -4
-sw $9, -1844($30)
-addiu $29, $29, -4
-sw $14, -1848($30)
-addiu $29, $29, -4
-sw $14, -1852($30)
-addiu $29, $29, -4
-sw $25, -1856($30)
-addiu $29, $29, -4
-sw $16, -1860($30)
-addiu $29, $29, -4
-sw $9, -1864($30)
-addiu $29, $29, -4
-sw $17, -1868($30)
-addiu $29, $29, -4
-sw $9, -1872($30)
-addiu $29, $29, -4
-sw $9, -1876($30)
-addiu $29, $29, -4
-sw $9, -1880($30)
-addiu $29, $29, -4
-sw $13, -1884($30)
-addiu $29, $29, -4
-sw $12, -1888($30)
-addiu $29, $29, -4
-sw $13, -1892($30)
-addiu $29, $29, -4
-sw $12, -1896($30)
-mul $13, $13, $12
-add $9, $13, $9
-addiu $2, $0, 11
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $16, $16, 4
-li $17, 28
-beq $16, $17, L182
-j L181
-
-L182:
-lb $9, 0($11)
-sll $9, $9, 28
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-mul $13, $13, $12
-add $9, $13, $9
-addiu $11, $11, 4
-j L170
-
-L183:
-addi $25, $25, -8
-addiu $18, $18, 7
-addiu $2, $0, 2
-lw $9, 0($11)
-mtc1 $9, $f12
-addiu $11, $11, 4
-j L170
-
-L184:
-move $2, $18
-
-function_printf_load:
+function_realloc_load:
 lw $t0, -4($30)
 lw $t1, -8($30)
 lw $t2, -12($30)
@@ -13613,7 +3473,7 @@ lw $ra, -96($30)
 add $29, $30, $0
 lw $30, 0($29)
 jr $ra
-function_factorial:
+function_free:
 sw $30, 0($29)
 add $30, $29, $0
 addiu $29, $29, -100
@@ -13641,414 +3501,9 @@ sw $a1, -84($30)
 sw $a2, -88($30)
 sw $a3, -92($30)
 sw $ra, -96($30)
-L186:
+L112:
 
-jr $ra
-function_printf:
-sw $30, 0($29)
-add $30, $29, $0
-addiu $29, $29, -100
-sw $t0, -4($30)
-sw $t1, -8($30)
-sw $t2, -12($30)
-sw $t3, -16($30)
-sw $t4, -20($30)
-sw $t5, -24($30)
-sw $t6, -28($30)
-sw $t7, -32($30)
-sw $t8, -36($30)
-sw $t9, -40($30)
-sw $s0, -44($30)
-sw $s1, -48($30)
-sw $s2, -52($30)
-sw $s3, -56($30)
-sw $s4, -60($30)
-sw $s5, -64($30)
-sw $s6, -68($30)
-sw $s7, -72($30)
-sw $v1, -76($30)
-sw $a0, -80($30)
-sw $a1, -84($30)
-sw $a2, -88($30)
-sw $a3, -92($30)
-sw $ra, -96($30)
-L194:
-
-L195:
-addiu $11, $30, 4
-lw $8, 0($11)
-addiu $11, $11, 4
-
-L196:
-li $25, 0
-lb $9, 0($8)
-beq $9, $0, L215
-addiu $2, $0, 11
-addiu $12, $0, 37
-beq $9, $12, L200
-
-L197:
-
-L198:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L199
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
-syscall
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L198
-
-L199:
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $8, $8, 1
-j L196
-
-L200:
-addiu $8, $8, 1
-addiu $29, $29, -4
-sw $11, -1900($30)
-addiu $29, $29, -4
-sw $8, -1904($30)
-addiu $29, $29, -4
-sw $11, -1908($30)
-addiu $29, $29, -4
-sw $25, -1912($30)
-addiu $29, $29, -4
-sw $9, -1916($30)
-addiu $29, $29, -4
-sw $2, -1920($30)
-addiu $29, $29, -4
-sw $12, -1924($30)
-addiu $29, $29, -4
-sw $24, -1928($30)
-addiu $29, $29, -4
-sw $15, -1932($30)
-addiu $29, $29, -4
-sw $2, -1936($30)
-addiu $29, $29, -4
-sw $4, -1940($30)
-addiu $29, $29, -4
-sw $18, -1944($30)
-addiu $29, $29, -4
-sw $25, -1948($30)
-addiu $29, $29, -4
-sw $24, -1952($30)
-addiu $29, $29, -4
-sw $4, -1956($30)
-addiu $29, $29, -4
-sw $18, -1960($30)
-addiu $29, $29, -4
-sw $8, -1964($30)
-addiu $29, $29, -4
-sw $8, -1968($30)
-lb $10, 0($8)
-addiu $12, $0, 100
-beq $10, $12, L202
-addiu $12, $0, 99
-beq $10, $12, L205
-addiu $12, $0, 115
-beq $10, $12, L206
-addiu $12, $0, 120
-beq $10, $12, L209
-addiu $12, $0, 102
-beq $10, $12, L214
-li $15, 47
-li $24, 58
-slt $15, $15, $10
-sgt $24, $24, $10
-and $15, $15, $24
-move $9, $10
-li $24, 1
-bne $15, $24, L201
-addiu $15, $10, -48
-li $24, 10
-mul $25, $25, $24
-add $25, $25, $15
-j L200
-
-L201:
-j L197
-
-L202:
-lw $9, 0($11)
-
-L203:
-li $15, 10
-addiu $29, $29, -4
-sw $10, -1972($30)
-addiu $29, $29, -4
-sw $12, -1976($30)
-addiu $29, $29, -4
-sw $12, -1980($30)
-addiu $29, $29, -4
-sw $12, -1984($30)
-addiu $29, $29, -4
-sw $12, -1988($30)
-addiu $29, $29, -4
-sw $12, -1992($30)
-addiu $29, $29, -4
-sw $15, -1996($30)
-addiu $29, $29, -4
-sw $24, -2000($30)
-addiu $29, $29, -4
-sw $15, -2004($30)
-addiu $29, $29, -4
-sw $24, -2008($30)
-addiu $29, $29, -4
-sw $15, -2012($30)
-addiu $29, $29, -4
-sw $24, -2016($30)
-addiu $29, $29, -4
-sw $15, -2020($30)
-addiu $29, $29, -4
-sw $24, -2024($30)
-addiu $29, $29, -4
-sw $25, -2028($30)
-addiu $29, $29, -4
-sw $25, -2032($30)
-addiu $29, $29, -4
-sw $9, -2036($30)
-addiu $29, $29, -4
-sw $15, -2040($30)
-div $9 $9 $15
-addiu $18, $18, 1
-li $15, 1
-sub $25, $25, $15
-li $15, 0
-bne $15, $9, L203
-
-L204:
-addiu $18, $18, -1
-addiu $2, $0, 1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L201
-
-L205:
-addi $25, $25, -1
-addiu $2, $0, 11
-lb $9, 0($11)
-addiu $11, $11, 4
-j L201
-
-L206:
-addiu $29, $29, -4
-sw $9, -2044($30)
-addiu $29, $29, -4
-sw $18, -2048($30)
-addiu $29, $29, -4
-sw $15, -2052($30)
-addiu $29, $29, -4
-sw $25, -2056($30)
-addiu $29, $29, -4
-sw $15, -2060($30)
-addiu $29, $29, -4
-sw $18, -2064($30)
-addiu $29, $29, -4
-sw $2, -2068($30)
-addiu $29, $29, -4
-sw $9, -2072($30)
-addiu $29, $29, -4
-sw $11, -2076($30)
-addiu $29, $29, -4
-sw $25, -2080($30)
-addiu $29, $29, -4
-sw $2, -2084($30)
-addiu $29, $29, -4
-sw $9, -2088($30)
-addiu $29, $29, -4
-sw $11, -2092($30)
-addiu $29, $29, -4
-sw $25, -2096($30)
-addiu $29, $29, -4
-sw $18, -2100($30)
-addiu $29, $29, -4
-sw $2, -2104($30)
-addiu $29, $29, -4
-sw $9, -2108($30)
-addiu $29, $29, -4
-sw $11, -2112($30)
-lw $15, 0($11)
-
-L207:
-lb $9, 0($15)
-li $24, 0
-beq $9, $24, L208
-addiu $18, $18, 1
-addi $15, $15, 1
-addi $25, $25, -1
-j L207
-
-L208:
-addiu $2, $0, 4
-addiu $18, $18, -1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L201
-
-L209:
-addiu $2, $0, 11
-li $16, 0
-addi $25, $25, -8
-j L211
-
-L210:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L212
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
-syscall
-addiu $29, $29, -4
-sw $15, -2116($30)
-addiu $29, $29, -4
-sw $9, -2120($30)
-addiu $29, $29, -4
-sw $24, -2124($30)
-addiu $29, $29, -4
-sw $18, -2128($30)
-addiu $29, $29, -4
-sw $15, -2132($30)
-addiu $29, $29, -4
-sw $25, -2136($30)
-addiu $29, $29, -4
-sw $2, -2140($30)
-addiu $29, $29, -4
-sw $18, -2144($30)
-addiu $29, $29, -4
-sw $9, -2148($30)
-addiu $29, $29, -4
-sw $11, -2152($30)
-addiu $29, $29, -4
-sw $2, -2156($30)
-addiu $29, $29, -4
-sw $16, -2160($30)
-addiu $29, $29, -4
-sw $25, -2164($30)
-addiu $29, $29, -4
-sw $24, -2168($30)
-addiu $29, $29, -4
-sw $15, -2172($30)
-addiu $29, $29, -4
-sw $2, -2176($30)
-addiu $29, $29, -4
-sw $4, -2180($30)
-addiu $29, $29, -4
-sw $18, -2184($30)
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L210
-j L212
-
-L211:
-lw $9, 0($11)
-sllv $9, $9, $16
-srl $9, $9, 28
-li $14, 0
-bne $9, $14, L210
-li $14, 28
-beq $14, $16, L210
-addi $25, $25, 1
-addiu $16, $16, 4
-j L211
-
-L212:
-lw $9, 0($11)
-li $17, 28
-beq $16, $17, L213
-sllv $9, $9, $16
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-addiu $29, $29, -4
-sw $25, -2188($30)
-addiu $29, $29, -4
-sw $24, -2192($30)
-addiu $29, $29, -4
-sw $9, -2196($30)
-addiu $29, $29, -4
-sw $9, -2200($30)
-addiu $29, $29, -4
-sw $9, -2204($30)
-addiu $29, $29, -4
-sw $14, -2208($30)
-addiu $29, $29, -4
-sw $14, -2212($30)
-addiu $29, $29, -4
-sw $25, -2216($30)
-addiu $29, $29, -4
-sw $16, -2220($30)
-addiu $29, $29, -4
-sw $9, -2224($30)
-addiu $29, $29, -4
-sw $17, -2228($30)
-addiu $29, $29, -4
-sw $9, -2232($30)
-addiu $29, $29, -4
-sw $9, -2236($30)
-addiu $29, $29, -4
-sw $9, -2240($30)
-addiu $29, $29, -4
-sw $13, -2244($30)
-addiu $29, $29, -4
-sw $12, -2248($30)
-addiu $29, $29, -4
-sw $13, -2252($30)
-addiu $29, $29, -4
-sw $12, -2256($30)
-mul $13, $13, $12
-add $9, $13, $9
-addiu $2, $0, 11
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $16, $16, 4
-li $17, 28
-beq $16, $17, L213
-j L212
-
-L213:
-lb $9, 0($11)
-sll $9, $9, 28
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-mul $13, $13, $12
-add $9, $13, $9
-addiu $11, $11, 4
-j L201
-
-L214:
-addi $25, $25, -8
-addiu $18, $18, 7
-addiu $2, $0, 2
-lw $9, 0($11)
-mtc1 $9, $f12
-addiu $11, $11, 4
-j L201
-
-L215:
-move $2, $18
-
-function_printf_load:
+function_free_load:
 lw $t0, -4($30)
 lw $t1, -8($30)
 lw $t2, -12($30)
@@ -14076,7 +3531,7 @@ lw $ra, -96($30)
 add $29, $30, $0
 lw $30, 0($29)
 jr $ra
-function_printf:
+function_calloc:
 sw $30, 0($29)
 add $30, $29, $0
 addiu $29, $29, -100
@@ -14104,815 +3559,26 @@ sw $a1, -84($30)
 sw $a2, -88($30)
 sw $a3, -92($30)
 sw $ra, -96($30)
-L241:
+L113:
 
-L242:
-addiu $11, $30, 4
-lw $8, 0($11)
-addiu $11, $11, 4
-
-L243:
-li $25, 0
-lb $9, 0($8)
-beq $9, $0, L262
-addiu $2, $0, 11
-addiu $12, $0, 37
-beq $9, $12, L247
-
-L244:
-
-L245:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L246
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
+L114:
+lw $t0, 4($30)
+lw $t1, 8($30)
+mul $t2, $t0, $t1
+move $4, $t2
+li $2, 9
 syscall
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L245
+j L115
 
-L246:
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $8, $8, 1
-j L243
+L115:
+addiu $t2, $t2, -1
+addiu $t5, $2, 0
+addu $t6, $t5, $t2
+li $t7, 0
+sb $t7, 0($t6)
+bne $t7, $t2, L115
 
-L247:
-addiu $8, $8, 1
-addiu $29, $29, -4
-sw $11, -2260($30)
-addiu $29, $29, -4
-sw $8, -2264($30)
-addiu $29, $29, -4
-sw $11, -2268($30)
-addiu $29, $29, -4
-sw $25, -2272($30)
-addiu $29, $29, -4
-sw $9, -2276($30)
-addiu $29, $29, -4
-sw $2, -2280($30)
-addiu $29, $29, -4
-sw $12, -2284($30)
-addiu $29, $29, -4
-sw $24, -2288($30)
-addiu $29, $29, -4
-sw $15, -2292($30)
-addiu $29, $29, -4
-sw $2, -2296($30)
-addiu $29, $29, -4
-sw $4, -2300($30)
-addiu $29, $29, -4
-sw $18, -2304($30)
-addiu $29, $29, -4
-sw $25, -2308($30)
-addiu $29, $29, -4
-sw $24, -2312($30)
-addiu $29, $29, -4
-sw $4, -2316($30)
-addiu $29, $29, -4
-sw $18, -2320($30)
-addiu $29, $29, -4
-sw $8, -2324($30)
-addiu $29, $29, -4
-sw $8, -2328($30)
-lb $10, 0($8)
-addiu $12, $0, 100
-beq $10, $12, L249
-addiu $12, $0, 99
-beq $10, $12, L252
-addiu $12, $0, 115
-beq $10, $12, L253
-addiu $12, $0, 120
-beq $10, $12, L256
-addiu $12, $0, 102
-beq $10, $12, L261
-li $15, 47
-li $24, 58
-slt $15, $15, $10
-sgt $24, $24, $10
-and $15, $15, $24
-move $9, $10
-li $24, 1
-bne $15, $24, L248
-addiu $15, $10, -48
-li $24, 10
-mul $25, $25, $24
-add $25, $25, $15
-j L247
-
-L248:
-j L244
-
-L249:
-lw $9, 0($11)
-
-L250:
-li $15, 10
-addiu $29, $29, -4
-sw $10, -2332($30)
-addiu $29, $29, -4
-sw $12, -2336($30)
-addiu $29, $29, -4
-sw $12, -2340($30)
-addiu $29, $29, -4
-sw $12, -2344($30)
-addiu $29, $29, -4
-sw $12, -2348($30)
-addiu $29, $29, -4
-sw $12, -2352($30)
-addiu $29, $29, -4
-sw $15, -2356($30)
-addiu $29, $29, -4
-sw $24, -2360($30)
-addiu $29, $29, -4
-sw $15, -2364($30)
-addiu $29, $29, -4
-sw $24, -2368($30)
-addiu $29, $29, -4
-sw $15, -2372($30)
-addiu $29, $29, -4
-sw $24, -2376($30)
-addiu $29, $29, -4
-sw $15, -2380($30)
-addiu $29, $29, -4
-sw $24, -2384($30)
-addiu $29, $29, -4
-sw $25, -2388($30)
-addiu $29, $29, -4
-sw $25, -2392($30)
-addiu $29, $29, -4
-sw $9, -2396($30)
-addiu $29, $29, -4
-sw $15, -2400($30)
-div $9 $9 $15
-addiu $18, $18, 1
-li $15, 1
-sub $25, $25, $15
-li $15, 0
-bne $15, $9, L250
-
-L251:
-addiu $18, $18, -1
-addiu $2, $0, 1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L248
-
-L252:
-addi $25, $25, -1
-addiu $2, $0, 11
-lb $9, 0($11)
-addiu $11, $11, 4
-j L248
-
-L253:
-addiu $29, $29, -4
-sw $9, -2404($30)
-addiu $29, $29, -4
-sw $18, -2408($30)
-addiu $29, $29, -4
-sw $15, -2412($30)
-addiu $29, $29, -4
-sw $25, -2416($30)
-addiu $29, $29, -4
-sw $15, -2420($30)
-addiu $29, $29, -4
-sw $18, -2424($30)
-addiu $29, $29, -4
-sw $2, -2428($30)
-addiu $29, $29, -4
-sw $9, -2432($30)
-addiu $29, $29, -4
-sw $11, -2436($30)
-addiu $29, $29, -4
-sw $25, -2440($30)
-addiu $29, $29, -4
-sw $2, -2444($30)
-addiu $29, $29, -4
-sw $9, -2448($30)
-addiu $29, $29, -4
-sw $11, -2452($30)
-addiu $29, $29, -4
-sw $25, -2456($30)
-addiu $29, $29, -4
-sw $18, -2460($30)
-addiu $29, $29, -4
-sw $2, -2464($30)
-addiu $29, $29, -4
-sw $9, -2468($30)
-addiu $29, $29, -4
-sw $11, -2472($30)
-lw $15, 0($11)
-
-L254:
-lb $9, 0($15)
-li $24, 0
-beq $9, $24, L255
-addiu $18, $18, 1
-addi $15, $15, 1
-addi $25, $25, -1
-j L254
-
-L255:
-addiu $2, $0, 4
-addiu $18, $18, -1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L248
-
-L256:
-addiu $2, $0, 11
-li $16, 0
-addi $25, $25, -8
-j L258
-
-L257:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L259
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
-syscall
-addiu $29, $29, -4
-sw $15, -2476($30)
-addiu $29, $29, -4
-sw $9, -2480($30)
-addiu $29, $29, -4
-sw $24, -2484($30)
-addiu $29, $29, -4
-sw $18, -2488($30)
-addiu $29, $29, -4
-sw $15, -2492($30)
-addiu $29, $29, -4
-sw $25, -2496($30)
-addiu $29, $29, -4
-sw $2, -2500($30)
-addiu $29, $29, -4
-sw $18, -2504($30)
-addiu $29, $29, -4
-sw $9, -2508($30)
-addiu $29, $29, -4
-sw $11, -2512($30)
-addiu $29, $29, -4
-sw $2, -2516($30)
-addiu $29, $29, -4
-sw $16, -2520($30)
-addiu $29, $29, -4
-sw $25, -2524($30)
-addiu $29, $29, -4
-sw $24, -2528($30)
-addiu $29, $29, -4
-sw $15, -2532($30)
-addiu $29, $29, -4
-sw $2, -2536($30)
-addiu $29, $29, -4
-sw $4, -2540($30)
-addiu $29, $29, -4
-sw $18, -2544($30)
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L257
-j L259
-
-L258:
-lw $9, 0($11)
-sllv $9, $9, $16
-srl $9, $9, 28
-li $14, 0
-bne $9, $14, L257
-li $14, 28
-beq $14, $16, L257
-addi $25, $25, 1
-addiu $16, $16, 4
-j L258
-
-L259:
-lw $9, 0($11)
-li $17, 28
-beq $16, $17, L260
-sllv $9, $9, $16
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-addiu $29, $29, -4
-sw $25, -2548($30)
-addiu $29, $29, -4
-sw $24, -2552($30)
-addiu $29, $29, -4
-sw $9, -2556($30)
-addiu $29, $29, -4
-sw $9, -2560($30)
-addiu $29, $29, -4
-sw $9, -2564($30)
-addiu $29, $29, -4
-sw $14, -2568($30)
-addiu $29, $29, -4
-sw $14, -2572($30)
-addiu $29, $29, -4
-sw $25, -2576($30)
-addiu $29, $29, -4
-sw $16, -2580($30)
-addiu $29, $29, -4
-sw $9, -2584($30)
-addiu $29, $29, -4
-sw $17, -2588($30)
-addiu $29, $29, -4
-sw $9, -2592($30)
-addiu $29, $29, -4
-sw $9, -2596($30)
-addiu $29, $29, -4
-sw $9, -2600($30)
-addiu $29, $29, -4
-sw $13, -2604($30)
-addiu $29, $29, -4
-sw $12, -2608($30)
-addiu $29, $29, -4
-sw $13, -2612($30)
-addiu $29, $29, -4
-sw $12, -2616($30)
-mul $13, $13, $12
-add $9, $13, $9
-addiu $2, $0, 11
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $16, $16, 4
-li $17, 28
-beq $16, $17, L260
-j L259
-
-L260:
-lb $9, 0($11)
-sll $9, $9, 28
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-mul $13, $13, $12
-add $9, $13, $9
-addiu $11, $11, 4
-j L248
-
-L261:
-addi $25, $25, -8
-addiu $18, $18, 7
-addiu $2, $0, 2
-lw $9, 0($11)
-mtc1 $9, $f12
-addiu $11, $11, 4
-j L248
-
-L262:
-move $2, $18
-
-function_printf_load:
-lw $t0, -4($30)
-lw $t1, -8($30)
-lw $t2, -12($30)
-lw $t3, -16($30)
-lw $t4, -20($30)
-lw $t5, -24($30)
-lw $t6, -28($30)
-lw $t7, -32($30)
-lw $t8, -36($30)
-lw $t9, -40($30)
-lw $s0, -44($30)
-lw $s1, -48($30)
-lw $s2, -52($30)
-lw $s3, -56($30)
-lw $s4, -60($30)
-lw $s5, -64($30)
-lw $s6, -68($30)
-lw $s7, -72($30)
-lw $v1, -76($30)
-lw $a0, -80($30)
-lw $a1, -84($30)
-lw $a2, -88($30)
-lw $a3, -92($30)
-lw $ra, -96($30)
-add $29, $30, $0
-lw $30, 0($29)
-jr $ra
-function_printf:
-sw $30, 0($29)
-add $30, $29, $0
-addiu $29, $29, -100
-sw $t0, -4($30)
-sw $t1, -8($30)
-sw $t2, -12($30)
-sw $t3, -16($30)
-sw $t4, -20($30)
-sw $t5, -24($30)
-sw $t6, -28($30)
-sw $t7, -32($30)
-sw $t8, -36($30)
-sw $t9, -40($30)
-sw $s0, -44($30)
-sw $s1, -48($30)
-sw $s2, -52($30)
-sw $s3, -56($30)
-sw $s4, -60($30)
-sw $s5, -64($30)
-sw $s6, -68($30)
-sw $s7, -72($30)
-sw $v1, -76($30)
-sw $a0, -80($30)
-sw $a1, -84($30)
-sw $a2, -88($30)
-sw $a3, -92($30)
-sw $ra, -96($30)
-L266:
-
-L267:
-addiu $11, $30, 4
-lw $8, 0($11)
-addiu $11, $11, 4
-
-L268:
-li $25, 0
-lb $9, 0($8)
-beq $9, $0, L287
-addiu $2, $0, 11
-addiu $12, $0, 37
-beq $9, $12, L272
-
-L269:
-
-L270:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L271
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
-syscall
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L270
-
-L271:
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $8, $8, 1
-j L268
-
-L272:
-addiu $8, $8, 1
-addiu $29, $29, -4
-sw $11, -2620($30)
-addiu $29, $29, -4
-sw $8, -2624($30)
-addiu $29, $29, -4
-sw $11, -2628($30)
-addiu $29, $29, -4
-sw $25, -2632($30)
-addiu $29, $29, -4
-sw $9, -2636($30)
-addiu $29, $29, -4
-sw $2, -2640($30)
-addiu $29, $29, -4
-sw $12, -2644($30)
-addiu $29, $29, -4
-sw $24, -2648($30)
-addiu $29, $29, -4
-sw $15, -2652($30)
-addiu $29, $29, -4
-sw $2, -2656($30)
-addiu $29, $29, -4
-sw $4, -2660($30)
-addiu $29, $29, -4
-sw $18, -2664($30)
-addiu $29, $29, -4
-sw $25, -2668($30)
-addiu $29, $29, -4
-sw $24, -2672($30)
-addiu $29, $29, -4
-sw $4, -2676($30)
-addiu $29, $29, -4
-sw $18, -2680($30)
-addiu $29, $29, -4
-sw $8, -2684($30)
-addiu $29, $29, -4
-sw $8, -2688($30)
-lb $10, 0($8)
-addiu $12, $0, 100
-beq $10, $12, L274
-addiu $12, $0, 99
-beq $10, $12, L277
-addiu $12, $0, 115
-beq $10, $12, L278
-addiu $12, $0, 120
-beq $10, $12, L281
-addiu $12, $0, 102
-beq $10, $12, L286
-li $15, 47
-li $24, 58
-slt $15, $15, $10
-sgt $24, $24, $10
-and $15, $15, $24
-move $9, $10
-li $24, 1
-bne $15, $24, L273
-addiu $15, $10, -48
-li $24, 10
-mul $25, $25, $24
-add $25, $25, $15
-j L272
-
-L273:
-j L269
-
-L274:
-lw $9, 0($11)
-
-L275:
-li $15, 10
-addiu $29, $29, -4
-sw $10, -2692($30)
-addiu $29, $29, -4
-sw $12, -2696($30)
-addiu $29, $29, -4
-sw $12, -2700($30)
-addiu $29, $29, -4
-sw $12, -2704($30)
-addiu $29, $29, -4
-sw $12, -2708($30)
-addiu $29, $29, -4
-sw $12, -2712($30)
-addiu $29, $29, -4
-sw $15, -2716($30)
-addiu $29, $29, -4
-sw $24, -2720($30)
-addiu $29, $29, -4
-sw $15, -2724($30)
-addiu $29, $29, -4
-sw $24, -2728($30)
-addiu $29, $29, -4
-sw $15, -2732($30)
-addiu $29, $29, -4
-sw $24, -2736($30)
-addiu $29, $29, -4
-sw $15, -2740($30)
-addiu $29, $29, -4
-sw $24, -2744($30)
-addiu $29, $29, -4
-sw $25, -2748($30)
-addiu $29, $29, -4
-sw $25, -2752($30)
-addiu $29, $29, -4
-sw $9, -2756($30)
-addiu $29, $29, -4
-sw $15, -2760($30)
-div $9 $9 $15
-addiu $18, $18, 1
-li $15, 1
-sub $25, $25, $15
-li $15, 0
-bne $15, $9, L275
-
-L276:
-addiu $18, $18, -1
-addiu $2, $0, 1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L273
-
-L277:
-addi $25, $25, -1
-addiu $2, $0, 11
-lb $9, 0($11)
-addiu $11, $11, 4
-j L273
-
-L278:
-addiu $29, $29, -4
-sw $9, -2764($30)
-addiu $29, $29, -4
-sw $18, -2768($30)
-addiu $29, $29, -4
-sw $15, -2772($30)
-addiu $29, $29, -4
-sw $25, -2776($30)
-addiu $29, $29, -4
-sw $15, -2780($30)
-addiu $29, $29, -4
-sw $18, -2784($30)
-addiu $29, $29, -4
-sw $2, -2788($30)
-addiu $29, $29, -4
-sw $9, -2792($30)
-addiu $29, $29, -4
-sw $11, -2796($30)
-addiu $29, $29, -4
-sw $25, -2800($30)
-addiu $29, $29, -4
-sw $2, -2804($30)
-addiu $29, $29, -4
-sw $9, -2808($30)
-addiu $29, $29, -4
-sw $11, -2812($30)
-addiu $29, $29, -4
-sw $25, -2816($30)
-addiu $29, $29, -4
-sw $18, -2820($30)
-addiu $29, $29, -4
-sw $2, -2824($30)
-addiu $29, $29, -4
-sw $9, -2828($30)
-addiu $29, $29, -4
-sw $11, -2832($30)
-lw $15, 0($11)
-
-L279:
-lb $9, 0($15)
-li $24, 0
-beq $9, $24, L280
-addiu $18, $18, 1
-addi $15, $15, 1
-addi $25, $25, -1
-j L279
-
-L280:
-addiu $2, $0, 4
-addiu $18, $18, -1
-lw $9, 0($11)
-addiu $11, $11, 4
-j L273
-
-L281:
-addiu $2, $0, 11
-li $16, 0
-addi $25, $25, -8
-j L283
-
-L282:
-li $24, 1
-slt $15, $25, $24
-beq $15, $24, L284
-move $15, $2
-li $2, 11
-li $4, 32
-addiu $18, $18, 1
-syscall
-addiu $29, $29, -4
-sw $15, -2836($30)
-addiu $29, $29, -4
-sw $9, -2840($30)
-addiu $29, $29, -4
-sw $24, -2844($30)
-addiu $29, $29, -4
-sw $18, -2848($30)
-addiu $29, $29, -4
-sw $15, -2852($30)
-addiu $29, $29, -4
-sw $25, -2856($30)
-addiu $29, $29, -4
-sw $2, -2860($30)
-addiu $29, $29, -4
-sw $18, -2864($30)
-addiu $29, $29, -4
-sw $9, -2868($30)
-addiu $29, $29, -4
-sw $11, -2872($30)
-addiu $29, $29, -4
-sw $2, -2876($30)
-addiu $29, $29, -4
-sw $16, -2880($30)
-addiu $29, $29, -4
-sw $25, -2884($30)
-addiu $29, $29, -4
-sw $24, -2888($30)
-addiu $29, $29, -4
-sw $15, -2892($30)
-addiu $29, $29, -4
-sw $2, -2896($30)
-addiu $29, $29, -4
-sw $4, -2900($30)
-addiu $29, $29, -4
-sw $18, -2904($30)
-addiu $25, $25, -1
-move $2, $15
-li $24, 0
-bne $25, $24, L282
-j L284
-
-L283:
-lw $9, 0($11)
-sllv $9, $9, $16
-srl $9, $9, 28
-li $14, 0
-bne $9, $14, L282
-li $14, 28
-beq $14, $16, L282
-addi $25, $25, 1
-addiu $16, $16, 4
-j L283
-
-L284:
-lw $9, 0($11)
-li $17, 28
-beq $16, $17, L285
-sllv $9, $9, $16
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-addiu $29, $29, -4
-sw $25, -2908($30)
-addiu $29, $29, -4
-sw $24, -2912($30)
-addiu $29, $29, -4
-sw $9, -2916($30)
-addiu $29, $29, -4
-sw $9, -2920($30)
-addiu $29, $29, -4
-sw $9, -2924($30)
-addiu $29, $29, -4
-sw $14, -2928($30)
-addiu $29, $29, -4
-sw $14, -2932($30)
-addiu $29, $29, -4
-sw $25, -2936($30)
-addiu $29, $29, -4
-sw $16, -2940($30)
-addiu $29, $29, -4
-sw $9, -2944($30)
-addiu $29, $29, -4
-sw $17, -2948($30)
-addiu $29, $29, -4
-sw $9, -2952($30)
-addiu $29, $29, -4
-sw $9, -2956($30)
-addiu $29, $29, -4
-sw $9, -2960($30)
-addiu $29, $29, -4
-sw $13, -2964($30)
-addiu $29, $29, -4
-sw $12, -2968($30)
-addiu $29, $29, -4
-sw $13, -2972($30)
-addiu $29, $29, -4
-sw $12, -2976($30)
-mul $13, $13, $12
-add $9, $13, $9
-addiu $2, $0, 11
-add $4, $0, $9
-addiu $18, $18, 1
-syscall
-addiu $16, $16, 4
-li $17, 28
-beq $16, $17, L285
-j L284
-
-L285:
-lb $9, 0($11)
-sll $9, $9, 28
-srl $9, $9, 28
-addiu $9, $9, 48
-addiu $13, $0, 58
-div $12 $9 $13
-mflo $12
-andi $13, $12, 1
-addi $12, $12, 38
-mul $13, $13, $12
-add $9, $13, $9
-addiu $11, $11, 4
-j L273
-
-L286:
-addi $25, $25, -8
-addiu $18, $18, 7
-addiu $2, $0, 2
-lw $9, 0($11)
-mtc1 $9, $f12
-addiu $11, $11, 4
-j L273
-
-L287:
-move $2, $18
-
-function_printf_load:
+function_calloc_load:
 lw $t0, -4($30)
 lw $t1, -8($30)
 lw $t2, -12($30)
