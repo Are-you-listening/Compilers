@@ -1,5 +1,5 @@
 digraph AST {
-  "125515034330208" [label="L2:
+  "125702257144880" [label="L2:
 addiu $t0, $sp, 0
 #/* show symbol table visualization */
 

@@ -1,5 +1,5 @@
 digraph AST {
-  "125515035361872" [label="%\".2\" = .2:
+  "125702256924400" [label="%\".2\" = .2:
   %\".3\" = alloca i8, align 1
   ;  VOID otherFunc ( ) { CHAR x ;
   ret void"];

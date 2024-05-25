@@ -1,24 +1,33 @@
 #include <stdio.h>
 
-void printPyramid(int rows, char toPrint)
-{
+struct water{
+    int has_nemo;
+};
 
-   int i = 1;
-   while (i <= rows) {
-        int j = 1;
-      while (j < i) {
-         printf("%c", toPrint);
-         j++;
-      }
-        printf("%c\n", toPrint);
-      i++;
-   }
-}
+struct bottle{
+    struct water perier;
+    struct water spa;
+    struct water sea;
+};
 
-int main() {
-    char toPrint = '*';
-    //printf("%c", toPrint);
-    int rows = 5;
-    printPyramid(rows, toPrint);
-   return 0;
+int main(){
+    struct water perier;
+    perier.has_nemo = 0;
+    struct water spa;
+    spa.has_nemo = 0;
+    struct water sea;
+    sea.has_nemo = 1;
+
+        printf("%d", perier.has_nemo );
+    printf("%d", spa.has_nemo );
+    printf("%d", sea.has_nemo );
+
+    struct bottle boo;
+    boo.perier = perier;
+    boo.spa = spa;
+    boo.sea = sea;
+
+
+
+    return 0;
 }
