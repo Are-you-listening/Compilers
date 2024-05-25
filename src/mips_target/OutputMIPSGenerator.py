@@ -9,7 +9,6 @@ from src.parser.Tables.TypeNodehandler import TypeNodeHandler
 from src.parser.Tables.SymbolTypeUnion import SymbolTypeUnion
 from src.mips_target.MipsLibrary import *
 from .MipsSingleton import MipsSingleton
-from .PredifinedStructures import SpecialFunctions
 from copy import deepcopy
 
 

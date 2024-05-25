@@ -1,6 +1,8 @@
 from src.mips_target.MipsLibrary import *
 from .MipsSingleton import MipsSingleton
-
+from .OutputMIPSGenerator import FunctionMet, Conversion
+from src.parser.Tables.SymbolTypePtr import SymbolTypePtr
+from src.parser.Tables.SymbolTypeStruct import SymbolTypeStruct
 
 class SpecialFunctions:
     @staticmethod
@@ -274,9 +276,113 @@ class SpecialFunctions:
 
         after_perms.systemCall()
 
+        descriptor = after_perms.addui(v0, 0)
+
+        #malloc_size = after_perms.li(12)
+
+        #MipsSingleton.getInstance().setCurrentBlock(after_perms)
+        #FunctionMet.functionCall("malloc", [malloc_size])
+
+        #struct_ptr = after_perms.addui(v0, 0)
+
+        descriptor.symbol_type = SymbolTypePtr(SymbolTypeStruct("0_FILE_IO"), False)
+        after_perms.move(v0, descriptor)
+
         """
         make struct using the descriptor as first element
         """
+
+        function.endFunction()
+        return function
+
+    @staticmethod
+    def fgets(func_type):
+        function: Function = MipsSingleton.getInstance().getModule().createFunction("fgets", func_type)
+
+        base_block = function.createBlock()
+
+        fp_register = Memory(30, True)
+
+        v0 = Memory(2, True)
+
+        a0 = Memory(4, True)
+        a1 = Memory(5, True)
+        a2 = Memory(6, True)
+
+        buffer = base_block.lw(fp_register, 4)
+        read_size = base_block.lw(fp_register, 8)
+        temp = base_block.addui(read_size, -1)
+        temp.overrideMemory(read_size)
+        descriptor = base_block.lw(fp_register, 12)
+
+        base_block.move(a0, descriptor)
+        base_block.move(a1, buffer)
+        base_block.move(a2, read_size)
+
+        s_code = base_block.li(14)
+        s_code.overrideMemory(v0)
+
+        base_block.systemCall()
+
+        function.endFunction()
+        return function
+
+    @staticmethod
+    def fputs(func_type):
+        function: Function = MipsSingleton.getInstance().getModule().createFunction("fputs", func_type)
+
+        base_block = function.createBlock()
+        after_length = function.createBlock()
+
+        fp_register = Memory(30, True)
+
+        v0 = Memory(2, True)
+
+        a0 = Memory(4, True)
+        a1 = Memory(5, True)
+        a2 = Memory(6, True)
+
+        buffer = base_block.lw(fp_register, 4)
+        read_size = base_block.li(0)
+
+        descriptor = base_block.lw(fp_register, 8)
+
+        base_block.j(after_length.label)
+
+        after_length.move(a0, descriptor)
+        after_length.move(a1, buffer)
+        after_length.move(a2, read_size)
+
+        s_code = after_length.li(15)
+        s_code.overrideMemory(v0)
+
+        after_length.systemCall()
+
+        function.endFunction()
+        return function
+
+    @staticmethod
+    def fclose(func_type):
+        function: Function = MipsSingleton.getInstance().getModule().createFunction("fclose", func_type)
+
+        base_block = function.createBlock()
+
+        fp_register = Memory(30, True)
+
+        v0 = Memory(2, True)
+
+        a0 = Memory(4, True)
+        a1 = Memory(5, True)
+        a2 = Memory(6, True)
+
+        descriptor = base_block.lw(fp_register, 4)
+
+        base_block.move(a0, descriptor)
+
+        s_code = base_block.li(16)
+        s_code.overrideMemory(v0)
+
+        base_block.systemCall()
 
         function.endFunction()
         return function

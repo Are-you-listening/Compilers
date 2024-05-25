@@ -7,9 +7,12 @@ int main(){
     char* char_buff = malloc(i);
 
     int j = 0;
-    for (j = 0; j < i; j++){
+    for (j = 0; j < i-1; j++){
         *(char_buff+j) = 'A' + (j % 20);
+
     }
+    *(char_buff+999) = '\0';
+    printf("%s", char_buff);
 
     FILE* fp = fopen("files/test8.txt", "w");
 

@@ -94,7 +94,7 @@ class RegisterManager:
             sp = self.getMemoryObject("sp")
 
             block.addui_function(sp, -4, sp)  # Adjust frame/stack ptr
-            block.comment(f"#1 {-(block.function.getOffset() + counter)}")
+
             block.sw_spill(var, fp, -(block.function.getOffset()+counter))  # Store to new ptr
             function_spill_map[var] = -(block.function.getOffset()+counter)
             self.register_spill_map[block.function.getFunctionName()] = function_spill_map
@@ -380,7 +380,6 @@ class RegisterManager:
             store_ptr = block.addui(sp, 4)
 
         store_ptr.symbol_type = symbol_type
-        block.comment(f"#2 {-(block.function.getOffset() + self.curr_function[block.function.getFunctionName()])}")
 
         return store_ptr
 

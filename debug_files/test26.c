@@ -1,19 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int main(){
+    int i = 1000;
 
-int main() {
-   int* a = calloc(5, sizeof(int));
-   *a = 5;
-   printf("%d", *a);
-   printf("%d", *(a+4));
-   *(a+4) = 6;
-   printf("%d", *(a+4));
+    char* char_buff = malloc(i);
 
+    int j = 0;
+    for (j = 0; j < i; j++){
+        *(char_buff+j) = 'a' + (j % 100);
+    }
+    *(char_buff+999) = '\0';
 
-   int* b = realloc(a, 100);
-   *(b+20) = 89;
-   printf("%d", *(b+20));
+    FILE* fp = fopen("files/test7.txt", "w");
 
-   return 0;
+    fputs(char_buff,fp);
+
+    return 0;
+
 }
