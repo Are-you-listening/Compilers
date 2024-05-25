@@ -140,6 +140,8 @@ class CFunctionExecuterChar(CFunctionExecuter):
         self.conversion_dict = {"INT": _Conversions.ToInt, "FLOAT": _Conversions.ToFloat, "BOOL": _Conversions.ToBool}
 
     def fromString(self, string: str):
+        string = string.encode('utf-8').decode('unicode-escape')
+
         data = ord(string[1])
         return _RangeCheck.toSigned(data)
 

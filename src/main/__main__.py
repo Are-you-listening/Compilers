@@ -219,6 +219,7 @@ def main(argv):
 
     ast, codegetter, includeSTDIO, comments = cleanGreen(input_file, symbol_file)  # Start AST cleanup & Dot Conversion
     ast, cfgs = Processing(ast, dot_file, fold, includeSTDIO, unused_var)  # Check for Errors , Apply Folding Techniques , ...
+
     if llvm_file is not None:
         LLVMSingleton.setName(input_file)
 

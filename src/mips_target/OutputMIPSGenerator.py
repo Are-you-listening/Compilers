@@ -247,6 +247,7 @@ class Declaration:
 
     @staticmethod
     def mipsLiteral(value, symbol_type: SymbolType):
+
         if symbol_type.getBaseType() == "FLOAT":
             value = float(value)
         if symbol_type.getBaseType() == "INT":
@@ -259,13 +260,13 @@ class Declaration:
             """
             support right interpretation special characters like \n
             """
+
             if len(value) != 1:
                 value = value.encode('utf-8').decode('unicode-escape')
 
             value = ord(value)  # Values are strings
             if value > 127:  # outside of a certain range, chars need to be read as signed chars
                 value -= 256
-
         block = MipsSingleton.getInstance().getCurrentBlock()
         if isinstance(value, float):
             var_name = MipsSingleton.getInstance().getFloatName()

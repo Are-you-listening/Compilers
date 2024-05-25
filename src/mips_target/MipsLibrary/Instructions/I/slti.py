@@ -6,4 +6,4 @@ class Slti(IMipsInstruction):
         super().__init__(rs, rt, load_value)
 
     def toString(self):
-        return f"slti ${self.rt} {self.immediate}"
+        return f"slti ${self.rt} ${self.rs} {self.immediate}"
