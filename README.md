@@ -5,10 +5,11 @@
 ### Requirements & Dependencies:
 - Install the python packages, see ``requirements.txt``
 - Working gcc compiler on your device
-- For unit tests, a linux Kernel with lli package installed: 
+- For unit tests, a linux Kernel with lli & spim packages installed: 
 
 ```bash
 sudo apt install llvm
+sudo apt install spim
 ```
 
 ### Video Explanation
