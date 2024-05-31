@@ -286,7 +286,6 @@ class RegisterManager:
         if symbol_type.getPtrAmount() == 0:
             return value
 
-
         self.loadIfNeeded(block, [value])
 
         if block.function.getFunctionName() not in self.curr_function:

@@ -157,7 +157,7 @@ class BinaryWrapper:
 class Declaration:
 
     @staticmethod
-    def declare(var_name: str, symbol_type: SymbolType, value=0, is_global=False):
+    def declare(var_name: str, symbol_type: SymbolType, value=0, is_global=False, array_ptr=True):
         block = MipsSingleton.getInstance().getCurrentBlock()
         register_manager = RegisterManager.getInstance()
         instr = None
@@ -182,7 +182,7 @@ class Declaration:
                 if isinstance(symbol_type.deReference(), SymbolTypeArray):
                     values = []
                     for i in range(symbol_type.size):
-                        val = Declaration.declare(f".{i}.{var_name}", symbol_type.deReference(), value, is_global)
+                        val = Declaration.declare(f".{i}.{var_name}", symbol_type.deReference(), value, is_global, False)
 
                         values.append(str(val))
 
@@ -196,6 +196,11 @@ class Declaration:
                 special_info = f".word"
 
                 value = f".{var_name}"
+
+                if not array_ptr:
+                    instr = Memory(value, False)
+                    instr.symbol_type = symbol_type
+                    return instr
 
             elif symbol_type.getPtrAmount() == 1 and symbol_type.getBaseType() == "CHAR":
                 index, found = MipsSingleton.getInstance().getStringIndex(value)

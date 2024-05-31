@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char a[2][2];
+char a[2][2][2];
 
 int main() {
 
-    a[0][0] = 'a';
-    a[0][1] = 'b';
+
+
+    a[0][0][0] = 'a';
+    a[0][0][1] = 'c';
+    a[1][1][1] = 'b';
 
     char* v = a;
 
