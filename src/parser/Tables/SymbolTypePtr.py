@@ -45,7 +45,7 @@ class SymbolTypePtr(SymbolType):
         return self.pts_to.getRealPtrAmount()+1
 
     def getBytesUsed(self):
-        return 8
+        return 4
 
     def hasFunction(self):
         """

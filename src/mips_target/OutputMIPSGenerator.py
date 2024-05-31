@@ -1422,11 +1422,17 @@ class Conversion:
         if to_type.getPtrAmount() != from_type.getPtrAmount() and min(to_type.getPtrAmount(), from_type.getPtrAmount()) != 0:
             ptr_difference = from_type.getPtrAmount() - to_type.getPtrAmount()
             for t in range(max(ptr_difference, 0)):
+                print(from_type.getPtrTuple())
                 var = block.lw(var, 0)
 
             for t in range(min(ptr_difference, 0)*-1):
                 temp = to_type
+
+                print("heo", to_type.getPtrTuple())
+
                 for v in range((ptr_difference*-1)-t):
+                    print("heo2", to_type.getPtrTuple())
+
                     temp = temp.deReference()
 
                 if isinstance(temp, SymbolTypeStruct):
@@ -1435,7 +1441,8 @@ class Conversion:
                     for option in range(temp.getElementCount()):
                         o = temp.getElementType(option)
                         sub_size = max(sub_size, o.getBytesUsed())
-
+                        print(type(o))
+                        print("subi", sub_size)
 
                 elif isinstance(temp, SymbolTypeArray):
                     size = temp.size
@@ -1450,19 +1457,48 @@ class Conversion:
                 t_list = []
                 for s in range(size):
 
-                    t = block.addui(var, int((s+1)*change))
+                    t = block.addui(var, int((s)*change))
                     t_list.append(t)
 
-                RegisterManager.getInstance().claimStack(block, (size + 1) * 4)
-                store_loc = block.addui(Memory("sp", True), 4)
+                a0 = Memory("a0", True)
+                v0 = Memory("v0", True)
+                """
+                Store conversion on the heap
+                """
+                temp_reg = block.li((size + 1) * 4)
+                temp_reg.overrideMemory(a0)
+
+                temp_reg = block.li(9)
+                temp_reg.overrideMemory(v0)
+                block.systemCall()
+
+                store_loc = block.addui(v0, 0)
+
+                #RegisterManager.getInstance().claimStack(block, (size + 1) * 4)
+                #store_loc = block.addui(Memory("sp", True), 4)
 
                 for i, t in enumerate(t_list):
                     block.sw(t, store_loc, 4*(i))
 
                 var = store_loc
-                RegisterManager.getInstance().claimStack(block, 4)
-                block.sw(var,Memory("sp", True), 4)
-                var = block.addui(Memory("sp", True), 4)
+
+                """
+                Store ptr on heap
+                """
+                temp_reg = block.li(4)
+                temp_reg.overrideMemory(a0)
+
+                temp_reg = block.li(9)
+                temp_reg.overrideMemory(v0)
+                block.systemCall()
+
+                store_loc = block.addui(v0, 0)
+                block.sw(var, store_loc, 0)
+                var = store_loc
+
+                #RegisterManager.getInstance().claimStack(block, 4)
+                #block.sw(var, Memory("sp", True), 4)
+                #var = block.addui(Memory("sp", True), 4)
 
             var.symbol_type = to_type
             return var

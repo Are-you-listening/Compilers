@@ -11,6 +11,7 @@ class Function:
         self.blocks = []
 
         self.frame_registers = RegisterManager.getInstance().getFramePtrRegisters()
+        self.original_address = [f.address for f in self.frame_registers]
 
         self.store_block: Block = self.__storeFrame(self.frame_registers)
         self.load_block: Block = None
@@ -81,6 +82,15 @@ class Function:
             """
             Store the registers on the frame ptr stack space (code scoping)
             """
+
+            """
+            make sure we load into registers instead of mem address
+            """
+            if not r.is_loaded:
+                val = self.original_address[i]
+                r.is_loaded = False
+                r.address = val
+
             load_frame_block.lw_function(fp_register, -(i+1)*4, r)
             RegisterManager.getInstance().framePtrLoad(r)
 
