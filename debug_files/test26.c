@@ -1,20 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define OOPS union a
-
-OOPS{
-    OOPS* b;
-    int v;
-};
-
+char a[2][2][2];
 
 int main() {
+    a[0][0][0] = 'a';
+    a[1][0][0] = 'c';
+    a[1][1][1] = 'b';
 
-    union a* w = (OOPS*) malloc(sizeof(OOPS));
-    w->v = 5;
+    int* v = a;
 
-    printf("%d", w->v);
+    printf("%c", *(v));
+    //printf("%c", *(v+1));
 
 
 
