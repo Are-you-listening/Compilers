@@ -49,7 +49,7 @@ def script():
             outfile.close()
 
             cfg_target = f"{curr_dir}{cfg[1:]}"
-            if file_name == "./example_source_files/46_unions/46_unions":
+            if file_name.endswith("46_unions"):
                 cfg_target = ""
 
             main([0, "--input", f"{curr_dir}{c[1:]}", "--target_llvm", f"{curr_dir}{llvm[1:]}", "--target_mips", f"{curr_dir}{mips[1:]}", "--fold", "True", "--render_ast", f"{curr_dir}{ast[1:]}", "--render_symb", f"{curr_dir}{table[1:]}", "--target_control_flow", cfg_target, "--unused_var", unused_var])  # Run our compiler with folding
