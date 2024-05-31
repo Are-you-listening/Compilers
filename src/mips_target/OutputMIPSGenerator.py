@@ -166,7 +166,8 @@ class Declaration:
             # Add global variable to the .data section
             module = MipsSingleton.getInstance().getModule()
             # if no initial value -> initialize to zero
-            if symbol_type.getBaseType() == "FLOAT":
+
+            if symbol_type.getBaseType() and symbol_type.isBase() == "FLOAT":
                 special_info = ".float"
                 #mem = block.l_s(var_name)
 
@@ -174,6 +175,7 @@ class Declaration:
                 """
                 make global array
                 """
+
                 if value == 0:
                     values = [str(value) for i in range(symbol_type.size)]
                 else:
@@ -187,7 +189,7 @@ class Declaration:
                         values.append(str(val))
 
                 if symbol_type.deReference().isBase() and symbol_type.deReference().getBaseType() == "CHAR":
-                    special_info = f".byte"
+                    special_info = ".byte"
                 else:
                     special_info = f".word"
 

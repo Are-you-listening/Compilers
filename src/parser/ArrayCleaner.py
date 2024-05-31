@@ -156,6 +156,11 @@ class ArrayCleaner(ASTVisitor):
             return
 
         if not self.__inFunction(node):
+            type_node = node.parent.getChild(0)
+            s = type_node.symbol_type.size
+            if s == -1:
+                type_node.symbol_type.size = node.getChildAmount()
+
             return
 
         if node.parent.text == "InitList":
@@ -199,7 +204,7 @@ class ArrayCleaner(ASTVisitor):
                 Dynamically determining array size
                 """
                 if size == -1:
-
+                    print("size-", size)
                     size = current_node.getChildAmount()
                     var = node.parent.getChild(0)
 
