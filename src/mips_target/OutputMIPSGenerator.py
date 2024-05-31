@@ -1418,31 +1418,51 @@ class Conversion:
         """
         Special cases of casting between ptrs
         """
+        a0 = Memory("a0", True)
+        v0 = Memory("v0", True)
 
         if to_type.getPtrAmount() != from_type.getPtrAmount() and min(to_type.getPtrAmount(), from_type.getPtrAmount()) != 0:
             ptr_difference = from_type.getPtrAmount() - to_type.getPtrAmount()
             for t in range(max(ptr_difference, 0)):
-                print(from_type.getPtrTuple())
                 var = block.lw(var, 0)
 
             for t in range(min(ptr_difference, 0)*-1):
                 temp = to_type
 
-                print("heo", to_type.getPtrTuple())
-
                 for v in range((ptr_difference*-1)-t):
-                    print("heo2", to_type.getPtrTuple())
 
                     temp = temp.deReference()
 
-                if isinstance(temp, SymbolTypeStruct):
+                if isinstance(temp, SymbolTypeUnion):
+
+                    temp = temp.getStoreType()
+                    size = 1
+                    sub_size = temp.getBytesUsed()
+
+                    sub_ptrs = temp.deReference().getPtrAmount()
+
+                    """
+                    make ptr heap space
+                    """
+                    temp_reg = block.li((size + 1) * 4)
+                    temp_reg.overrideMemory(a0)
+
+                    temp_reg = block.li(9)
+                    temp_reg.overrideMemory(v0)
+                    block.systemCall()
+
+                    temp_ptr = block.li(0)
+                    for jk in range(sub_ptrs):
+                        block.sw(temp_ptr, v0, jk*4)
+                        temp_ptr = block.addui(v0, jk*4)
+                    var = temp_ptr
+
+                elif isinstance(temp, SymbolTypeStruct):
                     size = temp.getElementCount()
                     sub_size = 4
                     for option in range(temp.getElementCount()):
                         o = temp.getElementType(option)
                         sub_size = max(sub_size, o.getBytesUsed())
-                        print(type(o))
-                        print("subi", sub_size)
 
                 elif isinstance(temp, SymbolTypeArray):
                     size = temp.size
@@ -1460,8 +1480,7 @@ class Conversion:
                     t = block.addui(var, int((s)*change))
                     t_list.append(t)
 
-                a0 = Memory("a0", True)
-                v0 = Memory("v0", True)
+
                 """
                 Store conversion on the heap
                 """
