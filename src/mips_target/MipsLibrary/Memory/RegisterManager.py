@@ -71,6 +71,7 @@ class RegisterManager:
         var.is_loaded = True
 
     def spill(self, block, reg: str):
+
         """
         Spill a register to memory
         :return:

@@ -1408,8 +1408,11 @@ class FunctionMet:
             """
             size = param.symbol_type.getElementCount()
 
-            RegisterManager.getInstance().claimStack(block, size*4)
-            struct_ptr = block.addui(Memory("sp", True), 4)
+            t = RegisterManager.getInstance().allocate(block)
+            RegisterManager.getInstance().claimStack(block, size * 4)
+            block.addui_function(Memory("sp", True), 4, t)
+            struct_ptr = t
+            struct_ptr.symbol_type = param.symbol_type
 
             for i in range(size):
                 """
@@ -1441,6 +1444,40 @@ class FunctionMet:
                 """
                 block.sw(new_location, struct_ptr, i*4)
             new_param = struct_ptr
+        elif isinstance(param.symbol_type, SymbolTypeArray):
+            """
+            copy of arrays
+            """
+            size = param.symbol_type.size
+
+            t = RegisterManager.getInstance().allocate(block)
+            RegisterManager.getInstance().claimStack(block, size * 4)
+            block.addui_function(Memory("sp", True), 4, t)
+            struct_ptr = t
+            struct_ptr.symbol_type = param.symbol_type
+
+            for i in range(size):
+                """
+                make a copy of all attributes of the struct
+                """
+                child_value = block.lw(param, i * 4)
+                child_value.symbol_type = param.symbol_type.deReference()
+
+                child_value_copy = FunctionMet.copy(child_value)
+                child_value_copy.symbol_type = param.symbol_type.deReference()
+
+                new_location = child_value_copy
+
+                """
+                special case for ptrs in a struct (point to same)
+                """
+
+                """
+                store ptr on right stack pos
+                """
+                block.sw(new_location, struct_ptr, i * 4)
+            new_param = struct_ptr
+
         else:
             new_param = block.addui(param, 0)
         return new_param
