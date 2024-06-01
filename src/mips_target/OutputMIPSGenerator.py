@@ -1366,6 +1366,18 @@ class FunctionMet:
         """
         allocate stack memory
         """
+
+        """
+        check if we need to make copies of the param
+        """
+        for i, p in enumerate(params):
+            if p.symbol_type is None:
+                continue
+            is_struct = isinstance(p.symbol_type, SymbolTypeStruct)
+            if is_struct:
+                p = FunctionMet.copy(p)
+                params[i] = p
+
         alloc_size = (len(params))*4
         sp_frame = Memory(29, True)
 
@@ -1375,6 +1387,53 @@ class FunctionMet:
         block.addui_function(sp_frame, -alloc_size, sp_frame)
         for i, p in enumerate(params):
             block.sw(p, sp_frame, (i+1)*4)
+
+    @staticmethod
+    def copy(param: Memory):
+        """
+        Copy a specific parameter that is being passed by value for example struct....
+
+        Sidenote here, This worked first try, which is pretty impresive if you ask me :)
+
+        """
+
+        block = MipsSingleton.getInstance().getCurrentBlock()
+
+        if param.symbol_type is None:
+            return param
+
+        if isinstance(param.symbol_type, SymbolTypeStruct):
+            """
+            Make a copy for a struct
+            """
+            size = param.symbol_type.getElementCount()
+
+            RegisterManager.getInstance().claimStack(block, size*4)
+            struct_ptr = block.addui(Memory("sp", True), 4)
+
+            for i in range(size):
+                """
+                make a copy of all attributes of the struct
+                """
+                child_value = block.lw(param, i*4)
+                child_value.symbol_type = param.symbol_type.getElementType(i).deReference()
+
+                child_value_copy = FunctionMet.copy(child_value)
+
+                """
+                Assign space to store copied value
+                """
+                new_location = Declaration.declare("", param.symbol_type.getElementType(i), 0, False)
+                block.sw(child_value_copy, new_location, 0)
+
+                """
+                store ptr on right stack pos
+                """
+                block.sw(new_location, struct_ptr, i*4)
+            new_param = struct_ptr
+        else:
+            new_param = block.addui(param, 0)
+        return new_param
 
     @staticmethod
     def loadParameters(params: list[Memory]):

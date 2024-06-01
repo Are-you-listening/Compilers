@@ -1,7 +1,6 @@
 from src.parser.Tables.SymbolTypeArray import *
 
 
-
 class SymbolTypeStruct(SymbolType):
     def __init__(self, struct_name):
         super().__init__(struct_name, False)
