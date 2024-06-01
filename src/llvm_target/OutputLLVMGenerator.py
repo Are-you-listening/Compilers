@@ -365,7 +365,7 @@ class Load:
 
         if isinstance(load_llvm, ir.Function):
             llvm_var.align = 8
-        elif not isinstance(load_llvm, ir.GEPInstr) and not isinstance(load_llvm, ir.CastInstr):
+        elif not isinstance(load_llvm, ir.GEPInstr) and not isinstance(load_llvm, ir.CastInstr) and not isinstance(load_llvm, ir.CallInstr):
             llvm_var.align = load_llvm.align
         else:
             llvm_var.align = CTypesToLLVM.getBytesUse(SymbolType("INT", False))

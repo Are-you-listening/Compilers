@@ -1419,12 +1419,22 @@ class FunctionMet:
                 child_value.symbol_type = param.symbol_type.getElementType(i).deReference()
 
                 child_value_copy = FunctionMet.copy(child_value)
+                child_value_copy.symbol_type = param.symbol_type.getElementType(i).deReference()
 
                 """
                 Assign space to store copied value
                 """
-                new_location = Declaration.declare("", param.symbol_type.getElementType(i), 0, False)
-                block.sw(child_value_copy, new_location, 0)
+                stype = param.symbol_type.getElementType(i)
+
+                new_location = Declaration.declare("", stype, 0, False)
+
+                """
+                special case for ptrs in a struct (point to same)
+                """
+                if isinstance(param.symbol_type.getElementType(i).deReference(), SymbolTypePtr):
+                    new_location = child_value_copy
+                else:
+                    block.sw(child_value_copy, new_location, 0)
 
                 """
                 store ptr on right stack pos
