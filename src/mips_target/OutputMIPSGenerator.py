@@ -1414,27 +1414,36 @@ class FunctionMet:
             struct_ptr = t
             struct_ptr.symbol_type = param.symbol_type
 
+            if isinstance(param.symbol_type, SymbolTypeUnion):
+                size = 1
+
             for i in range(size):
                 """
                 make a copy of all attributes of the struct
                 """
                 child_value = block.lw(param, i*4)
-                child_value.symbol_type = param.symbol_type.getElementType(i).deReference()
+
+                elem = param.symbol_type.getElementType(i)
+
+                if isinstance(param.symbol_type, SymbolTypeUnion):
+                    elem = param.symbol_type.getStoreType()
+
+                child_value.symbol_type = elem.deReference()
 
                 child_value_copy = FunctionMet.copy(child_value)
-                child_value_copy.symbol_type = param.symbol_type.getElementType(i).deReference()
+                child_value_copy.symbol_type = elem.deReference()
 
                 """
                 Assign space to store copied value
                 """
-                stype = param.symbol_type.getElementType(i)
+                stype = elem
 
                 new_location = Declaration.declare("", stype, 0, False)
 
                 """
                 special case for ptrs in a struct (point to same)
                 """
-                if isinstance(param.symbol_type.getElementType(i).deReference(), SymbolTypePtr):
+                if isinstance(elem.deReference(), SymbolTypePtr):
                     new_location = child_value_copy
                 else:
                     block.sw(child_value_copy, new_location, 0)
