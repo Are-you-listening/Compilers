@@ -26,9 +26,13 @@ int main() {
 
 
             printf("%d %d %d\n ", a[k], i+j, k);
-            printf("%d \n", *(a+k));
+            printf("%d %d %d\n", *(a+k), (a+k)-a, *(a+k)-*a);
+            printf("%d", (a+k) > a);
         }
     }
+    v++;
+    v--;
+    printf("%d %d\n", a[0], *v);
 
     return 0;
 }
