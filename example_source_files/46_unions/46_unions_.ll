@@ -1,4 +1,4 @@
-; ModuleID = "./example_source_files/46_unions/46_unions.c"
+; ModuleID = "/home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/example_source_files/46_unions/46_unions.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
@@ -12,7 +12,7 @@ define i32 @"main"()
   ; FLOAT s ;
   %".7" = alloca %"NotTypeSafe", align 16
   ; union NotTypeSafe safety ;
-  %".9" = alloca %"NotTypeSafe"*, align 8
+  %".9" = alloca %"NotTypeSafe"*, align 4
   ; union NotTypeSafe * safety_ptr ;
   ;  safety . as_integer = 5 ;
   %".12" = getelementptr inbounds %"NotTypeSafe", %"NotTypeSafe"* %".7", i32 0, i32 0
@@ -24,26 +24,26 @@ define i32 @"main"()
   %".18" = load i32, i32* %".17", align 4
   store i32 %".18", i32* %".3", align 4
   ;  safety_ptr -> as_float = 3.14 ;
-  %".21" = load %"NotTypeSafe"*, %"NotTypeSafe"** %".9", align 8
+  %".21" = load %"NotTypeSafe"*, %"NotTypeSafe"** %".9", align 4
   %".22" = getelementptr inbounds %"NotTypeSafe", %"NotTypeSafe"* %".21", i32 0, i32 0
   %".23" = bitcast [8 x i8]* %".22" to float*
   store float 0x40091eb860000000, float* %".23", align 4
   ;  INT q = safety_ptr -> as_integer ;
-  %".26" = load %"NotTypeSafe"*, %"NotTypeSafe"** %".9", align 8
+  %".26" = load %"NotTypeSafe"*, %"NotTypeSafe"** %".9", align 4
   %".27" = getelementptr inbounds %"NotTypeSafe", %"NotTypeSafe"* %".26", i32 0, i32 0
   %".28" = bitcast [8 x i8]* %".27" to i32*
   %".29" = load i32, i32* %".28", align 4
   %".30" = alloca i32, align 4
   store i32 %".29", i32* %".30", align 4
   ;  ( * safety_ptr ) . as_str [ 0 ] [ 0 ] = 'a' ;
-  %".33" = load %"NotTypeSafe"*, %"NotTypeSafe"** %".9", align 8
+  %".33" = load %"NotTypeSafe"*, %"NotTypeSafe"** %".9", align 4
   %".34" = getelementptr inbounds %"NotTypeSafe", %"NotTypeSafe"* %".33", i32 0, i32 0
   %".35" = bitcast [8 x i8]* %".34" to [2 x [2 x i8]]*
   %".36" = getelementptr inbounds [2 x [2 x i8]], [2 x [2 x i8]]* %".35", i64 0, i32 0
   %".37" = getelementptr inbounds [2 x i8], [2 x i8]* %".36", i64 0, i32 0
   store i8 97, i8* %".37", align 4
   ;  printf ( "%c" , ( * safety_ptr ) . as_str [ 0 ] [ 0 ] ) ;
-  %".40" = load %"NotTypeSafe"*, %"NotTypeSafe"** %".9", align 8
+  %".40" = load %"NotTypeSafe"*, %"NotTypeSafe"** %".9", align 4
   %".41" = getelementptr inbounds %"NotTypeSafe", %"NotTypeSafe"* %".40", i32 0, i32 0
   %".42" = bitcast [8 x i8]* %".41" to [2 x [2 x i8]]*
   %".43" = getelementptr inbounds [2 x [2 x i8]], [2 x [2 x i8]]* %".42", i64 0, i32 0

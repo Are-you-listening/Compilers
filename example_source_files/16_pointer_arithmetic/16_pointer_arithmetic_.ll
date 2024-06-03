@@ -1,4 +1,4 @@
-; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/example_source_files/16_pointer_arithmetic/16_pointer_arithmetic.c"
+; ModuleID = "/home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/example_source_files/16_pointer_arithmetic/16_pointer_arithmetic.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
@@ -49,15 +49,15 @@ define i32 @"main"()
   store i32 1, i32* %".43", align 4
   %".45" = getelementptr inbounds [20 x i32], [20 x i32]* %".3", i32 0, i32 0
   ; INT * passed = result ;
-  %".47" = alloca i32*, align 8
-  store i32* %".45", i32** %".47", align 8
-  %".49" = load i32*, i32** %".47", align 8
+  %".47" = alloca i32*, align 4
+  store i32* %".45", i32** %".47", align 4
+  %".49" = load i32*, i32** %".47", align 4
   ; passed ++ ;
   %".51" = getelementptr inbounds i32, i32* %".49", i64 1
-  store i32* %".51", i32** %".47", align 8
-  %".53" = load i32*, i32** %".47", align 8
+  store i32* %".51", i32** %".47", align 4
+  %".53" = load i32*, i32** %".47", align 4
   ;  printf ( "%d" , * passed ) ;
-  %".55" = load i32, i32* %".53", align 8
+  %".55" = load i32, i32* %".53", align 4
   %".56" = bitcast [3 x i8]* @".str.0" to i8*
   %".57" = alloca i32
   store i32 %".55", i32* %".57"

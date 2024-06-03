@@ -213,6 +213,27 @@ class Declaration:
                 value = label
                 special_info = f".word"
 
+            elif isinstance(symbol_type, SymbolTypeStruct):
+                """
+                make global struct
+                """
+
+                if value == 0:
+                    values = [str(value) for i in range(symbol_type.getElementCount())]
+                else:
+                    values = value
+
+                if isinstance(symbol_type, SymbolTypeUnion):
+                    val = Declaration.declare(f".union.{var_name}", symbol_type.getStoreType(), value, is_global, False)
+                    values = [str(val)]
+
+                special_info = f".word"
+                module.addDataSegment(f".{var_name}", f"{','.join(values)}", special_info=special_info)
+
+                special_info = f".word"
+
+                value = f".{var_name}"
+
             else:
                 special_info = ".word"
 

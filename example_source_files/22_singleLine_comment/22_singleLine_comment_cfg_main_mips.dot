@@ -1,5 +1,5 @@
 digraph AST {
-  "125702257439264" [label="L2:
+  "128810404353920" [label="L2:
 addiu $t0, $sp, 0
 #// global comment
 

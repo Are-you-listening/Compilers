@@ -1,11 +1,11 @@
 digraph AST {
-  "125702255855504" [label="%\".2\" = .2:
+  "128810403448336" [label="%\".2\" = .2:
   %\".3\" = alloca i32, align 4
   store i32 3, i32* %\".3\", align 4
   ;    INT main ( ) { INT a = 3 ;
-  %\".6\" = alloca i8*, align 8
+  %\".6\" = alloca i8*, align 4
   %\".7\" = bitcast [6 x i8]* @\".str.0\" to i8*
-  store i8* %\".7\", i8** %\".6\", align 8
+  store i8* %\".7\", i8** %\".6\", align 4
   ; CHAR * b = \"hello\" ;
   %\".10\" = alloca i32, align 4
   store i32 255, i32* %\".10\", align 4

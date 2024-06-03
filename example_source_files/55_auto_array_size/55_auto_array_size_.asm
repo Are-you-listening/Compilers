@@ -3,11 +3,6 @@ heap: .space 4
 str0: .asciiz  "%s" 
 .text
 main:
-li $a0, 8192
-li $v0, 9
-syscall
-la $t0, heap
-sw $v0, 0($t0)
 jal function_main
 li 	$v0, 10 #exit system call
 syscall

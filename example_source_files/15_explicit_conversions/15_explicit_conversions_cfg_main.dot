@@ -1,5 +1,5 @@
 digraph AST {
-  "125702256108896" [label="%\".2\" = .2:
+  "128810401985248" [label="%\".2\" = .2:
   %\".3\" = alloca i32, align 4
   store i32 10, i32* %\".3\", align 4
   ;  INT main ( ) { INT a = 10 ;
@@ -12,8 +12,8 @@ digraph AST {
   ; FLOAT * d = ( FLOAT * ) c ;
   %\".13\" = load i8, i8* %\".6\", align 1
   %\".14\" = inttoptr i8 %\".13\" to float*
-  %\".15\" = alloca float*, align 8
-  store float* %\".14\", float** %\".15\", align 8
+  %\".15\" = alloca float*, align 4
+  store float* %\".14\", float** %\".15\", align 4
   ret i32 0
   ; return 0 ;"];
 }

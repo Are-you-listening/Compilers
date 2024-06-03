@@ -1,4 +1,4 @@
-; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/example_source_files/25_printf/25_printf.c"
+; ModuleID = "/home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/example_source_files/25_printf/25_printf.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
@@ -8,9 +8,9 @@ define i32 @"main"()
   %".3" = alloca i32, align 4
   store i32 3, i32* %".3", align 4
   ;    INT main ( ) { INT a = 3 ;
-  %".6" = alloca i8*, align 8
+  %".6" = alloca i8*, align 4
   %".7" = bitcast [6 x i8]* @".str.0" to i8*
-  store i8* %".7", i8** %".6", align 8
+  store i8* %".7", i8** %".6", align 4
   ; CHAR * b = "hello" ;
   %".10" = alloca i32, align 4
   store i32 255, i32* %".10", align 4

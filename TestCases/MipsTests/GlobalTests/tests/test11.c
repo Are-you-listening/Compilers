@@ -1,11 +1,11 @@
 #include <stdio.h>
 
-union v{
+struct v{
     int* b;
     int a;
 };
 
-union v h;
+struct v h;
 
 void l(){
     printf("%d", h.a);

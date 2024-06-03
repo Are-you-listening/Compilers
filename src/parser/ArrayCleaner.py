@@ -204,7 +204,6 @@ class ArrayCleaner(ASTVisitor):
                 Dynamically determining array size
                 """
                 if size == -1:
-                    print("size-", size)
                     size = current_node.getChildAmount()
                     var = node.parent.getChild(0)
 

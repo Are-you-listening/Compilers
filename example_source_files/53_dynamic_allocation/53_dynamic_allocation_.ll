@@ -1,4 +1,4 @@
-; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/example_source_files/53_dynamic_allocation/53_dynamic_allocation.c"
+; ModuleID = "/home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/example_source_files/53_dynamic_allocation/53_dynamic_allocation.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
@@ -14,22 +14,22 @@ define i32 @"main"()
   ;  struct cheese * gouda_ptr = ( struct cheese * ) malloc ( sizeof ( struct cheese ) ) ;
   %".9" = call i8* @"malloc"(i32 4)
   %".10" = bitcast i8* %".9" to %"cheese"*
-  %".11" = alloca %"cheese"*, align 8
-  store %"cheese"* %".10", %"cheese"** %".11", align 8
+  %".11" = alloca %"cheese"*, align 4
+  store %"cheese"* %".10", %"cheese"** %".11", align 4
   ;  gouda_ptr = realloc ( gouda_ptr , sizeof ( struct cheese ) * 2 ) ;
-  %".14" = load %"cheese"*, %"cheese"** %".11", align 8
+  %".14" = load %"cheese"*, %"cheese"** %".11", align 4
   %".15" = bitcast %"cheese"* %".14" to i8*
   %".16" = call i8* @"realloc"(i8* %".15", i32 8)
   %".17" = bitcast i8* %".16" to %"cheese"*
-  store %"cheese"* %".17", %"cheese"** %".11", align 8
+  store %"cheese"* %".17", %"cheese"** %".11", align 4
   ;  free ( gouda_ptr ) ;
-  %".20" = load %"cheese"*, %"cheese"** %".11", align 8
+  %".20" = load %"cheese"*, %"cheese"** %".11", align 4
   %".21" = bitcast %"cheese"* %".20" to i8*
   call void @"free"(i8* %".21")
   ;  CHAR * z = calloc ( 2 , sizeof ( CHAR ) ) ;
   %".24" = call i8* @"calloc"(i32 2, i32 1)
-  %".25" = alloca i8*, align 8
-  store i8* %".24", i8** %".25", align 8
+  %".25" = alloca i8*, align 4
+  store i8* %".24", i8** %".25", align 4
   %".27" = load i8*, i8** %".25"
   %".28" = getelementptr inbounds i8, i8* %".27", i32 0
   ; z [ 0 ] = 'O' ;
@@ -38,7 +38,7 @@ define i32 @"main"()
   %".32" = getelementptr inbounds i8, i8* %".31", i32 1
   ; z [ 1 ] = 'Y' ;
   store i8 89, i8* %".32", align 4
-  %".35" = load i8*, i8** %".25", align 8
+  %".35" = load i8*, i8** %".25", align 4
   ;  free ( z ) ;
   call void @"free"(i8* %".35")
   ret i32 0

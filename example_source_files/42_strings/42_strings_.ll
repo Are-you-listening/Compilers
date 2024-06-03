@@ -1,4 +1,4 @@
-; ModuleID = "/home/watson/OneDrive/2023-2024/Compilers/Project/Compilers/example_source_files/42_strings/42_strings.c"
+; ModuleID = "/home/tibov/Desktop/universiteit/bachlor-2/Compilers/Project/Compilers/example_source_files/42_strings/42_strings.c"
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
@@ -33,9 +33,9 @@ define i32 @"main"()
   %".28" = getelementptr inbounds [10 x i8], [10 x i8]* %".3", i64 0, i32 1
   ; s [ 1 ] = 101 ;
   store i8 101, i8* %".28", align 4
-  %".31" = alloca i8*, align 8
+  %".31" = alloca i8*, align 4
   %".32" = bitcast [10 x i8]* @".str.0" to i8*
-  store i8* %".32", i8** %".31", align 8
+  store i8* %".32", i8** %".31", align 4
   ;  CHAR * str = "string he" ;
   ret i32 0
   ; return 0 ;
