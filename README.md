@@ -5,6 +5,24 @@
 > Compiler from a C-subset to LLVM IR & MIPS. A group project for the course Compilers (INFORMAT 1001WETCOP)
 > > By Emil Lambert, Lucas Vanden Abeele, Tibo Verreycken, Kars van Velzen.
 
+# Course Info
+
+[Spring, 2024 | Compilers, 1001WETCOP]
+
+The goals off this project for this course consists of (but not limited to): Show expertise in the course material theory, Implementing a compiler
+
+You can find detailed information about the course using this [link](https://www.uantwerpen.be/nl/studeren/aanbod/alle-opleidingen/informatica-studeren/bachelor/studieprogramma/)
+
+# Product Requirements
+
+Implementing a compiler for a C-subset to working LLVM-IR and MIPS assembly with at least the Mandatory Functionality, listed below. 
+
+# Final Product
+
+We developed a compiler for a C-subset to working LLVM-IR and MIPS assembly with a wide range of support. We encourage you to take a look at the provided  functionality below. A testing system consisting of 650 tests which will be used for the next year by the teaching assistants to grade the upcoming projects. We received the total grade for this project.
+
+# How to run?
+
 ### Requirements & Dependencies:
 - Install the python packages, see ``requirements.txt``
 - Working gcc compiler on your device
